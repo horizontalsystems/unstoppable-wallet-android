@@ -66,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s 个单词</string>
     <string name="CreateWallet_PassphraseConfirm">确认</string>
     <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请仅使用 <![CDATA[A-Z a-z 0-9 \'"&/?!:;.,~*$=+-[](){}<>\_#@|%]]> 获取密码</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]> for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
     <string name="EnterPassphrase">输入密码</string>
     <string name="CreateWallet_PassphraseDescription">密码为钱包增加了一个额外的保护层，同一组助记词使用不同的密码，就可以让用户创建许多个独立的多币钱包。\n\n要恢复这些钱包，用户必须有一组助记词和不同密码。</string>
@@ -501,7 +501,7 @@
     <string name="SwapInfo_Description">此兑换服务由基于%s区块链的去中心化代币兑换协议%s提供。\n\n%s不存在任何欺诈手段、以可靠方式推动代币兑换的智能合约来实现完全自动化管理。</string>
     <string name="SwapInfo_DexRelated">%s相关</string>
     <string name="SwapInfo_AllowanceTitle">补贴</string>
-    <string name="SwapInfo_AllowanceDescription">当执行令牌交换时，交易所可以代表用户花费的金额。 在进行实际互换交易之前，需要先确定足够的备抵。</string>
+    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">价格影响</string>
     <string name="SwapInfo_PriceImpactDescription">预期价格和显示价格的偏差通常会增加互兑金额。</string>
     <string name="SwapInfo_SwapFeeTitle">互兑交易费用</string>
