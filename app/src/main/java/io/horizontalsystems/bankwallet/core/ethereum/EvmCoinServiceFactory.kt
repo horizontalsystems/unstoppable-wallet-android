@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmTestnetManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.core.ICurrencyManager
@@ -12,7 +13,8 @@ class EvmCoinServiceFactory(
     private val baseToken: Token,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: ICurrencyManager,
-    private val evmTestnetManager: EvmTestnetManager
+    private val evmTestnetManager: EvmTestnetManager,
+    private val coinManager: ICoinManager
 ) {
     val baseCoinService = EvmCoinService(baseToken, currencyManager, marketKit)
 
@@ -26,7 +28,7 @@ class EvmCoinServiceFactory(
 
     private fun getToken(contractAddress: String): Token? {
         val tokenQuery = TokenQuery(baseToken.blockchainType, TokenType.Eip20(contractAddress))
-        return marketKit.token(tokenQuery) ?: evmTestnetManager.getNativeToken(tokenQuery.blockchainType)
+        return coinManager.getToken(tokenQuery) ?: evmTestnetManager.getNativeToken(tokenQuery.blockchainType)
     }
 
 }

@@ -56,7 +56,15 @@ object SendEvmConfirmationModule {
             val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimitSurchargePercent)
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, sendEvmData.transactionData)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeToken, App.marketKit, App.currencyManager, App.evmTestnetManager) }
+        private val coinServiceFactory by lazy {
+            EvmCoinServiceFactory(
+                feeToken,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
+        }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val sendService by lazy {
             SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService, App.evmLabelManager)

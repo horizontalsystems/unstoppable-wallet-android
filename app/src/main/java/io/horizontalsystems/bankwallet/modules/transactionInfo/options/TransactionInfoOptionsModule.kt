@@ -104,7 +104,15 @@ object TransactionInfoOptionsModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
 
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseToken, App.marketKit, App.currencyManager, App.evmTestnetManager) }
+        private val coinServiceFactory by lazy {
+            EvmCoinServiceFactory(
+                baseToken,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
+        }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
 
         private val sendService by lazy {

@@ -45,7 +45,15 @@ object OneInchConfirmationModule {
         private val feeService by lazy {
             OneInchFeeService(oneInchKitHelper, evmKitWrapper.evmKit, gasPriceService, oneInchSwapParameters)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(token, App.marketKit, App.currencyManager, App.evmTestnetManager) }
+        private val coinServiceFactory by lazy {
+            EvmCoinServiceFactory(
+                token,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
+        }
         private val sendService by lazy {
             OneInchSendEvmTransactionService(
                 evmKitWrapper,
