@@ -67,7 +67,7 @@
     <string name="CreateWallet_N_Words">%s слов</string>
     <string name="CreateWallet_PassphraseConfirm">Подтвердить</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
     <string name="EnterPassphrase">Введите кодовую фразу</string>
     <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
@@ -898,7 +898,7 @@
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
     <string name="AddToken_AlreadyAdded">УЖЕ ДОБАВЛЕНО</string>
     <string name="AddToken_AddressOrSymbol">Адрес Контракта</string>
-    <string name="AddToken_ChooseToken">Choose Token</string>
+    <string name="AddToken_ChooseToken">Выберите Токен</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный адрес контракта или символ BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
