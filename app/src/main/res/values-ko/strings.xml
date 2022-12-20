@@ -66,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s 단어</string>
     <string name="CreateWallet_PassphraseConfirm">확인</string>
     <string name="CreateWallet_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">만 사용하십시오 <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]>암호를 위해</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]> for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">암호 확인이 일치하지 않습니다</string>
     <string name="EnterPassphrase">암호 문구 입력</string>
     <string name="CreateWallet_PassphraseDescription">암호 문구는 사용자가 하나의 연상 기호 복구 문구를 사용하여 여러 개의 독립적인 멀티코인 지갑을 만들 수 있도록 지갑에 보안 계층을 추가합니다.\n\n이러한 지갑을 복원하려면 사용자가 복원하기 위해 각 지갑에 대한 비밀번호와 연상 기호 복구 문구가 필요합니다.</string>
@@ -501,7 +501,7 @@
     <string name="SwapInfo_Description">이 거래소 서비스는 %s 블록체인에 구축된 분산형 토큰 교환 프로토콜인 %s에 의해 구동됩니다.\n\n%s는 스마트 계약에 의해 완전 자동화되고 관리되므로 부정 행위 없이 토큰 교환을 안정적으로 수행할 수 있습니다.</string>
     <string name="SwapInfo_DexRelated">Uniswap 관련됨</string>
     <string name="SwapInfo_AllowanceTitle">허용량</string>
-    <string name="SwapInfo_AllowanceDescription">토큰 스왑을 실행할 때 거래소가 사용자를 대신하여 지출할 수 있는 금액. 실제 스왑 거래가 발생하기 전에 선행 거래 설정 충분한 여유가 필요합니다.</string>
+    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">가격 영향</string>
     <string name="SwapInfo_PriceImpactDescription">표시된 가격과의 예상 가격 편차는 일반적으로 스왑 금액에 따라 증가합니다.</string>
     <string name="SwapInfo_SwapFeeTitle">스왑 비용</string>
