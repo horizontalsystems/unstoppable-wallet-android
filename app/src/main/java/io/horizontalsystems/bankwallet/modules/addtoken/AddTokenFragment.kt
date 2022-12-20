@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
@@ -38,6 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.snackbar.SnackbarDuration
 
 class AddTokenFragment : BaseFragment() {
@@ -257,7 +259,7 @@ private fun Preview_TokenCell() {
                 "ACD",
                 "Token Name",
                 "Bep20",
-                R.drawable.bep20,
+                BlockchainType.BinanceSmartChain.imageUrl,
                 true,
                 false,
                 {})
@@ -266,7 +268,7 @@ private fun Preview_TokenCell() {
                 "TCD",
                 "Token Name",
                 "Polygon",
-                R.drawable.polygon_erc20,
+                BlockchainType.Ethereum.imageUrl,
                 false,
                 false,
                 {})
@@ -275,7 +277,7 @@ private fun Preview_TokenCell() {
                 "BTCD",
                 "Token Name",
                 "Erc20",
-                R.drawable.erc20,
+                BlockchainType.Ethereum.imageUrl,
                 alreadyAdded = true
             )
         }

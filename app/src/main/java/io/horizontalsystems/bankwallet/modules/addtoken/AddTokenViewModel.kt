@@ -64,9 +64,9 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                     .map {
                         TokenInfoUiState(
                             tokenInfo = it,
-                            title = it.coinCode,
-                            subtitle = it.coinName,
-                            blockchain = it.tokenQuery.protocolType ?: "",
+                            title = it.token.coin.code,
+                            subtitle = it.token.coin.name,
+                            blockchain = it.token.tokenQuery.protocolType ?: "",
                             image = it.token.tokenQuery.blockchainType.imageUrl,
                             checked = it.inWallet,
                             enabled = true
@@ -77,9 +77,9 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                     .filter { it.inWallet }
                     .map {
                         AlreadyAddedToken(
-                            title = it.coinCode,
-                            subtitle = it.coinName,
-                            blockchain = it.tokenQuery.protocolType,
+                            title = it.token.coin.code,
+                            subtitle = it.token.coin.name,
+                            blockchain = it.token.tokenQuery.protocolType ?: "",
                             image = it.token.tokenQuery.blockchainType.imageUrl,
                         )
                     }
@@ -91,7 +91,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                         Translator.getString(
                             R.string.ManageCoins_NotSupportedDescription,
                             addTokenService.accountType?.description ?: "",
-                            tokenInfo.coinName,
+                            tokenInfo.token.coin.name,
                         ), Caution.Type.Warning
                     )
                 }
