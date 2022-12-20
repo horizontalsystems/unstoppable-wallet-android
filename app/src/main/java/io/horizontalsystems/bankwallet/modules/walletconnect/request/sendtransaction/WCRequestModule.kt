@@ -55,7 +55,13 @@ object WCRequestModule {
         }
 
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(token, App.marketKit, App.currencyManager, App.evmTestnetManager)
+            EvmCoinServiceFactory(
+                token,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
         }
         private val feeService by lazy {
             val gasDataService = EvmCommonGasDataService(evmKitWrapper.evmKit, 10)
@@ -114,7 +120,13 @@ object WCRequestModule {
         }
 
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(token, App.marketKit, App.currencyManager, App.evmTestnetManager)
+            EvmCoinServiceFactory(
+                token,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
         }
         private val feeService by lazy {
             val evmKitWrapper = service.evmKitWrapper

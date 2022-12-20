@@ -48,7 +48,8 @@ object SwapApproveConfirmationModule {
                 token,
                 App.marketKit,
                 App.currencyManager,
-                App.evmTestnetManager
+                App.evmTestnetManager,
+                App.coinManager
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
