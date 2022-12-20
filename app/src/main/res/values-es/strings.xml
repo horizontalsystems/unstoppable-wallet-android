@@ -66,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s palabras</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmar</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor usa solo símbolos compatibles: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmación de la frase de contraseña no coincide</string>
     <string name="EnterPassphrase">Introduzca su frase de contraseña</string>
     <string name="CreateWallet_PassphraseDescription">La frase de contraseña añade una capa de seguridad adicional a los monederos permitiendo a los usuarios crear múltiples monederos multi-monedas independientes usando una sola frase de recuperación mnemotécnica pero asociada con diferentes contraseñas.\n\nPara restaurar estos monederos un usuario necesitará una frase de recuperación mnemotécnica, así como una contraseña para cada monedero restaurado.</string>
@@ -501,7 +501,7 @@
     <string name="SwapInfo_Description">Este servicio de intercambio está impulsado por %s, un intercambio de token descentralizado construido en %s blockchain.\n\n%s está completamente automatizado y administrado por contratos inteligentes que facilitan los intercambios de token de una manera conflaible y sin ninguna intención para hacer estafas.</string>
     <string name="SwapInfo_DexRelated">Uniswap Relacionado</string>
     <string name="SwapInfo_AllowanceTitle">Permiso de acceso</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A proceeding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">La cantidad que un intercambio puede gastar en nombre del usuario al ejecutar swaps de token. Se requiere un permiso suficiente para establecer una transacción anterior antes de que pueda tener lugar una transacción de intercambio real.</string>
     <string name="SwapInfo_PriceImpactTitle">Impacto en el precio</string>
     <string name="SwapInfo_PriceImpactDescription">Desviación de precio esperada de un valor mostrado, normalmente aumenta con la cantidad de swap.</string>
     <string name="SwapInfo_SwapFeeTitle">Tarifa por permutar</string>
@@ -899,7 +899,7 @@
     <string name="AddToken_CoinTypes">TIPOS DE COIN</string>
     <string name="AddToken_AlreadyAdded">YA AGREGADO</string>
     <string name="AddToken_AddressOrSymbol">Dirección del contrato</string>
-    <string name="AddToken_ChooseToken">Choose Token</string>
+    <string name="AddToken_ChooseToken">Elegir token</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddToken_InvalidAddressError">Dirección de contrato inválida o símbolo BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Límite de Api superado. Inténtalo de nuevo más tarde.</string>
