@@ -66,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s palavras</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmar</string>
     <string name="CreateWallet_Error_EmptyPassphrase">A senha não pode estar vazia</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]> for the passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Confirmação da senha não coincide</string>
     <string name="EnterPassphrase">Passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Senhas agregam uma camada de segurança adicional às carteiras, permitindo que os usuários criem várias carteiras multimoedas independentes, usando uma única frase mnemônica de recuperação, mas associada à senhas diferentes. \n\nPara restaurar estas carteiras, o usuário precisará de uma frase de recuperação mnemônica, bem como de uma senha para cada carteira a ser restaurada.</string>
@@ -102,8 +102,8 @@
     <string name="Restore_PrivateKey">Chave Privada</string>
     <string name="Restore_PrivateKeyHint">Insira a Chave Privada EVM, a Chave Raiz BIP32 ou a Chave Privada Estendida de Conta</string>
     <string name="Restore_PhraseHint">Insira 12, 15, 18, 21 ou 24 palavras</string>
-    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandardRestore">Restauração Não-Padrão</string>
+    <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de recuperação de carteira para usuários da Unstoppable que possuem uma carteira Não Padrão.  Geralmente, essas carteiras podem ter sido criadas na versão Unstoppable 0.27 - 0.28 usando uma lista de palavras mnemônicas não inglesas e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será mostrado como 0 após a atualização para a versão 0.29.  Esta página permitirá que você restaure o acesso à sua carteira não padrão.  Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="Select_Coins">Escolher Moedas</string>
     <string name="Restore_BirthdayHeight">Altura de aniversário</string>
@@ -402,7 +402,7 @@
     <string name="WalletConnect_Note">Observação</string>
     <string name="WalletConnect_LegacySignWarning">Assinar esta mensagem pode ser perigoso. Essa assinatura pode executar qualquer operação em nome de sua conta, incluindo dar controle total de sua conta e de todos os seus ativos ao site solicitante. Assine esta mensagem somente se você souber o que está fazendo ou confiar totalmente no site solicitante.</string>
     <string name="WalletConnect_NotSupportedDescription">Seu tipo de carteira atual %s não suporta WalletConnect</string>
-    <string name="WalletConnect_Unnamed">Unnamed</string>
+    <string name="WalletConnect_Unnamed">Sem nome</string>
     <string name="WalletConnect_DAppUnknown">dApp desconhecido</string>
     <string name="WalletConnect_Pairings">Pareamento</string>
     <string name="WalletConnect_PairedDApps">dApps pareados</string>
@@ -445,7 +445,7 @@
     <string name="Swap_Fee">Taxa</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorNoLiquidity">Não é possível trocar esses tokens</string>
-    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">Este serviço não permite a embalagem/desagregação. Use 1inch em vez disso.</string>
     <string name="Swap_ErrorHighPriceImpact">Alto impacto no preço</string>
     <string name="Swap_Proceed">Próximo</string>
     <string name="Swap_Revoke">Revogar</string>
@@ -472,7 +472,7 @@
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Endereço ou Domínio</string>
-    <string name="SwapSettings_FeeSettingsAlert">A service fee for the swap action on the platform typically either 0.3% or 0.6%</string>
+    <string name="SwapSettings_FeeSettingsAlert">Uma taxa de serviço para a ação de troca na plataforma normalmente 0,3% ou 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Sem prazo</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">É provável que sua transação falhe.</string>
@@ -501,7 +501,7 @@
     <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on the %s blockchain. \n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s Relacionado</string>
     <string name="SwapInfo_AllowanceTitle">Preço</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A proceeding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">Impacto de preço</string>
     <string name="SwapInfo_PriceImpactDescription">O desvio de preço esperado de um valor mostrado, normalmente aumenta com o montante de swap.</string>
     <string name="SwapInfo_SwapFeeTitle">Tarifas de troca</string>
@@ -653,7 +653,7 @@
     <string name="Privacy_BulletedText4">Não há nenhuma conta de usuário ou banco de dados mantendo os dados do usuário em algum lugar.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">CONFIGURAÇÕES DE BLOCKCHAIN</string>
-    <string name="SecurityCenter_TestnetSettings">TESTNET SETTINGS</string>
+    <string name="SecurityCenter_TestnetSettings">CONFIGURAÇÕES DE TESTADO</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Escolha a fonte de dados para restaurar e sincronizar carteira</string>
     <!--Evm Network-->
@@ -758,8 +758,8 @@
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Os recursos abaixo são experimentais e devem ser usados com cautela. Enquanto nós testamos minuciosamente esses recursos usando nossos próprios fundos cripto, nós não podemos garantir que eles funcionarão como esperado em todos os casos possíveis.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
-    <string name="ExperimentalFeatures_Testnet_Enable">Enable Testnet</string>
-    <string name="ExperimentalFeatures_Testnet_Support">Mnemonic Phrase wallets only</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Ativar Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Carteiras Mnemônicas de Frase apenas</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Isso permite que você envie Bitcoins que não podem ser gastos até uma data especificada. \n\nO destinatário de tais transações deve usar o aplicativo de carteira Unstoppable versão 0.10 ou mais recente, com o formato de endereço BIP44 para Bitcoin. \n\nSomente a carteira Unstoppable pode identificar corretamente tais transações na rede Bitcoin, bem como permitir que o receptor gaste esses Bitcoins após o período de bloqueio expirar. \n\nSe você é um HOLDER, você pode usar este recurso para se forçar a manter seus Bitcoins enviando tais transações para si mesmo. \n\nSendo um recurso experimental, o valor máximo por transação é limitado a 0,5 BTC.</string>
     <!--Manage Accounts-->
@@ -789,7 +789,7 @@
     <string name="ManageAccount_BackupRequired_Description">Você precisa fazer um backup de %1$s antes de poder receber %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta ação irá apagar do dispositivo a carteira selecionada.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Se você não fizer o backup da chave privada desta carteira, perderá o acesso aos seus fundos.</string>
-    <string name="ManageAccount_MigrationRequired_Title">Migration Required</string>
+    <string name="ManageAccount_MigrationRequired_Title">Migração Necessária</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s palavras</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s palavras com senha</string>
@@ -887,12 +887,13 @@
     <string name="AddToken_Title">Adicionar token</string>
     <string name="AddToken_CoinName">Nome da Moeda</string>
     <string name="AddToken_Symbol">Símbolo</string>
-    <string name="AddToken_CoinCode">Coin Code</string>
+    <string name="AddToken_CoinCode">Código da Moeda</string>
     <string name="AddToken_Decimals">Decimais</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Coin Type(s)</string>
-    <string name="AddToken_AlreadyAdded">ALREADY ADDED</string>
+    <string name="AddToken_AlreadyAdded">JÁ ADICIONADO</string>
     <string name="AddToken_AddressOrSymbol">Endereço do Contrato</string>
+    <string name="AddToken_ChooseToken">Choose Token</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token já está na lista de moedas</string>
     <string name="AddToken_InvalidAddressError">Endereço do contrato ou símbolo BEP2 inválido</string>
     <string name="AddToken_ApiLimitExceeded">Limite de Api excedido. Tente novamente mais tarde.</string>
