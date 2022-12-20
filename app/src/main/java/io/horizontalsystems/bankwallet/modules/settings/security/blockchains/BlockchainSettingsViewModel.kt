@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.icon24
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.disposables.CompositeDisposable
@@ -46,19 +46,19 @@ class BlockchainSettingsViewModel(
                         subtitle = "${Translator.getString(item.restoreMode.title)}, ${
                             Translator.getString(item.transactionMode.title)
                         }",
-                        icon = item.blockchain.type.icon24,
+                        imageUrl = item.blockchain.type.imageUrl,
                         blockchainItem = item
                     )
                     is BlockchainSettingsModule.BlockchainItem.Evm -> BlockchainSettingsModule.BlockchainViewItem(
                         title = item.blockchain.name,
                         subtitle = item.syncSource.name,
-                        icon = item.blockchain.type.icon24,
+                        imageUrl = item.blockchain.type.imageUrl,
                         blockchainItem = item
                     )
                     is BlockchainSettingsModule.BlockchainItem.Solana -> BlockchainSettingsModule.BlockchainViewItem(
                         title = item.blockchain.name,
                         subtitle = item.rpcSource.name,
-                        icon = item.blockchain.type.icon24,
+                        imageUrl = item.blockchain.type.imageUrl,
                         blockchainItem = item
                     )
                 }

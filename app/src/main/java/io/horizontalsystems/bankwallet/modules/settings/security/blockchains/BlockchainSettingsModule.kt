@@ -30,7 +30,7 @@ object BlockchainSettingsModule {
     data class BlockchainViewItem(
         val title: String,
         val subtitle: String,
-        val icon: Int,
+        val imageUrl: String,
         val blockchainItem: BlockchainItem
     )
 

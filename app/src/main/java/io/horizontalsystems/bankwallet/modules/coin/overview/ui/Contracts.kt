@@ -12,19 +12,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Preview
 @Composable
 fun ContractsPreview() {
     ComposeAppTheme(darkTheme = true) {
         val contracts = listOf(
-            ContractInfo("0xda123as34290098asd0098asdasd9098asd90123asd", R.drawable.logo_ethereum_24,"https://etherscan.io/token/0xda123as34290098asd0098asdasd9098asd90123asd"),
-            ContractInfo("0x34290098asd8asdasd98asd8asdasd9098asd098as9", R.drawable.logo_binancecoin_24,"https://bscscan.com/token/0x34290098asd8asdasd98asd8asdasd9098asd098as9"),
-            ContractInfo("BNB", R.drawable.logo_binance_smart_chain_24,"https://explorer.binance.org/asset/BNB"),
+            ContractInfo("0xda123as34290098asd0098asdasd9098asd90123asd", BlockchainType.Ethereum.imageUrl,"https://etherscan.io/token/0xda123as34290098asd0098asdasd9098asd90123asd"),
+            ContractInfo("0x34290098asd8asdasd98asd8asdasd9098asd098as9", BlockchainType.BinanceChain.imageUrl,"https://bscscan.com/token/0x34290098asd8asdasd98asd8asdasd9098asd098as9"),
+            ContractInfo("BNB", BlockchainType.BinanceSmartChain.imageUrl,"https://explorer.binance.org/asset/BNB"),
         )
         Contracts(contracts = contracts, {}, {})
     }
@@ -48,7 +51,10 @@ fun Contracts(
             ) {
                 Image(
                     modifier = Modifier.size(32.dp),
-                    painter = painterResource(id = contractInfo.logoResId),
+                    painter = rememberAsyncImagePainter(
+                        model = contractInfo.imgUrl,
+                        error = painterResource(R.drawable.ic_platform_placeholder_32)
+                    ),
                     contentDescription = "platform"
                 )
                 subhead2_leah(
