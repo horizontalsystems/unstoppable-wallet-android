@@ -166,6 +166,7 @@ object WCRequestModule {
             Chain.Avalanche -> BlockchainType.Avalanche
             Chain.Optimism -> BlockchainType.Optimism
             Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+            Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
             else -> BlockchainType.Ethereum
         }
         return App.evmBlockchainManager.getBaseToken(blockchainType)!!
