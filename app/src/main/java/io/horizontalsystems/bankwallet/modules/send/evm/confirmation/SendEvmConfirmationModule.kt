@@ -36,6 +36,7 @@ object SendEvmConfirmationModule {
                 Chain.Avalanche -> BlockchainType.Avalanche
                 Chain.Optimism -> BlockchainType.Optimism
                 Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+                Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
                 else -> BlockchainType.Ethereum
             }
             App.evmBlockchainManager.getBaseToken(blockchainType)!!

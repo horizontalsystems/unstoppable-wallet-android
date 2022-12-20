@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 object AddTokenModule {
@@ -13,14 +14,16 @@ object AddTokenModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val services = buildList {
                 addAll(
-                    App.evmBlockchainManager.allBlockchainTypes.map {
+                    App.evmBlockchainManager.allBlockchains.map {
                         AddEvmTokenBlockchainService(it, App.networkManager)
                     }
                 )
-                add(AddBep2TokenBlockchainService(BlockchainType.BinanceChain, App.networkManager))
+                App.marketKit.blockchain(BlockchainType.BinanceChain.uid)?.let {
+                    add(AddBep2TokenBlockchainService(it, App.networkManager))
+                }
             }
 
-            val service = AddTokenService(App.coinManager, services, App.walletManager, App.accountManager, App.marketKit)
+            val service = AddTokenService(App.coinManager, services, App.walletManager, App.accountManager)
 
             return AddTokenViewModel(service) as T
         }
@@ -29,13 +32,7 @@ object AddTokenModule {
     interface IAddTokenBlockchainService {
         fun isValid(reference: String): Boolean
         fun tokenQuery(reference: String): TokenQuery
-        suspend fun customCoin(reference: String): CustomCoin
+        suspend fun token(reference: String): Token
     }
 
-    data class CustomCoin(
-        val tokenQuery: TokenQuery,
-        val name: String,
-        val code: String,
-        val decimals: Int
-    )
 }
