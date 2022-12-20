@@ -66,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s کلمه</string>
     <string name="CreateWallet_PassphraseConfirm">تاييد</string>
     <string name="CreateWallet_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]> for the passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">تأیید عبارت عبور مطابقت ندارد</string>
     <string name="EnterPassphrase">عبارت عبور را وارد کنید</string>
     <string name="CreateWallet_PassphraseDescription">عبارت‌های عبور یک لایه امنیتی اضافی به کیف پول‌ها اضافه می‌کنند و به کاربران این امکان را می‌دهند تا با استفاده از یک عبارت بازیابی حافظه‌ای واحد، اما با رمزهای عبور متفاوت، کیف پول‌های چند سکه‌ای مستقل ایجاد کنند.\n\n برای بازیابی این کیف پول ها، کاربر به یک عبارت بازیابی حافظه و همچنین یک رمز عبور برای هر کیف پول بازیابی نیاز دارد.</string>
@@ -501,7 +501,7 @@
     <string name="SwapInfo_Description">این سرویس مبادله تراکنش %s، یک پروتکل تبادل توکن غیرمتمرکز که بر روی بلاک چین %s ساخته شده است، پشتیبانی می‌شود. \n\n %s کاملاً خودکار است و توسط قراردادهای هوشمند مدیریت می‌شود که تبادل توکن را به روشی قابل اعتماد و بدون هیچ راهی برای تقلب تسهیل می‌کند.</string>
     <string name="SwapInfo_DexRelated">Uniswap مرتبط نیست</string>
     <string name="SwapInfo_AllowanceTitle">مستمری</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A proceeding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">تأثیر قیمت</string>
     <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
     <string name="SwapInfo_SwapFeeTitle">هزینه جابجایی</string>
@@ -900,6 +900,7 @@
     <string name="AddToken_CoinTypes">انواع سکه</string>
     <string name="AddToken_AlreadyAdded">ALREADY ADDED</string>
     <string name="AddToken_AddressOrSymbol">آدرس قرارداد</string>
+    <string name="AddToken_ChooseToken">Choose Token</string>
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
     <string name="AddToken_InvalidAddressError">آدرس قرارداد یا نماد BEP2 نامعتبر است</string>
     <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
