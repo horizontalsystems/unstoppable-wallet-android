@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.icon24
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -133,7 +133,7 @@ class NftCollectionOverviewViewModel(
         collection.contracts.map {
             ContractInfo(
                 it,
-                service.blockchainType.icon24,
+                service.blockchainType.imageUrl,
                 service.blockchain?.explorerUrl?.replace("\$ref", it)
             )
         }

@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -140,7 +141,10 @@ private fun AddTokenScreen(
                                     modifier = Modifier
                                         .padding(vertical = 12.dp)
                                         .size(32.dp),
-                                    painter = painterResource(id = addedToken.image),
+                                    painter = rememberAsyncImagePainter(
+                                        model = addedToken.image,
+                                        error = painterResource(R.drawable.ic_platform_placeholder_32)
+                                    ),
                                     contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.width(16.dp))
@@ -171,7 +175,10 @@ private fun AddTokenScreen(
                                     modifier = Modifier
                                         .padding(vertical = 12.dp)
                                         .size(32.dp),
-                                    painter = painterResource(id = tokenInfoUiState.image),
+                                    painter = rememberAsyncImagePainter(
+                                        model = tokenInfoUiState.image,
+                                        error = painterResource(R.drawable.ic_platform_placeholder_32)
+                                    ),
                                     contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.width(16.dp))

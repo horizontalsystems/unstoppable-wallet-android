@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.icon24
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
@@ -77,7 +77,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                         TokenInfoUiState(
                             tokenInfo = it,
                             title = it.token.tokenQuery.protocolType ?: "",
-                            image = it.token.tokenQuery.blockchainType.icon24,
+                            image = it.token.tokenQuery.blockchainType.imageUrl,
                             checked = it.inWallet,
                             enabled = true
                         )
@@ -88,7 +88,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                     .map {
                         AlreadyAddedToken(
                             title = it.token.tokenQuery.protocolType ?: "",
-                            image = it.token.tokenQuery.blockchainType.icon24,
+                            image = it.token.tokenQuery.blockchainType.imageUrl,
                         )
                     }
 
@@ -163,13 +163,13 @@ data class AddTokenUiState(
 
 data class AlreadyAddedToken(
     val title: String,
-    val image: Int,
+    val image: String,
 )
 
 data class TokenInfoUiState(
     val tokenInfo: AddTokenService.TokenInfo,
     val title: String,
-    val image: Int,
+    val image: String,
     val checked: Boolean,
     val enabled: Boolean
 )

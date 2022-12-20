@@ -7,9 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.description
-import io.horizontalsystems.bankwallet.core.icon24
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -53,7 +54,7 @@ class RestoreBlockchainsViewModel(
         item: RestoreBlockchainsService.Item,
     ) = CoinViewItem(
         item.blockchain,
-        ImageSource.Local(item.blockchain.type.icon24),
+        ImageSource.Remote(item.blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
         item.blockchain.name,
         item.blockchain.description,
         state = CoinViewItemState.ToggleVisible(item.enabled, item.hasSettings)

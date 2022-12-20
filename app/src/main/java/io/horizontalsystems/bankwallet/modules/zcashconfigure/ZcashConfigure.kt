@@ -32,8 +32,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -42,6 +44,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 
 class ZcashConfigure : BaseFragment() {
@@ -123,7 +126,7 @@ private fun ZcashConfigureScreen(
     }
 
     if (showSlowSyncWarning) {
-        scope.launch {
+        LaunchedEffect(Unit) {
             sheetState.show()
         }
     }
@@ -287,7 +290,10 @@ fun ZcashAppBar(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     modifier = Modifier.padding(end = 16.dp).size(24.dp),
-                    painter = painterResource(R.drawable.logo_zcash_24),
+                    painter = rememberAsyncImagePainter(
+                        model = BlockchainType.Zcash.imageUrl,
+                        error = painterResource(R.drawable.ic_platform_placeholder_32)
+                    ),
                     contentDescription = null
                 )
                 title3_leah(

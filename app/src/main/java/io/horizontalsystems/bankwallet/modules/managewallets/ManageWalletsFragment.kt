@@ -302,12 +302,12 @@ private fun CoinCell(
 @Composable
 fun PreviewCoinCell() {
     val viewItem = CoinViewItem(
-        "arbitrum",
-        ImageSource.Local(R.drawable.logo_arbitrum_24),
-        "ARB",
-        "Arbitrum",
+        "athereum",
+        ImageSource.Local(R.drawable.logo_ethereum_24),
+        "ETH",
+        "Ethereum",
         CoinViewItemState.ToggleVisible(true, true),
-        "Arbitrum"
+        "Ethereum"
     )
     ComposeAppTheme {
         CoinCell(

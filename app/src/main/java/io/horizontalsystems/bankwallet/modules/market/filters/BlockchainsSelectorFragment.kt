@@ -18,9 +18,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.icon24
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -131,7 +132,10 @@ private fun BlockchainCell(
         backgroundColor = ComposeAppTheme.colors.lawrence
     ) {
         Image(
-            painter = painterResource(item.blockchain.type.icon24),
+            painter = rememberAsyncImagePainter(
+                model = item.blockchain.type.imageUrl,
+                error = painterResource(R.drawable.ic_platform_placeholder_32)
+            ),
             contentDescription = null,
             modifier = Modifier.size(32.dp)
         )

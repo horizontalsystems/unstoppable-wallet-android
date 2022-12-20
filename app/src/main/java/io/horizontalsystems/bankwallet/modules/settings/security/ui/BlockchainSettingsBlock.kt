@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule
@@ -60,7 +61,10 @@ private fun BlockchainSettingCell(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .size(32.dp),
-            painter = painterResource(item.icon),
+            painter = rememberAsyncImagePainter(
+                model = item.imageUrl,
+                error = painterResource(R.drawable.ic_platform_placeholder_32)
+            ),
             contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {

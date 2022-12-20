@@ -181,39 +181,6 @@ val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
         else -> listOf()
     }
 
-val BlockchainType.icon24: Int
-    get() = when (this) {
-        BlockchainType.Bitcoin -> R.drawable.logo_bitcoin_24
-        BlockchainType.BitcoinCash -> R.drawable.logo_bitcoincash_24
-        BlockchainType.Litecoin -> R.drawable.logo_litecoin_24
-        BlockchainType.Dash -> R.drawable.logo_dash_24
-        BlockchainType.Ethereum -> R.drawable.logo_ethereum_24
-        BlockchainType.EthereumGoerli -> R.drawable.logo_ethereum_goerli_32
-        BlockchainType.BinanceSmartChain -> R.drawable.logo_binance_smart_chain_24
-        BlockchainType.Polygon -> R.drawable.logo_polygon_24
-        BlockchainType.Avalanche -> R.drawable.logo_avalanche_24
-        BlockchainType.Optimism -> R.drawable.logo_optimism_24
-        BlockchainType.ArbitrumOne -> R.drawable.logo_arbitrum_24
-        BlockchainType.Zcash -> R.drawable.logo_zcash_24
-        BlockchainType.BinanceChain -> R.drawable.logo_binancecoin_24
-        BlockchainType.Solana -> R.drawable.logo_solana_24
-        is BlockchainType.Unsupported -> {
-            when (this._uid) {
-                "fantom" -> R.drawable.logo_fantom_24
-                "harmony-shard-0" -> R.drawable.logo_harmony_24
-                "huobi-token" -> R.drawable.logo_huobi_token_24
-                "iotex" -> R.drawable.logo_iotex_24
-                "moonriver" -> R.drawable.logo_moonriver_24
-                "okex-chain" -> R.drawable.logo_okex_24
-                "solana" -> R.drawable.logo_solana_24
-                "sora" -> R.drawable.logo_sora_24
-                "tomochain" -> R.drawable.logo_tomochain_24
-                "xdai" -> R.drawable.logo_xdai_24
-                else -> R.drawable.ic_platform_placeholder_24
-            }
-        }
-    }
-
 val BlockchainType.order: Int
     get() = when (this) {
         BlockchainType.Bitcoin -> 1

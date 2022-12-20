@@ -225,7 +225,7 @@ private fun ManageWalletsScreen(
                                 contentDescription = null,
                                 modifier = Modifier
                                     .padding(end = 16.dp)
-                                    .size(24.dp)
+                                    .size(32.dp)
                             )
                             Column(modifier = Modifier.weight(1f)) {
                                 body_leah(
