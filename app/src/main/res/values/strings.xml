@@ -1083,6 +1083,7 @@
     <string name="AddToken_CoinTypes">COIN TYPES</string>
     <string name="AddToken_AlreadyAdded">ALREADY ADDED</string>
     <string name="AddToken_AddressOrSymbol">Contract Address</string>
+    <string name="AddToken_ChooseToken">Choose Token</string>
 
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
     <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
