@@ -27,19 +27,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.snackbar.SnackbarDuration
 
 class AddTokenFragment : BaseFragment() {
@@ -152,9 +150,9 @@ private fun AddTokenScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                    title = stringResource(R.string.Button_Add),
+                    title = uiState.actionButton.title,
                     onClick = { viewModel.onAddClick() },
-                    enabled = uiState.addEnabled
+                    enabled = uiState.actionButton.enabled
                 )
             }
         }
@@ -166,7 +164,7 @@ private fun TokenCell(
     title: String,
     subtitle: String,
     blockchain: String?,
-    image: String,
+    image: ImageSource,
     checked: Boolean = true,
     alreadyAdded: Boolean = false,
     onCheckedChange: (() -> Unit)? = null,
@@ -183,13 +181,10 @@ private fun TokenCell(
                 }
             ) {
                 Image(
+                    painter = image.painter(),
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .size(32.dp),
-                    painter = rememberAsyncImagePainter(
-                        model = image,
-                        error = painterResource(R.drawable.ic_platform_placeholder_32)
-                    ),
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(16.dp))
@@ -217,7 +212,7 @@ private fun TokenCell(
                                         end = 4.dp,
                                         bottom = 1.dp
                                     ),
-                                    text = badge,
+                                    text = badge.uppercase(),
                                     color = ComposeAppTheme.colors.bran,
                                     style = ComposeAppTheme.typography.microSB,
                                     maxLines = 1,
@@ -259,7 +254,7 @@ private fun Preview_TokenCell() {
                 "ACD",
                 "Token Name",
                 "Bep20",
-                BlockchainType.BinanceSmartChain.imageUrl,
+                ImageSource.Local(R.drawable.bep20),
                 true,
                 false,
                 {})
@@ -268,7 +263,7 @@ private fun Preview_TokenCell() {
                 "TCD",
                 "Token Name",
                 "Polygon",
-                BlockchainType.Ethereum.imageUrl,
+                ImageSource.Local(R.drawable.polygon_erc20),
                 false,
                 false,
                 {})
@@ -277,7 +272,7 @@ private fun Preview_TokenCell() {
                 "BTCD",
                 "Token Name",
                 "Erc20",
-                BlockchainType.Ethereum.imageUrl,
+                ImageSource.Local(R.drawable.erc20),
                 alreadyAdded = true
             )
         }

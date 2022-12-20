@@ -9,6 +9,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -20,12 +22,19 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     private var tokens: List<TokenInfoUiState> = listOf()
     private var alreadyAddedTokens: List<AlreadyAddedToken> = listOf()
     private var caution: Caution? = null
+    private val actionButton: AddTokenButton
+        get() {
+            val enabled = tokens.any { it.enabled && it.checked }
+            val title =
+                Translator.getString(if (enabled) R.string.Button_Add else R.string.AddToken_ChooseToken)
+            return AddTokenButton(title, enabled)
+        }
 
     var uiState by mutableStateOf(
         AddTokenUiState(
             tokens = tokens,
             alreadyAddedTokens = alreadyAddedTokens,
-            addEnabled = false,
+            actionButton = actionButton,
             loading = loading,
             finished = finished,
             caution = caution
@@ -39,7 +48,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
         uiState = AddTokenUiState(
             tokens = tokens,
             alreadyAddedTokens = alreadyAddedTokens,
-            addEnabled = tokens.any { it.enabled && it.checked },
+            actionButton = actionButton,
             loading = loading,
             finished = finished,
             caution = caution,
@@ -67,7 +76,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                             title = it.token.coin.code,
                             subtitle = it.token.coin.name,
                             blockchain = it.token.tokenQuery.protocolType ?: "",
-                            image = it.token.tokenQuery.blockchainType.imageUrl,
+                            image = ImageSource.Remote(it.token.coin.imageUrl, it.token.blockchainType.tokenIconPlaceholder),
                             checked = it.inWallet,
                             enabled = true
                         )
@@ -80,7 +89,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                             title = it.token.coin.code,
                             subtitle = it.token.coin.name,
                             blockchain = it.token.tokenQuery.protocolType ?: "",
-                            image = it.token.tokenQuery.blockchainType.imageUrl,
+                            image = ImageSource.Remote(it.token.coin.imageUrl, it.token.blockchainType.tokenIconPlaceholder),
                         )
                     }
 
@@ -138,10 +147,15 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     }
 }
 
+data class AddTokenButton(
+    val title: String,
+    val enabled: Boolean
+)
+
 data class AddTokenUiState(
     val tokens: List<TokenInfoUiState>,
     val alreadyAddedTokens: List<AlreadyAddedToken>,
-    val addEnabled: Boolean,
+    val actionButton: AddTokenButton,
     val loading: Boolean,
     val finished: Boolean,
     val caution: Caution?,
@@ -151,7 +165,7 @@ data class AlreadyAddedToken(
     val title: String,
     val subtitle: String,
     val blockchain: String?,
-    val image: String,
+    val image: ImageSource,
 )
 
 data class TokenInfoUiState(
@@ -159,7 +173,7 @@ data class TokenInfoUiState(
     val title: String,
     val subtitle: String,
     val blockchain: String?,
-    val image: String,
+    val image: ImageSource,
     val checked: Boolean,
     val enabled: Boolean
 )
