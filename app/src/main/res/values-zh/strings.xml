@@ -766,7 +766,7 @@
     <string name="ExperimentalFeatures_Description">以下功能为实验性功能，应谨慎使用。虽然我们已使用自己的加密货币资金对这些功能进行了彻底测试，但是我们不保证它们在所有情况下都能如常工作。</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <string name="ExperimentalFeatures_Testnet_Enable">启用测试网</string>
-    <string name="ExperimentalFeatures_Testnet_Support">仅限虚拟词钱包</string>
+    <string name="ExperimentalFeatures_Testnet_Description">Enabling Testnet gives you the ability to add the Goerli Chain</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用本钱包。\n\n只有本钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Accounts-->
