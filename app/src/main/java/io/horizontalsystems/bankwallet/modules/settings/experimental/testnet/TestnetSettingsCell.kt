@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.experimental.testnet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,8 +20,6 @@ fun TestnetSettingsCell(viewModel: TestnetSettingsViewModel) {
             ) {
                 Column(Modifier.padding(vertical = 12.dp)) {
                     body_leah(text = stringResource(R.string.ExperimentalFeatures_Testnet_Enable))
-                    Spacer(Modifier.height(1.dp))
-                    subhead2_grey(text = stringResource(R.string.ExperimentalFeatures_Testnet_Support))
                 }
                 Spacer(Modifier.weight(1f))
                 HsSwitch(
@@ -33,4 +30,8 @@ fun TestnetSettingsCell(viewModel: TestnetSettingsViewModel) {
                 )
             }
         })
+
+    InfoText(
+        text = stringResource(R.string.ExperimentalFeatures_Testnet_Description),
+    )
 }
