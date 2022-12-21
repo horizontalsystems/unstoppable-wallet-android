@@ -45,7 +45,6 @@
     <string name="AccountRecovery_Note">Nota</string>
     <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
-
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
@@ -67,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s palabras</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmar</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor usa solo <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> para la frase clave</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor usa solo símbolos compatibles: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmación de la frase de contraseña no coincide</string>
     <string name="EnterPassphrase">Introduzca su frase de contraseña</string>
     <string name="CreateWallet_PassphraseDescription">La frase de contraseña añade una capa de seguridad adicional a los monederos permitiendo a los usuarios crear múltiples monederos multi-monedas independientes usando una sola frase de recuperación mnemotécnica pero asociada con diferentes contraseñas.\n\nPara restaurar estos monederos un usuario necesitará una frase de recuperación mnemotécnica, así como una contraseña para cada monedero restaurado.</string>
@@ -473,6 +472,7 @@
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Dominio o dirección</string>
+    <string name="SwapSettings_FeeSettingsAlert">Una tarifa de servicio para la acción de intercambio en la plataforma típicamente de 0,3% o 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
     <string name="SwapSettings_Error_SlippageZero">Cero deslizamiento</string>
     <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
@@ -764,6 +764,8 @@
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Las siguientes características son experimentales y deben utilizarse con precaución. Aunque hemos probado a fondo estas características usando nuestros propios fondos criptográficos, no podemos garantizar que funcionen como se espera en todos los casos posibles.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Activar Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Sólo carteras de Frases Mnemónicas</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Permite enviar Bitcoins que no se pueden gastar hasta la fecha establecida.\n\nEl receptor de dicha transacción debe utilizar el monedero Unstoppable.\n\nSólo el monedero Unstoppable puede identificar correctamente tales transacciones en la red Bitcoin, así como permitir que el receptor gaste esos Bitcoins después de que expire el período de bloqueo.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote dicha transacción a ti mismo.\n\nPor ser característica experimental, la cantidad máxima por transacción está limitada a 0.5 BTC.</string>
     <!--Manage Accounts-->
@@ -891,11 +893,13 @@
     <string name="AddToken_Title">Añadir Token</string>
     <string name="AddToken_CoinName">Nombre de moneda</string>
     <string name="AddToken_Symbol">Símbolo</string>
+    <string name="AddToken_CoinCode">Código de moneda</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TIPOS DE COIN</string>
     <string name="AddToken_AlreadyAdded">YA AGREGADO</string>
     <string name="AddToken_AddressOrSymbol">Dirección del contrato</string>
+    <string name="AddToken_ChooseToken">Elegir token</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddToken_InvalidAddressError">Dirección de contrato inválida o símbolo BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Límite de Api superado. Inténtalo de nuevo más tarde.</string>
@@ -914,9 +918,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Dirección de caja (recomendado)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Común antes de 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Común después de 2018</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Activar Testnet</string>
-    <string name="Testnet_Support">Sólo carteras de Frases Mnemónicas</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Conexión</string>
     <string name="Tor_Connection_Enable">Activar Tor</string>

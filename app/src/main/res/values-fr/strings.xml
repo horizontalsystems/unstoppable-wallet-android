@@ -45,7 +45,6 @@
     <string name="AccountRecovery_Note">Remarque</string>
     <string name="AccountRecovery_MigrationRecommended">Ce portefeuille semble utiliser un caractère non-standard dans sa liste de mots secrets et/ou dans une phrase de passe. Si vous ne voyez pas de solde ou de transactions, veuillez vous reporter aux informations ci-dessous. \n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
     <string name="AccountRecovery_MigrationRequired">Ce portefeuille n\'est pas conforme aux normes.\n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
-
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Désenchaînez les actifs</string>
@@ -67,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s mots</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmer</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser seulement <![CDATA[A-Z a-z 0-9 \'"`&/?!:;,~*$=+-[](){}<>\_#@|%]]> pour la phrase de passe</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser uniquement les symboles pris en charge : <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
     <string name="EnterPassphrase">Saisir la phrase d\'authentification</string>
     <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
@@ -473,6 +472,7 @@
     <string name="SwapSettings_Apply">Appliquer</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse ou domaine</string>
+    <string name="SwapSettings_FeeSettingsAlert">Des frais de service pour l\'action de swap sur la plateforme sont typiques de 0,3% ou 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Délai Zéro</string>
     <string name="SwapSettings_Error_SlippageZero">Zéro Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Votre transaction est susceptible de ne pas aboutir.</string>
@@ -764,6 +764,8 @@
     <string name="ExperimentalFeatures_Title">Expérimental</string>
     <string name="ExperimentalFeatures_Description">Les fonctionnalités ci-dessous sont expérimentales et doivent être utilisées avec prudence. Bien que nous ayons entièrement testé ces fonctionnalités en utilisant nos propres fonds crypto, nous ne pouvons pas garantir qu\'elles fonctionnent comme prévu dans tous les cas de figure possible.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Activer le Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Portefeuilles de phrase mnémonique uniquement</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Permet d\'envoyer des Bitcoins qui ne peuvent pas être dépensées avant la date spécifiée.\n\nLe destinataire d\'une telle transaction devrait utiliser un portefeuille Unstoppable.\n\nSeul un portefeuille Unstoppable peut identifier correctement de telles transactions sur le réseau Bitcoin ainsi que permettre au destinataire de dépenser ces Bitcoins après l\'expiration de la période de verrouillage.\n\nSi vous êtes un HODLer, vous pouvez utiliser cette fonction pour vous obliger à garder vos Bitcoins en vous envoyant une telle transaction à vous-même.\n\nPuisqu\'il s\'agit d\'une fonctionnalité expérimentale, le montant maximum par transaction est limité à 0,5 BTC.</string>
     <!--Manage Accounts-->
@@ -891,11 +893,13 @@
     <string name="AddToken_Title">Ajouter le token</string>
     <string name="AddToken_CoinName">Nom de la pièce</string>
     <string name="AddToken_Symbol">Symbole</string>
+    <string name="AddToken_CoinCode">Code de la pièce</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TYPES DE COINS</string>
     <string name="AddToken_AlreadyAdded">DÉJÀ AJOUTÉ</string>
     <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
+    <string name="AddToken_ChooseToken">Choisir les jetons</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidAddressError">Adresse du contrat ou symbole BEP2 non valide</string>
     <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
@@ -914,9 +918,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommendé)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Activer le Testnet</string>
-    <string name="Testnet_Support">Portefeuilles de phrase mnémonique uniquement</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Connexion</string>
     <string name="Tor_Connection_Enable">Activer Tor</string>

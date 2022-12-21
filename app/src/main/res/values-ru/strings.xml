@@ -46,7 +46,6 @@
     <string name="AccountRecovery_MigrationRecommended">Похоже, этот кошелек использует нестандартный символ в списке мнемонических слов и/или парольной фразе. Если вы не видите баланс или транзакции, пожалуйста, прочтите подробности ниже.
 \n\nПОЖАЛУЙСТА НАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ.</string>
     <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
-
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Продолжить</string>
     <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
@@ -68,7 +67,7 @@
     <string name="CreateWallet_N_Words">%s слов</string>
     <string name="CreateWallet_PassphraseConfirm">Подтвердить</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> для ключевой фразы.</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
     <string name="EnterPassphrase">Введите кодовую фразу</string>
     <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
@@ -107,7 +106,6 @@
     <string name="Restore_NonStandardRestore">Нестандартное Восстановление</string>
     <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
 \n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
-
     <string name="Restore_PrivateKey_InvalidKey">Неверный Ключ</string>
     <string name="Select_Coins">Выберите Токены</string>
     <string name="Restore_BirthdayHeight">Блок Создания</string>
@@ -476,6 +474,7 @@
     <string name="SwapSettings_Apply">Применить</string>
     <string name="SwapSettings_DeadlineMinute">%s мин</string>
     <string name="SwapSettings_RecipientPlaceholder">Адрес или домен</string>
+    <string name="SwapSettings_FeeSettingsAlert">Комиссия за услугу обмена на платформе обычно 0.3% или 0.6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Нулевой Срок</string>
     <string name="SwapSettings_Error_SlippageZero">Нулевое Отклонение</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
@@ -504,7 +503,7 @@
     <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного в блокчейне %s.\n\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
     <string name="SwapInfo_DexRelated">o %s</string>
     <string name="SwapInfo_AllowanceTitle">Разрешение</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">Сумма, которую exchange может потратить от имени пользователя при выполнении обмена токенов. Действующая транзакция, устанавливающая достаточный уровень допустимости, необходима для того, чтобы транзакция обмена была осуществлена.</string>
     <string name="SwapInfo_PriceImpactTitle">Колебание Цен</string>
     <string name="SwapInfo_PriceImpactDescription">Ожидаемое отклонение цены от указанной цены, обычно увеличивается при увеличении суммы обмена.</string>
     <string name="SwapInfo_SwapFeeTitle">Комиссия за обмен</string>
@@ -764,6 +763,8 @@
     <string name="ExperimentalFeatures_Title">Функции</string>
     <string name="ExperimentalFeatures_Description">Функции ниже являются экспериментальными. Несмотря на то, что мы детально их протестировали, используя наши собственные криптосредства, мы не можем гарантировать, что они всегда будут работать так, как предусмотрено.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Включить Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Только кошельки c мнемонической фразой</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен использовать версию 0.10 приложения Unstoppable Wallet или же более новую версию с форматом адреса BIP44 для Bitcoin.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию для удержания своих биткойнов, отправив их себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Accounts-->
@@ -891,11 +892,13 @@
     <string name="AddToken_Title">Добавить Токен</string>
     <string name="AddToken_CoinName">Название Токена</string>
     <string name="AddToken_Symbol">Символ</string>
+    <string name="AddToken_CoinCode">Код Монеты</string>
     <string name="AddToken_Decimals">Десятичные Знаки</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
     <string name="AddToken_AlreadyAdded">УЖЕ ДОБАВЛЕНО</string>
     <string name="AddToken_AddressOrSymbol">Адрес Контракта</string>
+    <string name="AddToken_ChooseToken">Выберите Токен</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный адрес контракта или символ BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
@@ -914,9 +917,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (рекомендуется)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">до 2018 года</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">после 2018 года</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Включить Testnet</string>
-    <string name="Testnet_Support">Только кошельки мнемонической фразы</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Соединение</string>
     <string name="Tor_Connection_Enable">Включить Tor</string>

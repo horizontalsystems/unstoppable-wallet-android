@@ -45,7 +45,6 @@
     <string name="AccountRecovery_Note">Hinweis</string>
     <string name="AccountRecovery_MigrationRecommended">Diese Brieftasche scheint ein nicht standardmäßiges Zeichen in ihrer geheimen Wortliste und/oder einer Passphrase zu verwenden. Wenn Sie kein Guthaben oder Transaktionen sehen, lesen Sie bitte unten für Details.\n\nKLICKEN, UM WEITERE INFORMATIONEN ZU ERHALTEN</string>
     <string name="AccountRecovery_MigrationRequired">Dies ist eine nicht standardmäßige Wallet. \n\nKLICKEN SIE MEHR INFO</string>
-
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Sei unaufhaltsam</string>
     <string name="Intro_Wallet_Screen2Title">Assets lösen</string>
@@ -67,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s Wörter</string>
     <string name="CreateWallet_PassphraseConfirm">Bestätigen</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Bitte verwende nur <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> für die Passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Bitte verwende nur unterstützte Symbole: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase-Bestätigung stimmt nicht überein</string>
     <string name="EnterPassphrase">Geben Sie Ihre Passphrase ein</string>
     <string name="CreateWallet_PassphraseDescription">Passphrasen fügen den Wallets eine zusätzliche Sicherheitsebene hinzu, wodurch Benutzer mehrere unabhängige Multi-Coin-Wallets mit einer einzigen mnemonischen Wiederherstellungsphrase erstellen können, die jedoch mit unterschiedlichen Passwörtern verbunden sind. \n\nUm diese Wallets wiederherzustellen, benötigt der Benutzer eine mnemonische Wiederherstellungsphrase sowie ein Passwort für jedes wiederherzustellende Wallet.</string>
@@ -474,6 +473,7 @@
     <string name="SwapSettings_Apply">Übernehmen</string>
     <string name="SwapSettings_DeadlineMinute">%s Min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse oder Domäne</string>
+    <string name="SwapSettings_FeeSettingsAlert">Eine Service-Gebühr für die Swap-Aktion auf der Plattform typischerweise entweder 0,3% oder 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Null Frist</string>
     <string name="SwapSettings_Error_SlippageZero">Null Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ihre Transaktion wird wahrscheinlich fehlschlagen.</string>
@@ -769,6 +769,8 @@
     <string name="ExperimentalFeatures_Title">Experimentell</string>
     <string name="ExperimentalFeatures_Description">Die unten aufgeführten Funktionen sind experimentell und sollten mit Vorsicht eingesetzt werden. Wir haben sie zwar ausführlich mit unserem eigenen Kryptoguthaben getestet, aber wir können noch nicht garantieren, dass sie in allen denkbaren Fällen funktionieren.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Testnet aktivieren</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Nur Mnemonische Phrasen-Wallets</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Damit können Sie gesendete Bitcoins sperren, sodass sie bis zu dem festgesetzten Datum nicht ausgegeben werden können.\n\nDer Empfänger einer solchen Transaktion sollte das Unstoppable-Wallet in der Version 0.10 (oder neuer) sowie das Bitcoin-Adressformat BIP44 verwenden.\n\nNur das Unstoppable-Wallet erkennt solche Transaktionen im Bitcoin-Netzwerk korrekt und ermöglicht es dem Empfänger, die Bitcoins nach der Sperrzeit zu auszugeben.\n\nWenn Sie ein HODLer* sind, können Sie diese Funktion auch für sich selbst nutzen, indem Sie sich selbst eine solche Transaktion schicken und so ihre Bitcoin für sich selbst zeitlich sperren.\n\nDa es sich noch um eine experimentelle Funktion handelt, liegt der maximale Betrag bei 0,5 BTC.</string>
     <!--Manage Accounts-->
@@ -896,11 +898,13 @@
     <string name="AddToken_Title">Token hinzufügen</string>
     <string name="AddToken_CoinName">Coin Name</string>
     <string name="AddToken_Symbol">Symbol</string>
+    <string name="AddToken_CoinCode">Münzcode</string>
     <string name="AddToken_Decimals">Dezimalen</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Münztypen</string>
     <string name="AddToken_AlreadyAdded">SCHON HINZUGEFÜGT</string>
     <string name="AddToken_AddressOrSymbol">Vertragsadresse</string>
+    <string name="AddToken_ChooseToken">Token auswählen</string>
     <string name="AddToken_CoinAlreadyInListWarning">Dieser Token befindet sich bereits in der Coin-Verwaltungsliste</string>
     <string name="AddToken_InvalidAddressError">Ungültige Vertragsadresse oder BEP2-Symbol</string>
     <string name="AddToken_ApiLimitExceeded">Api Limit überschritten. Versuchen Sie es später erneut.</string>
@@ -919,9 +923,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (empfohlen)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Üblich vor 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Üblich nach 2018</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Testnet aktivieren</string>
-    <string name="Testnet_Support">Nur Mnemonische Phrasen-Wallets</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Verbinde</string>
     <string name="Tor_Connection_Enable">Tor aktivieren</string>
