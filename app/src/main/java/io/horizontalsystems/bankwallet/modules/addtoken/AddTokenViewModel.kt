@@ -74,7 +74,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                             tokenInfo = it,
                             title = it.token.coin.code,
                             subtitle = it.token.coin.name,
-                            blockchain = it.token.tokenQuery.protocolType ?: "",
+                            badge = it.token.tokenQuery.protocolType,
                             image = ImageSource.Remote(it.token.coin.imageUrl, it.token.blockchainType.tokenIconPlaceholder),
                             checked = notInWalletTokens.size == 1 && supportedTokens.size == 1,
                             enabled = true
@@ -87,7 +87,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                         AlreadyAddedToken(
                             title = it.token.coin.code,
                             subtitle = it.token.coin.name,
-                            blockchain = it.token.tokenQuery.protocolType ?: "",
+                            badge = it.token.tokenQuery.protocolType,
                             image = ImageSource.Remote(it.token.coin.imageUrl, it.token.blockchainType.tokenIconPlaceholder),
                         )
                     }
@@ -163,7 +163,7 @@ data class AddTokenUiState(
 data class AlreadyAddedToken(
     val title: String,
     val subtitle: String,
-    val blockchain: String?,
+    val badge: String?,
     val image: ImageSource,
 )
 
@@ -171,7 +171,7 @@ data class TokenInfoUiState(
     val tokenInfo: AddTokenService.TokenInfo,
     val title: String,
     val subtitle: String,
-    val blockchain: String?,
+    val badge: String?,
     val image: ImageSource,
     val checked: Boolean,
     val enabled: Boolean

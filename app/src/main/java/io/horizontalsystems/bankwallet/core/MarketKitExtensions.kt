@@ -83,8 +83,8 @@ val TokenQuery.protocolType: String?
         }
         is TokenType.Eip20 -> {
             when (blockchainType) {
-                BlockchainType.Ethereum,
-                BlockchainType.EthereumGoerli -> "ERC20"
+                BlockchainType.Ethereum -> "ERC20"
+                BlockchainType.EthereumGoerli -> "Goerli ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Polygon -> "Polygon"
                 BlockchainType.Avalanche -> "Avalanche"

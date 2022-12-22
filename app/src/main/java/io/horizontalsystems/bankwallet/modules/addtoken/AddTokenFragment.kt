@@ -116,7 +116,7 @@ private fun AddTokenScreen(
                             TokenCell(
                                 title = token.title,
                                 subtitle = token.subtitle,
-                                blockchain = token.blockchain,
+                                badge = token.badge,
                                 image = token.image,
                                 checked = token.checked,
                                 onCheckedChange = { viewModel.onToggleToken(token) }
@@ -136,7 +136,7 @@ private fun AddTokenScreen(
                             TokenCell(
                                 title = token.title,
                                 subtitle = token.subtitle,
-                                blockchain = token.blockchain,
+                                badge = token.badge,
                                 image = token.image,
                                 alreadyAdded = true,
                             )
@@ -163,7 +163,7 @@ private fun AddTokenScreen(
 private fun TokenCell(
     title: String,
     subtitle: String,
-    blockchain: String?,
+    badge: String?,
     image: ImageSource,
     checked: Boolean = true,
     alreadyAdded: Boolean = false,
@@ -199,7 +199,7 @@ private fun TokenCell(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
-                        blockchain?.let { badge ->
+                        badge?.let { badgeText ->
                             Box(
                                 modifier = Modifier
                                     .padding(start = 8.dp)
@@ -212,7 +212,7 @@ private fun TokenCell(
                                         end = 4.dp,
                                         bottom = 1.dp
                                     ),
-                                    text = badge.uppercase(),
+                                    text = badgeText.uppercase(),
                                     color = ComposeAppTheme.colors.bran,
                                     style = ComposeAppTheme.typography.microSB,
                                     maxLines = 1,
