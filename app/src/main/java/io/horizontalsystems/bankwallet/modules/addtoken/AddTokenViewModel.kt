@@ -66,23 +66,22 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
             try {
                 val tokens = addTokenService.getTokens(text)
 
-                val filteredTokens = tokens.filter { it.supported }
+                val supportedTokens = tokens.filter { it.supported }
+                val notInWalletTokens = supportedTokens.filter { !it.inWallet }
 
-                this@AddTokenViewModel.tokens = filteredTokens
-                    .filter { !it.inWallet }
-                    .map {
+                this@AddTokenViewModel.tokens = notInWalletTokens.map {
                         TokenInfoUiState(
                             tokenInfo = it,
                             title = it.token.coin.code,
                             subtitle = it.token.coin.name,
                             blockchain = it.token.tokenQuery.protocolType ?: "",
                             image = ImageSource.Remote(it.token.coin.imageUrl, it.token.blockchainType.tokenIconPlaceholder),
-                            checked = it.inWallet,
+                            checked = notInWalletTokens.size == 1 && supportedTokens.size == 1,
                             enabled = true
                         )
                     }
 
-                this@AddTokenViewModel.alreadyAddedTokens = filteredTokens
+                this@AddTokenViewModel.alreadyAddedTokens = supportedTokens
                     .filter { it.inWallet }
                     .map {
                         AlreadyAddedToken(
@@ -95,7 +94,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
                 val tokenInfo = tokens.firstOrNull()
 
-                if (filteredTokens.isEmpty() && tokenInfo?.supported == false) {
+                if (supportedTokens.isEmpty() && tokenInfo?.supported == false) {
                     caution = Caution(
                         Translator.getString(
                             R.string.ManageCoins_NotSupportedDescription,
