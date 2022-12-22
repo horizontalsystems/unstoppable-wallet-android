@@ -167,7 +167,7 @@ private fun OneInchScreen(
                         .background(ComposeAppTheme.colors.lawrence)
                 ) {
                     SwapCoinCardView(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 22.dp),
                         viewModel = fromCoinCardViewModel,
                         uuid = uuidFrom,
                         amountEnabled = true,
@@ -177,12 +177,12 @@ private fun OneInchScreen(
                         showSuggestions = isFocused
                     }
 
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     SwitchCoinsSection { viewModel.onTapSwitch() }
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     SwapCoinCardView(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 22.dp),
                         viewModel = toCoinCardViewModel,
                         uuid = uuidTo,
                         amountEnabled = false,

@@ -16,7 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -60,13 +61,22 @@ fun SwapCoinCardView(
     Row(
         modifier = modifier
             .height(IntrinsicSize.Max)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
     ) {
+        SwapAmountInput(
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 3.dp),
+            viewModel = viewModel,
+            amountEnabled = amountEnabled,
+            focusRequester = focusRequester,
+            amountDimming = isLoading && isEstimated,
+            onFocusChanged = onFocusChanged
+        )
+        Spacer(modifier = Modifier.width(6.dp))
         Row(
             modifier = Modifier
-                .fillMaxHeight()
-                .padding(end = 8.dp)
+                .height(32.dp)
                 .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false, radius = 40.dp),
                     onClick = {
@@ -104,14 +114,6 @@ fun SwapCoinCardView(
                 tint = ComposeAppTheme.colors.grey
             )
         }
-        SwapAmountInput(
-            modifier = Modifier.weight(1f),
-            viewModel = viewModel,
-            amountEnabled = amountEnabled,
-            focusRequester = focusRequester,
-            amountDimming = isLoading && isEstimated,
-            onFocusChanged = onFocusChanged
-        )
     }
 
 }
@@ -141,10 +143,9 @@ fun SwapAmountInput(
         }
     }
 
-    Column(modifier = modifier.height(46.dp), verticalArrangement = Arrangement.Center) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
         BasicTextField(
-            modifier = Modifier
-                .onFocusChanged { focusState ->
+            modifier = Modifier.onFocusChanged { focusState ->
                     focused = focusState.isFocused
                     onFocusChanged?.invoke(focusState.isFocused)
                 }
@@ -162,10 +163,17 @@ fun SwapAmountInput(
             textStyle = ColoredTextStyle(
                 color = if (amountDimming) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
                 textStyle = ComposeAppTheme.typography.headline1,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.Start
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+            cursorBrush = Brush.verticalGradient(
+                0.00f to Color.Transparent,
+                0.15f to Color.Transparent,
+                0.15f to ComposeAppTheme.colors.jacob,
+                0.85f to ComposeAppTheme.colors.jacob,
+                0.85f to Color.Transparent,
+                1.00f to Color.Transparent
+            ),
             visualTransformation = { text ->
                 if (text.isEmpty() || viewModel.inputParams.primaryPrefix == null) {
                     TransformedText(text, OffsetMapping.Identity)
@@ -190,7 +198,7 @@ fun SwapAmountInput(
             decorationBox = { innerTextField ->
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd
+                    contentAlignment = Alignment.CenterStart
                 ) {
                     if (textState.text.isEmpty()) {
                         Text(
@@ -200,7 +208,7 @@ fun SwapAmountInput(
                             maxLines = 1,
                             color = ComposeAppTheme.colors.grey,
                             style = ComposeAppTheme.typography.headline1,
-                            textAlign = TextAlign.End
+                            textAlign = TextAlign.Start
                         )
                         innerTextField()
                     } else if (!focused) {
@@ -211,7 +219,7 @@ fun SwapAmountInput(
                             maxLines = 1,
                             color = if (amountDimming) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
                             style = ComposeAppTheme.typography.headline1,
-                            textAlign = TextAlign.End
+                            textAlign = TextAlign.Start
                         )
                         Box(
                             modifier = Modifier
@@ -227,7 +235,7 @@ fun SwapAmountInput(
             }
         )
 
-        Spacer(modifier = Modifier.height(3.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Text(
             modifier = Modifier
@@ -239,7 +247,8 @@ fun SwapAmountInput(
                     onClick = { viewModel.onSwitch() }
                 ),
             text = secondaryInfo ?: "",
-            style = ComposeAppTheme.typography.subhead2.copy(textAlign = TextAlign.End),
+            style = ComposeAppTheme.typography.caption,
+            textAlign = TextAlign.Start,
             color = ComposeAppTheme.colors.grey,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
