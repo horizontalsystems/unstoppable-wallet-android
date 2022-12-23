@@ -240,7 +240,7 @@ class UniswapViewModel(
         pendingAllowanceService.state == SwapPendingAllowanceState.Revoking -> {
             SwapActionState.Disabled(Translator.getString(R.string.Swap_Revoking))
         }
-        service.errors.any { it == SwapError.RevokeAllowanceRequired } -> {
+        service.errors.isNotEmpty() && service.errors.all { it == SwapError.RevokeAllowanceRequired } -> {
             SwapActionState.Enabled(Translator.getString(R.string.Swap_Revoke))
         }
         else -> {

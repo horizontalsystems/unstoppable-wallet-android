@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
+import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
@@ -209,7 +210,7 @@ private fun UniswapScreen(
                             infoItems.add { Price(primaryPrice, secondaryPrice, tradeTimeoutProgress ?: 1f, tradeViewItem?.expired ?: false) }
                         }
                     }
-                    if (allowanceViewModel.uiState.isVisible) {
+                    if (allowanceViewModel.uiState.isVisible && !allowanceViewModel.uiState.revokeRequired) {
                         infoItems.add { SwapAllowance(allowanceViewModel, navController) }
                     }
                     tradeViewItem?.priceImpact?.let {
@@ -225,7 +226,7 @@ private fun UniswapScreen(
                         SingleLineGroup(infoItems)
                     }
 
-                    if (allowanceViewModel.uiState.revokeRequired) {
+                    if (buttons?.revoke is SwapActionState.Enabled && allowanceViewModel.uiState.revokeRequired) {
                         Spacer(modifier = Modifier.height(12.dp))
                         TextImportantWarning(
                             modifier = Modifier.padding(horizontal = 16.dp),
