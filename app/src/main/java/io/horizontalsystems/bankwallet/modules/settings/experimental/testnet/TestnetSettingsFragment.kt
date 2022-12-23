@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.experimental.timelock
+package io.horizontalsystems.bankwallet.modules.settings.experimental.testnet
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.core.findNavController
 
-class TimeLockFragment : BaseFragment() {
+class TestnetSettingsFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,14 +53,14 @@ class TimeLockFragment : BaseFragment() {
 @Composable
 private fun ExperimentalScreen(
     navController: NavController,
-    viewModel: TimeLockViewModel = viewModel(factory = TimeLockModule.Factory())
+    viewModel: TestnetSettingsViewModel = viewModel(factory = TestnetSettingsModule.Factory())
 ) {
     ComposeAppTheme {
         Column(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.ResString(R.string.BitcoinHodling_Title),
+                title = TranslatableString.ResString(R.string.TestnetSettings_EvmTestnet),
                 navigationIcon = {
                     HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -76,11 +76,11 @@ private fun ExperimentalScreen(
             ) {
                 Spacer(Modifier.height(12.dp))
                 ActivateCell(
-                    checked = viewModel.timeLockActivated,
+                    checked = viewModel.testnetActivated,
                     onChecked = { activated -> viewModel.setActivated(activated) }
                 )
                 InfoText(
-                    text = stringResource(R.string.BitcoinHodling_Description)
+                    text = stringResource(R.string.TestnetSettings_Description)
                 )
                 Spacer(Modifier.height(24.dp))
             }
