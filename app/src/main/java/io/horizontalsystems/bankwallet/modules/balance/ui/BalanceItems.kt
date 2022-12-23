@@ -214,9 +214,7 @@ fun BalanceItems(
                     painter = painterResource(R.drawable.icon_binocule_24),
                     contentDescription = "binoculars icon"
                 )
-            }
-
-            if (accountViewItem.manageCoinsAllowed) {
+            } else {
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_manage_2,
                     onClick = {

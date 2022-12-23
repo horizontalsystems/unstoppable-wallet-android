@@ -30,14 +30,6 @@ data class Account(
         }
 
     @IgnoredOnParcel
-    val manageCoinsAllowed: Boolean
-        get() = when (this.type) {
-            is AccountType.EvmAddress -> false
-            is AccountType.SolanaAddress -> false
-            else -> true
-        }
-
-    @IgnoredOnParcel
     val nonStandard: Boolean by lazy {
         if (type is AccountType.Mnemonic) {
             val words = type.words.joinToString(separator = " ")
