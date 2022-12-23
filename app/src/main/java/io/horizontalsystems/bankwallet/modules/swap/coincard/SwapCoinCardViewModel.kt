@@ -46,7 +46,7 @@ class SwapCoinCardViewModel(
     private val uuidString: String
         get() = UUID.randomUUID().leastSignificantBits.toString()
 
-    private val amountLiveData = MutableLiveData<Pair<String?, String?>>(Pair(null, null))
+    private val amountLiveData = MutableLiveData<Triple<String?, String?, String?>>(Triple(null, null, null))
     private val balanceLiveData = MutableLiveData<String?>(null)
     private val balanceErrorLiveData = MutableLiveData(false)
     private val tokenCodeLiveData = MutableLiveData<Token?>()
@@ -54,7 +54,7 @@ class SwapCoinCardViewModel(
     private val secondaryInfoLiveData = MutableLiveData<String?>(null)
 
     //region outputs
-    fun amountLiveData(): LiveData<Pair<String?, String?>> = amountLiveData
+    fun amountLiveData(): LiveData<Triple<String?, String?, String?>> = amountLiveData
     fun balanceLiveData(): LiveData<String?> = balanceLiveData
     fun balanceErrorLiveData(): LiveData<Boolean> = balanceErrorLiveData
     fun tokenCodeLiveData(): LiveData<Token?> = tokenCodeLiveData
@@ -72,7 +72,7 @@ class SwapCoinCardViewModel(
         coinCardService.onSelectCoin(token)
         fiatService.set(token)
         if (resetAmountOnCoinSelect) {
-            amountLiveData.postValue(Pair(uuidString, ""))
+            amountLiveData.postValue(Triple(uuidString, "", null))
             onChangeAmount("")
         }
     }
@@ -208,7 +208,7 @@ class SwapCoinCardViewModel(
         updateInputFields()
 
         if (fullAmountInfo == null) {
-            amountLiveData.postValue(Pair(uuidString, null))
+            amountLiveData.postValue(Triple(uuidString, null, null))
             secondaryInfoLiveData.postValue(secondaryInfoPlaceHolder())
 
             setCoinValueToService(inputAmount, force)
@@ -216,7 +216,12 @@ class SwapCoinCardViewModel(
             val decimals = fullAmountInfo.primaryDecimal
             val amountString = fullAmountInfo.primaryValue.setScale(decimals, RoundingMode.FLOOR)?.stripTrailingZeros()?.toPlainString()
 
-            amountLiveData.postValue(Pair(uuidString, amountString))
+            val primaryAmountPrefix = if (fullAmountInfo.primaryInfo is AmountInfo.CurrencyValueInfo)
+                fullAmountInfo.primaryInfo.currencyValue.currency.symbol
+            else
+                null
+
+            amountLiveData.postValue(Triple(uuidString, amountString, primaryAmountPrefix))
             secondaryInfoLiveData.postValue(fullAmountInfo.secondaryInfo?.getFormatted())
 
             setCoinValueToService(fullAmountInfo.coinValue.value, force)

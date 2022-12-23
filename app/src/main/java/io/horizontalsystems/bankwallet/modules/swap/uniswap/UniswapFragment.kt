@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
@@ -56,18 +57,16 @@ class UniswapFragment : SwapBaseFragment() {
 
     private val vmFactory by lazy { UniswapModule.Factory(dex) }
     private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) { vmFactory }
-    private val allowanceViewModelFactory by lazy {
-        UniswapModule.AllowanceViewModelFactory(
-            uniswapViewModel.service
-        )
-    }
+    private val allowanceViewModelFactory by lazy { UniswapModule.AllowanceViewModelFactory(uniswapViewModel.service) }
     private val allowanceViewModel by viewModels<SwapAllowanceViewModel> { allowanceViewModelFactory }
+    private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
     private val coinCardViewModelFactory by lazy {
         SwapMainModule.CoinCardViewModelFactory(
             this,
             dex,
             uniswapViewModel.service,
-            uniswapViewModel.tradeService
+            uniswapViewModel.tradeService,
+            mainViewModel.switchService
         )
     }
 

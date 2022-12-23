@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
@@ -51,18 +52,16 @@ class OneInchFragment : SwapBaseFragment() {
 
     private val vmFactory by lazy { OneInchModule.Factory(dex) }
     private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) { vmFactory }
-    private val allowanceViewModelFactory by lazy {
-        OneInchModule.AllowanceViewModelFactory(
-            oneInchViewModel.service
-        )
-    }
+    private val allowanceViewModelFactory by lazy { OneInchModule.AllowanceViewModelFactory(oneInchViewModel.service) }
+    private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
     private val allowanceViewModel by viewModels<SwapAllowanceViewModel> { allowanceViewModelFactory }
     private val cardsFactory by lazy {
         SwapMainModule.CoinCardViewModelFactory(
             this,
             dex,
             oneInchViewModel.service,
-            oneInchViewModel.tradeService
+            oneInchViewModel.tradeService,
+            mainViewModel.switchService
         )
     }
 

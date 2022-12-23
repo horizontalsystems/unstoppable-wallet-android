@@ -145,7 +145,8 @@ fun SwapAmountInput(
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
         BasicTextField(
-            modifier = Modifier.onFocusChanged { focusState ->
+            modifier = Modifier
+                .onFocusChanged { focusState ->
                     focused = focusState.isFocused
                     onFocusChanged?.invoke(focusState.isFocused)
                 }
@@ -175,10 +176,10 @@ fun SwapAmountInput(
                 1.00f to Color.Transparent
             ),
             visualTransformation = { text ->
-                if (text.isEmpty() || viewModel.inputParams.primaryPrefix == null) {
+                val prefix = amountData?.third
+                if (text.isEmpty() || prefix == null) {
                     TransformedText(text, OffsetMapping.Identity)
                 } else {
-                    val prefix = viewModel.inputParams.primaryPrefix ?: ""
                     val out = prefix + text
                     val prefixOffset = prefix.length
 
@@ -238,14 +239,7 @@ fun SwapAmountInput(
         Spacer(modifier = Modifier.height(2.dp))
 
         Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    enabled = viewModel.inputParams.switchEnabled,
-                    onClick = { viewModel.onSwitch() }
-                ),
+            modifier = Modifier.fillMaxWidth(),
             text = secondaryInfo ?: "",
             style = ComposeAppTheme.typography.caption,
             textAlign = TextAlign.Start,
