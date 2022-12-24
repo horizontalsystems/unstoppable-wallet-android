@@ -228,6 +228,9 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_ktx_version"
 
+    //Compose Navigation
+    implementation "androidx.navigation:navigation-compose:$navigation_ktx_version"
+
     api 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     // WorkManager Kotlin

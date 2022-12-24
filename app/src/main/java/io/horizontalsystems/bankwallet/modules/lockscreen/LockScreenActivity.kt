@@ -15,7 +15,7 @@ class LockScreenActivity : BaseActivity() {
 
     override fun onBackPressed() {
         val navController = findNavController(R.id.lockScreenNavHost)
-        if (navController.currentDestination?.id == navController.graph.startDestination) {
+        if (navController.currentDestination?.id == navController.graph.startDestinationId) {
             finishAffinity()
         }
 

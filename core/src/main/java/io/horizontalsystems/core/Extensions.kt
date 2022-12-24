@@ -22,7 +22,7 @@ fun View.hideKeyboard(context: Context) {
 fun NavController.setNavigationResult(key: String, bundle: Bundle, destinationId: Int? = null) {
     val backStackEntry = when (destinationId) {
         null -> previousBackStackEntry
-        else -> backStack.findLast { it.destination.id == destinationId }
+        else -> backQueue.findLast { it.destination.id == destinationId }
     }
 
     backStackEntry?.savedStateHandle?.set(key, bundle)
