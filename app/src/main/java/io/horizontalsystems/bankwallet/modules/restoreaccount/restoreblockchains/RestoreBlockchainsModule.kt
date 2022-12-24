@@ -89,5 +89,5 @@ data class CoinViewItem<T>(
 
 sealed class CoinViewItemState {
     data class ToggleVisible(val enabled: Boolean, val hasSettings: Boolean) : CoinViewItemState()
-    object ToggleHidden : CoinViewItemState()
+    data class ToggleHidden(val notSupportedReason: String) : CoinViewItemState()
 }

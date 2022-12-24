@@ -10,10 +10,7 @@ import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -122,13 +119,16 @@ class ManageWalletsService(
     }
 
     private fun item(fullCoin: FullCoin): Item {
-        val account = account ?: return Item(fullCoin, ItemState.Unsupported)
+        if (fullCoin.tokens.size == 1 && fullCoin.tokens.first().blockchain.type is BlockchainType.Unsupported) {
+            return Item(fullCoin, ItemState.UnsupportedByApp)
+        }
 
-        val eligibleTokens = fullCoin.eligibleTokens(account.type)
-        val fullCoinWithEligibleTokens = FullCoin(fullCoin.coin, eligibleTokens)
+        val accountType = account?.type ?: return Item(fullCoin, ItemState.UnsupportedByWalletType)
+
+        val eligibleTokens = fullCoin.eligibleTokens(accountType)
 
         val itemState = if (eligibleTokens.isEmpty()) {
-            ItemState.Unsupported
+            ItemState.UnsupportedByWalletType
         } else {
             val enabled = isEnabled(fullCoin.coin)
             ItemState.Supported(
@@ -137,7 +137,7 @@ class ManageWalletsService(
             )
         }
 
-        return Item(fullCoinWithEligibleTokens, itemState)
+        return Item(FullCoin(fullCoin.coin, eligibleTokens), itemState)
     }
 
     private fun hasSettingsOrPlatforms(tokens: List<Token>): Boolean {
@@ -233,7 +233,8 @@ class ManageWalletsService(
     )
 
     sealed class ItemState {
-        object Unsupported : ItemState()
+        object UnsupportedByWalletType : ItemState()
+        object UnsupportedByApp : ItemState()
         class Supported(val enabled: Boolean, val hasSettings: Boolean) : ItemState()
     }
 }
