@@ -29,7 +29,6 @@ class ManageWalletsService(
             itemsObservable.onNext(value)
         }
 
-    val cancelEnableCoinObservable = PublishSubject.create<Coin>()
     val accountType: AccountType?
         get() = account?.type
 
@@ -56,12 +55,6 @@ class ManageWalletsService(
             }.let {
                 disposables.add(it)
             }
-
-        enableCoinService.cancelEnableCoinObservable
-            .subscribeIO { fullCoin ->
-                handleCancelEnable(fullCoin)
-            }.let { disposables.add(it) }
-
 
         sync(walletManager.activeWallets)
         syncFullCoins()
@@ -184,12 +177,6 @@ class ManageWalletsService(
 
         if (newWallets.isNotEmpty() || removedWallets.isNotEmpty()) {
             walletManager.handle(newWallets, removedWallets)
-        }
-    }
-
-    private fun handleCancelEnable(fullCoin: FullCoin) {
-        if (!isEnabled(fullCoin.coin)) {
-            cancelEnableCoinObservable.onNext(fullCoin.coin)
         }
     }
 
