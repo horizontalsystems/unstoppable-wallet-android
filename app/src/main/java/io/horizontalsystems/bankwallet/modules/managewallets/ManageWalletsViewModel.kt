@@ -2,12 +2,13 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Unsupported
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItemState
@@ -49,7 +50,21 @@ class ManageWalletsViewModel(
                 item.state.enabled,
                 item.state.hasSettings
             )
-            is Unsupported -> CoinViewItemState.ToggleHidden
+            is ManageWalletsService.ItemState.UnsupportedByWalletType -> {
+                val reasonText = Translator.getString(
+                    R.string.ManageCoins_NotSupportedDescription,
+                    accountTypeDescription,
+                    item.fullCoin.coin.name
+                )
+                CoinViewItemState.ToggleHidden(reasonText)
+            }
+            is ManageWalletsService.ItemState.UnsupportedByApp -> {
+                val reasonText = Translator.getString(
+                    R.string.ManageCoins_NotSupportedByAppDescription,
+                    item.fullCoin.coin.name
+                )
+                CoinViewItemState.ToggleHidden(reasonText)
+            }
         }
         return CoinViewItem(
             item = item.fullCoin.coin.uid,

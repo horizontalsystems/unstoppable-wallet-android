@@ -199,10 +199,10 @@ private fun ManageWalletsScreen(
                                     } else {
                                         viewModel.enable(viewItem.item)
                                     }
-                                } else {
+                                } else if (viewItem.state is CoinViewItemState.ToggleHidden) {
                                     navController.slideFromBottom(
                                         R.id.coinNotSupportedDialog,
-                                        CoinNotSupportedDialog.prepareParams(viewModel.accountTypeDescription, viewItem.subtitle)
+                                        CoinNotSupportedDialog.prepareParams(viewItem.state.notSupportedReason)
                                     )
                                 }
                             },

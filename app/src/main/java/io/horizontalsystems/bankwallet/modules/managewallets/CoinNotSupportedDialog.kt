@@ -28,12 +28,8 @@ import io.horizontalsystems.core.findNavController
 
 class CoinNotSupportedDialog : BaseComposableBottomSheetFragment() {
 
-    private val accountTypeDescription by lazy {
-        requireArguments().getString(ACCOUNT_TYPE_DESC) ?: ""
-    }
-
-    private val coinTitle by lazy {
-        requireArguments().getString(COIN_TITLE) ?: ""
+    private val bodyText by lazy {
+        requireArguments().getString(BODY_TEXT) ?: ""
     }
 
     override fun onCreateView(
@@ -46,31 +42,22 @@ class CoinNotSupportedDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                CoinNotSupportedScreen(
-                    findNavController(),
-                    accountTypeDescription,
-                    coinTitle
-                )
+                CoinNotSupportedScreen(findNavController(), bodyText)
             }
         }
     }
 
     companion object {
-        private const val ACCOUNT_TYPE_DESC = "account_type_desc"
-        private const val COIN_TITLE = "coin_title"
+        private const val BODY_TEXT = "body_text"
 
-        fun prepareParams(accountTypeDescription: String, coinTitle: String) = bundleOf(
-            ACCOUNT_TYPE_DESC to accountTypeDescription,
-            COIN_TITLE to coinTitle,
-        )
+        fun prepareParams(bodyText: String) = bundleOf(BODY_TEXT to bodyText)
     }
 }
 
 @Composable
 fun CoinNotSupportedScreen(
     navController: NavController,
-    accountTypeDescription: String,
-    coinTitle: String
+    bodyText: String
 ) {
     ComposeAppTheme {
         BottomSheetHeader(
@@ -83,11 +70,7 @@ fun CoinNotSupportedScreen(
         ) {
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = stringResource(
-                    R.string.ManageCoins_NotSupportedDescription,
-                    accountTypeDescription,
-                    coinTitle
-                )
+                text = bodyText
             )
             Spacer(Modifier.height(20.dp))
             ButtonPrimaryYellow(
