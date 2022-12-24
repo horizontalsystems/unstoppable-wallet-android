@@ -21,17 +21,12 @@ class ManageWalletsViewModel(
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<String>>>()
-    val disableCoinLiveData = MutableLiveData<String>()
 
     private var disposables = CompositeDisposable()
 
     init {
         service.itemsObservable
             .subscribeIO { sync(it) }
-            .let { disposables.add(it) }
-
-        service.cancelEnableCoinObservable
-            .subscribeIO { disableCoinLiveData.postValue(it.uid) }
             .let { disposables.add(it) }
 
         sync(service.items)
@@ -95,7 +90,7 @@ class ManageWalletsViewModel(
         service.setFilter(filter)
     }
 
-    val accountTypeDescription: String
+    private val accountTypeDescription: String
         get() = service.accountType?.description ?: ""
 
     val addTokenEnabled: Boolean
