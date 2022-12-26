@@ -763,7 +763,7 @@
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Belirtilen tarihe kadar harcanmamış Bitcoin\'leri göndermenize olanak verir.\n\nBu tür bir işlemin alıcısı Unstoppable cüzdan kullanmalıdır.\n\nSadece Unstoppable cüzdan, Bitcoin ağındaki bu tür işlemleri doğru bir şekilde tanımlayabilir ve kilitleme süresi dolduktan sonra da alıcının bu Bitcoin\'leri harcamasını sağlayabilir.\n\nEğer bir HODLer iseniz, kendinize böyle bir işlem göndererek, bu özelliği Bitcoin\'lerinizi zarar etmeden uzun süre elinizde tutmaya zorlamak için kullanabilirsiniz.\n\nDeneysel bir özellik olduğundan, işlem başına maksimum tutar 0.5 BTC ile sınırlandırılmıştır.</string>
     <!-- Testnet Settings -->
-    <string name="TestnetSettings_Description">This option activates Ethereum\'s Goerli testnet only for GoerliETH token and adds it to the coin manager.\n\nIt only affects GoerliETH token while all other EVM and Ethereum tokens operate over mainnet. In other words, only transactions in GoerliETH go through Goerli testnet, while all other EVM token transfers including ETH go through mainnet.</string>
+    <string name="TestnetSettings_Description">Bu seçenek, Ethereum\'un Goerli test ağını yalnızca GoerliETH belirteci için etkinleştirir ve madeni para yöneticisine ekler.\n\nDiğer tüm EVM ve Ethereum belirteçleri ana ağ üzerinden çalışırken yalnızca GoerliETH belirtecini etkiler. Başka bir deyişle, yalnızca GoerliETH\'deki işlemler Goerli testnet\'ten geçerken, ETH dahil diğer tüm EVM token transferleri ana ağdan geçer.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Cüzdanları yönet</string>
     <string name="ManageAccounts_CreateNewWallet">Oluştur</string>
