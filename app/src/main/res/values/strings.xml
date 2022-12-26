@@ -925,7 +925,7 @@
     <string name="BitcoinHodling_Description">This enables you to send Bitcoins that cannot be spent until a specified date. \n\nThe receiver of such transactions should use the Unstoppable wallet app version 0.10 or newer, with the BIP44 address format for Bitcoin. \n\nOnly the Unstoppable wallet can correctly identify such transactions on the Bitcoin network, as well as enable the receiver to spend those Bitcoins after the lock period expires. \n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transactions to yourself. \n\nBeing an experimental feature, the maximum amount per transaction is limited to 0.5 BTC.</string>
 
     <!-- Testnet Settings -->
-    <string name="TestnetSettings_EvmTestnet" translatable="false">EVM Testnet</string>
+    <string name="TestnetSettings_EvmTestnet" translatable="false">Testnet</string>
     <string name="TestnetSettings_Description">This option activates Ethereum\'s Goerli testnet only for GoerliETH token and adds it to the coin manager.\n\nIt only affects GoerliETH token while all other EVM and Ethereum tokens operate over mainnet. In other words, only transactions in GoerliETH go through Goerli testnet, while all other EVM token transfers including ETH go through mainnet.</string>
 
     <!--Manage Accounts-->
