@@ -444,7 +444,7 @@
     <string name="Swap_MaxFee">最大手续费</string>
     <string name="Swap_Fee">费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
-    <string name="Swap_ErrorBalanceNotAvailable">Balance N/A</string>
+    <string name="Swap_ErrorBalanceNotAvailable">余额 N/A</string>
     <string name="Swap_ErrorNoLiquidity">订单深度不足</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">此服务不允许包装/拆包。请使用1英寸代替。</string>
     <string name="Swap_ErrorHighPriceImpact">高价格影响</string>
@@ -461,7 +461,7 @@
     <string name="Swap_AmountEstimated">(预估金额)</string>
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
-    <string name="Swap_AmountTypeCoin">Coin</string>
+    <string name="Swap_AmountTypeCoin">硬币</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">高级设置</string>
     <string name="SwapSettings_Service">服务</string>
