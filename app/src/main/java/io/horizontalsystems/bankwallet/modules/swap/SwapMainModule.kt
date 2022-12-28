@@ -181,8 +181,8 @@ object SwapMainModule {
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
         private val tokenFrom: Token? = arguments.getParcelable(tokenFromKey)
-        private val swapProviders: List<ISwapProvider> =
-            listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider, QuickSwapProvider)
+        private val swapProviders: List<ISwapProvider> = listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider, QuickSwapProvider)
+        private val switchService by lazy { AmountTypeSwitchService() }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -194,7 +194,9 @@ object SwapMainModule {
                             tokenFrom,
                             swapProviders,
                             App.localStorage
-                        )
+                        ),
+                        switchService,
+                        App.currencyManager
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
@@ -207,11 +209,10 @@ object SwapMainModule {
         owner: SavedStateRegistryOwner,
         private val dex: Dex,
         private val service: ISwapService,
-        private val tradeService: ISwapTradeService
+        private val tradeService: ISwapTradeService,
+        private val switchService: AmountTypeSwitchService
     ) : AbstractSavedStateViewModelFactory(owner, null) {
-        private val switchService by lazy {
-            AmountTypeSwitchService()
-        }
+
         private val fromCoinCardService by lazy {
             SwapFromCoinCardService(service, tradeService)
         }

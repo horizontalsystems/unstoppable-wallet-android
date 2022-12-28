@@ -30,8 +30,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
+import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
@@ -56,18 +58,16 @@ class UniswapFragment : SwapBaseFragment() {
 
     private val vmFactory by lazy { UniswapModule.Factory(dex) }
     private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) { vmFactory }
-    private val allowanceViewModelFactory by lazy {
-        UniswapModule.AllowanceViewModelFactory(
-            uniswapViewModel.service
-        )
-    }
+    private val allowanceViewModelFactory by lazy { UniswapModule.AllowanceViewModelFactory(uniswapViewModel.service) }
     private val allowanceViewModel by viewModels<SwapAllowanceViewModel> { allowanceViewModelFactory }
+    private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
     private val coinCardViewModelFactory by lazy {
         SwapMainModule.CoinCardViewModelFactory(
             this,
             dex,
             uniswapViewModel.service,
-            uniswapViewModel.tradeService
+            uniswapViewModel.tradeService,
+            mainViewModel.switchService
         )
     }
 
@@ -174,7 +174,7 @@ private fun UniswapScreen(
                 ) {
 
                     SwapCoinCardView(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 22.dp),
                         viewModel = fromCoinCardViewModel,
                         uuid = uuidFrom,
                         amountEnabled = true,
@@ -185,12 +185,12 @@ private fun UniswapScreen(
                         showSuggestions = isFocused
                     }
 
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     SwitchCoinsSection { viewModel.onTapSwitch() }
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     SwapCoinCardView(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 22.dp),
                         viewModel = toCoinCardViewModel,
                         uuid = uuidTo,
                         amountEnabled = true,
@@ -210,7 +210,7 @@ private fun UniswapScreen(
                             infoItems.add { Price(primaryPrice, secondaryPrice, tradeTimeoutProgress ?: 1f, tradeViewItem?.expired ?: false) }
                         }
                     }
-                    if (allowanceViewModel.uiState.isVisible) {
+                    if (allowanceViewModel.uiState.isVisible && !allowanceViewModel.uiState.revokeRequired) {
                         infoItems.add { SwapAllowance(allowanceViewModel, navController) }
                     }
                     tradeViewItem?.priceImpact?.let {
@@ -226,7 +226,7 @@ private fun UniswapScreen(
                         SingleLineGroup(infoItems)
                     }
 
-                    if (allowanceViewModel.uiState.revokeRequired) {
+                    if (buttons?.revoke is SwapActionState.Enabled && allowanceViewModel.uiState.revokeRequired) {
                         Spacer(modifier = Modifier.height(12.dp))
                         TextImportantWarning(
                             modifier = Modifier.padding(horizontal = 16.dp),

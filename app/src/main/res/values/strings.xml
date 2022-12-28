@@ -523,6 +523,7 @@
     <string name="Swap_MaxFee">Max Fee</string>
     <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="Swap_ErrorBalanceNotAvailable">Balance N/A</string>
     <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
     <string name="Swap_ErrorHighPriceImpact">High price impact</string>
@@ -539,6 +540,7 @@
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
+    <string name="Swap_AmountTypeCoin">Coin</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Advanced Settings</string>
