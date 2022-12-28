@@ -446,6 +446,7 @@
     <string name="Swap_MaxFee">Макс. Комиссия</string>
     <string name="Swap_Fee">Комиссия</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
+    <string name="Swap_ErrorBalanceNotAvailable">Balance N/A</string>
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Эта служба не позволяет wrapping/unwrapping. Вместо этого используйте 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
@@ -462,6 +463,7 @@
     <string name="Swap_AmountEstimated">(прим.)</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
+    <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Дополнительные Настройки</string>
     <string name="SwapSettings_Service">Сервис</string>
