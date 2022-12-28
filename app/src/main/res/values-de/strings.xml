@@ -445,7 +445,7 @@
     <string name="Swap_MaxFee">Max Gebühr</string>
     <string name="Swap_Fee">Gebühr</string>
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
-    <string name="Swap_ErrorBalanceNotAvailable">Balance N/A</string>
+    <string name="Swap_ErrorBalanceNotAvailable">Saldo N/A</string>
     <string name="Swap_ErrorNoLiquidity">Diese Token sind nicht tauschbar</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Dieser Service erlaubt keine Verpackung/Auspackung. Verwenden Sie stattdessen 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Hohe Preisauswirkung</string>
