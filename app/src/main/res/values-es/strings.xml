@@ -444,6 +444,7 @@
     <string name="Swap_MaxFee">Comisión Máx.</string>
     <string name="Swap_Fee">Comisión</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
+    <string name="Swap_ErrorBalanceNotAvailable">Balance N/A</string>
     <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Este servicio no permite envolver/desenvolver. Usa 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Impacto de precio alto</string>
@@ -460,6 +461,7 @@
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
+    <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuración avanzada</string>
     <string name="SwapSettings_Service">Servicio</string>
