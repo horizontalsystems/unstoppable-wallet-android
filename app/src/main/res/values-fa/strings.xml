@@ -452,7 +452,7 @@
     <string name="Swap_Revoke">ابطال</string>
     <string name="Swap_Revoking">Revoking...</string>
     <string name="Swap_Approve">تایید</string>
-    <string name="Swap_Approving">در حال تایید...</string>
+    <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">در حال جابجایی</string>
     <string name="Swap_MaximumPaid">بیشترین مقدار</string>
     <string name="Swap_MinimumGot">مقدار تضمین شده</string>
