@@ -451,10 +451,10 @@
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Эта служба не позволяет wrapping/unwrapping. Вместо этого используйте 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
     <string name="Swap_Proceed">Далее</string>
-    <string name="Swap_Revoke">Отменить</string>
-    <string name="Swap_Revoking">Отмена...</string>
+    <string name="Swap_Revoke">Отозвать</string>
+    <string name="Swap_Revoking">Отзыв...</string>
     <string name="Swap_Approve">Разрешить</string>
-    <string name="Swap_Approving">Подтверждение...</string>
+    <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_MaximumPaid">Максимальная Выплата</string>
     <string name="Swap_MinimumGot">Гарантированная Сумма</string>
@@ -493,14 +493,14 @@
     <!--Approve-->
     <string name="Approve_Title">Разрешить Обмен</string>
     <string name="Approve_RevokeAndApproveInfo">Вы можете обменять %s, или вы должны отменить и одобрить новую сумму</string>
-    <string name="Approve_ButtonRevoke">Отменить</string>
-    <string name="Approve_ButtonRevoking">Отмена</string>
+    <string name="Approve_ButtonRevoke">Отозвать</string>
+    <string name="Approve_ButtonRevoking">Отзыв</string>
     <string name="Approve_ButtonApprove">Разрешить</string>
     <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт, чтобы обменять этот токен от своего имени. С помощью этого разрешения задается сумма, которая может быть использована в рамках смарт-контракта. Это не повлияет на ваш баланс, но вам придется заплатить небольшой сбор за исполнение транзакции.\n\nРазрешение может быть запрошено перед каждой сделкой, но дешевле заранее задать более высокую сумму для будущих сделок.</string>
     <string name="Approve_Error_AlreadyApproved">У вас уже есть разрешение на эту сумму</string>
     <string name="Approve_Spender">Покупатель</string>
     <string name="Approve_YouApprove">Вы Разрешаете</string>
-    <string name="Approve_YouRevoke">Вы Отменяете</string>
+    <string name="Approve_YouRevoke">Вы Отозвали</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного в блокчейне %s.\n\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
     <string name="SwapInfo_DexRelated">o %s</string>
