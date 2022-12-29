@@ -143,6 +143,7 @@ private fun UniswapScreen(
     val swapError by viewModel.swapErrorLiveData().observeAsState()
     val tradeViewItem by viewModel.tradeViewItemLiveData().observeAsState()
     val availableBalance by fromCoinCardViewModel.balanceLiveData().observeAsState()
+    val hasNonZeroBalance by fromCoinCardViewModel.hasNonZeroBalance().observeAsState()
     val keyboardState by observeKeyboardState()
     val fromAmount by fromCoinCardViewModel.amountLiveData().observeAsState()
     val tradeTimeoutProgress by viewModel.tradeTimeoutProgressLiveData().observeAsState()
@@ -280,7 +281,7 @@ private fun UniswapScreen(
                 Spacer(Modifier.height(32.dp))
             }
 
-            if (fromAmount?.second.isNullOrEmpty() && showSuggestions && keyboardState == Keyboard.Opened) {
+            if (hasNonZeroBalance == true && fromAmount?.second.isNullOrEmpty() && showSuggestions && keyboardState == Keyboard.Opened) {
                 SuggestionsBar(modifier = Modifier.align(Alignment.BottomCenter)) {
                     focusManager.clearFocus()
                     fromCoinCardViewModel.onSetAmountInBalancePercent(it)

@@ -52,6 +52,7 @@ class SwapCoinCardViewModel(
     private val tokenCodeLiveData = MutableLiveData<Token?>()
     private val isEstimatedLiveData = MutableLiveData(false)
     private val secondaryInfoLiveData = MutableLiveData<String?>(null)
+    private val hasNonZeroBalanceLiveData = MutableLiveData<Boolean?>(null)
 
     //region outputs
     fun amountLiveData(): LiveData<Triple<String?, String?, String?>> = amountLiveData
@@ -60,6 +61,7 @@ class SwapCoinCardViewModel(
     fun tokenCodeLiveData(): LiveData<Token?> = tokenCodeLiveData
     fun isEstimatedLiveData(): LiveData<Boolean> = isEstimatedLiveData
     fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
+    fun hasNonZeroBalance(): LiveData<Boolean?> = hasNonZeroBalanceLiveData
 
     private val prefix = if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null
     var inputParams by mutableStateOf(
@@ -173,12 +175,24 @@ class SwapCoinCardViewModel(
 
     private fun syncBalance(balance: BigDecimal?) {
         val token = coinCardService.token
-        val formattedBalance = when {
-            token == null -> Translator.getString(R.string.NotAvailable)
-            balance == null -> null
-            else -> formatter.coinAmount(balance, token.coin.code)
+        val formattedBalance: String?
+        val hasNonZeroBalance: Boolean?
+        when {
+            token == null -> {
+                formattedBalance = Translator.getString(R.string.NotAvailable)
+                hasNonZeroBalance = null
+            }
+            balance == null -> {
+                formattedBalance = null
+                hasNonZeroBalance = null
+            }
+            else -> {
+                formattedBalance = formatter.coinAmount(balance, token.coin.code)
+                hasNonZeroBalance = balance > BigDecimal.ZERO
+            }
         }
         balanceLiveData.postValue(formattedBalance)
+        hasNonZeroBalanceLiveData.postValue(hasNonZeroBalance)
     }
 
     private fun syncError(error: Throwable?) {
