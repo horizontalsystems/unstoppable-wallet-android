@@ -201,7 +201,7 @@ private fun UniswapScreen(
 
                 if (swapError != null) {
                     swapError?.let {
-                        SwapError(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), text = it)
+                        SwapError(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp), text = it)
                     }
                 } else {
                     val infoItems = mutableListOf<@Composable () -> Unit>()
