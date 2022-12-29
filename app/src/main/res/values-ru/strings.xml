@@ -454,7 +454,7 @@
     <string name="Swap_Revoke">Отменить</string>
     <string name="Swap_Revoking">Отмена...</string>
     <string name="Swap_Approve">Разрешить</string>
-    <string name="Swap_Approving">Approving</string>
+    <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_MaximumPaid">Максимальная Выплата</string>
     <string name="Swap_MinimumGot">Гарантированная Сумма</string>
