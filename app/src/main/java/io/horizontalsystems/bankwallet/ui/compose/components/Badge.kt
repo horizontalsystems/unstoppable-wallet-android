@@ -115,11 +115,9 @@ fun BadgeCircle(modifier: Modifier = Modifier, text: String) {
 fun BadgeStepCircle(
     modifier: Modifier = Modifier,
     text: String,
-    active: Boolean = false
+    background: Color,
+    textColor: Color
 ) {
-    val background = if (active) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.steel20
-    val textColor = if (active) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey50
-
     Text(
         text = text,
         modifier = modifier
@@ -201,7 +199,7 @@ fun BagdeStepCircle_Preview() {
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            BadgeStepCircle(text = "2", active = true)
+            BadgeStepCircle(text = "2", background = ComposeAppTheme.colors.claude,  textColor = ComposeAppTheme.colors.leah)
         }
     }
 }

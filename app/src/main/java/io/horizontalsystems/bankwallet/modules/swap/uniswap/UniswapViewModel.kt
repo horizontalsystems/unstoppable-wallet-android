@@ -259,7 +259,7 @@ class UniswapViewModel(
             SwapActionState.Hidden
         }
         pendingAllowanceService.state == SwapPendingAllowanceState.Approving -> {
-            SwapActionState.Disabled(Translator.getString(R.string.Swap_Approving))
+            SwapActionState.Disabled(Translator.getString(R.string.Swap_Approving), loading = true)
         }
         tradeService.state is UniswapTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
             SwapActionState.Hidden

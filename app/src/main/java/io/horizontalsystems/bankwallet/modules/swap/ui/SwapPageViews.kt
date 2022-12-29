@@ -45,7 +45,6 @@ fun SwapAllowance(
 ) {
     val uiState = viewModel.uiState
     val isError = uiState.isError
-    val revokeRequired = uiState.revokeRequired
     val allowanceAmount = uiState.allowance
     val visible = uiState.isVisible
 
@@ -243,7 +242,8 @@ fun ActionButtons(
                     title = actionButtons.approve.title,
                     onClick = onTapApprove,
                     enabled = actionButtons.approve is SwapActionState.Enabled,
-                    step = if (actionButtons.proceed != SwapActionState.Hidden) 1 else null
+                    step = if (actionButtons.proceed != SwapActionState.Hidden) 1 else null,
+                    showProgress = actionButtons.approve.showProgress
                 )
                 if (actionButtons.proceed != SwapActionState.Hidden) {
                     Spacer(Modifier.width(8.dp))
@@ -264,7 +264,7 @@ fun ActionButtons(
 }
 
 @Composable
-fun ApproveButton(modifier: Modifier, title: String, onClick: () -> Unit, enabled: Boolean, step: Int? = null) {
+fun ApproveButton(modifier: Modifier, title: String, onClick: () -> Unit, enabled: Boolean, step: Int? = null, showProgress: Boolean) {
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
@@ -275,9 +275,18 @@ fun ApproveButton(modifier: Modifier, title: String, onClick: () -> Unit, enable
             disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
-            step?.let {
-                BadgeStepCircle(text = "$it", active = enabled)
-                Spacer(modifier = Modifier.width(8.dp))
+            if (showProgress) {
+                Box(Modifier.padding(end = 8.dp)) {
+                    HSCircularProgressIndicator()
+                }
+            }
+            else {
+                step?.let {
+                    val background = if (enabled) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.steel20
+                    val textColor = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
+                    BadgeStepCircle(text = "$it", background = background, textColor = textColor)
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
             }
             Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
 
@@ -299,7 +308,9 @@ fun ProceedButton(modifier: Modifier, title: String, onClick: () -> Unit, enable
         ),
         content = {
             step?.let {
-                BadgeStepCircle(text = "$it", active = enabled)
+                val background = if (enabled) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.steel20
+                val textColor = if (enabled) ComposeAppTheme.colors.yellowD else ComposeAppTheme.colors.grey
+                BadgeStepCircle(text = "$it", background = background, textColor = textColor)
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
