@@ -275,21 +275,26 @@ fun ApproveButton(modifier: Modifier, title: String, onClick: () -> Unit, enable
             disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
-            if (showProgress) {
-                Box(Modifier.padding(end = 8.dp)) {
+            Row(
+                modifier = Modifier.weight(9f),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (showProgress) {
                     HSCircularProgressIndicator()
+                } else {
+                    step?.let {
+                        val background = if (enabled) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.steel20
+                        val textColor = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
+                        BadgeStepCircle(text = "$it", background = background, textColor = textColor)
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                 }
+                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            else {
-                step?.let {
-                    val background = if (enabled) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.steel20
-                    val textColor = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
-                    BadgeStepCircle(text = "$it", background = background, textColor = textColor)
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
+            if (showProgress || step != null) {
+                Row(modifier = Modifier.weight(1f)) {}
             }
-            Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-
         },
         enabled = enabled
     )
@@ -307,13 +312,22 @@ fun ProceedButton(modifier: Modifier, title: String, onClick: () -> Unit, enable
             disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
-            step?.let {
-                val background = if (enabled) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.steel20
-                val textColor = if (enabled) ComposeAppTheme.colors.yellowD else ComposeAppTheme.colors.grey
-                BadgeStepCircle(text = "$it", background = background, textColor = textColor)
-                Spacer(modifier = Modifier.width(8.dp))
+            Row(
+                modifier = Modifier.weight(9f),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                step?.let {
+                    val background = if (enabled) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.steel20
+                    val textColor = if (enabled) ComposeAppTheme.colors.yellowD else ComposeAppTheme.colors.grey
+                    BadgeStepCircle(text = "$it", background = background, textColor = textColor)
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (step != null) {
+                Row(modifier = Modifier.weight(1f)) {}
+            }
         },
         enabled = enabled
     )
