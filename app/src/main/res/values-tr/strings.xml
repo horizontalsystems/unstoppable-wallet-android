@@ -452,7 +452,7 @@
     <string name="Swap_Revoke">İptal et</string>
     <string name="Swap_Revoking">İptal ediliyor...</string>
     <string name="Swap_Approve">Onayla</string>
-    <string name="Swap_Approving">Onaylanıyor...</string>
+    <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Takas</string>
     <string name="Swap_MaximumPaid">Maksimum Ödenen</string>
     <string name="Swap_MinimumGot">Garantili Tutar</string>
