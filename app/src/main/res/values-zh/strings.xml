@@ -452,7 +452,7 @@
     <string name="Swap_Revoke">撤回</string>
     <string name="Swap_Revoking">正在取消...</string>
     <string name="Swap_Approve">批准</string>
-    <string name="Swap_Approving">审批中...</string>
+    <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">交易中...</string>
     <string name="Swap_MaximumPaid">最大支付金额</string>
     <string name="Swap_MinimumGot">保证金额</string>
