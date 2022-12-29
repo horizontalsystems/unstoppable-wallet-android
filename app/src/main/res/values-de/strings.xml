@@ -453,7 +453,7 @@
     <string name="Swap_Revoke">Widerrufen</string>
     <string name="Swap_Revoking">Widerrufen...</string>
     <string name="Swap_Approve">Genehmigen</string>
-    <string name="Swap_Approving">Approving</string>
+    <string name="Swap_Approving">Wird bestätigt</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_MaximumPaid">Maximal bezahlt</string>
     <string name="Swap_MinimumGot">Garantierter Betrag</string>
