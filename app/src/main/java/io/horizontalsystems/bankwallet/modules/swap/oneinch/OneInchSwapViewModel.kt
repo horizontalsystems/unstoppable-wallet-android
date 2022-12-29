@@ -235,7 +235,7 @@ class OneInchSwapViewModel(
             SwapActionState.Hidden
         }
         pendingAllowanceService.state == SwapPendingAllowanceState.Approving -> {
-            SwapActionState.Disabled(Translator.getString(R.string.Swap_Approving))
+            SwapActionState.Disabled(Translator.getString(R.string.Swap_Approving), loading = true)
         }
         tradeService.state is OneInchTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
             SwapActionState.Hidden
