@@ -452,7 +452,7 @@
     <string name="Swap_Revoke">취소</string>
     <string name="Swap_Revoking">철회...</string>
     <string name="Swap_Approve">승인</string>
-    <string name="Swap_Approving">Approving</string>
+    <string name="Swap_Approving">승인 중</string>
     <string name="Swap_Swapping">스와핑</string>
     <string name="Swap_MaximumPaid">최대 지불액</string>
     <string name="Swap_MinimumGot">보증 금액</string>
