@@ -62,7 +62,7 @@ class TermsFragment : BaseFragment() {
 }
 
 @Composable
-private fun TermsScreen(
+fun TermsScreen(
     navController: NavController,
     viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
 ) {

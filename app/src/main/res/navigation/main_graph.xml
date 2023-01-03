@@ -98,9 +98,6 @@
         android:id="@+id/securitySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment"/>
     <fragment
-        android:id="@+id/appStatusFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusFragment"/>
-    <fragment
         android:id="@+id/faqListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment"
         android:label="@string/Settings_Faq"/>
@@ -120,9 +117,6 @@
     <fragment
         android:id="@+id/termsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"/>
-    <fragment
-        android:id="@+id/privacyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.privacy.PrivacyFragment"/>
     <fragment
         android:id="@+id/aboutAppFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"/>

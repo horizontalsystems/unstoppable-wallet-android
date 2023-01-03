@@ -230,6 +230,7 @@ dependencies {
 
     //Compose Navigation
     implementation "androidx.navigation:navigation-compose:$navigation_ktx_version"
+    implementation "com.google.accompanist:accompanist-navigation-animation:0.28.0"
 
     api 'com.journeyapps:zxing-android-embedded:4.3.0'
 

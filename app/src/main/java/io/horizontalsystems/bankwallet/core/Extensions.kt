@@ -4,7 +4,13 @@ import android.content.Intent
 import android.os.Parcelable
 import android.widget.ImageView
 import androidx.annotation.CheckResult
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import coil.load
+import com.google.accompanist.navigation.animation.composable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
@@ -144,7 +150,10 @@ fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
 }
 
 @CheckResult
-fun <T> Observable<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable) -> Unit): Disposable {
+fun <T> Observable<T>.subscribeIO(
+    onSuccess: (t: T) -> Unit,
+    onError: (e: Throwable) -> Unit
+): Disposable {
     return this
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
@@ -160,7 +169,10 @@ fun <T> Flowable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
 }
 
 @CheckResult
-fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable) -> Unit): Disposable {
+fun <T> Single<T>.subscribeIO(
+    onSuccess: (t: T) -> Unit,
+    onError: (e: Throwable) -> Unit
+): Disposable {
     return this
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
@@ -193,4 +205,52 @@ fun String.shorten(): String {
         prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
     else
         this
+}
+
+//Compose Animated Navigation
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.composablePage(
+    route: String,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route,
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentScope.SlideDirection.Left,
+                animationSpec = tween(300)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentScope.SlideDirection.Right,
+                animationSpec = tween(300)
+            )
+        },
+        content = content
+    )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.composablePopup(
+    route: String,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route,
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentScope.SlideDirection.Up,
+                animationSpec = tween(250)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentScope.SlideDirection.Down,
+                animationSpec = tween(250)
+            )
+        },
+        content = content
+    )
 }

@@ -62,7 +62,7 @@ class ReleaseNotesFragment : BaseFragment() {
 }
 
 @Composable
-private fun ReleaseNotesScreen(
+fun ReleaseNotesScreen(
     closeablePopup: Boolean,
     onCloseClick: () -> Unit,
     viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory())

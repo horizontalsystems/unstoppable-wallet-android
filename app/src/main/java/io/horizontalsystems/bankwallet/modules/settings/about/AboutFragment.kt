@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -26,19 +27,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.composablePage
+import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
+import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
+import io.horizontalsystems.bankwallet.modules.settings.privacy.PrivacyScreen
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.findNavController
 
 class AboutFragment : BaseFragment() {
 
@@ -53,21 +61,49 @@ class AboutFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    AboutScreen(findNavController())
+                    AboutNavHost(findNavController())
                 }
             }
         }
     }
 }
 
+private const val AboutPage = "about"
+private const val ReleaseNotesPage = "release_notes"
+private const val AppStatusPage = "app_status"
+private const val PrivacyPage = "privacy"
+private const val TermsPage = "terms"
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun AboutScreen(navController: NavController) {
+private fun AboutNavHost(fragmentNavController: NavController) {
+    val navController = rememberAnimatedNavController()
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = AboutPage,
+    ) {
+        composable(AboutPage) { AboutScreen(navController, { fragmentNavController.popBackStack() }) }
+        composablePage(ReleaseNotesPage) {
+            ReleaseNotesScreen(false, { navController.popBackStack() })
+        }
+        composablePage(AppStatusPage) { AppStatusScreen(navController) }
+        composablePage(PrivacyPage) { PrivacyScreen(navController) }
+        composablePopup(TermsPage) { TermsScreen(navController) }
+    }
+}
+
+@Composable
+private fun AboutScreen(
+    navController: NavController,
+    onBackPress: () -> Unit,
+    aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
+) {
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
                 TranslatableString.ResString(R.string.SettingsAboutApp_Title),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = onBackPress) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             tint = ComposeAppTheme.colors.jacob,
@@ -77,24 +113,16 @@ private fun AboutScreen(navController: NavController) {
                 }
             )
 
-            AboutContent(navController)
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Spacer(Modifier.height(12.dp))
+                AboutHeader(aboutViewModel.appVersion)
+                Spacer(Modifier.height(24.dp))
+                InfoTextBody(text = stringResource(R.string.SettingsTerms_Text))
+                Spacer(Modifier.height(24.dp))
+                SettingSections(aboutViewModel, navController)
+                Spacer(Modifier.height(36.dp))
+            }
         }
-    }
-}
-
-@Composable
-fun AboutContent(
-    navController: NavController,
-    aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
-) {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        Spacer(Modifier.height(12.dp))
-        AboutHeader(aboutViewModel.appVersion)
-        Spacer(Modifier.height(24.dp))
-        InfoTextBody(text = stringResource(R.string.SettingsTerms_Text))
-        Spacer(Modifier.height(24.dp))
-        SettingSections(aboutViewModel, navController)
-        Spacer(Modifier.height(36.dp))
     }
 }
 
@@ -110,7 +138,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.string.SettingsAboutApp_WhatsNew,
                 R.drawable.ic_info_20,
                 onClick = {
-                    navController.slideFromRight(R.id.releaseNotesFragment)
+                    navController.navigate(ReleaseNotesPage)
                 }
             )
         }
@@ -124,7 +152,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
                 onClick = {
-                    navController.slideFromRight(R.id.appStatusFragment)
+                    navController.navigate(AppStatusPage)
                 }
             )
         }, {
@@ -133,7 +161,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.drawable.ic_terms_20,
                 showAlert = termsShowAlert,
                 onClick = {
-                    navController.slideFromBottom(R.id.termsFragment)
+                    navController.navigate(TermsPage)
                 }
             )
         }, {
@@ -141,7 +169,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.string.Settings_Privacy,
                 R.drawable.ic_user_20,
                 onClick = {
-                    navController.slideFromRight(R.id.privacyFragment)
+                    navController.navigate(PrivacyPage)
                 }
             )
         })
@@ -263,7 +291,7 @@ private fun sendEmail(recipient: String, context: Context) {
 @Composable
 private fun previewAboutScreen() {
     ComposeAppTheme {
-        Column{
+        Column {
             AboutHeader("0.24")
             Spacer(Modifier.height(32.dp))
             CellSingleLineLawrenceSection(
@@ -272,13 +300,13 @@ private fun previewAboutScreen() {
                         R.string.Settings_RateUs,
                         R.drawable.ic_star_20,
                         showAlert = true,
-                        onClick = {  }
+                        onClick = { }
                     )
                 }, {
                     HsSettingCell(
                         R.string.Settings_ShareThisWallet,
                         R.drawable.ic_share_20,
-                        onClick = {  }
+                        onClick = { }
                     )
                 })
             )
