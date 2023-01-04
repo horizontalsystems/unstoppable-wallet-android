@@ -1,10 +1,7 @@
 package io.horizontalsystems.core
 
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
-import io.horizontalsystems.core.helpers.LocaleHelper
-import java.util.*
 
 abstract class CoreApp : Application() {
 
@@ -25,22 +22,4 @@ abstract class CoreApp : Application() {
     }
 
     open val testMode = false
-
-    abstract fun localizedContext(): Context
-
-    fun localeAwareContext(base: Context): Context {
-        return LocaleHelper.onAttach(base)
-    }
-
-    fun getLocale(): Locale {
-        return LocaleHelper.getLocale(this)
-    }
-
-    fun setLocale(currentLocale: Locale) {
-        LocaleHelper.setLocale(this, currentLocale)
-    }
-
-    fun isLocaleRTL(): Boolean {
-        return LocaleHelper.isRTL(Locale.getDefault())
-    }
 }

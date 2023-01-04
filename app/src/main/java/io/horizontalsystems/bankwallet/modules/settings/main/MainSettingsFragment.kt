@@ -98,7 +98,6 @@ private fun SettingSections(
     val showAlertAboutApp by viewModel.aboutAppShowAlertLiveData.observeAsState(false)
     val wcCounter by viewModel.wcCounterLiveData.observeAsState()
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
-    val language by viewModel.languageLiveData.observeAsState()
 
     CellUniversalLawrenceSection(
         listOf({
@@ -178,7 +177,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_Language,
                 R.drawable.ic_language,
-                value = language,
+                value = viewModel.language,
                 onClick = {
                     navController.slideFromRight(R.id.languageSettingsFragment)
                 }
