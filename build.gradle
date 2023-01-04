@@ -11,11 +11,12 @@ buildscript {
         appcompat_version = "1.5.1"
         constraint_version = "2.1.4"
         core_ktx_version = "1.9.0"
-        fragment_ktx_version = "1.5.4"
+        fragment_ktx_version = "1.5.5"
         navigation_ktx_version = "2.5.3"
         rxjava_version = "2.2.19"
         biometric_version = "1.1.0"
         junit_version = "4.13.2"
+        accompanist_version = "0.28.0"
     }
 
     repositories {
