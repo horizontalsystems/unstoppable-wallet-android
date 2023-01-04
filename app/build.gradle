@@ -13,6 +13,7 @@ android {
         versionCode 73
         versionName "0.30.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs "en", "de", "es", "pt", "fa", "fr", "ko", "ru", "tr", "zh"
 
         kapt {
             arguments {

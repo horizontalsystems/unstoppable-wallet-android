@@ -55,14 +55,12 @@ interface IPinComponent {
 }
 
 interface ILanguageManager {
-    var fallbackLocale: Locale
-    var currentLocale: Locale
-    var currentLocaleTag: String
+    val fallbackLocale: Locale
+    val currentLocale: Locale
     val currentLanguageName: String
     val currentLanguage: String
 
-    fun getName(tag: String): String
-    fun getNativeName(tag: String): String
+    fun setLocale(locale: Locale)
 }
 
 interface ICurrencyManager {

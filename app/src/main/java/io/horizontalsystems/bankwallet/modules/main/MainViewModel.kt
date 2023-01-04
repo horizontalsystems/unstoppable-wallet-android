@@ -113,9 +113,6 @@ class MainViewModel(
     private fun getTabToOpen(): MainModule.MainTab {
         if (wcDeepLink != null) {
             return MainModule.MainTab.Settings
-        } else if (service.relaunchBySettingChange) {
-            service.relaunchBySettingChange = false
-            return MainModule.MainTab.Settings
         }
         return when(service.launchPage){
             LaunchPage.Market,

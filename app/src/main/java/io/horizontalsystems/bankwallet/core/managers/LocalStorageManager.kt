@@ -69,7 +69,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val FILL_WALLET_INFO_DONE = "fill_wallet_info_done"
     private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
-    private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
     private val TESTNET_ENABLED = "testnet_enabled"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
 
@@ -412,12 +411,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         }
         set(value) {
             preferences.edit().putString(MARKET_FAVORITES_MARKET_FIELD, value?.name).apply()
-        }
-
-    override var relaunchBySettingChange: Boolean
-        get() = preferences.getBoolean(RELAUNCH_BY_SETTING_CHANGE, false)
-        set(value) {
-            preferences.edit().putBoolean(RELAUNCH_BY_SETTING_CHANGE, value).commit()
         }
 
     override var testnetEnabled: Boolean
