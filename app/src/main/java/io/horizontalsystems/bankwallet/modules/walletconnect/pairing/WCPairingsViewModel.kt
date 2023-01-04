@@ -27,7 +27,6 @@ class WCPairingsViewModel(private val wc2Service: WC2Service) : ViewModel() {
     }
 
     private fun getPairingViewItem(pairing: Core.Model.Pairing): PairingViewItem {
-        pairing.topic
         val metaData = pairing.peerAppMetaData
 
         return PairingViewItem(
