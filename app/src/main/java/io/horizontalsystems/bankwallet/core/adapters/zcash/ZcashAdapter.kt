@@ -273,7 +273,7 @@ class ZcashAdapter(
         val scope = synchronizer.coroutineScope
         synchronizer.clearedTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onClearedTransactions)
         synchronizer.pendingTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onPendingTransactions)
-        synchronizer.status.distinctUntilChanged().collectWith(scope, ::onStatus)
+        synchronizer.status.collectWith(scope, ::onStatus)
         synchronizer.progress.distinctUntilChanged().collectWith(scope, ::onDownloadProgress)
         synchronizer.saplingBalances.collectWith(scope, ::onBalance)
         synchronizer.processorInfo.distinctUntilChanged().collectWith(scope, ::onProcessorInfo)

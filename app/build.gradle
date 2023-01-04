@@ -252,7 +252,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:market-kit-android:e5dd6d7'
     implementation 'com.github.horizontalsystems:solana-kit-android:889c977'
     // Zcash SDK
-    implementation "cash.z.ecc.android:zcash-android-sdk:1.9.0-beta03"
+    implementation "cash.z.ecc.android:zcash-android-sdk:1.9.0-beta04"
 
     // WalletConnect
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
