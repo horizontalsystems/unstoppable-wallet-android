@@ -112,7 +112,9 @@ class ManageWalletsService(
     }
 
     private fun item(fullCoin: FullCoin): Item {
-        if (fullCoin.tokens.size == 1 && fullCoin.tokens.first().blockchain.type is BlockchainType.Unsupported) {
+        if (fullCoin.tokens.isNotEmpty() &&
+            fullCoin.tokens.all { it.blockchain.type is BlockchainType.Unsupported }
+        ) {
             return Item(fullCoin, ItemState.UnsupportedByApp)
         }
 
