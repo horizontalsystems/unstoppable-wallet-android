@@ -44,6 +44,10 @@ class WC2Service : SignClient.WalletDelegate {
     val activeSessions: List<Sign.Model.Session>
         get() = SignClient.getListOfSettledSessions()
 
+    private val _connectionAvailableStateFlow: MutableStateFlow<Boolean?> = MutableStateFlow(null)
+    val connectionAvailableStateFlow: StateFlow<Boolean?>
+        get() = _connectionAvailableStateFlow.asStateFlow()
+
     init {
         SignClient.setWalletDelegate(this)
     }
@@ -183,10 +187,6 @@ class WC2Service : SignClient.WalletDelegate {
             pendingRequestUpdatedSubject.onNext(Unit)
         }
     }
-
-    private val _connectionAvailableStateFlow: MutableStateFlow<Boolean?> = MutableStateFlow(null)
-    val connectionAvailableStateFlow: StateFlow<Boolean?>
-        get() = _connectionAvailableStateFlow.asStateFlow()
 
     override fun onConnectionStateChange(state: Sign.Model.ConnectionState) {
         _connectionAvailableStateFlow.update {
