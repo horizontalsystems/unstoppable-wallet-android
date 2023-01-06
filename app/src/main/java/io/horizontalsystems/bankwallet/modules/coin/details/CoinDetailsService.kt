@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.coin.details
 
 import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 class CoinDetailsService(
     private val fullCoin: FullCoin,
     private val marketKit: MarketKitWrapper,
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val proFeaturesAuthorizationManager: ProFeaturesAuthorizationManager
 ) {
     private val disposables = CompositeDisposable()

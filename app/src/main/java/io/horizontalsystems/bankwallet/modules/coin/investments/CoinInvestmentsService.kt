@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.coin.investments
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -13,7 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 class CoinInvestmentsService(
     private val coinUid: String,
     private val marketKit: MarketKitWrapper,
-    private val currencyManager: ICurrencyManager
+    private val currencyManager: CurrencyManager
 ) {
     private var disposable: Disposable? = null
 

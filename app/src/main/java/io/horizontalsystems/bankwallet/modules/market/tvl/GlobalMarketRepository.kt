@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single

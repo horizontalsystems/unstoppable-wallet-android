@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.market.category
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class CoinCategoryMarketDataChartService(
-    override val currencyManager: ICurrencyManager,
+    override val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val categoryUid: String,
 ) : AbstractChartService() {

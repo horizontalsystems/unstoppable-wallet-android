@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.*
@@ -17,7 +17,7 @@ import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 class TotalService(
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val baseTokenManager: BaseTokenManager,
     private val balanceHiddenManager: BalanceHiddenManager

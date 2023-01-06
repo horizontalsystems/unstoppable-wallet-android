@@ -70,6 +70,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var torKitManager: ITorManager
         lateinit var chartTypeStorage: IChartTypeStorage
         lateinit var restoreSettingsStorage: IRestoreSettingsStorage
+        lateinit var currencyManager: CurrencyManager
 
         lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
         lateinit var btcBlockchainManager: BtcBlockchainManager

@@ -2,17 +2,17 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 
 class TransactionsRateRepository(
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
 ) : Clearable {
     private val baseCurrency get() = currencyManager.baseCurrency

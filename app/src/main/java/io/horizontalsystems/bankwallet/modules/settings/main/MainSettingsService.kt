@@ -5,15 +5,15 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
-import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.core.entities.Currency
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -22,7 +22,7 @@ class MainSettingsService(
     private val backupManager: IBackupManager,
     private val languageManager: ILanguageManager,
     private val systemInfoManager: ISystemInfoManager,
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
     private val wc1SessionManager: WC1SessionManager,

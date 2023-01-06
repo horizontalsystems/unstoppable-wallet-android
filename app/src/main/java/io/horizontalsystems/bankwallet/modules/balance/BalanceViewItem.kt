@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinPrice

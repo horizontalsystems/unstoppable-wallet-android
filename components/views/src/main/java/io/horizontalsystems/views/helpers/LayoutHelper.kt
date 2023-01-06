@@ -37,7 +37,4 @@ object LayoutHelper {
         return ContextCompat.getDrawable(context, id)
     }
 
-    fun getCurrencyDrawableResource(context: Context, currencyCode: String): Int {
-        return context.resources.getIdentifier("currency_$currencyCode", "drawable", context.packageName)
-    }
 }

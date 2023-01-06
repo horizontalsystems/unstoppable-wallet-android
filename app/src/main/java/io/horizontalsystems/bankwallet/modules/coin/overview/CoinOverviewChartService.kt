@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.helpers.IndicatorHelper
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.ChartInfo
 import io.horizontalsystems.marketkit.models.ChartPointType
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -20,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class CoinOverviewChartService(
     private val marketKit: MarketKitWrapper,
-    override val currencyManager: ICurrencyManager,
+    override val currencyManager: CurrencyManager,
     private val chartTypeStorage: IChartTypeStorage,
     private val coinUid: String,
 ) : AbstractChartService() {

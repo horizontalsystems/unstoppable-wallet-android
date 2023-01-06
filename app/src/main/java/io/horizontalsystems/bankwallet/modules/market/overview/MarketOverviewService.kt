@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopMoversRepository
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.models.MarketOverview
 import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.disposables.Disposable
@@ -19,7 +19,7 @@ class MarketOverviewService(
     private val marketTopMoversRepository: MarketTopMoversRepository,
     private val marketKit: MarketKitWrapper,
     private val backgroundManager: BackgroundManager,
-    private val currencyManager: ICurrencyManager
+    private val currencyManager: CurrencyManager
 ) : BackgroundManager.Listener {
 
     private var currencyManagerDisposable: Disposable? = null

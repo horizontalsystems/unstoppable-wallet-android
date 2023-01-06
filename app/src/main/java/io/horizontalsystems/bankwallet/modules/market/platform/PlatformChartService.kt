@@ -1,18 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.market.platform
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class PlatformChartService(
     private val platform: Platform,
-    override val currencyManager: ICurrencyManager,
+    override val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
 ) : AbstractChartService() {
 

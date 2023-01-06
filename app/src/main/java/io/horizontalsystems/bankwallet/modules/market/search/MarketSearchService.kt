@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow

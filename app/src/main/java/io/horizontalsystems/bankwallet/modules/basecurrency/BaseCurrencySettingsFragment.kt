@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.coroutines.launch
 
 class BaseCurrencySettingsFragment : BaseFragment() {
@@ -125,9 +124,7 @@ private fun BaseCurrencyScreen(
                         CurrencyCell(
                             item.currency.code,
                             item.currency.symbol,
-                            LayoutHelper.getCurrencyDrawableResource(
-                                context, item.currency.code.lowercase()
-                            ),
+                            item.currency.flag,
                             item.selected,
                             { viewModel.onSelectBaseCurrency(item.currency) }
                         )
@@ -140,9 +137,7 @@ private fun BaseCurrencyScreen(
                         CurrencyCell(
                             item.currency.code,
                             item.currency.symbol,
-                            LayoutHelper.getCurrencyDrawableResource(
-                                context, item.currency.code.lowercase()
-                            ),
+                            item.currency.flag,
                             item.selected,
                             { viewModel.onSelectBaseCurrency(item.currency) }
                         )
@@ -202,7 +197,9 @@ private fun CurrencyCell(
         onClick = onClick
     ) {
         Image(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .size(32.dp),
             painter = painterResource(icon),
             contentDescription = null
         )

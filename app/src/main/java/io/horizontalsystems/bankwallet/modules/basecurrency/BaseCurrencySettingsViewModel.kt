@@ -4,10 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.entities.Currency
 
-class BaseCurrencySettingsViewModel(private val currencyManager: ICurrencyManager) : ViewModel() {
+class BaseCurrencySettingsViewModel(private val currencyManager: CurrencyManager) : ViewModel() {
 
     private val popularCurrencyCodes = listOf("USD", "EUR", "GBP", "JPY")
     private val popularCurrencies: List<Currency>

@@ -2,13 +2,12 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.reactivex.subjects.PublishSubject
 
-class CurrencyManager(private val localStorage: ILocalStorage, private val appConfigProvider: AppConfigProvider) : ICurrencyManager {
+class CurrencyManager(private val localStorage: ILocalStorage, private val appConfigProvider: AppConfigProvider) {
 
-    override var baseCurrency = getInitialCurrency()
+    var baseCurrency = getInitialCurrency()
         set(value) {
             field = value
 
@@ -22,7 +21,7 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
         } ?: appConfigProvider.currencies.first { it.code == "USD" }
     }
 
-    override val currencies: List<Currency> = appConfigProvider.currencies
+    val currencies: List<Currency> = appConfigProvider.currencies
 
-    override val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
+    val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
 }

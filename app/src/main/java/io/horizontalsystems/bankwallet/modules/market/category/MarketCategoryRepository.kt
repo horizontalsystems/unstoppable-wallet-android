@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.reactivex.Single
 import kotlin.math.min
 

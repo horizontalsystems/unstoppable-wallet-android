@@ -42,16 +42,16 @@ class LanguageManager : ILanguageManager {
 
     companion object {
         val supportedLocales = listOf(
-            SupportedLocale(Locale("de"), R.drawable.icon_24_flags_germany),
-            SupportedLocale(Locale("en"), R.drawable.icon_24_flags_england),
-            SupportedLocale(Locale("es"), R.drawable.icon_24_flags_spain),
-            SupportedLocale(Locale("pt"), R.drawable.icon_24_flags_brazil),
-            SupportedLocale(Locale("fa"), R.drawable.icon_24_flags_iran),
-            SupportedLocale(Locale("fr"), R.drawable.icon_24_flags_france),
-            SupportedLocale(Locale("ko"), R.drawable.icon_24_flags_korea),
-            SupportedLocale(Locale("ru"), R.drawable.icon_24_flags_russia),
-            SupportedLocale(Locale("tr"), R.drawable.icon_24_flags_turkey),
-            SupportedLocale(Locale("zh"), R.drawable.icon_24_flags_china)
+            SupportedLocale(Locale("de"), R.drawable.icon_32_flag_germany),
+            SupportedLocale(Locale("en"), R.drawable.icon_32_flag_england),
+            SupportedLocale(Locale("es"), R.drawable.icon_32_flag_spain),
+            SupportedLocale(Locale("pt"), R.drawable.icon_32_flag_brazil),
+            SupportedLocale(Locale("fa"), R.drawable.icon_32_flag_iran),
+            SupportedLocale(Locale("fr"), R.drawable.icon_32_flag_france),
+            SupportedLocale(Locale("ko"), R.drawable.icon_32_flag_korea),
+            SupportedLocale(Locale("ru"), R.drawable.icon_32_flag_russia),
+            SupportedLocale(Locale("tr"), R.drawable.icon_32_flag_turkey),
+            SupportedLocale(Locale("zh"), R.drawable.icon_32_flag_china)
         )
     }
 }
