@@ -1,5 +1,3 @@
-include ':ui'
-include ':components:snackbar'
 include ':app'
 
 include ':core'
