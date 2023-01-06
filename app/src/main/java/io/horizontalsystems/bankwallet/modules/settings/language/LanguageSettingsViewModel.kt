@@ -5,11 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
-import io.horizontalsystems.core.ILanguageManager
 import java.util.*
 
 class LanguageSettingsViewModel(
-    private val languageManager: ILanguageManager
+    private val languageManager: LanguageManager
 ) : ViewModel() {
 
     val languageItems: List<LanguageViewItem>

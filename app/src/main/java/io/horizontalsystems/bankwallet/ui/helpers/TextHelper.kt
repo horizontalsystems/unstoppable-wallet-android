@@ -9,11 +9,8 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.views.helpers.LayoutHelper
 
 object TextHelper : IClipboardManager {
 
@@ -46,13 +43,6 @@ object TextHelper : IClipboardManager {
             e.printStackTrace()
             null
         }
-    }
-
-    fun getFeeRatePriorityString(context: Context, priority: FeeRatePriority): String = when (priority) {
-        FeeRatePriority.LOW -> context.getString(R.string.Send_TxSpeed_Low)
-        FeeRatePriority.RECOMMENDED -> context.getString(R.string.Send_TxSpeed_Recommended)
-        FeeRatePriority.HIGH -> context.getString(R.string.Send_TxSpeed_High)
-        is FeeRatePriority.Custom -> context.getString(R.string.Send_TxSpeed_Custom)
     }
 
     fun getCleanedUrl(link: String): String{

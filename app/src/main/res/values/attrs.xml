@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--  Custom view themes/styles -->
+    <attr name="BallanceCoinNameColor" format="reference|color" />
+    <attr name="BallanceCoinAmountColor" format="reference|color" />
+    <attr name="TitleColor" format="reference|color" />
+    <attr name="TextColorGreyLightToDark" format="reference|color" />
+    <attr name="TextColorBarsToDark" format="reference|color" />
+    <attr name="AboutBackgroundColor" format="reference|color" />
+    <attr name="BottomNavigationBackgroundColor" format="reference|color" />
+    <attr name="RippleColor" format="reference|color" />
+    <attr name="RoundRippleColor" format="reference|color" />
+    <attr name="BottomNavBackground" format="reference" />
+    <attr name="HudTextColor" format="reference|color" />
+    <attr name="TransactionDetailBackground" format="reference|color" />
+    <attr name="TransactionDetailValueTextColor" format="reference|color" />
+    <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
+    <attr name="LightBackground" format="color" />
+    <attr name="BottomSendButtonColor" format="reference|color" />
+    <attr name="BottomSendButtonHighlightedColor" format="reference|color" />
+    <attr name="BottomSendImageButtonTint" format="reference|color" />
+    <attr name="BottomDialogTextColor" format="reference|color" />
+    <attr name="ConfirmationDialogBackground" format="reference|color" />
+    <attr name="ProgressbarSpinnerColor" format="reference|color" />
+    <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
+    <attr name="InputBackground" format="reference|color" />
+    <attr name="ConfirmationTextColor" format="reference|color" />
+    <attr name="AddCoinButtonPlaceholder" format="reference|color" />
+    <attr name="SecondaryButtonStartGradient" format="reference|color" />
+    <attr name="SecondaryButtonEndGradient" format="reference|color" />
+    <attr name="SplashScreenBackground" format="reference" />
+
+    <!--  New themed gradient colors -->
+    <attr name="ColorGradientWhite" format="reference" />
+    <attr name="ColorWindowBackground" format="reference" />
+</resources>

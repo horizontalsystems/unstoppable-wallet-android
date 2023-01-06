@@ -9,8 +9,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.main.MainFragment"
-        tools:layout="@layout/fragment_main">
+        android:name="io.horizontalsystems.bankwallet.modules.main.MainFragment">
         <deepLink
             app:action=""
             android:id="@+id/deepLink"

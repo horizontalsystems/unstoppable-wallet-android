@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
@@ -64,6 +65,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     companion object : ICoreApp by CoreApp {
 
+        lateinit var preferences: SharedPreferences
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
         lateinit var marketStorage: IMarketStorage
@@ -71,6 +73,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var chartTypeStorage: IChartTypeStorage
         lateinit var restoreSettingsStorage: IRestoreSettingsStorage
         lateinit var currencyManager: CurrencyManager
+        lateinit var languageManager: LanguageManager
 
         lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
         lateinit var btcBlockchainManager: BtcBlockchainManager

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--Final, top-level theme-->
+    <style name="Theme.AppTheme.DayNight" parent="Theme.AppTheme.DarkModeAppTheme"/>
+
+    <style name="Theme.AppTheme.DarkModeAppTheme" parent="Theme.AppTheme">
+        <item name="colorAccent">@color/yellow_d</item>
+        <item name="android:windowBackground">@color/dark</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="actionMenuTextAppearance">@style/Headline2</item>
+        <item name="colorControlNormal">@color/grey</item>
+        <item name="colorControlActivated">@color/yellow_d</item>
+        <item name="colorControlHighlight">#6E7899</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
+
+        <item name="BallanceCoinNameColor">@color/white</item>
+        <item name="BallanceCoinAmountColor">@color/white</item>
+        <item name="TitleColor">@color/white</item>
+        <item name="TextColorGreyLightToDark">@color/light_grey</item>
+        <item name="TextColorBarsToDark">@color/light</item>
+        <item name="AboutBackgroundColor">@color/transparent</item>
+        <item name="BottomNavigationBackgroundColor">@color/dark</item>
+        <item name="RippleColor">@color/ripple_white</item>
+        <item name="RoundRippleColor">@color/white_50</item>
+        <item name="BottomNavBackground">@drawable/shadow_bottom_navigation</item>
+        <item name="HudTextColor">@color/white</item>
+        <item name="TransactionDetailBackground">@color/steel_dark</item>
+        <item name="TransactionDetailValueTextColor">@color/light</item>
+        <item name="TransactionDetailBottomBarBackground">@color/dark</item>
+        <item name="LightBackground">@color/steel_20</item>
+        <item name="BottomSendButtonColor">@color/steel_20</item>
+        <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>
+        <item name="BottomSendImageButtonTint">@color/white</item>
+        <item name="BottomDialogTextColor">@color/white</item>
+        <item name="ConfirmationDialogBackground">@color/steel_dark</item>
+        <item name="ProgressbarSpinnerColor">@color/dark</item>
+        <item name="SwipeRefreshBackgroundColor">@color/dark</item>
+        <item name="InputBackground">@color/steel_20</item>
+        <item name="ConfirmationTextColor">@color/steel_light</item>
+        <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
+        <item name="SecondaryButtonStartGradient">#33ffffff</item>
+        <item name="SecondaryButtonEndGradient">#00ffffff</item>
+        <item name="SplashScreenBackground">@drawable/ic_intro_background</item>
+
+        <!--  Gradient colors-->
+        <item name="ColorGradientWhite">@color/white_20</item>
+        <item name="ColorWindowBackground">@color/dark</item>
+    </style>
+</resources>

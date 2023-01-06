@@ -7,10 +7,10 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import android.view.View
 import androidx.annotation.DrawableRes
+import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.R
-import io.horizontalsystems.snackbar.CustomSnackbar
-import io.horizontalsystems.snackbar.SnackbarDuration
-import io.horizontalsystems.snackbar.SnackbarGravity
+import io.horizontalsystems.core.SnackbarDuration
+import io.horizontalsystems.core.SnackbarGravity
 
 object HudHelper {
 

@@ -4,17 +4,16 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.core.ILanguageManager
 import java.util.*
 
-class LanguageManager : ILanguageManager {
+class LanguageManager {
 
-    override val fallbackLocale: Locale = Locale.ENGLISH
+    val fallbackLocale: Locale = Locale.ENGLISH
 
     private val appLocaleSetInSystemSettings: Locale
         get() = AppCompatDelegate.getApplicationLocales().get(0) ?: fallbackLocale
 
-    override val currentLocale: Locale
+    val currentLocale: Locale
         get() {
             val locales = supportedLocales.map { it.locale }
             return locales.firstOrNull { it == appLocaleSetInSystemSettings }
@@ -22,19 +21,19 @@ class LanguageManager : ILanguageManager {
                 ?: fallbackLocale
         }
 
-    override val currentLanguageName: String
+    val currentLanguageName: String
         get() = currentLocale.getDisplayName(currentLocale).replaceFirstChar(Char::uppercase)
 
-    override val currentLanguage: String
+    val currentLanguage: String
         get() = currentLocale.language
 
-    override fun setLocale(locale: Locale) {
+    fun setLocale(locale: Locale) {
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(locale))
     }
 
     data class SupportedLocale(val locale: Locale, @DrawableRes val icon: Int) {
-        fun name(currentLocale: Locale): String
-             = locale.getDisplayName(currentLocale).replaceFirstChar(Char::uppercase)
+        fun name(currentLocale: Locale): String =
+            locale.getDisplayName(currentLocale).replaceFirstChar(Char::uppercase)
 
         val nativeName: String
             get() = locale.getDisplayName(locale).replaceFirstChar(Char::uppercase)

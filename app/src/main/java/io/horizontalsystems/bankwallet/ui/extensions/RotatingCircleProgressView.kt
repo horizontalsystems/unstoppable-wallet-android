@@ -8,7 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.bankwallet.ui.helpers.LayoutHelper
 import kotlin.math.max
 
 class RotatingCircleProgressView : View {
