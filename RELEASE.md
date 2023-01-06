@@ -19,11 +19,15 @@ Initial coins dump `json` file should be updated to latest state of backend.
 
 * In case there are changes in Guides and FAQ repositories, update their URL's by new tags.
 
-### 3. Transfer Code to Production Branch
+### 3. Update README file
+
+* Check and update 'Supported Android Versions' section if needed
+
+### 4. Transfer Code to Production Branch
 
 Merge `version` branch into `master` branch.
 
-### 4. Prepare New Development Branch
+### 5. Prepare New Development Branch
 
 * Create new `version` branch.
 
@@ -34,13 +38,13 @@ $ git branch version/0.1
 * Increment version code.
 * Increase version name.
 
-### 5. Set repository tag
+### 6. Set repository tag
 
 * Create tag for current version.
 
-### 6. Build apk file
+### 7. Build apk file
 
-#### 6.1 Build apk file via Docker.
+#### 7.1 Build apk file via Docker.
 
 You will find a bash script located at `[Wallet-Project-Path]/docker/build-apk.sh`
 1. Create and go to temporary folder for APK output
@@ -58,7 +62,7 @@ Example:
 ./build-apk.sh 0.18.0 ~/Documents/Keystore/Apk_HorSys/horsys Keystore_Psw
 ```
 
-#### 6.2 Verify apk file is reproducible from source code
+#### 7.2 Verify apk file is reproducible from source code
 
 Run command:
 
@@ -69,14 +73,14 @@ Where:<br>
 `test.sh` bash script located at `[Wallet-Project-Path]/docker`<br>
 APK-FILE-NAME: Name of the apk file<br>
 
-### 7. Upload Build to Google Play
+### 8. Upload Build to Google Play
 
 * Upload apk to `Google Play Console`.
 
-### 8. Create Release in GitHub Repository
+### 9. Create Release in GitHub Repository
 
-* Create new `Release`, add changelog and upload apk file.
+* Create new `Release`, add changelog and upload apk file. Make note in changelog if the 'Supported Android Versions' was changed
 
-### 9. Make sure Unstoppable Wallet is 'Reproducible' in [WalletScrutiny](https://walletscrutiny.com/android/io.horizontalsystems.bankwallet/)
+### 10. Make sure Unstoppable Wallet is 'Reproducible' in [WalletScrutiny](https://walletscrutiny.com/android/io.horizontalsystems.bankwallet/)
 
 * After apk is uploaded to Google Play make sure that new version of Unstoppable Wallet is 'Reproducible' in WalletScrutiny.

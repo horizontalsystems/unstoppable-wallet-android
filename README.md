@@ -13,6 +13,10 @@ Such approach enables the wallet to operate anywhere and remain censorship-resis
 
 More at [https://unstoppable.money](https://unstoppable.money)
 
+## Supported Android Versions
+
+Devices with Android versions 8.1 and above
+
 ## Download
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
