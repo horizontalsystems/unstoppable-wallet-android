@@ -16,7 +16,7 @@ import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Observable

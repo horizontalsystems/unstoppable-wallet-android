@@ -103,7 +103,9 @@ private fun LanguageCell(
         onClick = onClick
     ) {
         Image(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .size(32.dp),
             painter = painterResource(icon),
             contentDescription = null
         )

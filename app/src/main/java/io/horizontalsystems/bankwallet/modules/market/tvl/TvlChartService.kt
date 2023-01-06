@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class TvlChartService(
-    override val currencyManager: ICurrencyManager,
+    override val currencyManager: CurrencyManager,
     private val globalMarketRepository: GlobalMarketRepository
 ) : AbstractChartService() {
 

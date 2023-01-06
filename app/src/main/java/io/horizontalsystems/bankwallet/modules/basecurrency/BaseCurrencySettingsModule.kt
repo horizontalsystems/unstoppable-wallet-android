@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.basecurrency
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 
 object BaseCurrencySettingsModule {
     class Factory : ViewModelProvider.Factory {

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.widgets
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -11,7 +12,6 @@ import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesM
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
-import io.horizontalsystems.core.ICurrencyManager
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
@@ -22,7 +22,7 @@ class MarketWidgetRepository(
     private val topNftCollectionsRepository: TopNftCollectionsRepository,
     private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory,
     private val topPlatformsRepository: TopPlatformsRepository,
-    private val currencyManager: ICurrencyManager
+    private val currencyManager: CurrencyManager
 ) {
     companion object {
         private const val topGainers = 100

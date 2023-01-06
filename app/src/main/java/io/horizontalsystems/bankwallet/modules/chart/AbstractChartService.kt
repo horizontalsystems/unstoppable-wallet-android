@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
 import androidx.annotation.CallSuper
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +16,7 @@ abstract class AbstractChartService {
     abstract val chartIntervals: List<HsTimePeriod>
     open val chartIndicators: List<ChartIndicator> = listOf()
 
-    protected abstract val currencyManager: ICurrencyManager
+    protected abstract val currencyManager: CurrencyManager
     protected abstract val initialChartInterval: HsTimePeriod
     protected abstract fun getItems(chartInterval: HsTimePeriod, currency: Currency): Single<ChartPointsWrapper>
 

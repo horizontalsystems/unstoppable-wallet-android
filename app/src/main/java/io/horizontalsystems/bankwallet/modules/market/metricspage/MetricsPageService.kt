@@ -1,17 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.market.metricspage
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
-import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MetricsPageService(
     val metricsType: MetricsType,
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val globalMarketRepository: GlobalMarketRepository
 ) {
     private var currencyManagerDisposable: Disposable? = null

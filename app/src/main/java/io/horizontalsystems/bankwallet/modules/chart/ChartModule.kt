@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import java.math.BigDecimal
 
 object ChartModule {

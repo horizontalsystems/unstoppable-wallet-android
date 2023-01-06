@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.VolumeMenuType
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketTicker
 import io.reactivex.disposables.CompositeDisposable
@@ -14,7 +14,7 @@ import java.math.BigDecimal
 
 class CoinMarketsService(
     val fullCoin: FullCoin,
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
 ) {
 

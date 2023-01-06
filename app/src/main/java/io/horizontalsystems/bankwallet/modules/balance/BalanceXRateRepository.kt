@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 
 class BalanceXRateRepository(
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper
 ) {
     val baseCurrency by currencyManager::baseCurrency

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -32,8 +33,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -44,7 +44,7 @@ import java.math.BigDecimal
 class MarketOverviewViewModel(
     private val service: MarketOverviewService,
     private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory,
-    private val currencyManager: ICurrencyManager
+    private val currencyManager: CurrencyManager
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()

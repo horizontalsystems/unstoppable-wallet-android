@@ -2,10 +2,8 @@ package io.horizontalsystems.core
 
 import android.app.Activity
 import android.content.SharedPreferences
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import java.util.*
 import javax.crypto.SecretKey
 
@@ -15,7 +13,6 @@ interface ICoreApp {
     var encryptionManager: IEncryptionManager
     var systemInfoManager: ISystemInfoManager
     var languageManager: ILanguageManager
-    var currencyManager: ICurrencyManager
     var keyStoreManager: IKeyStoreManager
     var keyProvider: IKeyProvider
     var pinComponent: IPinComponent
@@ -61,12 +58,6 @@ interface ILanguageManager {
     val currentLanguage: String
 
     fun setLocale(locale: Locale)
-}
-
-interface ICurrencyManager {
-    var baseCurrency: Currency
-    val baseCurrencyUpdatedSignal: Observable<Unit>
-    val currencies: List<Currency>
 }
 
 interface IPinStorage {

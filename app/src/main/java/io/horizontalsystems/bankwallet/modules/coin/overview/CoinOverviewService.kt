@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.Observable
@@ -15,7 +15,7 @@ import java.net.URL
 class CoinOverviewService(
     val fullCoin: FullCoin,
     private val marketKit: MarketKitWrapper,
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val appConfigProvider: AppConfigProvider,
     private val languageManager: ILanguageManager
 ) {

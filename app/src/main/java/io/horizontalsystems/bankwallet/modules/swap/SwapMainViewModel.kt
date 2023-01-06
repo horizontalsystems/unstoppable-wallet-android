@@ -8,18 +8,18 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.disposables.CompositeDisposable
 
 class SwapMainViewModel(
     val service: SwapMainService,
     val switchService: AmountTypeSwitchService,
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
 ) : ViewModel() {
 
     private val disposable = CompositeDisposable()
