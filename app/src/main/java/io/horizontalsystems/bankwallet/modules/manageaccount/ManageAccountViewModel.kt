@@ -7,13 +7,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.balance.faqUrl
 import io.horizontalsystems.bankwallet.modules.balance.headerNote
-import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDExtendedKey.DerivedType
@@ -27,7 +27,7 @@ class ManageAccountViewModel(
     private val service: ManageAccountService,
     private val clearables: List<Clearable>,
     private val faqManager: FaqManager,
-    private val languageManager: ILanguageManager
+    private val languageManager: LanguageManager
 ) : ViewModel() {
     val disposable = CompositeDisposable()
 

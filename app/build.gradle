@@ -278,8 +278,6 @@ dependencies {
     // UI modules
 
     implementation project(':core')
-    implementation project(':components:views')
-    implementation project(':components:snackbar')
     implementation project(':components:icons')
     implementation project(':components:chartview')
 

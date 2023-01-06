@@ -1,18 +1,15 @@
 package io.horizontalsystems.core
 
 import android.app.Activity
-import android.content.SharedPreferences
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 import io.reactivex.Flowable
 import java.util.*
 import javax.crypto.SecretKey
 
 interface ICoreApp {
-    var preferences: SharedPreferences
     var backgroundManager: BackgroundManager
     var encryptionManager: IEncryptionManager
     var systemInfoManager: ISystemInfoManager
-    var languageManager: ILanguageManager
     var keyStoreManager: IKeyStoreManager
     var keyProvider: IKeyProvider
     var pinComponent: IPinComponent
@@ -49,15 +46,6 @@ interface IPinComponent {
     fun onUnlock()
     fun shouldShowPin(activity: Activity): Boolean
     fun lock()
-}
-
-interface ILanguageManager {
-    val fallbackLocale: Locale
-    val currentLocale: Locale
-    val currentLanguageName: String
-    val currentLanguage: String
-
-    fun setLocale(locale: Locale)
 }
 
 interface IPinStorage {

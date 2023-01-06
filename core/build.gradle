@@ -48,8 +48,6 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
     implementation "androidx.biometric:biometric:$biometric_version"
     implementation "com.google.android.material:material:$material_version"
-    implementation project(':components:views')
-    implementation project(':components:snackbar')
 
     testImplementation "junit:junit:$junit_version"
 }

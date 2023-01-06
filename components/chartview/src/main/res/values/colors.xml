@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Colors-->
+    <color name="ripple_white">#b2ffffff</color>
+    <color name="ripple_black">#1f000000</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="yellow_d">#ffa800</color>
+    <color name="yellow_l">#f58400</color>
+    <color name="green_d">#05C46B</color>
+    <color name="green_l">#04AD5F</color>
+    <color name="red_d">#F43A4F</color>
+    <color name="red_l">#FF3D43</color>
+    <color name="issyk_blue">#1a60ff</color>
+
+    <color name="black">#000000</color>
+    <color name="steel_dark">#252933</color>
+    <color name="grey">#808085</color>
+    <color name="light_grey">#c8c7cc</color>
+    <color name="steel_light">#e1e1e5</color>
+    <color name="white">#ffffff</color>
+    <color name="white_pressed">#e3e4e8</color>
+    <color name="darkest">#0f1014</color>
+
+    <color name="dark">#13151a</color>
+    <color name="dark_80">#CC13151A</color>
+    <color name="light">#f0f0f0</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="black_50">#80000000</color>
+    <color name="white_50">#80ffffff</color>
+    <color name="yellow_20">#33FFA800</color>
+    <color name="yellow_50">#80ffa800</color>
+    <color name="green_50">#8013D670</color>
+
+    <color name="grey_50">#80808085</color>
+    <color name="steel_10">#1a6E7899</color>
+    <color name="steel_20">#336E7899</color>
+    <color name="steel_dark_pressed">#353842</color>
+    <color name="red_50">#80ff4820</color>
+
+    <!--Paired Colors-->
+    <color name="jacob">@color/yellow_l</color>
+    <color name="remus">@color/green_l</color>
+    <color name="lucian">@color/red_l</color>
+    <color name="tyler">@color/light</color>
+    <color name="cassandra">@color/light_grey</color>
+    <color name="bran">@color/dark</color>
+
+    <color name="claude">@color/white</color>
+    <color name="leah">@color/steel_dark</color>
+    <color name="lawrence">@color/white</color>
+    <color name="lawrence_pressed">@color/steel_light</color>
+    <color name="elena">@color/light_grey</color>
+    <color name="jeremy">@color/steel_light</color>
+
+    <color name="andy">@color/steel_20</color>
+    <color name="nina">@color/black_50</color>
+    <color name="raina">@color/white_50</color>
+
+    <color name="tylerGradientStart">#fff0f0f0</color>
+    <color name="tylerGradientEnd">#00f0f0f0</color>
+</resources>

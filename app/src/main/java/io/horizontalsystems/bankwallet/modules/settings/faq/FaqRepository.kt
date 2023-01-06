@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.settings.faq
 
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.FaqMap
 import io.horizontalsystems.bankwallet.entities.FaqSection
-import io.horizontalsystems.core.ILanguageManager
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 class FaqRepository(
     private val faqManager: FaqManager,
     private val connectivityManager: ConnectivityManager,
-    private val languageManager: ILanguageManager
+    private val languageManager: LanguageManager
 ) {
 
     val faqList: Observable<DataState<List<FaqSection>>>

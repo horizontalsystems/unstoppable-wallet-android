@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.market.category
 
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.marketkit.models.CoinCategory
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -16,7 +16,7 @@ import io.reactivex.subjects.BehaviorSubject
 class MarketCategoryService(
     private val marketCategoryRepository: MarketCategoryRepository,
     private val currencyManager: CurrencyManager,
-    private val languageManager: ILanguageManager,
+    private val languageManager: LanguageManager,
     private val favoritesManager: MarketFavoritesManager,
     private val coinCategory: CoinCategory,
     topMarket: TopMarket = TopMarket.Top100,

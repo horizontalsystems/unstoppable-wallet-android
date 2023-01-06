@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.core.ILanguageManager
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
@@ -13,7 +12,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 class NumberFormatter(
-        private val languageManager: ILanguageManager
+        private val languageManager: LanguageManager
         ) : IAppNumberFormatter {
 
     private var formatters = ConcurrentHashMap<String, NumberFormat>()

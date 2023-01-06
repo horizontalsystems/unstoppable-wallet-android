@@ -14,7 +14,7 @@ import coil.load
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import io.horizontalsystems.bankwallet.databinding.*
-import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.bankwallet.ui.helpers.LayoutHelper
 import org.apache.commons.io.FilenameUtils
 import java.net.URL
 
