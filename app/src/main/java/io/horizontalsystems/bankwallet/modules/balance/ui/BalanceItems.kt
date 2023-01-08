@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.*
@@ -289,7 +288,7 @@ fun Wallets(
     }
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(uiState.isRefreshing),
+        refreshing = uiState.isRefreshing,
         onRefresh = {
             viewModel.onRefresh()
         }

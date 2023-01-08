@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -54,7 +53,7 @@ fun CoinDetailsScreen(
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        refreshing = isRefreshing,
         onRefresh = { viewModel.refresh() },
     ) {
         Crossfade(viewState) { viewState ->

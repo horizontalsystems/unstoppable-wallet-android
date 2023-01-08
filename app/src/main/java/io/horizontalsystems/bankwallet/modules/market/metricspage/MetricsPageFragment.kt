@@ -104,7 +104,7 @@ class MetricsPageFragment : BaseFragment() {
             )
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
+                refreshing = isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                 }

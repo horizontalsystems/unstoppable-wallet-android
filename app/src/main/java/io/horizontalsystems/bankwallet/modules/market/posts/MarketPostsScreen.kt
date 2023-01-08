@@ -33,7 +33,7 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
     val context = LocalContext.current
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        refreshing = isRefreshing,
         onRefresh = {
             viewModel.refresh()
         }

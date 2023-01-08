@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -102,7 +101,7 @@ fun CategoryScreen(
             TopCloseButton(interactionSource, onCloseButtonClick)
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
+                refreshing = isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                 }

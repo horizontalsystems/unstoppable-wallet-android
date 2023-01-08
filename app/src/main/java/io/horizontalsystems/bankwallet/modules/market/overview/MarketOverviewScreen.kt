@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -44,7 +43,7 @@ fun MarketOverviewScreen(
     val scrollState = rememberScrollState()
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        refreshing = isRefreshing,
         onRefresh = {
             viewModel.refresh()
         }

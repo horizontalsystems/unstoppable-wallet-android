@@ -100,7 +100,7 @@ private fun CoinReportsScreen(
             }
         )
         HSSwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing),
+            refreshing = isRefreshing,
             onRefresh = viewModel::refresh
         ) {
             Crossfade(viewState) { viewState ->

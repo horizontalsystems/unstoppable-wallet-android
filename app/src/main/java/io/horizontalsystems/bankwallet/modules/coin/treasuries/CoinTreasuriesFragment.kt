@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -83,7 +82,7 @@ class CoinTreasuriesFragment : BaseFragment() {
                 }
             )
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
+                refreshing = isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                 }

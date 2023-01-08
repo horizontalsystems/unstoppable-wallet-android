@@ -120,7 +120,7 @@ fun TopCoinsScreen(
             TopCloseButton(interactionSource, onCloseButtonClick)
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
+                refreshing = isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                 }
