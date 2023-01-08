@@ -282,7 +282,7 @@
     <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
-    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
     <string name="TimePeriod_24h">24h</string>
 
     <!--Coin Markets-->

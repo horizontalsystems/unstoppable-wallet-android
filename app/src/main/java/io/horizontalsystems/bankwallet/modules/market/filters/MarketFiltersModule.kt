@@ -177,10 +177,10 @@ enum class PriceChange(
         TextColor.Lucian,
         Pair(null, -50)
     ),
-    Negative_100_minus(
-        R.string.Market_Filter_PriceChange_Negative_100_minus,
+    Negative_75_minus(
+        R.string.Market_Filter_PriceChange_Negative_75_minus,
         TextColor.Lucian,
-        Pair(null, -100)
+        Pair(null, -75)
     ),
 }
 
