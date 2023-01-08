@@ -109,7 +109,7 @@ class TvlFragment : BaseFragment() {
             )
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
+                refreshing = isRefreshing,
                 onRefresh = {
                     tvlViewModel.refresh()
                 }

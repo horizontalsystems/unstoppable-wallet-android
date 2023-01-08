@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -41,7 +40,7 @@ fun NftCollectionEventsScreen(navController: NavController, blockchainType: Bloc
     )
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(viewModel.isRefreshing),
+        refreshing = viewModel.isRefreshing,
         onRefresh = {
             viewModel.refresh()
         }

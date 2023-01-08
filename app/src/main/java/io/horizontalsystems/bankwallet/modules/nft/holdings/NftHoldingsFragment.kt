@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -86,7 +85,7 @@ fun NftHoldingsScreen(navController: NavController) {
 
             )
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(loading),
+                refreshing = loading,
                 onRefresh = viewModel::refresh
             ) {
                 Crossfade(viewState) { viewState ->

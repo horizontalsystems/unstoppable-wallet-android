@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
@@ -37,7 +36,7 @@ fun NftCollectionOverviewScreen(
     val collection = viewModel.overviewViewItem
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(viewModel.isRefreshing),
+        refreshing = viewModel.isRefreshing,
         onRefresh = {
             viewModel.refresh()
         }

@@ -113,7 +113,7 @@ private fun PlatformScreen(
             TopCloseButton(interactionSource, onCloseButtonClick)
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(viewModel.isRefreshing),
+                refreshing = viewModel.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                 }

@@ -34,7 +34,7 @@ fun CoinTweetsScreen(
     val context = LocalContext.current
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        refreshing = isRefreshing,
         onRefresh = { viewModel.refresh() },
     ) {
         Crossfade(viewState) { viewState ->

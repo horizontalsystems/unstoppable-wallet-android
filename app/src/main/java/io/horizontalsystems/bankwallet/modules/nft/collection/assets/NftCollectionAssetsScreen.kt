@@ -29,7 +29,7 @@ fun NftCollectionAssetsScreen(navController: NavController, blockchainType: Bloc
     val viewModel = viewModel<NftCollectionAssetsViewModel>(factory = NftCollectionAssetsModule.Factory(blockchainType, collectionUid))
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(viewModel.isRefreshing),
+        refreshing = viewModel.isRefreshing,
         onRefresh = {
             viewModel.refresh()
         }

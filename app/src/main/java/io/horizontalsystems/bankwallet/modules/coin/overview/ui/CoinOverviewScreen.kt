@@ -58,7 +58,7 @@ fun CoinOverviewScreen(
     val context = LocalContext.current
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(refreshing),
+        refreshing = refreshing,
         onRefresh = {
             viewModel.refresh()
             chartViewModel.refresh()
