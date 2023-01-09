@@ -165,7 +165,6 @@ sealed class AccountType : Parcelable {
                     else -> ""
                 }
             }
-            else -> ""
         }
 
     val supportedDerivations: List<Derivation>
@@ -179,6 +178,7 @@ sealed class AccountType : Parcelable {
             else -> emptyList()
         }
 
+    @IgnoredOnParcel
     val hideZeroBalances = this is EvmAddress || this is SolanaAddress
 
     val detailedDescription: String

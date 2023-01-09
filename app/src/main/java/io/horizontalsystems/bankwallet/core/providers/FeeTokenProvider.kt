@@ -18,7 +18,6 @@ class FeeTokenProvider(
                 TokenQuery(token.blockchainType, TokenType.Native)
             }
             TokenType.Native,
-            is TokenType.Spl,
             is TokenType.Unsupported -> null
         }
 

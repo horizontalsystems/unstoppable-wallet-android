@@ -85,7 +85,7 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             }
         })
 
-        binding.bottomNavigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_market -> binding.viewPager.setCurrentItem(0, false)
                 R.id.navigation_balance -> binding.viewPager.setCurrentItem(1, false)

@@ -110,7 +110,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 key = SecretString(account.type.keySerialized)
                 accountType = HD_EXTENDED_LEY
             }
-            else -> throw Exception("Unsupported AccountType: ${account.type}")
         }
 
         return AccountRecord(

@@ -25,7 +25,7 @@ class MainActivity : BaseActivity() {
         navHost.navController.setGraph(R.navigation.main_graph, intent.extras)
         navHost.navController.addOnDestinationChangedListener(this)
 
-        wc2MainViewModel.sessionProposalLiveEvent.observe(this) { wcRequest ->
+        wc2MainViewModel.sessionProposalLiveEvent.observe(this) {
             navHost.navController.slideFromBottom(R.id.wc2SessionFragment)
         }
         wc2MainViewModel.openWalletConnectRequestLiveEvent.observe(this) { requestId ->
