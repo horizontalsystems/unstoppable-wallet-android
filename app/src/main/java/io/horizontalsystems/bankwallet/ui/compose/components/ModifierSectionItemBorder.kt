@@ -14,7 +14,7 @@ import kotlin.math.ceil
 import kotlin.math.min
 
 enum class SectionItemPosition {
-    First, Last, Middle
+    First, Last, Middle, Single
 }
 
 fun Modifier.sectionItemBorder(
@@ -44,6 +44,7 @@ fun Modifier.sectionItemBorder(
                 SectionItemPosition.Middle -> {
                     drawMiddleItemBorder(strokeWidthPx, brush)
                 }
+                SectionItemPosition.Single -> { }
             }
             drawContent()
         }
