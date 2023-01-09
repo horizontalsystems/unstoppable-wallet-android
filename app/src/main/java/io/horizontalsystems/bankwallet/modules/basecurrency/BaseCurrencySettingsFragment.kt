@@ -130,7 +130,7 @@ private fun BaseCurrencyScreen(
                     HeaderText(
                         stringResource(R.string.SettingsCurrency_Other)
                     )
-                    CellMultilineLawrenceSection(viewModel.otherItems) { item ->
+                    CellUniversalLawrenceSection(viewModel.otherItems) { item ->
                         CurrencyCell(
                             item.currency.code,
                             item.currency.symbol,
