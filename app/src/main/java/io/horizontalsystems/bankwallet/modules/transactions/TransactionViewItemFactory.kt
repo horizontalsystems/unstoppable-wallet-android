@@ -437,7 +437,13 @@ class TransactionViewItemFactory(
             title = Translator.getString(R.string.Transactions_Receive)
             val addresses = record.incomingEvents.mapNotNull { it.address }.toSet().toList()
 
-            subTitle = if (addresses.size == 1) evmLabelManager.mapped(addresses.first()) else Translator.getString(R.string.Transactions_Multiple)
+            subTitle = if (addresses.size == 1) {
+                Translator.getString(
+                    R.string.Transactions_From, evmLabelManager.mapped(addresses.first())
+                )
+            } else {
+                Translator.getString(R.string.Transactions_Multiple)
+            }
         } else {
             title = Translator.getString(R.string.Transactions_ExternalContractCall)
             subTitle = "---"
