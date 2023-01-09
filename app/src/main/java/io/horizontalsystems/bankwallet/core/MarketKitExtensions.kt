@@ -261,7 +261,6 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         }
         is AccountType.SolanaAddress ->
             this == BlockchainType.Solana
-        else -> false
     }
 }
 
