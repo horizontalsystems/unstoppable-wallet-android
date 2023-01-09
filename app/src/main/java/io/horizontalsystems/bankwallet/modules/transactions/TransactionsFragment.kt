@@ -232,8 +232,8 @@ fun TransactionList(
             val singleElement = itemsCount == 1
 
             itemsIndexed(transactions) { index, item ->
-                val position: SectionItemPosition? = when {
-                    singleElement -> null
+                val position: SectionItemPosition = when {
+                    singleElement -> SectionItemPosition.Single
                     index == 0 -> SectionItemPosition.First
                     index == itemsCount - 1 -> SectionItemPosition.Last
                     else -> SectionItemPosition.Middle
@@ -281,11 +281,10 @@ fun DateHeader(dateHeader: String) {
 }
 
 @Composable
-fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition?, onClick: () -> Unit) {
+fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, onClick: () -> Unit) {
     val divider = position == SectionItemPosition.Middle || position == SectionItemPosition.Last
-    CellMultilineClear(
+    SectionUniversalItem(
         borderTop = divider,
-        height = 64.dp,
     ) {
         val clipModifier = when (position) {
             SectionItemPosition.First -> {
@@ -294,22 +293,24 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition?, o
             SectionItemPosition.Last -> {
                 Modifier.clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
             }
+            SectionItemPosition.Single -> {
+                Modifier.clip(RoundedCornerShape(12.dp))
+            }
             else -> Modifier
         }
 
-        val borderModifier = if (position != null) {
+        val borderModifier = if (position != SectionItemPosition.Single) {
             Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.steel20, 12.dp, position)
         } else {
             Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
         }
 
-        Row(
+        RowUniversal(
             modifier = Modifier
                 .fillMaxSize()
                 .then(clipModifier)
                 .then(borderModifier)
                 .clickable(onClick = onClick),
-            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier = Modifier
@@ -425,9 +426,11 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition?, o
                 Row {
                     subhead2_grey(
                         text = item.subtitle,
-                        maxLines = 1,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp),
+                        maxLines = 2,
                     )
-                    Spacer(Modifier.weight(1f))
                     item.secondaryValue?.let { coloredValue ->
                         Text(
                             text = coloredValue.value,
