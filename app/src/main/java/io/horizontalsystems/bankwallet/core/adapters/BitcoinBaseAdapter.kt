@@ -255,7 +255,7 @@ abstract class BitcoinBaseAdapter(
 
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
         val from = transaction.inputs.find { input ->
-            input.address != null
+            input.address?.isNotBlank() == true
         }?.address
 
         val to = transaction.outputs.find { output ->
