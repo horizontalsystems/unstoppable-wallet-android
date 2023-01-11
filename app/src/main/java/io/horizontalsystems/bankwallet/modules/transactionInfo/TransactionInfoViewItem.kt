@@ -15,7 +15,7 @@ sealed class TransactionInfoViewItem {
 
     class Value(val title: String, val value: String) : TransactionInfoViewItem()
 
-    class Address(val title: String, val value: String, val valueTitle: String) : TransactionInfoViewItem()
+    class Address(val title: String, val value: String) : TransactionInfoViewItem()
 
     class TransactionHash(val transactionHash: String) : TransactionInfoViewItem()
 

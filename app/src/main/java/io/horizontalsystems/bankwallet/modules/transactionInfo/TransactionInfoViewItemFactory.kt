@@ -93,11 +93,7 @@ class TransactionInfoViewItemFactory(
 
                     if (transaction.recipient != null) {
                         youGetSectionItems.add(
-                            Address(
-                                getString(R.string.TransactionInfo_RecipientHash),
-                                transaction.recipient,
-                                evmLabelManager.mapped(transaction.recipient)
-                            )
+                            Address(getString(R.string.TransactionInfo_RecipientHash), transaction.recipient)
                         )
                     }
 
@@ -275,11 +271,7 @@ class TransactionInfoViewItemFactory(
 
         if (!mint && fromAddress != null) {
             items.add(
-                Address(
-                    getString(R.string.TransactionInfo_From),
-                    fromAddress,
-                    evmLabelManager.mapped(fromAddress)
-                )
+                Address(getString(R.string.TransactionInfo_From), fromAddress)
             )
         }
 
@@ -338,11 +330,7 @@ class TransactionInfoViewItemFactory(
 
         if (!burn && toAddress != null) {
             items.add(
-                Address(
-                    getString(R.string.TransactionInfo_To),
-                    toAddress,
-                    evmLabelManager.mapped(toAddress)
-                )
+                Address(getString(R.string.TransactionInfo_To), toAddress)
             )
         }
 
@@ -461,7 +449,7 @@ class TransactionInfoViewItemFactory(
         return listOf(
             Transaction(getString(R.string.Transactions_Approve), value.fullName, R.drawable.ic_checkmark_24),
             Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coinIconUrl, value.coinIconPlaceholder),
-            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, evmLabelManager.mapped(spenderAddress))
+            Address(getString(R.string.TransactionInfo_Spender), spenderAddress)
         )
     }
 
