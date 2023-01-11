@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.core
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
@@ -392,6 +394,19 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         WorkConfiguration.Builder()
             .setMinimumLoggingLevel(Log.VERBOSE)
             .build()
+
+    override fun localizedContext(): Context {
+        return localeAwareContext(this)
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(localeAwareContext(base))
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        localeAwareContext(this)
+    }
 
     private fun startTasks() {
         Thread {

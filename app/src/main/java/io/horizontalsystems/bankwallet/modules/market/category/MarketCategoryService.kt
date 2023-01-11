@@ -37,7 +37,7 @@ class MarketCategoryService(
         private set
 
     val coinCategoryName: String get() = coinCategory.name
-    val coinCategoryDescription: String get() = coinCategory.description[languageManager.currentLanguage]
+    val coinCategoryDescription: String get() = coinCategory.description[languageManager.currentLocaleTag]
         ?: coinCategory.description["en"]
         ?: coinCategory.description.keys.firstOrNull()
         ?: ""
