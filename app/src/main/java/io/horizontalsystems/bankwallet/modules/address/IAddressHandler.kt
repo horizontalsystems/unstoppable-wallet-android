@@ -117,6 +117,22 @@ class AddressHandlerEvm : IAddressHandler {
 
 }
 
+class AddressHandlerSolana : IAddressHandler {
+    override fun isSupported(value: String) = true
+
+    override fun parseAddress(value: String): Address {
+        try {
+            //simulate steps in Solana kit init
+            io.horizontalsystems.solanakit.models.Address(value)
+        } catch (e: Throwable) {
+            throw AddressValidator.AddressValidationException(e.message ?: "")
+        }
+
+        return Address(value)
+    }
+
+}
+
 class AddressHandlerPure : IAddressHandler {
     override fun isSupported(value: String) = true
 

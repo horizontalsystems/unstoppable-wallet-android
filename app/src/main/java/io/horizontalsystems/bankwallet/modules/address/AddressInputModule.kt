@@ -21,7 +21,6 @@ object AddressInputModule {
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
-                BlockchainType.Solana,
                 BlockchainType.BinanceChain -> {
                     addressViewModel.addAddressHandler(AddressHandlerPure())
                 }
@@ -33,6 +32,9 @@ object AddressInputModule {
                 BlockchainType.Optimism,
                 BlockchainType.ArbitrumOne -> {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())
+                }
+                BlockchainType.Solana -> {
+                    addressViewModel.addAddressHandler(AddressHandlerSolana())
                 }
                 is BlockchainType.Unsupported -> Unit
             }
