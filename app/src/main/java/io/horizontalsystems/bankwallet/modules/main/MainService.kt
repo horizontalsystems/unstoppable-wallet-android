@@ -23,4 +23,11 @@ class MainService(
         set(value) {
             localStorage.mainTab = value
         }
+
+    var relaunchBySettingChange: Boolean
+        get() = localStorage.relaunchBySettingChange
+        set(value) {
+            localStorage.relaunchBySettingChange = value
+        }
+
 }

@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -39,7 +40,10 @@ class LanguageSettingsFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                LanguageScreen(findNavController())
+                LanguageScreen(
+                    findNavController(),
+                    { activity?.let { MainModule.startAsNewTask(it) } }
+                )
             }
         }
     }
@@ -48,12 +52,17 @@ class LanguageSettingsFragment : BaseFragment() {
 @Composable
 private fun LanguageScreen(
     navController: NavController,
+    reloadApp: () -> Unit,
     viewModel: LanguageSettingsViewModel = viewModel(
         factory = LanguageSettingsModule.Factory()
     )
 ) {
     if (viewModel.closeScreen) {
         navController.popBackStack()
+    }
+
+    if (viewModel.reloadApp) {
+        reloadApp()
     }
 
     ComposeAppTheme {
@@ -82,7 +91,7 @@ private fun LanguageScreen(
                         subtitle = item.nativeName,
                         icon = item.icon,
                         checked = item.current,
-                        onClick = { viewModel.onSelectLocale(item.locale) }
+                        onClick = { viewModel.onSelectLocale(item.localeType) }
                     )
                 }
                 Spacer(Modifier.height(24.dp))

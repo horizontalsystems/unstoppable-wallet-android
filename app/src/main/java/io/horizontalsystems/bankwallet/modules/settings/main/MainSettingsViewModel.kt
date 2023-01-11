@@ -21,7 +21,7 @@ class MainSettingsViewModel(
     val aboutAppShowAlertLiveData = MutableLiveData(!service.termsAccepted)
     val wcCounterLiveData = MutableLiveData<CounterType?>(null)
     val baseCurrencyLiveData = MutableLiveData(service.baseCurrency)
-    val language by service::currentLanguageDisplayName
+    val languageLiveData = MutableLiveData(service.currentLanguageDisplayName)
     val appVersion by service::appVersion
 
     private var wcSessionsCount = service.walletConnectSessionCount

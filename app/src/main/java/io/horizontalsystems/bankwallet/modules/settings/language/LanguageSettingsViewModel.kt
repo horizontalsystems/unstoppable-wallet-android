@@ -4,26 +4,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
-import java.util.*
 
 class LanguageSettingsViewModel(
-    private val languageManager: LanguageManager
+    private val languageManager: LanguageManager,
+    private val localStorage: ILocalStorage
 ) : ViewModel() {
 
-    val languageItems: List<LanguageViewItem>
-        get() = LanguageManager.supportedLocales.map {
-            LanguageViewItem(it.locale, it.name(languageManager.currentLocale), it.nativeName, it.icon, languageManager.currentLocale == it.locale)
+    val languageItems = LanguageSettingsModule.LocaleType.values().map {
+        LanguageViewItem(
+            it,
+            languageManager.getName(it.tag),
+            languageManager.getNativeName(it.tag),
+            it.icon,
+            currentLocaleTag == it.tag
+        )
+    }
+
+    private var currentLocaleTag: String
+        get() = languageManager.currentLocaleTag
+        set(value) {
+            languageManager.currentLocaleTag = value
         }
 
     var closeScreen by mutableStateOf(false)
         private set
 
-    fun onSelectLocale(locale: Locale) {
-        if (locale == languageManager.currentLocale) {
+    var reloadApp by mutableStateOf(false)
+        private set
+
+    fun onSelectLocale(localeType: LanguageSettingsModule.LocaleType) {
+        if (localeType.tag == currentLocaleTag) {
             closeScreen = true
         } else {
-            languageManager.setLocale(locale)
+            localStorage.relaunchBySettingChange = true
+            currentLocaleTag = localeType.tag
+            reloadApp = true
         }
     }
 
