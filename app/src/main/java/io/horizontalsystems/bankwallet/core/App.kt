@@ -366,10 +366,13 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
 
         CoreClient.initialize(
+            metaData = appMetaData,
             relayServerUrl = serverUrl,
             connectionType = connectionType,
             application = this,
-            metaData = appMetaData
+            onError = { error ->
+                Log.w("AAA", "error", error.throwable)
+            },
         )
 
         val init = Sign.Params.Init(core = CoreClient)
