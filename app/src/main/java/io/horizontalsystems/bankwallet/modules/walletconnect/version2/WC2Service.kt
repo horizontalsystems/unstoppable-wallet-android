@@ -42,7 +42,7 @@ class WC2Service : SignClient.WalletDelegate {
         get() = pendingRequestUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val activeSessions: List<Sign.Model.Session>
-        get() = SignClient.getListOfSettledSessions()
+        get() = SignClient.getListOfActiveSessions()
 
     private val _connectionAvailableStateFlow: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     val connectionAvailableStateFlow: StateFlow<Boolean?>
@@ -87,7 +87,7 @@ class WC2Service : SignClient.WalletDelegate {
     }
 
     fun deletePairing(topic: String) {
-        CoreClient.Pairing.disconnect(topic) { error ->
+        CoreClient.Pairing.disconnect(Core.Params.Disconnect(topic)) { error ->
             Log.e(TAG, "disconnect pair error: ", error.throwable)
             event = Event.Error(error.throwable)
         }
