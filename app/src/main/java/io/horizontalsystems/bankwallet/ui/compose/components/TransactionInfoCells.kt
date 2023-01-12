@@ -155,18 +155,21 @@ fun TitleAndValueCell(
 @Composable
 fun TransactionInfoAddressCell(
     title: String,
-    value: String,
-    valueTitle: String
+    value: String
 ) {
     val view = LocalView.current
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
-        Spacer(Modifier.weight(1f))
-        ButtonSecondaryDefault(
-            modifier = Modifier.height(28.dp),
-            title = valueTitle,
+        subhead1_leah(
+            modifier = Modifier.weight(1f),
+            text = value,
+            textAlign = TextAlign.Right
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        ButtonSecondaryCircle(
+            icon = R.drawable.ic_copy_20,
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)

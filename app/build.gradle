@@ -10,7 +10,7 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 73
+        versionCode 74
         versionName "0.30.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -248,7 +248,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:ethereum-kit-android:7f3d061'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:2a89cad'
-    implementation 'com.github.horizontalsystems:market-kit-android:e5dd6d7'
+    implementation 'com.github.horizontalsystems:market-kit-android:f6dcb06'
     implementation 'com.github.horizontalsystems:solana-kit-android:889c977'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.9.0-beta04"
