@@ -80,7 +80,7 @@
     <string name="Welcome_PrivacySettings">Privacy Settings</string>
 
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">Advanced Setup</string>
+    <string name="CreateWallet_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
     <string name="CreateWallet_Wordlist">Wordlist</string>
     <string name="Passphrase">Passphrase</string>
@@ -116,6 +116,7 @@
     <!--Restore-->
 
     <string name="Restore_Enter_Key_Title">Restore</string>
+    <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
