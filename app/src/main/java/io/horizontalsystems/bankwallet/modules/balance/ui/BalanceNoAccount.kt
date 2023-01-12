@@ -40,7 +40,7 @@ fun BalanceNoAccount(navController: NavController) {
                 title = stringResource(R.string.Button_Restore),
                 onClick = {
                     navController.navigateWithTermsAccepted {
-                        navController.slideFromRight(R.id.restoreMnemonicFragment)
+                        navController.slideFromRight(R.id.advancedRestoreFragment)
                     }
                 }
             )

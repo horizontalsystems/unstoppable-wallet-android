@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restoreaccount.restore
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun RestoreByMenu(
-    viewModel: RestoreViewModel
+    viewModel: RestoreMenuViewModel
 ) {
     ByMenu(
         menuTitle = stringResource(R.string.Restore_By),

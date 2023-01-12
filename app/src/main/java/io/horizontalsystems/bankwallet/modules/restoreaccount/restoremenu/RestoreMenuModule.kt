@@ -1,16 +1,16 @@
-package io.horizontalsystems.bankwallet.modules.restoreaccount.restore
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 
-object RestoreModule {
+object RestoreMenuModule {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreViewModel() as T
+            return RestoreMenuViewModel() as T
         }
     }
 

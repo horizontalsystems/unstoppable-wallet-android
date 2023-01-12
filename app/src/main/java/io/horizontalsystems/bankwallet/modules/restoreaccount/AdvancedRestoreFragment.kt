@@ -12,15 +12,15 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.restoreaccount.resoreprivatekey.ResorePrivateKey
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreModule
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreModule.RestoreOption
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreViewModel
+import io.horizontalsystems.bankwallet.modules.restoreaccount.resoreprivatekey.RestorePrivateKey
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuModule
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuModule.RestoreOption
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 
-class RestoreMnemonicFragment : BaseFragment() {
+class AdvancedRestoreFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,11 +33,10 @@ class RestoreMnemonicFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    val popUpToInclusiveId = arguments?.getInt(
-                        ManageAccountsModule.popOffOnSuccessKey, R.id.restoreMnemonicFragment
-                    ) ?: R.id.restoreMnemonicFragment
+                    val popUpToInclusiveId =
+                        arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.advancedRestoreFragment) ?: R.id.advancedRestoreFragment
 
-                    RestoreScreen(findNavController(), popUpToInclusiveId)
+                    AdvancedRestoreScreen(findNavController(), popUpToInclusiveId)
                 }
             }
         }
@@ -45,17 +44,17 @@ class RestoreMnemonicFragment : BaseFragment() {
 }
 
 @Composable
-fun RestoreScreen(
+fun AdvancedRestoreScreen(
     navController: NavController,
     popUpToInclusiveId: Int,
-    restoreViewModel: RestoreViewModel = viewModel(factory = RestoreModule.Factory())
+    restoreMenuViewModel: RestoreMenuViewModel = viewModel(factory = RestoreMenuModule.Factory())
 ) {
-    when (restoreViewModel.restoreOption) {
+    when (restoreMenuViewModel.restoreOption) {
         RestoreOption.RecoveryPhrase -> {
-            RestorePhrase(navController, popUpToInclusiveId, restoreViewModel)
+            RestorePhrase(navController, popUpToInclusiveId, restoreMenuViewModel)
         }
         RestoreOption.PrivateKey -> {
-            ResorePrivateKey(navController, popUpToInclusiveId, restoreViewModel)
+            RestorePrivateKey(navController, popUpToInclusiveId, restoreMenuViewModel)
         }
     }
 }

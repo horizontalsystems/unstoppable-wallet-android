@@ -234,8 +234,8 @@
         android:id="@+id/restoreMnemonicNonStandardFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestoreMnemonicNonStandardFragment" />
     <fragment
-        android:id="@+id/restoreMnemonicFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreMnemonicFragment" />
+        android:id="@+id/advancedRestoreFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.AdvancedRestoreFragment" />
     <fragment
         android:id="@+id/watchAddressFragment"
         android:name="io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment" />

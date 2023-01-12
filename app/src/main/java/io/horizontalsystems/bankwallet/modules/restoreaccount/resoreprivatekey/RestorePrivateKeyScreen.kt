@@ -19,9 +19,9 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreByMenu
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreByMenu
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -30,10 +30,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 @Composable
-fun ResorePrivateKey(
+fun RestorePrivateKey(
     navController: NavController,
     popUpToInclusiveId: Int,
-    restoreViewModel: RestoreViewModel,
+    restoreMenuViewModel: RestoreMenuViewModel,
 ) {
     val viewModel =
         viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
@@ -79,7 +79,7 @@ fun ResorePrivateKey(
         ) {
             Spacer(Modifier.height(12.dp))
 
-            RestoreByMenu(restoreViewModel)
+            RestoreByMenu(restoreMenuViewModel)
 
             Spacer(Modifier.height(24.dp))
 
