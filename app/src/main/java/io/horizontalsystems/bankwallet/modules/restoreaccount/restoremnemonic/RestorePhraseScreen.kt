@@ -21,6 +21,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -48,6 +49,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
@@ -65,6 +67,7 @@ fun RestorePhrase(
     navController: NavController,
     popUpToInclusiveId: Int,
     restoreMenuViewModel: RestoreMenuViewModel,
+    advanced: Boolean
 ) {
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
@@ -77,16 +80,14 @@ fun RestorePhrase(
     var isMnemonicPhraseInputFocused by remember { mutableStateOf(false) }
     val keyboardState by observeKeyboardState()
 
-    val qrScannerLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-                textState =
-                    textState.copy(text = scannedText, selection = TextRange(scannedText.length))
-                viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
-            }
+            textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
+            viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
         }
+    }
 
     val borderColor = if (uiState.error != null) {
         ComposeAppTheme.colors.red50
@@ -97,7 +98,7 @@ fun RestorePhrase(
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
+            title = if (advanced) TranslatableString.ResString(R.string.Restore_Advanced_Title) else TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
             navigationIcon = {
                 HsIconButton(onClick = navController::popBackStack) {
                     Icon(
@@ -114,13 +115,19 @@ fun RestorePhrase(
                 )
             )
         )
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Spacer(Modifier.height(12.dp))
 
-                RestoreByMenu(restoreMenuViewModel)
-
-                Spacer(Modifier.height(32.dp))
+                if (advanced) {
+                    RestoreByMenu(restoreMenuViewModel)
+                    Spacer(Modifier.height(32.dp))
+                }
 
                 Column(
                     modifier = Modifier
@@ -253,36 +260,61 @@ fun RestorePhrase(
 
                 Spacer(Modifier.height(24.dp))
 
-                BottomSection(
-                    navController,
-                    viewModel,
-                    uiState,
-                    coroutineScope
-                )
-
-                Spacer(Modifier.height(44.dp))
+                if (advanced) {
+                    BottomSection(
+                        navController,
+                        viewModel,
+                        uiState,
+                        coroutineScope
+                    )
+                }
             }
 
-            if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
-                SuggestionsBar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    wordSuggestions = uiState.wordSuggestions
-                ) { wordItem, suggestion ->
-                    HudHelper.vibrate(context)
-
-                    val cursorIndex = wordItem.range.first + suggestion.length + 1
-                    var text = textState.text.replaceRange(wordItem.range, suggestion)
-
-                    if (text.length < cursorIndex) {
-                        text = "$text "
+            Column {
+                ButtonsGroupWithShade {
+                    Column {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp),
+                            title = stringResource(R.string.Button_Next),
+                            onClick = viewModel::onProceed
+                        )
+                        if (!advanced) {
+                            Spacer(Modifier.height(16.dp))
+                            ButtonPrimaryTransparent(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 24.dp),
+                                title = stringResource(R.string.Button_Advanced),
+                                onClick = {
+                                    navController.slideFromRight(R.id.advancedRestoreFragment, ManageAccountsModule.prepareParams(popUpToInclusiveId))
+                                }
+                            )
+                        }
                     }
+                }
+                if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
+                    SuggestionsBar(
+                        modifier = Modifier.background(Color.Red),//align(Alignment.BottomCenter),
+                        wordSuggestions = uiState.wordSuggestions
+                    ) { wordItem, suggestion ->
+                        HudHelper.vibrate(context)
 
-                    textState = TextFieldValue(
-                        text = text,
-                        selection = TextRange(cursorIndex)
-                    )
+                        val cursorIndex = wordItem.range.first + suggestion.length + 1
+                        var text = textState.text.replaceRange(wordItem.range, suggestion)
 
-                    viewModel.onEnterMnemonicPhrase(text, cursorIndex)
+                        if (text.length < cursorIndex) {
+                            text = "$text "
+                        }
+
+                        textState = TextFieldValue(
+                            text = text,
+                            selection = TextRange(cursorIndex)
+                        )
+
+                        viewModel.onEnterMnemonicPhrase(text, cursorIndex)
+                    }
                 }
             }
         }

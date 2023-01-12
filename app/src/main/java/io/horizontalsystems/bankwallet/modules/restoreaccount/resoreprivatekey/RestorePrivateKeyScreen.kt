@@ -42,7 +42,7 @@ fun RestorePrivateKey(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
+                title = TranslatableString.ResString(R.string.Restore_Advanced_Title),
                 navigationIcon = {
                     HsIconButton(onClick = navController::popBackStack) {
                         Icon(
