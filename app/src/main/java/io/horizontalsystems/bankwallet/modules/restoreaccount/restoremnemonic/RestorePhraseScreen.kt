@@ -50,9 +50,9 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreByMenu
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreByMenu
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
@@ -64,7 +64,7 @@ import kotlinx.coroutines.launch
 fun RestorePhrase(
     navController: NavController,
     popUpToInclusiveId: Int,
-    restoreViewModel: RestoreViewModel,
+    restoreMenuViewModel: RestoreMenuViewModel,
 ) {
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
@@ -118,7 +118,7 @@ fun RestorePhrase(
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(Modifier.height(12.dp))
 
-                RestoreByMenu(restoreViewModel)
+                RestoreByMenu(restoreMenuViewModel)
 
                 Spacer(Modifier.height(32.dp))
 
