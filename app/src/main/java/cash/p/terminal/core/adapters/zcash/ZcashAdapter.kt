@@ -1,12 +1,10 @@
 package cash.p.terminal.core.adapters.zcash
 
 import android.content.Context
-import cash.z.ecc.android.sdk.Initializer
+import cash.z.ecc.android.sdk.CloseableSynchronizer
 import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.block.CompactBlockProcessor
-import cash.z.ecc.android.sdk.db.entity.isFailure
-import cash.z.ecc.android.sdk.db.entity.isSubmitSuccess
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
@@ -50,7 +48,7 @@ class ZcashAdapter(
     private val feeChangeHeight: Long = 1_077_550
     private val lightWalletEndpoint = LightWalletEndpoint.defaultForNetwork(network)
 
-    private val synchronizer: Synchronizer
+    private val synchronizer: CloseableSynchronizer
     private val transactionsProvider: ZcashTransactionsProvider
 
     private val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -60,45 +58,38 @@ class ZcashAdapter(
     private val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
     private val seed = accountType.seed
 
+    private val zcashAccount = Account.DEFAULT
+
     override val receiveAddress: String = runBlocking {
-        DerivationTool.deriveShieldedAddress(seed, network)
+        DerivationTool.deriveUnifiedAddress(seed, network, zcashAccount)
     }
 
     init {
-        val viewingKey = runBlocking {
-            DerivationTool.deriveUnifiedViewingKeys(seed, network).first()
-        }
-
-        val initializerConfig = when (wallet.account.origin) {
+        val birthday = when (wallet.account.origin) {
             AccountOrigin.Created -> {
-                Initializer.Config { config ->
-                    config.newWallet(
-                        viewingKey = viewingKey,
-                        network = network,
-                        lightWalletEndpoint = lightWalletEndpoint,
-                        alias = getValidAliasFromAccountId(wallet.account.id)
-                    )
+                runBlocking {
+                    BlockHeight.ofLatestCheckpoint(context, network)
                 }
             }
             AccountOrigin.Restored -> {
-                val birthdayHeight = restoreSettings.birthdayHeight?.let { height ->
-                    max(network.saplingActivationHeight.value, height.toLong())
-                }
-                Initializer.Config { config ->
-                    config.importWallet(
-                        viewingKey = viewingKey,
-                        birthday = birthdayHeight?.let { BlockHeight.new(network, it) },
-                        network = network,
-                        lightWalletEndpoint = lightWalletEndpoint,
-                        alias = getValidAliasFromAccountId(wallet.account.id)
-                    )
-                }
+                restoreSettings.birthdayHeight
+                    ?.let { height ->
+                        max(network.saplingActivationHeight.value, height)
+                    }
+                    ?.let {
+                        BlockHeight.new(network, it)
+                    }
             }
         }
 
-        val initializer = Initializer.newBlocking(context, initializerConfig)
+        synchronizer = Synchronizer.newBlocking(
+            context = context,
+            zcashNetwork = network,
+            lightWalletEndpoint = lightWalletEndpoint,
+            seed = seed,
+            birthday = birthday
+        )
 
-        synchronizer = Synchronizer.newBlocking(initializer)
         transactionsProvider = ZcashTransactionsProvider(receiveAddress)
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
@@ -121,12 +112,11 @@ class ZcashAdapter(
 
     @OptIn(FlowPreview::class)
     override fun start() {
-        synchronizer.start()
         subscribe(synchronizer as SdkSynchronizer)
     }
 
     override fun stop() {
-        synchronizer.stop()
+        synchronizer.close()
     }
 
     override fun refresh() {
@@ -218,6 +208,7 @@ class ZcashAdapter(
             is AddressType.Invalid -> throw ZcashError.InvalidAddress
             is AddressType.Transparent -> ZCashAddressType.Transparent
             is AddressType.Shielded -> ZCashAddressType.Shielded
+            AddressType.Unified -> TODO()
         }
     }
 
@@ -226,7 +217,7 @@ class ZcashAdapter(
             Single.create { emitter ->
                 try {
                     val spendingKey = runBlocking {
-                            DerivationTool.deriveSpendingKeys(seed, network).first()
+                            DerivationTool.deriveUnifiedSpendingKey(seed, network, zcashAccount)
                         }
                     logger.info("call synchronizer.sendToAddress")
                     // use a scope that automatically cancels when the synchronizer stops
@@ -338,7 +329,7 @@ class ZcashAdapter(
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
                 transactionIndex = transaction.transactionIndex,
-                blockHeight = transaction.minedHeight.toInt(),
+                blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
                 fee = defaultFee(transaction.minedHeight).convertZatoshiToZec(decimalCount),
@@ -357,7 +348,7 @@ class ZcashAdapter(
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
                 transactionIndex = transaction.transactionIndex,
-                blockHeight = transaction.minedHeight.toInt(),
+                blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
                 fee = defaultFee(transaction.minedHeight).convertZatoshiToZec(decimalCount),
@@ -399,7 +390,7 @@ class ZcashAdapter(
 
         fun clear(accountId: String) {
             runBlocking {
-                Initializer.erase(App.instance, ZcashNetwork.Mainnet, getValidAliasFromAccountId(accountId))
+                Synchronizer.erase(App.instance, ZcashNetwork.Mainnet, getValidAliasFromAccountId(accountId))
             }
         }
     }
