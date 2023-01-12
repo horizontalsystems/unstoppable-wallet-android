@@ -48,7 +48,7 @@ class CreateAccountFragment : BaseFragment() {
             )
             setContent {
                 val popUpToInclusiveId =
-                    arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, -1) ?: -1
+                    arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.createAccountFragment) ?: R.id.createAccountFragment
                 CreateAccountScreen(findNavController(), popUpToInclusiveId)
             }
         }
@@ -58,7 +58,7 @@ class CreateAccountFragment : BaseFragment() {
 @Composable
 private fun CreateAccountScreen(
     navController: NavController,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: Int
 ) {
     val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
@@ -72,11 +72,7 @@ private fun CreateAccountScreen(
                 iconTint = R.color.white
             )
             delay(300)
-            if (popUpToInclusiveId != -1) {
-                navController.popBackStack(popUpToInclusiveId, true)
-            } else {
-                navController.popBackStack()
-            }
+            navController.popBackStack(popUpToInclusiveId, true)
             viewModel.onSuccessMessageShown()
         }
     }
@@ -128,16 +124,14 @@ private fun CreateAccountScreen(
                     ) {
                         Spacer(Modifier.height(12.dp))
                         CellUniversalLawrenceSection(
-                            listOf(
-                                {
-                                    MnemonicNumberCell(
-                                        kind = viewModel.selectedKind,
-                                        showMnemonicSizeSelectorDialog = {
-                                            showMnemonicSizeSelectorDialog = true
-                                        }
-                                    )
-                                },
-                            )
+                            listOf {
+                                MnemonicNumberCell(
+                                    kind = viewModel.selectedKind,
+                                    showMnemonicSizeSelectorDialog = {
+                                        showMnemonicSizeSelectorDialog = true
+                                    }
+                                )
+                            }
                         )
 
                         Spacer(Modifier.height(32.dp))

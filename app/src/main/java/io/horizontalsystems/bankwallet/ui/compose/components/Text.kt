@@ -2836,6 +2836,28 @@ fun H1(
         color = ComposeAppTheme.colors.grey,
     )
 }
+
+@Composable
+fun title2_leah(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.title2,
+        color = ComposeAppTheme.colors.leah,
+    )
+}
+
 @Composable
 fun title3_grey(
     text: String,

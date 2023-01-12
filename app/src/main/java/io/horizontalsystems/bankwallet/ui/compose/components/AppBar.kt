@@ -51,7 +51,8 @@ fun AppBar(
     title: TranslatableString? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<MenuItem> = listOf(),
-    showSpinner: Boolean = false
+    showSpinner: Boolean = false,
+    backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
     TopAppBar(
         modifier = Modifier.height(56.dp),
@@ -64,7 +65,7 @@ fun AppBar(
                 )
             }
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = backgroundColor,
         navigationIcon = navigationIcon?.let {
             {
                 navigationIcon()

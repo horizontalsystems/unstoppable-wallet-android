@@ -121,7 +121,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                     val actions = listOf(
                         ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
                             navController.navigateWithTermsAccepted {
-                                navController.slideFromRight(R.id.createAccountFragment, args)
+                                navController.slideFromRight(R.id.createAccountIntroFragment, args)
                             }
                         },
                         ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {

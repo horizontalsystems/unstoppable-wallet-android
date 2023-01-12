@@ -32,6 +32,7 @@
     <string name="Button_Disconnect">Disconnect</string>
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
+    <string name="Button_Advanced">Advanced</string>
     <string name="Button_Restore">Restore</string>
     <string name="Button_WatchAddress">Watch Address</string>
     <string name="Button_Reset">Reset</string>
@@ -79,7 +80,7 @@
     <string name="Welcome_PrivacySettings">Privacy Settings</string>
 
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">New Wallet</string>
+    <string name="CreateWallet_Title">Advanced Setup</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
     <string name="CreateWallet_Wordlist">Wordlist</string>
     <string name="Passphrase">Passphrase</string>
@@ -91,6 +92,7 @@
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
     <string name="EnterPassphrase">Enter the passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_Intro_Title">Your first step to become\nUnstoppable</string>
 
     <!--Languages-->
     <string name="Language_English">English</string>

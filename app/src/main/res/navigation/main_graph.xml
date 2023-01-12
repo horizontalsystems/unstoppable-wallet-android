@@ -228,6 +228,9 @@
         android:id="@+id/createAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment" />
     <fragment
+        android:id="@+id/createAccountIntroFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountIntroFragment" />
+    <fragment
         android:id="@+id/restoreMnemonicNonStandardFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestoreMnemonicNonStandardFragment" />
     <fragment
