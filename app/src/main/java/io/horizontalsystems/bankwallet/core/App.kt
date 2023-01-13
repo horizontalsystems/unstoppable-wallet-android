@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -393,10 +394,17 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         }
     }
 
-    override fun getWorkManagerConfiguration() =
-        WorkConfiguration.Builder()
-            .setMinimumLoggingLevel(Log.VERBOSE)
-            .build()
+    override fun getWorkManagerConfiguration(): WorkConfiguration {
+        return if (BuildConfig.DEBUG) {
+            WorkConfiguration.Builder()
+                .setMinimumLoggingLevel(Log.DEBUG)
+                .build()
+        } else {
+            WorkConfiguration.Builder()
+                .setMinimumLoggingLevel(Log.ERROR)
+                .build()
+        }
+    }
 
     override fun localizedContext(): Context {
         return localeAwareContext(this)
@@ -422,14 +430,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
-//            if (!localStorage.favoriteCoinIdsMigrated) {
-//                val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
-//                WorkManager.getInstance(instance).enqueue(request)
-//            }
-//            if (!localStorage.fillWalletInfoDone) {
-//                val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
-//                WorkManager.getInstance(instance).enqueue(request)
-//            }
+            if (MarketWidgetWorker.hasEnabledWidgets(instance)) {
+                MarketWidgetWorker.enqueueWork(instance)
+            }
 
             evmLabelManager.sync()
 
