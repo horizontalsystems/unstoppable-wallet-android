@@ -1386,6 +1386,7 @@
 
     <string name="WidgetList_Config_Title">Choose Type</string>
     <string name="NftAssetActivity_Empty">No item activity yet</string>
+    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
 
     <!--Alert-->
 

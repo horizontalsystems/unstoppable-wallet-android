@@ -65,8 +65,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val LAUNCH_PAGE = "launch_page"
     private val APP_ICON = "app_icon"
     private val MAIN_TAB = "main_tab"
-    private val FAVORITE_COIN_IDS_MIGRATED = "favorite_coins_ids_migrated"
-    private val FILL_WALLET_INFO_DONE = "fill_wallet_info_done"
     private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
@@ -384,18 +382,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         }
         set(value) {
             preferences.edit().putString(MAIN_TAB, value?.name).apply()
-        }
-
-    override var favoriteCoinIdsMigrated: Boolean
-        get() = preferences.getBoolean(FAVORITE_COIN_IDS_MIGRATED, false)
-        set(value) {
-            preferences.edit().putBoolean(FAVORITE_COIN_IDS_MIGRATED, value).apply()
-        }
-
-    override var fillWalletInfoDone: Boolean
-        get() = preferences.getBoolean(FILL_WALLET_INFO_DONE, false)
-        set(value) {
-            preferences.edit().putBoolean(FILL_WALLET_INFO_DONE, value).apply()
         }
 
     override var marketFavoritesSortingField: SortingField?

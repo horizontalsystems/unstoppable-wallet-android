@@ -18,7 +18,6 @@ import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
-import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.layout.*
 import androidx.glance.layout.Alignment.Vertical.Companion.CenterVertically
@@ -104,7 +103,10 @@ class MarketWidget : GlanceAppWidget() {
                                 CircularProgressIndicator(modifier = GlanceModifier.size(20.dp))
                             } else {
                                 Image(
-                                    modifier = GlanceModifier.size(20.dp),
+                                    modifier = GlanceModifier
+                                        .size(20.dp)
+                                        //todo remove after upgrade to glance-appwidget:1.0.0-alpha06
+                                        .clickable(actionRunCallback<UpdateMarketAction>()),
                                     provider = ImageProvider(R.drawable.ic_refresh),
                                     contentDescription = null
                                 )
@@ -133,6 +135,14 @@ class MarketWidget : GlanceAppWidget() {
                                     )
                             ) {
                                 Item(item = item)
+                                //todo remove after upgrade to glance-appwidget:1.0.0-alpha06
+                                Spacer(
+                                    GlanceModifier
+                                        .fillMaxSize()
+                                        .clickable(
+                                            actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item.uid, item.title, state.type)))
+                                        )
+                                )
                             }
                         }
                     }
@@ -351,7 +361,6 @@ class UpdateMarketAction : ActionCallback {
         }
         MarketWidget().update(context, glanceId)
 
-        val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
-        MarketWidgetWorker.enqueue(context = context, widgetId = state.widgetId)
+        MarketWidgetManager().refresh(glanceId)
     }
 }
