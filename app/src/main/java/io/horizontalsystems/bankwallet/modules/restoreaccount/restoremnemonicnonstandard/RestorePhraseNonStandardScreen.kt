@@ -395,7 +395,7 @@ private fun BottomSection(
     )
 
     if (uiState.passphraseEnabled) {
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         FormsInput(
             modifier = Modifier.padding(horizontal = 16.dp),
             hint = stringResource(R.string.Passphrase),
@@ -403,6 +403,16 @@ private fun BottomSection(
             pasteEnabled = false,
             singleLine = true,
             onValueChange = viewModel::onEnterPassphrase,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        FormsInput(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            hint = stringResource(R.string.ConfirmPassphrase),
+            state = uiState.repeatPassphraseError?.let { DataState.Error(Exception(it)) },
+            pasteEnabled = false,
+            singleLine = true,
+            onValueChange = viewModel::onEnterRepeatPassphrase,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         )
         InfoText(text = stringResource(R.string.Restore_PassphraseDescription))

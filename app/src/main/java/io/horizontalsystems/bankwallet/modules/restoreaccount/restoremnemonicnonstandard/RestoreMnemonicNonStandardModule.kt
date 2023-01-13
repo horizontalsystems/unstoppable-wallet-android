@@ -23,6 +23,7 @@ object RestoreMnemonicNonStandardModule {
     data class UiState(
         val passphraseEnabled: Boolean,
         val passphraseError: String?,
+        val repeatPassphraseError: String?,
         val invalidWordRanges: List<IntRange>,
         val error: String?,
         val accountType: AccountType?,

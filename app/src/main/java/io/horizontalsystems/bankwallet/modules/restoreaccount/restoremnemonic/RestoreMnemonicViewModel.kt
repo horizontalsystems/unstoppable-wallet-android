@@ -29,6 +29,8 @@ class RestoreMnemonicViewModel(
     private var passphraseEnabled: Boolean = false
     private var passphrase: String = ""
     private var passphraseError: String? = null
+    private var repeatPassphrase: String = ""
+    private var repeatPassphraseError: String? = null
     private var wordItems: List<WordItem> = listOf()
     private var invalidWordItems: List<WordItem> = listOf()
     private var invalidWordRanges: List<IntRange> = listOf()
@@ -45,6 +47,7 @@ class RestoreMnemonicViewModel(
         UiState(
             passphraseEnabled = passphraseEnabled,
             passphraseError = passphraseError,
+            repeatPassphraseError = repeatPassphraseError,
             invalidWordRanges = invalidWordRanges,
             error = error,
             accountType = accountType,
@@ -64,6 +67,7 @@ class RestoreMnemonicViewModel(
         uiState = UiState(
             passphraseEnabled = passphraseEnabled,
             passphraseError = passphraseError,
+            repeatPassphraseError = repeatPassphraseError,
             invalidWordRanges = invalidWordRanges,
             error = error,
             accountType = accountType,
@@ -97,6 +101,8 @@ class RestoreMnemonicViewModel(
         passphraseEnabled = enabled
         passphrase = ""
         passphraseError = null
+        repeatPassphrase = ""
+        passphraseError = null
 
         emitState()
     }
@@ -104,6 +110,13 @@ class RestoreMnemonicViewModel(
     fun onEnterPassphrase(passphrase: String) {
         this.passphrase = passphrase
         passphraseError = null
+
+        emitState()
+    }
+
+    fun onEnterRepeatPassphrase(passphrase: String) {
+        this.repeatPassphrase = passphrase
+        repeatPassphraseError = null
 
         emitState()
     }
@@ -135,6 +148,10 @@ class RestoreMnemonicViewModel(
             }
             passphraseEnabled && passphrase.isBlank() -> {
                 passphraseError = Translator.getString(R.string.Restore_Error_EmptyPassphrase)
+                repeatPassphraseError = null
+            }
+            passphraseEnabled && passphrase != repeatPassphrase -> {
+                repeatPassphraseError = Translator.getString(R.string.Restore_Error_PassphrasesDontMatch)
             }
             else -> {
                 try {

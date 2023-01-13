@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -78,6 +78,7 @@ private fun CreateAccountScreen(
     }
 
     var showMnemonicSizeSelectorDialog by remember { mutableStateOf(false) }
+    var hidePassphrase by remember { mutableStateOf(true) }
 
     ComposeAppTheme {
         Surface(color = ComposeAppTheme.colors.tyler) {
@@ -135,34 +136,37 @@ private fun CreateAccountScreen(
                         )
 
                         Spacer(Modifier.height(32.dp))
-                        PassphraseCell(
-                            enabled = viewModel.passphraseEnabled,
-                            onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
-                        )
+                        CellUniversalLawrenceSection(listOf {
+                            PassphraseCell(
+                                enabled = viewModel.passphraseEnabled,
+                                onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
+                            )
+                        })
+
                         if (viewModel.passphraseEnabled) {
                             Spacer(Modifier.height(24.dp))
-                            FormsInput(
+                            FormsInputPassword(
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                hint = stringResource(R.string.EnterPassphrase),
-                                onValueChange = {
-                                    viewModel.onChangePassphrase(it)
-                                },
-                                pasteEnabled = false,
+                                hint = stringResource(R.string.Passphrase),
                                 state = viewModel.passphraseState,
-                                visualTransformation = PasswordVisualTransformation(),
+                                onValueChange = viewModel::onChangePassphrase,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                hide = hidePassphrase,
+                                onToggleHide = {
+                                    hidePassphrase = !hidePassphrase
+                                }
                             )
-                            Spacer(Modifier.height(24.dp))
-                            FormsInput(
+                            Spacer(Modifier.height(16.dp))
+                            FormsInputPassword(
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                hint = stringResource(R.string.CreateWallet_PassphraseConfirm),
-                                onValueChange = {
-                                    viewModel.onChangePassphraseConfirmation(it)
-                                },
-                                pasteEnabled = false,
+                                hint = stringResource(R.string.ConfirmPassphrase),
                                 state = viewModel.passphraseConfirmState,
-                                visualTransformation = PasswordVisualTransformation(),
+                                onValueChange = viewModel::onChangePassphraseConfirmation,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                hide = hidePassphrase,
+                                onToggleHide = {
+                                    hidePassphrase = !hidePassphrase
+                                }
                             )
                             Spacer(Modifier.height(12.dp))
                             D1(
@@ -255,32 +259,28 @@ fun MnemonicLanguageCell(
 }
 
 @Composable
-private fun PassphraseCell(
-    enabled: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    CellUniversalLawrenceSection(
-        listOf {
-            RowUniversal(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                verticalPadding = 0.dp,
-                onClick = { onCheckedChange(!enabled) },
-            ) {
-                Icon(
-                    modifier = Modifier.padding(vertical = 12.dp),
-                    painter = painterResource(id = R.drawable.ic_key_phrase_20),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
-                )
-                B2(
-                    text = stringResource(R.string.Passphrase),
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                Spacer(Modifier.weight(1f))
-                HsSwitch(
-                    checked = enabled,
-                    onCheckedChange = onCheckedChange
-                )
-            }
-        })
+fun PassphraseCell(enabled: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalPadding = 0.dp,
+        onClick = { onCheckedChange(!enabled) },
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_key_phrase_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+        body_leah(
+            text = stringResource(R.string.Passphrase),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp, end = 8.dp)
+        )
+        HsSwitch(
+            checked = enabled,
+            onCheckedChange = onCheckedChange
+        )
+    }
 }
