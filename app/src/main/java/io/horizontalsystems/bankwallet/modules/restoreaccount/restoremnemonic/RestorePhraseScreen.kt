@@ -32,10 +32,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,6 +46,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
+import io.horizontalsystems.bankwallet.modules.createaccount.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
@@ -363,6 +361,7 @@ private fun ColumnScope.BottomSection(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var showLanguageSelectorDialog by remember { mutableStateOf(false) }
+    var hidePassphrase by remember { mutableStateOf(true) }
 
     if (showLanguageSelectorDialog) {
         SelectorDialogCompose(
@@ -388,52 +387,49 @@ private fun ColumnScope.BottomSection(
     }
 
     CellUniversalLawrenceSection(
-        listOf({
-            MnemonicLanguageCell(
-                language = uiState.language,
-                showLanguageSelectorDialog = {
-                    showLanguageSelectorDialog = true
-                }
-            )
-        },
+        listOf(
             {
-                RowUniversal(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    verticalPadding = 0.dp,
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_key_phrase_20),
-                        tint = ComposeAppTheme.colors.grey,
-                        contentDescription = null,
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    body_leah(
-                        text = stringResource(R.string.Passphrase),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp)
-                    )
-                    HsSwitch(
-                        checked = uiState.passphraseEnabled,
-                        onCheckedChange = viewModel::onTogglePassphrase
-                    )
-                }
+                MnemonicLanguageCell(
+                    language = uiState.language,
+                    showLanguageSelectorDialog = {
+                        showLanguageSelectorDialog = true
+                    }
+                )
+            },
+            {
+                PassphraseCell(
+                    enabled = uiState.passphraseEnabled,
+                    onCheckedChange = viewModel::onTogglePassphrase
+                )
             }
+
         )
     )
 
     if (uiState.passphraseEnabled) {
-        Spacer(modifier = Modifier.height(12.dp))
-        FormsInput(
+        Spacer(modifier = Modifier.height(24.dp))
+        FormsInputPassword(
             modifier = Modifier.padding(horizontal = 16.dp),
             hint = stringResource(R.string.Passphrase),
             state = uiState.passphraseError?.let { DataState.Error(Exception(it)) },
-            pasteEnabled = false,
-            singleLine = true,
             onValueChange = viewModel::onEnterPassphrase,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            hide = hidePassphrase,
+            onToggleHide = {
+                hidePassphrase = !hidePassphrase
+            }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        FormsInputPassword(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            hint = stringResource(R.string.ConfirmPassphrase),
+            state = uiState.repeatPassphraseError?.let { DataState.Error(Exception(it)) },
+            onValueChange = viewModel::onEnterRepeatPassphrase,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            hide = hidePassphrase,
+            onToggleHide = {
+                hidePassphrase = !hidePassphrase
+            }
         )
         InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
     }
