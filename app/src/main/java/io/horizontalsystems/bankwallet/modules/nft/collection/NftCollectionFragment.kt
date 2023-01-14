@@ -52,11 +52,13 @@ class NftCollectionFragment : BaseFragment() {
             )
             setContent {
                 val uid = activity?.intent?.data?.getQueryParameter("uid")
+                val blockchainTypeUidFromIntent = activity?.intent?.data?.getQueryParameter("blockchainTypeUid")
                 if (uid != null) {
                     activity?.intent?.data = null
                 }
                 val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
-                val blockchainType = requireArguments().getParcelable<BlockchainType>(blockchainTypeKey) ?: return@setContent
+                val blockchainTypeString = requireArguments().getString(blockchainTypeKey, blockchainTypeUidFromIntent ?: "")
+                val blockchainType = BlockchainType.fromUid(blockchainTypeString)
 
                 val viewModel by navGraphViewModels<NftCollectionOverviewViewModel>(R.id.nftCollectionFragment) {
                     NftCollectionModule.Factory(blockchainType, nftCollectionUid)
@@ -75,7 +77,7 @@ class NftCollectionFragment : BaseFragment() {
         private const val blockchainTypeKey = "blockchainType"
 
         fun prepareParams(collectionUid: String, blockchainType: BlockchainType) =
-            bundleOf(collectionUidKey to collectionUid, blockchainTypeKey to blockchainType)
+            bundleOf(collectionUidKey to collectionUid, blockchainTypeKey to blockchainType.uid)
     }
 }
 

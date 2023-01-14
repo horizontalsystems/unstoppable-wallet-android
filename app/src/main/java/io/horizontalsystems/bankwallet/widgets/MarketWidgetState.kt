@@ -46,6 +46,7 @@ data class MarketWidgetItem(
     val marketCap: String?,
     val volume: String?,
     val diff: BigDecimal?,
+    val blockchainTypeUid: String?,
 
     val imageRemoteUrl: String,
     val imageLocalPath: String? = null

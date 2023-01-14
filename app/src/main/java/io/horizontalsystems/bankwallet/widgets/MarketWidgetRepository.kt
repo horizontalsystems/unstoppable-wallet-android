@@ -69,6 +69,7 @@ class MarketWidgetRepository(
                 diff = item.changeDiff,
                 marketCap = null,
                 volume = null,
+                blockchainTypeUid = null,
                 imageRemoteUrl = item.platform.iconUrl
             )
         }
@@ -94,6 +95,7 @@ class MarketWidgetRepository(
                 marketCap = null,
                 diff = it.volumeDiff,
                 volume = null,
+                blockchainTypeUid = it.blockchainType.uid,
                 imageRemoteUrl = it.imageUrl ?: ""
             )
         }
@@ -161,6 +163,7 @@ class MarketWidgetRepository(
             marketCap = marketCap,
             volume = volume,
             diff = diff,
+            blockchainTypeUid = null,
             imageRemoteUrl = marketItem.fullCoin.coin.iconUrl
         )
     }

@@ -131,7 +131,7 @@ class MarketWidget : GlanceAppWidget() {
                                     .height(60.dp)
                                     .background(ImageProvider(R.drawable.widget_list_item_background))
                                     .clickable(
-                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item.uid, item.title, state.type)))
+                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item, state.type)))
                                     )
                             ) {
                                 Item(item = item)
@@ -140,7 +140,7 @@ class MarketWidget : GlanceAppWidget() {
                                     GlanceModifier
                                         .fillMaxSize()
                                         .clickable(
-                                            actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item.uid, item.title, state.type)))
+                                            actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item, state.type)))
                                         )
                                 )
                             }
@@ -158,16 +158,16 @@ class MarketWidget : GlanceAppWidget() {
         }
     }
 
-    private fun getDeeplinkUri(itemUid: String, title: String, type: MarketWidgetType): Uri = when (type) {
+    private fun getDeeplinkUri(item: MarketWidgetItem, type: MarketWidgetType): Uri = when (type) {
         MarketWidgetType.Watchlist,
         MarketWidgetType.TopGainers -> {
-            "unstoppable://coin-page?uid=${itemUid}".toUri()
+            "unstoppable://coin-page?uid=${item.uid}".toUri()
         }
         MarketWidgetType.TopNfts -> {
-            "unstoppable://nft-collection?uid=${itemUid}".toUri()
+            "unstoppable://nft-collection?uid=${item.uid}&blockchainTypeUid=${item.blockchainTypeUid}".toUri()
         }
         MarketWidgetType.TopPlatforms -> {
-            "unstoppable://top-platforms?uid=${itemUid}&title=${title}".toUri()
+            "unstoppable://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
         }
     }
 
