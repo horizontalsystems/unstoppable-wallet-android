@@ -97,6 +97,13 @@ class ManageWalletsFragment : BaseFragment() {
                 onCancel = { coinTokensViewModel.onCancelSelect() }
             )
         }
+        viewModel.showBirthdayHeightLiveEvent.observe(viewLifecycleOwner) {
+            BirthdayHeightDialog(
+                blockchainIcon = it.blockchainIcon,
+                blockchainName = it.blockchainName,
+                birthdayHeight = it.birthdayHeight
+            ).show(childFragmentManager, "birthday_height_dialog")
+        }
     }
 
     private fun showBottomSelectorDialog(
@@ -116,7 +123,7 @@ class ManageWalletsFragment : BaseFragment() {
             onCancelled = { onCancel() },
             warningTitle = config.descriptionTitle,
             warning = config.description,
-            allowEmpty= config.allowEmpty
+            allowEmpty = config.allowEmpty
         )
     }
 
@@ -207,6 +214,7 @@ private fun ManageWalletsScreen(
                                 }
                             },
                             onSettingClick = { viewModel.onClickSettings(viewItem.item) },
+                            onInfoClick = { viewModel.onClickInfo(viewItem.item) }
                         )
                     }
                 }
@@ -220,6 +228,7 @@ private fun CoinCell(
     viewItem: CoinViewItem<String>,
     onItemClick: () -> Unit,
     onSettingClick: () -> Unit,
+    onInfoClick: () -> Unit
 ) {
     Column {
         RowUniversal(
@@ -284,6 +293,15 @@ private fun CoinCell(
                         )
                     }
                 }
+                if (viewItem.state.hasInfo) {
+                    HsIconButton(onClick = onInfoClick) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_info_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
+                }
                 HsSwitch(
                     modifier = Modifier.padding(0.dp),
                     checked = viewItem.state.enabled,
@@ -306,7 +324,7 @@ fun PreviewCoinCell() {
         ImageSource.Local(R.drawable.logo_ethereum_24),
         "ETH",
         "Ethereum",
-        CoinViewItemState.ToggleVisible(true, true),
+        CoinViewItemState.ToggleVisible(true, true, true),
         "Ethereum"
     )
     ComposeAppTheme {
@@ -314,6 +332,7 @@ fun PreviewCoinCell() {
             viewItem,
             {},
             {},
+            {}
         )
     }
 }

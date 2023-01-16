@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.EvmTestnetManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
@@ -19,6 +20,7 @@ class ManageWalletsService(
     private val walletManager: IWalletManager,
     accountManager: IAccountManager,
     private val enableCoinService: EnableCoinService,
+    private val restoreSettingsManager: RestoreSettingsManager,
     private val evmTestnetManager: EvmTestnetManager,
 ) : Clearable {
 
@@ -128,7 +130,8 @@ class ManageWalletsService(
             val enabled = isEnabled(fullCoin.coin)
             ItemState.Supported(
                 enabled = enabled,
-                hasSettings = enabled && hasSettingsOrPlatforms(eligibleTokens)
+                hasSettings = enabled && hasSettingsOrPlatforms(eligibleTokens),
+                hasInfo = enabled && fullCoin.tokens.firstOrNull()?.blockchainType == BlockchainType.Zcash
             )
         }
 
@@ -212,6 +215,16 @@ class ManageWalletsService(
         enableCoinService.configure(fullCoin, account.type, coinWallets.map { it.configuredToken })
     }
 
+    fun birthdayHeight(uid: String): Pair<Blockchain, Long>? {
+        val token = fullCoins.firstOrNull { it.coin.uid == uid }?.tokens?.firstOrNull() ?: return null
+        val account = this.account ?: return null
+        val settings = restoreSettingsManager.settings(account, token.blockchainType)
+
+        return settings.birthdayHeight?.let {
+            Pair(token.blockchain, it)
+        }
+    }
+
     override fun clear() {
         disposables.clear()
     }
@@ -224,6 +237,6 @@ class ManageWalletsService(
     sealed class ItemState {
         object UnsupportedByWalletType : ItemState()
         object UnsupportedByApp : ItemState()
-        class Supported(val enabled: Boolean, val hasSettings: Boolean) : ItemState()
+        class Supported(val enabled: Boolean, val hasSettings: Boolean, val hasInfo: Boolean) : ItemState()
     }
 }

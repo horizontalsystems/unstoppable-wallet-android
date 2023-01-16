@@ -2,22 +2,16 @@ package io.horizontalsystems.bankwallet.modules.manageaccount
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
-import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class ManageAccountService(
-        accountId: String,
-        private val accountManager: IAccountManager,
-        private val walletManager: IWalletManager,
-        private val restoreSettingsManager: RestoreSettingsManager
+    accountId: String,
+    private val accountManager: IAccountManager
 ) : Clearable {
     private val disposable = CompositeDisposable()
 
@@ -42,23 +36,10 @@ class ManageAccountService(
     private val accountDeletedSubject = PublishSubject.create<Unit>()
     val accountDeletedObservable: Flowable<Unit> = accountDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    val accountSettingsInfo: List<Triple<Token, RestoreSettingType, String>>
-        get() {
-            val accountWallets = walletManager.getWallets(account)
-            return restoreSettingsManager.accountSettingsInfo(account).mapNotNull { (blockchainType, restoreSettingType, value) ->
-                val wallet = accountWallets.find { it.token.blockchainType == blockchainType }
-                if (wallet == null || (restoreSettingType == RestoreSettingType.BirthdayHeight && value.isEmpty())) {
-                    null
-                } else {
-                    Triple(wallet.token, restoreSettingType, value)
-                }
-            }
-        }
-
     init {
         accountManager.accountsFlowable
-                .subscribeIO { handleUpdatedAccounts(it) }
-                .let { disposable.add(it) }
+            .subscribeIO { handleUpdatedAccounts(it) }
+            .let { disposable.add(it) }
 
         syncState()
     }
@@ -87,10 +68,6 @@ class ManageAccountService(
     fun saveAccount() {
         account = account.copy(name = newName)
         accountManager.update(account)
-    }
-
-    fun getSettingsTitle(settingType: RestoreSettingType, token: Token): String {
-        return restoreSettingsManager.getSettingsTitle(settingType, token)
     }
 
     override fun clear() {

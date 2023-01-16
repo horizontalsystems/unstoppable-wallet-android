@@ -19,7 +19,6 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDExtendedKey.DerivedType
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 import java.net.URL
 
@@ -36,7 +35,6 @@ class ManageAccountViewModel(
 
     val saveEnabledLiveData = MutableLiveData<Boolean>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
-    val additionalViewItemsLiveData = MutableLiveData<List<AdditionalViewItem>>()
 
     val account: Account
         get() = service.account
@@ -88,7 +86,6 @@ class ManageAccountViewModel(
 
         syncState(service.state)
         syncAccount(service.account)
-        syncAccountSettings()
     }
 
     private fun syncState(state: ManageAccountService.State) {
@@ -103,20 +100,6 @@ class ManageAccountViewModel(
             account.isWatchAccount -> KeyActionState.None
             account.isBackedUp -> KeyActionState.ShowRecoveryPhrase
             else -> KeyActionState.BackupRecoveryPhrase
-        }
-    }
-
-    private fun syncAccountSettings() {
-        if (keyActionState == KeyActionState.ShowRecoveryPhrase) {
-            val additionalViewItems =
-                service.accountSettingsInfo.map { (token, restoreSettingType, value) ->
-                    AdditionalViewItem(
-                        token,
-                        service.getSettingsTitle(restoreSettingType, token),
-                        value
-                    )
-                }
-            additionalViewItemsLiveData.postValue(additionalViewItems)
         }
     }
 
@@ -143,11 +126,5 @@ class ManageAccountViewModel(
     enum class KeyActionState {
         None, ShowRecoveryPhrase, BackupRecoveryPhrase
     }
-
-    data class AdditionalViewItem(
-        val token: Token,
-        val title: String,
-        val value: String
-    )
 
 }
