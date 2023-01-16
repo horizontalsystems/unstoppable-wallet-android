@@ -3,15 +3,13 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItemState
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
 
@@ -21,6 +19,7 @@ class ManageWalletsViewModel(
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<String>>>()
+    var showBirthdayHeightLiveEvent = SingleLiveEvent<BirthdayHeightViewItem>()
 
     private var disposables = CompositeDisposable()
 
@@ -43,7 +42,8 @@ class ManageWalletsViewModel(
         val state = when (item.state) {
             is Supported -> CoinViewItemState.ToggleVisible(
                 item.state.enabled,
-                item.state.hasSettings
+                item.state.hasSettings,
+                item.state.hasInfo
             )
             is ManageWalletsService.ItemState.UnsupportedByWalletType -> {
                 val reasonText = Translator.getString(
@@ -90,6 +90,21 @@ class ManageWalletsViewModel(
         service.setFilter(filter)
     }
 
+    fun onClickInfo(uid: String) {
+        val (blockchain, birthdayHeight) = service.birthdayHeight(uid) ?: return
+        showBirthdayHeightLiveEvent.postValue(
+            BirthdayHeightViewItem(
+                blockchainIcon = ImageSource.Remote(blockchain.type.imageUrl),
+                blockchainName = blockchain.name,
+                birthdayHeight = birthdayHeight.toString()
+            )
+        )
+    }
+
+    fun onCloseBirthdayHeight() {
+        showBirthdayHeightLiveEvent.postValue(null)
+    }
+
     private val accountTypeDescription: String
         get() = service.accountType?.description ?: ""
 
@@ -101,4 +116,9 @@ class ManageWalletsViewModel(
         disposables.clear()
     }
 
+    data class BirthdayHeightViewItem(
+        val blockchainIcon: ImageSource,
+        val blockchainName: String,
+        val birthdayHeight: String
+    )
 }

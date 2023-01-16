@@ -24,7 +24,10 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.authorizedAction
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.balance.ui.NoteError
@@ -65,7 +68,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
     val viewModel = viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
     val saveEnabled by viewModel.saveEnabledLiveData.observeAsState(false)
-    val additionalViewItems by viewModel.additionalViewItemsLiveData.observeAsState(listOf())
     val finish by viewModel.finishLiveEvent.observeAsState()
 
     if (finish != null) {
@@ -273,25 +275,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             })
                     }
                     KeyActionState.None -> Unit
-                }
-
-                val additionalItems = mutableListOf<@Composable () -> Unit>()
-
-                additionalViewItems.forEach { additionViewItem ->
-                    val token = additionViewItem.token
-                    additionalItems.add {
-                        AccountActionItem(
-                            title = additionViewItem.title,
-                            coinIconUrl = token.coin.iconUrl,
-                            coinIconPlaceholder = token.iconPlaceholder,
-                            badge = additionViewItem.value
-                        )
-                    }
-                }
-
-                if (additionalItems.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(32.dp))
-                    CellUniversalLawrenceSection(additionalItems)
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
