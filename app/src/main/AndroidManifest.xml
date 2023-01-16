@@ -266,9 +266,9 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name="${applicationId}.HashTag1009LauncherAlias"
+            android:name="${applicationId}.Ball8LauncherAlias"
             android:enabled="false"
-            android:icon="@mipmap/launcher_1009"
+            android:icon="@mipmap/launcher_8ball"
             android:label="@string/App_Name"
             android:exported="true"
             android:targetActivity=".modules.launcher.LauncherActivity">
