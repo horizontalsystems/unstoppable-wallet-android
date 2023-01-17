@@ -88,7 +88,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Watch_Address_Title),
+                title = TranslatableString.ResString(R.string.ManageAccounts_WatchAddress),
                 navigationIcon = {
                     HsIconButton(
                         onClick = {

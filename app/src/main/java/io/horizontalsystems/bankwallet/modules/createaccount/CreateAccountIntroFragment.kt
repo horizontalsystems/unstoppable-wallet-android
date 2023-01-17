@@ -72,7 +72,7 @@ private fun CreateAccountIntroScreen(navController: NavController, popUpToInclus
         Surface(color = ComposeAppTheme.colors.tyler) {
             Column(Modifier.fillMaxSize()) {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.CreateWallet_Default_Title),
+                    title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Create),

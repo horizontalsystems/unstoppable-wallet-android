@@ -147,10 +147,6 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         }
                     }
 
-                    InfoText(
-                        text = stringResource(id = R.string.ManageAccounts_Hint),
-                    )
-
                     Spacer(modifier = Modifier.height(32.dp))
                 }
             }
