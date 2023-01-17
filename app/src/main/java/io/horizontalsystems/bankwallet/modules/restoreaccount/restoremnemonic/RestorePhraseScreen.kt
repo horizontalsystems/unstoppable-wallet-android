@@ -296,7 +296,7 @@ fun RestorePhrase(
                                     .padding(horizontal = 24.dp),
                                 title = stringResource(R.string.Button_Advanced),
                                 onClick = {
-                                    navController.slideFromRight(R.id.advancedRestoreFragment, ManageAccountsModule.prepareParams(popUpToInclusiveId))
+                                    navController.slideFromRight(R.id.restoreAccountAdvancedFragment, ManageAccountsModule.prepareParams(popUpToInclusiveId))
                                 }
                             )
                         }

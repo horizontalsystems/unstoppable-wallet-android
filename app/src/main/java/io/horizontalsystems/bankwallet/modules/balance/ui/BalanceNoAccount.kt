@@ -28,7 +28,7 @@ fun BalanceNoAccount(navController: NavController) {
                 title = stringResource(R.string.Button_Create),
                 onClick = {
                     navController.navigateWithTermsAccepted {
-                        navController.slideFromRight(R.id.createAccountIntroFragment)
+                        navController.slideFromRight(R.id.createAccountFragment)
                     }
                 }
             )
@@ -40,7 +40,7 @@ fun BalanceNoAccount(navController: NavController) {
                 title = stringResource(R.string.Button_Restore),
                 onClick = {
                     navController.navigateWithTermsAccepted {
-                        navController.slideFromRight(R.id.restoreFragment)
+                        navController.slideFromRight(R.id.restoreAccountFragment)
                     }
                 }
             )
