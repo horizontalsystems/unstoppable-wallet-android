@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -119,24 +120,62 @@ fun AppearanceScreen(navController: NavController) {
                         }
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
-                        CellUniversalLawrenceSection(uiState.launchScreenOptions.options) { option ->
-                            RowSelect(
-                                imageContent = {
+                        HeaderText(text = stringResource(id = R.string.Appearance_Tab))
+                        CellUniversalLawrenceSection(
+                            listOf {
+                                RowUniversal(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    verticalPadding = 0.dp,
+                                ) {
                                     Image(
                                         modifier = Modifier.size(24.dp),
-                                        painter = painterResource(id = option.iconRes),
+                                        painter = painterResource(id = R.drawable.ic_market_20),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
                                     )
-                                },
-                                text = option.title.getString(),
-                                selected = option == uiState.launchScreenOptions.selected
-                            ) {
-                                viewModel.onEnterLaunchPage(option)
+
+                                    body_leah(
+                                        text = stringResource(id = R.string.Appearance_MarketsTab),
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(horizontal = 16.dp)
+                                    )
+
+                                    HsSwitch(
+                                        checked = uiState.marketsTabEnabled,
+                                        onCheckedChange = {
+                                            viewModel.onSetMarketTabsEnabled(it)
+                                        }
+                                    )
+
+                                }
+
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        AnimatedVisibility(visible = uiState.marketsTabEnabled) {
+                            Column {
+                                HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
+                                CellUniversalLawrenceSection(uiState.launchScreenOptions.options) { option ->
+                                    RowSelect(
+                                        imageContent = {
+                                            Image(
+                                                modifier = Modifier.size(24.dp),
+                                                painter = painterResource(id = option.iconRes),
+                                                contentDescription = null,
+                                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                                            )
+                                        },
+                                        text = option.title.getString(),
+                                        selected = option == uiState.launchScreenOptions.selected
+                                    ) {
+                                        viewModel.onEnterLaunchPage(option)
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(24.dp))
                             }
                         }
-                        Spacer(modifier = Modifier.height(24.dp))
 
                         HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
                         AppIconSection(uiState.appIconOptions) {

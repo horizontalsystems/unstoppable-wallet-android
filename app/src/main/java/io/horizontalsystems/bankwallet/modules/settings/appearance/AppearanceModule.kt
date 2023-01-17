@@ -21,7 +21,8 @@ object AppearanceModule {
                 appIconService,
                 themeService,
                 App.baseTokenManager,
-                App.balanceViewTypeManager
+                App.balanceViewTypeManager,
+                App.localStorage
             ) as T
         }
     }
