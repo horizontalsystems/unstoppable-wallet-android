@@ -80,7 +80,8 @@
     <string name="Welcome_PrivacySettings">Privacy Settings</string>
 
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">Advanced</string>
+    <string name="CreateWallet_Default_Title">New Wallet</string>
+    <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
     <string name="CreateWallet_Wordlist">Wordlist</string>
     <string name="Passphrase">Passphrase</string>
@@ -92,7 +93,6 @@
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
-    <string name="CreateWallet_Intro_Title">Your first step to become\nUnstoppable</string>
 
     <!--Languages-->
     <string name="Language_English">English</string>
@@ -121,7 +121,6 @@
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
-    <string name="Restore_Error_PassphrasesDontMatch">Passphrases don\'t match</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase.</string>
     <string name="Restore_Title">Choose Blockchains</string>
