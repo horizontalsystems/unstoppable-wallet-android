@@ -11,16 +11,15 @@ import coil.request.ErrorResult
 import coil.request.ImageRequest
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.AppLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class MarketWidgetManager {
 
     private var coroutineScope: CoroutineScope? = CoroutineScope(Dispatchers.Default)
-    private val logger = AppLogger("market-widget-manager")
 
     fun updateWatchListWidgets() {
         coroutineScope?.launch {
@@ -38,41 +37,13 @@ class MarketWidgetManager {
     }
 
     fun refresh(glanceId: GlanceId) {
-        val context = App.instance
-        val marketRepository = App.marketWidgetRepository
         coroutineScope?.launch {
+            val context = App.instance
             try {
-                var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
-                val imagePathCache = buildMap {
-                    state.items.forEach { item ->
-                        item.imageLocalPath?.let { set(item.imageRemoteUrl, it) }
-                    }
+                executeWithRetry {
+                    updateData(glanceId)
                 }
-                var marketItems = marketRepository.getMarketItems(state.type)
-                marketItems =
-                    marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
-
-                state = state.copy(items = marketItems, loading = false, error = null)
-                setWidgetState(context, glanceId, state)
-
-                marketItems = marketItems.map { item ->
-                    item.copy(
-                        imageLocalPath = item.imageLocalPath ?: getImage(
-                            context,
-                            item.imageRemoteUrl
-                        )
-                    )
-                }
-
-                state =
-                    state.copy(
-                        items = marketItems,
-                        updateTimestampMillis = System.currentTimeMillis()
-                    )
-                setWidgetState(context, glanceId, state)
             } catch (exception: Exception) {
-                logger.info("refresh error, glanceId: $glanceId, ${exception.javaClass.simpleName}: ${exception.message}")
-
                 var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
 
                 val errorText = if (exception is UnknownHostException)
@@ -85,6 +56,39 @@ class MarketWidgetManager {
                 setWidgetState(context, glanceId, state)
             }
         }
+    }
+
+    private suspend fun updateData(glanceId: GlanceId) {
+        val context = App.instance
+        val marketRepository = App.marketWidgetRepository
+        var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
+        val imagePathCache = buildMap {
+            state.items.forEach { item ->
+                item.imageLocalPath?.let { set(item.imageRemoteUrl, it) }
+            }
+        }
+        var marketItems = marketRepository.getMarketItems(state.type)
+        marketItems =
+            marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
+
+        state = state.copy(items = marketItems, loading = false, error = null)
+        setWidgetState(context, glanceId, state)
+
+        marketItems = marketItems.map { item ->
+            item.copy(
+                imageLocalPath = item.imageLocalPath ?: getImage(
+                    context,
+                    item.imageRemoteUrl
+                )
+            )
+        }
+
+        state =
+            state.copy(
+                items = marketItems,
+                updateTimestampMillis = System.currentTimeMillis()
+            )
+        setWidgetState(context, glanceId, state)
     }
 
     @OptIn(ExperimentalCoilApi::class)
@@ -112,6 +116,23 @@ class MarketWidgetManager {
             state
         }
         MarketWidget().update(context, glanceId)
+    }
+
+    private val MAX_RETRIES = 5
+
+    private suspend inline fun executeWithRetry(call: () -> Unit){
+        for (i in 0..MAX_RETRIES) {
+            try {
+                call.invoke()
+                break
+            } catch (e: Exception) {
+                delay(2000)
+
+                if (i == MAX_RETRIES) {
+                    throw e
+                }
+            }
+        }
     }
 
 }

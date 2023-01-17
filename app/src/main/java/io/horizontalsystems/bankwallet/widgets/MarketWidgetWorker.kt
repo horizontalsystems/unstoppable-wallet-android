@@ -41,7 +41,6 @@ class MarketWidgetWorker(
                     return true
                 }
             }
-            cancel(context)
             return false
         }
 

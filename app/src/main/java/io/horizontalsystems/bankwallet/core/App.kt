@@ -432,6 +432,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
             if (MarketWidgetWorker.hasEnabledWidgets(instance)) {
                 MarketWidgetWorker.enqueueWork(instance)
+            } else {
+                MarketWidgetWorker.cancel(instance)
             }
 
             evmLabelManager.sync()
