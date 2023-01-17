@@ -55,7 +55,12 @@ class RestoreMnemonicViewModel(
         private set
 
     private val regex = Regex("\\S+")
+
     val defaultName = accountFactory.getNextAccountName()
+    var accountName: String = defaultName
+        get() = field.ifBlank { defaultName }
+        private set
+
 
     val isThirdPartyKeyboardAllowed: Boolean
         get() = CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed
@@ -107,6 +112,10 @@ class RestoreMnemonicViewModel(
         passphraseError = null
 
         emitState()
+    }
+
+    fun onEnterName(name: String) {
+        accountName = name
     }
 
     fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {

@@ -119,8 +119,17 @@ fun RestorePhraseNonStandard(
                 Spacer(Modifier.height(12.dp))
 
                 InfoText(text = stringResource(R.string.Restore_NonStandard_Description))
+                Spacer(Modifier.height(12.dp))
 
-                Spacer(Modifier.height(20.dp))
+                HeaderText(stringResource(id = R.string.ManageAccount_Name))
+                FormsInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = viewModel.accountName,
+                    pasteEnabled = false,
+                    hint = viewModel.defaultName,
+                    onValueChange = viewModel::onEnterName
+                )
+                Spacer(Modifier.height(32.dp))
 
                 Column(
                     modifier = Modifier
@@ -287,7 +296,7 @@ fun RestorePhraseNonStandard(
         navController.slideFromRight(
             R.id.restoreSelectCoinsFragment,
             bundleOf(
-                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.defaultName,
+                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.accountName,
                 RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
                 ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
             )

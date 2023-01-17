@@ -33,7 +33,7 @@
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Advanced">Advanced</string>
-    <string name="Button_Restore">Restore</string>
+    <string name="Button_Restore">Import</string>
     <string name="Button_WatchAddress">Watch Address</string>
     <string name="Button_Reset">Reset</string>
     <string name="Button_Reconnect">Reconnect</string>
@@ -122,13 +122,13 @@
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet but a new passphrase will a generate a brand new wallet.</string>
     <string name="Restore_Title">Choose Blockchains</string>
     <string name="Restore_Key">Key</string>
-    <string name="Restore_By">By</string>
-    <string name="Restore_RestoreBy">Restore By</string>
+    <string name="Restore_By">Import By</string>
+    <string name="Restore_RestoreBy">Import By</string>
     <string name="Restore_RecoveryPhrase">Recovery Phrase</string>
     <string name="Restore_PrivateKey">Private Key</string>
     <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Enter Recovery Phrase</string>
-    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
+    <string name="Restore_NonStandardRestore">Non-Standard Import</string>
     <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
 
     <string name="Restore_PrivateKey_InvalidKey">Invalid Key</string>
@@ -895,7 +895,7 @@
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
     <string name="Hud_Text_Created">Created</string>
-    <string name="Hud_Text_Restored">Restored</string>
+    <string name="Hud_Text_Restored">Imported</string>
     <string name="Hud_Text_AddressAdded">Address Added</string>
     <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_Verified">Verified</string>
