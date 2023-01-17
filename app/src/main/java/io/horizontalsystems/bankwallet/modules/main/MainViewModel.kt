@@ -39,6 +39,7 @@ class MainViewModel(
     val hideContentLiveData = MutableLiveData<Boolean>()
     val settingsBadgeLiveData = MutableLiveData<MainModule.BadgeType?>(null)
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
+    val marketsTabEnabledLiveData = MutableLiveData<Boolean>()
     val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<Account>, Account?>>()
     val torIsActiveLiveData = MutableLiveData(false)
     val playTorActiveAnimationLiveData = MutableLiveData(false)
@@ -51,6 +52,11 @@ class MainViewModel(
     val initialTab = getTabToOpen()
 
     init {
+        viewModelScope.launch {
+            service.marketsTabEnabledFlow.collect {
+                marketsTabEnabledLiveData.postValue(it)
+            }
+        }
 
         if (!service.ignoreRootCheck && service.isDeviceRooted) {
             showRootedDeviceWarningLiveEvent.call()
@@ -110,14 +116,18 @@ class MainViewModel(
         showWhatsNew()
     }
 
-    private fun getTabToOpen(): MainModule.MainTab {
-        if (wcDeepLink != null) {
-            return MainModule.MainTab.Settings
-        } else if (service.relaunchBySettingChange) {
-            service.relaunchBySettingChange = false
-            return MainModule.MainTab.Settings
+    private fun getTabToOpen() = when {
+        wcDeepLink != null -> {
+            MainModule.MainTab.Settings
         }
-        return when(service.launchPage){
+        service.relaunchBySettingChange -> {
+            service.relaunchBySettingChange = false
+            MainModule.MainTab.Settings
+        }
+        !service.marketsTabEnabledFlow.value -> {
+            MainModule.MainTab.Balance
+        }
+        else -> when (service.launchPage) {
             LaunchPage.Market,
             LaunchPage.Watchlist -> MainModule.MainTab.Market
             LaunchPage.Balance -> MainModule.MainTab.Balance

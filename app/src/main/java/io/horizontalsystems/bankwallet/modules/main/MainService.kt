@@ -8,6 +8,7 @@ class MainService(
     private val rootUtil: RootUtil,
     private val localStorage: ILocalStorage
 ) {
+    val marketsTabEnabledFlow by localStorage::marketsTabEnabledFlow
 
     val isDeviceRooted: Boolean
         get() = rootUtil.isRooted

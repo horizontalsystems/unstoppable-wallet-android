@@ -164,6 +164,10 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             binding.bottomNavigation.menu.getItem(2).isEnabled = enabled
         })
 
+        viewModel.marketsTabEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
+            binding.bottomNavigation.menu.getItem(0).isVisible = enabled
+        }
+
         viewModel.torIsActiveLiveData.observe(viewLifecycleOwner) { torIsActive ->
             binding.torIsActiveState.isVisible = torIsActive
         }
