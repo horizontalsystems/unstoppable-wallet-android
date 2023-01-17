@@ -27,10 +27,14 @@ class CreateAccountViewModel(
     private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
 ) : ViewModel() {
 
+    private val defaultAccountName = accountFactory.getNextAccountName()
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
     val mnemonicKinds = CreateAccountModule.Kind.values().toList()
+
+    var accountName: String = defaultAccountName
+        private set
 
     var selectedKind: CreateAccountModule.Kind = Mnemonic12
         private set
@@ -54,7 +58,7 @@ class CreateAccountViewModel(
 
         val accountType = mnemonicAccountType(selectedKind.wordsCount)
         val account = accountFactory.account(
-            accountFactory.getNextAccountName(),
+            accountName.ifBlank { defaultAccountName },
             accountType,
             AccountOrigin.Created,
             false
@@ -64,6 +68,10 @@ class CreateAccountViewModel(
         activateDefaultWallets(account)
         predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
         successMessage = R.string.Hud_Text_Created
+    }
+
+    fun onChangeAccountName(name: String) {
+        accountName = name
     }
 
     fun onChangePassphrase(v: String) {

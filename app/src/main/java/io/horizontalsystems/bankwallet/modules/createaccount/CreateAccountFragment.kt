@@ -98,7 +98,7 @@ private fun CreateAccountScreen(
             }
             Column {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.CreateWallet_Title),
+                    title = TranslatableString.ResString(R.string.CreateWallet_Advanced_Title),
                     navigationIcon = {
                         HsIconButton(onClick = { navController.popBackStack() }) {
                             Icon(
@@ -124,6 +124,14 @@ private fun CreateAccountScreen(
                             .verticalScroll(rememberScrollState())
                     ) {
                         Spacer(Modifier.height(12.dp))
+                        HeaderText(stringResource(id = R.string.ManageAccount_Name))
+                        FormsInput(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            initial = viewModel.accountName,
+                            hint = "",
+                            onValueChange = viewModel::onChangeAccountName
+                        )
+                        Spacer(Modifier.height(32.dp))
                         CellUniversalLawrenceSection(
                             listOf {
                                 MnemonicNumberCell(

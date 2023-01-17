@@ -149,7 +149,7 @@ class RestoreMnemonicNonStandardViewModel(
                 repeatPassphraseError = null
             }
             passphraseEnabled && passphrase != repeatPassphrase -> {
-                repeatPassphraseError = Translator.getString(R.string.Restore_Error_PassphrasesDontMatch)
+                repeatPassphraseError = Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)
             }
             else -> {
                 try {
