@@ -119,7 +119,7 @@
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet but a new passphrase will a generate a brand new wallet.</string>
     <string name="Restore_Title">Choose Blockchains</string>
     <string name="Restore_Key">Key</string>
     <string name="Restore_By">By</string>

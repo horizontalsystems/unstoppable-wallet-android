@@ -416,18 +416,10 @@ private fun ColumnScope.BottomSection(
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        FormsInputPassword(
+        TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp),
-            hint = stringResource(R.string.ConfirmPassphrase),
-            state = uiState.repeatPassphraseError?.let { DataState.Error(Exception(it)) },
-            onValueChange = viewModel::onEnterRepeatPassphrase,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            hide = hidePassphrase,
-            onToggleHide = {
-                hidePassphrase = !hidePassphrase
-            }
+            text = stringResource(R.string.Restore_PassphraseDescription)
         )
-        InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
     }
 
     Spacer(Modifier.height(32.dp))
