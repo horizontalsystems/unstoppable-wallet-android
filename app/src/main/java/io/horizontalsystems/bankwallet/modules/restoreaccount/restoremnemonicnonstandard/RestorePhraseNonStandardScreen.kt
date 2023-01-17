@@ -253,14 +253,9 @@ fun RestorePhraseNonStandard(
 
                 Spacer(Modifier.height(24.dp))
 
-                BottomSection(
-                    navController,
-                    viewModel,
-                    uiState,
-                    coroutineScope
-                )
+                BottomSection(viewModel, uiState, coroutineScope)
 
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(44.dp))
             }
 
             if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
@@ -324,13 +319,13 @@ fun RestorePhraseNonStandard(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun BottomSection(
-    navController: NavController,
     viewModel: RestoreMnemonicNonStandardViewModel,
     uiState: RestoreMnemonicNonStandardModule.UiState,
     coroutineScope: CoroutineScope,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var showLanguageSelectorDialog by remember { mutableStateOf(false) }
+    var hidePassphrase by remember { mutableStateOf(true) }
 
     if (showLanguageSelectorDialog) {
         SelectorDialogCompose(
@@ -396,25 +391,22 @@ private fun BottomSection(
 
     if (uiState.passphraseEnabled) {
         Spacer(modifier = Modifier.height(24.dp))
-        FormsInput(
+        FormsInputPassword(
             modifier = Modifier.padding(horizontal = 16.dp),
             hint = stringResource(R.string.Passphrase),
             state = uiState.passphraseError?.let { DataState.Error(Exception(it)) },
-            pasteEnabled = false,
-            singleLine = true,
             onValueChange = viewModel::onEnterPassphrase,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            hide = hidePassphrase,
+            onToggleHide = {
+                hidePassphrase = !hidePassphrase
+            }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        FormsInput(
+        TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp),
-            hint = stringResource(R.string.ConfirmPassphrase),
-            state = uiState.repeatPassphraseError?.let { DataState.Error(Exception(it)) },
-            pasteEnabled = false,
-            singleLine = true,
-            onValueChange = viewModel::onEnterRepeatPassphrase,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            text = stringResource(R.string.Restore_PassphraseDescription)
         )
-        InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
     }
+
 }
