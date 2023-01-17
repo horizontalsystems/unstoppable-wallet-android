@@ -70,6 +70,7 @@ class TransactionRecordRepository(
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.ArbitrumOne,
+                BlockchainType.Gnosis,
                 BlockchainType.Solana -> {
                     if (mergedWallets.none { it.source == wallet.source }) {
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))

@@ -69,6 +69,7 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
                     Chain.Avalanche,
                     Chain.Optimism,
                     Chain.ArbitrumOne,
+                    Chain.Gnosis,
                 )
             }
             networkTypes.forEach {

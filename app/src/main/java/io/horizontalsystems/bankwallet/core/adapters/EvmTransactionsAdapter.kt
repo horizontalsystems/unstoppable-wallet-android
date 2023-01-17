@@ -119,7 +119,8 @@ class EvmTransactionsAdapter(
                     Chain.BinanceSmartChain,
                     Chain.Polygon,
                     Chain.Optimism,
-                    Chain.ArbitrumOne
+                    Chain.ArbitrumOne,
+                    Chain.Gnosis,
                 )
             }
             networkTypes.forEach {

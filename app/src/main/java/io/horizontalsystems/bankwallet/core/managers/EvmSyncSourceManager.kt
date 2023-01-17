@@ -61,6 +61,10 @@ class EvmSyncSourceManager(appConfigProvider: AppConfigProvider, private val blo
 
             BlockchainType.ArbitrumOne to listOf(
                 getSyncSource(BlockchainType.ArbitrumOne, "Arbitrum.io HTTP", RpcSource.arbitrumOneRpcHttp(), TransactionSource.arbiscan(appConfigProvider.arbiscanApiKey))
+            ),
+
+            BlockchainType.Gnosis to listOf(
+                getSyncSource(BlockchainType.Gnosis, "Gnosis.io HTTP", RpcSource.gnosisRpcHttp(), TransactionSource.gnosis(appConfigProvider.gnosisscanApiKey))
             )
         )
 

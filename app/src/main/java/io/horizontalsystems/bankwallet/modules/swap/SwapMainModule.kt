@@ -84,6 +84,7 @@ object SwapMainModule {
             BlockchainType.Polygon,
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
+            BlockchainType.Gnosis,
             BlockchainType.ArbitrumOne -> true
             else -> false
         }
