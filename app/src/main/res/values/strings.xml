@@ -80,7 +80,6 @@
     <string name="Welcome_PrivacySettings">Privacy Settings</string>
 
     <!--Create Wallet-->
-    <string name="CreateWallet_Default_Title">New Wallet</string>
     <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
     <string name="CreateWallet_Wordlist">Wordlist</string>
@@ -114,8 +113,6 @@
     <string name="RateApp_Button_NotNow">Not now</string>
 
     <!--Restore-->
-
-    <string name="Restore_Enter_Key_Title">Restore</string>
     <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
@@ -936,12 +933,10 @@
 
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
-    <string name="ManageAccounts_CreateNewWallet">Create</string>
-    <string name="ManageAccounts_ImportWallet">Restore</string>
-    <string name="ManageAccounts_WatchAddress">Watch Address</string>
-    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
+    <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
+    <string name="ManageAccounts_ImportWallet">Import Wallet</string>
+    <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
 
-    <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Address or Domain</string>
     <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
@@ -969,7 +964,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
     <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
     <string name="ManageAccount_Wallets">Wallets</string>
-    <string name="ManageAccount_WatchAddresses">Watch Addresses</string>
+    <string name="ManageAccount_WatchAddresses">Watch Wallets</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <string name="ManageAccount_DeleteWarning">Do you want to stop watching this wallet address?</string>
 

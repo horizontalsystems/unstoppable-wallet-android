@@ -96,7 +96,7 @@ fun RestorePhrase(
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = if (advanced) TranslatableString.ResString(R.string.Restore_Advanced_Title) else TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
+            title = if (advanced) TranslatableString.ResString(R.string.Restore_Advanced_Title) else TranslatableString.ResString(R.string.ManageAccounts_ImportWallet),
             navigationIcon = {
                 HsIconButton(onClick = navController::popBackStack) {
                     Icon(
