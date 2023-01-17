@@ -225,20 +225,20 @@
         android:id="@+id/marketAdvancedSearchResultsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsFragment"/>
     <fragment
+        android:id="@+id/createAccountAdvancedFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountAdvancedFragment" />
+    <fragment
         android:id="@+id/createAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment" />
-    <fragment
-        android:id="@+id/createAccountIntroFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountIntroFragment" />
     <fragment
         android:id="@+id/restoreMnemonicNonStandardFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestoreMnemonicNonStandardFragment" />
     <fragment
-        android:id="@+id/restoreFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFragment" />
+        android:id="@+id/restoreAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountFragment" />
     <fragment
-        android:id="@+id/advancedRestoreFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.AdvancedRestoreFragment" />
+        android:id="@+id/restoreAccountAdvancedFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountAdvancedFragment" />
     <fragment
         android:id="@+id/watchAddressFragment"
         android:name="io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment" />

@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 
-class AdvancedRestoreFragment : BaseFragment() {
+class RestoreAccountAdvancedFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +34,7 @@ class AdvancedRestoreFragment : BaseFragment() {
             setContent {
                 ComposeAppTheme {
                     val popUpToInclusiveId =
-                        arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreFragment) ?: R.id.restoreFragment
+                        arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
                     AdvancedRestoreScreen(findNavController(), popUpToInclusiveId)
                 }

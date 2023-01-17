@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.Re
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 
-class RestoreFragment : BaseFragment() {
+class RestoreAccountFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +31,7 @@ class RestoreFragment : BaseFragment() {
             )
             setContent {
                 val popUpToInclusiveId =
-                    arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreFragment) ?: R.id.restoreFragment
+                    arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
                 RestoreScreen(findNavController(), popUpToInclusiveId)
             }
