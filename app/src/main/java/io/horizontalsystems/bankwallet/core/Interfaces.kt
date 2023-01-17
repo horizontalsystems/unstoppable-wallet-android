@@ -87,6 +87,7 @@ interface ILocalStorage {
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
+    var marketsTabEnabled: Boolean
     var testnetEnabled: Boolean
     var nonRecommendedAccountAlertDismissedAccounts: Set<String>
 

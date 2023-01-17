@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
@@ -25,12 +26,14 @@ class AppearanceViewModel(
     private val appIconService: AppIconService,
     private val themeService: ThemeService,
     private val baseTokenManager: BaseTokenManager,
-    private val balanceViewTypeManager: BalanceViewTypeManager
+    private val balanceViewTypeManager: BalanceViewTypeManager,
+    private val localStorage: ILocalStorage
 ) : ViewModel() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var appIconOptions = appIconService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
     private var baseTokenOptions = buildBaseTokenSelect(baseTokenManager.baseTokenFlow.value)
+    private var marketsTabEnabled = localStorage.marketsTabEnabled
     private var balanceViewTypeOptions =
         buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
 
@@ -41,6 +44,7 @@ class AppearanceViewModel(
             themeOptions = themeOptions,
             baseTokenOptions = baseTokenOptions,
             balanceViewTypeOptions = balanceViewTypeOptions,
+            marketsTabEnabled = marketsTabEnabled
         )
     )
 
@@ -117,6 +121,7 @@ class AppearanceViewModel(
             themeOptions = themeOptions,
             baseTokenOptions = baseTokenOptions,
             balanceViewTypeOptions = balanceViewTypeOptions,
+            marketsTabEnabled = marketsTabEnabled,
         )
     }
 
@@ -150,6 +155,13 @@ class AppearanceViewModel(
     fun onEnterBalanceViewType(viewType: BalanceViewType) {
         balanceViewTypeManager.setViewType(viewType)
     }
+
+    fun onSetMarketTabsEnabled(enabled: Boolean) {
+        localStorage.marketsTabEnabled = enabled
+
+        marketsTabEnabled = enabled
+        emitState()
+    }
 }
 
 data class AppearanceUIState(
@@ -158,4 +170,5 @@ data class AppearanceUIState(
     val themeOptions: Select<ThemeType>,
     val baseTokenOptions: SelectOptional<Token>,
     val balanceViewTypeOptions: Select<BalanceViewType>,
+    val marketsTabEnabled: Boolean,
 )
