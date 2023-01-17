@@ -12,11 +12,11 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.restoreaccount.resoreprivatekey.RestorePrivateKey
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuModule.RestoreOption
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKey
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 

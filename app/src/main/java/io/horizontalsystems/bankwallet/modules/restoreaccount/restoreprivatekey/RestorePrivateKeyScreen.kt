@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restoreaccount.resoreprivatekey
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

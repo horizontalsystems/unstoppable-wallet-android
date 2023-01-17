@@ -21,7 +21,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -293,10 +292,7 @@ fun RestorePhrase(
                     }
                 }
                 if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
-                    SuggestionsBar(
-                        modifier = Modifier.background(Color.Red),//align(Alignment.BottomCenter),
-                        wordSuggestions = uiState.wordSuggestions
-                    ) { wordItem, suggestion ->
+                    SuggestionsBar(wordSuggestions = uiState.wordSuggestions) { wordItem, suggestion ->
                         HudHelper.vibrate(context)
 
                         val cursorIndex = wordItem.range.first + suggestion.length + 1
