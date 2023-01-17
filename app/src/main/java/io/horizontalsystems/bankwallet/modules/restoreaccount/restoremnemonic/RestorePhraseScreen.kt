@@ -121,6 +121,16 @@ fun RestorePhrase(
             ) {
                 Spacer(Modifier.height(12.dp))
 
+                HeaderText(stringResource(id = R.string.ManageAccount_Name))
+                FormsInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = viewModel.accountName,
+                    pasteEnabled = false,
+                    hint = viewModel.defaultName,
+                    onValueChange = viewModel::onEnterName
+                )
+                Spacer(Modifier.height(32.dp))
+
                 if (advanced) {
                     RestoreByMenu(restoreMenuViewModel)
                     Spacer(Modifier.height(32.dp))
@@ -262,6 +272,7 @@ fun RestorePhrase(
                         navController,
                         viewModel,
                         uiState,
+                        popUpToInclusiveId,
                         coroutineScope
                     )
                 }
@@ -318,7 +329,7 @@ fun RestorePhrase(
         navController.slideFromRight(
             R.id.restoreSelectCoinsFragment,
             bundleOf(
-                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.defaultName,
+                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.accountName,
                 RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
                 ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
             )
@@ -353,6 +364,7 @@ private fun ColumnScope.BottomSection(
     navController: NavController,
     viewModel: RestoreMnemonicViewModel,
     uiState: RestoreMnemonicModule.UiState,
+    popUpToInclusiveId: Int,
     coroutineScope: CoroutineScope,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -429,7 +441,10 @@ private fun ColumnScope.BottomSection(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    navController.slideFromRight(R.id.restoreMnemonicNonStandardFragment)
+                    navController.slideFromRight(
+                        R.id.restoreMnemonicNonStandardFragment,
+                        bundleOf(ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId)
+                    )
                 }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,

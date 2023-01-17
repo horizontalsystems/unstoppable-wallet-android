@@ -18,10 +18,18 @@ class RestorePrivateKeyViewModel(
 ) : ViewModel() {
 
     val defaultName = accountFactory.getNextAccountName()
+    var accountName: String = defaultName
+        get() = field.ifBlank { defaultName }
+        private set
+
     private var text = ""
 
     var inputState by mutableStateOf<DataState.Error?>(null)
         private set
+
+    fun onEnterName(name: String) {
+        accountName = name
+    }
 
     fun onEnterPrivateKey(input: String) {
         inputState = null

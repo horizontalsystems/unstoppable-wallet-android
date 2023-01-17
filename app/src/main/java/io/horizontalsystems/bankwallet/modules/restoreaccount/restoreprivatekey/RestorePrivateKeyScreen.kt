@@ -24,10 +24,7 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.Restor
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputMultiline
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun RestorePrivateKey(
@@ -35,8 +32,7 @@ fun RestorePrivateKey(
     popUpToInclusiveId: Int,
     restoreMenuViewModel: RestoreMenuViewModel,
 ) {
-    val viewModel =
-        viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
+    val viewModel = viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -60,7 +56,7 @@ fun RestorePrivateKey(
                                 navController.slideFromRight(
                                     R.id.restoreSelectCoinsFragment,
                                     bundleOf(
-                                        RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.defaultName,
+                                        RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.accountName,
                                         RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
                                         ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
                                     )
@@ -79,9 +75,19 @@ fun RestorePrivateKey(
         ) {
             Spacer(Modifier.height(12.dp))
 
+            HeaderText(stringResource(id = R.string.ManageAccount_Name))
+            FormsInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                initial = viewModel.accountName,
+                pasteEnabled = false,
+                hint = viewModel.defaultName,
+                onValueChange = viewModel::onEnterName
+            )
+            Spacer(Modifier.height(32.dp))
+
             RestoreByMenu(restoreMenuViewModel)
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(32.dp))
 
             FormsInputMultiline(
                 modifier = Modifier.padding(horizontal = 16.dp),
