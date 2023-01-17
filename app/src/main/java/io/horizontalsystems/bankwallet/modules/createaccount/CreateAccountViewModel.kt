@@ -27,11 +27,12 @@ class CreateAccountViewModel(
     private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
 ) : ViewModel() {
 
-    private val defaultAccountName = accountFactory.getNextAccountName()
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
     val mnemonicKinds = CreateAccountModule.Kind.values().toList()
+
+    val defaultAccountName = accountFactory.getNextAccountName()
 
     var accountName: String = defaultAccountName
         private set

@@ -12,14 +12,13 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -63,6 +62,7 @@ fun FormsInput(
     onChangeFocus: ((Boolean) -> Unit)? = null,
     onValueChange: (String) -> Unit,
 ) {
+    val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
 
     val borderColor = when (state) {
@@ -105,6 +105,7 @@ fun FormsInput(
 
             BasicTextField(
                 modifier = Modifier
+                    .focusRequester(focusRequester)
                     .onFocusChanged {
                         onChangeFocus?.invoke(it.isFocused)
                     }
@@ -180,6 +181,7 @@ fun FormsInput(
                         val text = textPreprocessor.process("")
                         textState = textState.copy(text = text, selection = TextRange(0))
                         onValueChange.invoke(text)
+                        focusRequester.requestFocus()
                     }
                 )
             } else {
