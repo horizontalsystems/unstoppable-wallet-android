@@ -88,12 +88,13 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
                 else -> null
             }
             is TokenType.Eip20 -> when (tokenQuery.blockchainType) {
-                BlockchainType.Ethereum -> "ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Polygon -> "MATIC"
                 BlockchainType.Avalanche -> "AVAX"
-                BlockchainType.Optimism -> "ERC20"
-                BlockchainType.ArbitrumOne -> "ERC20"
+                BlockchainType.Ethereum,
+                BlockchainType.Optimism,
+                BlockchainType.ArbitrumOne,
+                BlockchainType.Gnosis -> "ERC20"
                 else -> null
             }
             else -> null

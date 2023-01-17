@@ -160,6 +160,7 @@ data class TransactionViewItem(
                 BlockchainType.Avalanche ->  R.drawable.logo_chain_avalanche_trx_24
                 BlockchainType.Optimism ->  R.drawable.logo_chain_optimism_trx_24
                 BlockchainType.ArbitrumOne ->  R.drawable.logo_chain_arbitrum_one_trx_24
+                BlockchainType.Gnosis ->  R.drawable.logo_chain_gnosis_trx_32
                 else -> null
             }
         }

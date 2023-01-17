@@ -55,6 +55,7 @@ object TransactionInfoOptionsModule {
                 Chain.Avalanche -> BlockchainType.Avalanche
                 Chain.Optimism -> BlockchainType.Optimism
                 Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+                Chain.Gnosis -> BlockchainType.Gnosis
                 Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
                 else -> BlockchainType.Ethereum
             }

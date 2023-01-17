@@ -53,6 +53,7 @@ class RestoreBlockchainsService(
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne,
+        BlockchainType.Gnosis,
         BlockchainType.Zcash,
         BlockchainType.Dash,
         BlockchainType.BitcoinCash,

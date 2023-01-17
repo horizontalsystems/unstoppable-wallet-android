@@ -97,6 +97,7 @@ class Eip20Adapter(
                     Chain.Avalanche,
                     Chain.Optimism,
                     Chain.ArbitrumOne,
+                    Chain.Gnosis,
                 )
             }
 

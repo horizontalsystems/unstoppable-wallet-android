@@ -52,6 +52,9 @@ class AppConfigProvider {
      val arbiscanApiKey by lazy {
         Translator.getString(R.string.arbiscanApiKey)
     }
+    val gnosisscanApiKey by lazy {
+        Translator.getString(R.string.gnosisscanApiKey)
+    }
      val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }

@@ -79,6 +79,7 @@ class AdapterFactory(
             BlockchainType.Polygon,
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
+            BlockchainType.Gnosis,
             BlockchainType.ArbitrumOne -> getEvmAdapter(wallet)
             BlockchainType.BinanceChain -> getBinanceAdapter(wallet, "BNB")
             BlockchainType.Solana -> {
