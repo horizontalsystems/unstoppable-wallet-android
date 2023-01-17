@@ -88,6 +88,7 @@ interface ILocalStorage {
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
     var marketsTabEnabled: Boolean
+    val marketsTabEnabledFlow: StateFlow<Boolean>
     var testnetEnabled: Boolean
     var nonRecommendedAccountAlertDismissedAccounts: Set<String>
 

@@ -24,6 +24,9 @@ import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class LocalStorageManager(private val preferences: SharedPreferences) : ILocalStorage, IPinStorage, IChartTypeStorage,
     IThirdKeyboard, IMarketStorage {
@@ -411,7 +414,13 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         get() = preferences.getBoolean(MARKETS_TAB_ENABLED, false)
         set(value) {
             preferences.edit().putBoolean(MARKETS_TAB_ENABLED, value).commit()
+            _marketsTabEnabledFlow.update {
+                value
+            }
         }
+
+    private val _marketsTabEnabledFlow = MutableStateFlow(marketsTabEnabled)
+    override val marketsTabEnabledFlow = _marketsTabEnabledFlow.asStateFlow()
 
     override var testnetEnabled: Boolean
         get() = preferences.getBoolean(TESTNET_ENABLED, false)
