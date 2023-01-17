@@ -33,8 +33,8 @@ class CreateAccountViewModel(
     val mnemonicKinds = CreateAccountModule.Kind.values().toList()
 
     val defaultAccountName = accountFactory.getNextAccountName()
-
     var accountName: String = defaultAccountName
+        get() = field.ifBlank { defaultAccountName }
         private set
 
     var selectedKind: CreateAccountModule.Kind = Mnemonic12
@@ -59,7 +59,7 @@ class CreateAccountViewModel(
 
         val accountType = mnemonicAccountType(selectedKind.wordsCount)
         val account = accountFactory.account(
-            accountName.ifBlank { defaultAccountName },
+            accountName,
             accountType,
             AccountOrigin.Created,
             false
