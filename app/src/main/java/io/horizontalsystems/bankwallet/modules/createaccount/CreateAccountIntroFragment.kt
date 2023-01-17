@@ -96,7 +96,8 @@ private fun CreateAccountIntroScreen(navController: NavController, popUpToInclus
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     initial = viewModel.accountName,
-                    hint = "",
+                    pasteEnabled = false,
+                    hint = viewModel.defaultAccountName,
                     onValueChange = viewModel::onChangeAccountName
                 )
 

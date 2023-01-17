@@ -128,7 +128,8 @@ private fun CreateAccountScreen(
                         FormsInput(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             initial = viewModel.accountName,
-                            hint = "",
+                            pasteEnabled = false,
+                            hint = viewModel.defaultAccountName,
                             onValueChange = viewModel::onChangeAccountName
                         )
                         Spacer(Modifier.height(32.dp))
