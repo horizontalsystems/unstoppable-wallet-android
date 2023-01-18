@@ -25,6 +25,7 @@
     <string name="Button_Disconnect">Desconectar</string>
     <string name="Button_Start">Iniciar</string>
     <string name="Button_Create">Criar</string>
+    <string name="Button_Advanced">Advanced</string>
     <string name="Button_Restore">Restaurar</string>
     <string name="Button_WatchAddress">Ver Endereço</string>
     <string name="Button_Reset">Redefinir</string>
@@ -58,17 +59,17 @@
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Configurações de Privacidade</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">Nova Carteira</string>
+    <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnemônico</string>
     <string name="CreateWallet_Wordlist">Dicionário</string>
     <string name="Passphrase">Senha</string>
+    <string name="ConfirmPassphrase">Confirmar</string>
     <string name="CreateWallet_N_WordsRecommended">%s palavras (recomendado)</string>
     <string name="CreateWallet_N_Words">%s palavras</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmar</string>
     <string name="CreateWallet_Error_EmptyPassphrase">A senha não pode estar vazia</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, use apenas símbolos suportados: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ £% ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Confirmação da senha não coincide</string>
-    <string name="EnterPassphrase">Passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Senhas agregam uma camada de segurança adicional às carteiras, permitindo que os usuários criem várias carteiras multimoedas independentes, usando uma única frase mnemônica de recuperação, mas associada à senhas diferentes. \n\nPara restaurar estas carteiras, o usuário precisará de uma frase de recuperação mnemônica, bem como de uma senha para cada carteira a ser restaurada.</string>
     <!--Languages-->
     <string name="Language_English">Inglês</string>
@@ -87,7 +88,7 @@
     <string name="RateApp_Button_RateIt">Avaliar</string>
     <string name="RateApp_Button_NotNow">Agora não</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Enter Key</string>
+    <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words need to be entered in the correct order and separated by spaces.</string>
     <string name="Restore_ValidationFailed">Chave incorreta</string>
     <string name="Restore_Error_MnemonicWordCount">Número incorreto de palavras. Deve ter entre 12 ou 24 palavras. Você inseriu: %d</string>
@@ -235,7 +236,7 @@
     <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
-    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
     <string name="TimePeriod_24h">24h</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
@@ -637,11 +638,13 @@
     <string name="Settings_LaunchScreen">Tela Inicial</string>
     <string name="Settings_Appearance">Aparência</string>
     <string name="Appearance_Theme">TEMA</string>
+    <string name="Appearance_Tab">TAB SETTINGS</string>
     <string name="Appearance_LaunchScreen">TELA DE INÍCIO</string>
     <string name="Appearance_AppIcon">ICONE DE APLICATIVO</string>
     <string name="Appearance_BalanceConversion">CONVERSÃO DE SALDO</string>
     <string name="Appearance_BalanceValue">VALOR DE SALDO</string>
     <string name="Appearance_Warning_CloseApplication">Alterar o ícone fechará o aplicativo</string>
+    <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="BalanceViewType_CoinValue">Valor da Moeda</string>
     <string name="BalanceViewType_FiatValue">Valor Fiat</string>
     <string name="SettingsAboutApp_Title">Sobre o App</string>
@@ -756,6 +759,7 @@
     <string name="ManageCoins_NoResults">Nenhum resultado encontrado. Tente adicionar o token manualmente se você souber seu endereço do contrato inteligente.</string>
     <string name="ManageCoins_NotSupported">Não suportado</string>
     <string name="ManageCoins_NotSupportedDescription">Seu tipo de carteira atual %1$s não suporta %2$s</string>
+    <string name="ManageCoins_NotSupportedByAppDescription">Unstoppable does not support %s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Os recursos abaixo são experimentais e devem ser usados com cautela. Enquanto nós testamos minuciosamente esses recursos usando nossos próprios fundos cripto, nós não podemos garantir que eles funcionarão como esperado em todos os casos possíveis.</string>
@@ -768,8 +772,6 @@
     <string name="ManageAccounts_CreateNewWallet">Criar</string>
     <string name="ManageAccounts_ImportWallet">Restaurar</string>
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
-    <string name="ManageAccounts_Hint">Dica: Restaurar uma carteira existente, mas com uma nova senha irá gerar uma carteira nova. Isso é útil se você quiser usar uma única frase de recuperação mnemônica de 12 – 24 palavras para várias carteiras.</string>
-    <string name="Watch_Address_Title">Address</string>
     <string name="Watch_Address_Hint">Endereço ou Domínio</string>
     <string name="Watch_XPubKey_Hint">Insira a chave pública estendida da conta</string>
     <string name="Watch_Address_Description">Disponível apenas para Ethereum e outras blockchains de EVM suportadas.</string>
@@ -1151,6 +1153,7 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">Escolha o tipo</string>
     <string name="NftAssetActivity_Empty">Sem atividade de item ainda</string>
+    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erro de Keystore do Android</string>
     <string name="Alert_KeysInvalidatedDescription">Os dados criptografados que continham sua carteira foram invalidados recentemente porque a tela de bloqueio do iOS foi alterada</string>
