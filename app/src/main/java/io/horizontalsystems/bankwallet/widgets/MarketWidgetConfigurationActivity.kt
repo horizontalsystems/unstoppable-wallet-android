@@ -67,7 +67,7 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                             .verticalScroll(rememberScrollState())
                     ) {
                         Spacer(modifier = Modifier.height(12.dp))
-                        CellSingleLineLawrenceSection(MarketWidgetType.values().toList()) { type ->
+                        CellSingleLineLawrenceSection(MarketWidgetManager.getMarketWidgetTypes()) { type ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxSize()

@@ -135,4 +135,15 @@ class MarketWidgetManager {
         }
     }
 
+    companion object {
+        fun getMarketWidgetTypes(): List<MarketWidgetType> {
+            val types = MarketWidgetType.values().toMutableList()
+            if (!App.localStorage.marketsTabEnabled) {
+                types.remove(MarketWidgetType.Watchlist)
+            }
+
+            return types
+        }
+    }
+
 }
