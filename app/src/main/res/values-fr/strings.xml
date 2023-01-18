@@ -828,8 +828,8 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Ne pas copier</string>
     <string name="ShowKey_PrivateKey_Warning">Cette clé est pour toutes les blockchains compatibles EVM.\n\nEn tant que mesure de sécurité, nous vous recommandons de ne pas utiliser l\'action de copie sur la clé privée.</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Sauvegarder la phrase</string>
-    <string name="BackupRecoveryPhrase_Description">Créez une copie de sauvegarde de la phrase de récupération et du mot de passe qui vous permettra de récupérer votre portefeuille si votre téléphone est perdu, volé, cassé, etc.</string>
+    <string name="BackupRecoveryPhrase_Title">Backup Wallet</string>
+    <string name="BackupRecoveryPhrase_Description">Backup this wallet by creating a copy of its recovery phrase. It will be required in order to access the wallet if your phone is lost, stolen, broken etc.</string>
     <string name="BackupRecoveryPhrase_Backup">Sauvegarde</string>
     <string name="BackupRecoveryPhrase_Later">Plus tard</string>
     <!-- Recovery Phrase -->
