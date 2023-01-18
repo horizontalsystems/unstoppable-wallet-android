@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -14,11 +15,13 @@ import kotlinx.coroutines.rx2.asFlow
 class CoinViewModel(
     private val service: CoinService,
     private val clearables: List<Clearable>,
+    private val localStorage: ILocalStorage,
 ) : ViewModel() {
 
     val tabs = CoinModule.Tab.values()
     val fullCoin by service::fullCoin
 
+    val isWatchlistEnabled = localStorage.marketsTabEnabled
     var isFavorite by mutableStateOf<Boolean>(false)
         private set
     var coinState by mutableStateOf<CoinState?>(null)
