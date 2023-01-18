@@ -828,8 +828,8 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">복사 금지</string>
     <string name="ShowKey_PrivateKey_Warning">이 키는 모든 EVM 호환 블록체인용입니다.\n\n보안 조치로 개인 키에 복사 작업을 사용하지 않는 것이 좋습니다.</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">백업 문구</string>
-    <string name="BackupRecoveryPhrase_Description">휴대전화 분실, 도난, 파손 등의 경우 지갑을 복구할 수 있도록 복구 문구 및 관련 비밀번호의 백업 사본을 만드십시오.</string>
+    <string name="BackupRecoveryPhrase_Title">Backup Wallet</string>
+    <string name="BackupRecoveryPhrase_Description">Backup this wallet by creating a copy of its recovery phrase. It will be required in order to access the wallet if your phone is lost, stolen, broken etc.</string>
     <string name="BackupRecoveryPhrase_Backup">백업</string>
     <string name="BackupRecoveryPhrase_Later">나중에</string>
     <!-- Recovery Phrase -->
