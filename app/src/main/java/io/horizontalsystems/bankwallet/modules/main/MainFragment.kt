@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -15,8 +14,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
@@ -37,7 +34,6 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
     private val viewModel by viewModels<MainViewModel> {
         MainModule.Factory(activity?.intent?.data?.toString())
     }
-    private var bottomBadgeView: View? = null
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
@@ -63,7 +59,6 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        bottomBadgeView = null
         _binding = null
     }
 
@@ -226,22 +221,24 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
     }
 
     private fun setSettingsBadge(badgeType: MainModule.BadgeType?) {
-        val bottomMenu = binding.bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-        val settingsNavigationViewItem = bottomMenu?.getChildAt(3) as? BottomNavigationItemView
-        settingsNavigationViewItem?.removeView(bottomBadgeView)
-        when (val type = badgeType) {
+        val context = requireContext()
+        val badge = binding.bottomNavigation.getOrCreateBadge(R.id.navigation_settings)
+        badge.backgroundColor = context.getColor(R.color.lucian)
+        badge.badgeTextColor = context.getColor(R.color.white)
+
+        when (badgeType) {
             MainModule.BadgeType.BadgeDot -> {
-                bottomBadgeView = LayoutInflater.from(activity)
-                    .inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
-                settingsNavigationViewItem?.addView(bottomBadgeView)
+                badge.clearNumber()
+                badge.isVisible = true
             }
             is MainModule.BadgeType.BadgeNumber -> {
-                bottomBadgeView = LayoutInflater.from(activity)
-                    .inflate(R.layout.view_bottom_navigation_badge_with_number, bottomMenu, false)
-                bottomBadgeView?.findViewById<TextView>(R.id.badgeNumber)?.text = type.number.toString()
-                settingsNavigationViewItem?.addView(bottomBadgeView)
+                badge.number = badgeType.number
+                badge.isVisible = true
             }
-            else -> { }
+            else -> {
+                badge.isVisible = false
+                badge.clearNumber()
+            }
         }
     }
 
