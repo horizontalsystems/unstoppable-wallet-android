@@ -25,6 +25,7 @@
     <string name="Button_Disconnect">Bağlantıyı Kes</string>
     <string name="Button_Start">Başlangıç</string>
     <string name="Button_Create">Oluştur</string>
+    <string name="Button_Advanced">Advanced</string>
     <string name="Button_Restore">Geri Yükle</string>
     <string name="Button_WatchAddress">Adresi İzle</string>
     <string name="Button_Reset">Sıfırla</string>
@@ -58,17 +59,17 @@
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">Yeni Cüzdan</string>
+    <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
     <string name="CreateWallet_Wordlist">Sözcük Listesi</string>
     <string name="Passphrase">Parola</string>
+    <string name="ConfirmPassphrase">Onayla</string>
     <string name="CreateWallet_N_WordsRecommended">%s kelimeler (Tavsiye edilen)</string>
     <string name="CreateWallet_N_Words">%s kelime</string>
     <string name="CreateWallet_PassphraseConfirm">Onayla</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Lütfen yalnızca desteklenen sembolleri kullanın:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
-    <string name="EnterPassphrase">Parolayı girin</string>
     <string name="CreateWallet_PassphraseDescription">Parolalar cüzdanlara ek güvenlik katmanı ekleyerek kullanıcıların tek bir anımsatıcı kurtarma ifadesi kullanarak ancak farklı parolalarla ilişkilendirilmiş birden çok bağımsız çoklu para cüzdanı oluşturmasına olanak tanır. \n\nBu cüzdanları geri yüklemek için bir kullanıcı mnemonic kurtarma ifadesinin yanı sıra bir parola gerektirecektir. her biri geri yüklenecek cüzdan.</string>
     <!--Languages-->
     <string name="Language_English">İngilizce</string>
@@ -87,7 +88,7 @@
     <string name="RateApp_Button_RateIt">Puanla</string>
     <string name="RateApp_Button_NotNow">Şimdi değil</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Geri Yükle</string>
+    <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Mnemonic_Description">12, 15, 18, 21 veya 24 kelimeden oluşan ve ek bir alfasayısal şifre içerebilen cüzdan kurtarma ifadenizi (aka anımsatıcı) girin.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
@@ -235,7 +236,7 @@
     <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
-    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
     <string name="TimePeriod_24h">24h</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
@@ -637,11 +638,13 @@
     <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
     <string name="Settings_Appearance">Görünüm</string>
     <string name="Appearance_Theme">TEMA</string>
+    <string name="Appearance_Tab">TAB SETTINGS</string>
     <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
     <string name="Appearance_AppIcon">UYGULAMA IKONLARI</string>
     <string name="Appearance_BalanceConversion">BAKIYE ÇEVRIMI</string>
     <string name="Appearance_BalanceValue">BAKIYE DEĞERI</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
+    <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
     <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
@@ -759,6 +762,7 @@
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
     <string name="ManageCoins_NotSupported">Desteklenmiyor</string>
     <string name="ManageCoins_NotSupportedDescription">Mevcut cüzdan türünüz %1$s, %2$s\'yi desteklemiyor</string>
+    <string name="ManageCoins_NotSupportedByAppDescription">Unstoppable does not support %s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
     <string name="ExperimentalFeatures_Description">Aşağıdaki özellikler deneyseldir ve dikkatli kullanılmalıdır. Bu özellikleri kendi kripto fonlarımızı kullanarak baştan sona test etmemize rağmen, olası tüm durumlarda beklendiği gibi çalışmalarını garanti edemeyiz.</string>
@@ -771,8 +775,6 @@
     <string name="ManageAccounts_CreateNewWallet">Oluştur</string>
     <string name="ManageAccounts_ImportWallet">Geri Yükle</string>
     <string name="ManageAccounts_WatchAddress">Adresi İzle</string>
-    <string name="ManageAccounts_Hint">İpucu! Mevcut bir cüzdanı geri yüklemek, yeni bir şifre ile en baştan bir cüzdan oluşturur. Birden fazla cüzdan için 12-24 kelimelik tek bir hatırlatıcı kurtarma öbeği kullanmak istiyorsanız kullanışlıdır.</string>
-    <string name="Watch_Address_Title">Adresi İzle</string>
     <string name="Watch_Address_Hint">Adres veya Domain</string>
     <string name="Watch_XPubKey_Hint">Account Extended Public Key girin</string>
     <string name="Watch_Address_Description">Yalnızca Ethereum ve diğer desteklenen EVM blok zincirleri için kullanılabilir.</string>
@@ -1154,6 +1156,7 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">Türü Seç</string>
     <string name="NftAssetActivity_Empty">Henüz öğe etkinliği yok</string>
+    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
