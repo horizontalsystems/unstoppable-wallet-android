@@ -282,23 +282,25 @@ fun CoinTabs(
                         )
                     }
                 }
-                if (viewModel.isFavorite) {
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
-                            icon = R.drawable.ic_filled_star_24,
-                            tint = ComposeAppTheme.colors.jacob,
-                            onClick = { viewModel.onUnfavoriteClick() }
+                if (viewModel.isWatchlistEnabled) {
+                    if (viewModel.isFavorite) {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
+                                icon = R.drawable.ic_filled_star_24,
+                                tint = ComposeAppTheme.colors.jacob,
+                                onClick = { viewModel.onUnfavoriteClick() }
+                            )
                         )
-                    )
-                } else {
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.CoinPage_Favorite),
-                            icon = R.drawable.ic_star_24,
-                            onClick = { viewModel.onFavoriteClick() }
+                    } else {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.CoinPage_Favorite),
+                                icon = R.drawable.ic_star_24,
+                                onClick = { viewModel.onFavoriteClick() }
+                            )
                         )
-                    )
+                    }
                 }
             }
         )

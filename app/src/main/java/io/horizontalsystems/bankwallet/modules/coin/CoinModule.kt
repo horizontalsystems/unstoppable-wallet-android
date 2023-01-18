@@ -14,7 +14,7 @@ object CoinModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val fullCoin = App.marketKit.fullCoins(coinUids = listOf(coinUid)).first()
             val service = CoinService(fullCoin, App.marketFavoritesManager, App.walletManager, App.accountManager)
-            return CoinViewModel(service, listOf(service)) as T
+            return CoinViewModel(service, listOf(service), App.localStorage) as T
         }
 
     }
