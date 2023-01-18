@@ -25,6 +25,7 @@
     <string name="Button_Disconnect">قطع ارتباط</string>
     <string name="Button_Start">شروع</string>
     <string name="Button_Create">به وجود آوردن</string>
+    <string name="Button_Advanced">Advanced</string>
     <string name="Button_Restore">بازگرداني</string>
     <string name="Button_WatchAddress">مشاهده آدرس</string>
     <string name="Button_Reset">تنظیم مجدد</string>
@@ -58,17 +59,17 @@
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">تنظیمات حریم خصوصی</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">کیف پول جدید</string>
+    <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">وابسته</string>
     <string name="CreateWallet_Wordlist">فهرست واژه</string>
     <string name="Passphrase">عبارت عبور</string>
+    <string name="ConfirmPassphrase">تاييد</string>
     <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s کلمه</string>
     <string name="CreateWallet_PassphraseConfirm">تاييد</string>
     <string name="CreateWallet_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">تأیید عبارت عبور مطابقت ندارد</string>
-    <string name="EnterPassphrase">عبارت عبور را وارد کنید</string>
     <string name="CreateWallet_PassphraseDescription">عبارت‌های عبور یک لایه امنیتی اضافی به کیف پول‌ها اضافه می‌کنند و به کاربران این امکان را می‌دهند تا با استفاده از یک عبارت بازیابی حافظه‌ای واحد، اما با رمزهای عبور متفاوت، کیف پول‌های چند سکه‌ای مستقل ایجاد کنند.\n\n برای بازیابی این کیف پول ها، کاربر به یک عبارت بازیابی حافظه و همچنین یک رمز عبور برای هر کیف پول بازیابی نیاز دارد.</string>
     <!--Languages-->
     <string name="Language_English">انگلیسی</string>
@@ -87,7 +88,7 @@
     <string name="RateApp_Button_RateIt">امتیاز بدهید</string>
     <string name="RateApp_Button_NotNow">الان نه</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">بازگرداني</string>
+    <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
     <string name="Restore_Error_MnemonicWordCount">تعداد کلمات اشتباه. باید بین ۱۲ تا ۱۴ کلمه باشد. شما وارد کردید: %d</string>
@@ -235,7 +236,7 @@
     <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
-    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
     <string name="TimePeriod_24h">24 ساعت</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">Markets %s</string>
@@ -637,11 +638,13 @@
     <string name="Settings_LaunchScreen">صفحه شروع</string>
     <string name="Settings_Appearance">ظاهر</string>
     <string name="Appearance_Theme">موضوع</string>
+    <string name="Appearance_Tab">TAB SETTINGS</string>
     <string name="Appearance_LaunchScreen">صفحه راه اندازی</string>
     <string name="Appearance_AppIcon">نماد برنامه</string>
     <string name="Appearance_BalanceConversion">تبدیل تعادل</string>
     <string name="Appearance_BalanceValue">BALANCE VALUE</string>
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
+    <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="BalanceViewType_CoinValue">ارزش سکه</string>
     <string name="BalanceViewType_FiatValue">ارزش فیات</string>
     <string name="SettingsAboutApp_Title">درباره برنامه</string>
@@ -763,6 +766,7 @@
     <string name="ManageCoins_NoResults">نتیجه ای پیدا نشد. اگر آدرس قرارداد هوشمند آن را می‌دانید، سعی کنید توکن را به صورت دستی اضافه کنید.</string>
     <string name="ManageCoins_NotSupported">Not Supported</string>
     <string name="ManageCoins_NotSupportedDescription">Your current wallet type %1$s does not support %2$s</string>
+    <string name="ManageCoins_NotSupportedByAppDescription">Unstoppable does not support %s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">تجربی</string>
     <string name="ExperimentalFeatures_Description">ویژگی های زیر تجربی است و باید با احتیاط استفاده شود. در حالی که ما این ویژگی ها را با استفاده از وجوه رمزنگاری شده خودمان به طور آزمایشی آزمایش کرده ایم ، اما نمی توانیم تضمین کنیم که آنها مطابق آنچه انتظار می رود عمل کنند.</string>
@@ -775,8 +779,6 @@
     <string name="ManageAccounts_CreateNewWallet">به وجود آوردن</string>
     <string name="ManageAccounts_ImportWallet">بازگرداني</string>
     <string name="ManageAccounts_WatchAddress">مشاهده آدرس</string>
-    <string name="ManageAccounts_Hint">نکته! بازیابی کیف پول موجود اما با عبارت عبور جدید، یک کیف پول کاملاً جدید تولید می کند. اگر می خواهید از یک عبارت بازیابی حافظه 12-24 کلمه ای برای کیف پول های متعدد استفاده کنید، این مفید است.</string>
-    <string name="Watch_Address_Title">مشاهده آدرس</string>
     <string name="Watch_Address_Hint">آدرس یا دامنه</string>
     <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
@@ -1158,6 +1160,7 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">انتخاب نوع</string>
     <string name="NftAssetActivity_Empty">No item activity yet</string>
+    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">خطای کلید اصلی اندروید</string>
     <string name="Alert_KeysInvalidatedDescription">داده رمزگذاری شده که کیف پول شما را نگه داشته است اخیراً باطل نشده است زیرا صفحه قفل اندروید شما تغییر کرده است</string>
