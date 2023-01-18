@@ -829,8 +829,8 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">不复制</string>
     <string name="ShowKey_PrivateKey_Warning">此密钥适用于所有EVM兼容的区块链。\n\n作为一项安全措施，我们建议不要在私钥上使用复制操作。</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">备份码</string>
-    <string name="BackupRecoveryPhrase_Description">创建恢复短语和相关密码的备份副本，允许您在手机丢失时恢复钱包， • 盗窃、故障等问题</string>
+    <string name="BackupRecoveryPhrase_Title">Backup Wallet</string>
+    <string name="BackupRecoveryPhrase_Description">Backup this wallet by creating a copy of its recovery phrase. It will be required in order to access the wallet if your phone is lost, stolen, broken etc.</string>
     <string name="BackupRecoveryPhrase_Backup">备份</string>
     <string name="BackupRecoveryPhrase_Later">稍后</string>
     <!-- Recovery Phrase -->
