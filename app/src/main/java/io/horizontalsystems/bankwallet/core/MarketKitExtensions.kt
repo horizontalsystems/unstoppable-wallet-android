@@ -171,7 +171,7 @@ fun BlockchainType.defaultSettingsArray(accountType: AccountType): List<CoinSett
     BlockchainType.Bitcoin,
     BlockchainType.Litecoin -> {
         when (accountType) {
-            is AccountType.Mnemonic -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
+            is AccountType.Mnemonic -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip84.value)))
             is AccountType.HdExtendedKey -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value)))
             else -> listOf()
         }

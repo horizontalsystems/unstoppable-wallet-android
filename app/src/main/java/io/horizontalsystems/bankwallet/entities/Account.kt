@@ -222,18 +222,11 @@ val AccountType.Derivation.rawName: String
         AccountType.Derivation.bip84 -> "BIP 84"
     }
 
-val AccountType.Derivation.title: String
+val AccountType.Derivation.description: String
     get() = when (this) {
         AccountType.Derivation.bip44 -> Translator.getString(R.string.CoinOption_bip44_Title)
         AccountType.Derivation.bip49 -> Translator.getString(R.string.CoinOption_bip49_Title)
         AccountType.Derivation.bip84 -> Translator.getString(R.string.CoinOption_bip84_Title)
-    }
-
-val AccountType.Derivation.description: String
-    get() = when (this) {
-        AccountType.Derivation.bip44 -> rawName
-        AccountType.Derivation.bip84,
-        AccountType.Derivation.bip49 -> "$rawName - $addressType"
     }
 
 @Parcelize
