@@ -938,8 +938,9 @@
     <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">با فعال کردن TOR، اتصال Ethereum زنجیره بلوکی به Infura بازمی گردد.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip49_Title">جدیدتر (توصیه شده)</string>
-    <string name="CoinOption_bip84_Title">جدیدترین</string>
+    <string name="CoinOption_bip44_Title">Old</string>
+    <string name="CoinOption_bip49_Title">Good</string>
+    <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">قیمت</string>
     <string name="Coin_Tab_Market">Markets</string>
