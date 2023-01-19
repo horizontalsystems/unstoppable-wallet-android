@@ -31,8 +31,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
@@ -141,6 +143,13 @@ private fun SettingSections(
                         }
                         WC1Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                        }
+                        is WC1Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                            val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup, state.account.name)
+                            navController.slideFromBottom(
+                                R.id.backupRequiredDialog,
+                                BackupRequiredDialog.prepareParams(state.account, text)
+                            )
                         }
                         is WC1Manager.SupportState.NotSupported -> {
                             navController.slideFromBottom(

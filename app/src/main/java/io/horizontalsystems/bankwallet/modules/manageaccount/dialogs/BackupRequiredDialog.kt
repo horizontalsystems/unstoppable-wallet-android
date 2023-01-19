@@ -35,8 +35,8 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
         requireArguments().getParcelable<Account>(ACCOUNT)
     }
 
-    private val coinTitle by lazy {
-        requireArguments().getString(COIN_TITLE) ?: ""
+    private val text by lazy {
+        requireArguments().getString(TEXT) ?: ""
     }
 
     override fun onCreateView(
@@ -50,7 +50,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 account?.let {
-                    BackupRequiredScreen(findNavController(), it, coinTitle)
+                    BackupRequiredScreen(findNavController(), it, text)
                 }
             }
         }
@@ -58,17 +58,17 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 
     companion object {
         private const val ACCOUNT = "account"
-        private const val COIN_TITLE = "coin_title"
+        private const val TEXT = "text"
 
-        fun prepareParams(account: Account, coinTitle: String) = bundleOf(
+        fun prepareParams(account: Account, text: String) = bundleOf(
             ACCOUNT to account,
-            COIN_TITLE to coinTitle,
+            TEXT to text
         )
     }
 }
 
 @Composable
-fun BackupRequiredScreen(navController: NavController, account: Account, coinTitle: String) {
+fun BackupRequiredScreen(navController: NavController, account: Account, text: String) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_24),
@@ -80,18 +80,14 @@ fun BackupRequiredScreen(navController: NavController, account: Account, coinTit
         ) {
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = stringResource(
-                    R.string.ManageAccount_BackupRequired_Description,
-                    account.name,
-                    coinTitle
-                )
+                text = text
             )
             Spacer(Modifier.height(20.dp))
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
-                title = stringResource(R.string.ManageAccount_RecoveryPhraseBackup),
+                title = stringResource(R.string.BackupRecoveryPhrase_Backup),
                 onClick = {
                     navController.popBackStack()
                     navController.slideFromBottom(
