@@ -74,8 +74,8 @@ private fun InfoScreen(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                InfoHeader(R.string.BtcBlockchainSettings_RestoreSource)
-                InfoBody(R.string.BtcBlockchainSettings_RestoreSourceDescription)
+                InfoHeader(R.string.BtcBlockchainSettings_TransactionInputsOutputs)
+                InfoBody(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)
                 Spacer(Modifier.height(20.dp))
             }
         }
