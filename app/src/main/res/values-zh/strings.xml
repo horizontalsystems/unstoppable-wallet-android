@@ -904,10 +904,12 @@
     <string name="AddToken_AlreadyAdded">已经加入</string>
     <string name="AddToken_AddressOrSymbol">智能合约地址</string>
     <string name="AddToken_ChooseToken">选择代币</string>
-    <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
-    <string name="AddToken_InvalidAddressError">找不到符号</string>
-    <string name="AddToken_ApiLimitExceeded">超过Api限制。请稍后再试。</string>
-    <string name="AddEvmToken_TokenNotFound">找不到代币</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
+    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
     <string name="AddressFormatSettings_Description">选择您 %s 钱包的地址格式。每个选中的格式代表应用的余额选项卡上不同的钱包。</string>
