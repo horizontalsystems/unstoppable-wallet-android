@@ -936,8 +936,9 @@
     <string name="Tor_TorIsActive">Tor активен</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip49_Title">Новые (рекомендуется)</string>
-    <string name="CoinOption_bip84_Title">Новые</string>
+    <string name="CoinOption_bip44_Title">Old</string>
+    <string name="CoinOption_bip49_Title">Good</string>
+    <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Цена</string>
     <string name="Coin_Tab_Market">Рынки</string>
