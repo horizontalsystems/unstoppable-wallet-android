@@ -27,6 +27,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
@@ -251,9 +252,14 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem))
             )
         } catch (e: BackupRequiredError) {
+            val text = Translator.getString(
+                R.string.ManageAccount_BackupRequired_Description,
+                e.account.name,
+                e.coinTitle
+            )
             navController.slideFromBottom(
                 R.id.backupRequiredDialog,
-                BackupRequiredDialog.prepareParams(e.account, e.coinTitle)
+                BackupRequiredDialog.prepareParams(e.account, text)
             )
         }
     }

@@ -12,6 +12,7 @@ class WC1Manager(
     sealed class SupportState {
         object Supported : SupportState()
         object NotSupportedDueToNoActiveAccount : SupportState()
+        class NotSupportedDueToNonBackedUpAccount(val account: Account) : SupportState()
         class NotSupported(val accountTypeDescription: String) : SupportState()
     }
 
@@ -36,6 +37,7 @@ class WC1Manager(
 
         return when {
             tmpAccount == null -> SupportState.NotSupportedDueToNoActiveAccount
+            !tmpAccount.isBackedUp -> SupportState.NotSupportedDueToNonBackedUpAccount(tmpAccount)
             tmpAccount.type.supportsWalletConnect -> SupportState.Supported
             else -> SupportState.NotSupported(tmpAccount.type.description)
         }

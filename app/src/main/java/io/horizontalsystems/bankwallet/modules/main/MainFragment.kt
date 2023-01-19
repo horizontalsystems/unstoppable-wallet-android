@@ -17,10 +17,12 @@ import androidx.viewpager2.widget.ViewPager2
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentMainBinding
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
@@ -105,6 +107,14 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
                 SupportState.NotSupportedDueToNoActiveAccount -> {
                     activity?.intent?.data = null
                     findNavController().slideFromBottom(R.id.wcErrorNoAccountFragment)
+                }
+                is SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                    activity?.intent?.data = null
+                    val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup, wcSupportState.account.name)
+                    findNavController().slideFromBottom(
+                        R.id.backupRequiredDialog,
+                        BackupRequiredDialog.prepareParams(wcSupportState.account, text)
+                    )
                 }
                 is SupportState.NotSupported -> {
                     activity?.intent?.data = null
