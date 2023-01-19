@@ -904,10 +904,12 @@
     <string name="AddToken_AlreadyAdded">ALREADY ADDED</string>
     <string name="AddToken_AddressOrSymbol">آدرس قرارداد</string>
     <string name="AddToken_ChooseToken">Choose Token</string>
-    <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
-    <string name="AddToken_InvalidAddressError">آدرس قرارداد یا نماد BEP2 نامعتبر است</string>
-    <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
-    <string name="AddEvmToken_TokenNotFound">نشانه یافت نشد</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
+    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <string name="AddressFormatSettings_Description">قالب آدرس را برای سکه انتخاب کنید. اگر مطمئن نیستید گزینه پیشنهادی را ادامه دهید. هنگام بازیابی کیف پول موجود باید یک قالب صحیح انتخاب شود.</string>
