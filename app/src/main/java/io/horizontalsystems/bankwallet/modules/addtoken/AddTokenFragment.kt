@@ -4,41 +4,48 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.Blockchain
 
 class AddTokenFragment : BaseFragment() {
 
@@ -93,6 +100,13 @@ private fun AddTokenScreen(
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
 
+                BlockchainSelector(
+                    viewModel.blockchains,
+                    viewModel.selectedBlockchain
+                ) { viewModel.onBlockchainSelect(it) }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     enabled = false,
@@ -103,45 +117,29 @@ private fun AddTokenScreen(
                     viewModel.onEnterText(it)
                 }
 
-                val tokens = uiState.tokens
-                val alreadyAddedTokens = uiState.alreadyAddedTokens
+                Spacer(modifier = Modifier.height(32.dp))
 
-                AnimatedVisibility(tokens.isNotEmpty()) {
-                    Column {
-                        Spacer(modifier = Modifier.height(24.dp))
-                        tokens.forEachIndexed { index, token ->
-                            if (index != 0) {
-                                Spacer(modifier = Modifier.height(12.dp))
+                uiState.tokenInfo?.let { tokenInfo ->
+                    CellUniversalLawrenceSection(
+                        listOf(
+                            {
+                                TitleValueCell(
+                                    stringResource(R.string.AddToken_CoinName),
+                                    tokenInfo.token.coin.name
+                                )
+                            }, {
+                                TitleValueCell(
+                                    stringResource(R.string.AddToken_CoinCode),
+                                    tokenInfo.token.coin.code
+                                )
+                            }, {
+                                TitleValueCell(
+                                    stringResource(R.string.AddToken_Decimals),
+                                    tokenInfo.token.decimals.toString()
+                                )
                             }
-                            TokenCell(
-                                title = token.title,
-                                subtitle = token.subtitle,
-                                badge = token.badge,
-                                image = token.image,
-                                checked = token.checked,
-                                onCheckedChange = { viewModel.onToggleToken(token) }
-                            )
-                        }
-                    }
-                }
-
-                AnimatedVisibility(alreadyAddedTokens.isNotEmpty()) {
-                    Column {
-                        Spacer(modifier = Modifier.height(24.dp))
-                        HeaderText(text = stringResource(id = R.string.AddToken_AlreadyAdded))
-                        alreadyAddedTokens.forEachIndexed { index, token ->
-                            if (index != 0) {
-                                Spacer(modifier = Modifier.height(12.dp))
-                            }
-                            TokenCell(
-                                title = token.title,
-                                subtitle = token.subtitle,
-                                badge = token.badge,
-                                image = token.image,
-                                alreadyAdded = true,
-                            )
-                        }
-                    }
+                        )
+                    )
                 }
             }
 
@@ -150,9 +148,9 @@ private fun AddTokenScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                    title = uiState.actionButton.title,
+                    title = stringResource(R.string.Button_Add),
                     onClick = { viewModel.onAddClick() },
-                    enabled = uiState.actionButton.enabled
+                    enabled = uiState.addButtonEnabled
                 )
             }
         }
@@ -160,121 +158,101 @@ private fun AddTokenScreen(
 }
 
 @Composable
-private fun TokenCell(
-    title: String,
-    subtitle: String,
-    badge: String?,
-    image: ImageSource,
-    checked: Boolean = true,
-    alreadyAdded: Boolean = false,
-    onCheckedChange: (() -> Unit)? = null,
+private fun BlockchainSelector(
+    blockchains: List<Blockchain>,
+    selectedBlockchain: Blockchain,
+    onSelected: (Blockchain) -> Unit
 ) {
-    CellUniversalLawrenceSection(
-        listOf {
-            RowUniversal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalPadding = 0.dp,
-                onClick = onCheckedChange?.let {
-                    { it.invoke() }
-                }
-            ) {
-                Image(
-                    painter = image.painter(),
+    var expanded by remember { mutableStateOf(false) }
+    var rowSize by remember { mutableStateOf(Size.Zero) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.TopStart)
+    ) {
+        CellUniversalLawrenceSection(
+            listOf {
+                RowUniversal(
                     modifier = Modifier
-                        .padding(vertical = 12.dp)
-                        .size(32.dp),
-                    contentDescription = null
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column(
-                    modifier = Modifier.weight(weight = 1f),
+                        .fillMaxWidth()
+                        .onGloballyPositioned { layoutCoordinates ->
+                            rowSize = layoutCoordinates.size.toSize()
+                        }
+                        .padding(horizontal = 16.dp),
+                    onClick = { expanded = !expanded }
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        body_leah(
-                            text = title,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        badge?.let { badgeText ->
-                            Box(
+                    Image(
+                        painter = painterResource(R.drawable.ic_blocks_24),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    body_leah(
+                        text = stringResource(R.string.AddToken_Blockchain),
+                        modifier = Modifier.weight(1f)
+                    )
+                    subhead1_grey(
+                        text = selectedBlockchain.name,
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_down_arrow_20),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.grey
+                    )
+                }
+            }
+        )
+        MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(12.dp))) {
+            Box {
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    offset = DpOffset(x = (16).dp, y = 0.dp),
+                    modifier = Modifier
+                        .width(with(LocalDensity.current) { rowSize.width.toDp() })
+                        .background(ComposeAppTheme.colors.lawrence)
+                ) {
+                    blockchains.forEach { item ->
+                        DropdownMenuItem(
+                            onClick = {
+                                onSelected.invoke(item)
+                                expanded = false
+                            },
+                        ) {
+                            Image(
+                                painter = rememberAsyncImagePainter(
+                                    model = item.type.imageUrl,
+                                    error = painterResource(R.drawable.ic_platform_placeholder_32)
+                                ),
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp)
+                            )
+                            body_leah(
                                 modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(ComposeAppTheme.colors.jeremy)
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(
-                                        start = 4.dp,
-                                        end = 4.dp,
-                                        bottom = 1.dp
-                                    ),
-                                    text = badgeText.uppercase(),
-                                    color = ComposeAppTheme.colors.bran,
-                                    style = ComposeAppTheme.typography.microSB,
-                                    maxLines = 1,
+                                    .padding(horizontal = 16.dp)
+                                    .weight(1f),
+                                text = item.name,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            if (item == selectedBlockchain) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_checkmark_20),
+                                    tint = ComposeAppTheme.colors.jacob,
+                                    contentDescription = null,
                                 )
                             }
                         }
                     }
-                    subhead2_grey(text = subtitle)
-                }
-                if (alreadyAdded) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_checkmark_20),
-                        tint = ComposeAppTheme.colors.grey,
-                        contentDescription = null,
-                    )
-                } else {
-                    HsCheckbox(
-                        checked = checked,
-                        onCheckedChange = { onCheckedChange?.invoke() }
-                    )
                 }
             }
         }
-    )
+    }
 }
 
 private fun getState(caution: Caution?, loading: Boolean) = when (caution?.type) {
     Caution.Type.Error -> DataState.Error(Exception(caution.text))
     Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
     null -> if (loading) DataState.Loading else null
-}
-
-@Preview
-@Composable
-private fun Preview_TokenCell() {
-    ComposeAppTheme {
-        Column {
-            TokenCell(
-                "ACD",
-                "Token Name",
-                "Bep20",
-                ImageSource.Local(R.drawable.bep20),
-                true,
-                false,
-                {})
-            Spacer(Modifier.height(12.dp))
-            TokenCell(
-                "TCD",
-                "Token Name",
-                "Polygon",
-                ImageSource.Local(R.drawable.polygon_erc20),
-                false,
-                false,
-                {})
-            Spacer(Modifier.height(12.dp))
-            TokenCell(
-                "BTCD",
-                "Token Name",
-                "Erc20",
-                ImageSource.Local(R.drawable.erc20),
-                alreadyAdded = true
-            )
-        }
-    }
 }
