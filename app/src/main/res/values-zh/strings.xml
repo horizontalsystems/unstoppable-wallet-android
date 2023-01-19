@@ -938,8 +938,9 @@
     <string name="Tor_TorIsActive">Tor 已激活</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip49_Title">较新（推荐)</string>
-    <string name="CoinOption_bip84_Title">最新</string>
+    <string name="CoinOption_bip44_Title">Old</string>
+    <string name="CoinOption_bip49_Title">Good</string>
+    <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">行情</string>
     <string name="Coin_Tab_Market">市场</string>
