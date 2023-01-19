@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -92,11 +93,18 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             true
         }
 
-        binding.bottomNavigation.findViewById<View>(R.id.navigation_balance)
-            ?.setOnLongClickListener {
-                viewModel.onLongPressBalanceTab()
-                true
+        (binding.bottomNavigation.getChildAt(0) as? ViewGroup)?.let { viewGroup ->
+            viewGroup.forEach {
+                it.setOnLongClickListener {
+                    if (it.id == R.id.navigation_balance) {
+                        viewModel.onLongPressBalanceTab()
+                        true
+                    } else {
+                        false
+                    }
+                }
             }
+        }
 
         viewModel.walletConnectSupportState.observe(viewLifecycleOwner) { wcSupportState ->
             viewModel.wcSupportStateHandled()
