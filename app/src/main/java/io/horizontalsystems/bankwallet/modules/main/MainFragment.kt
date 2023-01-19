@@ -65,7 +65,7 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mainViewPagerAdapter = MainViewPagerAdapter(this)
+        val mainViewPagerAdapter = MainViewPagerAdapter(this, viewModel.marketsTabEnabledLiveData.value ?: false)
 
         binding.viewPager.offscreenPageLimit = 1
         binding.viewPager.adapter = mainViewPagerAdapter
@@ -161,6 +161,7 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
         viewModel.marketsTabEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
             binding.bottomNavigation.menu.getItem(0).isVisible = enabled
+            mainViewPagerAdapter.setMarketsTabEnabled(enabled)
         }
 
         viewModel.torIsActiveLiveData.observe(viewLifecycleOwner) { torIsActive ->
