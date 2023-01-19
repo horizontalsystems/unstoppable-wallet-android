@@ -900,10 +900,12 @@
     <string name="AddToken_AlreadyAdded">ÇOKTAN EKLENMİŞ GÖRÜNÜYOR</string>
     <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
     <string name="AddToken_ChooseToken">Tokenleri seç</string>
-    <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
-    <string name="AddToken_InvalidAddressError">Geçersiz sözleşme adresi veya BEP2 sembolü</string>
-    <string name="AddToken_ApiLimitExceeded">Api limiti aşıldı. Daha sonra tekrar deneyin.</string>
-    <string name="AddEvmToken_TokenNotFound">Token bulunamadı</string>
+    <string name="AddToken_Blockchain">Blockchains</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
+    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adres Formatı</string>
     <string name="AddressFormatSettings_Description">Koin için adres formatını seçin. Emin değilseniz önerilen seçenekle devam edin. Mevcut bir cüzdanı geri yüklerken doğru bir format seçilmelidir.</string>
