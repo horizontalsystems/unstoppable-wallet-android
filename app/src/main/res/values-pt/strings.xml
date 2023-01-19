@@ -897,10 +897,12 @@
     <string name="AddToken_AlreadyAdded">JÁ ADICIONADO</string>
     <string name="AddToken_AddressOrSymbol">Endereço do Contrato</string>
     <string name="AddToken_ChooseToken">Escolha os tokens</string>
-    <string name="AddToken_CoinAlreadyInListWarning">Este token já está na lista de moedas</string>
-    <string name="AddToken_InvalidAddressError">Endereço do contrato ou símbolo BEP2 inválido</string>
-    <string name="AddToken_ApiLimitExceeded">Limite de Api excedido. Tente novamente mais tarde.</string>
-    <string name="AddEvmToken_TokenNotFound">Token não encontrado</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
+    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato do Endereço</string>
     <string name="AddressFormatSettings_Description">Selecione o formato do endereço para a moeda. Prossiga com a opção recomendada se não tiver certeza. Um formato correto deve ser escolhido quando restaurar uma carteira existente.</string>
