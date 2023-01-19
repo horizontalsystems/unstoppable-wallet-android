@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
 import io.horizontalsystems.bankwallet.entities.description
-import io.horizontalsystems.bankwallet.entities.title
+import io.horizontalsystems.bankwallet.entities.rawName
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
@@ -63,7 +63,7 @@ class CoinSettingsViewModel(
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
             viewItems = allDerivations.map { derivation ->
                 BottomSheetSelectorViewItem(
-                    title = derivation.title,
+                    title = derivation.rawName,
                     subtitle = derivation.description
                 )
             },

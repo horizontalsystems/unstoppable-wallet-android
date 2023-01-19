@@ -1137,9 +1137,9 @@
 
     <!--Coin Option-->
 
-    <string name="CoinOption_bip44_Title" translatable="false">Legacy</string>
-    <string name="CoinOption_bip49_Title">Newer (recommended)</string>
-    <string name="CoinOption_bip84_Title">Newest</string>
+    <string name="CoinOption_bip44_Title">Old</string>
+    <string name="CoinOption_bip49_Title">Good</string>
+    <string name="CoinOption_bip84_Title">Best</string>
 
     <!--Coin Page-->
 
