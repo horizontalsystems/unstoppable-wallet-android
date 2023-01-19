@@ -937,8 +937,9 @@
     <string name="Tor_TorIsActive">Tor 활성화</string>
     <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip49_Title">최신(권장)</string>
-    <string name="CoinOption_bip84_Title">최신</string>
+    <string name="CoinOption_bip44_Title">Old</string>
+    <string name="CoinOption_bip49_Title">Good</string>
+    <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">금액</string>
     <string name="Coin_Tab_Market">Markets</string>
