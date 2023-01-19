@@ -1088,11 +1088,13 @@
     <string name="AddToken_AlreadyAdded">ALREADY ADDED</string>
     <string name="AddToken_AddressOrSymbol">Contract Address</string>
     <string name="AddToken_ChooseToken">Choose Token</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
 
-    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
-    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
-    <string name="AddEvmToken_TokenNotFound">Token not found</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
+    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
 
     <!-- Address Format Settings List -->
 
