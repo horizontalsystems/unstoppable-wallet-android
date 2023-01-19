@@ -117,7 +117,7 @@ fun NftHoldingsScreen(navController: NavController) {
                                                     HudHelper.vibrate(context)
                                                 },
                                                 onClickSubtitle = {
-                                                    viewModel.toggleBalanceVisibility()
+                                                    viewModel.toggleTotalType()
                                                     HudHelper.vibrate(context)
                                                 },
                                             )
@@ -132,7 +132,7 @@ fun NftHoldingsScreen(navController: NavController) {
                                                     HudHelper.vibrate(context)
                                                 },
                                                 onClickSubtitle = {
-                                                    viewModel.toggleBalanceVisibility()
+                                                    viewModel.toggleTotalType()
                                                     HudHelper.vibrate(context)
                                                 },
                                             )

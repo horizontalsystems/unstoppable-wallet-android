@@ -158,9 +158,9 @@ fun BalanceItems(
                         HudHelper.vibrate(context)
                     },
                     onClickSubtitle = {
-                        viewModel.toggleBalanceVisibility()
+                        viewModel.toggleTotalType()
                         HudHelper.vibrate(context)
-                    },
+                    }
                 )
             }
             is TotalUIState.Visible -> {
@@ -173,7 +173,7 @@ fun BalanceItems(
                         HudHelper.vibrate(context)
                     },
                     onClickSubtitle = {
-                        viewModel.toggleBalanceVisibility()
+                        viewModel.toggleTotalType()
                         HudHelper.vibrate(context)
                     },
                 )

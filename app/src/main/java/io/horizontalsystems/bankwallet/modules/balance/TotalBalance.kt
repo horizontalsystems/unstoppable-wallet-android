@@ -14,15 +14,14 @@ interface ITotalBalance {
     val totalUiState: TotalUIState
 
     fun toggleBalanceVisibility()
+    fun toggleTotalType()
 }
 
 class TotalBalance(
     private val totalService: TotalService,
-    private val balanceViewTypeManager: BalanceViewTypeManager,
     private val balanceHiddenManager: BalanceHiddenManager,
 ) : ITotalBalance {
 
-    private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var totalState = totalService.stateFlow.value
 
     override val balanceHidden by balanceHiddenManager::balanceHidden
@@ -37,20 +36,14 @@ class TotalBalance(
                 totalUiState = createTotalUIState()
             }
         }
-        viewModelScope.launch {
-            balanceViewTypeManager.balanceViewTypeFlow.collect {
-                balanceViewType = it
-                totalUiState = createTotalUIState()
-            }
-        }
         totalService.start()
     }
 
-    fun createTotalUIState() = when (val state = totalState) {
+    private fun createTotalUIState() = when (val state = totalState) {
         TotalService.State.Hidden -> TotalUIState.Hidden
         is TotalService.State.Visible -> TotalUIState.Visible(
-            primaryAmountStr = getPrimaryAmount(balanceViewType, state) ?: "---",
-            secondaryAmountStr = getSecondaryAmount(balanceViewType, state) ?: "---",
+            primaryAmountStr = getPrimaryAmount(state) ?: "---",
+            secondaryAmountStr = getSecondaryAmount(state) ?: "---",
             dimmed = state.dimmed
         )
     }
@@ -67,31 +60,19 @@ class TotalBalance(
         balanceHiddenManager.toggleBalanceHidden()
     }
 
+    override fun toggleTotalType() {
+        totalService.toggleType()
+    }
+
     private fun getPrimaryAmount(
-        balanceViewType: BalanceViewType,
         totalState: TotalService.State.Visible
-    ): String? {
-        return when (balanceViewType) {
-            BalanceViewType.CoinThenFiat -> totalState.coinValue?.let {
-                App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
-            }
-            BalanceViewType.FiatThenCoin -> totalState.currencyValue?.let {
-                App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
-            }
-        }
+    ) = totalState.currencyValue?.let {
+        App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
     }
 
     private fun getSecondaryAmount(
-        balanceViewType: BalanceViewType,
         totalState: TotalService.State.Visible
-    ): String? {
-        return when (balanceViewType) {
-            BalanceViewType.CoinThenFiat -> totalState.currencyValue?.let {
-                "~" + App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
-            }
-            BalanceViewType.FiatThenCoin -> totalState.coinValue?.let {
-                "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
-            }
-        }
+    ) = totalState.coinValue?.let {
+        "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
     }
 }

@@ -78,6 +78,10 @@ class TotalService(
         emitState()
     }
 
+    fun toggleType() {
+        baseTokenManager.toggleBaseToken()
+    }
+
     private fun setBalanceHidden(balanceHidden: Boolean) {
         this.balanceHidden = balanceHidden
 
