@@ -934,8 +934,9 @@
     <string name="Tor_TorIsActive">Tor aktif</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip49_Title">Daha yeni (önerilen)</string>
-    <string name="CoinOption_bip84_Title">Yeni</string>
+    <string name="CoinOption_bip44_Title">Old</string>
+    <string name="CoinOption_bip49_Title">Good</string>
+    <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Fiyat</string>
     <string name="Coin_Tab_Market">Markets</string>
