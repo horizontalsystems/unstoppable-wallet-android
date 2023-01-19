@@ -40,7 +40,7 @@ object BalanceModule {
                 balanceService,
                 BalanceViewItemFactory(),
                 App.balanceViewTypeManager,
-                TotalBalance(totalService, App.balanceViewTypeManager, App.balanceHiddenManager),
+                TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
                 App.languageManager,
                 FaqManager

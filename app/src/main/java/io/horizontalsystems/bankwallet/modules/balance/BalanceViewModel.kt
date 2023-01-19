@@ -134,6 +134,10 @@ class BalanceViewModel(
         }
     }
 
+    override fun toggleTotalType() {
+        totalBalance.toggleTotalType()
+    }
+
     fun onItem(viewItem: BalanceViewItem) {
         viewModelScope.launch {
             expandedWallet = when {
