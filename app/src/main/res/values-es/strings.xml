@@ -937,8 +937,9 @@
     <string name="Tor_TorIsActive">Tor está activo</string>
     <string name="Tor_PrerequisitesAlert_Content">Activar TOR restablecerá la conexión del Blockchain de Ethereum de vuelta a Infura.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip49_Title">Más reciente (recomendado)</string>
-    <string name="CoinOption_bip84_Title">Más nuevo</string>
+    <string name="CoinOption_bip44_Title">Old</string>
+    <string name="CoinOption_bip49_Title">Good</string>
+    <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Precio</string>
     <string name="Coin_Tab_Market">Mercados</string>
