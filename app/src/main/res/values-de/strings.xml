@@ -908,10 +908,12 @@
     <string name="AddToken_AlreadyAdded">SCHON HINZUGEFÜGT</string>
     <string name="AddToken_AddressOrSymbol">Vertragsadresse</string>
     <string name="AddToken_ChooseToken">Token auswählen</string>
-    <string name="AddToken_CoinAlreadyInListWarning">Dieser Token befindet sich bereits in der Coin-Verwaltungsliste</string>
-    <string name="AddToken_InvalidAddressError">Ungültige Vertragsadresse oder BEP2-Symbol</string>
-    <string name="AddToken_ApiLimitExceeded">Api Limit überschritten. Versuchen Sie es später erneut.</string>
-    <string name="AddEvmToken_TokenNotFound">Token nicht gefunden</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
+    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adressformat</string>
     <string name="AddressFormatSettings_Description">Wählen Sie das Adressformat für die Coin. Fahren Sie mit der empfohlenen Option fort, wenn Sie unsicher sind. Wenn Sie ein bestehendes Wallet wiederherstellen, sollten Sie das richtige Format wählen.</string>
