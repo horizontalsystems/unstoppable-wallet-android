@@ -77,29 +77,29 @@ class CoinDetailsService(
         return Single.zip(
             tvlsSingle.onErrorReturn { listOf() },
             volumeSingle.onErrorReturn { listOf() },
-            Single.just(ProCharts.forbidden)
+            proFeatures(fullCoin.coin.uid, currency.code)
         ) { t1, t2, t3 -> Triple(t1, t2, t3) }.map { (tvls, totalVolumes, proFeatures) ->
             Item(details, tvls, totalVolumes, proFeatures)
         }
     }
 
     private fun proFeatures(coinUid: String, currencyCode: String): Single<ProCharts> {
-        val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK) ?: return Single.just(ProCharts.forbidden)
+//        val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK) ?: return Single.just(ProCharts.forbidden)
 
         val dexVolumeSingle = marketKit
-            .dexVolumesSingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .dexVolumesSingle(coinUid, currencyCode, HsTimePeriod.Month1, null)
             .onErrorReturn { DexVolumesResponse(listOf(), listOf()) }
 
         val dexLiquiditySingle = marketKit
-            .dexLiquiditySingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .dexLiquiditySingle(coinUid, currencyCode, HsTimePeriod.Month1, null)
             .onErrorReturn { DexLiquiditiesResponse(listOf(), listOf()) }
 
         val transactionDataSingle = marketKit
-            .transactionDataSingle(coinUid, currencyCode, HsTimePeriod.Month1, null, sessionKey.key.value)
+            .transactionDataSingle(coinUid, currencyCode, HsTimePeriod.Month1, null, null)
             .onErrorReturn { TransactionsDataResponse(listOf(), listOf()) }
 
         val activeAddressesSingle = marketKit
-            .activeAddressesSingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .activeAddressesSingle(coinUid, currencyCode, HsTimePeriod.Month1, null)
             .onErrorReturn { ActiveAddressesDataResponse(listOf(), listOf()) }
 
         return Single.zip(
