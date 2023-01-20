@@ -82,7 +82,7 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
-    <string name="CreateWallet_Wordlist">Wordlist</string>
+    <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">Passphrase</string>
     <string name="ConfirmPassphrase">Confirm</string>
     <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
@@ -91,7 +91,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
 
     <!--Languages-->
     <string name="Language_English">English</string>
@@ -429,8 +429,8 @@
     <string name="FeeInfo_Fast">High</string>
     <string name="FeeInfo_FastDescription">For transactions where priority is important, we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
 
-    <!--Wallet Connect-->
-    <string name="WalletConnect_Title" translatable="false">Wallet Connect</string>
+    <!--WalletConnect-->
+    <string name="WalletConnect_Title" translatable="false">WalletConnect</string>
     <string name="WalletConnect_Request">Request</string>
     <string name="WalletConnect_SendRequest_Title">Send</string>
     <string name="WalletConnect_ApproveRequest_Title">Approve</string>
@@ -443,7 +443,7 @@
     <string name="WalletConnect_Ready_Hint">You can go to the browser. Do not close this page while interacting in the browser.</string>
     <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
-    <string name="WalletConnect_NotSupportedV2">Wallet Connect v2 is not supported</string>
+    <string name="WalletConnect_NotSupportedV2">WalletConnect v2 is not supported</string>
     <string name="WalletConnect_Requirement">Requirement</string>
     <string name="WalletConnect_Alert">Alert</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
@@ -544,7 +544,7 @@
     <string name="Swap_AmountTypeCoin">Coin</string>
 
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Advanced Settings</string>
+    <string name="SwapSettings_Title">Swap Settings</string>
     <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
     <string name="SwapSettings_SlippageDescription">Your transaction will revert if the price changes unfavorably by more than this percentage</string>
@@ -745,7 +745,7 @@
     <string name="Settings_CompanyName" translatable="false">horizontal systems</string>
     <string name="Settings_Faq" translatable="false">FAQ</string>
     <string name="Settings_AppStatus">App Status</string>
-    <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_Appearance">Appearance</string>
@@ -912,7 +912,7 @@
     <!--Manage Coins-->
 
     <string name="ManageCoins_title">Coin Manager</string>
-    <string name="ManageCoins_Search">Token code or name</string>
+    <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <string name="ManageCoins_NotSupported">Not Supported</string>
