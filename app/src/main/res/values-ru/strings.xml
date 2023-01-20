@@ -62,7 +62,7 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Мнемоническая Фраза</string>
-    <string name="CreateWallet_Wordlist">Список Слов</string>
+    <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">Кодовая Фраза</string>
     <string name="ConfirmPassphrase">Подтвердить</string>
     <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
@@ -71,7 +71,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">Английский</string>
     <string name="Language_Japanese">Японский</string>
@@ -360,7 +360,7 @@
     <string name="FeeInfo_AverageDescription">Обычно для этого диапазона комиссий характерна обработка транзакций в течение нескольких минут/часа для Bitcoin и в течение нескольких минут для Ethereum.</string>
     <string name="FeeInfo_Fast">Быстро</string>
     <string name="FeeInfo_FastDescription">В случае с приоритетными транзакциями лучше всего использовать настройку высокой комиссии. При выборе этой настройки транзакция Bitcoin будет обработана в течение 10 минут, ну а обработка транзакции Ethereum займет всего лишь 1-2 минуты.</string>
-    <!--Wallet Connect-->
+    <!--WalletConnect-->
     <string name="WalletConnect_Request">Запрос</string>
     <string name="WalletConnect_SendRequest_Title">Отправить</string>
     <string name="WalletConnect_ApproveRequest_Title">Разрешить</string>
@@ -372,7 +372,7 @@
     <string name="WalletConnect_Ready_Hint">Вы можете перейти в браузер. Не закрывайте эту страницу во время использования браузера.</string>
     <string name="WalletConnect_Reconnect_Hint">Не удалось установить соединение. Попробуйте переподключиться снова.</string>
     <string name="WalletConnect_Error_InvalidUrl">Неверный URL-адрес</string>
-    <string name="WalletConnect_NotSupportedV2">Подключение к Wallet Connect v2 не поддерживается</string>
+    <string name="WalletConnect_NotSupportedV2">WalletConnect v2 is not supported</string>
     <string name="WalletConnect_Requirement">Требования</string>
     <string name="WalletConnect_Alert">Предупреждение</string>
     <string name="WalletConnect_Status_Offline">Не доступен</string>
@@ -386,7 +386,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Пожалуйста, подпишите сообщение для аутентификации</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
-    <string name="WalletConnect_Error_NoWallet">Нет подходящего кошелька. Вам нужно создать или восстановить текущий кошелек</string>
+    <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">You need to backup %s before you can use WalletConnect</string>
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый Блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
@@ -466,7 +467,7 @@
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_AmountTypeCoin">Монета</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Дополнительные Настройки</string>
+    <string name="SwapSettings_Title">Swap Settings</string>
     <string name="SwapSettings_Service">Сервис</string>
     <string name="SwapSettings_SlippageTitle">Допустимость Отклонений</string>
     <string name="SwapSettings_SlippageDescription">Ваша транзакция будет отменена, если цена изменится в неблагоприятную сторону более чем на этот процент</string>
@@ -635,7 +636,7 @@
     <string name="Settings_Privacy">Конфиденциальность</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_AppStatus">Статус Приложения</string>
-    <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Оцените наше приложение</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="Settings_Appearance">Оформление</string>
@@ -759,7 +760,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Токены</string>
-    <string name="ManageCoins_Search">Код или название токена</string>
+    <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Добавить Токен</string>
     <string name="ManageCoins_NoResults">Ничего не найдено. Попробуйте добавить токен вручную, если вы знаете его адрес смарт-контракта.</string>
     <string name="ManageCoins_NotSupported">Не поддерживается</string>
