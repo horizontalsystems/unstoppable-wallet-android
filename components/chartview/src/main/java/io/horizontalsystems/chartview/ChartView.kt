@@ -16,7 +16,8 @@ class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         Month1("1m"),
         Month3("3m"),
         Month6("6m"),
-        Year1("1y");
+        Year1("1y"),
+        Year2("2y");
 
         companion object {
             fun fromString(value: String): ChartType = values().first { it.value == value }
