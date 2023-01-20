@@ -61,7 +61,7 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnemônico</string>
-    <string name="CreateWallet_Wordlist">Dicionário</string>
+    <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">Senha</string>
     <string name="ConfirmPassphrase">Confirmar</string>
     <string name="CreateWallet_N_WordsRecommended">%s palavras (recomendado)</string>
@@ -70,7 +70,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">A senha não pode estar vazia</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, use apenas símbolos suportados: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ £% ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Confirmação da senha não coincide</string>
-    <string name="CreateWallet_PassphraseDescription">Senhas agregam uma camada de segurança adicional às carteiras, permitindo que os usuários criem várias carteiras multimoedas independentes, usando uma única frase mnemônica de recuperação, mas associada à senhas diferentes. \n\nPara restaurar estas carteiras, o usuário precisará de uma frase de recuperação mnemônica, bem como de uma senha para cada carteira a ser restaurada.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">Inglês</string>
     <string name="Language_Japanese">Japonês</string>
@@ -358,7 +358,7 @@
     <string name="FeeInfo_AverageDescription">Normalmente, o valor de taxa recomendado deve ser suficiente para que uma transação seja processada em minutos ou uma hora para Bitcoin e em minutos para o Ethereum.</string>
     <string name="FeeInfo_Fast">Alto</string>
     <string name="FeeInfo_FastDescription">Para as operações em que a prioridade é importante, recomendamos a utilização do alto valor de taxa. É esperado que seja suficiente para concluir uma transação dentro de 10 minutos para o Bitcoin e dentro de 1 – 2 minutos para o Ethereum.</string>
-    <!--Wallet Connect-->
+    <!--WalletConnect-->
     <string name="WalletConnect_Request">Solicitar</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
     <string name="WalletConnect_ApproveRequest_Title">Aprovar</string>
@@ -370,7 +370,7 @@
     <string name="WalletConnect_Ready_Hint">Você pode ir ao navegador. Não feche esta página enquanto interage no navegador.</string>
     <string name="WalletConnect_Reconnect_Hint">Não foi possível estabelecer a conexão. Tente reconectar novamente.</string>
     <string name="WalletConnect_Error_InvalidUrl">Endereço URL Inválido</string>
-    <string name="WalletConnect_NotSupportedV2">Wallet Connect v2 não é suportado</string>
+    <string name="WalletConnect_NotSupportedV2">WalletConnect v2 is not supported</string>
     <string name="WalletConnect_Requirement">Requisito</string>
     <string name="WalletConnect_Alert">Alerta</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
@@ -384,7 +384,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Mensagem não assinada</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Por favor, assine uma mensagem para autenticar</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Assinar</string>
-    <string name="WalletConnect_Error_NoWallet">Nenhuma carteira adequada. Você precisa criar ou restaurar uma carteira existente</string>
+    <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">You need to backup %s before you can use WalletConnect</string>
     <string name="WalletConnect_Error_WatchAccount">Este recurso não funciona apenas com carteiras para visualização, você precisa mudar para uma carteira restaurada ou criada </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Sem conta adequada</string>
@@ -464,7 +465,7 @@
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Configurações avançadas</string>
+    <string name="SwapSettings_Title">Swap Settings</string>
     <string name="SwapSettings_Service">Serviço</string>
     <string name="SwapSettings_SlippageTitle">Tolerância de Slippage</string>
     <string name="SwapSettings_SlippageDescription">Sua transação será revertida se o preço mudar desfavoravelmente em mais do que esta porcentagem</string>
@@ -633,7 +634,7 @@
     <string name="Settings_Privacy">Privacidade</string>
     <string name="Settings_ShareThisWallet">Indique para amigos</string>
     <string name="Settings_AppStatus">Status do app</string>
-    <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Avalie-Nos</string>
     <string name="Settings_LaunchScreen">Tela Inicial</string>
     <string name="Settings_Appearance">Aparência</string>
@@ -754,7 +755,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gerenciador de Moedas</string>
-    <string name="ManageCoins_Search">Código ou nome do token</string>
+    <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Adicionar token</string>
     <string name="ManageCoins_NoResults">Nenhum resultado encontrado. Tente adicionar o token manualmente se você souber seu endereço do contrato inteligente.</string>
     <string name="ManageCoins_NotSupported">Não suportado</string>
