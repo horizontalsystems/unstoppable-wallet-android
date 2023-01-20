@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
@@ -16,7 +17,6 @@ import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Observable
@@ -229,4 +229,5 @@ val HsTimePeriod.stringResId: Int
         HsTimePeriod.Month3 -> R.string.CoinPage_TimeDuration_Month3
         HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
         HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
+        HsTimePeriod.Year2 -> R.string.CoinPage_TimeDuration_Year2
     }
