@@ -61,7 +61,7 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnémonique</string>
-    <string name="CreateWallet_Wordlist">Liste de mots</string>
+    <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">Phrase d\'authentification</string>
     <string name="ConfirmPassphrase">Confirmer</string>
     <string name="CreateWallet_N_WordsRecommended">%s mots (recommandé)</string>
@@ -70,7 +70,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser uniquement les symboles pris en charge : <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
-    <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">Anglais</string>
     <string name="Language_Japanese">Japonais</string>
@@ -358,7 +358,7 @@
     <string name="FeeInfo_AverageDescription">Généralement, cette fourchette de frais devrait être suffisante pour que la transaction soit traitée en quelques minutes/heure pour Bitcoin et en quelques minutes pour Ethereum.</string>
     <string name="FeeInfo_Fast">Rapide</string>
     <string name="FeeInfo_FastDescription">Pour les transactions où la priorité est importante, nous vous recommandons d\'utiliser la valeur élevée des frais. Cela devrait suffire pour qu\'une transaction soit effectuée dans les 10 minutes pour Bitcoin et dans les 1-2 minutes pour Ethereum.</string>
-    <!--Wallet Connect-->
+    <!--WalletConnect-->
     <string name="WalletConnect_Request">Requête</string>
     <string name="WalletConnect_SendRequest_Title">Envoyer</string>
     <string name="WalletConnect_ApproveRequest_Title">Approuver</string>
@@ -370,7 +370,7 @@
     <string name="WalletConnect_Ready_Hint">Vous pouvez aller sur le navigateur. Ne fermez pas cette page pendant que vous interagissez dans le navigateur.</string>
     <string name="WalletConnect_Reconnect_Hint">Échec de connexion. Essayez de vous reconnecter à nouveau.</string>
     <string name="WalletConnect_Error_InvalidUrl">Adresse URL invalide</string>
-    <string name="WalletConnect_NotSupportedV2">Wallet Connect v2 n\'est pas pris en charge</string>
+    <string name="WalletConnect_NotSupportedV2">WalletConnect v2 is not supported</string>
     <string name="WalletConnect_Requirement">Condition préalable</string>
     <string name="WalletConnect_Alert">Alerte</string>
     <string name="WalletConnect_Status_Offline">Déconnecté</string>
@@ -384,7 +384,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message à signer</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Veuillez signer un message pour vous authentifier</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signer</string>
-    <string name="WalletConnect_Error_NoWallet">Aucun portefeuille adéquat. Vous devez créer ou restaurer un portefeuille existant</string>
+    <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">You need to backup %s before you can use WalletConnect</string>
     <string name="WalletConnect_Error_WatchAccount">Cette fonctionnalité ne peut être utilisée avec les portefeuilles de type watching only. Vous devez basculer vers un portefeuille restauré ou en créer un </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Blockchain non pris en charge</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Aucun compte approprié</string>
@@ -464,7 +465,7 @@
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Configuration avancée</string>
+    <string name="SwapSettings_Title">Swap Settings</string>
     <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
     <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix évolue défavorablement au-delà de ce pourcentage</string>
@@ -633,7 +634,7 @@
     <string name="Settings_Privacy">Confidentialité</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_AppStatus">Statut de l\'appli</string>
-    <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
@@ -760,7 +761,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
-    <string name="ManageCoins_Search">Code ou nom du jeton</string>
+    <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
     <string name="ManageCoins_NotSupported">Pas supporté</string>
