@@ -6,6 +6,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -333,11 +335,15 @@ fun FormsInputPassword(
                 }
             }
 
-            ButtonSecondaryCircle(
-                modifier = Modifier.padding(end = 16.dp),
-                icon = if (hide) R.drawable.ic_eye_20 else R.drawable.ic_eye_off_20,
-                onClick = onToggleHide
+            Icon(
+                modifier = Modifier
+                    .size(20.dp)
+                    .clickable(onClick = onToggleHide, interactionSource = MutableInteractionSource(), indication = null),
+                painter = painterResource(id = if (hide) R.drawable.ic_eye_off_20 else R.drawable.ic_eye_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.leah
             )
+            Spacer(Modifier.width(16.dp))
         }
 
         state?.errorOrNull?.localizedMessage?.let {
