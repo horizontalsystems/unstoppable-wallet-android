@@ -32,7 +32,7 @@ class WalletActivator(
         walletManager.save(wallets)
     }
 
-    fun activateBtcWallets(mnemonicDerivation: AccountType.Derivation, account: Account, tokenQueries: List<TokenQuery>) {
+    fun activateBtcWallets(derivation: AccountType.Derivation, account: Account, tokenQueries: List<TokenQuery>) {
         val wallets = mutableListOf<Wallet>()
 
         for (tokenQuery in tokenQueries) {
@@ -40,8 +40,7 @@ class WalletActivator(
 
             when (tokenQuery.blockchainType.coinSettingType) {
                 CoinSettingType.derivation -> {
-                    val configuredToken = ConfiguredToken(token,
-                        CoinSettings(mapOf(CoinSettingType.derivation to mnemonicDerivation.value)))
+                    val configuredToken = ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.derivation to derivation.value)))
                     val wallet = Wallet(configuredToken, account)
                     wallets.add(wallet)
                 }

@@ -132,7 +132,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var balanceHiddenManager: BalanceHiddenManager
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
-        lateinit var watchAddressBlockchainManager: WatchAddressBlockchainManager
     }
 
     override val testMode = BuildConfig.testMode
@@ -330,12 +329,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
         balanceHiddenManager = BalanceHiddenManager(localStorage)
-        watchAddressBlockchainManager = WatchAddressBlockchainManager(
-            accountManager,
-            walletManager,
-            evmBlockchainManager,
-            walletActivator
-        )
 
         startTasks()
     }
