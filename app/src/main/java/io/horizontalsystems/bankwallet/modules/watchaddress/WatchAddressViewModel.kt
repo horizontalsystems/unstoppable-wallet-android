@@ -5,28 +5,30 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IAccountFactory
-import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 class WatchAddressViewModel(
-    private val accountFactory: IAccountFactory,
-    private val accountManager: IAccountManager,
+    private val watchAddressService: WatchAddressService
 ) : ViewModel() {
 
     private var accountCreated = false
-    private var submitEnabled = false
+    private var submitButtonType: SubmitButtonType = SubmitButtonType.Next(false)
     private var type = Type.EvmAddress
     private var address: Address? = null
     private var xPubKey: String? = null
 
+    private var accountType: AccountType? = null
+    private var accountName: String? = null
+
     var uiState by mutableStateOf(
         WatchAddressUiState(
             accountCreated = accountCreated,
-            submitEnabled = submitEnabled,
+            submitButtonType = submitButtonType,
             type = type,
+            accountType = accountType,
+            accountName = accountName
         )
     )
         private set
@@ -34,15 +36,18 @@ class WatchAddressViewModel(
     private fun emitState() {
         uiState = WatchAddressUiState(
             accountCreated = accountCreated,
-            submitEnabled = submitEnabled,
+            submitButtonType = submitButtonType,
             type = type,
+            accountType = accountType,
+            accountName = accountName
         )
     }
 
     fun onEnterAddress(v: Address?) {
         address = v
+        accountName = v?.domain
 
-        submitEnabled = calculateIfSubmitEnabled()
+        syncSubmitButtonType()
         emitState()
     }
 
@@ -54,13 +59,28 @@ class WatchAddressViewModel(
             null
         }
 
-        submitEnabled = calculateIfSubmitEnabled()
+        syncSubmitButtonType()
+        emitState()
+    }
+
+    fun blockchainSelectionOpened() {
+        accountType = null
+
+        emitState()
+    }
+
+    fun onClickNext() {
+        accountType = getAccountType()
+
         emitState()
     }
 
     fun onClickWatch() {
         try {
-            createAccount()
+            val accountType = getAccountType() ?: throw Exception()
+
+            watchAddressService.watch(accountType, listOf(), address?.domain)
+
             accountCreated = true
             emitState()
         } catch (_: Exception) {
@@ -74,47 +94,22 @@ class WatchAddressViewModel(
         address = null
         xPubKey = null
 
-        submitEnabled = calculateIfSubmitEnabled()
+        syncSubmitButtonType()
         emitState()
     }
 
-    private fun calculateIfSubmitEnabled() = when (this.type) {
-        Type.EvmAddress -> address != null
-        Type.SolanaAddress -> address != null
-        Type.XPubKey -> xPubKey != null
+    private fun syncSubmitButtonType() {
+        submitButtonType = when (type) {
+            Type.EvmAddress -> SubmitButtonType.Next(address != null)
+            Type.XPubKey -> SubmitButtonType.Next(xPubKey != null)
+            Type.SolanaAddress -> SubmitButtonType.Watch(address != null)
+        }
     }
 
-    private fun createAccount() {
-        var accountName: String? = null
-        val accountType: AccountType
-
-        when (type) {
-            Type.EvmAddress -> {
-                val tmpAddress = address ?: throw Exception()
-                accountName = address?.domain
-
-                accountType = AccountType.EvmAddress(tmpAddress.hex)
-            }
-            Type.SolanaAddress -> {
-                val tmpAddress = address ?: throw Exception()
-                accountName = address?.domain
-
-                accountType = AccountType.SolanaAddress(tmpAddress.hex)
-            }
-            Type.XPubKey -> {
-                val tmpXPubKey = xPubKey ?: throw Exception()
-
-                accountType = AccountType.HdExtendedKey(tmpXPubKey)
-            }
-        }
-
-        if (accountName == null) {
-            accountName = accountFactory.getNextWatchAccountName()
-        }
-
-        val account = accountFactory.watchAccount(accountName, accountType)
-
-        accountManager.save(account)
+    private fun getAccountType() = when (type) {
+        Type.EvmAddress -> address?.let { AccountType.EvmAddress(it.hex) }
+        Type.SolanaAddress -> address?.let { AccountType.SolanaAddress(it.hex) }
+        Type.XPubKey -> xPubKey?.let { AccountType.HdExtendedKey(it) }
     }
 
     enum class Type(val titleResId: Int) {
@@ -126,6 +121,13 @@ class WatchAddressViewModel(
 
 data class WatchAddressUiState(
     val accountCreated: Boolean,
-    val submitEnabled: Boolean,
-    val type: WatchAddressViewModel.Type
+    val submitButtonType: SubmitButtonType,
+    val type: WatchAddressViewModel.Type,
+    val accountType: AccountType?,
+    val accountName: String?
 )
+
+sealed class SubmitButtonType {
+    data class Watch(val enabled: Boolean) : SubmitButtonType()
+    data class Next(val enabled: Boolean) : SubmitButtonType()
+}
