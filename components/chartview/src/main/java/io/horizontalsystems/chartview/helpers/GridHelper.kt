@@ -29,7 +29,8 @@ object GridHelper {
             ChartType.Month3,
             ChartType.Month6,
             ChartType.Year1,
-            ChartType.Year2 -> {
+            ChartType.Year2,
+            ChartType.All -> {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
                 calendar.set(Calendar.DATE, 1)
             }
@@ -60,6 +61,7 @@ object GridHelper {
             ChartType.Month6 -> calendar.add(Calendar.MONTH, -1)          // 1 month
             ChartType.Year1 -> calendar.add(Calendar.MONTH, -2)         // 2 month
             ChartType.Year2 -> calendar.add(Calendar.MONTH, -4)         // 2 month
+            ChartType.All -> calendar.add(Calendar.MONTH, -4)
         }
     }
 
@@ -72,7 +74,8 @@ object GridHelper {
             ChartType.Month3 -> calendar.get(Calendar.DAY_OF_MONTH).toString()
             ChartType.Month6,
             ChartType.Year1,
-            ChartType.Year2 -> formatDate(calendar.time, "MMM")
+            ChartType.Year2,
+            ChartType.All -> formatDate(calendar.time, "MMM")
         }
     }
 
