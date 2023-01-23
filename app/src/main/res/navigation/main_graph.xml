@@ -97,6 +97,9 @@
         android:id="@+id/securitySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment"/>
     <fragment
+        android:id="@+id/blockchainSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsFragment"/>
+    <fragment
         android:id="@+id/faqListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment"
         android:label="@string/Settings_Faq"/>

@@ -756,6 +756,10 @@
     <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
 
+    <!-- Blockchain Settings  -->
+
+    <string name="BlockchainSettings_Title">Blockchain Settings</string>
+
     <!-- Privacy  -->
 
     <string name="Privacy_Information">Unstoppable doesn\'t collect any data or use analytics tools that may expose any data about its users. The wallet is designed to ensure a high level of privacy for its users.</string>
@@ -766,10 +770,7 @@
 
     <!-- Security Center -->
 
-    <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
-    <string name="SecurityCenter_TestnetSettings">TESTNET SETTINGS</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
-    <string name="SecurityCenter_BlockchainSettingsFooterDescription">Select data source for restoring and synchronizing wallet</string>
 
     <!--Evm Network-->
     <string name="EvmNetwork_SyncMode">Sync Mode</string>

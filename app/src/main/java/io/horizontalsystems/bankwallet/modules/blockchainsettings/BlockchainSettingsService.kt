@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.settings.security.blockchains
+package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsModule.BlockchainItem
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject

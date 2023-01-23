@@ -117,11 +117,10 @@ private fun SettingSections(
             )
         }, {
             HsSettingCell(
-                R.string.Settings_SecurityCenter,
-                R.drawable.ic_security,
-                showAlert = showAlertSecurityCenter,
+                R.string.BlockchainSettings_Title,
+                R.drawable.ic_blocks_20,
                 onClick = {
-                    navController.slideFromRight(R.id.securitySettingsFragment)
+                    navController.slideFromRight(R.id.blockchainSettingsFragment)
                 }
             )
         })
@@ -167,6 +166,15 @@ private fun SettingSections(
 
     CellUniversalLawrenceSection(
         listOf({
+                HsSettingCell(
+                    R.string.Settings_SecurityCenter,
+                    R.drawable.ic_security,
+                    showAlert = showAlertSecurityCenter,
+                    onClick = {
+                        navController.slideFromRight(R.id.securitySettingsFragment)
+                    }
+                )
+            }, {
             HsSettingCell(
                 R.string.Settings_Appearance,
                 R.drawable.ic_brush_20,
@@ -192,7 +200,14 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.languageSettingsFragment)
                 }
             )
-        }, {
+        },
+        )
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellUniversalLawrenceSection(
+        listOf {
             HsSettingCell(
                 R.string.Settings_ExperimentalFeatures,
                 R.drawable.ic_experimental,
@@ -200,7 +215,7 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.experimentalFeaturesFragment)
                 }
             )
-        })
+        }
     )
 
     Spacer(Modifier.height(32.dp))
