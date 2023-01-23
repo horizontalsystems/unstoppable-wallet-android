@@ -194,9 +194,9 @@ val BlockchainType.order: Int
         BlockchainType.Polygon -> 4
         BlockchainType.Avalanche -> 5
         BlockchainType.Zcash -> 6
-        BlockchainType.Dash -> 7
-        BlockchainType.BitcoinCash -> 8
-        BlockchainType.Litecoin -> 9
+        BlockchainType.BitcoinCash -> 7
+        BlockchainType.Litecoin -> 8
+        BlockchainType.Dash -> 9
         BlockchainType.BinanceChain -> 10
         BlockchainType.Gnosis -> 11
         BlockchainType.ArbitrumOne -> 12

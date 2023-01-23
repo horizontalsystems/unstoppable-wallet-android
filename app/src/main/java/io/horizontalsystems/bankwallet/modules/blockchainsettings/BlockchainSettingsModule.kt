@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.security.blockchains
+package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
