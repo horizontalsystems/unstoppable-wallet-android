@@ -411,7 +411,7 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         }
 
     override var marketsTabEnabled: Boolean
-        get() = preferences.getBoolean(MARKETS_TAB_ENABLED, false)
+        get() = preferences.getBoolean(MARKETS_TAB_ENABLED, true)
         set(value) {
             preferences.edit().putBoolean(MARKETS_TAB_ENABLED, value).commit()
             _marketsTabEnabledFlow.update {
