@@ -39,24 +39,22 @@ class AddTokenService(
                 blockchain,
                 App.networkManager
             )
-            else -> AddEvmTokenBlockchainService(blockchain, App.networkManager)
+            else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }
 
         if (!blockchainService.isValid(reference)) throw TokenError.InvalidReference
 
         val token = coinManager.getToken(blockchainService.tokenQuery(reference))
-
         if (token != null && token.type !is TokenType.Unsupported) {
             return TokenInfo(token, true)
-        } else {
-            try {
-                val customToken = blockchainService.token(reference)
-                return TokenInfo(customToken, false)
-            } catch (e: Exception) {
-            }
         }
 
-        throw TokenError.NotFound
+        try {
+            val customToken = blockchainService.token(reference)
+            return TokenInfo(customToken, false)
+        } catch (e: Throwable) {
+            throw TokenError.NotFound
+        }
     }
 
     fun addToken(token: TokenInfo) {

@@ -8,4 +8,6 @@ data class EvmSyncSource(
     val name: String,
     val rpcSource: RpcSource,
     val transactionSource: TransactionSource
-)
+) {
+    val isHttp: Boolean = rpcSource is RpcSource.Http
+}

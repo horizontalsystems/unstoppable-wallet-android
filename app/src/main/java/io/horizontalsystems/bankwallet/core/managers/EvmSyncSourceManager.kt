@@ -88,6 +88,17 @@ class EvmSyncSourceManager(appConfigProvider: AppConfigProvider, private val blo
         return syncSource ?: syncSources[0]
     }
 
+    fun getHttpSyncSource(blockchainType: BlockchainType): EvmSyncSource? {
+        val syncSources = getAllBlockchains(blockchainType)
+        blockchainSettingsStorage.evmSyncSourceName(blockchainType)?.let { syncSourceName ->
+            syncSources.firstOrNull { it.name == syncSourceName && it.isHttp }?.let { syncSource ->
+                return syncSource
+            }
+        }
+
+        return syncSources.firstOrNull { it.isHttp }
+    }
+
     fun save(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
         blockchainSettingsStorage.save(syncSource.name, blockchainType)
         syncSourceSubject.onNext(blockchainType)

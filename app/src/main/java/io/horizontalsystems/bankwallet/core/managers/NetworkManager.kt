@@ -55,10 +55,6 @@ class NetworkManager : INetworkManager {
     override suspend fun getBep2TokeInfo(blockchainUid: String, symbol: String): TokenInfoService.Bep2TokenInfo {
         return TokenInfoService.service().getBep2TokenInfo(blockchainUid, symbol)
     }
-
-    override suspend fun getEvmTokeInfo(blockchainUid: String, address: String): TokenInfoService.EvmTokenInfo {
-        return TokenInfoService.service().getEip20TokenInfo(blockchainUid, address)
-    }
 }
 
 object ServiceFullTransaction {
@@ -120,24 +116,12 @@ object TokenInfoService {
         val decimals: Int
     )
 
-    data class EvmTokenInfo(
-        val name: String,
-        val symbol: String,
-        val decimals: Int
-    )
-
     interface TokenInfoAPI {
         @GET("bep2")
         suspend fun getBep2TokenInfo(
             @Query("blockchain") blockchain: String,
             @Query("symbol") symbol: String
         ): Bep2TokenInfo
-
-        @GET("eip20")
-        suspend fun getEip20TokenInfo(
-            @Query("blockchain") blockchain: String,
-            @Query("address") address: String
-        ): EvmTokenInfo
     }
 }
 
