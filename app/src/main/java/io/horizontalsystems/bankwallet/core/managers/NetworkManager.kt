@@ -3,8 +3,6 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.annotation.SuppressLint
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -52,8 +50,8 @@ class NetworkManager : INetworkManager {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
 
-    override suspend fun getBep2TokeInfo(blockchainUid: String, symbol: String): TokenInfoService.Bep2TokenInfo {
-        return TokenInfoService.service().getBep2TokenInfo(blockchainUid, symbol)
+    override suspend fun getBep2Tokens(): List<Bep2TokenInfoService.Bep2Token> {
+        return Bep2TokenInfoService.service().tokens()
     }
 }
 
@@ -100,29 +98,26 @@ object ServiceEvmContractInfo {
 
 }
 
-object TokenInfoService {
-    private val apiUrl = "${App.appConfigProvider.marketApiBaseUrl}/v1/token_info/"
+object Bep2TokenInfoService {
+    private val apiUrl = "https://dex.binance.org/api/v1/"
 
     fun service(): TokenInfoAPI {
         return APIClient.retrofit(apiUrl, 60)
             .create(TokenInfoAPI::class.java)
     }
 
-    data class Bep2TokenInfo(
-        val name: String,
-        @SerializedName("original_symbol")
-        val originalSymbol: String,
-        @SerializedName("contract_decimals")
-        val decimals: Int
-    )
-
     interface TokenInfoAPI {
-        @GET("bep2")
-        suspend fun getBep2TokenInfo(
-            @Query("blockchain") blockchain: String,
-            @Query("symbol") symbol: String
-        ): Bep2TokenInfo
+        @GET("tokens")
+        suspend fun tokens(
+            @Query("limit") limit: Int = 1000
+        ): List<Bep2Token>
     }
+
+    data class Bep2Token(
+        val name: String,
+        val original_symbol: String,
+        val symbol: String
+    )
 }
 
 object ServiceGuide {

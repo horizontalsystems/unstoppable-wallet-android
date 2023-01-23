@@ -21,13 +21,15 @@ class AddBep2TokenBlockchainService(
     }
 
     override suspend fun token(reference: String): Token {
-        val tokenInfo = networkManager.getBep2TokeInfo(blockchain.type.uid, reference)
+        val bep2Tokens = networkManager.getBep2Tokens()
+        val tokenInfo = bep2Tokens.firstOrNull { it.symbol == reference }
+            ?: throw AddTokenService.TokenError.NotFound
         val tokenQuery = tokenQuery(reference)
         return Token(
-            coin = Coin(tokenQuery.customCoinUid, tokenInfo.name, tokenInfo.originalSymbol, tokenInfo.decimals),
+            coin = Coin(tokenQuery.customCoinUid, tokenInfo.name, tokenInfo.original_symbol),
             blockchain = blockchain,
             type = tokenQuery.tokenType,
-            decimals = tokenInfo.decimals
+            decimals = 0
         )
     }
 }

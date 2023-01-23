@@ -62,7 +62,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
             try {
                 tokenInfo = withContext(Dispatchers.IO) {
-                    addTokenService.tokenInfo(selectedBlockchain, text)
+                    addTokenService.tokenInfo(selectedBlockchain, text.trim())
                 }
                 tokenInfo?.let {
                     if (it.inCoinList) {
