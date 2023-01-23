@@ -10,8 +10,10 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewModel() {
 
@@ -59,7 +61,9 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
             emitState()
 
             try {
-                tokenInfo = addTokenService.tokenInfo(selectedBlockchain, text)
+                tokenInfo = withContext(Dispatchers.IO) {
+                    addTokenService.tokenInfo(selectedBlockchain, text)
+                }
                 tokenInfo?.let {
                     if (it.inCoinList) {
                         caution = Caution(
