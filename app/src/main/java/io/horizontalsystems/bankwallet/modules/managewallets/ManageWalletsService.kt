@@ -113,29 +113,27 @@ class ManageWalletsService(
         }
     }
 
-    private fun item(fullCoin: FullCoin): Item {
+    private fun item(fullCoin: FullCoin): Item? {
         if (fullCoin.tokens.isNotEmpty() &&
             fullCoin.tokens.all { it.blockchain.type is BlockchainType.Unsupported }
         ) {
-            return Item(fullCoin, ItemState.UnsupportedByApp)
+            return null
         }
 
-        val accountType = account?.type ?: return Item(fullCoin, ItemState.UnsupportedByWalletType)
+        val accountType = account?.type ?: return null
 
         val eligibleTokens = fullCoin.eligibleTokens(accountType)
-
-        val itemState = if (eligibleTokens.isEmpty()) {
-            ItemState.UnsupportedByWalletType
-        } else {
-            val enabled = isEnabled(fullCoin.coin)
-            ItemState.Supported(
-                enabled = enabled,
-                hasSettings = enabled && hasSettingsOrPlatforms(eligibleTokens),
-                hasInfo = enabled && fullCoin.tokens.firstOrNull()?.blockchainType == BlockchainType.Zcash
-            )
+        if (eligibleTokens.isEmpty()) {
+            return null
         }
 
-        return Item(FullCoin(fullCoin.coin, eligibleTokens), itemState)
+        val enabled = isEnabled(fullCoin.coin)
+        return Item(
+            fullCoin = FullCoin(fullCoin.coin, eligibleTokens),
+            enabled = enabled,
+            hasSettings = enabled && hasSettingsOrPlatforms(eligibleTokens),
+            hasInfo = enabled && fullCoin.tokens.firstOrNull()?.blockchainType == BlockchainType.Zcash
+        )
     }
 
     private fun hasSettingsOrPlatforms(tokens: List<Token>): Boolean {
@@ -148,7 +146,7 @@ class ManageWalletsService(
     }
 
     private fun syncState() {
-        items = fullCoins.map { item(it) }
+        items = fullCoins.mapNotNull { item(it) }
     }
 
     private fun handleUpdated(wallets: List<Wallet>) {
@@ -231,12 +229,8 @@ class ManageWalletsService(
 
     data class Item(
         val fullCoin: FullCoin,
-        val state: ItemState
+        val enabled: Boolean,
+        val hasSettings: Boolean,
+        val hasInfo: Boolean
     )
-
-    sealed class ItemState {
-        object UnsupportedByWalletType : ItemState()
-        object UnsupportedByApp : ItemState()
-        class Supported(val enabled: Boolean, val hasSettings: Boolean, val hasInfo: Boolean) : ItemState()
-    }
 }

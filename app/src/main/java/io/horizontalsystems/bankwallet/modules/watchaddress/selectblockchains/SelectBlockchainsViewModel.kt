@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressService
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -58,7 +57,7 @@ class SelectBlockchainsViewModel(
                         imageSource = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
                         title = blockchain.name,
                         subtitle = blockchain.description,
-                        state = CoinViewItemState.ToggleVisible(false)
+                        enabled = false
                     )
                 }
             }
@@ -75,7 +74,7 @@ class SelectBlockchainsViewModel(
                             imageSource = ImageSource.Remote(token.fullCoin.coin.iconUrl, R.drawable.coin_placeholder),
                             title = token.fullCoin.coin.code,
                             subtitle = token.fullCoin.coin.name,
-                            state = CoinViewItemState.ToggleVisible(enabled = false),
+                            enabled = false,
                             label = accountType.hdExtendedKey.info.purpose.name
                         )
                     }
@@ -93,8 +92,7 @@ class SelectBlockchainsViewModel(
             selectedBlockchains.toMutableSet().also { it.add(blockchain) }
 
         blockchainViewItems = blockchainViewItems.map { viewItem ->
-            val enabled = selectedBlockchains.contains(viewItem.item)
-            viewItem.copy(state = CoinViewItemState.ToggleVisible(enabled))
+            viewItem.copy(enabled = selectedBlockchains.contains(viewItem.item))
         }
 
         emitState()

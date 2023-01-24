@@ -2,13 +2,9 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
@@ -38,37 +34,15 @@ class ManageWalletsViewModel(
 
     private fun viewItem(
         item: ManageWalletsService.Item,
-    ): CoinViewItem<String> {
-        val state = when (item.state) {
-            is Supported -> CoinViewItemState.ToggleVisible(
-                item.state.enabled,
-                item.state.hasSettings,
-                item.state.hasInfo
-            )
-            is ManageWalletsService.ItemState.UnsupportedByWalletType -> {
-                val reasonText = Translator.getString(
-                    R.string.ManageCoins_NotSupportedDescription,
-                    accountTypeDescription,
-                    item.fullCoin.coin.name
-                )
-                CoinViewItemState.ToggleHidden(reasonText)
-            }
-            is ManageWalletsService.ItemState.UnsupportedByApp -> {
-                val reasonText = Translator.getString(
-                    R.string.ManageCoins_NotSupportedByAppDescription,
-                    item.fullCoin.coin.name
-                )
-                CoinViewItemState.ToggleHidden(reasonText)
-            }
-        }
-        return CoinViewItem(
-            item = item.fullCoin.coin.uid,
-            imageSource = ImageSource.Remote(item.fullCoin.coin.iconUrl, item.fullCoin.iconPlaceholder),
-            title = item.fullCoin.coin.code,
-            subtitle = item.fullCoin.coin.name,
-            state = state,
-        )
-    }
+    ) = CoinViewItem(
+        item = item.fullCoin.coin.uid,
+        imageSource = ImageSource.Remote(item.fullCoin.coin.iconUrl, item.fullCoin.iconPlaceholder),
+        title = item.fullCoin.coin.code,
+        subtitle = item.fullCoin.coin.name,
+        enabled = item.enabled,
+        hasSettings = item.hasSettings,
+        hasInfo = item.hasInfo
+    )
 
     fun enable(fullCoin: FullCoin) {
         service.enable(fullCoin)

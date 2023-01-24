@@ -20,7 +20,7 @@ object RestoreBlockchainsModule {
     class Factory(
         private val accountName: String,
         private val accountType: AccountType
-        ) : ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
 
         private val restoreSettingsService by lazy {
             RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider)
@@ -83,11 +83,8 @@ data class CoinViewItem<T>(
     val imageSource: ImageSource,
     val title: String,
     val subtitle: String,
-    val state: CoinViewItemState,
+    val enabled: Boolean,
+    val hasSettings: Boolean = false,
+    val hasInfo: Boolean = false,
     val label: String? = null,
 )
-
-sealed class CoinViewItemState {
-    data class ToggleVisible(val enabled: Boolean, val hasSettings: Boolean = false, val hasInfo: Boolean = false) : CoinViewItemState()
-    data class ToggleHidden(val notSupportedReason: String) : CoinViewItemState()
-}

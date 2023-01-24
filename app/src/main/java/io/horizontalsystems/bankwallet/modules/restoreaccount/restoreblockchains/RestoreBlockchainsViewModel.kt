@@ -53,11 +53,13 @@ class RestoreBlockchainsViewModel(
     private fun viewItem(
         item: RestoreBlockchainsService.Item,
     ) = CoinViewItem(
-        item.blockchain,
-        ImageSource.Remote(item.blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
-        item.blockchain.name,
-        item.blockchain.description,
-        state = CoinViewItemState.ToggleVisible(item.enabled, item.hasSettings, false)
+        item = item.blockchain,
+        imageSource = ImageSource.Remote(item.blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
+        title = item.blockchain.name,
+        subtitle = item.blockchain.description,
+        enabled = item.enabled,
+        hasSettings = item.hasSettings,
+        hasInfo = false
     )
 
     fun enable(blockchain: Blockchain) {

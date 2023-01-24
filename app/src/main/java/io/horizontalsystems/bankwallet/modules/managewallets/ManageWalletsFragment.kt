@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Restor
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -200,17 +199,10 @@ private fun ManageWalletsScreen(
                         CoinCell(
                             viewItem = viewItem,
                             onItemClick = {
-                                if (viewItem.state is CoinViewItemState.ToggleVisible) {
-                                    if (viewItem.state.enabled) {
-                                        viewModel.disable(viewItem.item)
-                                    } else {
-                                        viewModel.enable(viewItem.item)
-                                    }
-                                } else if (viewItem.state is CoinViewItemState.ToggleHidden) {
-                                    navController.slideFromBottom(
-                                        R.id.coinNotSupportedDialog,
-                                        CoinNotSupportedDialog.prepareParams(viewItem.state.notSupportedReason)
-                                    )
+                                if (viewItem.enabled) {
+                                    viewModel.disable(viewItem.item)
+                                } else {
+                                    viewModel.enable(viewItem.item)
                                 }
                             },
                             onSettingClick = { viewModel.onClickSettings(viewItem.item) },
@@ -280,34 +272,32 @@ private fun CoinCell(
                     modifier = Modifier.padding(top = 1.dp)
                 )
             }
-            if (viewItem.state is CoinViewItemState.ToggleVisible) {
-                Spacer(Modifier.width(12.dp))
-                if (viewItem.state.hasSettings) {
-                    HsIconButton(
-                        onClick = onSettingClick
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_edit_20),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.grey
-                        )
-                    }
+            Spacer(Modifier.width(12.dp))
+            if (viewItem.hasSettings) {
+                HsIconButton(
+                    onClick = onSettingClick
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_edit_20),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.grey
+                    )
                 }
-                if (viewItem.state.hasInfo) {
-                    HsIconButton(onClick = onInfoClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_info_20),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.grey
-                        )
-                    }
-                }
-                HsSwitch(
-                    modifier = Modifier.padding(0.dp),
-                    checked = viewItem.state.enabled,
-                    onCheckedChange = { onItemClick.invoke() },
-                )
             }
+            if (viewItem.hasInfo) {
+                HsIconButton(onClick = onInfoClick) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_info_20),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.grey
+                    )
+                }
+            }
+            HsSwitch(
+                modifier = Modifier.padding(0.dp),
+                checked = viewItem.enabled,
+                onCheckedChange = { onItemClick.invoke() },
+            )
         }
         Divider(
             thickness = 1.dp,
@@ -320,12 +310,14 @@ private fun CoinCell(
 @Composable
 fun PreviewCoinCell() {
     val viewItem = CoinViewItem(
-        "athereum",
-        ImageSource.Local(R.drawable.logo_ethereum_24),
-        "ETH",
-        "Ethereum",
-        CoinViewItemState.ToggleVisible(true, true, true),
-        "Ethereum"
+        item = "ethereum",
+        imageSource = ImageSource.Local(R.drawable.logo_ethereum_24),
+        title = "ETH",
+        subtitle = "Ethereum",
+        enabled = true,
+        hasSettings = true,
+        hasInfo = true,
+        label = "Ethereum"
     )
     ComposeAppTheme {
         CoinCell(
