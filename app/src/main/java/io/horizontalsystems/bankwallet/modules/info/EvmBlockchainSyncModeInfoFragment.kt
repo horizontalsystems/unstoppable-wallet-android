@@ -42,7 +42,7 @@ class EvmBlockchainSyncModeInfoFragment : BaseFragment() {
 
             setContent {
                 ComposeAppTheme {
-                    InfoScreen(
+                    EvmNetworkInfoScreen(
                         findNavController()
                     )
                 }
@@ -53,7 +53,7 @@ class EvmBlockchainSyncModeInfoFragment : BaseFragment() {
 }
 
 @Composable
-private fun InfoScreen(
+fun EvmNetworkInfoScreen(
     navController: NavController
 ) {
 
@@ -74,7 +74,7 @@ private fun InfoScreen(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                InfoHeader(R.string.EvmNetwork_SyncMode)
+                InfoHeader(R.string.AddEvmSyncSource_RpcSource)
                 InfoBody(R.string.EvmNetwork_SyncModeDescription)
                 Spacer(Modifier.height(20.dp))
             }

@@ -18,11 +18,12 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnec
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 49, exportSchema = false, entities = [
+@Database(version = 50, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
     BlockchainSettingRecord::class,
+    EvmSyncSourceRecord::class,
     LogEntry::class,
     FavoriteCoin::class,
     WalletConnectSession::class,
@@ -47,6 +48,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun enabledWalletsCacheDao(): EnabledWalletsCacheDao
     abstract fun accountsDao(): AccountsDao
     abstract fun blockchainSettingDao(): BlockchainSettingDao
+    abstract fun evmSyncSourceDao(): EvmSyncSourceDao
     abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
@@ -93,6 +95,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_46_47,
                             Migration_47_48,
                             Migration_48_49,
+                            Migration_49_50,
                     )
                     .build()
         }

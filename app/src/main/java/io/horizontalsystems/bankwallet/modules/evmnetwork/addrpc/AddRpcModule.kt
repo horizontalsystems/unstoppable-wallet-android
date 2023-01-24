@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.evmnetwork
+package io.horizontalsystems.bankwallet.modules.evmnetwork.addrpc
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.marketkit.models.Blockchain
 
-object EvmNetworkModule {
+object AddRpcModule {
 
     fun args(blockchain: Blockchain): Bundle {
         return bundleOf("blockchain" to blockchain)
@@ -18,7 +18,7 @@ object EvmNetworkModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return EvmNetworkViewModel(blockchain, App.evmSyncSourceManager) as T
+            return AddRpcViewModel(blockchain, App.evmSyncSourceManager) as T
         }
     }
 
