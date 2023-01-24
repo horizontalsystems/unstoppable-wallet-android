@@ -22,7 +22,7 @@ class SolanaRpcSourceManager(
 
     val rpcSource: RpcSource
         get() {
-            val rpcSourceName = blockchainSettingsStorage.evmSyncSourceName(blockchainType)
+            val rpcSourceName = blockchainSettingsStorage.evmSyncSourceUrl(blockchainType)
             val rpcSource = allRpcSources.firstOrNull { it.name == rpcSourceName }
 
             return rpcSource ?: allRpcSources[0]

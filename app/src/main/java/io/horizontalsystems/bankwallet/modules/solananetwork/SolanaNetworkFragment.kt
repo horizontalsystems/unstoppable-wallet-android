@@ -86,7 +86,7 @@ private fun SolanaNetworkScreen(
             ) {
 
                 item {
-                    HeaderText(stringResource(R.string.EvmNetwork_SyncMode)) {
+                    HeaderText(stringResource(R.string.AddEvmSyncSource_RpcSource)) {
                         navController.slideFromBottom(R.id.evmBlockchainSyncModeInfoFragment)
                     }
                 }

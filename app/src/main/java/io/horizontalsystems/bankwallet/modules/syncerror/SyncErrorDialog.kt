@@ -22,6 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule
@@ -120,7 +121,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                             }
                             SyncErrorModule.BlockchainWrapper.Type.Evm -> {
                                 val params = EvmNetworkModule.args(blockchainWrapper.blockchain)
-                                navController.slideFromRight(R.id.evmNetworkFragment, params)
+                                navController.slideFromBottom(R.id.evmNetworkFragment, params)
                             }
                             else -> {}
                         }

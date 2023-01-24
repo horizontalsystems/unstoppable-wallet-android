@@ -79,6 +79,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var languageManager: LanguageManager
 
         lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
+        lateinit var evmSyncSourceStorage: EvmSyncSourceStorage
         lateinit var btcBlockchainManager: BtcBlockchainManager
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
@@ -171,7 +172,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         appDatabase = AppDatabase.getInstance(this)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage)
+        evmSyncSourceStorage = EvmSyncSourceStorage(appDatabase)
+        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
 
         btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 

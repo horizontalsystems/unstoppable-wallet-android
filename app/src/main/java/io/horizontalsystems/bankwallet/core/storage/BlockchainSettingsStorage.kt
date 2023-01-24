@@ -10,7 +10,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
     companion object {
         const val keyBtcRestore: String = "btc-restore"
         const val keyBtcTransactionSort: String = "btc-transaction-sort"
-        const val keyEvmSyncSource: String = "evm-sync-source"
+        const val keyEvmSyncSourceUrl: String = "evm-sync-source-url"
     }
 
     private val dao = appDatabase.blockchainSettingDao()
@@ -48,16 +48,16 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         )
     }
 
-    fun evmSyncSourceName(blockchainType: BlockchainType): String? {
-        return dao.getBlockchainSetting(blockchainType.uid, keyEvmSyncSource)?.value
+    fun evmSyncSourceUrl(blockchainType: BlockchainType): String? {
+        return dao.getBlockchainSetting(blockchainType.uid, keyEvmSyncSourceUrl)?.value
     }
 
-    fun save(evmSyncSourceName: String, blockchainType: BlockchainType) {
+    fun save(evmSyncSourceUrl: String, blockchainType: BlockchainType) {
         dao.insert(
             BlockchainSettingRecord(
                 blockchainUid = blockchainType.uid,
-                key = keyEvmSyncSource,
-                value = evmSyncSourceName
+                key = keyEvmSyncSourceUrl,
+                value = evmSyncSourceUrl
             )
         )
     }

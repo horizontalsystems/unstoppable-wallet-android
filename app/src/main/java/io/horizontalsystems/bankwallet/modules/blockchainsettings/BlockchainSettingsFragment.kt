@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
@@ -122,7 +123,7 @@ private fun onClick(
         }
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
             val params = EvmNetworkModule.args(item.blockchainItem.blockchain)
-            navController.slideFromRight(R.id.evmNetworkFragment, params)
+            navController.slideFromBottom(R.id.evmNetworkFragment, params)
         }
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
             navController.slideFromRight(R.id.solanaNetworkFragment, bundleOf())

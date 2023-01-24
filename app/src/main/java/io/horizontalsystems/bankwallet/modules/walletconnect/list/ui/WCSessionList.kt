@@ -156,14 +156,14 @@ private fun LazyListScope.WCSection(
     }
 }
 
-private fun getShape(itemsCount: Int, index: Int): Shape = when {
+fun getShape(itemsCount: Int, index: Int): Shape = when {
     itemsCount == 1 -> RoundedCornerShape(12.dp)
     itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
     0 == index -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
     else -> RoundedCornerShape(0.dp)
 }
 
-private fun showDivider(itemsCount: Int, index: Int): Boolean = when {
+fun showDivider(itemsCount: Int, index: Int): Boolean = when {
     itemsCount == 1 || index == 0 -> false
     else -> true
 }
