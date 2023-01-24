@@ -780,6 +780,8 @@
     <string name="Watch_XPubKey_Hint">Account Extended Public Key girin</string>
     <string name="Watch_Address_Description">Yalnızca Ethereum ve diğer desteklenen EVM blok zincirleri için kullanılabilir.</string>
     <string name="Watch_Address_Watch">İzle</string>
+    <string name="Watch_Select_Blockchains">Blok Zincirleri Seç</string>
+    <string name="Watch_Select_Coins">Kripto Parayı Seç</string>
     <string name="Watch_By">İçerik</string>
     <string name="Watch_WatchBy">İzle</string>
     <string name="Watch_TypeEvmAddress">EVM Adresi</string>
