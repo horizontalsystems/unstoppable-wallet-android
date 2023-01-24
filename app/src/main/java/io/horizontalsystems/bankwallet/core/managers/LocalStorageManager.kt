@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -23,13 +22,13 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class LocalStorageManager(private val preferences: SharedPreferences) : ILocalStorage, IPinStorage, IChartTypeStorage,
-    IThirdKeyboard, IMarketStorage {
+class LocalStorageManager(
+    private val preferences: SharedPreferences
+) : ILocalStorage, IPinStorage, IThirdKeyboard, IMarketStorage {
 
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
@@ -44,7 +43,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val BASE_ZCASH_PROVIDER = "base_zcash_provider"
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
-    private val CHART_INTERVAL = "prev_chart_interval"
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
@@ -279,14 +277,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         }
 
     //  IChartTypeStorage
-
-    override var chartInterval: HsTimePeriod
-        get() = HsTimePeriod.values().firstOrNull {
-            preferences.getString(CHART_INTERVAL, null) == it.value
-        } ?: HsTimePeriod.Day1
-        set(interval) {
-            preferences.edit().putString(CHART_INTERVAL, interval.value).apply()
-        }
 
     override var torEnabled: Boolean
         get() = preferences.getBoolean(TOR_ENABLED, false)

@@ -24,7 +24,6 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.solanakit.models.FullTransaction
@@ -96,10 +95,6 @@ interface ILocalStorage {
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
 
     fun clear()
-}
-
-interface IChartTypeStorage {
-    var chartInterval: HsTimePeriod
 }
 
 interface IRestoreSettingsStorage {

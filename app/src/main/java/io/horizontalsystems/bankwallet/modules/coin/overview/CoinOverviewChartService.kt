@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
-import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -22,11 +21,10 @@ import kotlinx.coroutines.rx2.await
 class CoinOverviewChartService(
     private val marketKit: MarketKitWrapper,
     override val currencyManager: CurrencyManager,
-    private val chartTypeStorage: IChartTypeStorage,
     private val coinUid: String,
 ) : AbstractChartService() {
 
-    override val initialChartInterval by chartTypeStorage::chartInterval
+    override val initialChartInterval = HsTimePeriod.Day1
 
     override var chartIntervals = listOf<HsTimePeriod>()
 
@@ -55,11 +53,6 @@ class CoinOverviewChartService(
     override fun stop() {
         super.stop()
         unsubscribeFromUpdates()
-    }
-
-    override fun updateChartInterval(chartInterval: HsTimePeriod) {
-        super.updateChartInterval(chartInterval)
-        chartTypeStorage.chartInterval = chartInterval
     }
 
     override fun getItems(
