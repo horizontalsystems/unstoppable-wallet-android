@@ -782,6 +782,8 @@
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
     <string name="Watch_Address_Watch">Смотреть</string>
+    <string name="Watch_Select_Blockchains">Блокчейны</string>
+    <string name="Watch_Select_Coins">Выберите Токены</string>
     <string name="Watch_By">Из</string>
     <string name="Watch_WatchBy">Смотреть из</string>
     <string name="Watch_TypeEvmAddress">EVM адрес</string>
