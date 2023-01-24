@@ -36,7 +36,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -91,7 +90,14 @@ private fun AddTokenScreen(
                             tint = ComposeAppTheme.colors.jacob
                         )
                     }
-                }
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Add),
+                        onClick = viewModel::onAddClick,
+                        enabled = uiState.addButtonEnabled
+                    )
+                )
             )
             Column(
                 modifier = Modifier
@@ -141,17 +147,6 @@ private fun AddTokenScreen(
                         )
                     )
                 }
-            }
-
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                    title = stringResource(R.string.Button_Add),
-                    onClick = { viewModel.onAddClick() },
-                    enabled = uiState.addButtonEnabled
-                )
             }
         }
     }

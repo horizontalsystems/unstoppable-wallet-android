@@ -46,7 +46,6 @@ import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
 import io.horizontalsystems.bankwallet.modules.createaccount.PassphraseCell
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
@@ -265,7 +264,7 @@ fun RestorePhrase(
                     )
                 }
 
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(32.dp))
 
                 if (advanced) {
                     BottomSection(
@@ -275,33 +274,35 @@ fun RestorePhrase(
                         popUpToInclusiveId,
                         coroutineScope
                     )
+                } else {
+                    CellSingleLineLawrenceSection {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable {
+                                    navController.slideFromRight(
+                                        R.id.restoreAccountAdvancedFragment,
+                                        ManageAccountsModule.prepareParams(popUpToInclusiveId)
+                                    )
+                                }
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            body_leah(text = stringResource(R.string.Button_Advanced))
+                            Spacer(modifier = Modifier.weight(1f))
+                            Image(
+                                modifier = Modifier.size(20.dp),
+                                painter = painterResource(id = R.drawable.ic_arrow_right),
+                                contentDescription = null,
+                            )
+                        }
+                    }
+
+                    Spacer(Modifier.height(32.dp))
                 }
             }
 
             Column {
-                ButtonsGroupWithShade {
-                    Column {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp),
-                            title = stringResource(R.string.Button_Next),
-                            onClick = viewModel::onProceed
-                        )
-                        if (!advanced) {
-                            Spacer(Modifier.height(16.dp))
-                            ButtonPrimaryTransparent(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 24.dp),
-                                title = stringResource(R.string.Button_Advanced),
-                                onClick = {
-                                    navController.slideFromRight(R.id.restoreAccountAdvancedFragment, ManageAccountsModule.prepareParams(popUpToInclusiveId))
-                                }
-                            )
-                        }
-                    }
-                }
                 if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
                     SuggestionsBar(wordSuggestions = uiState.wordSuggestions) { wordItem, suggestion ->
                         HudHelper.vibrate(context)
