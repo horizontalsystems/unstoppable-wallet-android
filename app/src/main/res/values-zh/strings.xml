@@ -784,6 +784,8 @@
     <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
     <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
     <string name="Watch_Address_Watch">观察</string>
+    <string name="Watch_Select_Blockchains">选择区块链</string>
+    <string name="Watch_Select_Coins">选择货币</string>
     <string name="Watch_By">由</string>
     <string name="Watch_WatchBy">观看者</string>
     <string name="Watch_TypeEvmAddress">EVM 地址</string>
