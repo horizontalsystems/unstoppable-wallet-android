@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -172,14 +171,11 @@ private fun SelectBlockchainsScreen(accountType: AccountType, accountName: Strin
                                 modifier = Modifier.padding(top = 1.dp)
                             )
                         }
-                        if (viewItem.state is CoinViewItemState.ToggleVisible) {
-                            Spacer(Modifier.width(12.dp))
-
-                            HsSwitch(
-                                checked = viewItem.state.enabled,
-                                onCheckedChange = { viewModel.onToggleBlockchain(viewItem.item) },
-                            )
-                        }
+                        Spacer(Modifier.width(12.dp))
+                        HsSwitch(
+                            checked = viewItem.enabled,
+                            onCheckedChange = { viewModel.onToggleBlockchain(viewItem.item) },
+                        )
                     }
                 }
             }

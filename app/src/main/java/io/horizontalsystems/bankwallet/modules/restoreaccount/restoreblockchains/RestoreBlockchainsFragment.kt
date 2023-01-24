@@ -238,24 +238,22 @@ private fun ManageWalletsScreen(
                                     modifier = Modifier.padding(top = 1.dp)
                                 )
                             }
-                            if (viewItem.state is CoinViewItemState.ToggleVisible) {
-                                Spacer(Modifier.width(12.dp))
-                                if (viewItem.state.hasSettings) {
-                                    HsIconButton(
-                                        onClick = { viewModel.onClickSettings(viewItem.item) }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_edit_20),
-                                            contentDescription = null,
-                                            tint = ComposeAppTheme.colors.grey
-                                        )
-                                    }
+                            Spacer(Modifier.width(12.dp))
+                            if (viewItem.hasSettings) {
+                                HsIconButton(
+                                    onClick = { viewModel.onClickSettings(viewItem.item) }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_edit_20),
+                                        contentDescription = null,
+                                        tint = ComposeAppTheme.colors.grey
+                                    )
                                 }
-                                HsSwitch(
-                                    checked = viewItem.state.enabled,
-                                    onCheckedChange = { onItemClick(viewItem, viewModel) },
-                                )
                             }
+                            HsSwitch(
+                                checked = viewItem.enabled,
+                                onCheckedChange = { onItemClick(viewItem, viewModel) },
+                            )
                         }
                     }
                 }
@@ -265,11 +263,9 @@ private fun ManageWalletsScreen(
 }
 
 private fun onItemClick(viewItem: CoinViewItem<Blockchain>, viewModel: RestoreBlockchainsViewModel) {
-    if (viewItem.state is CoinViewItemState.ToggleVisible) {
-        if (viewItem.state.enabled) {
-            viewModel.disable(viewItem.item)
-        } else {
-            viewModel.enable(viewItem.item)
-        }
+    if (viewItem.enabled) {
+        viewModel.disable(viewItem.item)
+    } else {
+        viewModel.enable(viewItem.item)
     }
 }

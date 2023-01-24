@@ -313,9 +313,6 @@
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
     <dialog
-        android:id="@+id/coinNotSupportedDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.managewallets.CoinNotSupportedDialog" />
-    <dialog
         android:id="@+id/backupRecoveryPhraseDialog"
         android:name="io.horizontalsystems.bankwallet.modules.backupalert.BackupRecoveryPhraseDialog" />
     <dialog
