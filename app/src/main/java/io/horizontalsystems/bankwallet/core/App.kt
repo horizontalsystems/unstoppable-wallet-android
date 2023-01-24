@@ -73,7 +73,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var localStorage: ILocalStorage
         lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
-        lateinit var chartTypeStorage: IChartTypeStorage
         lateinit var restoreSettingsStorage: IRestoreSettingsStorage
         lateinit var currencyManager: CurrencyManager
         lateinit var languageManager: LanguageManager
@@ -192,7 +191,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         LocalStorageManager(preferences).apply {
             localStorage = this
-            chartTypeStorage = this
             pinStorage = this
             thirdKeyboardStorage = this
             marketStorage = this
