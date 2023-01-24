@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -101,25 +104,31 @@ private fun CreateAccountIntroScreen(navController: NavController, popUpToInclus
                     onValueChange = viewModel::onChangeAccountName
                 )
 
-                Spacer(Modifier.weight(1f))
+                Spacer(Modifier.height(32.dp))
 
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    title = stringResource(R.string.Button_Create),
-                    onClick = viewModel::createAccount
-                )
-                Spacer(Modifier.height(16.dp))
-                ButtonPrimaryTransparent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    title = stringResource(R.string.Button_Advanced),
-                    onClick = {
-                        navController.slideFromRight(R.id.createAccountAdvancedFragment, ManageAccountsModule.prepareParams(popUpToInclusiveId))
+                CellSingleLineLawrenceSection {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                navController.slideFromRight(
+                                    R.id.createAccountAdvancedFragment,
+                                    ManageAccountsModule.prepareParams(popUpToInclusiveId)
+                                )
+                            }
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        body_leah(text = stringResource(R.string.Button_Advanced))
+                        Spacer(modifier = Modifier.weight(1f))
+                        Image(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = null,
+                        )
                     }
-                )
+                }
+
                 Spacer(Modifier.height(32.dp))
             }
         }

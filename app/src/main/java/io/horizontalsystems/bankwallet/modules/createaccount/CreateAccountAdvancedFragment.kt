@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.displayNameStringRes
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -48,7 +47,8 @@ class CreateAccountAdvancedFragment : BaseFragment() {
             )
             setContent {
                 val popUpToInclusiveId =
-                    arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.createAccountAdvancedFragment) ?: R.id.createAccountAdvancedFragment
+                    arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.createAccountAdvancedFragment)
+                        ?: R.id.createAccountAdvancedFragment
                 CreateAccountScreen(findNavController(), popUpToInclusiveId)
             }
         }
@@ -116,87 +116,73 @@ private fun CreateAccountScreen(
                     )
                 )
 
-                Column {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        Spacer(Modifier.height(12.dp))
-                        HeaderText(stringResource(id = R.string.ManageAccount_Name))
-                        FormsInput(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            initial = viewModel.accountName,
-                            pasteEnabled = false,
-                            hint = viewModel.defaultAccountName,
-                            onValueChange = viewModel::onChangeAccountName
-                        )
-                        Spacer(Modifier.height(32.dp))
-                        CellUniversalLawrenceSection(
-                            listOf {
-                                MnemonicNumberCell(
-                                    kind = viewModel.selectedKind,
-                                    showMnemonicSizeSelectorDialog = {
-                                        showMnemonicSizeSelectorDialog = true
-                                    }
-                                )
-                            }
-                        )
-
-                        Spacer(Modifier.height(32.dp))
-                        CellUniversalLawrenceSection(listOf {
-                            PassphraseCell(
-                                enabled = viewModel.passphraseEnabled,
-                                onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
-                            )
-                        })
-
-                        if (viewModel.passphraseEnabled) {
-                            Spacer(Modifier.height(24.dp))
-                            FormsInputPassword(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                hint = stringResource(R.string.Passphrase),
-                                state = viewModel.passphraseState,
-                                onValueChange = viewModel::onChangePassphrase,
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                                hide = hidePassphrase,
-                                onToggleHide = {
-                                    hidePassphrase = !hidePassphrase
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Spacer(Modifier.height(12.dp))
+                    HeaderText(stringResource(id = R.string.ManageAccount_Name))
+                    FormsInput(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        initial = viewModel.accountName,
+                        pasteEnabled = false,
+                        hint = viewModel.defaultAccountName,
+                        onValueChange = viewModel::onChangeAccountName
+                    )
+                    Spacer(Modifier.height(32.dp))
+                    CellUniversalLawrenceSection(
+                        listOf {
+                            MnemonicNumberCell(
+                                kind = viewModel.selectedKind,
+                                showMnemonicSizeSelectorDialog = {
+                                    showMnemonicSizeSelectorDialog = true
                                 }
-                            )
-                            Spacer(Modifier.height(16.dp))
-                            FormsInputPassword(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                hint = stringResource(R.string.ConfirmPassphrase),
-                                state = viewModel.passphraseConfirmState,
-                                onValueChange = viewModel::onChangePassphraseConfirmation,
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                                hide = hidePassphrase,
-                                onToggleHide = {
-                                    hidePassphrase = !hidePassphrase
-                                }
-                            )
-                            Spacer(Modifier.height(12.dp))
-                            D1(
-                                modifier = Modifier.padding(horizontal = 24.dp),
-                                text = stringResource(R.string.CreateWallet_PassphraseDescription)
                             )
                         }
-                        Spacer(Modifier.height(32.dp))
-                    }
+                    )
 
-                    ButtonsGroupWithShade {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp),
-                            title = stringResource(R.string.Button_Create),
-                            onClick = {
-                                viewModel.createAccount()
-                            },
+                    Spacer(Modifier.height(32.dp))
+                    CellUniversalLawrenceSection(listOf {
+                        PassphraseCell(
+                            enabled = viewModel.passphraseEnabled,
+                            onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
+                        )
+                    })
+
+                    if (viewModel.passphraseEnabled) {
+                        Spacer(Modifier.height(24.dp))
+                        FormsInputPassword(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            hint = stringResource(R.string.Passphrase),
+                            state = viewModel.passphraseState,
+                            onValueChange = viewModel::onChangePassphrase,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            hide = hidePassphrase,
+                            onToggleHide = {
+                                hidePassphrase = !hidePassphrase
+                            }
+                        )
+                        Spacer(Modifier.height(16.dp))
+                        FormsInputPassword(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            hint = stringResource(R.string.ConfirmPassphrase),
+                            state = viewModel.passphraseConfirmState,
+                            onValueChange = viewModel::onChangePassphraseConfirmation,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            hide = hidePassphrase,
+                            onToggleHide = {
+                                hidePassphrase = !hidePassphrase
+                            }
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        D1(
+                            modifier = Modifier.padding(horizontal = 24.dp),
+                            text = stringResource(R.string.CreateWallet_PassphraseDescription)
                         )
                     }
+                    Spacer(Modifier.height(32.dp))
                 }
             }
         }
