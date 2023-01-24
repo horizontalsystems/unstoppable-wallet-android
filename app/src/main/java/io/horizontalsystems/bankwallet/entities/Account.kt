@@ -178,8 +178,8 @@ sealed class AccountType : Parcelable {
             else -> emptyList()
         }
 
-    @IgnoredOnParcel
-    val hideZeroBalances = this is EvmAddress || this is SolanaAddress
+    val hideZeroBalances: Boolean
+        get() = this is EvmAddress || this is SolanaAddress
 
     val detailedDescription: String
         get() = when (this) {
