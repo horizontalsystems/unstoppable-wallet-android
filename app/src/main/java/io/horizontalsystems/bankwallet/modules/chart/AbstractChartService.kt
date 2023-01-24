@@ -50,7 +50,7 @@ abstract class AbstractChartService {
     private val disposables = CompositeDisposable()
     protected var forceRefresh = false
 
-    fun start() {
+    open suspend fun start() {
         currencyManager.baseCurrencyUpdatedSignal
             .subscribeIO {
                 fetchItems()
