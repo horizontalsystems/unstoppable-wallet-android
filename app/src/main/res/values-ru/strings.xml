@@ -27,7 +27,7 @@
     <string name="Button_Create">Создать</string>
     <string name="Button_Advanced">Advanced</string>
     <string name="Button_Restore">Восстановить</string>
-    <string name="Button_WatchAddress">Посмотреть Адрес</string>
+    <string name="Button_WatchAddress">Просмотр Кошелька</string>
     <string name="Button_Reset">Сбросить</string>
     <string name="Button_Reconnect">Повторное Подключение</string>
     <string name="Button_Understand">Я Понимаю</string>
@@ -777,7 +777,7 @@
     <string name="ManageAccounts_Title">Кошельки</string>
     <string name="ManageAccounts_CreateNewWallet">Создать</string>
     <string name="ManageAccounts_ImportWallet">Восстановить</string>
-    <string name="ManageAccounts_WatchAddress">Посмотреть Адрес</string>
+    <string name="ManageAccounts_WatchAddress">Просмотр Адреса</string>
     <string name="Watch_Address_Hint">Адрес или Домен</string>
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
@@ -785,7 +785,7 @@
     <string name="Watch_Select_Blockchains">Блокчейны</string>
     <string name="Watch_Select_Coins">Выберите Токены</string>
     <string name="Watch_By">Из</string>
-    <string name="Watch_WatchBy">Смотреть из</string>
+    <string name="Watch_WatchBy">Смотреть</string>
     <string name="Watch_TypeEvmAddress">EVM адрес</string>
     <string name="Watch_TypeSolanaAddress">Solana адрес</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
@@ -806,7 +806,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
     <string name="ManageAccount_SwitchWallet_Title">Сменить Кошелек</string>
     <string name="ManageAccount_Wallets">Кошельки</string>
-    <string name="ManageAccount_WatchAddresses">Посмотреть Адрес</string>
+    <string name="ManageAccount_WatchAddresses">Просмотр Кошелька</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Выберите кошелек для быстрого переключения</string>
     <string name="ManageAccount_DeleteWarning">Вы хотите приостановить просмотр этого адреса кошелька?</string>
     <!--Network Settings-->
