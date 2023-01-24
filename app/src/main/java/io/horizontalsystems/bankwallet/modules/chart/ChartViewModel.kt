@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.chart
 import android.util.Range
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -21,6 +22,8 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 open class ChartViewModel(
@@ -86,7 +89,9 @@ open class ChartViewModel(
                 disposables.add(it)
             }
 
-        service.start()
+        viewModelScope.launch(Dispatchers.IO) {
+            service.start()
+        }
     }
 
     fun onSelectChartInterval(chartInterval: HsTimePeriod) {

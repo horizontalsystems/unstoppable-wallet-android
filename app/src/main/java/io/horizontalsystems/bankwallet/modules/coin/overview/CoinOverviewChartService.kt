@@ -17,6 +17,7 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.rx2.await
 
 class CoinOverviewChartService(
     private val marketKit: MarketKitWrapper,
@@ -27,7 +28,7 @@ class CoinOverviewChartService(
 
     override val initialChartInterval by chartTypeStorage::chartInterval
 
-    override val chartIntervals = HsTimePeriod.values().toList()
+    override var chartIntervals = listOf<HsTimePeriod>()
 
     override val chartIndicators = listOf(
         ChartIndicator.Ema,
@@ -37,6 +38,19 @@ class CoinOverviewChartService(
 
     private var updatesSubscriptionKey: String? = null
     private val disposables = CompositeDisposable()
+
+    override suspend fun start() {
+        val chartStartTime = marketKit.chartStartTimeSingle(coinUid).await()
+        val now = System.currentTimeMillis() / 1000L
+        val mostPeriodSeconds = now - chartStartTime
+
+        chartIntervals = HsTimePeriod.values().filter {
+            val range = it.range
+            range == null || range <= mostPeriodSeconds
+        }
+
+        super.start()
+    }
 
     override fun stop() {
         super.stop()

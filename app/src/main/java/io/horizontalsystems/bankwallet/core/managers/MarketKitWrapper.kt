@@ -147,6 +147,7 @@ class MarketKitWrapper(
 
     // Chart Info
 
+    fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
     fun chartInfo(coinUid: String, currencyCode: String, interval: HsTimePeriod) = marketKit.chartInfo(coinUid, currencyCode, interval)
 
     fun chartInfoSingle(coinUid: String, currencyCode: String, interval: HsTimePeriod) = marketKit.chartInfoSingle(coinUid, currencyCode, interval)
