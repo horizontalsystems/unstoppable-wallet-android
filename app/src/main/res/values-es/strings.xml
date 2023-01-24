@@ -783,6 +783,8 @@
     <string name="Watch_XPubKey_Hint">Introduzca Account Extended Public Key</string>
     <string name="Watch_Address_Description">Disponible sólo para Ethereum y otras blockchains EVM soportadas.</string>
     <string name="Watch_Address_Watch">Ver</string>
+    <string name="Watch_Select_Blockchains">Elegir Blockchain</string>
+    <string name="Watch_Select_Coins">Elegir monedas</string>
     <string name="Watch_By">Por</string>
     <string name="Watch_WatchBy">Ver por</string>
     <string name="Watch_TypeEvmAddress">Dirección EVM</string>
