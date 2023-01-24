@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,7 +50,7 @@ class BalanceService(
 
     /* getBalanceItems should return new immutable list */
     private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (hideZeroBalances) {
-        allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
+        allBalanceItems.filter { it.wallet.token.type == TokenType.Native || it.balanceData.total > BigDecimal.ZERO }
     } else {
         allBalanceItems.toList()
     }
