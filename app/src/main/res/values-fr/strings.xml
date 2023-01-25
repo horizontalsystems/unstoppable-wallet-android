@@ -25,6 +25,7 @@
     <string name="Button_Disconnect">Déconnecter</string>
     <string name="Button_Start">Commencer</string>
     <string name="Button_Create">Créer</string>
+    <string name="Button_Advanced">Advanced</string>
     <string name="Button_Restore">Restaurer</string>
     <string name="Button_WatchAddress">Adresse à suivre</string>
     <string name="Button_Reset">Réinitialiser</string>
@@ -58,18 +59,18 @@
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Paramètres de Confidentialité</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">Nouveau porte-monnaie</string>
+    <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Mnémonique</string>
-    <string name="CreateWallet_Wordlist">Liste de mots</string>
+    <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">Phrase d\'authentification</string>
+    <string name="ConfirmPassphrase">Confirmer</string>
     <string name="CreateWallet_N_WordsRecommended">%s mots (recommandé)</string>
     <string name="CreateWallet_N_Words">%s mots</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmer</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser uniquement les symboles pris en charge : <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
-    <string name="EnterPassphrase">Saisir la phrase d\'authentification</string>
-    <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">Anglais</string>
     <string name="Language_Japanese">Japonais</string>
@@ -87,7 +88,7 @@
     <string name="RateApp_Button_RateIt">Evaluez-là</string>
     <string name="RateApp_Button_NotNow">Plus tard</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Restaurer</string>
+    <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Mnemonic_Description">Saisissez la phrase de récupération de votre portefeuille (mnémonique) qui se compose de 12, 15, 18, 21 ou 24 mots et peut inclure un mot de passe alphanumérique supplémentaire.</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être compris entre 12 et 24 mots. Vous avez saisi : %d</string>
@@ -235,7 +236,7 @@
     <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
-    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
     <string name="TimePeriod_24h">24h</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Marchés</string>
@@ -357,7 +358,7 @@
     <string name="FeeInfo_AverageDescription">Généralement, cette fourchette de frais devrait être suffisante pour que la transaction soit traitée en quelques minutes/heure pour Bitcoin et en quelques minutes pour Ethereum.</string>
     <string name="FeeInfo_Fast">Rapide</string>
     <string name="FeeInfo_FastDescription">Pour les transactions où la priorité est importante, nous vous recommandons d\'utiliser la valeur élevée des frais. Cela devrait suffire pour qu\'une transaction soit effectuée dans les 10 minutes pour Bitcoin et dans les 1-2 minutes pour Ethereum.</string>
-    <!--Wallet Connect-->
+    <!--WalletConnect-->
     <string name="WalletConnect_Request">Requête</string>
     <string name="WalletConnect_SendRequest_Title">Envoyer</string>
     <string name="WalletConnect_ApproveRequest_Title">Approuver</string>
@@ -369,7 +370,7 @@
     <string name="WalletConnect_Ready_Hint">Vous pouvez aller sur le navigateur. Ne fermez pas cette page pendant que vous interagissez dans le navigateur.</string>
     <string name="WalletConnect_Reconnect_Hint">Échec de connexion. Essayez de vous reconnecter à nouveau.</string>
     <string name="WalletConnect_Error_InvalidUrl">Adresse URL invalide</string>
-    <string name="WalletConnect_NotSupportedV2">Wallet Connect v2 n\'est pas pris en charge</string>
+    <string name="WalletConnect_NotSupportedV2">WalletConnect v2 is not supported</string>
     <string name="WalletConnect_Requirement">Condition préalable</string>
     <string name="WalletConnect_Alert">Alerte</string>
     <string name="WalletConnect_Status_Offline">Déconnecté</string>
@@ -383,7 +384,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message à signer</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Veuillez signer un message pour vous authentifier</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signer</string>
-    <string name="WalletConnect_Error_NoWallet">Aucun portefeuille adéquat. Vous devez créer ou restaurer un portefeuille existant</string>
+    <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">You need to backup %s before you can use WalletConnect</string>
     <string name="WalletConnect_Error_WatchAccount">Cette fonctionnalité ne peut être utilisée avec les portefeuilles de type watching only. Vous devez basculer vers un portefeuille restauré ou en créer un </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Blockchain non pris en charge</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Aucun compte approprié</string>
@@ -463,7 +465,7 @@
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Configuration avancée</string>
+    <string name="SwapSettings_Title">Swap Settings</string>
     <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
     <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix évolue défavorablement au-delà de ce pourcentage</string>
@@ -500,24 +502,12 @@
     <string name="Approve_YouApprove">Vous approuvez</string>
     <string name="Approve_YouRevoke">Vous révoquez</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Ce service d\'échange est assuré par %s, un protocole d\'échange de tokens décentralisé construit sur la blockchain %s.\n\n%s est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucune possibilité de tricher.</string>
-    <string name="SwapInfo_DexRelated">Relatif à %s</string>
     <string name="SwapInfo_AllowanceTitle">Allocation</string>
     <string name="SwapInfo_AllowanceDescription">Le montant qu\'un échange peut dépenser pour le compte de l\'utilisateur lors de l\'exécution de swaps de jetons. Une provision suffisante est requise avant de pouvoir effectuer une opération d\'échange réelle.</string>
     <string name="SwapInfo_PriceImpactTitle">Impact prix</string>
     <string name="SwapInfo_PriceImpactDescription">L\'écart de prix attendu par rapport à un prix affiché, augmente généralement avec le montant de l\'échange.</string>
-    <string name="SwapInfo_SwapFeeTitle">Frais d\'échange</string>
-    <string name="SwapInfo_SwapFeeDescription">Des frais de service pour l\'opération d\'échange sur la plateforme, indiqués dans la devise dans laquelle l\'utilisateur vend. Pour la plupart des ordres, ils devraient être de 0,3 % ou 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Montant garanti</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">Le montant minimum qu\'un jeton de swapping d\'un utilisateur devrait recevoir suite à une action de swap.</string>
     <string name="SwapInfo_MaxSpendTitle">Dépense maximale</string>
-    <string name="SwapInfo_MaxSpendDescription">Le montant maximum que les jetons de swapping d\'un utilisateur doivent dépenser à la suite d\'une action de swap.</string>
-    <string name="SwapInfo_Other">Autre</string>
-    <string name="SwapInfo_TransactionFeeTitle">Frais de transaction</string>
-    <string name="SwapInfo_TransactionFeeDescription">Le coût maximal de l\'exécution d\'une transaction sur la blockchain. Notez que les frais de transaction sont le coût de l\'exécution d\'une transaction sur la blockchain elle-même et n\'incluent pas les frais de service facturés par les protocoles d\'échange décentralisés de jetons. \n\nLes protocoles d\'échange de jetons décentralisés facturent généralement des frais de swap équivalents à 0. % (ou 0,6%) du montant négocié. Ces frais sont appliqués dans l\'ordre de swap.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Vitesse de transaction</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Les transactions dont les frais de transaction sont plus élevés se traduiront par une vitesse de traitement plus rapide. L\'inverse est également vrai.</string>
-    <string name="SwapInfo_Site">Site %s</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Partager</string>
@@ -632,21 +622,25 @@
     <string name="Settings_Privacy">Confidentialité</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_AppStatus">Statut de l\'appli</string>
-    <string name="Settings_WalletConnect">Wallet Connect</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
     <string name="Appearance_Theme">Thème</string>
+    <string name="Appearance_Tab">TAB SETTINGS</string>
     <string name="Appearance_LaunchScreen">ÉCRAN DE LÉCHARGEMENT</string>
     <string name="Appearance_AppIcon">ICON APPLICATION</string>
     <string name="Appearance_BalanceConversion">CONVERSION DE BALANCE</string>
     <string name="Appearance_BalanceValue">VALEUR DE BALANCE</string>
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
+    <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
     <string name="BalanceViewType_FiatValue">Valeur Fiat</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
     <string name="SettingsAboutApp_Site">Site Web</string>
     <string name="SettingsAboutApp_WhatsNew">Nouveautés</string>
+    <!-- Blockchain Settings  -->
+    <string name="BlockchainSettings_Title">Blockchain Settings</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable ne collecte aucune donnée et n\'utilise aucun outil d\'analyse susceptible d\'exposer des données sur ses utilisateurs. Le portefeuille est conçu pour assurer un haut niveau de confidentialité à ses utilisateurs.</string>
     <string name="Privacy_BulletedText1">Les données de l\'utilisateur restent toujours sur l\'appareil de l\'utilisateur.</string>
@@ -654,13 +648,20 @@
     <string name="Privacy_BulletedText3">Le portefeuille ne partage aucune donnée sur les utilisateurs.</string>
     <string name="Privacy_BulletedText4">Aucun compte utilisateur ni aucune base de données ne conserve les données des utilisateurs à un autre endroit.</string>
     <!-- Security Center -->
-    <string name="SecurityCenter_BlockchainSettings">PARAMÈTRES DE BLOCKCHAIN</string>
-    <string name="SecurityCenter_TestnetSettings">PARAMÈTRES DE TESTNET</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
-    <string name="SecurityCenter_BlockchainSettingsFooterDescription">Sélectionnez la source de données pour la restauration et la synchronisation du portefeuille</string>
     <!--Evm Network-->
+    <string name="EvmNetwork_AddNew">Add New</string>
+    <string name="EvmNetwork_Added">Added</string>
     <string name="EvmNetwork_SyncMode">Mode de synchronisation</string>
     <string name="EvmNetwork_SyncModeDescription">Ce paramètre contrôle la façon dont cette application interagit avec les blockchains lors de l\'envoi ou de la réception de transactions.\n\nDans le cas du Bitcoin, du Bitcoin Cash, du Litecoin et du Dash, la communication avec les nœuds du réseau blockchain est entièrement de pair à pair. Unstoppable ping plusieurs nœuds et communique avec l\'un d\'entre eux.\n\nDans le cas d\'Ethereum, de Binance Smart Chain et d\'autres blockchains EVM, les portefeuilles mobiles n\'ont pas d\'autre choix pour interagir avec les blockchains respectives que de passer par des fournisseurs de services RPC tiers (par exemple Infura.io) ou des nœuds personnels. Cela signifie essentiellement que votre communication avec cette blockchain n\'est pas décentralisée. Cela n\'a aucune incidence sur vos fonds, mais seulement sur votre capacité à vous connecter au réseau de la blockchain.\n\nRassurez-vous, nous réfléchissons à une solution et nous essaierons très bientôt de vous proposer un moyen décentralisé de synchronisation. Patience.</string>
+    <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
+    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_Name">Nom</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Une fois la source de restauration modifiée, le portefeuille devra être resynchronisé avec la blockchain Bitcoin.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Restorer la source</string>
@@ -754,14 +755,13 @@
     <string name="Hud_Added_To_Wallet">Ajouté au portefeuille</string>
     <string name="Hud_Already_In_Wallet">Déjà ajouté au portefeuille</string>
     <string name="Hud_Removed_from_Watchlist">Retirer de la liste de suivi</string>
+    <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
-    <string name="ManageCoins_Search">Code ou nom du jeton</string>
+    <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
-    <string name="ManageCoins_NotSupported">Pas supporté</string>
-    <string name="ManageCoins_NotSupportedDescription">Votre type de portefeuille actuel %1$s ne prend pas en charge %2$s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Expérimental</string>
     <string name="ExperimentalFeatures_Description">Les fonctionnalités ci-dessous sont expérimentales et doivent être utilisées avec prudence. Bien que nous ayons entièrement testé ces fonctionnalités en utilisant nos propres fonds crypto, nous ne pouvons pas garantir qu\'elles fonctionnent comme prévu dans tous les cas de figure possible.</string>
@@ -774,17 +774,18 @@
     <string name="ManageAccounts_CreateNewWallet">Créer</string>
     <string name="ManageAccounts_ImportWallet">Restaurer</string>
     <string name="ManageAccounts_WatchAddress">Adresse à suivre</string>
-    <string name="ManageAccounts_Hint">Astuce ! La restauration d\'un portefeuille existant, mais avec une nouvelle phrase d\'authentification, génère un tout nouveau portefeuille. Pratique si vous souhaitez utiliser une seule phrase de réinitialisation mnémonique de 12 à 24 mots pour plusieurs portefeuilles.</string>
-    <string name="Watch_Address_Title">Adresse à suivre</string>
     <string name="Watch_Address_Hint">Adresse ou domaine</string>
     <string name="Watch_XPubKey_Hint">Entrez Account Extended Public Key</string>
     <string name="Watch_Address_Description">Disponible uniquement pour Ethereum et autres blockchains EVM prises en charge.</string>
     <string name="Watch_Address_Watch">Suivi</string>
+    <string name="Watch_Select_Blockchains">Choisir la blockchain</string>
+    <string name="Watch_Select_Coins">Crypto Monnaie</string>
     <string name="Watch_By">Par</string>
     <string name="Watch_WatchBy">Regarder par</string>
     <string name="Watch_TypeEvmAddress">Adresse EVM</string>
     <string name="Watch_TypeSolanaAddress">Adresse Solana</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
     <string name="ManageAccount_Save">Sauvegarder</string>
@@ -826,8 +827,8 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Ne pas copier</string>
     <string name="ShowKey_PrivateKey_Warning">Cette clé est pour toutes les blockchains compatibles EVM.\n\nEn tant que mesure de sécurité, nous vous recommandons de ne pas utiliser l\'action de copie sur la clé privée.</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Sauvegarder la phrase</string>
-    <string name="BackupRecoveryPhrase_Description">Créez une copie de sauvegarde de la phrase de récupération et du mot de passe qui vous permettra de récupérer votre portefeuille si votre téléphone est perdu, volé, cassé, etc.</string>
+    <string name="BackupRecoveryPhrase_Title">Backup Wallet</string>
+    <string name="BackupRecoveryPhrase_Description">Backup this wallet by creating a copy of its recovery phrase. It will be required in order to access the wallet if your phone is lost, stolen, broken etc.</string>
     <string name="BackupRecoveryPhrase_Backup">Sauvegarde</string>
     <string name="BackupRecoveryPhrase_Later">Plus tard</string>
     <!-- Recovery Phrase -->
@@ -901,10 +902,12 @@
     <string name="AddToken_AlreadyAdded">DÉJÀ AJOUTÉ</string>
     <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
     <string name="AddToken_ChooseToken">Choisir les jetons</string>
-    <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
-    <string name="AddToken_InvalidAddressError">Adresse du contrat ou symbole BEP2 non valide</string>
-    <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
-    <string name="AddEvmToken_TokenNotFound">Token non trouvé</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
+    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
+    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Format de l\'adresse</string>
     <string name="AddressFormatSettings_Description">Sélectionnez le format d\'adresse de la pièce. Procédez avec l\'option recommandée si vous n\'êtes pas sur de vous. Un format correct doit être choisi lors de la restauration d\'un portefeuille existant.</string>
@@ -933,8 +936,9 @@
     <string name="Tor_TorIsActive">Tor est actif</string>
     <string name="Tor_PrerequisitesAlert_Content">L\'activation de TOR réinitialisera la connexion de la blockchain Ethereum à Infura.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip49_Title">Plus récent (recommandé)</string>
-    <string name="CoinOption_bip84_Title">Plus récent</string>
+    <string name="CoinOption_bip44_Title">Old</string>
+    <string name="CoinOption_bip49_Title">Good</string>
+    <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Prix</string>
     <string name="Coin_Tab_Market">Marchés</string>
@@ -1157,6 +1161,7 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">Choisir le type</string>
     <string name="NftAssetActivity_Empty">Aucune activité pour l\'instant</string>
+    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
     <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
