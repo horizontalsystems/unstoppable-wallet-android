@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
@@ -18,6 +19,9 @@ class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewMo
 
     var viewItems by mutableStateOf<List<ViewItem>>(listOf())
         private set
+
+    val title: String = "Solana"
+    val blockchainType = BlockchainType.Solana
 
     init {
         service.itemsObservable
@@ -44,8 +48,6 @@ class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewMo
             item.selected
         )
     }
-
-    val title: String = "Solana"
 
     fun onSelectViewItem(viewItem: ViewItem) {
         service.setCurrentSource(viewItem.name)

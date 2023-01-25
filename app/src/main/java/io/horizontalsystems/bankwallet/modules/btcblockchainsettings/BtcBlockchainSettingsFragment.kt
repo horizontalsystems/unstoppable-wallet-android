@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -73,14 +75,26 @@ private fun BtcBlockchainSettingsScreen(
             AppBar(
                 TranslatableString.PlainString(viewModel.title),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = viewModel.blockchainIconUrl,
+                            error = painterResource(R.drawable.ic_platform_placeholder_32)
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(start = 14.dp)
+                            .size(24.dp)
+                    )
                 },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                )
             )
 
             Column(
@@ -154,7 +168,7 @@ private fun TransactionDataSortSettings(
 private fun BlockchainSettingSection(
     restoreSources: List<BtcBlockchainSettingsModule.ViewItem>,
     infoScreenId: Int,
-    settingTitleTextRes : Int,
+    settingTitleTextRes: Int,
     settingDescriptionTextRes: Int,
     onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit,
     navController: NavController
