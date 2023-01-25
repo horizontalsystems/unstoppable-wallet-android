@@ -502,24 +502,12 @@
     <string name="Approve_YouApprove">Você concorda</string>
     <string name="Approve_YouRevoke">Você revoga</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on the %s blockchain. \n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
-    <string name="SwapInfo_DexRelated">%s Relacionado</string>
     <string name="SwapInfo_AllowanceTitle">Preço</string>
     <string name="SwapInfo_AllowanceDescription">O montante que uma exchange pode gastar em nome do usuário na execução de trocas simbólicas. É necessária uma margem suficiente para que uma transação de troca efetiva possa ocorrer.</string>
     <string name="SwapInfo_PriceImpactTitle">Impacto de preço</string>
     <string name="SwapInfo_PriceImpactDescription">O desvio de preço esperado de um valor mostrado, normalmente aumenta com o montante de swap.</string>
-    <string name="SwapInfo_SwapFeeTitle">Tarifas de troca</string>
-    <string name="SwapInfo_SwapFeeDescription">Uma taxa de serviço para a ação de troca na plataforma, mostrada na moeda que o usuário vende. Para a maioria das encomendas, deve situar-se nos 0,3% ou nos 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Valor garantido</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">A quantia mínima esperada de um usuário que troca tokens deve receber como resultado de uma ação de troca.</string>
     <string name="SwapInfo_MaxSpendTitle">Gastos máximos</string>
-    <string name="SwapInfo_MaxSpendDescription">O valor máximo esperado de um usuário que troca tokens deve receber como resultado de uma ação de troca.</string>
-    <string name="SwapInfo_Other">Outros</string>
-    <string name="SwapInfo_TransactionFeeTitle">Taxa de Transação</string>
-    <string name="SwapInfo_TransactionFeeDescription">O custo máximo de execução de uma transação na blockchain. Observe que a taxa de transação é o custo de execução de uma transação na própria blockchain e não inclui taxas de serviço cobradas por protocolos descentralizados de troca de tokens. \n\nOs protocolos de troca de tokens descentralizados normalmente cobram uma taxa de troca equivalente a 0,3% (ou 0,6%) do valor negociado. Esta taxa é aplicada dentro da ordem de swap.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Velocidade da Transação</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Transações com uma taxa de transação maior resultarão em velocidades de processamento mais rápidas. O oposto também é verdade.</string>
-    <string name="SwapInfo_Site">%s Site</string>
     <!--Deposit-->
     <string name="Deposit_Title">Receber %s</string>
     <string name="Deposit_Share">Compartilhar</string>
@@ -651,6 +639,8 @@
     <string name="SettingsAboutApp_Title">Sobre o App</string>
     <string name="SettingsAboutApp_Site">Site</string>
     <string name="SettingsAboutApp_WhatsNew">O que há de novo</string>
+    <!-- Blockchain Settings  -->
+    <string name="BlockchainSettings_Title">Blockchain Settings</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">A Unstoppable não coleta dados nem usa ferramentas analíticas que possam expor dados sobre seus usuários. A carteira foi projetada para garantir um alto nível de privacidade para seus usuários.</string>
     <string name="Privacy_BulletedText1">Os dados do usuário sempre permanecem em seu dispositivo.</string>
@@ -658,13 +648,20 @@
     <string name="Privacy_BulletedText3">A carteira não coleta nenhum dado sobre os usuários.</string>
     <string name="Privacy_BulletedText4">Não há nenhuma conta de usuário ou banco de dados mantendo os dados do usuário em algum lugar.</string>
     <!-- Security Center -->
-    <string name="SecurityCenter_BlockchainSettings">CONFIGURAÇÕES DE BLOCKCHAIN</string>
-    <string name="SecurityCenter_TestnetSettings">CONFIGURAÇÕES DE TESTADO</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
-    <string name="SecurityCenter_BlockchainSettingsFooterDescription">Escolha a fonte de dados para restaurar e sincronizar carteira</string>
     <!--Evm Network-->
+    <string name="EvmNetwork_AddNew">Add New</string>
+    <string name="EvmNetwork_Added">Added</string>
     <string name="EvmNetwork_SyncMode">Sincronizar Nó</string>
     <string name="EvmNetwork_SyncModeDescription">Esta configuração controla como este aplicativo interage com blockchains ao enviar ou receber transações.\n\nNo caso do Bitcoin, Bitcoin Cash, Litecoin e Dash, a comunicação com os nós da rede blockchain é totalmente peer-to-peer. Os pings Unstoppable são feitos em muitos nós e se comunicam com um deles. Cada vez que o aplicativo se conecta a um nó diferente.\n\nNo caso da Ethereum, da Binance Smart Chain e outras blockchains de EVM, não existem alternativas para as carteiras móveis para interagir com as respectivas blockchains que não sejam por provedores de serviços RPC de terceiros (ex. Infura.io) ou nós pessoais. Isso essencialmente significa que sua comunicação com essa blockchain não é descentralizada. Isso não afeta seus fundos de forma alguma, apenas a capacidade de se conectar à rede blockchain.\n\nFique tranquilo, vamos mantê-lo no radar e em breve tentaremos fornecer uma forma descentralizada para sincronizar. Paciência.</string>
+    <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
+    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_Name">Nome</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte de restauração, a carteira terá que ressincronizar-se com a blockchain do Bitcoin.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Restaurar Fonte</string>
@@ -752,6 +749,7 @@
     <string name="Hud_Added_To_Wallet">Adicionado à Carteira</string>
     <string name="Hud_Already_In_Wallet">Já adicionado à carteira</string>
     <string name="Hud_Removed_from_Watchlist">Removido da Lista</string>
+    <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gerenciador de Moedas</string>
@@ -781,6 +779,7 @@
     <string name="Watch_TypeEvmAddress">Endereço EVM</string>
     <string name="Watch_TypeSolanaAddress">Endereço Solana</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nome</string>
     <string name="ManageAccount_Save">Salvar</string>
