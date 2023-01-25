@@ -65,6 +65,12 @@ class EvmSyncSourceManager(
                         appConfigProvider.infuraProjectSecret
                     ),
                     defaultTransactionSource(type)
+                ),
+                evmSyncSource(
+                    type,
+                    "eth.llamarpc.com",
+                    RpcSource.Http(listOf(URL("https://eth.llamarpc.com")), null),
+                    defaultTransactionSource(type)
                 )
             )
             BlockchainType.EthereumGoerli -> listOf(
@@ -91,12 +97,24 @@ class EvmSyncSourceManager(
                     RpcSource.bscRpcHttp(),
                     defaultTransactionSource(type)
                 ),
+                evmSyncSource(
+                    type,
+                    "1rpc.io",
+                    RpcSource.Http(listOf(URL("https://1rpc.io/bnb")), null),
+                    defaultTransactionSource(type)
+                )
             )
             BlockchainType.Polygon -> listOf(
                 evmSyncSource(
                     type,
                     "Polygon-RPC HTTP",
                     RpcSource.polygonRpcHttp(),
+                    defaultTransactionSource(type)
+                ),
+                evmSyncSource(
+                    type,
+                    "polygon.llamarpc.com",
+                    RpcSource.Http(listOf(URL("https://polygon.llamarpc.com")), null),
                     defaultTransactionSource(type)
                 )
             )
@@ -106,6 +124,12 @@ class EvmSyncSourceManager(
                     "Avax.network",
                     RpcSource.avaxNetworkHttp(),
                     defaultTransactionSource(type)
+                ),
+                evmSyncSource(
+                    type,
+                    "avalanche-evm.publicnode.com",
+                    RpcSource.Http(listOf(URL("https://avalanche-evm.publicnode.com")), null),
+                    defaultTransactionSource(type)
                 )
             )
             BlockchainType.Optimism -> listOf(
@@ -113,6 +137,15 @@ class EvmSyncSourceManager(
                     type,
                     "Optimism.io HTTP",
                     RpcSource.optimismRpcHttp(),
+                    defaultTransactionSource(type)
+                ),
+                evmSyncSource(
+                    type,
+                    "endpoints.omniatech.io",
+                    RpcSource.Http(
+                        listOf(URL("https://endpoints.omniatech.io/v1/op/mainnet/public")),
+                        null
+                    ),
                     defaultTransactionSource(type)
                 )
             )
@@ -122,6 +155,12 @@ class EvmSyncSourceManager(
                     "Arbitrum.io HTTP",
                     RpcSource.arbitrumOneRpcHttp(),
                     defaultTransactionSource(type)
+                ),
+                evmSyncSource(
+                    type,
+                    "1rpc.io",
+                    RpcSource.Http(listOf(URL("https://1rpc.io/arb")), null),
+                    defaultTransactionSource(type)
                 )
             )
             BlockchainType.Gnosis -> listOf(
@@ -129,6 +168,12 @@ class EvmSyncSourceManager(
                     type,
                     "Gnosis.io HTTP",
                     RpcSource.gnosisRpcHttp(),
+                    defaultTransactionSource(type)
+                ),
+                evmSyncSource(
+                    type,
+                    "rpc.ankr.com",
+                    RpcSource.Http(listOf(URL("https://rpc.ankr.com/gnosis")), null),
                     defaultTransactionSource(type)
                 )
             )
