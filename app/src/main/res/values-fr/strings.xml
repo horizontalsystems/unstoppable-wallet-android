@@ -764,9 +764,6 @@
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
-    <string name="ManageCoins_NotSupported">Pas supporté</string>
-    <string name="ManageCoins_NotSupportedDescription">Votre type de portefeuille actuel %1$s ne prend pas en charge %2$s</string>
-    <string name="ManageCoins_NotSupportedByAppDescription">Unstoppable does not support %s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Expérimental</string>
     <string name="ExperimentalFeatures_Description">Les fonctionnalités ci-dessous sont expérimentales et doivent être utilisées avec prudence. Bien que nous ayons entièrement testé ces fonctionnalités en utilisant nos propres fonds crypto, nous ne pouvons pas garantir qu\'elles fonctionnent comme prévu dans tous les cas de figure possible.</string>
