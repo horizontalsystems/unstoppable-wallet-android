@@ -50,7 +50,7 @@ class SelectBlockchainsViewModel(
             is AccountType.SolanaAddress -> Unit // N/A
             is AccountType.EvmAddress -> {
                 title = R.string.Watch_Select_Blockchains
-                val blockchains = evmBlockchainManager.allBlockchains
+                val blockchains = evmBlockchainManager.allMainNetBlockchains
                 blockchainViewItems = blockchains.map { blockchain ->
                     CoinViewItem(
                         item = blockchain,
