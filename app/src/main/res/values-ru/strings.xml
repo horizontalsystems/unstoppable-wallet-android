@@ -27,7 +27,7 @@
     <string name="Button_Create">Создать</string>
     <string name="Button_Advanced">Доп. Настройки</string>
     <string name="Button_Restore">Импорт</string>
-    <string name="Button_WatchAddress">Просмотр Кошелька</string>
+    <string name="Button_WatchAddress">Просмотр кошелька</string>
     <string name="Button_Reset">Сбросить</string>
     <string name="Button_Reconnect">Повторное Подключение</string>
     <string name="Button_Understand">Я Понимаю</string>
@@ -62,7 +62,7 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Доп. Настройки</string>
     <string name="CreateWallet_Mnemonic">Мнемоническая Фраза</string>
-    <string name="CreateWallet_Wordlist">Список Слов</string>
+    <string name="CreateWallet_Wordlist">Список слов</string>
     <string name="Passphrase">Кодовая Фраза</string>
     <string name="ConfirmPassphrase">Подтвердить</string>
     <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
@@ -91,33 +91,33 @@
     <!--Restore-->
     <string name="Restore_Advanced_Title">Доп. Настройки</string>
     <string name="Restore_Mnemonic_Description">Введите фразу для восстановления (мнемоническая фраза), которая состоит из 12, 15, 18, 21 или 24 слов и может содержать дополнительный буквенно-цифровой пароль.</string>
-    <string name="Restore_ValidationFailed">Неверный Ключ</string>
+    <string name="Restore_ValidationFailed">Неверный ключ</string>
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
-    <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
+    <string name="Restore_InvalidChecksum">Неверная контрольная сумма</string>
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
     <string name="Restore_Title">Блокчейны</string>
     <string name="Restore_Key">Ключ</string>
-    <string name="Restore_By">Импортировать по</string>
-    <string name="Restore_RestoreBy">Импортировать по</string>
-    <string name="Restore_RecoveryPhrase">Фраза Восстановления</string>
-    <string name="Restore_PrivateKey">Приватный Ключ</string>
+    <string name="Restore_By">Через</string>
+    <string name="Restore_RestoreBy">Через</string>
+    <string name="Restore_RecoveryPhrase">Фраза восстановления</string>
+    <string name="Restore_PrivateKey">Приватный ключ</string>
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите 12, 15, 18, 21 или 24 слова</string>
-    <string name="Restore_NonStandardRestore">Нестандартный Импорт</string>
+    <string name="Restore_NonStandardRestore">Нестандартный импорт</string>
     <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
 \n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
-    <string name="Restore_PrivateKey_InvalidKey">Неверный Ключ</string>
-    <string name="Select_Coins">Выберите Токены</string>
-    <string name="Restore_BirthdayHeight">Блок Создания</string>
+    <string name="Restore_PrivateKey_InvalidKey">Неверный ключ</string>
+    <string name="Select_Coins">Выберите токены</string>
+    <string name="Restore_BirthdayHeight">Блок создания</string>
     <string name="Restore_ZCash">Zcash</string>
-    <string name="Restore_ZCash_BirthdayHeight">Блок Создания Zcash</string>
+    <string name="Restore_ZCash_BirthdayHeight">Блок создания Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете дату создания вашего кошелька, укажите ее для быстрой синхронизации.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
-    <string name="Restore_ZCash_RestoreAsNew">Вставить как новое</string>
-    <string name="Restore_ZCash_NewWallet">Создать Кошелек</string>
+    <string name="Restore_ZCash_RestoreAsNew">Восстановить как новый</string>
+    <string name="Restore_ZCash_NewWallet">Создать кошелек</string>
     <string name="Restore_ZCash_NewWallet_Description">Не было транзакций до</string>
-    <string name="Restore_ZCash_OldWallet">Старый Кошелёк</string>
+    <string name="Restore_ZCash_OldWallet">Старый кошелёк</string>
     <string name="Restore_ZCash_OldWallet_Description">Использовался до и есть транзакции</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Первоначальная синхронизация с блокчейном может потреблять много интернет-трафика.</string>
     <!--Backup-->
@@ -131,30 +131,30 @@
     <string name="Market_FilterSection_MarketParameters">ПАРАМЕТРЫ РЫНКА</string>
     <string name="Market_FilterSection_PriceParameters">ПАРАМЕТРЫ ЦЕНЫ</string>
     <string name="Market_FilterSection_NetworkParameters">ПАРАМЕТРЫ СЕТИ</string>
-    <string name="Market_Field_HighestCap">Наивысшей Кап.</string>
-    <string name="Market_Field_LowestCap">Наименьшей Кап.</string>
-    <string name="Market_Field_HighestVolume">Наивысшему Обьему</string>
-    <string name="Market_Field_LowestVolume">Наименьшему Объему</string>
+    <string name="Market_Field_HighestCap">Наивысшей кап.</string>
+    <string name="Market_Field_LowestCap">Наименьшей кап.</string>
+    <string name="Market_Field_HighestVolume">Наивысшему обьему</string>
+    <string name="Market_Field_LowestVolume">Наименьшему объему</string>
     <string name="Market_Field_HighestPrice">Самая высокая цена</string>
     <string name="Market_Field_LowestPrice">Самая низкая цена</string>
     <string name="Market_Sort_PopupTitle">Сортировать по</string>
-    <string name="Market_TotalMarketCap">Общая Капитализация</string>
+    <string name="Market_TotalMarketCap">Общая капитализация</string>
     <string name="Market_BtcDominance">Доминирование BTC</string>
-    <string name="Market_Volume24h">Объем Торгов (24ч)</string>
+    <string name="Market_Volume24h">Объем торгов (24ч)</string>
     <string name="Market_TvlDeFi">TVL в DeFi</string>
     <string name="Market_DeFiCap">Капитализация DeFi</string>
-    <string name="Market_SeeAll">Посмотреть Всё</string>
+    <string name="Market_SeeAll">Посмотреть всё</string>
     <string name="Market_PoweredByHorizontalApi">Работает на Horizontal API</string>
     <string name="Market_Tab_Overview">Обзор</string>
     <string name="Market_Tab_Posts">Новости</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
     <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
-    <string name="Market_Category_TopCoins">Лучшие Токены</string>
+    <string name="Market_Category_TopCoins">Лучшие токены</string>
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
     <!--Market Overview-->
-    <string name="Market_Overview_TopSectors">Лучшие Секторы</string>
+    <string name="Market_Overview_TopSectors">Лучшие секторы</string>
     <!--Market Top Platforms-->
-    <string name="MarketTopPlatforms_Title">Лучшие Платформы</string>
+    <string name="MarketTopPlatforms_Title">Лучшие платформы</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">Лучшие блокчейн-платформы</string>
     <string name="MarketTopPlatforms_Description">Лучшие ведущие блокчейн-платформы кумулятивного рынка проектов.</string>
     <string name="MarketTopPlatforms_Protocols">Протокол: %s</string>
@@ -184,11 +184,11 @@
     <string name="Market_Search_Hint">Поиск</string>
     <string name="Market_Search_BrowseCategories">Обзор Категорий</string>
     <string name="Market_Filter_ChooseSet">Выбрать Набор</string>
-    <string name="Market_Filter_MarketCap">Рыночная Капитализация</string>
+    <string name="Market_Filter_MarketCap">Рыночная капитализация</string>
     <string name="Market_Filter_Volume">Объем Торговли</string>
-    <string name="Market_Filter_Volume24h">Объем Торговли (24ч)</string>
-    <string name="Market_Filter_PricePeriod">Ценовой Период</string>
-    <string name="Market_Filter_PriceChange">Изменение Цены</string>
+    <string name="Market_Filter_Volume24h">Объем торговли (24ч)</string>
+    <string name="Market_Filter_PricePeriod">Ценовой период</string>
+    <string name="Market_Filter_PriceChange">Изменение цены</string>
     <string name="Market_Filter_Blockchains">Блокчейны</string>
     <string name="Market_Filter_OutperformedBtc">Обошел BTC</string>
     <string name="Market_Filter_OutperformedEth">Обошел ETH</string>
@@ -200,8 +200,8 @@
     <string name="Market_Filter_Top_500">Топ 500</string>
     <string name="Market_Filter_Top_1000">Топ 1000</string>
     <string name="Market_Filter_Top_1500">Топ 1500</string>
-    <string name="Market_Filter_ShowResults">Показать Результаты</string>
-    <string name="Market_Filter_ShowResults_Counter">Показать Результаты: %d</string>
+    <string name="Market_Filter_ShowResults">Показать результаты</string>
+    <string name="Market_Filter_ShowResults_Counter">Показать результаты: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5 млн</string>
     <string name="Market_Filter_Range_5M_20M">5млн - 20млн</string>
     <string name="Market_Filter_Range_20M_100M">20млн - 100млн</string>
@@ -265,23 +265,23 @@
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
-    <string name="Balance_AddCoins">Добавить Токен</string>
-    <string name="Balance_AddCoin">Добавить Токен</string>
+    <string name="Balance_AddCoins">Добавить токен</string>
+    <string name="Balance_AddCoin">Добавить токен</string>
     <string name="Balance_CoinDisabled">Отключена монета %s</string>
     <string name="Balance_Sort_Balance">По Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать</string>
-    <string name="Balance_Sort_Az">По Названию</string>
-    <string name="Balance_Sort_24hPriceChange">По Изменение Цены (%)</string>
+    <string name="Balance_Sort_Az">По названию</string>
+    <string name="Balance_Sort_24hPriceChange">По изменение цены (%)</string>
     <string name="Balance_Hidden">скрытое</string>
-    <string name="Balance_DownloadingBlocks">Загрузка Блоков</string>
-    <string name="Balance_ScanningBlocks">Сканирование Блоков</string>
+    <string name="Balance_DownloadingBlocks">Загрузка блоков</string>
+    <string name="Balance_ScanningBlocks">Сканирование блоков</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет установленных кошельков.\nСоздайте новый кошелек или восстановите существующий кошелек </string>
     <string name="Balance_NoCoinsAlert">У вас нет добавленных монет.\nДобавьте монеты, которые вы будете использовать</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
-    <string name="SendNft_Error_NotEnoughtBalance">Недостаточно Средств</string>
+    <string name="SendNft_Error_NotEnoughtBalance">Недостаточно средств</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
@@ -303,7 +303,7 @@
     <string name="ScanQr_NoCameraPermission">Нет разрешения для камеры</string>
     <string name="ScanQr_CameraPermissionDeniedText">Доступ к камере для этого приложения запрещен, вы можете перейти в настройки и разрешить доступ</string>
     <string name="ScanQr_GoToSettings">Перейти в настройки</string>
-    <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
+    <string name="Send_Error_IncorrectAddress">Неверный адрес</string>
     <string name="Send_Error_UnsupportedAddress">Блокировка по времени работает только с адресами P2PKH (начиная с 1)</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
     <string name="Send_Error_MinimumAmount">Мин. сумма %s</string>
@@ -311,8 +311,8 @@
     <string name="Send_Error_MinRequiredBalance">Мин. обязательный остаток %s</string>
     <string name="Send_Error_TransparentAddress">Unstoppable не поддерживает платежи на публичный адрес</string>
     <string name="Send_Error_SendToSelf">Отправка самому себе невозможна</string>
-    <string name="Send_DialogAvailableBalance">Доступный Баланс</string>
-    <string name="Send_DialogSpeed">Скорость Транзакции</string>
+    <string name="Send_DialogAvailableBalance">Доступный баланс</string>
+    <string name="Send_DialogSpeed">Скорость транзакции</string>
     <string name="Send_TxSpeed_Low">Низкая</string>
     <string name="Send_TxSpeed_High">Высокая</string>
     <string name="Send_TxSpeed_Recommended">Рекомендовано</string>
@@ -332,16 +332,16 @@
     <string name="Send_Warning_LowFee_Description">Транзакция может застрять в сети или будет отклонена</string>
     <string name="Send_Error_FetchFeeRateFailed">Ошибка при получении ставки комиссии</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_Title">Настройки Комиссии</string>
+    <string name="FeeSettings_Title">Настройки комиссии</string>
     <string name="FeeSettings_Reset">Сбросить</string>
-    <string name="FeeSettings_MaxFee">Макс. Комиссия</string>
+    <string name="FeeSettings_MaxFee">Макс. комиссия</string>
     <string name="FeeSettings_MaxFee_Info">Максимальная ожидаемая общая комиссия за данную транзакцию. Обычно, фактическая комиссия будет меньше.</string>
     <string name="FeeSettings_Fee">Комиссия</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Gas Limit - это максимальное количество единиц газа, которое пользователь готов потратить при отправке конкретной транзакции. Для выполнения более комплексных транзакций требуется большее количество единиц газ, чем для выполнения более простых. Лимит газа автоматически рассчитывается и задается для каждой транзакции.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
     <string name="FeeSettings_GasPrice_Info">Комиссия за сетевую транзакцию измеряется в единицах газа. Цена газа – это сумма, которую пользователь готов заплатить за единицу газа. Когда сеть занята, цены на газ повышаются, а во время простоя они наоборот снижаются. Слишком низкая цена газа зачастую является основанием для длительного сохранения отложенного статуса транзакции.</string>
-    <string name="FeeSettings_CurrentBaseFee">Текущая Базовая Комиссия</string>
+    <string name="FeeSettings_CurrentBaseFee">Текущая базовая комиссия</string>
     <string name="FeeSettings_MaxBaseFee">Макс. Базовая Комиссия</string>
     <string name="FeeSettings_MaxBaseFee_Info">Пользователь должен потратить определенное количество единиц газа на обработку каждой транзакции в Ethereum. Стоимость одной единицы газа изменяется в реальном времени в зависимости от статуса сети и не контролируется ни одной организацией. Максимальный размер базовой комиссии в сочетании с опциональными майнерскими чаевыми (см. ниже) - это самая высокая цена за единицу газа, которую пользователь готов оплатить за отправку транзакции.</string>
     <string name="FeeSettings_MaxMinerTips">Оплата Майнерам</string>
@@ -659,7 +659,7 @@
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
-    <string name="AddEvmSyncSource_Name">По Названию</string>
+    <string name="AddEvmSyncSource_Name">По названию</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
@@ -778,7 +778,7 @@
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
     <string name="Watch_Address_Watch">Смотреть</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
-    <string name="Watch_Select_Coins">Выберите Токены</string>
+    <string name="Watch_Select_Coins">Выберите токены</string>
     <string name="Watch_By">По</string>
     <string name="Watch_WatchBy">Смотреть</string>
     <string name="Watch_TypeEvmAddress">EVM адрес</string>
