@@ -502,24 +502,12 @@
     <string name="Approve_YouApprove">شما تایید کردید</string>
     <string name="Approve_YouRevoke">You Revoke</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">این سرویس مبادله تراکنش %s، یک پروتکل تبادل توکن غیرمتمرکز که بر روی بلاک چین %s ساخته شده است، پشتیبانی می‌شود. \n\n %s کاملاً خودکار است و توسط قراردادهای هوشمند مدیریت می‌شود که تبادل توکن را به روشی قابل اعتماد و بدون هیچ راهی برای تقلب تسهیل می‌کند.</string>
-    <string name="SwapInfo_DexRelated">Uniswap مرتبط نیست</string>
     <string name="SwapInfo_AllowanceTitle">مستمری</string>
     <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A proceeding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">تأثیر قیمت</string>
     <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="SwapInfo_SwapFeeTitle">هزینه جابجایی</string>
-    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on the platform, shown in the currency the user sells. For most orders it should be either 0.3% or 0.6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">مبلغ تضمین شده</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user swapping tokens is expected to receive as a result of a swap action.</string>
     <string name="SwapInfo_MaxSpendTitle">حداکثر هزینه</string>
-    <string name="SwapInfo_MaxSpendDescription">The maximum amount a user swapping tokens is expected to spend as a result of a swap action.</string>
-    <string name="SwapInfo_Other">غیره</string>
-    <string name="SwapInfo_TransactionFeeTitle">كارمزد تراکنش</string>
-    <string name="SwapInfo_TransactionFeeDescription">The maximum cost of executing a transaction on the blockchain. Note that, the transaction fee is the cost of executing a transaction on the blockchain itself and doesn\'t include service fees charged by decentralized token exchange protocols. \n\nDecentralized token exchange protocols typically charge a swap fee equivalent to 0.3% (or 0.6%) of the amount traded. This fee is applied within the swap order.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">سرعت تراکنش</string>
-    <string name="SwapInfo_TransactionSpeedDescription">معاملات با کارمزد معامله بالاتر منجر به سرعت پردازش بیشتر می شود. عکس این نیز صادق است.</string>
-    <string name="SwapInfo_Site">سایت%s</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت %s</string>
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
@@ -651,6 +639,8 @@
     <string name="SettingsAboutApp_Title">درباره برنامه</string>
     <string name="SettingsAboutApp_Site">وب سایت پروژه</string>
     <string name="SettingsAboutApp_WhatsNew">تغییرات جدید</string>
+    <!-- Blockchain Settings  -->
+    <string name="BlockchainSettings_Title">Blockchain Settings</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable doesn\'t collect any data or use analytics tools that may expose any data about its users. The wallet is designed to ensure a high level of privacy for its users.</string>
     <string name="Privacy_BulletedText1">User data always remains on the user\'s device.</string>
@@ -658,13 +648,20 @@
     <string name="Privacy_BulletedText3">The wallet doesn\'t share any data about users.</string>
     <string name="Privacy_BulletedText4">There are no user accounts or databases keeping user data elsewhere.</string>
     <!-- Security Center -->
-    <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
-    <string name="SecurityCenter_TestnetSettings">TESTNET SETTINGS</string>
     <string name="SecurityCenter_Internet">اینترنت</string>
-    <string name="SecurityCenter_BlockchainSettingsFooterDescription">منبع داده را برای بازیابی و همگام سازی کیف پول انتخاب کنید</string>
     <!--Evm Network-->
+    <string name="EvmNetwork_AddNew">Add New</string>
+    <string name="EvmNetwork_Added">Added</string>
     <string name="EvmNetwork_SyncMode">حالت همگام سازی</string>
     <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience</string>
+    <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
+    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_Name">نام</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing Restore Source the wallet will have to resync itself with the Bitcoin blockchain.</string>
     <string name="BtcBlockchainSettings_RestoreSource">بازیابی منبع</string>
@@ -759,6 +756,7 @@
     <string name="Hud_Added_To_Wallet">Added To Wallet</string>
     <string name="Hud_Already_In_Wallet">Already added to wallet</string>
     <string name="Hud_Removed_from_Watchlist">از فهرست تماشا برداشته شد</string>
+    <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
@@ -788,6 +786,7 @@
     <string name="Watch_TypeEvmAddress">EVM Address</string>
     <string name="Watch_TypeSolanaAddress">Solana Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">نام</string>
     <string name="ManageAccount_Save">ذخیره</string>
