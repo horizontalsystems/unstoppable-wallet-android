@@ -25,8 +25,8 @@
     <string name="Button_Disconnect">Отсоединить</string>
     <string name="Button_Start">Начать</string>
     <string name="Button_Create">Создать</string>
-    <string name="Button_Advanced">Advanced</string>
-    <string name="Button_Restore">Восстановить</string>
+    <string name="Button_Advanced">Доп. Настройки</string>
+    <string name="Button_Restore">Импорт</string>
     <string name="Button_WatchAddress">Просмотр Кошелька</string>
     <string name="Button_Reset">Сбросить</string>
     <string name="Button_Reconnect">Повторное Подключение</string>
@@ -60,9 +60,9 @@
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Настройки Приватности</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Advanced_Title">Advanced</string>
+    <string name="CreateWallet_Advanced_Title">Доп. Настройки</string>
     <string name="CreateWallet_Mnemonic">Мнемоническая Фраза</string>
-    <string name="CreateWallet_Wordlist">Word List</string>
+    <string name="CreateWallet_Wordlist">Список Слов</string>
     <string name="Passphrase">Кодовая Фраза</string>
     <string name="ConfirmPassphrase">Подтвердить</string>
     <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
@@ -89,7 +89,7 @@
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Restore-->
-    <string name="Restore_Advanced_Title">Advanced</string>
+    <string name="Restore_Advanced_Title">Доп. Настройки</string>
     <string name="Restore_Mnemonic_Description">Введите фразу для восстановления (мнемоническая фраза), которая состоит из 12, 15, 18, 21 или 24 слов и может содержать дополнительный буквенно-цифровой пароль.</string>
     <string name="Restore_ValidationFailed">Неверный Ключ</string>
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
@@ -98,13 +98,13 @@
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
     <string name="Restore_Title">Блокчейны</string>
     <string name="Restore_Key">Ключ</string>
-    <string name="Restore_By">Из</string>
-    <string name="Restore_RestoreBy">Восстановить из</string>
+    <string name="Restore_By">Импортировать по</string>
+    <string name="Restore_RestoreBy">Импортировать по</string>
     <string name="Restore_RecoveryPhrase">Фраза Восстановления</string>
     <string name="Restore_PrivateKey">Приватный Ключ</string>
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите 12, 15, 18, 21 или 24 слова</string>
-    <string name="Restore_NonStandardRestore">Нестандартное Восстановление</string>
+    <string name="Restore_NonStandardRestore">Нестандартный Импорт</string>
     <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
 \n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
     <string name="Restore_PrivateKey_InvalidKey">Неверный Ключ</string>
@@ -372,7 +372,7 @@
     <string name="WalletConnect_Ready_Hint">Вы можете перейти в браузер. Не закрывайте эту страницу во время использования браузера.</string>
     <string name="WalletConnect_Reconnect_Hint">Не удалось установить соединение. Попробуйте переподключиться снова.</string>
     <string name="WalletConnect_Error_InvalidUrl">Неверный URL-адрес</string>
-    <string name="WalletConnect_NotSupportedV2">WalletConnect v2 is not supported</string>
+    <string name="WalletConnect_NotSupportedV2">Подключение к Wallet Connect v2 не поддерживается</string>
     <string name="WalletConnect_Requirement">Требования</string>
     <string name="WalletConnect_Alert">Предупреждение</string>
     <string name="WalletConnect_Status_Offline">Не доступен</string>
@@ -386,8 +386,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Пожалуйста, подпишите сообщение для аутентификации</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
-    <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">You need to backup %s before you can use WalletConnect</string>
+    <string name="WalletConnect_Error_NoWallet">Вам нужно создать или импортировать кошелек перед использованием WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">Вам нужно сделать резервную копию %s перед использованием WalletConnect</string>
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый Блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
@@ -504,24 +504,12 @@
     <string name="Approve_YouApprove">Вы Разрешаете</string>
     <string name="Approve_YouRevoke">Вы Отозвали</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного в блокчейне %s.\n\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
-    <string name="SwapInfo_DexRelated">o %s</string>
     <string name="SwapInfo_AllowanceTitle">Разрешение</string>
     <string name="SwapInfo_AllowanceDescription">Сумма, которую exchange может потратить от имени пользователя при выполнении обмена токенов. Действующая транзакция, устанавливающая достаточный уровень допустимости, необходима для того, чтобы транзакция обмена была осуществлена.</string>
     <string name="SwapInfo_PriceImpactTitle">Колебание Цен</string>
     <string name="SwapInfo_PriceImpactDescription">Ожидаемое отклонение цены от указанной цены, обычно увеличивается при увеличении суммы обмена.</string>
-    <string name="SwapInfo_SwapFeeTitle">Комиссия за обмен</string>
-    <string name="SwapInfo_SwapFeeDescription">Плата за услугу обмена на платформе, показана в валюте, в которой продает пользователь. Для большинства заказов составляет или 0,3% или 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Гарантированная Сумма</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">Минимальная сумма, которую пользователь изменяет в результате действия подкачки.</string>
     <string name="SwapInfo_MaxSpendTitle">Максимальная Трата</string>
-    <string name="SwapInfo_MaxSpendDescription">Максимальная сумма, которую пользователь изменяет в результате действия подкачки.</string>
-    <string name="SwapInfo_Other">Другое</string>
-    <string name="SwapInfo_TransactionFeeTitle">Комиссия за транзакцию</string>
-    <string name="SwapInfo_TransactionFeeDescription">Максимальная стоимость выполнения транзакции на блокчейне. Обратите внимание, что Комиссия за транзакцию - это стоимость выполнения транзакции на самом блокчейне и не включает плату за услуги, взимаемую по децентрализованным протоколам обмена токенов. \n\nПротоколы обмена токенов обычно взимают комиссию за замену, эквивалентную 0. % (или 0,6%) от суммы сделки. Эта комиссия применяется в рамках заказа обмена валют.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Скорость Транзакции</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Обработка транзакций с более высокой комиссией будет ускорена. Также верно и обратное.</string>
-    <string name="SwapInfo_Site">%s Сайт</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
@@ -653,6 +641,8 @@
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_WhatsNew">Что Нового</string>
+    <!-- Blockchain Settings  -->
+    <string name="BlockchainSettings_Title">Blockchain Settings</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable не собирает данные и не использует инструменты аналитики, которые могут раскрывать любые данные о своих пользователях. Кошелек разработан для обеспечения высокого уровня конфиденциальности для своих пользователей.</string>
     <string name="Privacy_BulletedText1">Данные пользователя всегда остаются на устройстве пользователя.</string>
@@ -660,13 +650,20 @@
     <string name="Privacy_BulletedText3">Кошелек не передает никаких данных о пользователях.</string>
     <string name="Privacy_BulletedText4">Нет учетных записей или баз данных, хранящих данные пользователя в другом месте.</string>
     <!-- Security Center -->
-    <string name="SecurityCenter_BlockchainSettings">НАСТРОЙКИ BLOCKCHAIN</string>
-    <string name="SecurityCenter_TestnetSettings">НАСТРОЙКИ ТЕСТНЕТА</string>
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
-    <string name="SecurityCenter_BlockchainSettingsFooterDescription">Выберите источник данных для восстановления и синхронизации кошелька</string>
     <!--Evm Network-->
+    <string name="EvmNetwork_AddNew">Add New</string>
+    <string name="EvmNetwork_Added">Added</string>
     <string name="EvmNetwork_SyncMode">Режим Синхронизации</string>
     <string name="EvmNetwork_SyncModeDescription">Этот параметр определяет способ взаимодействия приложения с блокчейнами при отправке или получении транзакций.\n\nКогда речь идет о Bitcoin, Bitcoin Cash, Litecoin, и Dash, связь с сетевыми узлами блокчейна полностью равноправна. Unstoppable пингует многие узлы и связывается с одним из них. Каждый раз приложение подключается к другому узлу.\n\nЧто касается Ethereum и Binance Smart Chain, то пока нет подходящих альтернативных вариантов мобильных кошельков для взаимодействия с соответствующими блокчейнами кроме сторонних поставщиков услуг RPC (т.е. Infura.io) или личными узлами Ethereum. Это значит, что ваше взаимодействие с блокчейном не децентрализовано. Это влияет не на ваши средства, а на возможность подключения к сети блокчейн.</string>
+    <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
+    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_Name">По Названию</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">После изменения источника восстановления, кошелек должен будет повторно синхронизироваться с Биткоин блокчейном.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Источник Восстановления</string>
@@ -748,7 +745,7 @@
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_Created">Создан</string>
-    <string name="Hud_Text_Restored">Восстановлен</string>
+    <string name="Hud_Text_Restored">Импортировано</string>
     <string name="Hud_Text_AddressAdded">Адрес Добавлен</string>
     <string name="Hud_Text_Done">Готово</string>
     <string name="Hud_Text_Verified">Подтверждено</string>
@@ -757,10 +754,11 @@
     <string name="Hud_Added_To_Wallet">Добавлено в Кошелек</string>
     <string name="Hud_Already_In_Wallet">Уже добавлено в кошелек</string>
     <string name="Hud_Removed_from_Watchlist">Удалить из Избранного</string>
+    <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Токены</string>
-    <string name="ManageCoins_Search">Name, code or contract address</string>
+    <string name="ManageCoins_Search">Название, код или адрес контракта</string>
     <string name="ManageCoins_AddToken">Добавить Токен</string>
     <string name="ManageCoins_NoResults">Ничего не найдено. Попробуйте добавить токен вручную, если вы знаете его адрес смарт-контракта.</string>
     <!-- Experimental Feature -->
@@ -773,21 +771,22 @@
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Кошельки</string>
     <string name="ManageAccounts_CreateNewWallet">Создать</string>
-    <string name="ManageAccounts_ImportWallet">Восстановить</string>
-    <string name="ManageAccounts_WatchAddress">Просмотр Адреса</string>
+    <string name="ManageAccounts_ImportWallet">Импорт Кошелька</string>
+    <string name="ManageAccounts_WatchAddress">Просмотр Кошелька</string>
     <string name="Watch_Address_Hint">Адрес или Домен</string>
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
     <string name="Watch_Address_Watch">Смотреть</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
     <string name="Watch_Select_Coins">Выберите Токены</string>
-    <string name="Watch_By">Из</string>
+    <string name="Watch_By">По</string>
     <string name="Watch_WatchBy">Смотреть</string>
     <string name="Watch_TypeEvmAddress">EVM адрес</string>
     <string name="Watch_TypeSolanaAddress">Solana адрес</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
     <!--Manage Account-->
-    <string name="ManageAccount_Name">Названию</string>
+    <string name="ManageAccount_Name">Название</string>
     <string name="ManageAccount_Save">Сохранить</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Резервная Фраза</string>
     <string name="ManageAccount_RecoveryPhraseShow">Показать Фразу</string>
@@ -907,7 +906,7 @@
     <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
     <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
     <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
-    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Адрес контракта не найден в %s блокчейне </string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <string name="AddressFormatSettings_Description">Выберите формат адреса для токена. Если вы сомневаетесь в правильности выбранного формата, выберите рекомендуемую опцию. При восстановлении существующего кошелька должен быть выбран правильный формат.</string>
