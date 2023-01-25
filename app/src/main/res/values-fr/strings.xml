@@ -502,24 +502,12 @@
     <string name="Approve_YouApprove">Vous approuvez</string>
     <string name="Approve_YouRevoke">Vous révoquez</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Ce service d\'échange est assuré par %s, un protocole d\'échange de tokens décentralisé construit sur la blockchain %s.\n\n%s est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucune possibilité de tricher.</string>
-    <string name="SwapInfo_DexRelated">Relatif à %s</string>
     <string name="SwapInfo_AllowanceTitle">Allocation</string>
     <string name="SwapInfo_AllowanceDescription">Le montant qu\'un échange peut dépenser pour le compte de l\'utilisateur lors de l\'exécution de swaps de jetons. Une provision suffisante est requise avant de pouvoir effectuer une opération d\'échange réelle.</string>
     <string name="SwapInfo_PriceImpactTitle">Impact prix</string>
     <string name="SwapInfo_PriceImpactDescription">L\'écart de prix attendu par rapport à un prix affiché, augmente généralement avec le montant de l\'échange.</string>
-    <string name="SwapInfo_SwapFeeTitle">Frais d\'échange</string>
-    <string name="SwapInfo_SwapFeeDescription">Des frais de service pour l\'opération d\'échange sur la plateforme, indiqués dans la devise dans laquelle l\'utilisateur vend. Pour la plupart des ordres, ils devraient être de 0,3 % ou 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Montant garanti</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">Le montant minimum qu\'un jeton de swapping d\'un utilisateur devrait recevoir suite à une action de swap.</string>
     <string name="SwapInfo_MaxSpendTitle">Dépense maximale</string>
-    <string name="SwapInfo_MaxSpendDescription">Le montant maximum que les jetons de swapping d\'un utilisateur doivent dépenser à la suite d\'une action de swap.</string>
-    <string name="SwapInfo_Other">Autre</string>
-    <string name="SwapInfo_TransactionFeeTitle">Frais de transaction</string>
-    <string name="SwapInfo_TransactionFeeDescription">Le coût maximal de l\'exécution d\'une transaction sur la blockchain. Notez que les frais de transaction sont le coût de l\'exécution d\'une transaction sur la blockchain elle-même et n\'incluent pas les frais de service facturés par les protocoles d\'échange décentralisés de jetons. \n\nLes protocoles d\'échange de jetons décentralisés facturent généralement des frais de swap équivalents à 0. % (ou 0,6%) du montant négocié. Ces frais sont appliqués dans l\'ordre de swap.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Vitesse de transaction</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Les transactions dont les frais de transaction sont plus élevés se traduiront par une vitesse de traitement plus rapide. L\'inverse est également vrai.</string>
-    <string name="SwapInfo_Site">Site %s</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Partager</string>
@@ -651,6 +639,8 @@
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
     <string name="SettingsAboutApp_Site">Site Web</string>
     <string name="SettingsAboutApp_WhatsNew">Nouveautés</string>
+    <!-- Blockchain Settings  -->
+    <string name="BlockchainSettings_Title">Blockchain Settings</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable ne collecte aucune donnée et n\'utilise aucun outil d\'analyse susceptible d\'exposer des données sur ses utilisateurs. Le portefeuille est conçu pour assurer un haut niveau de confidentialité à ses utilisateurs.</string>
     <string name="Privacy_BulletedText1">Les données de l\'utilisateur restent toujours sur l\'appareil de l\'utilisateur.</string>
@@ -658,13 +648,20 @@
     <string name="Privacy_BulletedText3">Le portefeuille ne partage aucune donnée sur les utilisateurs.</string>
     <string name="Privacy_BulletedText4">Aucun compte utilisateur ni aucune base de données ne conserve les données des utilisateurs à un autre endroit.</string>
     <!-- Security Center -->
-    <string name="SecurityCenter_BlockchainSettings">PARAMÈTRES DE BLOCKCHAIN</string>
-    <string name="SecurityCenter_TestnetSettings">PARAMÈTRES DE TESTNET</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
-    <string name="SecurityCenter_BlockchainSettingsFooterDescription">Sélectionnez la source de données pour la restauration et la synchronisation du portefeuille</string>
     <!--Evm Network-->
+    <string name="EvmNetwork_AddNew">Add New</string>
+    <string name="EvmNetwork_Added">Added</string>
     <string name="EvmNetwork_SyncMode">Mode de synchronisation</string>
     <string name="EvmNetwork_SyncModeDescription">Ce paramètre contrôle la façon dont cette application interagit avec les blockchains lors de l\'envoi ou de la réception de transactions.\n\nDans le cas du Bitcoin, du Bitcoin Cash, du Litecoin et du Dash, la communication avec les nœuds du réseau blockchain est entièrement de pair à pair. Unstoppable ping plusieurs nœuds et communique avec l\'un d\'entre eux.\n\nDans le cas d\'Ethereum, de Binance Smart Chain et d\'autres blockchains EVM, les portefeuilles mobiles n\'ont pas d\'autre choix pour interagir avec les blockchains respectives que de passer par des fournisseurs de services RPC tiers (par exemple Infura.io) ou des nœuds personnels. Cela signifie essentiellement que votre communication avec cette blockchain n\'est pas décentralisée. Cela n\'a aucune incidence sur vos fonds, mais seulement sur votre capacité à vous connecter au réseau de la blockchain.\n\nRassurez-vous, nous réfléchissons à une solution et nous essaierons très bientôt de vous proposer un moyen décentralisé de synchronisation. Patience.</string>
+    <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
+    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_Name">Nom</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Une fois la source de restauration modifiée, le portefeuille devra être resynchronisé avec la blockchain Bitcoin.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Restorer la source</string>
@@ -758,6 +755,7 @@
     <string name="Hud_Added_To_Wallet">Ajouté au portefeuille</string>
     <string name="Hud_Already_In_Wallet">Déjà ajouté au portefeuille</string>
     <string name="Hud_Removed_from_Watchlist">Retirer de la liste de suivi</string>
+    <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
@@ -787,6 +785,7 @@
     <string name="Watch_TypeEvmAddress">Adresse EVM</string>
     <string name="Watch_TypeSolanaAddress">Adresse Solana</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
     <string name="ManageAccount_Save">Sauvegarder</string>
