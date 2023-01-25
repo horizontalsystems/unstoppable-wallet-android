@@ -769,9 +769,6 @@
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Token hinzufügen</string>
     <string name="ManageCoins_NoResults">Keine Ergebnisse gefunden. Versuchen Sie, den Token manuell hinzuzufügen, wenn Sie die Adresse des Smart Contracts kennen.</string>
-    <string name="ManageCoins_NotSupported">Nicht unterstützt</string>
-    <string name="ManageCoins_NotSupportedDescription">Ihr aktueller Wallet-Typ %1$s unterstützt %2$s nicht</string>
-    <string name="ManageCoins_NotSupportedByAppDescription">Unstoppable does not support %s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimentell</string>
     <string name="ExperimentalFeatures_Description">Die unten aufgeführten Funktionen sind experimentell und sollten mit Vorsicht eingesetzt werden. Wir haben sie zwar ausführlich mit unserem eigenen Kryptoguthaben getestet, aber wir können noch nicht garantieren, dass sie in allen denkbaren Fällen funktionieren.</string>
