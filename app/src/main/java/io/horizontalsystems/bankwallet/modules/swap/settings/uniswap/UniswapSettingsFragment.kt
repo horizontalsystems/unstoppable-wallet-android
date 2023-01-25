@@ -18,9 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.info.SwapInfoFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewModel
@@ -66,12 +64,6 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
                         onCloseClick = {
                             findNavController().popBackStack()
                         },
-                        onInfoClick = {
-                            findNavController().slideFromRight(
-                                R.id.swapInfoFragment,
-                                SwapInfoFragment.prepareParams(dex)
-                            )
-                        },
                         dex = dex,
                         factory = vmFactory,
                     )
@@ -85,27 +77,21 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
 @Composable
 private fun UniswapSettingsScreen(
     onCloseClick: () -> Unit,
-    onInfoClick: () -> Unit,
     factory: UniswapSettingsModule.Factory,
     dex: SwapMainModule.Dex,
-    uniswapSettinsViewModel: UniswapSettingsViewModel = viewModel(factory = factory),
+    uniswapSettingsViewModel: UniswapSettingsViewModel = viewModel(factory = factory),
     deadlineViewModel: SwapDeadlineViewModel = viewModel(factory = factory),
     recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
     slippageViewModel: SwapSlippageViewModel = viewModel(factory = factory),
 ) {
-    val (buttonTitle, buttonEnabled) = uniswapSettinsViewModel.buttonState
-    val localview = LocalView.current
+    val (buttonTitle, buttonEnabled) = uniswapSettingsViewModel.buttonState
+    val view = LocalView.current
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
                 title = TranslatableString.ResString(R.string.SwapSettings_Title),
                 menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Info_Title),
-                        icon = R.drawable.ic_info_24,
-                        onClick = onInfoClick
-                    ),
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
@@ -145,10 +131,10 @@ private fun UniswapSettingsScreen(
                         .padding(horizontal = 24.dp),
                     title = buttonTitle,
                     onClick = {
-                        if (uniswapSettinsViewModel.onDoneClick()) {
+                        if (uniswapSettingsViewModel.onDoneClick()) {
                             onCloseClick()
                         } else {
-                            HudHelper.showErrorMessage(localview, R.string.default_error_msg)
+                            HudHelper.showErrorMessage(view, R.string.default_error_msg)
                         }
                     },
                     enabled = buttonEnabled

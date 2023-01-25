@@ -587,24 +587,12 @@
 
     <!--Uniswap Info -->
 
-    <string name="SwapInfo_Description">This exchange service is powered by %1$s, a decentralized token exchange protocol built on the %2$s blockchain. \n\n%3$s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
-    <string name="SwapInfo_DexRelated">%s Related</string>
     <string name="SwapInfo_AllowanceTitle">Allowance</string>
     <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A proceeding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
     <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="SwapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on the platform, shown in the currency the user sells. For most orders it should be either 0.3% or 0.6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user swapping tokens is expected to receive as a result of a swap action.</string>
     <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
-    <string name="SwapInfo_MaxSpendDescription">The maximum amount a user swapping tokens is expected to spend as a result of a swap action.</string>
-    <string name="SwapInfo_Other">Other</string>
-    <string name="SwapInfo_TransactionFeeTitle">Transaction Fee</string>
-    <string name="SwapInfo_TransactionFeeDescription">The maximum cost of executing a transaction on the blockchain. Note that, the transaction fee is the cost of executing a transaction on the blockchain itself and doesn\'t include service fees charged by decentralized token exchange protocols. \n\nDecentralized token exchange protocols typically charge a swap fee equivalent to 0.3% (or 0.6%) of the amount traded. This fee is applied within the swap order.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Transactions with a higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
-    <string name="SwapInfo_Site">%s Site</string>
 
     <!--Deposit-->
 
