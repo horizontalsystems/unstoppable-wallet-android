@@ -503,24 +503,12 @@
     <string name="Approve_YouApprove">Sie genehmigen</string>
     <string name="Approve_YouRevoke">Du widerrufen</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Dieser Tauschdienst wird von %s betrieben, einem dezentralen Token-Tauschprotokoll, das auf der %s Blockchain basiert.\n\n%s ist vollständig automatisiert und wird von intelligenten Verträgen verwaltet, die den Token-Tausch in einer zuverlässigen Art und Weise ermöglichen, ohne dass Betrug betrieben werden kann.</string>
-    <string name="SwapInfo_DexRelated">Uniswap-bezogen</string>
     <string name="SwapInfo_AllowanceTitle">Vergütung</string>
     <string name="SwapInfo_AllowanceDescription">Der Betrag, den ein Austausch im Namen des Benutzers ausgeben kann, wenn Token Swaps ausgeführt werden. Bevor eine tatsächliche Swap-Transaktion durchgeführt werden kann, ist eine vorherige Transaktion erforderlich, die ausreichende Zertifikate festlegt.</string>
     <string name="SwapInfo_PriceImpactTitle">Preisauswirkungen</string>
     <string name="SwapInfo_PriceImpactDescription">Erwartete Preisabweichung von einem angezeigten Preis, steigt normalerweise mit dem Tauschbetrag.</string>
-    <string name="SwapInfo_SwapFeeTitle">Tauschgebühr</string>
-    <string name="SwapInfo_SwapFeeDescription">Eine Servicegebühr für die Tauschaktion auf der Plattform, angegeben in der Währung, die der Benutzer verkauft. Für die meisten Aufträge beträgt diese entweder 0,3 % oder 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Garantierter Betrag</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">Der minimale Betrag, den ein Benutzer durch eine Swap-Aktion erhält.</string>
     <string name="SwapInfo_MaxSpendTitle">Maximale Ausgaben</string>
-    <string name="SwapInfo_MaxSpendDescription">Der maximale Betrag, den ein Benutzer durch eine Swap-Aktion ausgeben soll.</string>
-    <string name="SwapInfo_Other">Andere</string>
-    <string name="SwapInfo_TransactionFeeTitle">Transaktionsgebühr</string>
-    <string name="SwapInfo_TransactionFeeDescription">Die maximalen Kosten für die Ausführung einer Transaktion auf der Blockchain. Beachte, das, die Transaktionsgebühr ist die Kosten für die Ausführung einer Transaktion auf der Blockchain selbst und enthält keine Servicegebühren, die durch dezentrale Token-Austauschprotokolle berechnet werden. \n\nDezentrale Token-Austauschprotokolle berechnen normalerweise eine Swap-Gebühr in Höhe von 0. % (oder 0,6%) des gehandelten Betrags. Diese Gebühr wird innerhalb des Swap-Orders erhoben.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Transaktionsgeschwindigkeit</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Transaktionen mit höheren Transaktionsgebühren führen zu schnelleren Bearbeitungsgeschwindigkeiten. Auch das Gegenteil ist der Fall.</string>
-    <string name="SwapInfo_Site">Uniswap-Seite</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s Anfordern</string>
     <string name="Deposit_Share">Teilen</string>
@@ -652,6 +640,8 @@
     <string name="SettingsAboutApp_Title">Über die App</string>
     <string name="SettingsAboutApp_Site">Webseite</string>
     <string name="SettingsAboutApp_WhatsNew">Das ist neu</string>
+    <!-- Blockchain Settings  -->
+    <string name="BlockchainSettings_Title">Blockchain Settings</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unaufhaltsam sammelt keine Daten oder verwendet Analysewerkzeuge, die möglicherweise Daten über ihre Nutzer enthüllen. Die Brieftasche ist so konzipiert, dass sie den Benutzern ein hohes Maß an Privatsphäre garantiert.</string>
     <string name="Privacy_BulletedText1">Benutzerdaten bleiben immer auf dem Gerät des Benutzers.</string>
@@ -659,13 +649,20 @@
     <string name="Privacy_BulletedText3">Das Wallet teilt keine Daten über Benutzer.</string>
     <string name="Privacy_BulletedText4">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten woanders speichern.</string>
     <!-- Security Center -->
-    <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN EINSTELLUNGEN</string>
-    <string name="SecurityCenter_TestnetSettings">TESTNET EINSTELLUNGEN</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
-    <string name="SecurityCenter_BlockchainSettingsFooterDescription">Datenquelle zum Wiederherstellen und Synchronisieren der Brieftasche auswählen</string>
     <!--Evm Network-->
+    <string name="EvmNetwork_AddNew">Add New</string>
+    <string name="EvmNetwork_Added">Added</string>
     <string name="EvmNetwork_SyncMode">Sync-Modus</string>
     <string name="EvmNetwork_SyncModeDescription">Diese Einstellung regelt, wie diese App beim Senden oder Empfangen von Transaktionen mit Blockchains interagiert.\n\nIm Falle von Bitcoin, Bitcoin Cash, Litecoin und Dash, ist die Kommunikation mit Blockchain Netzwerkknoten vollständig Peer-to-Peer. Unaufhaltsam pingt viele Knoten und kommuniziert mit einem von ihnen. Jedes Mal, wenn sich die App mit einem anderen Knoten verbindet.\n\nIm Fall von Ethereum, Binance Smart Chain und anderen EVM Blockchains, es gibt keine Alternativen für mobile Brieftaschen zur Interaktion mit entsprechenden Blockketten außer über RPC-Dienstanbieter Dritter (i. . Infura.io) oder persönliche Knoten. Das bedeutet im Grunde, dass Ihre Kommunikation mit dieser Blockchain nicht dezentralisiert ist. Dies wirkt sich in keiner Weise auf Ihr Geld aus, nur auf die Fähigkeit, sich mit dem blockchain Netzwerk zu verbinden.\n\nSeien Sie versichert, wir halten dies auf dem Radar und werden bald versuchen, eine dezentrale Synchronisierung zu ermöglichen.</string>
+    <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
+    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_Name">Name</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Nach dem Ändern der Quelle wiederherstellen muss sich die Wallet mit der %@ Blockchain synchronisieren.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Parameter wiederherstellen</string>
@@ -763,6 +760,7 @@
     <string name="Hud_Added_To_Wallet">Zum Wallet hinzugefügt</string>
     <string name="Hud_Already_In_Wallet">Bereits im Wallet enthalten</string>
     <string name="Hud_Removed_from_Watchlist">Aus Merkliste entfernt</string>
+    <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError">%s </string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
@@ -792,6 +790,7 @@
     <string name="Watch_TypeEvmAddress">EVM-Adresse</string>
     <string name="Watch_TypeSolanaAddress">Solana-Adresse</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Speichern</string>
