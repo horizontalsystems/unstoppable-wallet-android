@@ -183,9 +183,6 @@
         android:id="@+id/swapApproveConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
     <fragment
-        android:id="@+id/swapInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.SwapInfoFragment" />
-    <fragment
         android:id="@+id/uniswapSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment"
         />
