@@ -28,6 +28,9 @@ class EvmBlockchainManager(
     val allBlockchains: List<Blockchain>
         get() = marketKit.blockchains(allBlockchainTypes.map { it.uid }) + evmTestnetManager.blockchains()
 
+    val allMainNetBlockchains: List<Blockchain>
+        get() = marketKit.blockchains(allBlockchainTypes.map { it.uid })
+
     private fun getEvmKitManagers(blockchainType: BlockchainType): Pair<EvmKitManager, EvmAccountManager> {
         val evmKitManagers = evmKitManagersMap[blockchainType]
 
