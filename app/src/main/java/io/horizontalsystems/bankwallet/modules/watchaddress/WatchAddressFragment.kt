@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.ByMenu
@@ -179,10 +180,13 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                     }
                     WatchAddressViewModel.Type.XPubKey -> {
                         FormsInputMultiline(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp),
+                            modifier = Modifier.padding(horizontal = 16.dp),
                             hint = stringResource(id = R.string.Watch_XPubKey_Hint),
                             qrScannerEnabled = true,
+                            state = if (uiState.invalidXPubKey)
+                                DataState.Error(Exception(stringResource(id = R.string.Watch_Error_InvalidXPubKey)))
+                            else
+                               null
                         ) {
                             viewModel.onEnterXPubKey(it)
                         }

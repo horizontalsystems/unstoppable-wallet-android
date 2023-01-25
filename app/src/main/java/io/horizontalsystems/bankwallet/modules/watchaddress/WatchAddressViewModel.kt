@@ -18,6 +18,7 @@ class WatchAddressViewModel(
     private var type = Type.EvmAddress
     private var address: Address? = null
     private var xPubKey: String? = null
+    private var invalidXPubKey = false
 
     private var accountType: AccountType? = null
     private var accountName: String? = null
@@ -28,7 +29,8 @@ class WatchAddressViewModel(
             submitButtonType = submitButtonType,
             type = type,
             accountType = accountType,
-            accountName = accountName
+            accountName = accountName,
+            invalidXPubKey = invalidXPubKey
         )
     )
         private set
@@ -39,7 +41,8 @@ class WatchAddressViewModel(
             submitButtonType = submitButtonType,
             type = type,
             accountType = accountType,
-            accountName = accountName
+            accountName = accountName,
+            invalidXPubKey = invalidXPubKey
         )
     }
 
@@ -54,8 +57,10 @@ class WatchAddressViewModel(
     fun onEnterXPubKey(v: String) {
         xPubKey = try {
             HDExtendedKey.validate(v, true)
+            invalidXPubKey = false
             v
         } catch (t: Throwable) {
+            invalidXPubKey = v.isNotBlank()
             null
         }
 
@@ -124,7 +129,8 @@ data class WatchAddressUiState(
     val submitButtonType: SubmitButtonType,
     val type: WatchAddressViewModel.Type,
     val accountType: AccountType?,
-    val accountName: String?
+    val accountName: String?,
+    val invalidXPubKey: Boolean
 )
 
 sealed class SubmitButtonType {
