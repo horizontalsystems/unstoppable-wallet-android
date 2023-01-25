@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
@@ -19,8 +20,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -71,14 +74,26 @@ private fun SolanaNetworkScreen(
             AppBar(
                 TranslatableString.PlainString(viewModel.title),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = viewModel.blockchainType.imageUrl,
+                            error = painterResource(R.drawable.ic_platform_placeholder_32)
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(start = 14.dp)
+                            .size(24.dp)
+                    )
                 },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                )
             )
 
             LazyColumn(

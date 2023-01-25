@@ -127,7 +127,7 @@ private fun EvmNetworkScreen(
                         ),
                         contentDescription = null,
                         modifier = Modifier
-                            .padding(start = 16.dp)
+                            .padding(start = 14.dp)
                             .size(24.dp)
                     )
                 },
