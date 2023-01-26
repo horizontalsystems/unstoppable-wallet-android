@@ -118,7 +118,11 @@ open class ChartViewModel(
         val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
 
         val firstItemValue = chartItems.first().value
-        val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
+        val currentValueDiff = if (firstItemValue != 0f) {
+            Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
+        } else {
+            null
+        }
 
         val chartData = ChartDataBuilder.buildFromPoints(
             chartPointsWrapper.items,
