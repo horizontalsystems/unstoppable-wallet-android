@@ -255,7 +255,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:2a89cad'
     implementation 'com.github.horizontalsystems:market-kit-android:820e52a'
-    implementation 'com.github.horizontalsystems:solana-kit-android:889c977'
+    implementation 'com.github.horizontalsystems:solana-kit-android:59c448a'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.9.0-beta04"
 
