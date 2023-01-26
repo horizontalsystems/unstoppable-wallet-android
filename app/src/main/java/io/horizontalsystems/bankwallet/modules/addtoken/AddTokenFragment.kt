@@ -4,38 +4,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
+import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.BlockchainSelectorResult
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -58,8 +52,39 @@ class AddTokenFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                AddTokenScreen(findNavController())
+                AddTokenNavHost(findNavController())
             }
+        }
+    }
+}
+
+private const val AddTokenPage = "add_token"
+private const val BlockchainSelectorPage = "blockchain_selector"
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun AddTokenNavHost(
+    fragmentNavController: NavController,
+    viewModel: AddTokenViewModel = viewModel(factory = AddTokenModule.Factory())
+) {
+    val navController = rememberAnimatedNavController()
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = AddTokenPage,
+    ) {
+        composable(AddTokenPage) {
+            AddTokenScreen(
+                navController = navController,
+                onBackPress = { fragmentNavController.popBackStack() },
+                viewModel = viewModel
+            )
+        }
+        composablePage(BlockchainSelectorPage) {
+            AddTokenBlockchainSelectorScreen(
+                blockchains = viewModel.blockchains,
+                selectedBlockchains = listOf(viewModel.selectedBlockchain),
+                navController = navController
+            )
         }
     }
 }
@@ -67,8 +92,21 @@ class AddTokenFragment : BaseFragment() {
 @Composable
 private fun AddTokenScreen(
     navController: NavController,
-    viewModel: AddTokenViewModel = viewModel(factory = AddTokenModule.Factory())
+    onBackPress: () -> Unit,
+    viewModel: AddTokenViewModel,
 ) {
+    navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getStateFlow<List<Blockchain>>(BlockchainSelectorResult, emptyList())
+        ?.collectAsState()?.value?.let { selectedItems ->
+            if (selectedItems.isNotEmpty()) {
+                viewModel.onBlockchainSelect(selectedItems.first())
+                navController.currentBackStackEntry
+                    ?.savedStateHandle
+                    ?.set<List<Blockchain>>(BlockchainSelectorResult, emptyList())
+            }
+        }
+
     val uiState = viewModel.uiState
 
     if (uiState.finished) {
@@ -83,7 +121,7 @@ private fun AddTokenScreen(
             AppBar(
                 title = TranslatableString.ResString(R.string.AddToken_Title),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = onBackPress) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",
@@ -106,10 +144,35 @@ private fun AddTokenScreen(
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
 
-                BlockchainSelector(
-                    viewModel.blockchains,
-                    viewModel.selectedBlockchain
-                ) { viewModel.onBlockchainSelect(it) }
+                CellUniversalLawrenceSection(
+                    listOf {
+                        RowUniversal(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            onClick = { navController.navigate(BlockchainSelectorPage) }
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_blocks_24),
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            body_leah(
+                                text = stringResource(R.string.AddToken_Blockchain),
+                                modifier = Modifier.weight(1f)
+                            )
+                            subhead1_grey(
+                                text = viewModel.selectedBlockchain.name,
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_down_arrow_20),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.grey
+                            )
+                        }
+                    }
+                )
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -146,100 +209,6 @@ private fun AddTokenScreen(
                             }
                         )
                     )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun BlockchainSelector(
-    blockchains: List<Blockchain>,
-    selectedBlockchain: Blockchain,
-    onSelected: (Blockchain) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-    var rowSize by remember { mutableStateOf(Size.Zero) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.TopStart)
-    ) {
-        CellUniversalLawrenceSection(
-            listOf {
-                RowUniversal(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .onGloballyPositioned { layoutCoordinates ->
-                            rowSize = layoutCoordinates.size.toSize()
-                        }
-                        .padding(horizontal = 16.dp),
-                    onClick = { expanded = !expanded }
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_blocks_24),
-                        contentDescription = null
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    body_leah(
-                        text = stringResource(R.string.AddToken_Blockchain),
-                        modifier = Modifier.weight(1f)
-                    )
-                    subhead1_grey(
-                        text = selectedBlockchain.name,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
-            }
-        )
-        MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(12.dp))) {
-            Box {
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    offset = DpOffset(x = (16).dp, y = 0.dp),
-                    modifier = Modifier
-                        .width(with(LocalDensity.current) { rowSize.width.toDp() })
-                        .background(ComposeAppTheme.colors.lawrence)
-                ) {
-                    blockchains.forEach { item ->
-                        DropdownMenuItem(
-                            onClick = {
-                                onSelected.invoke(item)
-                                expanded = false
-                            },
-                        ) {
-                            Image(
-                                painter = rememberAsyncImagePainter(
-                                    model = item.type.imageUrl,
-                                    error = painterResource(R.drawable.ic_platform_placeholder_32)
-                                ),
-                                contentDescription = null,
-                                modifier = Modifier.size(32.dp)
-                            )
-                            body_leah(
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .weight(1f),
-                                text = item.name,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                            if (item == selectedBlockchain) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_checkmark_20),
-                                    tint = ComposeAppTheme.colors.jacob,
-                                    contentDescription = null,
-                                )
-                            }
-                        }
-                    }
                 }
             }
         }

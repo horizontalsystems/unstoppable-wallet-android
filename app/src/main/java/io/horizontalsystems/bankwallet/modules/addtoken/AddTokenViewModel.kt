@@ -45,24 +45,28 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     fun onBlockchainSelect(blockchain: Blockchain) {
         selectedBlockchain = blockchain
         if (enteredText.isNotBlank()) {
-            onEnterText(enteredText)
+            updateTokenInfo(blockchain, enteredText)
         }
     }
 
     fun onEnterText(text: String) {
         enteredText = text
+        updateTokenInfo(selectedBlockchain, text)
+    }
+
+    private fun updateTokenInfo(blockchain: Blockchain, text: String) {
         fetchCustomCoinsJob?.cancel()
         tokenInfo = null
         addButtonEnabled = false
+        caution = null
+        loading = true
+
+        emitState()
+
         fetchCustomCoinsJob = viewModelScope.launch {
-            loading = true
-            caution = null
-
-            emitState()
-
             try {
                 tokenInfo = withContext(Dispatchers.IO) {
-                    addTokenService.tokenInfo(selectedBlockchain, text.trim())
+                    addTokenService.tokenInfo(blockchain, text.trim())
                 }
                 tokenInfo?.let {
                     if (it.inCoinList) {
