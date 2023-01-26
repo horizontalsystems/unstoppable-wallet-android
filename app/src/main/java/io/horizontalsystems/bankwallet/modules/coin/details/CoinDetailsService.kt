@@ -63,7 +63,7 @@ class CoinDetailsService(
             Single.just(listOf())
         }
 
-        val volumeSingle = marketKit.chartInfoSingle(fullCoin.coin.uid, currency.code, HsTimePeriod.Month1)
+        val volumeSingle = marketKit.chartInfoSingle(fullCoin.coin.uid, currency.code, HsPeriodType.ByPeriod(HsTimePeriod.Month1))
             .map { chartInfo ->
                 chartInfo.points
                     .filter { it.timestamp >= chartInfo.startTimestamp }

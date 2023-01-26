@@ -148,12 +148,12 @@ class MarketKitWrapper(
     // Chart Info
 
     fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
-    fun chartInfo(coinUid: String, currencyCode: String, interval: HsTimePeriod) = marketKit.chartInfo(coinUid, currencyCode, interval)
+    fun chartInfo(coinUid: String, currencyCode: String, periodType: HsPeriodType) = marketKit.chartInfo(coinUid, currencyCode, periodType)
 
-    fun chartInfoSingle(coinUid: String, currencyCode: String, interval: HsTimePeriod) = marketKit.chartInfoSingle(coinUid, currencyCode, interval)
+    fun chartInfoSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) = marketKit.chartInfoSingle(coinUid, currencyCode, periodType)
 
-    fun getChartInfoAsync(coinUid: String, currencyCode: String, interval: HsTimePeriod) =
-        marketKit.getChartInfoAsync(coinUid, currencyCode, interval)
+    fun getChartInfoAsync(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
+        marketKit.getChartInfoAsync(coinUid, currencyCode, periodType)
 
     // Global Market Info
 

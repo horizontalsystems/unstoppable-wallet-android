@@ -6,24 +6,11 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 
-class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : View(context, attrs, defStyleAttr) {
-
-    enum class ChartType(val value: String) {
-        Day1("1d"),
-        Week1("1w"),
-        Week2("2w"),
-        Month1("1m"),
-        Month3("3m"),
-        Month6("6m"),
-        Year1("1y"),
-        Year2("2y"),
-        All("All");
-
-        companion object {
-            fun fromString(value: String): ChartType = values().first { it.value == value }
-        }
-    }
+class ChartView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     val shape = RectF(0f,0f,0f,0f)
 
