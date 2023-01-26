@@ -118,22 +118,25 @@ private fun StaticContent(
             modifier = Modifier
                 .height(120.dp)
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val title = viewModel.slides[pagerState.currentPage].title
-            Crossfade(title) {
+            Crossfade(targetState = title) { titleRes ->
                 title3_leah(
-                    modifier = Modifier.padding(horizontal = 24.dp),
-                    text = stringResource(title),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    text = stringResource(titleRes),
                     textAlign = TextAlign.Center
                 )
             }
             Spacer(Modifier.height(16.dp))
             val subtitle = viewModel.slides[pagerState.currentPage].subtitle
-            Crossfade(subtitle) {
+            Crossfade(targetState = subtitle) { subtitleRes ->
                 body_grey(
-                    text = stringResource(subtitle),
-                    modifier = Modifier.padding(horizontal = 48.dp),
+                    text = stringResource(subtitleRes),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 48.dp),
                     textAlign = TextAlign.Center
                 )
             }
