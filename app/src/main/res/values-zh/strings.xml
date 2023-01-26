@@ -954,6 +954,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6月</string>
     <string name="CoinPage_TimeDuration_Year">1年</string>
     <string name="CoinPage_TimeDuration_Year2">2年</string>
+    <string name="CoinPage_TimeDuration_All">所有</string>
     <string name="CoinPage_Markets">市场</string>
     <string name="CoinPage_TradingVolume">成交量</string>
     <string name="CoinPage_MajorHolders">主要持有者</string>
