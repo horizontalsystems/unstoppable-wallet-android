@@ -27,6 +27,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -314,6 +315,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
         Spacer(modifier = Modifier.width(8.dp))
         ButtonPrimaryCircle(
             icon = R.drawable.ic_chart_24,
+            enabled = !viewItem.wallet.token.isCustom,
             onClick = {
                 val coinUid = viewItem.wallet.coin.uid
                 val arguments = CoinFragment.prepareParams(coinUid)
