@@ -10,10 +10,7 @@ import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.helpers.IndicatorHelper
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.ChartInfo
-import io.horizontalsystems.marketkit.models.ChartPointType
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.rx2.await
@@ -26,7 +23,7 @@ class CoinOverviewChartService(
 
     override val initialChartInterval = HsTimePeriod.Day1
 
-    override var chartIntervals = listOf<HsTimePeriod>()
+    override var chartIntervals = listOf<HsTimePeriod?>()
 
     override val chartIndicators = listOf(
         ChartIndicator.Ema,
@@ -37,15 +34,16 @@ class CoinOverviewChartService(
     private var updatesSubscriptionKey: String? = null
     private val disposables = CompositeDisposable()
 
+    private var chartStartTime: Long = 0
+
     override suspend fun start() {
-        val chartStartTime = marketKit.chartStartTimeSingle(coinUid).await()
+        chartStartTime = marketKit.chartStartTimeSingle(coinUid).await()
         val now = System.currentTimeMillis() / 1000L
         val mostPeriodSeconds = now - chartStartTime
 
         chartIntervals = HsTimePeriod.values().filter {
-            val range = it.range
-            range == null || range <= mostPeriodSeconds
-        }
+            it.range <= mostPeriodSeconds
+        } + listOf<HsTimePeriod?>(null)
 
         super.start()
     }
@@ -55,18 +53,38 @@ class CoinOverviewChartService(
         unsubscribeFromUpdates()
     }
 
+    override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
+        return getItemsByPeriodType(
+            currency = currency,
+            periodType = HsPeriodType.ByStartTime(chartStartTime),
+            chartInterval = null
+        )
+    }
+
     override fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
     ): Single<ChartPointsWrapper> {
-        val newKey = chartInterval.name + currency.code
+        return getItemsByPeriodType(
+            currency = currency,
+            periodType = HsPeriodType.ByPeriod(chartInterval),
+            chartInterval = chartInterval
+        )
+    }
+
+    private fun getItemsByPeriodType(
+        currency: Currency,
+        periodType: HsPeriodType,
+        chartInterval: HsTimePeriod?
+    ): Single<ChartPointsWrapper> {
+        val newKey = (chartInterval?.name ?: "All") + currency.code
         if (forceRefresh || newKey != updatesSubscriptionKey) {
             unsubscribeFromUpdates()
-            subscribeForUpdates(currency, chartInterval)
+            subscribeForUpdates(currency, periodType)
             updatesSubscriptionKey = newKey
         }
 
-        val tmpChartInfo: ChartInfo? = marketKit.chartInfo(coinUid, currency.code, chartInterval)
+        val tmpChartInfo = marketKit.chartInfo(coinUid, currency.code, periodType)
         val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
 
         return Single.just(doGetItems(tmpChartInfo, tmpLastCoinPrice, chartInterval))
@@ -76,7 +94,7 @@ class CoinOverviewChartService(
         disposables.clear()
     }
 
-    private fun subscribeForUpdates(currency: Currency, chartInterval: HsTimePeriod) {
+    private fun subscribeForUpdates(currency: Currency, periodType: HsPeriodType) {
         marketKit.coinPriceObservable(coinUid, currency.code)
             .subscribeIO {
                 dataInvalidated()
@@ -85,7 +103,7 @@ class CoinOverviewChartService(
                 disposables.add(it)
             }
 
-        marketKit.getChartInfoAsync(coinUid, currency.code, chartInterval)
+        marketKit.getChartInfoAsync(coinUid, currency.code, periodType)
             .subscribeIO {
                 dataInvalidated()
             }
@@ -97,7 +115,7 @@ class CoinOverviewChartService(
     private fun doGetItems(
         chartInfo: ChartInfo?,
         lastCoinPrice: CoinPrice?,
-        chartInterval: HsTimePeriod
+        chartInterval: HsTimePeriod?
     ): ChartPointsWrapper {
         if (chartInfo == null || lastCoinPrice == null) return ChartPointsWrapper(chartInterval, listOf())
         val points = chartInfo.points

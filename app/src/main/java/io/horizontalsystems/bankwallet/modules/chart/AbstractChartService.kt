@@ -13,17 +13,20 @@ import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 
 abstract class AbstractChartService {
-    abstract val chartIntervals: List<HsTimePeriod>
+    abstract val chartIntervals: List<HsTimePeriod?>
     open val chartIndicators: List<ChartIndicator> = listOf()
 
     protected abstract val currencyManager: CurrencyManager
     protected abstract val initialChartInterval: HsTimePeriod
+    protected open fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
+        return Single.error(Exception("Not Implemented"))
+    }
     protected abstract fun getItems(chartInterval: HsTimePeriod, currency: Currency): Single<ChartPointsWrapper>
 
     protected var chartInterval: HsTimePeriod? = null
         set(value) {
             field = value
-            value?.let { chartTypeObservable.onNext(it) }
+            chartTypeObservable.onNext(Optional.ofNullable(value))
             indicatorsEnabled = chartInterval != HsTimePeriod.Day1
         }
     var indicator: ChartIndicator? = null
@@ -39,7 +42,7 @@ abstract class AbstractChartService {
 
     val currency: Currency
         get() = currencyManager.baseCurrency
-    val chartTypeObservable = BehaviorSubject.create<HsTimePeriod>()
+    val chartTypeObservable = BehaviorSubject.create<Optional<HsTimePeriod>>()
     val indicatorObservable = BehaviorSubject.create<Optional<ChartIndicator>>()
 
     val indicatorsEnabledObservable = BehaviorSubject.create<Boolean>()
@@ -74,7 +77,7 @@ abstract class AbstractChartService {
     }
 
     @CallSuper
-    open fun updateChartInterval(chartInterval: HsTimePeriod) {
+    open fun updateChartInterval(chartInterval: HsTimePeriod?) {
         this.chartInterval = chartInterval
 
         fetchItems()
@@ -94,10 +97,14 @@ abstract class AbstractChartService {
 
     @Synchronized
     private fun fetchItems() {
-        val tmpChartInterval = chartInterval ?: return
+        val tmpChartInterval = chartInterval
+        val itemsSingle = when {
+            tmpChartInterval == null -> getAllItems(currency)
+            else -> getItems(tmpChartInterval, currency)
+        }
 
         fetchItemsDisposable?.dispose()
-        fetchItemsDisposable = getItems(tmpChartInterval, currency)
+        fetchItemsDisposable = itemsSingle
             .subscribeIO({
                 chartPointsWrapperObservable.onNext(Result.success(it))
             }, {

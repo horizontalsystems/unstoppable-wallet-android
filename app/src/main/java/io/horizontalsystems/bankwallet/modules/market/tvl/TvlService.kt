@@ -21,7 +21,7 @@ class TvlService(
     val marketTvlItemsObservable: BehaviorSubject<DataState<List<TvlModule.MarketTvlItem>>> =
         BehaviorSubject.create()
 
-    private var chartInterval: HsTimePeriod = HsTimePeriod.Day1
+    private var chartInterval: HsTimePeriod? = HsTimePeriod.Day1
         set(value) {
             field = value
             updateTvlData(false)
@@ -77,7 +77,7 @@ class TvlService(
         tvlDataDisposable?.dispose()
     }
 
-    fun updateChartInterval(chartInterval: HsTimePeriod) {
+    fun updateChartInterval(chartInterval: HsTimePeriod?) {
         this.chartInterval = chartInterval
     }
 }

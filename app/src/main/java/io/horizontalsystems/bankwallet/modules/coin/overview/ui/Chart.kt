@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartDataItemImmutable
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -52,7 +51,7 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 }
 
 @Composable
-fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod) -> Unit)? = null) {
+fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?) -> Unit)? = null) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
     val chartIndicators by chartViewModel.indicatorsLiveData.observeAsState(listOf())
@@ -283,9 +282,8 @@ fun PriceVolChart(
                         chart.setIndicatorLineVisible(showIndicatorLine)
 
                         chartInfoData?.let { chartInfoData ->
-                            val chartType = ChartView.ChartType.fromString(chartInfoData.chartInterval.value)
                             chart.doOnLayout {
-                                chart.setData(chartInfoData.chartData, chartType, chartInfoData.maxValue, chartInfoData.minValue)
+                                chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
                                 if (chartIndicator != null) {
                                     chart.setIndicator(chartIndicator, true)
                                 } else {

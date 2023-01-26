@@ -30,7 +30,7 @@ open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
-    val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod>>>()
+    val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod?>>>()
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()
@@ -44,7 +44,8 @@ open class ChartViewModel(
         service.chartTypeObservable
             .subscribeIO { chartType ->
                 val tabItems = service.chartIntervals.map {
-                    TabItem(Translator.getString(it.stringResId), it == chartType, it)
+                    val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
+                    TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
                 }
                 tabItemsLiveData.postValue(tabItems)
             }
@@ -94,7 +95,7 @@ open class ChartViewModel(
         }
     }
 
-    fun onSelectChartInterval(chartInterval: HsTimePeriod) {
+    fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
         loadingLiveData.postValue(true)
         service.updateChartInterval(chartInterval)
     }
@@ -166,7 +167,7 @@ open class ChartViewModel(
     fun getSelectedPoint(item: ChartDataItemImmutable): SelectedPoint? {
         return item.values[Indicator.Candle]?.let { candle ->
             val value = valueFormatter.formatValue(service.currency, candle.value.toBigDecimal())
-            val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
+            val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
 
             SelectedPoint(
                 value = value,
@@ -235,5 +236,4 @@ val HsTimePeriod.stringResId: Int
         HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
         HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
         HsTimePeriod.Year2 -> R.string.CoinPage_TimeDuration_Year2
-        HsTimePeriod.All -> R.string.CoinPage_TimeDuration_All
     }

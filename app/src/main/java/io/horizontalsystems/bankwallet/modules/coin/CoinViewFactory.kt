@@ -7,10 +7,10 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.*
 import java.math.BigDecimal
@@ -18,7 +18,7 @@ import java.net.URI
 
 data class ChartInfoData(
     val chartData: ChartData,
-    val chartInterval: HsTimePeriod,
+    val chartInterval: HsTimePeriod?,
     val maxValue: String?,
     val minValue: String?
 )

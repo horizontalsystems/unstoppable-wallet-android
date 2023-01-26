@@ -100,7 +100,7 @@ class TvlViewModel(
         disposables.clear()
     }
 
-    fun onSelectChartInterval(chartInterval: HsTimePeriod) {
+    fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
         service.updateChartInterval(chartInterval)
     }
 }
