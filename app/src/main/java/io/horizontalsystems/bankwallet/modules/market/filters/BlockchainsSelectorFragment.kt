@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -176,12 +177,11 @@ private fun AnyCell(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        if (checked) {
-            Icon(
-                painter = painterResource(R.drawable.ic_checkmark_20),
-                tint = ComposeAppTheme.colors.jacob,
-                contentDescription = null,
-            )
-        }
+        Icon(
+            painter = painterResource(R.drawable.ic_checkmark_20),
+            tint = ComposeAppTheme.colors.jacob,
+            contentDescription = null,
+            modifier = Modifier.alpha(if (checked) 1f else 0f)
+        )
     }
 }
