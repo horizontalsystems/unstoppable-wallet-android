@@ -17,6 +17,8 @@ class WatchAddressService(
     private val accountFactory: IAccountFactory
 ) {
 
+    fun getNextWatchAccountName() = accountFactory.getNextWatchAccountName()
+
     fun watch(accountType: AccountType, blockchains: List<Blockchain>, name: String? = null) {
         val accountName = name ?: accountFactory.getNextWatchAccountName()
         val account = accountFactory.watchAccount(accountName, accountType)

@@ -95,7 +95,7 @@ fun FormsInput(
             verticalAlignment = Alignment.CenterVertically
         ) {
             var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue(initial ?: ""))
+                mutableStateOf(TextFieldValue(initial ?: "", TextRange(initial?.length ?: 0)))
             }
 
             prefix?.let{

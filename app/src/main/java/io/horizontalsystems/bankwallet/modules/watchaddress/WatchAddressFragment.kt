@@ -148,6 +148,16 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
 
+                HeaderText(stringResource(id = R.string.ManageAccount_Name))
+                FormsInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = viewModel.accountName,
+                    pasteEnabled = false,
+                    hint = viewModel.defaultAccountName,
+                    onValueChange = viewModel::onEnterAccountName
+                )
+                Spacer(Modifier.height(32.dp))
+
                 ByMenu(
                     menuTitle = stringResource(R.string.Watch_By),
                     menuValue = stringResource(type.titleResId),

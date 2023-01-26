@@ -21,7 +21,12 @@ class WatchAddressViewModel(
     private var invalidXPubKey = false
 
     private var accountType: AccountType? = null
-    private var accountName: String? = null
+    private var accountNameEdited = false
+    val defaultAccountName = watchAddressService.getNextWatchAccountName()
+    var accountName: String = defaultAccountName
+        get() = field.ifBlank { defaultAccountName }
+        private set
+
 
     var uiState by mutableStateOf(
         WatchAddressUiState(
@@ -46,9 +51,16 @@ class WatchAddressViewModel(
         )
     }
 
+    fun onEnterAccountName(v: String) {
+        accountNameEdited = v.isNotBlank()
+        accountName = v
+    }
+
     fun onEnterAddress(v: Address?) {
         address = v
-        accountName = v?.domain
+        if (!accountNameEdited) {
+            accountName = v?.domain ?: defaultAccountName
+        }
 
         syncSubmitButtonType()
         emitState()
@@ -84,7 +96,7 @@ class WatchAddressViewModel(
         try {
             val accountType = getAccountType() ?: throw Exception()
 
-            watchAddressService.watch(accountType, listOf(), address?.domain)
+            watchAddressService.watch(accountType, listOf(), accountName)
 
             accountCreated = true
             emitState()
@@ -98,6 +110,10 @@ class WatchAddressViewModel(
 
         address = null
         xPubKey = null
+
+        if (!accountNameEdited) {
+            accountName = defaultAccountName
+        }
 
         syncSubmitButtonType()
         emitState()
