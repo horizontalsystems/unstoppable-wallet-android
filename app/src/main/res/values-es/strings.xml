@@ -953,6 +953,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1A</string>
     <string name="CoinPage_TimeDuration_Year2">2A</string>
+    <string name="CoinPage_TimeDuration_All">Todo</string>
     <string name="CoinPage_Markets">Mercados</string>
     <string name="CoinPage_TradingVolume">Volumen de Comercio</string>
     <string name="CoinPage_MajorHolders">Principales Accionistas</string>
