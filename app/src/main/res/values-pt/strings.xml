@@ -694,12 +694,11 @@
 \n\nÉ uma carteira peer-to-peer sem custódia, onde apenas o usuário tem controle sobre os fundos. A carteira não coleta nenhum dado e mantém o usuário independente ao não bloquear os fundos do mesmo em um aplicativo de carteira específico.
 \n\nA carteira Unstoppable é totalmente de código aberto e qualquer pessoa pode confirmar se o aplicativo funciona exatamente como afirma.
 \n\nConstruímos a Unstoppable para nós mesmos, pois as outras soluções disponíveis não estavam à altura. Tanto do ponto de vista da engenharia quanto da usabilidade, acreditamos que esta carteira está significativamente à frente dos produtos alternativos.</string>
-    <string name="SettingsTerms_Backup">Faça o backup das frases de recuperação de carteira para recuperar o acesso aos fundos.</string>
-    <string name="SettingsTerms_PrivateKeys">Chaves privadas e frases de recuperação são armazenadas apenas no seu dispositivo.</string>
-    <string name="SettingsTerms_DisablingPin">Desativar o PIN de desbloqueio do smartphone exclui todas as carteiras do aplicativo. As frases de recuperação serão necessárias para recuperar o acesso aos fundos.</string>
-    <string name="SettingsTerms_JailBraking">JailBreak (rooting), a instalação de aplicativos de fontes desconhecidas e o uso do SO desatualizado podem pôr em risco a segurança de fundos.</string>
-    <string name="SettingsTerms_Bugs">Pode haver problemas de software não descobertos no código que pode levar a um comportamento inesperado ou a um mau funcionamento do aplicativo.</string>
-    <string name="SettingsTerms_Responsibility">Só o utilizador é responsável pela segurança dos fundos e não outra entidade.</string>
+    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
+    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
+    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartilhar</string>
     <string name="SettingsShare_Text">Seja Unstoppable</string>
