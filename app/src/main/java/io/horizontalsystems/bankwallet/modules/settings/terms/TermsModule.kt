@@ -19,8 +19,7 @@ object TermsModule {
         PrivateKeys("term_privatekeys"),
         DisablingPin("term_disablingpin"),
         JailBraking("term_jailbraking"),
-        Bugs("term_bugs"),
-        Responsibility("term_responsibility");
+        Bugs("term_bugs");
 
         val description: Int
             get() = when (this) {
@@ -29,7 +28,6 @@ object TermsModule {
                 DisablingPin -> R.string.SettingsTerms_DisablingPin
                 JailBraking -> R.string.SettingsTerms_JailBraking
                 Bugs -> R.string.SettingsTerms_Bugs
-                Responsibility -> R.string.SettingsTerms_Responsibility
             }
     }
 
