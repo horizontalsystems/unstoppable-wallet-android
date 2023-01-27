@@ -700,12 +700,11 @@
 \n\nEl monedero Unstoppable es completamente de código abierto y cualquiera puede verificar que la aplicación funciona exactamente como se afirma.
 
 \n\nDesarrollamos Unstoppable para nosotros mismos ya que las soluciones disponibles no estaban a la altura. Desde una perspectiva de ingenieria y practicidad, creemos que este monedero está significativamente por delante de los productos alternativos.</string>
-    <string name="SettingsTerms_Backup">Copia de seguridad las frases de recuperación del monedero para recuperar el acceso a los fondos.</string>
-    <string name="SettingsTerms_PrivateKeys">Las claves privadas y las frases de recuperación sólo se almacenan en su dispositivo.</string>
-    <string name="SettingsTerms_DisablingPin">Desactivar el teléfono inteligente desbloquea el PIN elimina todas las carteras de la aplicación. Las frases de recuperación serán necesarias para recuperar el acceso a los fondos.</string>
-    <string name="SettingsTerms_JailBraking">Rompiendo la cárcel (rooting), instalando aplicaciones de fuentes desconocidas y usando un sistema operativo desactualizado puede poner en peligro la seguridad de los fondos.</string>
-    <string name="SettingsTerms_Bugs">Entiendo que puede haber problemas de software sin descubrir en el código que hace funcionar esta aplicación, lo que puede llevar a un comportamiento inesperado o al mal funcionamiento de la aplicación.</string>
-    <string name="SettingsTerms_Responsibility">Sólo el usuario es responsable de la seguridad de los fondos y ninguna otra entidad.</string>
+    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
+    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
+    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
