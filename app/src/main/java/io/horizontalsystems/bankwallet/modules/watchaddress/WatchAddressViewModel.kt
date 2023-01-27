@@ -22,7 +22,7 @@ class WatchAddressViewModel(
 
     private var accountType: AccountType? = null
     private var accountNameEdited = false
-    val defaultAccountName = watchAddressService.getNextWatchAccountName()
+    val defaultAccountName = watchAddressService.nextWatchAccountName()
     var accountName: String = defaultAccountName
         get() = field.ifBlank { defaultAccountName }
         private set
@@ -96,7 +96,7 @@ class WatchAddressViewModel(
         try {
             val accountType = getAccountType() ?: throw Exception()
 
-            watchAddressService.watch(accountType, listOf(), accountName)
+            watchAddressService.watchAll(accountType, accountName)
 
             accountCreated = true
             emitState()

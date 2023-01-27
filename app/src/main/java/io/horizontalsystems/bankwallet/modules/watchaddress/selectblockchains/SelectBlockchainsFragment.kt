@@ -70,7 +70,7 @@ private fun SelectBlockchainsScreen(accountType: AccountType, accountName: Strin
     val title = uiState.title
     val accountCreated = uiState.accountCreated
     val submitEnabled = uiState.submitButtonEnabled
-    val blockchainViewItems = uiState.blockchains
+    val blockchainViewItems = uiState.coinViewItems
 
     LaunchedEffect(accountCreated) {
         if (accountCreated) {
@@ -123,7 +123,7 @@ private fun SelectBlockchainsScreen(accountType: AccountType, accountName: Strin
             items(blockchainViewItems) { viewItem ->
                 CellMultilineClear(
                     borderBottom = true,
-                    onClick = { viewModel.onToggleBlockchain(viewItem.item) }
+                    onClick = { viewModel.onToggle(viewItem.item) }
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -174,7 +174,7 @@ private fun SelectBlockchainsScreen(accountType: AccountType, accountName: Strin
                         Spacer(Modifier.width(12.dp))
                         HsSwitch(
                             checked = viewItem.enabled,
-                            onCheckedChange = { viewModel.onToggleBlockchain(viewItem.item) },
+                            onCheckedChange = { viewModel.onToggle(viewItem.item) },
                         )
                     }
                 }
