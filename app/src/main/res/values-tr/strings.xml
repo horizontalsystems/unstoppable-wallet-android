@@ -697,12 +697,11 @@
 \n\nDurdurulamaz cüzdan tamamen açık kaynaklıdır ve herkes uygulamanın tam olarak iddia edildiği gibi çalıştığını doğrulayabilir.
 
 \n\nMevcut çözümler yeterli olmadığından kendimiz için Durdurulamaz\'ı geliştirdik. Hem mühendislik hem de kullanılabilirlik açısından bu cüzdanın alternatif ürünlerin çok önünde olduğuna inanıyoruz.</string>
-    <string name="SettingsTerms_Backup">Fonlara yeniden erişim sağlamak için cüzdan kurtarma ifadelerinizi yedekleyin.</string>
-    <string name="SettingsTerms_PrivateKeys">Özel anahtarlar ve kurtarma ifadeleri yalnızca cihazınızda saklanır.</string>
-    <string name="SettingsTerms_DisablingPin">Akıllı telefon kilit açma PIN\'ini devre dışı bırakmak, tüm cüzdanları uygulamadan siler. Fonlara yeniden erişim sağlamak için kurtarma ifadelerine ihtiyaç duyulacaktır.</string>
-    <string name="SettingsTerms_JailBraking">Hapisten kaçma (köklenme), bilinmeyen kaynaklardan uygulama yükleme ve eski işletim sistemi kullanmak fonların güvenliğini tehlikeye atabilir.</string>
-    <string name="SettingsTerms_Bugs">Bu uygulamaya güç sağlayan kodda, beklenmeyen davranışlara veya uygulamanın arızalanmasına neden olabilecek keşfedilmemiş yazılım sorunları olabilir.</string>
-    <string name="SettingsTerms_Responsibility">Fonların güvenliğinden yalnızca kullanıcı sorumludur ve başka hiçbir kuruluş sorumlu değildir.</string>
+    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
+    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
+    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
