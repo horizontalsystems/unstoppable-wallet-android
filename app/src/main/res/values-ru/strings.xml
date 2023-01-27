@@ -699,12 +699,11 @@
 \n\nКошелек Unstoppable имеет открытый исходный программный код, и любой может убедиться в том, что приложение работает должным образом.
 
 \n\nМы создали кошелек Unstoppable для себя, так как доступные в сети решения не предлагают необходимый функционал на должном уровне. С точки зрения инженерии и простоты использования, мы считаем, что этот кошелек значительно опережает альтернативные продукты.</string>
-    <string name="SettingsTerms_Backup">Сделайте резервную копию фраз восстановления кошелька, чтобы восстановить доступ к средствам.</string>
-    <string name="SettingsTerms_PrivateKeys">Приватные ключи и фразы восстановления хранятся только на вашем устройстве.</string>
-    <string name="SettingsTerms_DisablingPin">Отключение PIN-кода для разблокировки смартфона приводит к удалению всех кошельков из приложения. Фразы восстановления потребуются для восстановления доступа к средствам.</string>
-    <string name="SettingsTerms_JailBraking">Jailbreaking(rooting), установка приложений из неизвестных источников и использование устаревшей ОС могут поставить под угрозу безопасность средств.</string>
-    <string name="SettingsTerms_Bugs">В процессе работы кода могут возникнуть проблемы с программным обеспечением, которые могут привести к неожиданному поведению или неисправности приложения.</string>
-    <string name="SettingsTerms_Responsibility">Только пользователь несет ответственность за сохранность средств и никто другой.</string>
+    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
+    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
+    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Продолжить</string>
