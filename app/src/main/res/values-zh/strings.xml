@@ -701,12 +701,11 @@
 \n\nUnstoppable钱包完全开源且任何人都可以确定应用按照其宣称的方式运行。
 
 \n\n我们为我们自己创立了Unstoppable作为符合标准的可用的解决方案。从工程和可用性角度而言，我们相信此钱包远远领先于其他产品。\n</string>
-    <string name="SettingsTerms_Backup">备份你的钱包恢复短语以重新获取资金。</string>
-    <string name="SettingsTerms_PrivateKeys">私钥和恢复短语仅保存在您的设备上。</string>
-    <string name="SettingsTerms_DisablingPin">禁用智能手机解锁 PIN 会删除应用程序中的所有钱包。需要恢复短语才能重新获得资金。</string>
-    <string name="SettingsTerms_JailBraking">越狱(rooting)，从未知来源安装应用，使用过时的操作系统会危及资金安全。</string>
-    <string name="SettingsTerms_Bugs">这个应用程序的代码可能会出现未发现的软件问题，这可能会导致意外的行为或应用程序故障。</string>
-    <string name="SettingsTerms_Responsibility">只有用户负责资金的安全，而没有其他实体。</string>
+    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
+    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
+    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
