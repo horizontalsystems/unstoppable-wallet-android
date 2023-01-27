@@ -2,62 +2,91 @@ package io.horizontalsystems.bankwallet.modules.watchaddress
 
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.derivation
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.bankwallet.core.order
+import io.horizontalsystems.bankwallet.core.supports
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 
 class WatchAddressService(
     private val accountManager: IAccountManager,
     private val walletActivator: WalletActivator,
-    private val accountFactory: IAccountFactory
+    private val accountFactory: IAccountFactory,
+    private val marketKit: MarketKitWrapper,
+    private val evmBlockchainManager: EvmBlockchainManager,
 ) {
 
-    fun getNextWatchAccountName() = accountFactory.getNextWatchAccountName()
+    fun nextWatchAccountName() = accountFactory.getNextWatchAccountName()
 
-    fun watch(accountType: AccountType, blockchains: List<Blockchain>, name: String? = null) {
+    fun configuredTokens(accountType: AccountType) = buildList {
+        when (accountType) {
+            is AccountType.Mnemonic,
+            is AccountType.EvmPrivateKey -> Unit // N/A
+            is AccountType.SolanaAddress -> {
+                token(BlockchainType.Solana, accountType)?.let {
+                    add(ConfiguredToken(it))
+                }
+            }
+            is AccountType.EvmAddress -> {
+                evmBlockchainManager.allMainNetBlockchains.forEach { blockchain ->
+                    token(blockchain.type, accountType)?.let { token ->
+                        add(ConfiguredToken(token))
+                    }
+                }
+            }
+            is AccountType.HdExtendedKey -> {
+                token(BlockchainType.Bitcoin, accountType)?.let { token ->
+                    add(
+                        ConfiguredToken(
+                            token,
+                            CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value))
+                        )
+                    )
+                }
+                token(BlockchainType.Dash, accountType)?.let { token ->
+                    add(ConfiguredToken(token))
+                }
+                token(BlockchainType.BitcoinCash, accountType)?.let { token ->
+                    BitcoinCashCoinType.values().map { coinType ->
+                        add(ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to coinType.value))))
+                    }
+                }
+                token(BlockchainType.Litecoin, accountType)?.let { token ->
+                    add(
+                        ConfiguredToken(
+                            token,
+                            CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value))
+                        )
+                    )
+                }
+            }
+        }
+    }.sortedBy { it.token.blockchainType.order }
+
+    fun watchAll(accountType: AccountType, name: String?) {
+        watchConfiguredTokens(accountType, configuredTokens(accountType), name)
+    }
+
+    fun watchConfiguredTokens(accountType: AccountType, configuredTokens: List<ConfiguredToken>, name: String? = null) {
         val accountName = name ?: accountFactory.getNextWatchAccountName()
         val account = accountFactory.watchAccount(accountName, accountType)
 
         accountManager.save(account)
 
-        when (val type = account.type) {
-            is AccountType.EvmAddress -> enableEvmBlockchains(account, blockchains)
-            is AccountType.SolanaAddress -> enableSolanaBlockchains(account)
-            is AccountType.HdExtendedKey -> {
-                if (type.hdExtendedKey.info.isPublic) {
-                    enableBtcBlockchains(account, type.hdExtendedKey.info.purpose.derivation, blockchains)
-                }
-            }
-            else -> Unit
-        }
-    }
-
-    private fun enableEvmBlockchains(account: Account, blockchains: List<Blockchain>) {
         try {
-            val tokenQueries = blockchains.map { TokenQuery(it.type, TokenType.Native) }
-            walletActivator.activateWallets(account, tokenQueries)
+            walletActivator.activateConfiguredTokens(account, configuredTokens)
         } catch (e: Exception) {
         }
     }
 
-    private fun enableSolanaBlockchains(account: Account) {
-        try {
-            val tokenQueries = listOf(TokenQuery(BlockchainType.Solana, TokenType.Native))
-            walletActivator.activateWallets(account, tokenQueries)
-        } catch (e: Exception) {
-        }
-    }
-
-    private fun enableBtcBlockchains(account: Account, mnemonicDerivation: AccountType.Derivation, blockchains: List<Blockchain>) {
-        try {
-            val tokenQueries = blockchains.map { TokenQuery(it.type, TokenType.Native) }
-            walletActivator.activateBtcWallets(mnemonicDerivation, account, tokenQueries)
-        } catch (e: Exception) {
-        }
-    }
+    private fun token(blockchainType: BlockchainType, accountType: AccountType): Token? =
+        if (blockchainType.supports(accountType))
+            marketKit.token(TokenQuery(blockchainType, TokenType.Native))
+        else
+            null
 }

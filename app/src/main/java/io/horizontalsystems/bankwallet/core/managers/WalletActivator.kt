@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.coinSettingType
 import io.horizontalsystems.bankwallet.core.defaultSettingsArray
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.ConfiguredToken
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletActivator(
@@ -32,29 +33,11 @@ class WalletActivator(
         walletManager.save(wallets)
     }
 
-    fun activateBtcWallets(derivation: AccountType.Derivation, account: Account, tokenQueries: List<TokenQuery>) {
+    fun activateConfiguredTokens(account: Account, configuredTokens: List<ConfiguredToken>) {
         val wallets = mutableListOf<Wallet>()
 
-        for (tokenQuery in tokenQueries) {
-            val token = marketKit.token(tokenQuery) ?: continue
-
-            when (tokenQuery.blockchainType.coinSettingType) {
-                CoinSettingType.derivation -> {
-                    val configuredToken = ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.derivation to derivation.value)))
-                    val wallet = Wallet(configuredToken, account)
-                    wallets.add(wallet)
-                }
-                CoinSettingType.bitcoinCashCoinType -> {
-                    val cashWallets = BitcoinCashCoinType.values().map { coinType ->
-                        val configuredToken = ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to coinType.value)))
-                        Wallet(configuredToken, account)
-                    }
-                    wallets.addAll(cashWallets)
-                }
-                else -> {
-                    wallets.add(Wallet(token, account))
-                }
-            }
+        for (configuredToken in configuredTokens) {
+            wallets.add(Wallet(configuredToken, account))
         }
 
         walletManager.save(wallets)
