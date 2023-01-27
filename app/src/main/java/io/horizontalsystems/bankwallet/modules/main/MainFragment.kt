@@ -195,7 +195,11 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
                         )
                         setEvaluator(ArgbEvaluator())
                         addUpdateListener { valueAnimator ->
-                            binding.torIsActiveState.setBackgroundColor((valueAnimator.animatedValue as Int))
+                            try {
+                                binding.torIsActiveState.setBackgroundColor((valueAnimator.animatedValue as Int))
+                            } catch (e: Exception) {
+                                //binding is null
+                            }
                         }
 
                         duration = 1000
