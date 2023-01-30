@@ -88,14 +88,24 @@ class MarketKitWrapper(
     fun coinPrice(coinUid: String, currencyCode: String): CoinPrice? =
         if (coinUid.isCustomCoin) null else marketKit.coinPrice(coinUid, currencyCode)
 
-    fun coinPriceMap(coinUids: List<String>, currencyCode: String): Map<String, CoinPrice> =
-        marketKit.coinPriceMap(coinUids.removeCustomCoins(), currencyCode)
+    fun coinPriceMap(coinUids: List<String>, currencyCode: String): Map<String, CoinPrice> {
+        val coinUidsNoCustom = coinUids.removeCustomCoins()
+        return when {
+            coinUidsNoCustom.isEmpty() -> mapOf()
+            else -> marketKit.coinPriceMap(coinUidsNoCustom, currencyCode)
+        }
+    }
 
     fun coinPriceObservable(coinUid: String, currencyCode: String): Observable<CoinPrice> =
         if (coinUid.isCustomCoin) Observable.never() else marketKit.coinPriceObservable(coinUid, currencyCode)
 
-    fun coinPriceMapObservable(coinUids: List<String>, currencyCode: String): Observable<Map<String, CoinPrice>> =
-        marketKit.coinPriceMapObservable(coinUids.removeCustomCoins(), currencyCode)
+    fun coinPriceMapObservable(coinUids: List<String>, currencyCode: String): Observable<Map<String, CoinPrice>> {
+        val coinUidsNoCustom = coinUids.removeCustomCoins()
+        return when {
+            coinUidsNoCustom.isEmpty() -> Observable.never()
+            else -> marketKit.coinPriceMapObservable(coinUidsNoCustom, currencyCode)
+        }
+    }
 
     // Coin Historical Price
 
