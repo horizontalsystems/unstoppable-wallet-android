@@ -1128,6 +1128,7 @@
     <string name="NftCollection_EventType_Custom">شخصی سازی</string>
     <string name="NftCollection_EventType_Payout">پرداخت</string>
     <string name="NftCollection_EventType_BulkCancel">Bulk Cancel</string>
+    <string name="NftCollection_EventType_Mint">نعناع</string>
     <string name="NftCollection_EventType_Unknown">ناشناخته</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
