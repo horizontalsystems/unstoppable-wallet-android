@@ -1127,6 +1127,7 @@
     <string name="NftCollection_EventType_Custom">Personnalisé</string>
     <string name="NftCollection_EventType_Payout">Versement</string>
     <string name="NftCollection_EventType_BulkCancel">Annuler en bloc</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Inconnu</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Les grands gagnants</string>
