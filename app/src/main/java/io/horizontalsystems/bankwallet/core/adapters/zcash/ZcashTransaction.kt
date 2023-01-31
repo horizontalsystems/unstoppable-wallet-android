@@ -25,7 +25,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
 //            TODO: need to define toAddress
             toAddress = null
             expiryHeight = it.expiryHeight?.value?.toInt()
-            minedHeight = it.minedHeight.value
+            minedHeight = it.minedHeight?.value
             timestamp = it.blockTimeEpochSeconds
             value = it.netValue.value
             memo = null
