@@ -466,7 +466,7 @@
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Swap Settings</string>
+    <string name="SwapSettings_Title">Swap-Einstellungen</string>
     <string name="SwapSettings_Service">Dienst</string>
     <string name="SwapSettings_SlippageTitle">Slippage-Toleranz</string>
     <string name="SwapSettings_SlippageDescription">Ihre Transaktion wird zurückgesetzt, wenn sich der Preis um mehr als diesen Prozentsatz ungünstig ändert</string>
@@ -662,7 +662,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Nach dem Ändern der Quelle wiederherstellen muss sich die Wallet mit der %@ Blockchain synchronisieren.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Parameter wiederherstellen</string>
