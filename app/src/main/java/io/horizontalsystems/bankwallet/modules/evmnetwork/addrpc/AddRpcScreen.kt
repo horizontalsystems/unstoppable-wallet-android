@@ -36,7 +36,7 @@ fun AddRpcScreen(
             .background(ComposeAppTheme.colors.tyler)
     ) {
         AppBar(
-            title = TranslatableString.ResString(R.string.EvmNetwork_AddNew),
+            title = TranslatableString.ResString(R.string.AddEvmSyncSource_AddRPCSource),
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Close),
