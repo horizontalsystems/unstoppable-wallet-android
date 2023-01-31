@@ -1124,6 +1124,7 @@
     <string name="NftCollection_EventType_Custom">Özel</string>
     <string name="NftCollection_EventType_Payout">Ödeme</string>
     <string name="NftCollection_EventType_BulkCancel">Toplu İptal</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
