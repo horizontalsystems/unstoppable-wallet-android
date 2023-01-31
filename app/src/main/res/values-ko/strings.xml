@@ -1127,6 +1127,7 @@
     <string name="NftCollection_EventType_Custom">사용자 지정</string>
     <string name="NftCollection_EventType_Payout">지불</string>
     <string name="NftCollection_EventType_BulkCancel">대량 취소</string>
+    <string name="NftCollection_EventType_Mint">민트</string>
     <string name="NftCollection_EventType_Unknown">알 수 없음</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
