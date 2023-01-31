@@ -1132,6 +1132,7 @@
     <string name="NftCollection_EventType_Custom">Benutzerdefiniert</string>
     <string name="NftCollection_EventType_Payout">Auszahlung</string>
     <string name="NftCollection_EventType_BulkCancel">Massenabbruch</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Unbekannt</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
