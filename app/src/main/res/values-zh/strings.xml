@@ -1128,6 +1128,7 @@
     <string name="NftCollection_EventType_Custom">自定义</string>
     <string name="NftCollection_EventType_Payout">支出</string>
     <string name="NftCollection_EventType_BulkCancel">批量取消</string>
+    <string name="NftCollection_EventType_Mint">薄荷绿</string>
     <string name="NftCollection_EventType_Unknown">未知</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">涨幅榜</string>
