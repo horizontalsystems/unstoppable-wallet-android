@@ -23,7 +23,10 @@ class ZcashTransactionsProvider(private val receiveAddress: String) {
 
     @Synchronized
     fun onClearedTransactions(transactions: List<TransactionOverview>) {
-        val newTransactions = transactions.filter { tx -> tx.minedHeight.value > 0 && !confirmedTransactions.any { it.id == tx.id } }
+        val newTransactions = transactions.filter { tx ->
+            val minedHeight = tx.minedHeight
+            minedHeight != null && minedHeight.value > 0 && !confirmedTransactions.any { it.id == tx.id }
+        }
 
         if (newTransactions.isNotEmpty()) {
             val newZcashTransactions = newTransactions.map { ZcashTransaction(it, receiveAddress) }
