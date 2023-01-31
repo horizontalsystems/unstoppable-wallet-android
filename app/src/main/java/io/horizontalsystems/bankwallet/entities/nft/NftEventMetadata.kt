@@ -22,6 +22,7 @@ data class NftEventMetadata(
         Payout,
         Cancel,
         BulkCancel,
+        Mint,
         Unknown;
     }
 }

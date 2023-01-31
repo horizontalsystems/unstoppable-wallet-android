@@ -12,8 +12,10 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.nft.NftEventMetadata.EventType
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.SelectOptional
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import kotlinx.coroutines.delay
@@ -24,7 +26,7 @@ class NftCollectionEventsViewModel(
     private val service: NftCollectionEventsService
 ) : ViewModel() {
 
-    var viewItem by mutableStateOf<ViewItem?>(null)
+    var events by mutableStateOf<List<EventViewItem>?>(null)
         private set
 
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
@@ -36,25 +38,27 @@ class NftCollectionEventsViewModel(
     var isRefreshing by mutableStateOf(false)
         private set
 
-    var eventTypeSelectorState by mutableStateOf<SelectorDialogState>(SelectorDialogState.Closed)
-        private set
-
-    private val eventTypeSelect: Select<NftEventTypeWrapper>
+    val eventTypeSelect: Select<NftEventTypeWrapper>
         get() = Select(
             NftEventTypeWrapper(service.eventType),
             listOf(
                 NftEventTypeWrapper(EventType.All),
                 NftEventTypeWrapper(EventType.Sale),
                 NftEventTypeWrapper(EventType.List),
-                NftEventTypeWrapper(EventType.OfferEntered),
                 NftEventTypeWrapper(EventType.BidEntered),
-                NftEventTypeWrapper(EventType.Transfer)
+                NftEventTypeWrapper(EventType.BidWithdrawn),
+                NftEventTypeWrapper(EventType.Transfer),
+                NftEventTypeWrapper(EventType.Mint),
+                NftEventTypeWrapper(EventType.Cancel),
             )
         )
 
+    val contractSelect: SelectOptional<ContractInfo>
+        get() = SelectOptional(service.contract, service.contracts)
+
     init {
         service.itemsUpdatedFlow.collectWith(viewModelScope) {
-            viewItem = ViewItem(eventTypeSelect, service.items?.getOrNull()?.map { eventViewItem(it) })
+            events = service.items?.getOrNull()?.map { eventViewItem(it) }
 
             loadingMore = false
             viewState = service.items?.exceptionOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
@@ -65,16 +69,33 @@ class NftCollectionEventsViewModel(
         }
     }
 
-    private fun eventViewItem(item: NftCollectionEventsService.Item) =
-        EventViewItem(
+    private fun eventViewItem(item: NftCollectionEventsService.Item): EventViewItem {
+        val type = item.event.eventType ?: EventType.Unknown
+
+        val price: CoinValue?
+        val priceInFiat: CurrencyValue?
+        when (type) {
+            EventType.Transfer,
+            EventType.Mint -> {
+                price = null
+                priceInFiat = null
+            }
+            else -> {
+                price = item.event.amount?.coinValue
+                priceInFiat = item.priceInFiat
+            }
+        }
+
+        return EventViewItem(
             providerCollectionUid = item.event.assetMetadata.providerCollectionUid,
             nftUid = item.event.assetMetadata.nftUid,
             date = item.event.date,
             type = item.event.eventType ?: EventType.Unknown,
             imageUrl = item.event.assetMetadata.imageUrl,
-            price = item.event.amount?.coinValue,
-            priceInFiat = item.priceInFiat
+            price = price,
+            priceInFiat = priceInFiat
         )
+    }
 
     fun onBottomReached() {
         loadingMore = !isRefreshing
@@ -103,23 +124,19 @@ class NftCollectionEventsViewModel(
         }
     }
 
-    fun onClickEventType() {
-        eventTypeSelectorState = SelectorDialogState.Opened(eventTypeSelect)
-    }
-
-    fun onSelectEvenType(eventTypeWrapper: NftEventTypeWrapper) {
+    fun onSelect(eventTypeWrapper: NftEventTypeWrapper) {
         viewModelScope.launch {
             service.setEventType(eventTypeWrapper.eventType)
         }
-        eventTypeSelectorState = SelectorDialogState.Closed
     }
 
-    fun onDismissEventTypeDialog() {
-        eventTypeSelectorState = SelectorDialogState.Closed
+    fun onSelect(contract: ContractInfo) {
+        viewModelScope.launch {
+            service.setContract(contract)
+        }
     }
 
     data class ViewItem(
-        val eventTypeSelect: Select<NftEventTypeWrapper>,
         val events: List<EventViewItem>?
     )
 
@@ -156,6 +173,7 @@ data class NftEventTypeWrapper(
                 EventType.Payout -> R.string.NftCollection_EventType_Payout
                 EventType.Cancel -> R.string.NftCollection_EventType_Cancelled
                 EventType.BulkCancel -> R.string.NftCollection_EventType_BulkCancel
+                EventType.Mint -> R.string.NftCollection_EventType_Mint
                 EventType.Unknown -> R.string.NftCollection_EventType_Unknown
             }
 

@@ -46,7 +46,9 @@ sealed class RoiViewItem {
 open class ContractInfo(
     val rawValue: String,
     val imgUrl: String,
-    val explorerUrl: String?
+    val explorerUrl: String?,
+    val name: String? = null,
+    val schema: String? = null
 ) {
     val shortened = rawValue.shorten()
 }
