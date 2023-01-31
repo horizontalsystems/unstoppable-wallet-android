@@ -53,8 +53,8 @@ class NftCollectionEventsViewModel(
             )
         )
 
-    val contractSelect: SelectOptional<ContractInfo>
-        get() = SelectOptional(service.contract, service.contracts)
+    val contractSelect: SelectOptional<ContractInfo>?
+        get() = if (service.contracts.size > 1) SelectOptional(service.contract, service.contracts) else null
 
     init {
         service.itemsUpdatedFlow.collectWith(viewModelScope) {

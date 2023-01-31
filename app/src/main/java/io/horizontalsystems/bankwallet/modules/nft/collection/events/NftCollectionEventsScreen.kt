@@ -73,13 +73,10 @@ fun NftCollectionEventsScreen(navController: NavController, blockchainType: Bloc
 
 @Composable
 private fun ContractBottomSheet(
-    contractSelect: SelectOptional<ContractInfo>,
+    contractSelect: SelectOptional<ContractInfo>?,
     onSelect: (ContractInfo) -> Unit,
     onClose: (() -> Unit)
 ) {
-    val contracts = contractSelect.options
-    val selected = contractSelect.selected
-
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.icon_paper_contract_20),
         title = stringResource(R.string.CoinPage_Contracts),
@@ -87,6 +84,9 @@ private fun ContractBottomSheet(
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
     ) {
         Spacer(Modifier.height(12.dp))
+
+        val contracts = contractSelect?.options ?: listOf()
+        val selected = contractSelect?.selected
         CellUniversalLawrenceSection(
             items = contracts,
             showFrame = true
@@ -194,7 +194,7 @@ fun NftEvents(
                     eventTypeSelectorState = SelectorDialogState.Opened
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                viewModel.contractSelect.selected?.let { selected ->
+                viewModel.contractSelect?.selected?.let { selected ->
                     ButtonSecondaryWithIcon(
                         modifier = Modifier
                             .padding(end = 16.dp)
