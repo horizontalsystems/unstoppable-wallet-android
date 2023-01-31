@@ -1,12 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,21 +59,54 @@ fun Contracts(
                     ),
                     contentDescription = "platform"
                 )
-                subhead2_leah(
-                    text = contractInfo.shortened,
+                Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = 16.dp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                        .padding(horizontal = 16.dp)
+                ) {
+                    contractInfo.name?.let {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            body_leah(
+                                modifier = Modifier.weight(1f, fill = false),
+                                text = it,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            contractInfo.schema?.let { labelText ->
+                                Box(
+                                    modifier = Modifier
+                                        .padding(start = 8.dp)
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .background(ComposeAppTheme.colors.jeremy)
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
+                                        text = labelText,
+                                        color = ComposeAppTheme.colors.bran,
+                                        style = ComposeAppTheme.typography.microSB,
+                                        maxLines = 1,
+                                    )
+                                }
+                            }
+                        }
+                        Spacer(Modifier.height(1.dp))
+                    }
+                    subhead2_grey(
+                        text = contractInfo.shortened,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_copy_20,
                     onClick = {
                         onClickCopy.invoke(contractInfo)
                     }
                 )
-                contractInfo.explorerUrl?.let{ explorerUrl ->
+                contractInfo.explorerUrl?.let { explorerUrl ->
                     ButtonSecondaryCircle(
                         modifier = Modifier.padding(start = 16.dp),
                         icon = R.drawable.ic_globe_20,

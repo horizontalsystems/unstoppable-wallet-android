@@ -1,11 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.events
 
 import cash.z.ecc.android.sdk.ext.collectWith
-import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
+import io.horizontalsystems.bankwallet.core.providers.nft.NftEventsProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.PaginationData
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.nft.NftEventMetadata
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.*
@@ -16,12 +17,15 @@ import java.util.concurrent.atomic.AtomicBoolean
 class NftCollectionEventsService(
     private val eventListType: NftEventListType,
     eventType: NftEventMetadata.EventType,
-    private val nftProvider: INftProvider,
+    private val nftEventsProvider: NftEventsProvider,
     private val xRateRepository: BalanceXRateRepository
 ) {
     var items: Result<List<Item>>? = null
     val itemsUpdatedFlow = MutableSharedFlow<Unit>()
     var eventType: NftEventMetadata.EventType = eventType
+        private set
+    val contracts: List<ContractInfo> = (eventListType as? NftEventListType.Collection)?.contracts ?: listOf()
+    var contract: ContractInfo? = contracts.firstOrNull()
         private set
     private var paginationData: PaginationData? = null
     private val loading = AtomicBoolean(false)
@@ -48,6 +52,13 @@ class NftCollectionEventsService(
     suspend fun setEventType(eventType: NftEventMetadata.EventType) {
         if (this.eventType == eventType) return
         this.eventType = eventType
+
+        restart()
+    }
+
+    suspend fun setContract(contract: ContractInfo) {
+        if (this.contract == contract) return
+        this.contract = contract
 
         restart()
     }
@@ -83,10 +94,16 @@ class NftCollectionEventsService(
                 } else {
                     val (events, cursor) = when (eventListType) {
                         is NftEventListType.Collection -> {
-                            nftProvider.collectionEventsMetadata(eventListType.blockchainType, eventListType.providerUid, eventType, paginationData)
+                            nftEventsProvider.collectionEventsMetadata(
+                                eventListType.blockchainType,
+                                eventListType.providerUid,
+                                contract?.rawValue ?: "",
+                                eventType,
+                                paginationData
+                            )
                         }
                         is NftEventListType.Asset -> {
-                            nftProvider.assetEventsMetadata(eventListType.nftUid, eventType, paginationData)
+                            nftEventsProvider.assetEventsMetadata(eventListType.nftUid, eventType, paginationData)
                         }
                     }
 

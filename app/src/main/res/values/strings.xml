@@ -1351,6 +1351,7 @@
     <string name="NftCollection_EventType_Custom">Custom</string>
     <string name="NftCollection_EventType_Payout">Payout</string>
     <string name="NftCollection_EventType_BulkCancel">Bulk Cancel</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Unknown</string>
 
     <!--Rate list-->

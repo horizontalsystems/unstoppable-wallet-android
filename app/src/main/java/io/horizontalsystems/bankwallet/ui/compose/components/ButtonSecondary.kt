@@ -56,9 +56,7 @@ fun ButtonSecondaryWithIcon(
         onClick = onClick,
         contentPadding = PaddingValues(
             start = 16.dp,
-            top = 6.dp,
             end = 12.dp,
-            bottom = 6.dp
         ),
         content = {
             Row {

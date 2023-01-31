@@ -133,7 +133,7 @@ class OpenSeaNftProvider(
         return NftCollectionMetadata(
             blockchainType = blockchainType,
             providerUid = response.slug,
-            contracts = response.primary_asset_contracts?.map { it.address } ?: listOf(),
+            contracts = response.primary_asset_contracts?.map { NftContractMetadata(it.address, it.name, it.created_date, it.schema_name) } ?: listOf(),
             name = response.name,
             description = response.description,
             imageUrl = response.large_image_url,
@@ -342,6 +342,7 @@ class OpenSeaNftProvider(
             EventType.BulkCancel -> "bulk_cancel"
             EventType.All,
             EventType.Unknown,
+            EventType.Mint,
             null -> null
         }
 
