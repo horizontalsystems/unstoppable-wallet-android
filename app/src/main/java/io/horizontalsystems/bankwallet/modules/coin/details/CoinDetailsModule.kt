@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -40,19 +41,19 @@ object CoinDetailsModule {
         val auditAddresses: List<String>
     )
 
+    sealed class ChartHeaderView {
+        abstract val value: String
+
+        data class Latest(override val value: String, val diff: Value.Percent) : ChartHeaderView()
+        data class Sum(override val value: String) : ChartHeaderView()
+
+    }
+
     @Immutable
     data class ChartViewItem(
-        val value: String,
-        val diff: String,
-        val chartData: ChartData,
-        val movementTrend: ChartMovementTrend
+        val headerView: ChartHeaderView,
+        val chartData: ChartData
     )
-
-    enum class ChartMovementTrend {
-        Neutral,
-        Down,
-        Up,
-    }
 
     @Immutable
     data class TokenLiquidityViewItem(
