@@ -21,8 +21,8 @@ object CoinModule {
 
     enum class Tab(@StringRes val titleResId: Int) {
         Overview(R.string.Coin_Tab_Overview),
-        Market(R.string.Coin_Tab_Market),
         Details(R.string.Coin_Tab_Details),
+        Market(R.string.Coin_Tab_Market),
         Tweets(R.string.Coin_Tab_Tweets);
     }
 }
