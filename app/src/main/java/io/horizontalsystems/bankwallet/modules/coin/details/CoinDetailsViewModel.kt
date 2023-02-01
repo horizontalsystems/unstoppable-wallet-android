@@ -137,10 +137,8 @@ class CoinDetailsViewModel(
 
         val headerView = if (isMovementChart) {
             val lastItemValue = values.last().value
-            val firstItemValue = values.first().value
-            val diff = (lastItemValue - firstItemValue) / firstItemValue * 100.toBigDecimal()
             val value = valueFormatter.formatValue(service.currency, lastItemValue)
-            CoinDetailsModule.ChartHeaderView.Latest(value, Value.Percent(diff))
+            CoinDetailsModule.ChartHeaderView.Latest(value, Value.Percent(chartData.diff()))
         } else {
             val sum = valueFormatter.formatValue(service.currency, chartData.sum())
             CoinDetailsModule.ChartHeaderView.Sum(sum)
