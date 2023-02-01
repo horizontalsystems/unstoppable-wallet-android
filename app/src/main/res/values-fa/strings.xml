@@ -701,12 +701,11 @@
 \n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds. It doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
 \n\nThe Unstoppable wallet is fully open-source and anyone can confirm the app works exactly as it claims to.
 \n\nWe built Unstoppable for ourselves as the other available solutions were not up to par. Both from an engineering and usability perspective, we believe this wallet to be significantly ahead of alternative products</string>
-    <string name="SettingsTerms_Backup">Back up your wallet recovery phrases to regain access to the funds.</string>
-    <string name="SettingsTerms_PrivateKeys">Private keys and recovery phrases are stored only on your device.</string>
-    <string name="SettingsTerms_DisablingPin">Disabling smartphone unlock PIN deletes all wallets from app. Recovery phrases will be needed to regain access to funds.</string>
-    <string name="SettingsTerms_JailBraking">Jail breaking (rooting), installing apps from unknown sources, and using outdated OS can endanger safety of funds.</string>
-    <string name="SettingsTerms_Bugs">من آگاه هستم که ممکن است در کد منبع اصلی این برنامه کیف پول مشکل نرم افزاری کشف نشده ای وجود داشته باشد که منجر به رفتار غیر منتظره یا نقص برنامه شود.</string>
-    <string name="SettingsTerms_Responsibility">Only user is responsible for safety of funds and no other entity.</string>
+    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
+    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
+    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
@@ -954,6 +953,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1Y</string>
     <string name="CoinPage_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_TimeDuration_All">All</string>
     <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
@@ -1128,6 +1128,7 @@
     <string name="NftCollection_EventType_Custom">شخصی سازی</string>
     <string name="NftCollection_EventType_Payout">پرداخت</string>
     <string name="NftCollection_EventType_BulkCancel">Bulk Cancel</string>
+    <string name="NftCollection_EventType_Mint">نعناع</string>
     <string name="NftCollection_EventType_Unknown">ناشناخته</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>

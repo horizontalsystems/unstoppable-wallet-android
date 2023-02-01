@@ -25,7 +25,7 @@
     <string name="Button_Disconnect">연결 해제</string>
     <string name="Button_Start">시작</string>
     <string name="Button_Create">생성하기</string>
-    <string name="Button_Advanced">Advanced</string>
+    <string name="Button_Advanced">고급의</string>
     <string name="Button_Restore">복구</string>
     <string name="Button_WatchAddress">주소 관찰</string>
     <string name="Button_Reset">초기화</string>
@@ -59,9 +59,9 @@
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">개인 정보 설정</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Advanced_Title">Advanced</string>
+    <string name="CreateWallet_Advanced_Title">고급의</string>
     <string name="CreateWallet_Mnemonic">연상 기호</string>
-    <string name="CreateWallet_Wordlist">Word List</string>
+    <string name="CreateWallet_Wordlist">단어 목록</string>
     <string name="Passphrase">암호문구</string>
     <string name="ConfirmPassphrase">확인</string>
     <string name="CreateWallet_N_WordsRecommended">%s 단어 (권장)</string>
@@ -70,7 +70,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">지원되는 기호만 사용하세요:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">암호 확인이 일치하지 않습니다</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
+    <string name="CreateWallet_PassphraseDescription">암호는 지갑에 대한 추가 보안 계층을 추가합니다. 이러한 지갑을 복원하려면 사용자는 니모닉과 암호가 모두 필요했습니다.\n\n암호는 또한 사용자가 하나의 니모닉을 사용하지만 다른 암호를 사용하여 여러 코인 지갑을 쉽게 가질 수 있도록 합니다.</string>
     <!--Languages-->
     <string name="Language_English">영어</string>
     <string name="Language_Japanese">일본어</string>
@@ -88,7 +88,7 @@
     <string name="RateApp_Button_RateIt">평가 하기</string>
     <string name="RateApp_Button_NotNow">다음에 확인</string>
     <!--Restore-->
-    <string name="Restore_Advanced_Title">Advanced</string>
+    <string name="Restore_Advanced_Title">고급의</string>
     <string name="Restore_Mnemonic_Description">12, 15, 18, 21 또는 24단어로 구성되고 추가 영숫자 비밀번호가 포함될 수 있는 지갑 복구 문구(니모닉이라고도 함)를 입력하십시오.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_Error_MnemonicWordCount">단어 수가 틀렸습니다. 12 개 와 24개 사이여야 합니다. 이렇게 입력했습니다: %d</string>
@@ -384,8 +384,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">서명할 메시지</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">인증을 위해 메시지에 서명하십시오</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
-    <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">You need to backup %s before you can use WalletConnect</string>
+    <string name="WalletConnect_Error_NoWallet">WalletConnect를 사용하려면 먼저 지갑을 생성하거나 가져와야 합니다</string>
+    <string name="WalletConnect_Error_NeedBackup">WalletConnect를 사용하려면 %s을(를) 백업해야 합니다.</string>
     <string name="WalletConnect_Error_WatchAccount">이 기능은 시계 전용 지갑에서는 작동하지 않으므로 복원 또는 생성된 지갑으로 전환해야 합니다 </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
@@ -465,7 +465,7 @@
     <string name="Swap_AmountMax">(최대)</string>
     <string name="Swap_AmountTypeCoin">코인</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Swap Settings</string>
+    <string name="SwapSettings_Title">스왑 설정</string>
     <string name="SwapSettings_Service">서비스</string>
     <string name="SwapSettings_SlippageTitle">토큰 범위 설정</string>
     <string name="SwapSettings_SlippageDescription">가격이 해당 퍼센티지 이상으로 불리하게 변경되면 거래가 취소됩니다.</string>
@@ -627,20 +627,20 @@
     <string name="Settings_LaunchScreen">시작 화면</string>
     <string name="Settings_Appearance">모양</string>
     <string name="Appearance_Theme">주제</string>
-    <string name="Appearance_Tab">TAB SETTINGS</string>
+    <string name="Appearance_Tab">탭 설정</string>
     <string name="Appearance_LaunchScreen">시작 화면</string>
     <string name="Appearance_AppIcon">앱 아이콘</string>
     <string name="Appearance_BalanceConversion">잔액 변환</string>
     <string name="Appearance_BalanceValue">균형 가치</string>
     <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
-    <string name="Appearance_MarketsTab">Markets Tab</string>
+    <string name="Appearance_MarketsTab">시장 탭</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
     <string name="BalanceViewType_FiatValue">법정 가치</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
     <string name="SettingsAboutApp_Site">웹사이트</string>
     <string name="SettingsAboutApp_WhatsNew">새로운 기능</string>
     <!-- Blockchain Settings  -->
-    <string name="BlockchainSettings_Title">Blockchain Settings</string>
+    <string name="BlockchainSettings_Title">블록 체인 설정</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable은 사용자에 대한 데이터를 노출할 수 있는 데이터를 수집하거나 분석 도구를 사용하지 않습니다. 지갑은 사용자에게 높은 수준의 개인 정보를 보장하도록 설계되었습니다.</string>
     <string name="Privacy_BulletedText1">사용자 데이터는 항상 사용자의 장치에 남아 있습니다.</string>
@@ -650,18 +650,18 @@
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">인터넷</string>
     <!--Evm Network-->
-    <string name="EvmNetwork_AddNew">Add New</string>
-    <string name="EvmNetwork_Added">Added</string>
+    <string name="EvmNetwork_AddNew">신규로 추가</string>
+    <string name="EvmNetwork_Added">추가됨</string>
     <string name="EvmNetwork_SyncMode">동기화 모드</string>
     <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
-    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_AddRPCSource">RPC 소스 추가</string>
     <string name="AddEvmSyncSource_Name">이름</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
-    <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다.</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">복원 소스를 변경한 후 지갑은 Bitcoin 블록체인과 자체적으로 다시 동기화해야 합니다.</string>
     <string name="BtcBlockchainSettings_RestoreSource">매개 변수 복원</string>
@@ -700,12 +700,11 @@
     <string name="SettingsTerms_Text">Unstoppable 지갑은 개인적이고 독립적인 방식으로 암호화폐를 투자하고 보관하려는 사람들을 위해 만들어졌습니다.\n\n이는 오직 사용자만이 자금을 통제할 수 있는 비관세적인 P2P 지갑입니다. 데이터를 수집하지 않고 특정 지갑 앱에 지갑을 잠그지 않아 사용자의 독립성을 유지합니다.
 \n\nUnstoppable 지갑은 완전한 오픈소스여서 누구나 앱이 요구하는 대로 정확히 작동하는지 확인할 수 있습니다.
 \n\n귀사는 이용 가능한 해결책이 기대에 미치지 못했기 때문에 스스로 Unstoppable 을 구축했습니다. 엔지니어링과 사용 편의성 측면에서 모두 귀사는 이 지갑이 대체 제품보다 상당히 앞서 있다고 믿고 있습니다.</string>
-    <string name="SettingsTerms_Backup">지갑 복구 문구를 백업하여 자금에 다시 액세스하십시오.</string>
-    <string name="SettingsTerms_PrivateKeys">개인 키 및 복구 문구는 장치에만 저장됩니다.</string>
-    <string name="SettingsTerms_DisablingPin">스마트폰 잠금 해제 PIN을 비활성화하면 앱에서 모든 지갑이 삭제됩니다. 자금에 대한 액세스 권한을 다시 얻으려면 복구 문구가 필요합니다.</string>
-    <string name="SettingsTerms_JailBraking">탈옥(루팅), 출처를 알 수 없는 앱 설치, 오래된 OS 사용은 자금의 안전을 위협할 수 있습니다.</string>
-    <string name="SettingsTerms_Bugs">이 앱을 구동하는 코드에 발견되지 않은 소프트웨어 문제가 있을 수 있으며 이로 인해 예기치 않은 동작이나 앱 오작동이 발생할 수 있습니다.</string>
-    <string name="SettingsTerms_Responsibility">자금의 안전은 사용자만이 책임을 지며 다른 주체는 책임이 없습니다.</string>
+    <string name="SettingsTerms_Backup">지갑별 복구 문구를 안전하게 백업합니다. 앱이 오작동하는 경우 자금에 다시 액세스할 수 있는 유일한 방법입니다.</string>
+    <string name="SettingsTerms_PrivateKeys">지갑 복구 문구는 설정 중에 장치에서 임의로 생성되며 다른 곳에 저장되지 않습니다.</string>
+    <string name="SettingsTerms_DisablingPin">스마트폰에서 잠금 해제 PIN(코드)을 비활성화하면 앱에서 모든 지갑이 삭제됩니다. 자금에 대한 액세스를 복원하려면 복구 문구가 필요합니다.</string>
+    <string name="SettingsTerms_JailBraking">탈옥(루팅), 오래된 OS 사용, 출처를 알 수 없는 앱 설치 등은 자금의 안전을 위협할 수 있습니다.</string>
+    <string name="SettingsTerms_Bugs">이 앱을 구동하는 코드에 발견되지 않은 소프트웨어 문제가 있을 수 있으며 이로 인해 앱이 오작동할 수 있습니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
@@ -755,11 +754,11 @@
     <string name="Hud_Added_To_Wallet">지갑에 추가됨</string>
     <string name="Hud_Already_In_Wallet">이미 지갑에 추가됨</string>
     <string name="Hud_Removed_from_Watchlist">관심목록에서 제거</string>
-    <string name="Hud_Removed">Removed</string>
+    <string name="Hud_Removed">제거됨</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 매니저</string>
-    <string name="ManageCoins_Search">Name, code or contract address</string>
+    <string name="ManageCoins_Search">이름, 코드 또는 계약 주소</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
     <!-- Experimental Feature -->
@@ -785,7 +784,7 @@
     <string name="Watch_TypeEvmAddress">EVM 주소</string>
     <string name="Watch_TypeSolanaAddress">Solana Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">잘못된 xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
     <string name="ManageAccount_Save">저장</string>
@@ -827,8 +826,8 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">복사 금지</string>
     <string name="ShowKey_PrivateKey_Warning">이 키는 모든 EVM 호환 블록체인용입니다.\n\n보안 조치로 개인 키에 복사 작업을 사용하지 않는 것이 좋습니다.</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Backup Wallet</string>
-    <string name="BackupRecoveryPhrase_Description">Backup this wallet by creating a copy of its recovery phrase. It will be required in order to access the wallet if your phone is lost, stolen, broken etc.</string>
+    <string name="BackupRecoveryPhrase_Title">백업용 지갑</string>
+    <string name="BackupRecoveryPhrase_Description">복구 문구의 복사본을 생성하여 이 지갑을 백업하십시오. 휴대폰 분실, 도난, 파손 등의 경우 지갑에 액세스하기 위해 필요합니다.</string>
     <string name="BackupRecoveryPhrase_Backup">백업</string>
     <string name="BackupRecoveryPhrase_Later">나중에</string>
     <!-- Recovery Phrase -->
@@ -903,11 +902,11 @@
     <string name="AddToken_AddressOrSymbol">계약 주소</string>
     <string name="AddToken_ChooseToken">토큰 선택</string>
     <string name="AddToken_Blockchain">Blockchain</string>
-    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
-    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
-    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
-    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
-    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
+    <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
+    <string name="AddToken_InvalidContractAddress">잘못된 계약 주소</string>
+    <string name="AddToken_InvalidBep2Symbol">잘못된 BEP2 기호</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 기호를 찾을 수 없음</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">%s 블록체인에서 계약 주소를 찾을 수 없습니다.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
     <string name="AddressFormatSettings_Description">코인의 주소 형식을 선택합니다. 확실하지 않은 경우 권장 옵션을 진행합니다. 기존 지갑을 복원할 때 올바른 형식을 선택해야 합니다.</string>
@@ -936,9 +935,9 @@
     <string name="Tor_TorIsActive">Tor 활성화</string>
     <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Old</string>
-    <string name="CoinOption_bip49_Title">Good</string>
-    <string name="CoinOption_bip84_Title">Best</string>
+    <string name="CoinOption_bip44_Title">기존</string>
+    <string name="CoinOption_bip49_Title">좋은</string>
+    <string name="CoinOption_bip84_Title">최상의</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">금액</string>
     <string name="Coin_Tab_Market">Markets</string>
@@ -953,6 +952,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1Y</string>
     <string name="CoinPage_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_TimeDuration_All">모든</string>
     <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
@@ -998,7 +998,7 @@
     <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">YES:\nThe token holder can\'t be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">NO:\nThe token holder can be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
-    <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non audited projects are more likely to have security issues in the code.</string>
+    <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non-audited projects are more likely to have security issues in the code.</string>
     <string name="CoinPage_SecurityParams_Info">인포</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
@@ -1127,6 +1127,7 @@
     <string name="NftCollection_EventType_Custom">사용자 지정</string>
     <string name="NftCollection_EventType_Payout">지불</string>
     <string name="NftCollection_EventType_BulkCancel">대량 취소</string>
+    <string name="NftCollection_EventType_Mint">민트</string>
     <string name="NftCollection_EventType_Unknown">알 수 없음</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
@@ -1152,7 +1153,7 @@
     <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidity and Rank</string>
     <string name="ProUsersInfo_Features_ActiveAddresses">Active Addresses</string>
     <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
-    <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
+    <string name="ProUsersInfo_Features_TxVolume">트랜잭션 거래량</string>
     <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
     <string name="Hud_Text_LearnMore">추후 공개</string>
     <string name="Hud_Text_Activate">활성화</string>
