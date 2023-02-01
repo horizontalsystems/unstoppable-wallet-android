@@ -84,7 +84,7 @@ class CoinDetailsViewModel(
             proChartsActivated = item.proCharts.activated,
             tokenLiquidityViewItem = getTokenLiquidityViewItem(item.proCharts),
             tokenDistributionViewItem = getTokenDistributionViewItem(item.proCharts, service.hasMajorHolders),
-            tvlChart = chart(item.tvls, currencyValueFormatter, cumulative = false),
+            tvlChart = chart(item.tvls, currencyValueFormatter, isMovementChart = true),
             tvlRank = item.marketInfoDetails.tvlRank?.let { "#$it" },
             tvlRatio = item.marketInfoDetails.tvlRatio?.let { App.numberFormatter.format(it, 2, 2) },
             treasuries = item.marketInfoDetails.totalTreasuries?.let {
@@ -100,8 +100,8 @@ class CoinDetailsViewModel(
     }
 
     private fun getTokenLiquidityViewItem(proCharts: CoinDetailsService.ProCharts): CoinDetailsModule.TokenLiquidityViewItem? {
-        val volume = chart(proCharts.dexVolumes, currencyValueFormatter, cumulative = true)
-        val liquidity = chart(proCharts.dexLiquidity, currencyValueFormatter, cumulative = false)
+        val volume = chart(proCharts.dexVolumes, currencyValueFormatter, isMovementChart = false)
+        val liquidity = chart(proCharts.dexLiquidity, currencyValueFormatter, isMovementChart = true)
 
         if (volume == null && liquidity == null) return null
 
@@ -112,9 +112,9 @@ class CoinDetailsViewModel(
         proCharts: CoinDetailsService.ProCharts,
         hasMajorHolders: Boolean
     ): CoinDetailsModule.TokenDistributionViewItem? {
-        val txCount = chart(proCharts.txCount, numberFormatter, cumulative = true)
-        val txVolume = chart(proCharts.txVolume, currencyValueFormatter, cumulative = true)
-        val activeAddresses = chart(proCharts.activeAddresses, numberFormatter, cumulative = false)
+        val txCount = chart(proCharts.txCount, numberFormatter, isMovementChart = false)
+        val txVolume = chart(proCharts.txVolume, currencyValueFormatter, isMovementChart = false)
+        val activeAddresses = chart(proCharts.activeAddresses, numberFormatter, isMovementChart = true)
 
         if (txCount == null && txVolume == null && activeAddresses == null && !hasMajorHolders) return null
 
@@ -124,7 +124,7 @@ class CoinDetailsViewModel(
     private fun chart(
         values: List<ChartPoint>?,
         valueFormatter: ChartModule.ChartNumberFormatter,
-        cumulative: Boolean,
+        isMovementChart: Boolean,
         timePeriod: HsTimePeriod? = null
     ): CoinDetailsModule.ChartViewItem? {
         if (values.isNullOrEmpty()) return null
@@ -133,17 +133,17 @@ class CoinDetailsViewModel(
             io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
-        val chartData = ChartDataBuilder.buildFromPoints(points, isMovementChart = !cumulative)
+        val chartData = ChartDataBuilder.buildFromPoints(points, isMovementChart = isMovementChart)
 
-        val headerView = if (cumulative) {
-            val sum = valueFormatter.formatValue(service.currency, chartData.sum())
-            CoinDetailsModule.ChartHeaderView.Sum(sum)
-        } else {
+        val headerView = if (isMovementChart) {
             val lastItemValue = values.last().value
             val firstItemValue = values.first().value
             val diff = (lastItemValue - firstItemValue) / firstItemValue * 100.toBigDecimal()
             val value = valueFormatter.formatValue(service.currency, lastItemValue)
             CoinDetailsModule.ChartHeaderView.Latest(value, Value.Percent(diff))
+        } else {
+            val sum = valueFormatter.formatValue(service.currency, chartData.sum())
+            CoinDetailsModule.ChartHeaderView.Sum(sum)
         }
 
         return CoinDetailsModule.ChartViewItem(headerView, chartData, timePeriod)
@@ -152,12 +152,12 @@ class CoinDetailsViewModel(
     private fun chart(
         proData: CoinDetailsService.ProData,
         valueFormatter: ChartModule.ChartNumberFormatter,
-        cumulative: Boolean
+        isMovementChart: Boolean
     ): CoinDetailsModule.ChartViewItem? =
         when (proData) {
             is CoinDetailsService.ProData.Empty,
             is CoinDetailsService.ProData.Forbidden -> null
-            is CoinDetailsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter, cumulative, proData.timePeriod)
+            is CoinDetailsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter, isMovementChart, proData.timePeriod)
         }
 
     private fun securityViewItems(marketInfoDetails: MarketInfoDetails): List<SecurityViewItem> {
