@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartMinimal
@@ -36,18 +37,20 @@ fun MiniChartCard(
         caption_grey(text = title)
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = chartViewItem.value,
+            text = chartViewItem.headerView.value,
             style = ComposeAppTheme.typography.headline1,
             color = ComposeAppTheme.colors.bran,
         )
         Spacer(modifier = Modifier.weight(1f))
         Row(verticalAlignment = Alignment.Bottom) {
-            Text(
-                text = chartViewItem.diff,
-                style = ComposeAppTheme.typography.subhead1,
-                color = diffColor(chartViewItem.movementTrend),
-            )
-            Spacer(modifier = Modifier.width(12.dp))
+            (chartViewItem.headerView as? CoinDetailsModule.ChartHeaderView.Latest)?.let { latest ->
+                Text(
+                    text = App.numberFormatter.formatValueAsDiff(latest.diff),
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = diffColor(latest.diff.percent),
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+            }
             AndroidView(
                 modifier = Modifier
                     .weight(1f)
