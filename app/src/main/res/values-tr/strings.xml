@@ -25,7 +25,7 @@
     <string name="Button_Disconnect">Bağlantıyı Kes</string>
     <string name="Button_Start">Başlangıç</string>
     <string name="Button_Create">Oluştur</string>
-    <string name="Button_Advanced">Advanced</string>
+    <string name="Button_Advanced">İleri düzey</string>
     <string name="Button_Restore">Geri Yükle</string>
     <string name="Button_WatchAddress">Adresi İzle</string>
     <string name="Button_Reset">Sıfırla</string>
@@ -59,9 +59,9 @@
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Advanced_Title">Advanced</string>
+    <string name="CreateWallet_Advanced_Title">İleri düzey</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
-    <string name="CreateWallet_Wordlist">Word List</string>
+    <string name="CreateWallet_Wordlist">Kelime Listesi</string>
     <string name="Passphrase">Parola</string>
     <string name="ConfirmPassphrase">Onayla</string>
     <string name="CreateWallet_N_WordsRecommended">%s kelimeler (Tavsiye edilen)</string>
@@ -70,7 +70,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Lütfen yalnızca desteklenen sembolleri kullanın:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
+    <string name="CreateWallet_PassphraseDescription">Parolalar, cüzdanlar için ek bir güvenlik katmanı ekler. Bir cüzdanı geri yüklemek için bir kullanıcı hem anımsatıcı hem de bir parola gerektiriyordu.\n\n\nParolalar, kullanıcıların tek bir anımsatıcı ancak farklı bir parola kullanarak çok paralı cüzdanlara sahip olmalarını da kolaylaştırır.</string>
     <!--Languages-->
     <string name="Language_English">İngilizce</string>
     <string name="Language_Japanese">Japonca</string>
@@ -88,7 +88,7 @@
     <string name="RateApp_Button_RateIt">Puanla</string>
     <string name="RateApp_Button_NotNow">Şimdi değil</string>
     <!--Restore-->
-    <string name="Restore_Advanced_Title">Advanced</string>
+    <string name="Restore_Advanced_Title">İleri düzey</string>
     <string name="Restore_Mnemonic_Description">12, 15, 18, 21 veya 24 kelimeden oluşan ve ek bir alfasayısal şifre içerebilen cüzdan kurtarma ifadenizi (aka anımsatıcı) girin.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
@@ -370,7 +370,7 @@
     <string name="WalletConnect_Ready_Hint">Tarayıcıya gidebilirsiniz. Tarayıcıda etkileşim içindeyken bu sayfayı kapatmayın.</string>
     <string name="WalletConnect_Reconnect_Hint">Bağlantı kurulamadı. Yeniden bağlanmayı deneyin.</string>
     <string name="WalletConnect_Error_InvalidUrl">Geçersiz URL Adresi</string>
-    <string name="WalletConnect_NotSupportedV2">WalletConnect v2 is not supported</string>
+    <string name="WalletConnect_NotSupportedV2">Wallet Connect v2 destegi bulunmuyor</string>
     <string name="WalletConnect_Requirement">Gereksinim</string>
     <string name="WalletConnect_Alert">Uyarı</string>
     <string name="WalletConnect_Status_Offline">Çevrimdışı</string>
@@ -384,8 +384,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Lütfen doğrulamak için bir mesajı imzalayın</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
-    <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">You need to backup %s before you can use WalletConnect</string>
+    <string name="WalletConnect_Error_NoWallet">WalletConnect\'i kullanmadan önce bir cüzdan oluşturmanız veya içe aktarmanız gerekir</string>
+    <string name="WalletConnect_Error_NeedBackup">WalletConnect\'i kullanmadan önce %s yedeklemeniz gerekir</string>
     <string name="WalletConnect_Error_WatchAccount">Bu özellik salt izlenir cüzdanlarda çalışmaz, geri yüklediğiniz veya oluşturduğunuz bir cüzdana geçmeniz gerekiyor </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Desteklenmeyen Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
@@ -465,7 +465,7 @@
     <string name="Swap_AmountMax">(azami)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Swap Settings</string>
+    <string name="SwapSettings_Title">Swap Ayarları</string>
     <string name="SwapSettings_Service">Hizmet</string>
     <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
     <string name="SwapSettings_SlippageDescription">Fiyat bu yüzde oranından daha fazla olumsuz olarak değişirse, İşleminiz geri alınacaktır</string>
@@ -640,7 +640,7 @@
     <string name="SettingsAboutApp_Site">Web sitesi</string>
     <string name="SettingsAboutApp_WhatsNew">Neler yeni</string>
     <!-- Blockchain Settings  -->
-    <string name="BlockchainSettings_Title">Blockchain Settings</string>
+    <string name="BlockchainSettings_Title">Blockchain Ayarları</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable herhangi bir veri toplamaz veya kullanıcıları hakkında herhangi bir veriyi ifşa edebilecek analiz araçları kullanmaz. Unstoppable cüzdanı kullanıcıları için yüksek düzeyde gizlilik sağlamak üzere tasarlanmıştır.</string>
     <string name="Privacy_BulletedText1">Kullanıcı verileri her zaman kullanıcının cihazında kalır.</string>
@@ -650,18 +650,18 @@
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
-    <string name="EvmNetwork_AddNew">Add New</string>
-    <string name="EvmNetwork_Added">Added</string>
+    <string name="EvmNetwork_AddNew">Yeni ekle</string>
+    <string name="EvmNetwork_Added">Eklendi</string>
     <string name="EvmNetwork_SyncMode">Senkron Modu</string>
     <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
-    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_AddRPCSource">RPC Kaynağı Ekle</string>
     <string name="AddEvmSyncSource_Name">İsim</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
-    <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
-    <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_RpcSource">RPC Kaynak</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">Bu URL\'ye sahip RPC kaynak zaten var</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Girilen Url geçersiz. Geçerli url aşağıdaki şemalardan birine sahip olmalıdır: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Bu değişiklikten sonra cüzdan Bitcoin blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Geri Yükleme Kaynağı</string>
@@ -697,11 +697,11 @@
 \n\nDurdurulamaz cüzdan tamamen açık kaynaklıdır ve herkes uygulamanın tam olarak iddia edildiği gibi çalıştığını doğrulayabilir.
 
 \n\nMevcut çözümler yeterli olmadığından kendimiz için Durdurulamaz\'ı geliştirdik. Hem mühendislik hem de kullanılabilirlik açısından bu cüzdanın alternatif ürünlerin çok önünde olduğuna inanıyoruz.</string>
-    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
-    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
-    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
-    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
-    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
+    <string name="SettingsTerms_Backup">Her cüzdan için kurtarma ifadelerini güvenli bir şekilde yedekleyin. Uygulama arızalanırsa fonlara yeniden erişmenin tek yolu budur.</string>
+    <string name="SettingsTerms_PrivateKeys">Cüzdan kurtarma ifadeleri kurulum sırasında cihazda rastgele oluşturulur ve başka bir yerde saklanmaz.</string>
+    <string name="SettingsTerms_DisablingPin">Akıllı telefon kilit açma PIN\'ini devre dışı bırakmak, tüm cüzdanları uygulamadan siler. Fonlara yeniden erişim sağlamak için kurtarma ifadelerine ihtiyaç duyulacaktır.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreak, eski (OS) işletim sistemlerini kullanmak ve bilinmeyen kaynaklardan uygulama yüklemek fonların güvenliğini tehlikeye atabilir.</string>
+    <string name="SettingsTerms_Bugs">Bu uygulamaya güç veren kodda, uygulamanın arızalanmasına neden olabilecek keşfedilmemiş yazılım sorunları olabilir.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
@@ -755,7 +755,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
-    <string name="ManageCoins_Search">Name, code or contract address</string>
+    <string name="ManageCoins_Search">Ad, kod veya sözleşme adresi</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
     <!-- Experimental Feature -->
@@ -823,8 +823,8 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Kopyalama</string>
     <string name="ShowKey_PrivateKey_Warning">Bu anahtar, tüm EVM uyumlu blok zincirleri içindir.\n\nGüvenlik önlemi olarak, özel anahtar üzerinde kopyalama eyleminin kullanılmamasını öneririz.</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Backup Wallet</string>
-    <string name="BackupRecoveryPhrase_Description">Backup this wallet by creating a copy of its recovery phrase. It will be required in order to access the wallet if your phone is lost, stolen, broken etc.</string>
+    <string name="BackupRecoveryPhrase_Title">Cüzdanı yedekle</string>
+    <string name="BackupRecoveryPhrase_Description">Kurtarma ifadesinin bir kopyasını oluşturarak bu cüzdanı yedekleyin. Telefonunuzun kaybolması, çalınması, kırılması vb. durumlarda cüzdana erişmek için gerekli olacaktır.</string>
     <string name="BackupRecoveryPhrase_Backup">Yedekle</string>
     <string name="BackupRecoveryPhrase_Later">Sonra</string>
     <!-- Recovery Phrase -->
@@ -900,10 +900,10 @@
     <string name="AddToken_ChooseToken">Tokenleri seç</string>
     <string name="AddToken_Blockchain">Blockchains</string>
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
-    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
-    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
-    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
-    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
+    <string name="AddToken_InvalidContractAddress">Geçersiz sözleşme adresi</string>
+    <string name="AddToken_InvalidBep2Symbol">Geçersiz BEP2 symbolu</string>
+    <string name="AddEvmToken_Bep2NotFound">BEP2 sembolü bulunamadı</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Sözleşme adresi %s blockchain\'de bulunamadı</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adres Formatı</string>
     <string name="AddressFormatSettings_Description">Koin için adres formatını seçin. Emin değilseniz önerilen seçenekle devam edin. Mevcut bir cüzdanı geri yüklerken doğru bir format seçilmelidir.</string>
@@ -932,9 +932,9 @@
     <string name="Tor_TorIsActive">Tor aktif</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Old</string>
-    <string name="CoinOption_bip49_Title">Good</string>
-    <string name="CoinOption_bip84_Title">Best</string>
+    <string name="CoinOption_bip44_Title">Eski</string>
+    <string name="CoinOption_bip49_Title">İyi</string>
+    <string name="CoinOption_bip84_Title">En İyi</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Fiyat</string>
     <string name="Coin_Tab_Market">Markets</string>
