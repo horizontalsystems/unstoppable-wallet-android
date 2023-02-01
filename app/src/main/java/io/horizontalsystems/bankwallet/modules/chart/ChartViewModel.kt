@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartDataBuilder
@@ -114,21 +115,22 @@ open class ChartViewModel(
         val chartItems = chartPointsWrapper.items
         if (chartItems.isEmpty()) return
 
-        val lastItemValue = chartItems.last().value
-        val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
-
-        val firstItemValue = chartItems.first().value
-        val currentValueDiff = if (firstItemValue != 0f) {
-            Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
-        } else {
-            null
-        }
-
         val chartData = ChartDataBuilder.buildFromPoints(
             chartPointsWrapper.items,
             chartPointsWrapper.startTimestamp,
             chartPointsWrapper.endTimestamp,
-            chartPointsWrapper.isExpired)
+            chartPointsWrapper.isExpired,
+            chartPointsWrapper.isMovementChart
+        )
+
+        val headerView = if (!chartPointsWrapper.isMovementChart) {
+            val sum = valueFormatter.formatValue(service.currency, chartData.sum())
+            CoinDetailsModule.ChartHeaderView.Sum(sum)
+        } else {
+            val lastItemValue = chartItems.last().value
+            val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
+            CoinDetailsModule.ChartHeaderView.Latest(currentValue, Value.Percent(chartData.diff()))
+        }
 
         val (minValue, maxValue) = getMinMax(chartData.valueRange)
 
@@ -139,7 +141,7 @@ open class ChartViewModel(
             minValue
         )
 
-        dataWrapperLiveData.postValue(ChartDataWrapper(currentValue, currentValueDiff, chartInfoData))
+        dataWrapperLiveData.postValue(ChartDataWrapper(headerView, chartInfoData))
     }
 
     private val noChangesLimitPercent = 0.2f
