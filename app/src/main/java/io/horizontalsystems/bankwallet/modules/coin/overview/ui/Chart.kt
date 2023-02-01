@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.chart.SelectedPoint
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
@@ -31,20 +31,19 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 @Composable
-fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
+fun HsChartLineHeader(chartHeaderView: CoinDetailsModule.ChartHeaderView?) {
     TabBalance(borderTop = true) {
         Text(
             modifier = Modifier.padding(end = 8.dp),
-            text = currentValue ?: "--",
+            text = chartHeaderView?.value ?: "--",
             style = ComposeAppTheme.typography.headline1,
             color = ComposeAppTheme.colors.leah
         )
-
-        currentValueDiff?.let {
+        (chartHeaderView as? CoinDetailsModule.ChartHeaderView.Latest)?.let { latest ->
             Text(
-                text = formatValueAsDiff(it),
+                text = formatValueAsDiff(latest.diff),
                 style = ComposeAppTheme.typography.subhead1,
-                color = diffColor(it.raw())
+                color = diffColor(latest.diff.raw())
             )
         }
     }
@@ -59,7 +58,7 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?
     val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
 
     Column {
-        HsChartLineHeader(chartDataWrapper?.currentValue, chartDataWrapper?.currentValueDiff)
+        HsChartLineHeader(chartDataWrapper?.chartHeaderView)
         Chart(
             tabItems = chartTabs,
             onSelectTab = {

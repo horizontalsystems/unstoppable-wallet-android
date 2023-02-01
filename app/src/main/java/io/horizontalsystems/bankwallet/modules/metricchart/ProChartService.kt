@@ -51,6 +51,14 @@ class ProChartService(
                     .map { response -> response.countPoints }
         }
 
+        val isMovementChart = when (chartType) {
+            ProChartModule.ChartType.DexLiquidity,
+            ProChartModule.ChartType.AddressesCount -> true
+            ProChartModule.ChartType.DexVolume,
+            ProChartModule.ChartType.TxCount,
+            ProChartModule.ChartType.TxVolume -> false
+        }
+
         return chartDataSingle
             .map { chartPoints ->
                 val items = chartPoints.mapNotNull { chartPoint ->
@@ -62,7 +70,8 @@ class ProChartService(
                     items,
                     null,
                     null,
-                    false
+                    false,
+                    isMovementChart
                 )
             }
     }
