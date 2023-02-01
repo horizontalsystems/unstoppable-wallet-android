@@ -103,7 +103,7 @@
     <string name="Restore_RecoveryPhrase">Фраза восстановления</string>
     <string name="Restore_PrivateKey">Приватный ключ</string>
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
-    <string name="Restore_PhraseHint">Enter Recovery Phrase</string>
+    <string name="Restore_PhraseHint">Введите фразу восстановления</string>
     <string name="Restore_NonStandardRestore">Нестандартный импорт</string>
     <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
 \n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
@@ -652,13 +652,13 @@
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
     <!--Evm Network-->
-    <string name="EvmNetwork_AddNew">Add New</string>
-    <string name="EvmNetwork_Added">Added</string>
+    <string name="EvmNetwork_AddNew">Добавить новый</string>
+    <string name="EvmNetwork_Added">Добавлено</string>
     <string name="EvmNetwork_SyncMode">Режим Синхронизации</string>
     <string name="EvmNetwork_SyncModeDescription">Этот параметр определяет способ взаимодействия приложения с блокчейнами при отправке или получении транзакций.\n\nКогда речь идет о Bitcoin, Bitcoin Cash, Litecoin, и Dash, связь с сетевыми узлами блокчейна полностью равноправна. Unstoppable пингует многие узлы и связывается с одним из них. Каждый раз приложение подключается к другому узлу.\n\nЧто касается Ethereum и Binance Smart Chain, то пока нет подходящих альтернативных вариантов мобильных кошельков для взаимодействия с соответствующими блокчейнами кроме сторонних поставщиков услуг RPC (т.е. Infura.io) или личными узлами Ethereum. Это значит, что ваше взаимодействие с блокчейном не децентрализовано. Это влияет не на ваши средства, а на возможность подключения к сети блокчейн.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
-    <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
+    <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">Источник RPC</string>
@@ -753,7 +753,7 @@
     <string name="Hud_Added_To_Wallet">Добавлено в кошелек</string>
     <string name="Hud_Already_In_Wallet">Уже добавлено в кошелек</string>
     <string name="Hud_Removed_from_Watchlist">Удалить из Избранного</string>
-    <string name="Hud_Removed">Removed</string>
+    <string name="Hud_Removed">Удалено</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Токены</string>
@@ -936,7 +936,7 @@
     <!--Coin Option-->
     <string name="CoinOption_bip44_Title">Старый</string>
     <string name="CoinOption_bip49_Title">Новый</string>
-    <string name="CoinOption_bip84_Title">Best</string>
+    <string name="CoinOption_bip84_Title">Новейший</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Цена</string>
     <string name="Coin_Tab_Market">Рынки</string>
@@ -1161,7 +1161,7 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">Выберите Тип</string>
     <string name="NftAssetActivity_Empty">Нет активности</string>
-    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
+    <string name="Widget_EnableAutostartWarning">Чтобы убедиться, что этот виджет работает правильно, необходимо включить автозапуск.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
