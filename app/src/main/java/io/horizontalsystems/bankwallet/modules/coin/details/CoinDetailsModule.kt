@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 object CoinDetailsModule {
 
@@ -52,8 +53,15 @@ object CoinDetailsModule {
     @Immutable
     data class ChartViewItem(
         val headerView: ChartHeaderView,
-        val chartData: ChartData
-    )
+        val chartData: ChartData,
+        val timePeriod: HsTimePeriod?
+    ) {
+        val timePeriodString: Int?
+            get() = when (timePeriod) {
+                HsTimePeriod.Month1 -> R.string.CoinPage_DetailsChartPeriod_Month1
+                else -> null
+            }
+    }
 
     @Immutable
     data class TokenLiquidityViewItem(

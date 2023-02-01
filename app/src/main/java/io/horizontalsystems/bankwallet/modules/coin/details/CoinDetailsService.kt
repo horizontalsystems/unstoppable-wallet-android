@@ -113,11 +113,11 @@ class CoinDetailsService(
 
             return@zip ProCharts(
                 true,
-                if (dexVolumeChartPoints.isEmpty()) ProData.Empty else ProData.Completed(dexVolumeChartPoints),
-                if (dexLiquidityChartPoints.isEmpty()) ProData.Empty else ProData.Completed(dexLiquidityChartPoints),
-                if (txCountChartPoints.isEmpty()) ProData.Empty else ProData.Completed(txCountChartPoints),
-                if (txVolumeChartPoints.isEmpty()) ProData.Empty else ProData.Completed(txVolumeChartPoints),
-                if (activeAddresses.isEmpty()) ProData.Empty else ProData.Completed(activeAddresses),
+                if (dexVolumeChartPoints.isEmpty()) ProData.Empty else ProData.Completed(dexVolumeChartPoints, HsTimePeriod.Month1),
+                if (dexLiquidityChartPoints.isEmpty()) ProData.Empty else ProData.Completed(dexLiquidityChartPoints, HsTimePeriod.Month1),
+                if (txCountChartPoints.isEmpty()) ProData.Empty else ProData.Completed(txCountChartPoints, HsTimePeriod.Month1),
+                if (txVolumeChartPoints.isEmpty()) ProData.Empty else ProData.Completed(txVolumeChartPoints, HsTimePeriod.Month1),
+                if (activeAddresses.isEmpty()) ProData.Empty else ProData.Completed(activeAddresses, HsTimePeriod.Month1),
             )
         }
     }
@@ -165,7 +165,7 @@ class CoinDetailsService(
     sealed class ProData {
         object Empty : ProData()
         object Forbidden : ProData()
-        class Completed(val chartPoints: List<ChartPoint>) : ProData()
+        class Completed(val chartPoints: List<ChartPoint>, val timePeriod: HsTimePeriod) : ProData()
     }
 
     data class ProCharts(

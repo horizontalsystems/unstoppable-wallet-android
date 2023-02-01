@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -123,7 +124,8 @@ class CoinDetailsViewModel(
     private fun chart(
         values: List<ChartPoint>?,
         valueFormatter: ChartModule.ChartNumberFormatter,
-        cumulative: Boolean
+        cumulative: Boolean,
+        timePeriod: HsTimePeriod? = null
     ): CoinDetailsModule.ChartViewItem? {
         if (values.isNullOrEmpty()) return null
 
@@ -144,7 +146,7 @@ class CoinDetailsViewModel(
             CoinDetailsModule.ChartHeaderView.Latest(value, Value.Percent(diff))
         }
 
-        return CoinDetailsModule.ChartViewItem(headerView, chartData)
+        return CoinDetailsModule.ChartViewItem(headerView, chartData, timePeriod)
     }
 
     private fun chart(
@@ -155,7 +157,7 @@ class CoinDetailsViewModel(
         when (proData) {
             is CoinDetailsService.ProData.Empty,
             is CoinDetailsService.ProData.Forbidden -> null
-            is CoinDetailsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter, cumulative)
+            is CoinDetailsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter, cumulative, proData.timePeriod)
         }
 
     private fun securityViewItems(marketInfoDetails: MarketInfoDetails): List<SecurityViewItem> {

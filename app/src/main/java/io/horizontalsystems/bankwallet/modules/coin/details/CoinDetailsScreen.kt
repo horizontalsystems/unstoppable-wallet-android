@@ -265,6 +265,13 @@ private fun SecurityParameters(
 }
 
 @Composable
+private fun chartTitleWithTimePeriod(title: Int, period: Int?) = if (period == null) {
+    stringResource(title)
+} else {
+    "${stringResource(title)} (${stringResource(period)})"
+}
+
+@Composable
 private fun TokenLiquidity(
     coinUid: String,
     viewItem: ViewItem,
@@ -309,7 +316,7 @@ private fun TokenLiquidity(
                 halfWidth = tokenLiquidityViewItem.liquidity != null,
                 proChartsActivated = viewItem.proChartsActivated,
                 chartViewItem = it,
-                title = stringResource(id = R.string.CoinPage_DetailsDexVolume),
+                title = chartTitleWithTimePeriod(R.string.CoinPage_DetailsDexVolume, it.timePeriodString),
                 description = stringResource(id = R.string.CoinPage_DetailsDexVolume_Description),
                 fragmentManager = fragmentManager,
                 coinUid = coinUid,
@@ -381,7 +388,7 @@ private fun TokenDistribution(
                     halfWidth = tokenDistributionViewItem.txVolume != null,
                     proChartsActivated = viewItem.proChartsActivated,
                     chartViewItem = it,
-                    title = stringResource(id = R.string.CoinPage_DetailsTxCount),
+                    title = chartTitleWithTimePeriod(R.string.CoinPage_DetailsTxCount, it.timePeriodString),
                     description = stringResource(id = R.string.CoinPage_DetailsTxCount_Description),
                     fragmentManager = fragmentManager,
                     coinUid = coinUid,
@@ -391,12 +398,12 @@ private fun TokenDistribution(
 
             tokenDistributionViewItem.txVolume?.let {
                 MiniProChartCard(
-                    ProChartModule.ChartType.TxVolume,
-                    false,
-                    viewItem.proChartsActivated,
-                    it,
-                    stringResource(id = R.string.CoinPage_DetailsTxVolume),
-                    stringResource(id = R.string.CoinPage_DetailsTxVolume_Description),
+                    chartType = ProChartModule.ChartType.TxVolume,
+                    halfWidth = false,
+                    proChartsActivated = viewItem.proChartsActivated,
+                    chartViewItem = it,
+                    title = chartTitleWithTimePeriod(R.string.CoinPage_DetailsTxVolume, it.timePeriodString),
+                    description = stringResource(id = R.string.CoinPage_DetailsTxVolume_Description),
                     fragmentManager = fragmentManager,
                     coinUid = coinUid,
                     onBannerClick = onBannerClick
