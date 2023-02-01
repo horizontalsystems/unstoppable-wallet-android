@@ -71,7 +71,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
+    <string name="CreateWallet_PassphraseDescription">Кодовая фраза добавляет дополнительный слой безопасности для кошельков. Чтобы восстановить такой кошелек требуется как мнемоник, так и кодовая фраза.\n\Кодовая фраза также облегчает пользователям возможность иметь множество мульти-монетных кошельков, используя одну фразу восстановления, но другой пароль.</string>
     <!--Languages-->
     <string name="Language_English">Английский</string>
     <string name="Language_Japanese">Японский</string>
@@ -391,7 +391,7 @@
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
-    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Нет подходящего evm kit</string>
     <string name="WalletConnect_Error_DataParsingError">Ошибка разбора данных</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Запрос не найден</string>
     <string name="WalletConnect_NoConnection">У вас нет подключенных dapps</string>
@@ -467,7 +467,7 @@
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_AmountTypeCoin">Монета</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Swap Settings</string>
+    <string name="SwapSettings_Title">Настройки обмена</string>
     <string name="SwapSettings_Service">Сервис</string>
     <string name="SwapSettings_SlippageTitle">Допустимость Отклонений</string>
     <string name="SwapSettings_SlippageDescription">Ваша транзакция будет отменена, если цена изменится в неблагоприятную сторону более чем на этот процент</string>
@@ -635,7 +635,7 @@
     <string name="Appearance_BalanceConversion">КОНВЕРТАЦИЯ БАЛАНСА</string>
     <string name="Appearance_BalanceValue">ЗНАЧЕНИЕ БАЛАНСА</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
-    <string name="Appearance_MarketsTab">Markets Tab</string>
+    <string name="Appearance_MarketsTab">Вкладка Рынки</string>
     <string name="BalanceViewType_CoinValue">Токен Значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное Значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
@@ -660,7 +660,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Базовая аутентификация (опционально)</string>
     <string name="AddEvmSyncSource_RpcSource">Источник RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Источник с таким url уже существует</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss</string>
@@ -699,11 +699,11 @@
 \n\nКошелек Unstoppable имеет открытый исходный программный код, и любой может убедиться в том, что приложение работает должным образом.
 
 \n\nМы создали кошелек Unstoppable для себя, так как доступные в сети решения не предлагают необходимый функционал на должном уровне. С точки зрения инженерии и простоты использования, мы считаем, что этот кошелек значительно опережает альтернативные продукты.</string>
-    <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
-    <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
-    <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
-    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), using outdated OS, and installing apps from unknown sources may endanger the safety of funds.</string>
-    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may cause the app to malfunction.</string>
+    <string name="SettingsTerms_Backup">Безопасное резервное копирование фраз для каждого кошелька. Это единственный способ восстановить доступ к средствам, если приложение не работает.</string>
+    <string name="SettingsTerms_PrivateKeys">Фразы восстановления кошелька генерируются случайным образом на устройстве во время установки и не хранятся в другом месте.</string>
+    <string name="SettingsTerms_DisablingPin">Отключение PIN-кода разблокировки на смартфоне удаляет все кошельки из приложения. Для восстановления доступа к средствам потребуется восстановление фраз.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreaking (rooting), использование устаревших ОС и установка приложений из неизвестных источников могут поставить под угрозу безопасность средств.</string>
+    <string name="SettingsTerms_Bugs">В процессе работы кода могут возникнуть проблемы с программным обеспечением, что может привести к сбоям приложения.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Продолжить</string>
@@ -826,7 +826,7 @@
     <string name="ShowKey_PrivateKey_Warning">Этот ключ для всех EVM-совместимых блокчейнов.\n\nВ качестве меры безопасности мы не рекомендуем использовать действие копирования на закрытом ключе.</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Резервная Копия</string>
-    <string name="BackupRecoveryPhrase_Description">Backup this wallet by creating a copy of its recovery phrase. It will be required in order to access the wallet if your phone is lost, stolen, broken etc.</string>
+    <string name="BackupRecoveryPhrase_Description">Сделайте резервную копию этого кошелька, создав копию его фразы восстановления. Это будет необходимо для доступа к кошельку, если ваш телефон утерян, украден, повреждён и т.д.</string>
     <string name="BackupRecoveryPhrase_Backup">Резервная Копия</string>
     <string name="BackupRecoveryPhrase_Later">Позже</string>
     <!-- Recovery Phrase -->
@@ -901,10 +901,10 @@
     <string name="AddToken_AddressOrSymbol">Адрес Контракта</string>
     <string name="AddToken_ChooseToken">Выберите Токен</string>
     <string name="AddToken_Blockchain">Blockchain</string>
-    <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
-    <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
-    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
-    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
+    <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке</string>
+    <string name="AddToken_InvalidContractAddress">Неверный адрес контракта</string>
+    <string name="AddToken_InvalidBep2Symbol">Неверный символ BEP2</string>
+    <string name="AddEvmToken_Bep2NotFound">Символ BEP2 не найден</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Адрес контракта не найден в %s блокчейне </string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
@@ -1022,7 +1022,7 @@
     <string name="CoinPage_MarketCap_Million">млн</string>
     <string name="CoinPage_MarketCap_Billion">млрд</string>
     <string name="CoinPage_MarketCap_Trillion">трл</string>
-    <string name="CoinPage_MarketCap_Quadrillion">Q</string>
+    <string name="CoinPage_MarketCap_Quadrillion">кв.</string>
     <string name="CoinPage_MarketCap_TvlRation">Рын.кап / Соотношение TVL </string>
     <string name="CoinPage_MarketCap_TvlRation_Description">Соотношение рыночной капитализации токена проекта и его значения TVL.</string>
     <string name="CoinPage_Volume">Объём</string>
