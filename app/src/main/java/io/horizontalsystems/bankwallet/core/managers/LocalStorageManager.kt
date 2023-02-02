@@ -370,9 +370,9 @@ class LocalStorageManager(
             preferences.edit().putString(APP_ICON, value?.name).apply()
         }
 
-    override var mainTab: MainModule.MainTab?
+    override var mainTab: MainModule.MainNavigation?
         get() = preferences.getString(MAIN_TAB, null)?.let {
-            MainModule.MainTab.fromString(it)
+            MainModule.MainNavigation.fromString(it)
         }
         set(value) {
             preferences.edit().putString(MAIN_TAB, value?.name).apply()

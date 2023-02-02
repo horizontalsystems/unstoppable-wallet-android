@@ -1647,6 +1647,27 @@ fun subhead2_red50(
 }
 
 @Composable
+fun micro_leah(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.micro,
+        color = ComposeAppTheme.colors.leah,
+    )
+}
+
+@Composable
 fun E1(
     text: String,
     modifier: Modifier = Modifier,
