@@ -94,7 +94,7 @@
     <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolayı girin. Mevcut bir cüzdanı yeni bir parolayla geri yüklemek, yepyeni bir cüzdan oluşturur.</string>
     <string name="Restore_Title">Blok Zincirleri Seç</string>
     <string name="Restore_Key">Anahtar</string>
     <string name="Restore_By">İçerik</string>
@@ -612,7 +612,7 @@
     <string name="SettingsCurrency_Understand">Anlıyorum</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
-    <string name="Settings_SecurityCenter">Security</string>
+    <string name="Settings_SecurityCenter">Güvenlik</string>
     <string name="Settings_Notifications">Bildirimler</string>
     <string name="Settings_ExperimentalFeatures">Deneysel</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
@@ -658,7 +658,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC Kaynağı Ekle</string>
     <string name="AddEvmSyncSource_Name">İsim</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth (optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Kaynak</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">Bu URL\'ye sahip RPC kaynak zaten var</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Girilen Url geçersiz. Geçerli url aşağıdaki şemalardan birine sahip olmalıdır: http, https, ws, wss</string>
