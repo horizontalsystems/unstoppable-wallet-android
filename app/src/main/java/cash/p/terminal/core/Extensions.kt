@@ -228,6 +228,7 @@ fun NavGraphBuilder.composablePage(
                 animationSpec = tween(300)
             )
         },
+        popEnterTransition = { null },
         content = content
     )
 }

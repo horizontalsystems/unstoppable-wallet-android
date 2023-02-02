@@ -1,19 +1,25 @@
 package cash.p.terminal.modules.send.bitcoin
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.annotation.StringRes
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cash.p.terminal.R
+import cash.p.terminal.core.composablePage
+import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.address.AddressParserModule
@@ -27,14 +33,49 @@ import cash.p.terminal.modules.fee.HSFeeInputRaw
 import cash.p.terminal.modules.hodler.HSHodlerInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
+import cash.p.terminal.modules.settings.about.*
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.*
 import java.math.BigDecimal
+
+
+const val SendBtcPage = "send_btc"
+const val SendBtcAdvancedSettingsPage = "send_btc_advanced_settings"
+const val TransactionInputsSortInfoPage = "transaction_input_sort_info_settings"
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun SendBitcoinNavHost(
+    fragmentNavController: NavController,
+    viewModel: SendBitcoinViewModel,
+    amountInputModeViewModel: AmountInputModeViewModel
+) {
+    val navController = rememberAnimatedNavController()
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = SendBtcPage,
+    ) {
+        composable(SendBtcPage) {
+            SendBitcoinScreen(
+                fragmentNavController,
+                navController,
+                viewModel,
+                amountInputModeViewModel
+            )
+        }
+        composablePage(SendBtcAdvancedSettingsPage) {
+            SendBtcAdvancedSettingsScreen(navController, viewModel.blockchainType)
+        }
+        composablePopup(TransactionInputsSortInfoPage) { BtcTransactionInputSortInfoScreen { navController.popBackStack() } }
+    }
+}
 
 @Composable
 fun SendBitcoinScreen(
-    navController: NavController,
+    fragmentNavController: NavController,
+    composeNavController: NavController,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
@@ -66,8 +107,8 @@ fun SendBitcoinScreen(
         }
 
         SendScreen(
-            navController = navController,
-            fullCoin = fullCoin
+            fullCoin = fullCoin,
+            onCloseClick = { fragmentNavController.popBackStack() }
         ) {
             AvailableBalance(
                 coinCode = wallet.coin.code,
@@ -122,8 +163,14 @@ fun SendBitcoinScreen(
                         rate = rate,
                         enabled = viewModel.feeRateChangeable,
                         onClick = {
-                            navController.slideFromBottom(R.id.feeSettings)
+                            fragmentNavController.slideFromBottom(R.id.feeSettings)
                         }
+                    )
+                }
+                add {
+                    AdvancedSettingCell(
+                        title = R.string.Send_Advanced,
+                        onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
                     )
                 }
                 if (isLockTimeEnabled) {
@@ -154,7 +201,7 @@ fun SendBitcoinScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-                    navController.slideFromRight(
+                    fragmentNavController.slideFromRight(
                         R.id.sendConfirmation,
                         SendConfirmationFragment.prepareParams(SendConfirmationFragment.Type.Bitcoin)
                     )
@@ -162,5 +209,28 @@ fun SendBitcoinScreen(
                 enabled = proceedEnabled
             )
         }
+    }
+}
+
+@Composable
+private fun AdvancedSettingCell(
+    @StringRes title: Int,
+    onClick: () -> Unit
+) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
+    ) {
+        subhead2_grey(
+            text = stringResource(title),
+            maxLines = 1,
+            modifier = Modifier.padding(end = 16.dp)
+        )
+        Spacer(Modifier.weight(1f))
+        Image(
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = null,
+        )
     }
 }

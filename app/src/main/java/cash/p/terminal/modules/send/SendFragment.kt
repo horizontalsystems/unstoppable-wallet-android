@@ -19,7 +19,7 @@ import cash.p.terminal.modules.send.binance.SendBinanceModule
 import cash.p.terminal.modules.send.binance.SendBinanceScreen
 import cash.p.terminal.modules.send.binance.SendBinanceViewModel
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinModule
-import cash.p.terminal.modules.send.bitcoin.SendBitcoinScreen
+import cash.p.terminal.modules.send.bitcoin.SendBitcoinNavHost
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
 import cash.p.terminal.modules.send.evm.SendEvmModule
 import cash.p.terminal.modules.send.evm.SendEvmScreen
@@ -62,7 +62,7 @@ class SendFragment : BaseFragment() {
                                 SendBitcoinModule.Factory(wallet)
                             }
 
-                            SendBitcoinScreen(
+                            SendBitcoinNavHost(
                                 findNavController(),
                                 sendBitcoinViewModel,
                                 amountInputModeViewModel

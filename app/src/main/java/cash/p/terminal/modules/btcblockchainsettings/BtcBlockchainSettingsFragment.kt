@@ -112,10 +112,6 @@ private fun BtcBlockchainSettingsScreen(
 
                 Spacer(Modifier.height(24.dp))
                 RestoreSourceSettings(viewModel, navController)
-
-                Spacer(Modifier.height(24.dp))
-                TransactionDataSortSettings(viewModel, navController)
-
                 Spacer(Modifier.height(32.dp))
             }
 
@@ -150,21 +146,6 @@ private fun RestoreSourceSettings(
 }
 
 @Composable
-private fun TransactionDataSortSettings(
-    viewModel: BtcBlockchainSettingsViewModel,
-    navController: NavController
-) {
-    BlockchainSettingSection(
-        restoreSources = viewModel.transactionSortModes,
-        infoScreenId = R.id.btcBlockchainTransactionInputOutputsInfoFragment,
-        settingTitleTextRes = R.string.BtcBlockchainSettings_TransactionInputsOutputs,
-        settingDescriptionTextRes = R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription,
-        onItemClick = { viewItem -> viewModel.onSelectTransactionMode(viewItem) },
-        navController = navController
-    )
-}
-
-@Composable
 private fun BlockchainSettingSection(
     restoreSources: List<BtcBlockchainSettingsModule.ViewItem>,
     infoScreenId: Int,
@@ -179,7 +160,7 @@ private fun BlockchainSettingSection(
             navController.slideFromBottom(infoScreenId)
         })
     CellUniversalLawrenceSection(restoreSources) { item ->
-        SettingCell(item.title, item.subtitle, item.selected) {
+        BlockchainSettingCell(item.title, item.subtitle, item.selected) {
             onItemClick(item)
         }
     }
@@ -189,7 +170,7 @@ private fun BlockchainSettingSection(
 }
 
 @Composable
-private fun SettingCell(
+fun BlockchainSettingCell(
     title: String,
     subtitle: String,
     checked: Boolean,

@@ -39,6 +39,7 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.EvmSyncSource
+import cash.p.terminal.modules.btcblockchainsettings.BlockchainSettingCell
 import cash.p.terminal.modules.evmnetwork.addrpc.AddRpcScreen
 import cash.p.terminal.modules.info.EvmNetworkInfoScreen
 import cash.p.terminal.modules.settings.about.*
@@ -154,7 +155,7 @@ private fun EvmNetworkScreen(
 
                 item {
                     CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
-                        NetworkSettingCell(item.name, item.url, item.selected) {
+                        BlockchainSettingCell(item.name, item.url, item.selected) {
                             viewModel.onSelectSyncSource(item.syncSource)
                         }
                     }
@@ -271,46 +272,6 @@ private fun AddButton(
             }
         }
     )
-}
-
-@Composable
-private fun NetworkSettingCell(
-    title: String,
-    subtitle: String,
-    checked: Boolean,
-    onClick: () -> Unit
-) {
-    RowUniversal(
-        onClick = onClick
-    ) {
-        Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
-            body_leah(
-                text = title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(Modifier.height(1.dp))
-            subhead2_grey(
-                text = subtitle,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        Box(
-            modifier = Modifier
-                .width(52.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
-        ) {
-            if (checked) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_checkmark_20),
-                    tint = ComposeAppTheme.colors.jacob,
-                    contentDescription = null,
-                )
-            }
-        }
-    }
 }
 
 @Composable

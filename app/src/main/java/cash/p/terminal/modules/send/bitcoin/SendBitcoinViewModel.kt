@@ -36,6 +36,7 @@ class SendBitcoinViewModel(
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
+    val blockchainType by adapter::blockchainType
     val feeRatePriorities by feeRateService::feeRatePriorities
     val feeRateRange by feeRateService::feeRateRange
     val feeRateChangeable by feeRateService::feeRateChangeable

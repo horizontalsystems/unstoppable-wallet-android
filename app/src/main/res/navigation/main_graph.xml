@@ -79,9 +79,6 @@
         android:id="@+id/tokenLiquidityInfoFragment"
         android:name="cash.p.terminal.modules.info.TokenLiquidityInfoFragment"/>
     <fragment
-        android:id="@+id/btcBlockchainTransactionInputOutputsInfoFragment"
-        android:name="cash.p.terminal.modules.info.BtcBlockchainTransactionInputsOutputsInfoFragment"/>
-    <fragment
         android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
         android:name="cash.p.terminal.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
     <fragment

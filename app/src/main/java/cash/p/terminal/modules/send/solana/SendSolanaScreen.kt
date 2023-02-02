@@ -54,8 +54,8 @@ fun SendSolanaScreen(
         }
 
         SendScreen(
-                navController = navController,
-                fullCoin = fullCoin
+            fullCoin = fullCoin,
+            onCloseClick = { navController.popBackStack() }
         ) {
             AvailableBalance(
                     coinCode = wallet.coin.code,
