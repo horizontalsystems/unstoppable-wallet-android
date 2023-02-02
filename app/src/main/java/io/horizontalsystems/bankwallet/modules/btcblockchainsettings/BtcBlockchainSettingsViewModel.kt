@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
-import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.ViewItem
 import io.reactivex.disposables.CompositeDisposable
 
@@ -23,9 +22,6 @@ class BtcBlockchainSettingsViewModel(
     var restoreSources by mutableStateOf<List<ViewItem>>(listOf())
         private set
 
-    var transactionSortModes by mutableStateOf<List<ViewItem>>(listOf())
-        private set
-
     var saveButtonEnabled by mutableStateOf(false)
         private set
 
@@ -37,13 +33,11 @@ class BtcBlockchainSettingsViewModel(
             .subscribe {
                 saveButtonEnabled = it
                 syncRestoreModeState()
-                syncTransactionModeState()
             }.let {
                 disposables.add(it)
             }
 
         syncRestoreModeState()
-        syncTransactionModeState()
     }
 
     override fun onCleared() {
@@ -52,10 +46,6 @@ class BtcBlockchainSettingsViewModel(
 
     fun onSelectRestoreMode(viewItem: ViewItem) {
         service.setRestoreMode(viewItem.id)
-    }
-
-    fun onSelectTransactionMode(viewItem: ViewItem) {
-        service.setTransactionMode(viewItem.id)
     }
 
     fun onSaveClick() {
@@ -73,18 +63,6 @@ class BtcBlockchainSettingsViewModel(
             )
         }
         restoreSources = viewItems
-    }
-
-    private fun syncTransactionModeState() {
-        val viewItems = TransactionDataSortMode.values().map { mode ->
-            ViewItem(
-                id = mode.raw,
-                title = Translator.getString(mode.title),
-                subtitle = Translator.getString(mode.description),
-                selected = mode == service.transactionMode
-            )
-        }
-        transactionSortModes = viewItems
     }
 
 }

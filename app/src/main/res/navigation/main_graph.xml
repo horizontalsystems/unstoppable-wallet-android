@@ -79,9 +79,6 @@
         android:id="@+id/tokenLiquidityInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.TokenLiquidityInfoFragment"/>
     <fragment
-        android:id="@+id/btcBlockchainTransactionInputOutputsInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.BtcBlockchainTransactionInputsOutputsInfoFragment"/>
-    <fragment
         android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
     <fragment
