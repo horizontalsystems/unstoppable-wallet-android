@@ -265,13 +265,6 @@ private fun SecurityParameters(
 }
 
 @Composable
-private fun chartTitleWithTimePeriod(title: Int, period: Int?) = if (period == null) {
-    stringResource(title)
-} else {
-    "${stringResource(title)} (${stringResource(period)})"
-}
-
-@Composable
 private fun TokenLiquidity(
     coinUid: String,
     viewItem: ViewItem,
@@ -316,11 +309,12 @@ private fun TokenLiquidity(
                 halfWidth = tokenLiquidityViewItem.liquidity != null,
                 proChartsActivated = viewItem.proChartsActivated,
                 chartViewItem = it,
-                title = chartTitleWithTimePeriod(R.string.CoinPage_DetailsDexVolume, it.timePeriodString),
+                title = stringResource(R.string.CoinPage_DetailsDexVolume),
                 description = stringResource(id = R.string.CoinPage_DetailsDexVolume_Description),
                 fragmentManager = fragmentManager,
                 coinUid = coinUid,
-                onBannerClick = onBannerClick
+                onBannerClick = onBannerClick,
+                timePeriodSuffix = it.timePeriodString
             )
         }
 
@@ -334,7 +328,8 @@ private fun TokenLiquidity(
                 description = stringResource(id = R.string.CoinPage_DetailsDexLiquidity_Description),
                 fragmentManager = fragmentManager,
                 coinUid = coinUid,
-                onBannerClick = onBannerClick
+                onBannerClick = onBannerClick,
+                timePeriodSuffix = null
             )
         }
     }
@@ -388,11 +383,12 @@ private fun TokenDistribution(
                     halfWidth = tokenDistributionViewItem.txVolume != null,
                     proChartsActivated = viewItem.proChartsActivated,
                     chartViewItem = it,
-                    title = chartTitleWithTimePeriod(R.string.CoinPage_DetailsTxCount, it.timePeriodString),
+                    title = stringResource(R.string.CoinPage_DetailsTxCount),
                     description = stringResource(id = R.string.CoinPage_DetailsTxCount_Description),
                     fragmentManager = fragmentManager,
                     coinUid = coinUid,
-                    onBannerClick = onBannerClick
+                    onBannerClick = onBannerClick,
+                    timePeriodSuffix = it.timePeriodString
                 )
             }
 
@@ -402,11 +398,12 @@ private fun TokenDistribution(
                     halfWidth = false,
                     proChartsActivated = viewItem.proChartsActivated,
                     chartViewItem = it,
-                    title = chartTitleWithTimePeriod(R.string.CoinPage_DetailsTxVolume, it.timePeriodString),
+                    title = stringResource(R.string.CoinPage_DetailsTxVolume),
                     description = stringResource(id = R.string.CoinPage_DetailsTxVolume_Description),
                     fragmentManager = fragmentManager,
                     coinUid = coinUid,
-                    onBannerClick = onBannerClick
+                    onBannerClick = onBannerClick,
+                    timePeriodSuffix = it.timePeriodString
                 )
             }
         }
@@ -429,7 +426,8 @@ private fun TokenDistribution(
                 description = stringResource(id = R.string.CoinPage_DetailsActiveAddresses_Description),
                 fragmentManager = fragmentManager,
                 coinUid = coinUid,
-                onBannerClick = onBannerClick
+                onBannerClick = onBannerClick,
+                timePeriodSuffix = null
             )
         }
     }
@@ -572,6 +570,7 @@ private fun MiniProChartCard(
     description: String,
     fragmentManager: FragmentManager,
     coinUid: String,
+    timePeriodSuffix: Int?,
     onBannerClick: () -> Unit
 ) {
     Box(
@@ -579,7 +578,7 @@ private fun MiniProChartCard(
             .fillMaxWidth(if (halfWidth) 0.5F else 1F)
     ) {
         MiniChartCard(
-            title = title,
+            title = "$title${timePeriodSuffix?.let { " (${stringResource(id = it)})" } ?: ""}",
             chartViewItem = chartViewItem,
             paddingValues = PaddingValues(start = 4.dp, end = 4.dp),
             onClick = {
