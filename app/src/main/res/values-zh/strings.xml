@@ -94,7 +94,7 @@
     <string name="Restore_Error_MnemonicWordCount">个数有误。必须为12到24个单词。您输入了：%d</string>
     <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
-    <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">选择区块链</string>
     <string name="Restore_Key">密钥</string>
     <string name="Restore_By">由</string>
@@ -612,7 +612,7 @@
     <string name="SettingsCurrency_Understand">我理解</string>
     <!--Settings-->
     <string name="Settings_Title">系统设置</string>
-    <string name="Settings_SecurityCenter">安全中心</string>
+    <string name="Settings_SecurityCenter">Security</string>
     <string name="Settings_Notifications">价格通知</string>
     <string name="Settings_ExperimentalFeatures">实验功能</string>
     <string name="Settings_BaseCurrency">基础货币</string>
@@ -658,7 +658,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">添加 RPC 源</string>
     <string name="AddEvmSyncSource_Name">名称</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">基本身份验证(可选)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC 源</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">此网址的 RPC 源已存在</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： http，https，ws，wss</string>
@@ -1061,6 +1061,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">总代币交易量记录在链上。交易量是以实际代币（而非美元）进行度量。</string>
     <string name="CoinPage_DetailsActiveAddresses">活跃地址</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">不同时期交易中唯一钱包地址的数量。</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">通过持有不可阻挡的 NFT 获取高级钱包功能。</string>
     <string name="CoinPage_CoinNotFound">[%s]\n未找到</string>
