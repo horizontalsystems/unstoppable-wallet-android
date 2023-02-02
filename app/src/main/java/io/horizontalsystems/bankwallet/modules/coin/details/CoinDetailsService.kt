@@ -17,7 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
 class CoinDetailsService(
-    private val fullCoin: FullCoin,
+    val fullCoin: FullCoin,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val proFeaturesAuthorizationManager: ProFeaturesAuthorizationManager
@@ -53,8 +53,6 @@ class CoinDetailsService(
             }
         }
     }
-
-    val coin = fullCoin.coin
 
     private fun fetchCharts(details: MarketInfoDetails): Single<Item> {
         val tvlsSingle: Single<List<ChartPoint>> = if (details.tvl != null) {

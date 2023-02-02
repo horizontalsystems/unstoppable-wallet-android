@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.chart.ChartCoinValueFormatterShortened
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartNumberFormatterShortened
@@ -33,10 +34,11 @@ class CoinDetailsViewModel(
 
     private val numberFormatter = ChartNumberFormatterShortened()
     private val currencyValueFormatter = ChartCurrencyValueFormatterShortened()
+    private val coinValueFormatter = ChartCoinValueFormatterShortened(service.fullCoin)
     private val disposables = CompositeDisposable()
 
     val coin: Coin
-        get() = service.coin
+        get() = service.fullCoin.coin
 
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
@@ -113,7 +115,7 @@ class CoinDetailsViewModel(
         hasMajorHolders: Boolean
     ): CoinDetailsModule.TokenDistributionViewItem? {
         val txCount = chart(proCharts.txCount, numberFormatter, isMovementChart = false)
-        val txVolume = chart(proCharts.txVolume, currencyValueFormatter, isMovementChart = false)
+        val txVolume = chart(proCharts.txVolume, coinValueFormatter, isMovementChart = false)
         val activeAddresses = chart(proCharts.activeAddresses, numberFormatter, isMovementChart = true)
 
         if (txCount == null && txVolume == null && activeAddresses == null && !hasMajorHolders) return null
