@@ -94,7 +94,7 @@
     <string name="Restore_Error_MnemonicWordCount">단어 수가 틀렸습니다. 12 개 와 24개 사이여야 합니다. 이렇게 입력했습니다: %d</string>
     <string name="Restore_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
-    <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">블록체인 선택</string>
     <string name="Restore_Key">키</string>
     <string name="Restore_By">으로</string>
@@ -612,7 +612,7 @@
     <string name="SettingsCurrency_Understand">이해합니다</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
-    <string name="Settings_SecurityCenter">보안 센터</string>
+    <string name="Settings_SecurityCenter">Security</string>
     <string name="Settings_Notifications">알림</string>
     <string name="Settings_ExperimentalFeatures">실험적인</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
@@ -658,7 +658,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC 소스 추가</string>
     <string name="AddEvmSyncSource_Name">이름</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다.</string>
@@ -1060,6 +1060,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">The aggregate token transaction volume is recorded on-chain. The volume is measured in the actual tokens (not USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>

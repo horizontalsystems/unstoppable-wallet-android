@@ -94,7 +94,7 @@
     <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
-    <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız şifreyi girin.</string>
+    <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolayı girin. Mevcut bir cüzdanı yeni bir parolayla geri yüklemek, yepyeni bir cüzdan oluşturur.</string>
     <string name="Restore_Title">Blok Zincirleri Seç</string>
     <string name="Restore_Key">Anahtar</string>
     <string name="Restore_By">İçerik</string>
@@ -612,7 +612,7 @@
     <string name="SettingsCurrency_Understand">Anlıyorum</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
-    <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
+    <string name="Settings_SecurityCenter">Güvenlik</string>
     <string name="Settings_Notifications">Bildirimler</string>
     <string name="Settings_ExperimentalFeatures">Deneysel</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
@@ -1057,6 +1057,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">The aggregate token transaction volume is recorded on-chain. The volume is measured in the actual tokens (not USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>

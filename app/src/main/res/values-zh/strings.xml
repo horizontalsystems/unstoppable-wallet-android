@@ -658,7 +658,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">添加 RPC 源</string>
     <string name="AddEvmSyncSource_Name">名称</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">基本身份验证(可选)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">基本认证(可选)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC 源</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">此网址的 RPC 源已存在</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： http，https，ws，wss</string>
@@ -1061,6 +1061,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">总代币交易量记录在链上。交易量是以实际代币（而非美元）进行度量。</string>
     <string name="CoinPage_DetailsActiveAddresses">活跃地址</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">不同时期交易中唯一钱包地址的数量。</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30 天</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">通过持有不可阻挡的 NFT 获取高级钱包功能。</string>
     <string name="CoinPage_CoinNotFound">[%s]\n未找到</string>

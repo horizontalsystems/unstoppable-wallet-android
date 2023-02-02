@@ -612,7 +612,7 @@
     <string name="SettingsCurrency_Understand">Entiendo</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
-    <string name="Settings_SecurityCenter">Centro de seguridad</string>
+    <string name="Settings_SecurityCenter">Seguridad</string>
     <string name="Settings_Notifications">Notificaciones</string>
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
@@ -658,7 +658,7 @@
     <string name="AddEvmSyncSource_RpcUrl">Url RPC</string>
     <string name="AddEvmSyncSource_AddRPCSource">Añadir fuente RPC</string>
     <string name="AddEvmSyncSource_Name">Nombre</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Autenticación básica (opcional)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Auth Básica (opcional)</string>
     <string name="AddEvmSyncSource_RpcSource">Fuente RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">La fuente RPC con esta url ya existe</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">La url introducida no es válida. La url válida debe tener uno de los siguientes esquemas: http, https, ws, wss</string>
@@ -1060,6 +1060,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">El volumen de transacción de token agregada se registra en cadena. El volumen se mide en los tokens reales (no en USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Direcciones activas</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">El número de direcciones únicas de cartera involucradas en transacciones durante varios períodos.</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Obtén acceso a funciones avanzadas de cartera manteniendo NFT imparables.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNo encontrado</string>

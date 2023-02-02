@@ -659,7 +659,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC-Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC-Quelle hinzufügen</string>
     <string name="AddEvmSyncSource_Name">Name</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Grundlegende Authentifizierung(optional)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Einfacher Auth (optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC-Quelle</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC-Quelle mit dieser URL existiert bereits</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: http, https, ws, wss</string>
@@ -1065,6 +1065,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">The aggregate token transaction volume is recorded on-chain. The volume is measured in the actual tokens (not USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nnicht gefunden</string>

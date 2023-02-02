@@ -612,7 +612,7 @@
     <string name="SettingsCurrency_Understand">Estou ciente</string>
     <!--Settings-->
     <string name="Settings_Title">Configurações</string>
-    <string name="Settings_SecurityCenter">Central de Segurança</string>
+    <string name="Settings_SecurityCenter">Segurança</string>
     <string name="Settings_Notifications">Notificações</string>
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Moeda base</string>
@@ -1054,6 +1054,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">O volume do token de transação agregada é registrado on-chain. O volume é medido nos tokens reais (não em USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Endereços ativos</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">O número de endereços únicos da carteira envolvidos nas transações em vários períodos.</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Obtenha acesso aos recursos avançados de carteiraFazendo Holdin NFTs Unstoppable.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNão encontrado</string>

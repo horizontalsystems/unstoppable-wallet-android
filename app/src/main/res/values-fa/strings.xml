@@ -94,7 +94,7 @@
     <string name="Restore_Error_MnemonicWordCount">تعداد کلمات اشتباه. باید بین ۱۲ تا ۱۴ کلمه باشد. شما وارد کردید: %d</string>
     <string name="Restore_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
-    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">انتخاب زنجیره های بلوکی</string>
     <string name="Restore_Key">کلید</string>
     <string name="Restore_By">By</string>
@@ -612,7 +612,7 @@
     <string name="SettingsCurrency_Understand">می فهمم</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
-    <string name="Settings_SecurityCenter">مركز امنيتي</string>
+    <string name="Settings_SecurityCenter">Security</string>
     <string name="Settings_Notifications">اطلاعیه ها</string>
     <string name="Settings_ExperimentalFeatures">آزمایشی</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
@@ -658,7 +658,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
     <string name="AddEvmSyncSource_Name">نام</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Basic Authentication(optional)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
@@ -1061,6 +1061,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">The aggregate token transaction volume is recorded on-chain. The volume is measured in the actual tokens (not USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>

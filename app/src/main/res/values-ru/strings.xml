@@ -614,7 +614,7 @@
     <string name="SettingsCurrency_Understand">Я понимаю</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
-    <string name="Settings_SecurityCenter">Центр безопасности</string>
+    <string name="Settings_SecurityCenter">Безопасность</string>
     <string name="Settings_Notifications">Уведомления </string>
     <string name="Settings_ExperimentalFeatures">Функции</string>
     <string name="Settings_BaseCurrency">Базовая валюта</string>
@@ -629,7 +629,7 @@
     <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="Settings_Appearance">Оформление</string>
     <string name="Appearance_Theme">ТЕМА</string>
-    <string name="Appearance_Tab">TAB SETTINGS</string>
+    <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
     <string name="Appearance_BalanceConversion">КОНВЕРТАЦИЯ БАЛАНСА</string>
@@ -660,7 +660,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Базовая аутентификация (опционально)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
     <string name="AddEvmSyncSource_RpcSource">Источник RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Источник с таким url уже существует</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss</string>
@@ -1049,16 +1049,17 @@
     <string name="CoinPage_MajorHolders_Description">На графике выше показано % всех токенов, находящихся в обороте топ-10 кошельков. Чем ниже это процентное соотношение, тем выше распределение коина.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">Топ-10 кошельков Ethereum</string>
     <string name="CoinPage_CoinInvestments_Lead">Лид</string>
-    <string name="CoinPage_DetailsDexVolume">Объем торгов Dex</string>
+    <string name="CoinPage_DetailsDexVolume">Объем торг. DEX</string>
     <string name="CoinPage_DetailsDexVolume_Description">Торговый объем для токена на децентрализованных биржах.</string>
-    <string name="CoinPage_DetailsDexLiquidity">Ликвидность Dex</string>
+    <string name="CoinPage_DetailsDexLiquidity">Ликвидность DEX</string>
     <string name="CoinPage_DetailsDexLiquidity_Description">Общая сумма доступной ликвидности для токена на децентрализованных биржах.</string>
-    <string name="CoinPage_DetailsTxCount">Количество транзакций</string>
+    <string name="CoinPage_DetailsTxCount">Кол-во транз.</string>
     <string name="CoinPage_DetailsTxCount_Description">Количество транзакций токенов, зарегистрированных ончейн за различные периоды.</string>
-    <string name="CoinPage_DetailsTxVolume">Объем торгов</string>
+    <string name="CoinPage_DetailsTxVolume">Объем транз.</string>
     <string name="CoinPage_DetailsTxVolume_Description">Совокупный объем транзакций токенов регистрируется ончейн. Объем измеряется в токенах (а не в долларах США).</string>
     <string name="CoinPage_DetailsActiveAddresses">Активные Адреса</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">Количество уникальных адресов кошельков, использованных для осуществления транзакций за различные периоды.</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30д</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Получите доступ к расширенным функциям Unstoppable Кошелька.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nне найден</string>
