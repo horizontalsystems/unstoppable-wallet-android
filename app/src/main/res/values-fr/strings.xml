@@ -94,7 +94,7 @@
     <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être compris entre 12 et 24 mots. Vous avez saisi : %d</string>
     <string name="Restore_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">Entrez la phrase d\'authentification que vous avez utilisée pour créer cette phrase mnémonique.</string>
     <string name="Restore_Title">Choisir la blockchain</string>
     <string name="Restore_Key">Clé</string>
     <string name="Restore_By">Par</string>
@@ -612,7 +612,7 @@
     <string name="SettingsCurrency_Understand">J’ai Compris</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
-    <string name="Settings_SecurityCenter">Security</string>
+    <string name="Settings_SecurityCenter">Centre de Sécurité</string>
     <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ExperimentalFeatures">Expérimental</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
@@ -658,7 +658,7 @@
     <string name="AddEvmSyncSource_RpcUrl">Url RPC</string>
     <string name="AddEvmSyncSource_AddRPCSource">Ajouter une source RPC</string>
     <string name="AddEvmSyncSource_Name">Nom</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Authentification basique (facultatif)</string>
     <string name="AddEvmSyncSource_RpcSource">Source RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">La source RPC avec cette url existe déjà</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : http, https, ws, wss</string>
@@ -1022,7 +1022,7 @@
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">G</string>
-    <string name="CoinPage_MarketCap_Trillion">T</string>
+    <string name="CoinPage_MarketCap_Trillion">MM</string>
     <string name="CoinPage_MarketCap_Quadrillion">P</string>
     <string name="CoinPage_MarketCap_TvlRation">Ratio MCap / TVL</string>
     <string name="CoinPage_MarketCap_TvlRation_Description">Le ratio de la capitalisation boursière du token du projet par rapport à sa TVL.</string>
@@ -1060,7 +1060,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">Le volume global des transactions de tokens est enregistré on-chain. Le volume est mesuré en tokens réels (pas en USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Adresses actives</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">Le nombre d\'adresses uniques de portefeuille impliquées dans les transactions sur différentes périodes.</string>
-    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30j</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Accédez aux fonctionnalités avancées du portefeuilleen maintenant des NFT non stoppables.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNon trouvé</string>
