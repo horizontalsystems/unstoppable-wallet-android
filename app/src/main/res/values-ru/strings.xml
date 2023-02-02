@@ -95,7 +95,7 @@
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная контрольная сумма</string>
-    <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">Блокчейны</string>
     <string name="Restore_Key">Ключ</string>
     <string name="Restore_By">Через</string>
@@ -614,7 +614,7 @@
     <string name="SettingsCurrency_Understand">Я понимаю</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
-    <string name="Settings_SecurityCenter">Центр безопасности</string>
+    <string name="Settings_SecurityCenter">Security</string>
     <string name="Settings_Notifications">Уведомления </string>
     <string name="Settings_ExperimentalFeatures">Функции</string>
     <string name="Settings_BaseCurrency">Базовая валюта</string>
@@ -660,7 +660,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Базовая аутентификация (опционально)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">Источник RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Источник с таким url уже существует</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss</string>
@@ -1059,6 +1059,7 @@
     <string name="CoinPage_DetailsTxVolume_Description">Совокупный объем транзакций токенов регистрируется ончейн. Объем измеряется в токенах (а не в долларах США).</string>
     <string name="CoinPage_DetailsActiveAddresses">Активные Адреса</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">Количество уникальных адресов кошельков, использованных для осуществления транзакций за различные периоды.</string>
+    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Получите доступ к расширенным функциям Unstoppable Кошелька.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nне найден</string>
