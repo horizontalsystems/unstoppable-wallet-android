@@ -94,7 +94,7 @@
     <string name="Restore_Error_MnemonicWordCount">Falsche Wortzahl. Sie muss zwischen 12 und 24 Wörtern liegen. Sie haben eingegeben: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
     <string name="Restore_InvalidChecksum">Ungültige Prüfsumme</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">Geben Sie Ihre Passphrase ein, die Sie beim Erstellen dieser Eselsbrücke verwendet haben.</string>
     <string name="Restore_Title">Blockchain auswählen</string>
     <string name="Restore_Key">Schlüssel</string>
     <string name="Restore_By">Von</string>
@@ -613,7 +613,7 @@
     <string name="SettingsCurrency_Understand">Ich stimme zu</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
-    <string name="Settings_SecurityCenter">Security</string>
+    <string name="Settings_SecurityCenter">Sicherheit</string>
     <string name="Settings_Notifications">Benachrichtigungen</string>
     <string name="Settings_ExperimentalFeatures">Experimentell</string>
     <string name="Settings_BaseCurrency">Währung</string>
@@ -659,7 +659,7 @@
     <string name="AddEvmSyncSource_RpcUrl">RPC-Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC-Quelle hinzufügen</string>
     <string name="AddEvmSyncSource_Name">Name</string>
-    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Einfacher Auth (optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC-Quelle</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC-Quelle mit dieser URL existiert bereits</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: http, https, ws, wss</string>
