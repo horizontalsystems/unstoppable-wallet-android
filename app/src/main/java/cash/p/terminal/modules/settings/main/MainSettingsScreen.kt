@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.settings.main
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -19,18 +15,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
@@ -43,35 +36,11 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.LinkHelper
-import io.horizontalsystems.core.findNavController
-
-class MainSettingsFragment : BaseFragment() {
-
-    private val viewModel by viewModels<MainSettingsViewModel> { MainSettingsModule.Factory() }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    SettingsScreen(viewModel, findNavController())
-                }
-            }
-        }
-    }
-
-}
 
 @Composable
-private fun SettingsScreen(
-    viewModel: MainSettingsViewModel,
+fun SettingsScreen(
     navController: NavController,
+    viewModel: MainSettingsViewModel = viewModel(factory = MainSettingsModule.Factory()),
 ) {
 
     Surface(color = ComposeAppTheme.colors.tyler) {

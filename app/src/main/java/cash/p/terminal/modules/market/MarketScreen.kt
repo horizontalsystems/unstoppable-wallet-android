@@ -1,16 +1,10 @@
 package cash.p.terminal.modules.market
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -18,7 +12,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
 import cash.p.terminal.modules.market.overview.MarketOverviewScreen
@@ -29,30 +22,10 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TabItem
 import cash.p.terminal.ui.compose.components.Tabs
-import io.horizontalsystems.core.findNavController
-
-class MarketFragment : BaseFragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    MarketFragmentScreen(findNavController())
-                }
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun MarketFragmentScreen(navController: NavController) {
+fun MarketScreen(navController: NavController) {
     val marketViewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val tabs = marketViewModel.tabs
     val selectedTab = marketViewModel.selectedTab

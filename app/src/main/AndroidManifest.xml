@@ -63,9 +63,6 @@
         <activity
             android:name=".modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.rooteddevice.RootedDeviceActivity"
-            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

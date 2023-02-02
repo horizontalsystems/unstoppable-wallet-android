@@ -3,7 +3,10 @@ package cash.p.terminal.core
 import com.google.gson.JsonObject
 import cash.p.terminal.R
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
-import cash.p.terminal.core.managers.*
+import cash.p.terminal.core.managers.ActiveAccountState
+import cash.p.terminal.core.managers.Bep2TokenInfoService
+import cash.p.terminal.core.managers.EvmKitWrapper
+import cash.p.terminal.core.managers.TorManager
 import cash.p.terminal.entities.*
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.amount.AmountInputType
@@ -82,7 +85,7 @@ interface ILocalStorage {
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
     var appIcon: AppIcon?
-    var mainTab: MainModule.MainTab?
+    var mainTab: MainModule.MainNavigation?
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
@@ -414,12 +417,11 @@ interface ITorManager {
 }
 
 interface IRateAppManager {
-    val showRateAppObservable: Observable<RateUsType>
+    val showRateAppFlow: Flow<Boolean>
 
     fun onBalancePageActive()
     fun onBalancePageInactive()
     fun onAppLaunch()
-    fun forceShow()
 }
 
 interface ICoinManager {

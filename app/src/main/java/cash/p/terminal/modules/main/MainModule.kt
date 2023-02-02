@@ -7,8 +7,8 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.utils.RootUtil
 import kotlinx.parcelize.Parcelize
 
 object MainModule {
@@ -16,7 +16,6 @@ object MainModule {
     class Factory(private val wcDeepLink: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MainService(RootUtil, App.localStorage)
             return MainViewModel(
                 App.pinComponent,
                 App.rateAppManager,
@@ -24,7 +23,7 @@ object MainModule {
                 App.termsManager,
                 App.accountManager,
                 App.releaseNotesManager,
-                service,
+                App.localStorage,
                 App.torKitManager,
                 App.wc2SessionManager,
                 App.wc1Manager,
@@ -52,17 +51,24 @@ object MainModule {
         class BadgeNumber(val number: Int) : BadgeType()
     }
 
+    data class NavigationViewItem(
+        val mainNavItem: MainNavigation,
+        val selected: Boolean,
+        val enabled: Boolean,
+        val badge: BadgeType? = null
+    )
+
     @Parcelize
-    enum class MainTab : Parcelable {
-        Balance,
-        Transactions,
-        Market,
-        Settings;
+    enum class MainNavigation(val iconRes: Int) : Parcelable {
+        Balance(R.drawable.ic_wallet_24),
+        Transactions(R.drawable.ic_transactions),
+        Market(R.drawable.ic_market_24),
+        Settings(R.drawable.ic_settings);
 
         companion object {
-            private val map = values().associateBy(MainTab::name)
+            private val map = values().associateBy(MainNavigation::name)
 
-            fun fromString(type: String?): MainTab? = map[type]
+            fun fromString(type: String?): MainNavigation? = map[type]
         }
     }
 }
