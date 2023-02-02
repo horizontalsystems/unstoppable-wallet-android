@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.rooteddevice
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,31 +17,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
-class RootedDeviceActivity : AppCompatActivity() {
-
-    private val viewModel by viewModels<RootedDeviceViewModel> { RootedDeviceModule.Factory() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            RootedDeviceScreen(
-                onIgnoreWarningClicked = {
-                    viewModel.ignoreRootedDeviceWarning()
-                    finish()
-                },
-            )
-        }
-    }
-
-    override fun onBackPressed() {
-        //disable close with back button
-    }
-
-}
 
 @Composable
-private fun RootedDeviceScreen(
+fun RootedDeviceScreen(
     onIgnoreWarningClicked: () -> Unit
 ) {
     ComposeAppTheme {
@@ -91,6 +65,6 @@ private fun RootedDeviceScreen(
 @Composable
 fun Preview_RootedDeviceScreen() {
     ComposeAppTheme {
-        RootedDeviceScreen({})
+        RootedDeviceScreen {}
     }
 }

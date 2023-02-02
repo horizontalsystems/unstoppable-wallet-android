@@ -12,7 +12,9 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.time.Instant
 
@@ -22,14 +24,14 @@ class RateAppManager(
         private val adapterManager: IAdapterManager,
         private val localStorage: ILocalStorage) : IRateAppManager {
 
-    override val showRateAppObservable = PublishSubject.create<RateUsType>()
+    private val _showRateFlow = MutableStateFlow(false)
+    override val showRateAppFlow = _showRateFlow.filterNotNull()
 
     private val MIN_LAUNCH_COUNT = 5
     private val MIN_COINS_COUNT = 2
     private val COUNTDOWN_TIME_INTERVAL: Long = 10 * 1000 // 10 seconds
     private val REQUEST_TIME_INTERVAL = 40 * 24 * 60 * 60 // 40 Days
 
-    private var isCountdownAllowed = false
     private var isCountdownPassed = false
     private var isRequestAllowed = false
     private var isOnBalancePage = false
@@ -73,24 +75,17 @@ class RateAppManager(
         if (lastRequestTime > 0 && (Instant.now().epochSecond - lastRequestTime) < REQUEST_TIME_INTERVAL) {
             return
         }
-        isCountdownAllowed = true
 
-        if(isCountdownAllowed && !isCountdownPassed){
+        if(!isCountdownPassed){
             startCountdownChecker()
         }
-    }
-
-    override fun forceShow() {
-        localStorage.rateAppLastRequestTime = Instant.now().epochSecond
-        isRequestAllowed = false
-        showRateAppObservable.onNext(RateUsType.OpenPlayMarket)
     }
 
     private fun showIfAllowed() {
         if (isOnBalancePage && isRequestAllowed) {
             localStorage.rateAppLastRequestTime = Instant.now().epochSecond
             isRequestAllowed = false
-            showRateAppObservable.onNext(RateUsType.ShowDialog)
+            _showRateFlow.update { true }
         }
     }
 
@@ -123,8 +118,4 @@ class RateAppManager(
 
     }
 
-}
-
-enum class RateUsType{
-    ShowDialog, OpenPlayMarket
 }

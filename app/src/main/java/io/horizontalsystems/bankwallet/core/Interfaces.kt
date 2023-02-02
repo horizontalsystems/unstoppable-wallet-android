@@ -3,7 +3,10 @@ package io.horizontalsystems.bankwallet.core
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
+import io.horizontalsystems.bankwallet.core.managers.Bep2TokenInfoService
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -82,7 +85,7 @@ interface ILocalStorage {
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
     var appIcon: AppIcon?
-    var mainTab: MainModule.MainTab?
+    var mainTab: MainModule.MainNavigation?
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
@@ -414,12 +417,11 @@ interface ITorManager {
 }
 
 interface IRateAppManager {
-    val showRateAppObservable: Observable<RateUsType>
+    val showRateAppFlow: Flow<Boolean>
 
     fun onBalancePageActive()
     fun onBalancePageInactive()
     fun onAppLaunch()
-    fun forceShow()
 }
 
 interface ICoinManager {

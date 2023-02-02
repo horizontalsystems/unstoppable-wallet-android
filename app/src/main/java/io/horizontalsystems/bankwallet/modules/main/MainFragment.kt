@@ -1,268 +1,347 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import androidx.core.view.forEach
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.viewpager2.widget.ViewPager2
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.navGraphViewModels
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentMainBinding
-import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
+import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
-import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
+import io.horizontalsystems.bankwallet.modules.market.MarketScreen
+import io.horizontalsystems.bankwallet.modules.rateapp.RateApp
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
-import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
+import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
+import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
+import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
+import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsScreen
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager.SupportState
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetWalletSelectDialog
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBottomNavigation
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBottomNavigationItem
+import io.horizontalsystems.bankwallet.ui.compose.components.micro_leah
+import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
 import io.horizontalsystems.core.findNavController
+import kotlinx.coroutines.launch
 
-class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
+class MainFragment : BaseFragment() {
 
-    private val viewModel by viewModels<MainViewModel> {
-        MainModule.Factory(activity?.intent?.data?.toString())
-    }
-
-    private var _binding: FragmentMainBinding? = null
-    private val binding get() = _binding!!
+    private val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    MainScreenWithRootedDeviceCheck(
+                        transactionsViewModel = transactionsViewModel,
+                        deepLink = activity?.intent?.data?.toString(),
+                        navController = findNavController(),
+                        clearActivityData = { activity?.intent?.data = null }
+                    )
+                }
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().moveTaskToBack(true)
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().moveTaskToBack(true)
+                }
+            })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+}
+
+@Composable
+private fun MainScreenWithRootedDeviceCheck(
+    transactionsViewModel: TransactionsViewModel,
+    deepLink: String?,
+    navController: NavController,
+    clearActivityData: () -> Unit,
+    rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory())
+) {
+    if (rootedDeviceViewModel.showRootedDeviceWarning) {
+        RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
+    } else {
+        MainScreen(transactionsViewModel, deepLink, navController, clearActivityData)
     }
+}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+@Composable
+private fun MainScreen(
+    transactionsViewModel: TransactionsViewModel,
+    deepLink: String?,
+    fragmentNavController: NavController,
+    clearActivityData: () -> Unit,
+    viewModel: MainViewModel = viewModel(factory = MainModule.Factory(deepLink))
+) {
 
-        val mainViewPagerAdapter = MainViewPagerAdapter(this, viewModel.marketsTabEnabledLiveData.value ?: false)
+    val selectedPage = viewModel.selectedPageIndex
+    val pagerState = rememberPagerState(initialPage = viewModel.selectedPageIndex)
 
-        binding.viewPager.offscreenPageLimit = 1
-        binding.viewPager.adapter = mainViewPagerAdapter
-        binding.viewPager.isUserInputEnabled = false
+    val coroutineScope = rememberCoroutineScope()
+    val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-        binding.viewPager.setCurrentItem(viewModel.initialTab.ordinal, false)
-        binding.bottomNavigation.menu.getItem(viewModel.initialTab.ordinal).isChecked = true
+    ModalBottomSheetLayout(
+        sheetState = modalBottomSheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            WalletSwitchBottomSheet(
+                wallets = viewModel.wallets,
+                watchingAddresses = viewModel.watchWallets,
+                selectedAccount = viewModel.activeWallet,
+                onSelectListener = {
+                    coroutineScope.launch {
+                        modalBottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+                        viewModel.onSelect(it)
+                    }
+                },
+                onCancelClick = {
+                    coroutineScope.launch {
+                        modalBottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+                    }
+                }
+            )
+        },
+    ) {
+        Box(Modifier.fillMaxSize()) {
+            Scaffold(
+                backgroundColor = ComposeAppTheme.colors.tyler,
+                bottomBar = {
+                    HsBottomNavigation(
+                        backgroundColor = ComposeAppTheme.colors.tyler,
+                        elevation = 10.dp
+                    ) {
+                        viewModel.mainNavItems.forEach { item ->
+                            HsBottomNavigationItem(
+                                icon = {
+                                    BadgedIcon(item.badge) {
+                                        Icon(
+                                            painterResource(item.mainNavItem.iconRes),
+                                            contentDescription = null
+                                        )
+                                    }
+                                },
+                                selected = item.selected,
+                                enabled = item.enabled,
+                                selectedContentColor = ComposeAppTheme.colors.jacob,
+                                unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.grey50,
+                                onClick = { viewModel.onSelect(item.mainNavItem) },
+                                onLongClick = {
+                                    if (item.mainNavItem == MainNavigation.Balance) {
+                                        coroutineScope.launch {
+                                            modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            ) {
+                Column(modifier = Modifier.padding(it)) {
+                    LaunchedEffect(key1 = selectedPage, block = {
+                        pagerState.scrollToPage(selectedPage)
+                    })
 
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                viewModel.onTabSelect(position)
-            }
-        })
-
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.navigation_market -> binding.viewPager.setCurrentItem(0, false)
-                R.id.navigation_balance -> binding.viewPager.setCurrentItem(1, false)
-                R.id.navigation_transactions -> binding.viewPager.setCurrentItem(2, false)
-                R.id.navigation_settings -> binding.viewPager.setCurrentItem(3, false)
-            }
-            true
-        }
-
-        (binding.bottomNavigation.getChildAt(0) as? ViewGroup)?.let { viewGroup ->
-            viewGroup.forEach {
-                it.setOnLongClickListener {
-                    if (it.id == R.id.navigation_balance) {
-                        viewModel.onLongPressBalanceTab()
-                        true
-                    } else {
-                        false
+                    HorizontalPager(
+                        modifier = Modifier.weight(1f),
+                        count = viewModel.mainNavItems.size,
+                        state = pagerState,
+                        userScrollEnabled = false,
+                        verticalAlignment = Alignment.Top
+                    ) { page ->
+                        when (viewModel.mainNavItems[page].mainNavItem) {
+                            MainNavigation.Market -> MarketScreen(fragmentNavController)
+                            MainNavigation.Balance -> BalanceScreen(fragmentNavController)
+                            MainNavigation.Transactions -> TransactionsScreen(fragmentNavController, transactionsViewModel)
+                            MainNavigation.Settings -> SettingsScreen(fragmentNavController)
+                        }
+                    }
+                    if (viewModel.torIsActive) {
+                        TorIsActiveStatus()
                     }
                 }
             }
+            HideContentBox(viewModel.contentHidden)
         }
+    }
 
-        viewModel.walletConnectSupportState.observe(viewLifecycleOwner) { wcSupportState ->
-            viewModel.wcSupportStateHandled()
-            when (wcSupportState) {
-                SupportState.Supported -> {
-                    findNavController().slideFromRight(R.id.wallet_connect_graph)
-                }
-                SupportState.NotSupportedDueToNoActiveAccount -> {
-                    activity?.intent?.data = null
-                    findNavController().slideFromBottom(R.id.wcErrorNoAccountFragment)
-                }
-                is SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                    activity?.intent?.data = null
-                    val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup, wcSupportState.account.name)
-                    findNavController().slideFromBottom(
-                        R.id.backupRequiredDialog,
-                        BackupRequiredDialog.prepareParams(wcSupportState.account, text)
-                    )
-                }
-                is SupportState.NotSupported -> {
-                    activity?.intent?.data = null
-                    findNavController().slideFromBottom(
-                        R.id.wcAccountTypeNotSupportedDialog,
-                        WCAccountTypeNotSupportedDialog.prepareParams(wcSupportState.accountTypeDescription)
-                    )
-                }
-                null -> {}
-            }
-        }
-
-
-        viewModel.openWalletSwitcherLiveEvent.observe(
-            viewLifecycleOwner,
-            { (wallets, selectedWallet) ->
-                openWalletSwitchDialog(wallets, selectedWallet) {
-                    viewModel.onSelect(it)
-                }
-            })
-
-        viewModel.showRootedDeviceWarningLiveEvent.observe(viewLifecycleOwner, {
-            startActivity(Intent(activity, RootedDeviceActivity::class.java))
-        })
-
-        viewModel.showRateAppLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                RateAppDialogFragment.show(it, this)
-            }
-        })
-
-        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner) {
-            findNavController().slideFromBottom(
+    if (viewModel.showWhatsNew) {
+        LaunchedEffect(Unit) {
+            fragmentNavController.slideFromBottom(
                 R.id.releaseNotesFragment,
                 bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true)
             )
+            viewModel.whatsNewShown()
         }
+    }
 
-        viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
-            openAppInPlayMarket()
-        })
+    if (viewModel.showRateAppDialog) {
+        val context = LocalContext.current
+        RateApp(
+            onRateClick = {
+                RateAppManager.openPlayMarket(context)
+                viewModel.closeRateDialog()
+            },
+            onCancelClick = { viewModel.closeRateDialog() }
+        )
+    }
 
-        viewModel.hideContentLiveData.observe(viewLifecycleOwner, Observer { hide ->
-            binding.screenSecureDim.isVisible = hide
-        })
-
-        viewModel.settingsBadgeLiveData.observe(viewLifecycleOwner) {
-            setSettingsBadge(it)
+    if (viewModel.wcSupportState != null) {
+        when (val wcSupportState = viewModel.wcSupportState) {
+            SupportState.Supported -> {
+                fragmentNavController.slideFromRight(R.id.wallet_connect_graph)
+            }
+            SupportState.NotSupportedDueToNoActiveAccount -> {
+                clearActivityData.invoke()
+                fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+            }
+            is SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                clearActivityData.invoke()
+                val text = stringResource(
+                    R.string.WalletConnect_Error_NeedBackup,
+                    wcSupportState.account.name
+                )
+                fragmentNavController.slideFromBottom(
+                    R.id.backupRequiredDialog,
+                    BackupRequiredDialog.prepareParams(wcSupportState.account, text)
+                )
+            }
+            is SupportState.NotSupported -> {
+                clearActivityData.invoke()
+                fragmentNavController.slideFromBottom(
+                    R.id.wcAccountTypeNotSupportedDialog,
+                    WCAccountTypeNotSupportedDialog.prepareParams(wcSupportState.accountTypeDescription)
+                )
+            }
+            null -> {}
         }
+        viewModel.wcSupportStateHandled()
+    }
 
-        viewModel.transactionTabEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            binding.bottomNavigation.menu.getItem(2).isEnabled = enabled
-        })
+    DisposableLifecycleCallbacks(
+        onResume = viewModel::onResume,
+    )
+}
 
-        viewModel.marketsTabEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
-            binding.bottomNavigation.menu.getItem(0).isVisible = enabled
-            mainViewPagerAdapter.setMarketsTabEnabled(enabled)
-        }
+@Composable
+private fun HideContentBox(contentHidden: Boolean) {
+    val backgroundModifier = if (contentHidden) {
+        Modifier.background(ComposeAppTheme.colors.tyler)
+    } else {
+        Modifier
+    }
+    Box(Modifier.fillMaxSize().then(backgroundModifier))
+}
 
-        viewModel.torIsActiveLiveData.observe(viewLifecycleOwner) { torIsActive ->
-            binding.torIsActiveState.isVisible = torIsActive
-        }
-        viewModel.playTorActiveAnimationLiveData.observe(viewLifecycleOwner) { playAnimation ->
-            if (playAnimation) {
-                context?.let { ctx ->
-                    ValueAnimator().apply {
-                        setIntValues(
-                            ContextCompat.getColor(ctx, R.color.remus),
-                            ContextCompat.getColor(ctx, R.color.lawrence)
+@Composable
+private fun BadgedIcon(
+    badge: MainModule.BadgeType?,
+    icon: @Composable BoxScope.() -> Unit,
+) {
+    when (badge) {
+        is MainModule.BadgeType.BadgeNumber ->
+            BadgedBox(
+                badge = {
+                    Badge(
+                        backgroundColor = ComposeAppTheme.colors.lucian
+                    ) {
+                        Text(
+                            text = badge.number.toString(),
+                            style = ComposeAppTheme.typography.micro,
+                            color = ComposeAppTheme.colors.white,
                         )
-                        setEvaluator(ArgbEvaluator())
-                        addUpdateListener { valueAnimator ->
-                            try {
-                                binding.torIsActiveState.setBackgroundColor((valueAnimator.animatedValue as Int))
-                            } catch (e: Exception) {
-                                //binding is null
-                            }
-                        }
-
-                        duration = 1000
-                        start()
                     }
-                }
-                viewModel.animationPlayed()
+                },
+                content = icon
+            )
+        MainModule.BadgeType.BadgeDot ->
+            BadgedBox(
+                badge = {
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .background(
+                                ComposeAppTheme.colors.lucian,
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                    ) { }
+                },
+                content = icon
+            )
+        else -> {
+            Box {
+                icon()
             }
         }
-
     }
+}
 
-    private fun openWalletSwitchDialog(
-        items: List<Account>,
-        selectedItem: Account?,
-        onSelectListener: (account: Account) -> Unit
+@Composable
+private fun TorIsActiveStatus() {
+    val startColor = ComposeAppTheme.colors.remus
+    val endColor = ComposeAppTheme.colors.lawrence
+    val color = remember { Animatable(startColor) }
+    LaunchedEffect(Unit) {
+        color.animateTo(endColor, animationSpec = tween(1000))
+    }
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .height(20.dp)
+            .background(color.value),
+        contentAlignment = Alignment.Center
     ) {
-        val dialog = BottomSheetWalletSelectDialog()
-        dialog.wallets = items.filter { !it.isWatchAccount }
-        dialog.watchingAddresses = items.filter { it.isWatchAccount }
-        dialog.selectedItem = selectedItem
-        dialog.onSelectListener = { onSelectListener(it) }
-
-        dialog.show(childFragmentManager, "selector_dialog")
+        micro_leah(
+            text = stringResource(R.string.Tor_TorIsActive),
+        )
     }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.onResume()
-    }
-
-    //  RateAppDialogFragment.Listener
-
-    override fun onClickRateApp() {
-        openAppInPlayMarket()
-    }
-
-    private fun openAppInPlayMarket() {
-        context?.let { context ->
-            RateAppManager.openPlayMarket(context)
-        }
-    }
-
-    private fun setSettingsBadge(badgeType: MainModule.BadgeType?) {
-        val context = requireContext()
-        val badge = binding.bottomNavigation.getOrCreateBadge(R.id.navigation_settings)
-        badge.backgroundColor = context.getColor(R.color.lucian)
-        badge.badgeTextColor = context.getColor(R.color.white)
-
-        when (badgeType) {
-            MainModule.BadgeType.BadgeDot -> {
-                badge.clearNumber()
-                badge.isVisible = true
-            }
-            is MainModule.BadgeType.BadgeNumber -> {
-                badge.number = badgeType.number
-                badge.isVisible = true
-            }
-            else -> {
-                badge.isVisible = false
-                badge.clearNumber()
-            }
-        }
-    }
-
 }
