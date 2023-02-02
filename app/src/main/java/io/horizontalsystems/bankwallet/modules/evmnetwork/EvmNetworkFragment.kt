@@ -39,6 +39,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.evmnetwork.addrpc.AddRpcScreen
 import io.horizontalsystems.bankwallet.modules.info.EvmNetworkInfoScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.*
@@ -154,7 +155,7 @@ private fun EvmNetworkScreen(
 
                 item {
                     CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
-                        NetworkSettingCell(item.name, item.url, item.selected) {
+                        BlockchainSettingCell(item.name, item.url, item.selected) {
                             viewModel.onSelectSyncSource(item.syncSource)
                         }
                     }
@@ -271,46 +272,6 @@ private fun AddButton(
             }
         }
     )
-}
-
-@Composable
-private fun NetworkSettingCell(
-    title: String,
-    subtitle: String,
-    checked: Boolean,
-    onClick: () -> Unit
-) {
-    RowUniversal(
-        onClick = onClick
-    ) {
-        Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
-            body_leah(
-                text = title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(Modifier.height(1.dp))
-            subhead2_grey(
-                text = subtitle,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        Box(
-            modifier = Modifier
-                .width(52.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
-        ) {
-            if (checked) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_checkmark_20),
-                    tint = ComposeAppTheme.colors.jacob,
-                    contentDescription = null,
-                )
-            }
-        }
-    }
 }
 
 @Composable

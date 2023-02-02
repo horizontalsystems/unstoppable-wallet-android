@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceModule
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceScreen
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinScreen
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinNavHost
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
@@ -62,7 +62,7 @@ class SendFragment : BaseFragment() {
                                 SendBitcoinModule.Factory(wallet)
                             }
 
-                            SendBitcoinScreen(
+                            SendBitcoinNavHost(
                                 findNavController(),
                                 sendBitcoinViewModel,
                                 amountInputModeViewModel
