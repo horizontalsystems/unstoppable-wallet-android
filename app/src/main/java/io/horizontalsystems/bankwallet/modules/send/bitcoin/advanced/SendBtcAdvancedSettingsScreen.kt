@@ -1,35 +1,42 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
+import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.TransactionInputsSortInfoPage
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule.SortModeViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
 fun SendBtcAdvancedSettingsScreen(
     navController: NavHostController,
     blockchainType: BlockchainType,
+    lockTimeEnabled: Boolean,
+    lockTimeIntervals: List<LockTimeInterval?>,
+    lockTimeInterval: LockTimeInterval?,
+    onEnterLockTimeInterval: (LockTimeInterval?) -> Unit,
 ) {
+    var selectedLockTimeInterval by remember { mutableStateOf(lockTimeInterval) }
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
@@ -52,6 +59,26 @@ fun SendBtcAdvancedSettingsScreen(
                     navController,
                     viewModel.sortModeViewItems
                 ) { viewModel.setTransactionMode(it) }
+
+                if (lockTimeEnabled) {
+                    Spacer(Modifier.height(32.dp))
+                    CellUniversalLawrenceSection(
+                        listOf {
+                            HSHodlerInput(
+                                lockTimeIntervals = lockTimeIntervals,
+                                lockTimeInterval = selectedLockTimeInterval,
+                                onSelect = {
+                                    selectedLockTimeInterval = it
+                                    onEnterLockTimeInterval(it)
+                                }
+                            )
+                        }
+                    )
+                    InfoText(
+                        text = stringResource(R.string.Send_Hodler_Description),
+                    )
+                }
+                Spacer(Modifier.height(32.dp))
             }
         }
     }
@@ -97,16 +124,4 @@ private fun SettingSection(
     InfoText(
         text = stringResource(settingDescriptionTextRes),
     )
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Preview
-@Composable
-private fun Preview_SendBtcAdvancedSettingsScreen() {
-    ComposeAppTheme {
-        SendBtcAdvancedSettingsScreen(
-            rememberAnimatedNavController(),
-            BlockchainType.Bitcoin
-        )
-    }
 }

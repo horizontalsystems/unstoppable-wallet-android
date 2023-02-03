@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
-import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
+import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -147,7 +147,7 @@ fun SendConfirmationScreen(
                         }
                         if (lockTimeInterval != null) {
                             add {
-                                HSHodlerInput(lockTimeInterval = lockTimeInterval)
+                                HSHodler(lockTimeInterval = lockTimeInterval)
                             }
                         }
                     }

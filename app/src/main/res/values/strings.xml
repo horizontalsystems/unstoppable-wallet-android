@@ -342,6 +342,7 @@
     <string name="Send_Button_Paste">Paste</string>
     <string name="Send_Button_Max">Max</string>
     <string name="Send_Advanced">Advanced</string>
+    <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_Domain">Domain</string>
