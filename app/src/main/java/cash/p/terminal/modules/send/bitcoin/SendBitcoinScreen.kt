@@ -4,9 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
@@ -30,11 +28,10 @@ import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.fee.FeeRateCaution
 import cash.p.terminal.modules.fee.HSFeeInputRaw
-import cash.p.terminal.modules.hodler.HSHodlerInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
-import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
 import cash.p.terminal.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
+import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
 import cash.p.terminal.modules.settings.about.*
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
@@ -66,7 +63,14 @@ fun SendBitcoinNavHost(
             )
         }
         composablePage(SendBtcAdvancedSettingsPage) {
-            SendBtcAdvancedSettingsScreen(navController, viewModel.blockchainType)
+            SendBtcAdvancedSettingsScreen(
+                navController = navController,
+                blockchainType = viewModel.blockchainType,
+                lockTimeEnabled = viewModel.isLockTimeEnabled,
+                lockTimeIntervals = viewModel.lockTimeIntervals,
+                lockTimeInterval = viewModel.uiState.lockTimeInterval,
+                onEnterLockTimeInterval = { viewModel.onEnterLockTimeInterval(it) }
+            )
         }
         composablePopup(TransactionInputsSortInfoPage) { BtcTransactionInputSortInfoScreen { navController.popBackStack() } }
     }
@@ -81,8 +85,6 @@ fun SendBitcoinScreen(
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
-    val isLockTimeEnabled = viewModel.isLockTimeEnabled
-    val lockTimeIntervals = viewModel.lockTimeIntervals
 
     val availableBalance = uiState.availableBalance
     val addressError = uiState.addressError
@@ -91,7 +93,6 @@ fun SendBitcoinScreen(
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
     val feeRateCaution = uiState.feeRateCaution
-    val lockTimeInterval = uiState.lockTimeInterval
 
     val rate = viewModel.coinRate
 
@@ -172,17 +173,6 @@ fun SendBitcoinScreen(
                         title = R.string.Send_Advanced,
                         onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
                     )
-                }
-                if (isLockTimeEnabled) {
-                    add {
-                        HSHodlerInput(
-                            lockTimeIntervals = lockTimeIntervals,
-                            lockTimeInterval = lockTimeInterval,
-                            onSelect = {
-                                viewModel.onEnterLockTimeInterval(it)
-                            }
-                        )
-                    }
                 }
             }
 

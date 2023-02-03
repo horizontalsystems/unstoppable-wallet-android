@@ -25,7 +25,7 @@ import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.fee.HSFeeInputRaw
-import cash.p.terminal.modules.hodler.HSHodlerInput
+import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
@@ -147,7 +147,7 @@ fun SendConfirmationScreen(
                         }
                         if (lockTimeInterval != null) {
                             add {
-                                HSHodlerInput(lockTimeInterval = lockTimeInterval)
+                                HSHodler(lockTimeInterval = lockTimeInterval)
                             }
                         }
                     }
