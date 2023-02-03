@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters.zcash
 
 import cash.z.ecc.android.sdk.model.PendingTransaction
 import cash.z.ecc.android.sdk.model.TransactionOverview
+import cash.z.ecc.android.sdk.model.TransactionRecipient
 import cash.z.ecc.android.sdk.model.isFailure
 
 class ZcashTransaction : Comparable<ZcashTransaction> {
@@ -17,21 +18,20 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     val failed: Boolean
     val isIncoming: Boolean
 
-    constructor(confirmedTransaction: TransactionOverview, receiveAddress: String) {
+    constructor(confirmedTransaction: TransactionOverview, recipient: String?, memo: String?) {
         confirmedTransaction.let {
             id = it.id
             transactionHash = it.rawId.byteArray
             transactionIndex = it.index.toInt()
-//            TODO: need to define toAddress
-            toAddress = null
+            toAddress = recipient
             expiryHeight = it.expiryHeight?.value?.toInt()
             minedHeight = it.minedHeight?.value
             timestamp = it.blockTimeEpochSeconds
             value = it.netValue.value
-            memo = null
+            this.memo = memo
             failed = false
+            isIncoming = !it.isSentTransaction
         }
-        isIncoming = toAddress.isNullOrBlank() || toAddress == receiveAddress
     }
 
     constructor(pendingTransaction: PendingTransaction, receiveAddress: String) {
@@ -39,8 +39,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             id = it.id
             transactionHash = it.rawTransactionId?.byteArray ?: byteArrayOf()
             transactionIndex = -1
-//            TODO: need to define toAddress
-            toAddress = null
+            toAddress = (it.recipient as? TransactionRecipient.Address)?.addressValue
             expiryHeight = it.expiryHeight?.value?.toInt()
             minedHeight = it.minedHeight?.value
             timestamp = it.createTime / 1000
