@@ -60,9 +60,7 @@ class ZcashAdapter(
 
     private val zcashAccount = Account.DEFAULT
 
-    override val receiveAddress: String = runBlocking {
-        DerivationTool.deriveUnifiedAddress(seed, network, zcashAccount)
-    }
+    override val receiveAddress: String
 
     init {
         val birthday = when (wallet.account.origin) {
@@ -90,7 +88,8 @@ class ZcashAdapter(
             birthday = birthday
         )
 
-        transactionsProvider = ZcashTransactionsProvider(receiveAddress)
+        receiveAddress = runBlocking { synchronizer.getSaplingAddress(zcashAccount) }
+        transactionsProvider = ZcashTransactionsProvider(receiveAddress, synchronizer as SdkSynchronizer)
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
     }
