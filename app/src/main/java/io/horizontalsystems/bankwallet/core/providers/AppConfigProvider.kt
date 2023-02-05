@@ -5,15 +5,15 @@ import io.horizontalsystems.bankwallet.entities.Currency
 
 class AppConfigProvider {
 
-     val companyWebPageLink: String = "https://horizontalsystems.io"
-     val appWebPageLink: String = "https://unstoppable.money"
-     val appGithubLink: String = "https://github.com/horizontalsystems/unstoppable-wallet-android"
-     val appTwitterLink: String = "https://twitter.com/UnstoppableByHS"
-     val appTelegramLink: String = "https://t.me/unstoppable_announcements"
-     val appRedditLink: String = "https://www.reddit.com/r/UNSTOPPABLEWallet/"
-     val reportEmail = "support.unstoppable@protonmail.com"
+     val companyWebPageLink: String = "https://p.cash/"
+     val appWebPageLink: String = "https://p.cash/wallet"
+     val appGithubLink: String = "https://github.com/piratecash/pcash-wallet-android"
+     val appTwitterLink: String = "https://twitter.com/PirateCash_NET"
+     val appTelegramLink: String = "https://t.me/pcash"
+     val appRedditLink: String = "https://www.reddit.com/r/PirateCash/"
+     val reportEmail = "i@p.cash"
      val btcCoreRpcUrl: String = "https://btc.blocksdecoded.com/rpc"
-     val releaseNotesUrl: String = "https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/"
+     val releaseNotesUrl: String = "https://api.github.com/repos/piratecash/pcash-wallet-android/releases/tags/"
      val walletConnectUrl = "relay.walletconnect.com"
      val walletConnectProjectId by lazy {
          Translator.getString(R.string.walletConnectV2Key)

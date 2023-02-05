@@ -12,19 +12,19 @@ class IntroViewModel(
         IntroModule.IntroSliderData(
             R.string.Intro_Wallet_Screen2Title,
             R.string.Intro_Wallet_Screen2Description,
-            R.drawable.ic_independence_light,
+            R.drawable.ic_independence,
             R.drawable.ic_independence
         ),
         IntroModule.IntroSliderData(
             R.string.Intro_Wallet_Screen3Title,
             R.string.Intro_Wallet_Screen3Description,
-            R.drawable.ic_knowledge_light,
+            R.drawable.ic_knowledge,
             R.drawable.ic_knowledge
         ),
         IntroModule.IntroSliderData(
             R.string.Intro_Wallet_Screen4Title,
             R.string.Intro_Wallet_Screen4Description,
-            R.drawable.ic_privacy_light,
+            R.drawable.ic_privacy,
             R.drawable.ic_privacy
         ),
     )

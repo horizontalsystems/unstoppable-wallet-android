@@ -46,7 +46,7 @@
     <string name="AccountRecovery_MigrationRecommended">Esta carteira parece usar um caractere não padrão em sua lista de palavras secretas e/ou uma frase secreta.  Se você não ver um saldo ou transações, leia abaixo para obter detalhes.\n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
     <string name="AccountRecovery_MigrationRequired">Esta é uma carteira não padrão. \n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Seja Unstoppable</string>
+    <string name="Intro_Wallet_Screen1Description">Seja Free</string>
     <string name="Intro_Wallet_Screen2Title">Libere Recursos</string>
     <string name="Intro_Wallet_Screen2Description">Não se prenda, e não deixe que te prendam.</string>
     <string name="Intro_Wallet_Screen3Title">Seja sem fronteiras</string>
@@ -83,7 +83,7 @@
     <string name="Language_Portuguese">Português</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Gostou da Unstoppable? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
+    <string name="RateApp_Description_Rate_This_App">Gostou da P.CASH? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
     <string name="RateApp_Button_RateIt">Avaliar</string>
     <string name="RateApp_Button_NotNow">Agora não</string>
     <!--Restore-->
@@ -103,7 +103,7 @@
     <string name="Restore_PrivateKeyHint">Insira a Chave Privada EVM, a Chave Raiz BIP32 ou a Chave Privada Estendida de Conta</string>
     <string name="Restore_PhraseHint">Insira 12, 15, 18, 21 ou 24 palavras</string>
     <string name="Restore_NonStandardRestore">Restauração Não-Padrão</string>
-    <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de recuperação de carteira para usuários da Unstoppable que possuem uma carteira Não Padrão.  Geralmente, essas carteiras podem ter sido criadas na versão Unstoppable 0.27 - 0.28 usando uma lista de palavras mnemônicas não inglesas e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será mostrado como 0 após a atualização para a versão 0.29.  Esta página permitirá que você restaure o acesso à sua carteira não padrão.  Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
+    <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de recuperação de carteira para usuários da P.CASH que possuem uma carteira Não Padrão.  Geralmente, essas carteiras podem ter sido criadas na versão P.CASH 0.27 - 0.28 usando uma lista de palavras mnemônicas não inglesas e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será mostrado como 0 após a atualização para a versão 0.29.  Esta página permitirá que você restaure o acesso à sua carteira não padrão.  Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="Select_Coins">Escolher Moedas</string>
     <string name="Restore_BirthdayHeight">Altura de aniversário</string>
@@ -306,7 +306,7 @@
     <string name="Send_Error_MinimumAmount">Valor mínimo: %s</string>
     <string name="Send_Error_MaximumAmount">Valor máximo: %s</string>
     <string name="Send_Error_MinRequiredBalance">Restante min. necessário %s</string>
-    <string name="Send_Error_TransparentAddress">A Unstoppable não é suporta pagamentos para um endereço vazio</string>
+    <string name="Send_Error_TransparentAddress">A P.CASH não é suporta pagamentos para um endereço vazio</string>
     <string name="Send_Error_SendToSelf">Não é possível enviar para você mesmo</string>
     <string name="Send_DialogAvailableBalance">Saldo Disponível</string>
     <string name="Send_DialogSpeed">Velocidade da Transação</string>
@@ -590,10 +590,10 @@
     <string name="StatusInfo_Processing">Processando</string>
     <string name="StatusInfo_Confirmed">Concluído</string>
     <string name="StatusInfo_Failed">Falhou</string>
-    <string name="StatusInfo_PendingDescription">A transação ainda não foi confirmada na blockchain. As transações enviadas com uma configuração de taxas recomendada ou maior são geralmente processadas dentro de alguns minutos. Transações enviadas com uma taxa baixa podem permanecer pendentes por algumas horas ou até mesmo dias, e podem até mesmo ser rejeitadas. Observe que o status de uma transação individual em interface da carteira Unstoppable normalmente é atualizado com um curto atraso.</string>
+    <string name="StatusInfo_PendingDescription">A transação ainda não foi confirmada na blockchain. As transações enviadas com uma configuração de taxas recomendada ou maior são geralmente processadas dentro de alguns minutos. Transações enviadas com uma taxa baixa podem permanecer pendentes por algumas horas ou até mesmo dias, e podem até mesmo ser rejeitadas. Observe que o status de uma transação individual em interface da carteira P.CASH normalmente é atualizado com um curto atraso.</string>
     <string name="StatusInfo_ProcessingDescription">A transação já foi incluída na blockchain, mas ainda não atingiu a finalidade permanente. Neste ponto, é seguro considerar a transação como concluída para pagamentos menores. Para pagamentos maiores, é recomendado esperar até que o status da transação seja alterado.</string>
     <string name="StatusInfo_ConfirmedDescription">A transação está concluída e considerada permanente e irreversível.</string>
-    <string name="StatusInfo_FailedDescription">A transação não foi processada e nenhuma transferência de valor ocorreu. Dependendo do motivo, algumas transações com falha podem consumir taxas de transação. As transações que foram substituídas ou canceladas por outra transação não consomem taxas de transação e também aparecerão com falha. O aplicativo Unstoppable não consegue mostrar o motivo das transações com falha, mas os usuários podem procurá-lo em um explorador de blocos público, como o etherscan.io.</string>
+    <string name="StatusInfo_FailedDescription">A transação não foi processada e nenhuma transferência de valor ocorreu. Dependendo do motivo, algumas transações com falha podem consumir taxas de transação. As transações que foram substituídas ou canceladas por outra transação não consomem taxas de transação e também aparecerão com falha. O aplicativo P.CASH não consegue mostrar o motivo das transações com falha, mas os usuários podem procurá-lo em um explorador de blocos público, como o etherscan.io.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Acelerar</string>
     <string name="TransactionInfoOptions_SpeedUp_Description">Esta ação tentará invalidar a transação anterior, reenviando-a com uma taxa maior. Se a transação original permanecer pendente quando uma nova foi enviada há uma alta chance (não garantida) de que ela seja invalidada e substituída. Apenas uma dessas duas transações será incluída no blockchain.</string>
@@ -616,7 +616,7 @@
     <string name="SettingsCurrency_Title">Moeda base</string>
     <string name="SettingsCurrency_Other">OUTRA</string>
     <string name="SettingsCurrency_DisclaimerTitle">Aviso Legal</string>
-    <string name="SettingsCurrency_DisclaimerText">Os dados da taxa de câmbio são fornecidos por um serviço de terceiros - Coingecko.com. \n\nO aplicativo de carteira Unstoppable não garante que esses valores sejam sempre corretos e que correspondam aos dados do mercado. A chance de inconsistência é maior se você selecionar qualquer moeda base que não seja %s.</string>
+    <string name="SettingsCurrency_DisclaimerText">Os dados da taxa de câmbio são fornecidos por um serviço de terceiros - Coingecko.com. \n\nO aplicativo de carteira P.CASH não garante que esses valores sejam sempre corretos e que correspondam aos dados do mercado. A chance de inconsistência é maior se você selecionar qualquer moeda base que não seja %s.</string>
     <string name="SettingsCurrency_Understand">Estou ciente</string>
     <!--Settings-->
     <string name="Settings_Title">Configurações</string>
@@ -646,7 +646,7 @@
     <string name="SettingsAboutApp_Site">Site</string>
     <string name="SettingsAboutApp_WhatsNew">O que há de novo</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">A Unstoppable não coleta dados nem usa ferramentas analíticas que possam expor dados sobre seus usuários. A carteira foi projetada para garantir um alto nível de privacidade para seus usuários.</string>
+    <string name="Privacy_Information">A P.CASH não coleta dados nem usa ferramentas analíticas que possam expor dados sobre seus usuários. A carteira foi projetada para garantir um alto nível de privacidade para seus usuários.</string>
     <string name="Privacy_BulletedText1">Os dados do usuário sempre permanecem em seu dispositivo.</string>
     <string name="Privacy_BulletedText2">A carteira não coleta nenhum dado sobre os usuários.</string>
     <string name="Privacy_BulletedText3">A carteira não coleta nenhum dado sobre os usuários.</string>
@@ -658,15 +658,15 @@
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Escolha a fonte de dados para restaurar e sincronizar carteira</string>
     <!--Evm Network-->
     <string name="EvmNetwork_SyncMode">Sincronizar Nó</string>
-    <string name="EvmNetwork_SyncModeDescription">Esta configuração controla como este aplicativo interage com blockchains ao enviar ou receber transações.\n\nNo caso do Bitcoin, Bitcoin Cash, Litecoin e Dash, a comunicação com os nós da rede blockchain é totalmente peer-to-peer. Os pings Unstoppable são feitos em muitos nós e se comunicam com um deles. Cada vez que o aplicativo se conecta a um nó diferente.\n\nNo caso da Ethereum, da Binance Smart Chain e outras blockchains de EVM, não existem alternativas para as carteiras móveis para interagir com as respectivas blockchains que não sejam por provedores de serviços RPC de terceiros (ex. Infura.io) ou nós pessoais. Isso essencialmente significa que sua comunicação com essa blockchain não é descentralizada. Isso não afeta seus fundos de forma alguma, apenas a capacidade de se conectar à rede blockchain.\n\nFique tranquilo, vamos mantê-lo no radar e em breve tentaremos fornecer uma forma descentralizada para sincronizar. Paciência.</string>
+    <string name="EvmNetwork_SyncModeDescription">Esta configuração controla como este aplicativo interage com blockchains ao enviar ou receber transações.\n\nNo caso do Bitcoin, Bitcoin Cash, Litecoin e Dash, a comunicação com os nós da rede blockchain é totalmente peer-to-peer. Os pings P.CASH são feitos em muitos nós e se comunicam com um deles. Cada vez que o aplicativo se conecta a um nó diferente.\n\nNo caso da Ethereum, da Binance Smart Chain e outras blockchains de EVM, não existem alternativas para as carteiras móveis para interagir com as respectivas blockchains que não sejam por provedores de serviços RPC de terceiros (ex. Infura.io) ou nós pessoais. Isso essencialmente significa que sua comunicação com essa blockchain não é descentralizada. Isso não afeta seus fundos de forma alguma, apenas a capacidade de se conectar à rede blockchain.\n\nFique tranquilo, vamos mantê-lo no radar e em breve tentaremos fornecer uma forma descentralizada para sincronizar. Paciência.</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte de restauração, a carteira terá que ressincronizar-se com a blockchain do Bitcoin.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Restaurar Fonte</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restaurar uma carteira com transações.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceDescription">Esta configuração só é relevante ao restaurar uma carteira existente. É um processo de obtenção de histórico de transações para uma determinada criptomoeda, então o aplicativo de carteira é capaz de exibir transações anteriores e calcular o saldo do usuário. Isto precisa acontecer apenas uma vez quando o usuário restaura as carteiras previamente criadas.\n\nNeste ponto, existem duas possíveis maneiras de uma carteira móvel como o Unstoppable de fazer isso:\n\n1. do Servidor API: Há um servidor predefinido por terceiros que hospeda toda a blockchain e tem todos os dados processados e otimizados para fornecer esses dados de forma rápida. Este método é rápido, mas potencialmente (não necessariamente) menos privado. É também um método centralizado para restaurar uma carteira, pois depende da disponibilidade de um servidor de terceiros. Esta opção é recomendada devido à velocidade de obtenção de dados (5-10 minutos).\n\n2. da Blockchain: O aplicativo tenta restaurar diretamente de uma rede de nós da blockchain. Essa é uma maneira descentralizada de restaurar o saldo das carteiras e transações anteriores. O aplicativo pança muitos dos nós da rede e solicita dados deles sem abordar alguns nós especificamente. Esta opção é lenta e pode levar facilmente 2-3 horas, o aplicativo precisa estar aberto enquanto a restauração está acontecendo. Este método de restauração não depende de nenhuma entidade e deve funcionar em todas as condições.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceDescription">Esta configuração só é relevante ao restaurar uma carteira existente. É um processo de obtenção de histórico de transações para uma determinada criptomoeda, então o aplicativo de carteira é capaz de exibir transações anteriores e calcular o saldo do usuário. Isto precisa acontecer apenas uma vez quando o usuário restaura as carteiras previamente criadas.\n\nNeste ponto, existem duas possíveis maneiras de uma carteira móvel como o P.CASH de fazer isso:\n\n1. do Servidor API: Há um servidor predefinido por terceiros que hospeda toda a blockchain e tem todos os dados processados e otimizados para fornecer esses dados de forma rápida. Este método é rápido, mas potencialmente (não necessariamente) menos privado. É também um método centralizado para restaurar uma carteira, pois depende da disponibilidade de um servidor de terceiros. Esta opção é recomendada devido à velocidade de obtenção de dados (5-10 minutos).\n\n2. da Blockchain: O aplicativo tenta restaurar diretamente de uma rede de nós da blockchain. Essa é uma maneira descentralizada de restaurar o saldo das carteiras e transações anteriores. O aplicativo pança muitos dos nós da rede e solicita dados deles sem abordar alguns nós especificamente. Esta opção é lenta e pode levar facilmente 2-3 horas, o aplicativo precisa estar aberto enquanto a restauração está acontecendo. Este método de restauração não depende de nenhuma entidade e deve funcionar em todas as condições.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entradas / Saídas de Transação</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Torne suas transações BTC, LTC e BCH mais difíceis de rastrear, alterando como as transações são estruturadas.</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">A maioria das transações do Bitcoin, bem como as transações em criptomoedas, incluindo Bitcoin Cash, Dash, e Litecoin, geram duas saídas. Uma saída é a quantidade que vai para o destinatário e a outra é a mudança de saída que é retornada ao remetente. A maneira como a maioria das carteiras constrói as transações torna mais fácil para um terceiro entender qual das saídas foi para a parte receptora e qual foi a quantia alterada retornada ao remetente. Como a saída retornada ao remetente será usada mais tarde em transações futuras, uma conexão entre essas duas transações se torna evidente.\n\nA carteira Unstoppable implementa medidas para tornar mais difícil para alguém descobrir qual saída vai para onde.\n\nExistem duas opções disponíveis para usuários Unstoppable:\n\n1. Embaralhamento: A ordem de saídas da transação é randomizada em cada transação. Às vezes a mudança pode ser a primeira saída, às vezes pode ser a segunda. Se um usuário confia no desenvolvedor do aplicativo, considere esta opção recomendada.\n\n2. Determinístico: Há um padrão comumente acordado para encomendar saídas de transação (conhecido como BIP69). Nas carteiras de código aberto, que o padrão garante que os usuários de carteira não precisam confiar em como desenvolvedores do aplicativo implementam a ordenação das saídas. Como este padrão é novo, muitas carteiras ainda não o implementaram. Como resultado, é um pouco possível ver no blockchain se uma transação foi enviada de uma carteira que usa esse padrão ou não.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">A maioria das transações do Bitcoin, bem como as transações em criptomoedas, incluindo Bitcoin Cash, Dash, e Litecoin, geram duas saídas. Uma saída é a quantidade que vai para o destinatário e a outra é a mudança de saída que é retornada ao remetente. A maneira como a maioria das carteiras constrói as transações torna mais fácil para um terceiro entender qual das saídas foi para a parte receptora e qual foi a quantia alterada retornada ao remetente. Como a saída retornada ao remetente será usada mais tarde em transações futuras, uma conexão entre essas duas transações se torna evidente.\n\nA carteira P.CASH implementa medidas para tornar mais difícil para alguém descobrir qual saída vai para onde.\n\nExistem duas opções disponíveis para usuários P.CASH:\n\n1. Embaralhamento: A ordem de saídas da transação é randomizada em cada transação. Às vezes a mudança pode ser a primeira saída, às vezes pode ser a segunda. Se um usuário confia no desenvolvedor do aplicativo, considere esta opção recomendada.\n\n2. Determinístico: Há um padrão comumente acordado para encomendar saídas de transação (conhecido como BIP69). Nas carteiras de código aberto, que o padrão garante que os usuários de carteira não precisam confiar em como desenvolvedores do aplicativo implementam a ordenação das saídas. Como este padrão é novo, muitas carteiras ainda não o implementaram. Como resultado, é um pouco possível ver no blockchain se uma transação foi enviada de uma carteira que usa esse padrão ou não.</string>
     <!--Info screen-->
     <string name="Info_Title">Informação</string>
     <!--Setting_Security-->
@@ -676,9 +676,9 @@
     <string name="SettingsSecurity_EnablePin">Senha</string>
     <string name="SettingsSecurity_EditPin">Editar senha</string>
     <string name="SettingsSecurity_ManageKeys">Gerenciar carteiras</string>
-    <string name="SettingsSecurity_AppRestartWarning">Esta ação reiniciará Carteira Unstoppable.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Esta ação reiniciará Carteira P.CASH.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimize sua internet completamente enquanto estiver usando este aplicativo. Nota: em alguns casos, o recurso WalletConnect para apps DeFi pode ser muito lento ou nem funcionar.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">As notificações do aplicativo da carteira Unstoppable estão desativadas. Você precisa ativar as notificações e permitir a atualização do aplicativo em segundo plano para poder receber alertas de alteração de preço.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">As notificações do aplicativo da carteira P.CASH estão desativadas. Você precisa ativar as notificações e permitir a atualização do aplicativo em segundo plano para poder receber alertas de alteração de preço.</string>
     <string name="SettingsSecurity_SortingShuffle">Embaralhar</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexação aleatória</string>
     <string name="SettingsSecurity_SortingBip69">Bip69 Determinístico</string>
@@ -687,10 +687,10 @@
     <string name="SettingsSecurity_SyncModeBlockchain">Da Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Mais Privado</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">A carteira Unstoppable foi criada para quem deseja investir e armazenar criptomoedas de maneira privada e independente.
+    <string name="SettingsTerms_Text">A carteira P.CASH foi criada para quem deseja investir e armazenar criptomoedas de maneira privada e independente.
 \n\nÉ uma carteira peer-to-peer sem custódia, onde apenas o usuário tem controle sobre os fundos. A carteira não coleta nenhum dado e mantém o usuário independente ao não bloquear os fundos do mesmo em um aplicativo de carteira específico.
-\n\nA carteira Unstoppable é totalmente de código aberto e qualquer pessoa pode confirmar se o aplicativo funciona exatamente como afirma.
-\n\nConstruímos a Unstoppable para nós mesmos, pois as outras soluções disponíveis não estavam à altura. Tanto do ponto de vista da engenharia quanto da usabilidade, acreditamos que esta carteira está significativamente à frente dos produtos alternativos.</string>
+\n\nA carteira P.CASH é totalmente de código aberto e qualquer pessoa pode confirmar se o aplicativo funciona exatamente como afirma.
+\n\nConstruímos a P.CASH para nós mesmos, pois as outras soluções disponíveis não estavam à altura. Tanto do ponto de vista da engenharia quanto da usabilidade, acreditamos que esta carteira está significativamente à frente dos produtos alternativos.</string>
     <string name="SettingsTerms_Backup">Faça o backup das frases de recuperação de carteira para recuperar o acesso aos fundos.</string>
     <string name="SettingsTerms_PrivateKeys">Chaves privadas e frases de recuperação são armazenadas apenas no seu dispositivo.</string>
     <string name="SettingsTerms_DisablingPin">Desativar o PIN de desbloqueio do smartphone exclui todas as carteiras do aplicativo. As frases de recuperação serão necessárias para recuperar o acesso aos fundos.</string>
@@ -699,12 +699,12 @@
     <string name="SettingsTerms_Responsibility">Só o utilizador é responsável pela segurança dos fundos e não outra entidade.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartilhar</string>
-    <string name="SettingsShare_Text">Seja Unstoppable</string>
+    <string name="SettingsShare_Text">Seja Free</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contato</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Defina alertas de mudança de preço para as moedas que você gostaria de observar.\n\nVocê será alertado quando a mudança de preço nas últimas 24 horas exceder o limite selecionado.\n\nAlerta de Tendência de Preço avisa sobre uma mudança de tendência para o período de 1 semana, durante 6 meses.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">As notificações do aplicativo da carteira Unstoppable estão desativadas. Você precisa ativá-las para poder receber alertas de alteração de preço.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">As notificações do aplicativo da carteira P.CASH estão desativadas. Você precisa ativá-las para poder receber alertas de alteração de preço.</string>
     <string name="SettingsNotifications_TurnOn">Ativar nas Configurações</string>
     <string name="SettingsNotifications_Off">Desligado</string>
     <string name="SettingsNotifications_DeactivateAll">Redefinir Tudo</string>
@@ -758,7 +758,7 @@
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Os recursos abaixo são experimentais e devem ser usados com cautela. Enquanto nós testamos minuciosamente esses recursos usando nossos próprios fundos cripto, nós não podemos garantir que eles funcionarão como esperado em todos os casos possíveis.</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Description">Isso permite que você envie Bitcoins que não podem ser gastos até uma data especificada. \n\nO destinatário de tais transações deve usar o aplicativo de carteira Unstoppable versão 0.10 ou mais recente, com o formato de endereço BIP44 para Bitcoin. \n\nSomente a carteira Unstoppable pode identificar corretamente tais transações na rede Bitcoin, bem como permitir que o receptor gaste esses Bitcoins após o período de bloqueio expirar. \n\nSe você é um HOLDER, você pode usar este recurso para se forçar a manter seus Bitcoins enviando tais transações para si mesmo. \n\nSendo um recurso experimental, o valor máximo por transação é limitado a 0,5 BTC.</string>
+    <string name="BitcoinHodling_Description">Isso permite que você envie Bitcoins que não podem ser gastos até uma data especificada. \n\nO destinatário de tais transações deve usar o aplicativo de carteira P.CASH versão 0.10 ou mais recente, com o formato de endereço BIP44 para Bitcoin. \n\nSomente a carteira P.CASH pode identificar corretamente tais transações na rede Bitcoin, bem como permitir que o receptor gaste esses Bitcoins após o período de bloqueio expirar. \n\nSe você é um HOLDER, você pode usar este recurso para se forçar a manter seus Bitcoins enviando tais transações para si mesmo. \n\nSendo um recurso experimental, o valor máximo por transação é limitado a 0,5 BTC.</string>
     <!-- Testnet Settings -->
     <string name="TestnetSettings_Description">Esta opção ativa a rede de testes Goerli da Ethereum apenas para o token GoerliETH e adiciona-a ao gerenciador de moedas.\n\nApenas afeta o token GoerliETH enquanto todos os outros tokens EVM e Ethereum operam sobre o mainnet. Em outras palavras, apenas as transações em GoerliETH passam pelo teste Goerli, enquanto todas as outras transferências token, incluindo ETH passam pelo mainnet.</string>
     <!--Manage Accounts-->
@@ -827,7 +827,7 @@
     <string name="RecoveryPhrase_Description">Escreva essas palavras na ordem correta e mantenha-as em um lugar seguro</string>
     <string name="RecoveryPhrase_ShowPhrase">Toque para mostrar a frase de recuperação</string>
     <string name="RecoveryPhrase_Verify">Verificar</string>
-    <string name="RecoveryPhrase_Warning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe Unstoppable nunca pedirá a sua frase de recuperação.</string>
+    <string name="RecoveryPhrase_Warning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe P.CASH nunca pedirá a sua frase de recuperação.</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Risco de Copiar</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">Chave Privada EVM</string>
@@ -1048,8 +1048,8 @@
     <string name="CoinPage_DetailsTxVolume_Description">O volume do token de transação agregada é registrado on-chain. O volume é medido nos tokens reais (não em USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Endereços ativos</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">O número de endereços únicos da carteira envolvidos nas transações em vários períodos.</string>
-    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
-    <string name="CoinPage_NftBannerDescription">Obtenha acesso aos recursos avançados de carteiraFazendo Holdin NFTs Unstoppable.</string>
+    <string name="CoinPage_NftBannerTitle">P.CASH NFT</string>
+    <string name="CoinPage_NftBannerDescription">Obtenha acesso aos recursos avançados de carteiraFazendo Holdin NFTs P.CASH.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNão encontrado</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">média de 7D.</string>
@@ -1153,8 +1153,8 @@
     <string name="Alert_KeysInvalidatedTitle">Erro de Keystore do Android</string>
     <string name="Alert_KeysInvalidatedDescription">Os dados criptografados que continham sua carteira foram invalidados recentemente porque a tela de bloqueio do iOS foi alterada</string>
     <string name="Alert_TitleWarning">Aviso</string>
-    <string name="Alert_CustomKeyboardIsUsed">Parece que o seu dispositivo usa um teclado que não é padrão. A Unstoppable recomenda a seleção de teclado padrão no seu dispositivo, já que teclados de terceiros podem potencialmente coletar e expor os dados de entrada dos usuários. \n\nClique no botão \'Avançar\' se você quiser continuar usando seu teclado preferido.</string>
-    <string name="Alert_DeviceIsRootedWarning">A equipe Unstoppable recomenda a execução do aplicativo apenas em telefones sem root (sem jailbreak).\n\nObserve que quando você usa um dispositivo com root, o aplicativo não pode mais garantir a segurança de sua criptomoeda contra software malicioso.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Parece que o seu dispositivo usa um teclado que não é padrão. A P.CASH recomenda a seleção de teclado padrão no seu dispositivo, já que teclados de terceiros podem potencialmente coletar e expor os dados de entrada dos usuários. \n\nClique no botão \'Avançar\' se você quiser continuar usando seu teclado preferido.</string>
+    <string name="Alert_DeviceIsRootedWarning">A equipe P.CASH recomenda a execução do aplicativo apenas em telefones sem root (sem jailbreak).\n\nObserve que quando você usa um dispositivo com root, o aplicativo não pode mais garantir a segurança de sua criptomoeda contra software malicioso.</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN do telefone</string>
     <string name="OSPin_Confirm_Desciption">Este aplicativo requer que o telefone tenha a senha (bloqueio de tela) ativada.\n\nVocê pode ativá-lo nas configurações do Android.\n\nObserve que quando você desativa o PIN no nível do sistema operacional, as medidas de segurança no armazenamento seguro do seu telefone tornou os dados armazenados anteriormente inválidos. Você precisará Restaurar as chaves da carteira para voltar à sua carteira.</string>

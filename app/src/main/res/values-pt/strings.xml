@@ -47,7 +47,7 @@
     <string name="AccountRecovery_MigrationRecommended">Esta carteira parece usar um caractere não padrão em sua lista de palavras secretas e/ou uma frase secreta.  Se você não ver um saldo ou transações, leia abaixo para obter detalhes.\n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
     <string name="AccountRecovery_MigrationRequired">Esta é uma carteira não padrão. \n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Seja Unstoppable</string>
+    <string name="Intro_Wallet_Screen1Description">Seja Free</string>
     <string name="Intro_Wallet_Screen2Title">Libere Recursos</string>
     <string name="Intro_Wallet_Screen2Description">Não se prenda, e não deixe que te prendam.</string>
     <string name="Intro_Wallet_Screen3Title">Seja sem fronteiras</string>
@@ -701,7 +701,7 @@
     <string name="SettingsTerms_Bugs">Pode haver problemas de software não descobertos no código que irá ligá-lo e causar problemas no aplicativo.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartilhar</string>
-    <string name="SettingsShare_Text">Seja Unstoppable</string>
+    <string name="SettingsShare_Text">Seja Free</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contato</string>
     <!--Setting_Notifications-->

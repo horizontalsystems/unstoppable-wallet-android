@@ -73,7 +73,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, "dbBankWallet")
+            return Room.databaseBuilder(context, AppDatabase::class.java, "db_p_cash")
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .addMigrations(
