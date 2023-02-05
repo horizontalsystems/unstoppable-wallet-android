@@ -268,8 +268,6 @@ private fun AppIconSection(appIconOptions: Select<AppIcon>, onAppIconSelect: (Ap
     ) {
         val rows = appIconOptions.options.chunked(3)
         AppIconsRow(rows[0], appIconOptions.selected, onAppIconSelect)
-        AppIconsRow(rows[1], appIconOptions.selected, onAppIconSelect)
-        AppIconsRow(rows[2], appIconOptions.selected, onAppIconSelect)
     }
 }
 

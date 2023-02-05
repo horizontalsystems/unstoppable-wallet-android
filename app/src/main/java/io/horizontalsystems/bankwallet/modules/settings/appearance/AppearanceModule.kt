@@ -32,13 +32,7 @@ object AppearanceModule {
 enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle {
     Main(R.drawable.launcher_main_preview, "Main"),
     Dark(R.drawable.launcher_dark_preview, "Dark"),
-    Mono(R.drawable.launcher_mono_preview, "Mono"),
-    Leo(R.drawable.launcher_leo_preview, "Leo"),
-    Mustang(R.drawable.launcher_mustang_preview, "Mustang"),
-    Yak(R.drawable.launcher_yak_preview, "Yak"),
-    Punk(R.drawable.launcher_punk_preview, "Punk"),
-    Ape(R.drawable.launcher_ape_preview, "#1874"),
-    Ball8(R.drawable.launcher_8ball_preview, "8ball");
+    Mono(R.drawable.launcher_mono_preview, "Mono");
 
     override val title: TranslatableString
         get() = TranslatableString.PlainString(titleText)
