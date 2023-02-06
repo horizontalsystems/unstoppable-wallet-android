@@ -13,16 +13,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.shorten
-import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.evmfee.EvmFeeCell
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
-import cash.p.terminal.modules.evmfee.EvmFeeSettingsFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.TextHelper
@@ -33,8 +30,6 @@ import io.horizontalsystems.marketkit.models.*
 fun SendEvmTransactionView(
     transactionViewModel: SendEvmTransactionViewModel,
     feeCellViewModel: EvmFeeCellViewModel,
-    navController: NavController,
-    parentNavGraphId: Int,
     description: String? = null
 ) {
     ComposeAppTheme {
@@ -60,14 +55,8 @@ fun SendEvmTransactionView(
                 title = stringResource(R.string.FeeSettings_Fee),
                 value = fee,
                 loading = loading,
-                highlightEditButton = feeCellViewModel.highlightEditButton,
                 viewState = viewState
-            ) {
-                navController.slideFromBottom(
-                    resId = R.id.sendEvmFeeSettingsFragment,
-                    args = EvmFeeSettingsFragment.prepareParams(parentNavGraphId)
-                )
-            }
+            )
 
             val cautions by transactionViewModel.cautionsLiveData.observeAsState()
             cautions?.let {
@@ -79,7 +68,7 @@ fun SendEvmTransactionView(
 
 @Composable
 private fun SectionView(viewItems: List<ViewItem>) {
-    Spacer(Modifier.height(12.dp))
+    Spacer(Modifier.height(16.dp))
     CellUniversalLawrenceSection(viewItems) { item ->
         when (item) {
             is ViewItem.Subhead -> Subhead(item)

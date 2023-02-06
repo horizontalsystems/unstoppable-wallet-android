@@ -403,6 +403,11 @@
     <string name="Send_Warning_LowFee_Description">The transaction may get stuck or fail</string>
     <string name="Send_Error_FetchFeeRateFailed">Error while fetching fee rate</string>
 
+    <!-- Send Evm Settings -->
+
+    <string name="SendEvmSettings_Title">Advanced</string>
+
+
     <!-- Fee Settings -->
 
     <string name="FeeSettings_Title">Fee Settings</string>

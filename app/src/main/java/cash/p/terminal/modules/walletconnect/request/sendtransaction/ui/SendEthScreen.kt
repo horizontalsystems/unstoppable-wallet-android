@@ -104,7 +104,8 @@ fun SendEthRequestScreen(
                                     item.token
                                 )
                                 is ViewItem.NftAmount,
-                                is ViewItem.ValueMulti -> {}
+                                is ViewItem.ValueMulti -> {
+                                }
                             }
                         }
                         Spacer(Modifier.height(12.dp))
@@ -115,8 +116,7 @@ fun SendEthRequestScreen(
                     title = stringResource(R.string.FeeSettings_MaxFee),
                     value = fee,
                     loading = loading,
-                    viewState = viewState,
-                    highlightEditButton = feeViewModel.highlightEditButton,
+                    viewState = viewState
                 ) {
                     navController.slideFromBottom(
                         resId = R.id.sendEvmFeeSettingsFragment,

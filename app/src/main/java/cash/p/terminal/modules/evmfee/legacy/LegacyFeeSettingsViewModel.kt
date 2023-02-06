@@ -31,7 +31,6 @@ class LegacyFeeSettingsViewModel(
     val feeViewItemLoadingLiveData = MutableLiveData<Boolean>()
 
     val cautionsLiveData = MutableLiveData<List<CautionViewItem>>()
-    val isRecommendedGasPriceSelected by gasPriceService::isRecommendedGasPriceSelected
 
     init {
         sync(gasPriceService.state)
@@ -54,10 +53,6 @@ class LegacyFeeSettingsViewModel(
 
     fun onSelectGasPrice(gasPrice: Long) {
         gasPriceService.setGasPrice(gasPrice)
-    }
-
-    fun onClickReset() {
-        gasPriceService.setRecommended()
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {

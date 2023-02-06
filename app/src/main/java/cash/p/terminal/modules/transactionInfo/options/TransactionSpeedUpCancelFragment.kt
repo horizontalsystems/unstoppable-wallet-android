@@ -26,8 +26,10 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewModel
@@ -174,10 +176,14 @@ private fun TransactionSpeedUpCancelScreen(
                     },
                     menuItems = listOf(
                         MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                            icon = R.drawable.ic_manage_2,
+                            tint = ComposeAppTheme.colors.jacob,
                             onClick = {
-                                navController.popBackStack(R.id.transactionInfoFragment, true)
+                                navController.slideFromBottom(
+                                    resId = R.id.sendEvmSettingsFragment,
+                                    args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                                )
                             }
                         )
                     )
@@ -193,8 +199,6 @@ private fun TransactionSpeedUpCancelScreen(
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
                         feeViewModel,
-                        navController,
-                        parentNavGraphId,
                         speedUpCancelViewModel.description
                     )
                 }

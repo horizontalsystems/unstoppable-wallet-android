@@ -26,10 +26,12 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmModule
+import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -92,7 +94,6 @@ class SendEvmConfirmationFragment : BaseFragment() {
                     sendEvmTransactionViewModel = sendEvmTransactionViewModel,
                     feeViewModel = feeViewModel,
                     parentNavGraphId = R.id.sendEvmConfirmationFragment,
-                    sendNavGraphId = sendNavGraphId,
                     navController = findNavController(),
                     onSendClick = {
                         logger.info("click send button")
@@ -137,7 +138,6 @@ private fun SendEvmConfirmationScreen(
     sendEvmTransactionViewModel: SendEvmTransactionViewModel,
     feeViewModel: EvmFeeCellViewModel,
     parentNavGraphId: Int,
-    sendNavGraphId: Int,
     navController: NavController,
     onSendClick: () -> Unit
 ) {
@@ -154,10 +154,14 @@ private fun SendEvmConfirmationScreen(
                     },
                     menuItems = listOf(
                         MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                            icon = R.drawable.ic_manage_2,
+                            tint = ComposeAppTheme.colors.jacob,
                             onClick = {
-                                navController.popBackStack(sendNavGraphId, true)
+                                navController.slideFromBottom(
+                                    resId = R.id.sendEvmSettingsFragment,
+                                    args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                                )
                             }
                         )
                     )
@@ -172,9 +176,7 @@ private fun SendEvmConfirmationScreen(
                 ) {
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
-                        feeViewModel,
-                        navController,
-                        parentNavGraphId,
+                        feeViewModel
                     )
                 }
                 ButtonsGroupWithShade {

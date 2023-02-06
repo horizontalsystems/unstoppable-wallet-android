@@ -33,7 +33,6 @@ class Eip1559FeeSettingsViewModel(
     val feeViewItemStateLiveData = MutableLiveData<ViewState>()
     val feeViewItemLoadingLiveData = MutableLiveData<Boolean>()
     val cautionsLiveData = MutableLiveData<List<CautionViewItem>>()
-    val isRecommendedGasPriceSelected by gasPriceService::isRecommendedGasPriceSelected
 
     init {
         sync(gasPriceService.state)
@@ -56,10 +55,6 @@ class Eip1559FeeSettingsViewModel(
 
     fun onSelectGasPrice(baseFee: Long, maxPriorityFee: Long) {
         gasPriceService.setGasPrice(baseFee, maxPriorityFee)
-    }
-
-    fun onClickReset() {
-        gasPriceService.setRecommended()
     }
 
     override fun onCleared() {

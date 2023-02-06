@@ -102,8 +102,7 @@ class SendFragment : BaseFragment() {
                             val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
                                 R.id.sendXFragment
                             ) { factory }
-                            val initiateLazyViewModel =
-                                evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
+                            val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
                             val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { factory }
 
                             SendEvmScreen(

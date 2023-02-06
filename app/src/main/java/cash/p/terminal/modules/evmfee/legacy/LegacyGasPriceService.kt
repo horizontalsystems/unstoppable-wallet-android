@@ -14,6 +14,10 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.lang.Long.max
 import java.math.BigDecimal
 
@@ -58,8 +62,9 @@ class LegacyGasPriceService(
     var gasPriceRange: LongRange? = null
         private set
 
-    override var isRecommendedGasPriceSelected = true
-        private set
+    private val recommendedGasPriceSelected = MutableStateFlow(true)
+    override val recommendedGasPriceSelectedFlow: StateFlow<Boolean>
+        get() = recommendedGasPriceSelected.asStateFlow()
 
     init {
         if (initialGasPrice != null) {
@@ -69,8 +74,8 @@ class LegacyGasPriceService(
         }
     }
 
-    fun setRecommended() {
-        isRecommendedGasPriceSelected = true
+    override fun setRecommended() {
+        recommendedGasPriceSelected.update { true }
 
         state = DataState.Loading
         disposable?.dispose()
@@ -92,7 +97,7 @@ class LegacyGasPriceService(
     }
 
     fun setGasPrice(value: Long) {
-        isRecommendedGasPriceSelected = false
+        recommendedGasPriceSelected.update { false }
 
         state = DataState.Loading
         disposable?.dispose()

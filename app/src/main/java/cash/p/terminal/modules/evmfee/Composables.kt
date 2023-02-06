@@ -1,6 +1,8 @@
 package cash.p.terminal.modules.evmfee
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -24,7 +26,6 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 
 @Composable
@@ -45,122 +46,91 @@ fun Eip1559FeeSettings(
     var maxPriorityFee by remember { mutableStateOf(1L) }
     var valueChanged by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = ComposeAppTheme.colors.tyler)
-    ) {
-        AppBar(
-            title = TranslatableString.ResString(R.string.FeeSettings_Title),
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.FeeSettings_Reset),
-                    enabled = !viewModel.isRecommendedGasPriceSelected,
-                    onClick = { viewModel.onClickReset() }
-                )
+    Column {
+        Spacer(modifier = Modifier.height(12.dp))
+
+        CellSingleLineLawrenceSection(
+            listOf(
+                {
+                    MaxFeeCell(
+                        title = stringResource(R.string.FeeSettings_MaxFee),
+                        value = feeViewItem?.fee ?: "",
+                        loading = feeViewItemLoading,
+                        viewState = feeViewItemState,
+                        navController = navController
+                    )
+                },
+                {
+                    FeeInfoCell(
+                        title = stringResource(R.string.FeeSettings_GasLimit),
+                        value = feeViewItem?.gasLimit,
+                        infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
+                        infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
+                        navController = navController
+                    )
+                },
+                {
+                    FeeCell(title = stringResource(R.string.FeeSettings_CurrentBaseFee), value = currentBaseFee)
+                }
             )
         )
 
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            MaxFeeCell(
-                title = stringResource(R.string.FeeSettings_MaxFee),
-                value = feeViewItem?.fee ?: "",
-                loading = feeViewItemLoading,
-                viewState = feeViewItemState,
-                navController = navController
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+        maxBaseFeeSlider?.let { baseFeeSlider ->
+            maxPriorityFeeSlider?.let { priorityFeeSlider ->
+                maxBaseFee = baseFeeSlider.initialSliderValue
 
-            CellSingleLineLawrenceSection(
-                listOf(
-                    {
-                        FeeInfoCell(
-                            title = stringResource(R.string.FeeSettings_GasLimit),
-                            value = feeViewItem?.gasLimit,
-                            infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
-                            infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
-                            navController = navController
-                        )
-                    },
-                    {
-                        FeeCell(title = stringResource(R.string.FeeSettings_CurrentBaseFee), value = currentBaseFee)
-                    }
-                )
-            )
+                settingsViewItems.add {
+                    FeeInfoCell(
+                        title = stringResource(R.string.FeeSettings_MaxBaseFee),
+                        value = baseFeeSlider.scaledString(maxBaseFee),
+                        infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
+                        infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
+                        navController = navController
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(8.dp))
+                settingsViewItems.add {
+                    HsSlider(
+                        value = baseFeeSlider.initialSliderValue,
+                        onValueChange = { maxBaseFee = it },
+                        valueRange = baseFeeSlider.range.first..baseFeeSlider.range.last,
+                        onValueChangeFinished = { viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee)) }
+                    )
+                }
 
-            maxBaseFeeSlider?.let { baseFeeSlider ->
-                maxPriorityFeeSlider?.let { priorityFeeSlider ->
-                    maxBaseFee = baseFeeSlider.initialSliderValue
+                settingsViewItems.add {
+                    FeeInfoCell(
+                        title = stringResource(R.string.FeeSettings_MaxMinerTips),
+                        value = if (valueChanged) priorityFeeSlider.scaledString(maxPriorityFee) else priorityFeeSlider.initialValueScaledString,
+                        infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
+                        infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
+                        navController = navController
+                    )
+                }
 
-                    settingsViewItems.add {
-                        FeeInfoCell(
-                                title = stringResource(R.string.FeeSettings_MaxBaseFee),
-                                value = baseFeeSlider.scaledString(maxBaseFee),
-                                infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
-                                infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
-                                navController = navController
-                        )
-                    }
-
-                    settingsViewItems.add {
-                        HsSlider(
-                                value = baseFeeSlider.initialSliderValue,
-                                onValueChange = { maxBaseFee = it },
-                                valueRange = baseFeeSlider.range.first..baseFeeSlider.range.last,
-                                onValueChangeFinished = { viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee)) }
-                        )
-                    }
-
-                    settingsViewItems.add {
-                        FeeInfoCell(
-                                title = stringResource(R.string.FeeSettings_MaxMinerTips),
-                                value = if (valueChanged) priorityFeeSlider.scaledString(maxPriorityFee) else priorityFeeSlider.initialValueScaledString,
-                                infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
-                                infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
-                                navController = navController
-                        )
-                    }
-
-                    settingsViewItems.add {
-                        HsSlider(
-                                value = priorityFeeSlider.initialSliderValue,
-                                onValueChange = {
-                                    valueChanged = true
-                                    maxPriorityFee = it
-                                                },
-                                valueRange = priorityFeeSlider.range.first..priorityFeeSlider.range.last,
-                                onValueChangeFinished = {
-                                    viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee))
-                                }
-                        )
-                    }
+                settingsViewItems.add {
+                    HsSlider(
+                        value = priorityFeeSlider.initialSliderValue,
+                        onValueChange = {
+                            valueChanged = true
+                            maxPriorityFee = it
+                        },
+                        valueRange = priorityFeeSlider.range.first..priorityFeeSlider.range.last,
+                        onValueChangeFinished = {
+                            viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee))
+                        }
+                    )
                 }
             }
-
-            CellSingleLineLawrenceSection(settingsViewItems)
-
-            Cautions(cautions)
-
-            Spacer(modifier = Modifier.height(32.dp))
         }
 
-        ButtonsGroupWithShade {
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp)
-                    .fillMaxWidth(),
-                title = stringResource(R.string.Button_Done),
-                onClick = { navController.popBackStack() }
-            )
-        }
+        CellSingleLineLawrenceSection(settingsViewItems)
+
+        Cautions(cautions)
+
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -205,29 +175,10 @@ fun LegacyFeeSettings(
     val settingsViewItems = mutableListOf<@Composable () -> Unit>()
     var selectedGasPrice by remember { mutableStateOf(1L) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = ComposeAppTheme.colors.tyler)
-    ) {
-        AppBar(
-            title = TranslatableString.ResString(R.string.FeeSettings_Title),
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.FeeSettings_Reset),
-                    enabled = !viewModel.isRecommendedGasPriceSelected,
-                    onClick = { viewModel.onClickReset() }
-                )
-            )
-        )
+    Column {
+        Spacer(modifier = Modifier.height(12.dp))
 
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
-
+        settingsViewItems.add {
             MaxFeeCell(
                 title = stringResource(R.string.FeeSettings_MaxFee),
                 value = feeViewItem?.fee ?: "",
@@ -235,59 +186,48 @@ fun LegacyFeeSettings(
                 viewState = feeViewItemState,
                 navController = navController
             )
+        }
 
-            Spacer(modifier = Modifier.height(8.dp))
+        settingsViewItems.add {
+            FeeInfoCell(
+                title = stringResource(R.string.FeeSettings_GasLimit),
+                value = feeViewItem?.gasLimit,
+                infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
+                infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
+                navController = navController
+            )
+        }
 
+        selectedGasPrice = sliderViewItem?.initialSliderValue ?: 0
+
+        sliderViewItem?.let { slider ->
             settingsViewItems.add {
                 FeeInfoCell(
-                    title = stringResource(R.string.FeeSettings_GasLimit),
-                    value = feeViewItem?.gasLimit,
-                    infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
-                    infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
+                    title = stringResource(R.string.FeeSettings_GasPrice),
+                    value = slider.scaledString(selectedGasPrice),
+                    infoTitle = Translator.getString(R.string.FeeSettings_GasPrice),
+                    infoText = Translator.getString(R.string.FeeSettings_GasPrice_Info),
                     navController = navController
                 )
             }
 
-            selectedGasPrice = sliderViewItem?.initialSliderValue ?: 0
-
-            sliderViewItem?.let { slider ->
-                settingsViewItems.add {
-                    FeeInfoCell(
-                        title = stringResource(R.string.FeeSettings_GasPrice),
-                        value = slider.scaledString(selectedGasPrice),
-                        infoTitle = Translator.getString(R.string.FeeSettings_GasPrice),
-                        infoText = Translator.getString(R.string.FeeSettings_GasPrice_Info),
-                        navController = navController
-                    )
-                }
-
-                settingsViewItems.add {
-                    HsSlider(
-                        value = slider.initialSliderValue,
-                        onValueChange = { selectedGasPrice = it },
-                        valueRange = slider.range.first..slider.range.last,
-                        onValueChangeFinished = { viewModel.onSelectGasPrice(slider.wei(selectedGasPrice)) }
-                    )
-                }
+            settingsViewItems.add {
+                HsSlider(
+                    value = slider.initialSliderValue,
+                    onValueChange = { selectedGasPrice = it },
+                    valueRange = slider.range.first..slider.range.last,
+                    onValueChangeFinished = { viewModel.onSelectGasPrice(slider.wei(selectedGasPrice)) }
+                )
             }
-
-            CellSingleLineLawrenceSection(settingsViewItems)
-
-            Cautions(cautions)
-
-            Spacer(modifier = Modifier.height(32.dp))
         }
 
-        ButtonsGroupWithShade {
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
-                title = stringResource(R.string.Button_Done),
-                onClick = { navController.popBackStack() }
-            )
-        }
+        CellSingleLineLawrenceSection(settingsViewItems)
+
+        Cautions(cautions)
+
+        Spacer(modifier = Modifier.height(32.dp))
     }
+
 }
 
 @Composable
@@ -472,47 +412,45 @@ fun MaxFeeCell(
     viewState: ViewState?,
     navController: NavController
 ) {
-    CellSingleLineLawrenceSection {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    navController.slideFromBottom(
-                        R.id.feeSettingsInfoDialog,
-                        FeeSettingsInfoDialog.prepareParams(
-                            Translator.getString(R.string.FeeSettings_MaxFee),
-                            Translator.getString(R.string.FeeSettings_MaxFee_Info)
-                        )
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable {
+                navController.slideFromBottom(
+                    R.id.feeSettingsInfoDialog,
+                    FeeSettingsInfoDialog.prepareParams(
+                        Translator.getString(R.string.FeeSettings_MaxFee),
+                        Translator.getString(R.string.FeeSettings_MaxFee_Info)
                     )
-                }
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier.padding(end = 16.dp),
-                painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
-            )
-            subhead2_grey(text = title)
+                )
+            }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            modifier = Modifier.padding(end = 16.dp),
+            painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
+        )
+        subhead2_grey(text = title)
 
-            Row(
-                modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.End
-            ) {
-                if (loading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(16.dp),
-                        color = ComposeAppTheme.colors.grey,
-                        strokeWidth = 1.5.dp
-                    )
-                } else {
-                    Text(
-                        text = value,
-                        style = ComposeAppTheme.typography.subhead1,
-                        color = if (viewState is ViewState.Error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.End
+        ) {
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 1.5.dp
+                )
+            } else {
+                Text(
+                    text = value,
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = if (viewState is ViewState.Error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
     }

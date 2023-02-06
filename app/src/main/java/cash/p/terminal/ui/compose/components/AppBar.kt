@@ -41,6 +41,7 @@ fun AppBarMenuButton(
         enabled = enabled,
     ) {
         Icon(
+            modifier = Modifier.size(24.dp),
             painter = painterResource(id = icon),
             contentDescription = description,
             tint = tint
@@ -57,7 +58,7 @@ fun AppBar(
     backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
     TopAppBar(
-        modifier = Modifier.height(56.dp),
+        modifier = Modifier.height(64.dp),
         title = {
             title?.let {
                 title3_leah(
