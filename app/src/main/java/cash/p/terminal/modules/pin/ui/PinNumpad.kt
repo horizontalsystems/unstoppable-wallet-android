@@ -11,12 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.pin.unlock.PinUnlockModule.InputState
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import io.horizontalsystems.core.helpers.HudHelper
 
 
 @Composable
@@ -82,6 +84,8 @@ private fun NumberKey(
     enabled: Boolean,
     onClick: (Int) -> Unit
 ) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .size(72.dp)
@@ -89,7 +93,10 @@ private fun NumberKey(
             .border(1.dp, ComposeAppTheme.colors.steel20, CircleShape)
             .clickable(
                 enabled = enabled,
-                onClick = { onClick.invoke(number) }
+                onClick = {
+                    HudHelper.vibrate(context)
+                    onClick.invoke(number)
+                }
             )
     ) {
         Column(
@@ -118,13 +125,18 @@ private fun NumberKey(
 
 @Composable
 private fun ImageKey(image: Int, visible: Boolean, enabled: Boolean, onClick: () -> Unit) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .size(72.dp)
             .clip(CircleShape)
             .clickable(
                 enabled = visible && enabled,
-                onClick = onClick
+                onClick = {
+                    HudHelper.vibrate(context)
+                    onClick.invoke()
+                }
             )
     ) {
         if (visible) {
