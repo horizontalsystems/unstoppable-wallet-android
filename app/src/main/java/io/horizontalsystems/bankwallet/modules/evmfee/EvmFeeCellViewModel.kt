@@ -21,9 +21,6 @@ class EvmFeeCellViewModel(
     val viewStateLiveData = MutableLiveData<ViewState>()
     val loadingLiveData = MutableLiveData<Boolean>()
 
-    var highlightEditButton = false
-        private set
-
     init {
         syncTransactionStatus(feeService.transactionStatus)
         feeService.transactionStatusObservable
@@ -36,14 +33,11 @@ class EvmFeeCellViewModel(
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
-        var hasError = false
-
         when (transactionStatus) {
             DataState.Loading -> {
                 loadingLiveData.postValue(true)
             }
             is DataState.Error -> {
-                hasError = true
                 loadingLiveData.postValue(false)
                 viewStateLiveData.postValue(ViewState.Error(transactionStatus.error))
                 feeLiveData.postValue(Translator.getString(R.string.NotAvailable))
@@ -53,7 +47,6 @@ class EvmFeeCellViewModel(
                 loadingLiveData.postValue(false)
 
                 if (transaction.errors.isNotEmpty()) {
-                    hasError = true
                     viewStateLiveData.postValue(ViewState.Error(transaction.errors.first()))
                 } else {
                     viewStateLiveData.postValue(ViewState.Success)
@@ -63,8 +56,6 @@ class EvmFeeCellViewModel(
                 feeLiveData.postValue(fee)
             }
         }
-
-        highlightEditButton = hasError || !gasPriceService.isRecommendedGasPriceSelected
     }
 
 }

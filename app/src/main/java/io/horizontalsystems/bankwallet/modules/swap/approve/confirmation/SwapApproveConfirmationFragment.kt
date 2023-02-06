@@ -29,6 +29,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
@@ -37,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.additional
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.backButtonKey
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.blockchainTypeKey
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.transactionDataKey
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
@@ -183,10 +185,14 @@ private fun SwapApproveConfirmationScreen(
                     navigationIcon = navigationIcon,
                     menuItems = listOf(
                         MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                            icon = R.drawable.ic_manage_2,
+                            tint = ComposeAppTheme.colors.jacob,
                             onClick = {
-                                navController.popBackStack(R.id.swapFragment, false)
+                                navController.slideFromBottom(
+                                    resId = R.id.sendEvmSettingsFragment,
+                                    args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                                )
                             }
                         )
                     )
@@ -201,9 +207,7 @@ private fun SwapApproveConfirmationScreen(
                 ) {
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
-                        feeViewModel,
-                        navController,
-                        parentNavGraphId,
+                        feeViewModel
                     )
                 }
                 ButtonsGroupWithShade {
