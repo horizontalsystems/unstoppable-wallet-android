@@ -28,7 +28,7 @@ jobs:
         uses: maierj/fastlane-action@v3.0.0
         with:
           lane: 'app_build'
-          options: '{ "app_name": "Unstoppable-Dev", "api_token": "${{secrets.API_TOKEN_DEV}}" }'
+          options: '{ "app_name": "P.CASH-Dev", "api_token": "${{secrets.API_TOKEN_DEV}}" }'
         env:
           BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
 
