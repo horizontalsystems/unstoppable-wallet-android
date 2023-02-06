@@ -1,6 +1,6 @@
-# Unstoppable Wallet Release
+# P.CASH Terminal-Wallet Release
 
-This document describes the release process for `Unstoppable` app.
+This document describes the release process for `P.CASH` app.
 
 ### 1. Prepare dependent libraries
 
@@ -81,6 +81,6 @@ APK-FILE-NAME: Name of the apk file<br>
 
 * Create new `Release`, add changelog and upload apk file. Make note in changelog if the 'Supported Android Versions' was changed
 
-### 10. Make sure Unstoppable Wallet is 'Reproducible' in [WalletScrutiny](https://walletscrutiny.com/android/io.horizontalsystems.bankwallet/)
+### 10. Make sure P.CASH Wallet is 'Reproducible'
 
 * After apk is uploaded to Google Play make sure that new version of Unstoppable Wallet is 'Reproducible' in WalletScrutiny.
