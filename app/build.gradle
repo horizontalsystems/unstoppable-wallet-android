@@ -254,7 +254,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:ethereum-kit-android:7aadf9d'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:2a89cad'
-    implementation 'com.github.horizontalsystems:market-kit-android:97f5bc7'
+    //implementation 'com.github.piratecash:market-kit-android:97f5bc7'
     implementation 'com.github.horizontalsystems:solana-kit-android:59c448a'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.9.0-beta04"
@@ -285,6 +285,7 @@ dependencies {
     implementation project(':core')
     implementation project(':components:icons')
     implementation project(':components:chartview')
+    implementation project(':components:marketkit')
 
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.6.1'
