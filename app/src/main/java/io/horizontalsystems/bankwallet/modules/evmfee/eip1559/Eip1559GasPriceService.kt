@@ -13,6 +13,10 @@ import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import kotlin.math.max
 import kotlin.math.min
@@ -57,8 +61,9 @@ class Eip1559GasPriceService(
     override val stateObservable: Observable<DataState<GasPriceInfo>>
         get() = stateSubject
 
-    override var isRecommendedGasPriceSelected = true
-        private set
+    private val recommendedGasPriceSelected = MutableStateFlow(true)
+    override val recommendedGasPriceSelectedFlow: StateFlow<Boolean>
+        get() = recommendedGasPriceSelected.asStateFlow()
 
     var currentBaseFee: Long? = null
         private set
@@ -88,8 +93,8 @@ class Eip1559GasPriceService(
             .let { disposable.add(it) }
     }
 
-    fun setRecommended() {
-        isRecommendedGasPriceSelected = true
+    override fun setRecommended() {
+        recommendedGasPriceSelected.update { true }
 
         recommendedGasPrice?.let {
             state = DataState.Success(GasPriceInfo(it, listOf(), listOf()))
@@ -97,7 +102,7 @@ class Eip1559GasPriceService(
     }
 
     fun setGasPrice(baseFee: Long, maxPriorityFee: Long) {
-        isRecommendedGasPriceSelected = false
+        recommendedGasPriceSelected.update { false }
 
         val newGasPrice = GasPrice.Eip1559(baseFee + maxPriorityFee, maxPriorityFee)
         state = validatedGasPriceInfoState(newGasPrice)
@@ -169,7 +174,7 @@ class Eip1559GasPriceService(
 
         recommendedGasPrice = newRecommendGasPrice
 
-        if (isRecommendedGasPriceSelected) {
+        if (recommendedGasPriceSelected.value) {
             state = validatedGasPriceInfoState(newRecommendGasPrice)
         } else {
             state.dataOrNull?.let {
@@ -192,12 +197,10 @@ class Eip1559GasPriceService(
                 priorityFeesCount += 1
             }
         }
-        val priorityFee = if (priorityFeesCount > 0)
+        return if (priorityFeesCount > 0)
             priorityFeesSum / priorityFeesCount
         else
             0
-
-        return priorityFee
     }
 
     private fun syncFeeRanges(newRecommendGasPrice: GasPrice.Eip1559) {

@@ -26,8 +26,10 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
@@ -174,10 +176,14 @@ private fun TransactionSpeedUpCancelScreen(
                     },
                     menuItems = listOf(
                         MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                            icon = R.drawable.ic_manage_2,
+                            tint = ComposeAppTheme.colors.jacob,
                             onClick = {
-                                navController.popBackStack(R.id.transactionInfoFragment, true)
+                                navController.slideFromBottom(
+                                    resId = R.id.sendEvmSettingsFragment,
+                                    args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                                )
                             }
                         )
                     )
@@ -193,8 +199,6 @@ private fun TransactionSpeedUpCancelScreen(
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
                         feeViewModel,
-                        navController,
-                        parentNavGraphId,
                         speedUpCancelViewModel.description
                     )
                 }

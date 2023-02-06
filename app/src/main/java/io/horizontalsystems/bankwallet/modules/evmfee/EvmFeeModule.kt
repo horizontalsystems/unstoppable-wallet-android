@@ -16,6 +16,7 @@ import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
+import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
@@ -79,7 +80,9 @@ interface IEvmFeeService {
 interface IEvmGasPriceService {
     val state: DataState<GasPriceInfo>
     val stateObservable: Observable<DataState<GasPriceInfo>>
-    val isRecommendedGasPriceSelected: Boolean
+    val recommendedGasPriceSelectedFlow: StateFlow<Boolean>
+
+    fun setRecommended()
 }
 
 abstract class FeeSettingsError : Throwable() {
