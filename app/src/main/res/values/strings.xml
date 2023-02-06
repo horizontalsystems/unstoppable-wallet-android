@@ -51,7 +51,7 @@
     <string name="Any">Any</string>
     <string name="SyncError">Sync error. Try Again</string>
 
-    <string name="FooterText" translatable="false">© Horizontal Systems 2022</string>
+    <string name="FooterText" translatable="false">© PirateCash and Cosanta Foundation 2023</string>
 
     <string name="PercentTitle">Percent</string>
 
@@ -730,7 +730,7 @@
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion" translatable="false">P.CASH %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
-    <string name="Settings_CompanyName" translatable="false">horizontal systems</string>
+    <string name="Settings_CompanyName" translatable="false">PirateCash and Cosanta Foundation</string>
     <string name="Settings_Faq" translatable="false">FAQ</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect">WalletConnect</string>
