@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
 
 class MainViewPagerAdapter(fragment: Fragment, private var marketsTabEnabled: Boolean) : FragmentStateAdapter(fragment.getChildFragmentManager(), fragment.viewLifecycleOwner.lifecycle) {
 
-    private val marketsTabPosition = 0
+    private val marketsTabPosition = 2
     private val marketsTabIdEnabled = 10L
     private val marketsTabIdDisabled = 11L
 
@@ -39,13 +39,13 @@ class MainViewPagerAdapter(fragment: Fragment, private var marketsTabEnabled: Bo
     override fun getItemCount() = 4
 
     override fun createFragment(position: Int) = when (position) {
-        0 -> if (marketsTabEnabled) {
+        0 -> BalanceFragment()
+        1 -> TransactionsFragment()
+        2 -> if (marketsTabEnabled) {
             MarketFragment()
         } else {
             Fragment()
         }
-        1 -> BalanceFragment()
-        2 -> TransactionsFragment()
         3 -> MainSettingsFragment()
         else -> throw IllegalStateException()
     }

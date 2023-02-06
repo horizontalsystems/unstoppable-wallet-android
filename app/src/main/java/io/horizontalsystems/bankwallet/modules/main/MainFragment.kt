@@ -85,9 +85,9 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_market -> binding.viewPager.setCurrentItem(0, false)
-                R.id.navigation_balance -> binding.viewPager.setCurrentItem(1, false)
-                R.id.navigation_transactions -> binding.viewPager.setCurrentItem(2, false)
+                R.id.navigation_balance -> binding.viewPager.setCurrentItem(0, false)
+                R.id.navigation_transactions -> binding.viewPager.setCurrentItem(1, false)
+                R.id.navigation_market -> binding.viewPager.setCurrentItem(2, false)
                 R.id.navigation_settings -> binding.viewPager.setCurrentItem(3, false)
             }
             true
@@ -174,11 +174,11 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         }
 
         viewModel.transactionTabEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            binding.bottomNavigation.menu.getItem(2).isEnabled = enabled
+            binding.bottomNavigation.menu.getItem(1).isEnabled = enabled
         })
 
         viewModel.marketsTabEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
-            binding.bottomNavigation.menu.getItem(0).isVisible = enabled
+            binding.bottomNavigation.menu.getItem(2).isVisible = enabled
             mainViewPagerAdapter.setMarketsTabEnabled(enabled)
         }
 

@@ -54,9 +54,9 @@ object MainModule {
 
     @Parcelize
     enum class MainTab : Parcelable {
-        Market,
         Balance,
         Transactions,
+        Market,
         Settings;
 
         companion object {
