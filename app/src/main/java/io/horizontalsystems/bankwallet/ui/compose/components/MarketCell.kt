@@ -117,9 +117,11 @@ fun MarketCoinSecondRow(
         subhead2_grey(
             text = subtitle,
             maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
         )
         marketDataValue?.let {
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(Modifier.width(8.dp))
             MarketDataValueComponent(marketDataValue)
         }
     }
@@ -168,11 +170,11 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
 fun PreviewMarketCoin(){
     ComposeAppTheme {
         MarketCoin(
-            "Ethereum",
-            "ETH",
-            "eth.png",
-            R.drawable.logo_ethereum_24,
-            "$2600",
+            coinName = "Ethereum With very long name for token",
+            coinCode = "ETH",
+            coinIconUrl = "eth.png",
+            coinIconPlaceholder = R.drawable.logo_ethereum_24,
+            coinRate = "$2600",
         )
     }
 }
