@@ -288,6 +288,8 @@
     <string name="Send_Fee">Комиссия</string>
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Max">Макс.</string>
+    <string name="Send_Advanced">Доп. Настройки</string>
+    <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_Domain">Домен</string>
     <string name="Send_Confirmation_YouSend">Вы Отправляете</string>
