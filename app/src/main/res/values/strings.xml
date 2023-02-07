@@ -44,6 +44,8 @@
     <string name="Button_IAgree">I Agree</string>
     <string name="Button_Continue">Continue</string>
     <string name="Button_Send">Send</string>
+    <string name="Button_Search">Search</string>
+    <string name="Button_Back">Back</string>
 
 
     <string name="Error">Error</string>

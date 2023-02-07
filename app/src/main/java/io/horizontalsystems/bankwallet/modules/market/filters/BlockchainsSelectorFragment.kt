@@ -81,13 +81,7 @@ private fun FilterByBlockchainsScreen(
             AppBar(
                 title = TranslatableString.ResString(R.string.Market_Filter_Blockchains),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = { navController.popBackStack() })
                 }
             )
             Column(

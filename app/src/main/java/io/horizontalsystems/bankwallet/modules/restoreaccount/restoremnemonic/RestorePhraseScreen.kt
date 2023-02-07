@@ -96,13 +96,7 @@ fun RestorePhrase(
         AppBar(
             title = if (advanced) TranslatableString.ResString(R.string.Restore_Advanced_Title) else TranslatableString.ResString(R.string.ManageAccounts_ImportWallet),
             navigationIcon = {
-                HsIconButton(onClick = navController::popBackStack) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "back",
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
+                HsBackButton(onClick = navController::popBackStack)
             },
             menuItems = listOf(
                 MenuItem(

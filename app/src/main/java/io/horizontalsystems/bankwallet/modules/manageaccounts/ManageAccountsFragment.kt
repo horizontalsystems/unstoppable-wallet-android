@@ -80,13 +80,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                 ))
             } else {
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = { navController.popBackStack() })
                 }
             }
             AppBar(

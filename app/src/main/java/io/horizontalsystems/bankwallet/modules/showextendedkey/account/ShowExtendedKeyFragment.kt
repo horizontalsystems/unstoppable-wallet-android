@@ -112,13 +112,7 @@ private fun AccountExtendedKeyScreen(
                 AppBar(
                     title = viewModel.title,
                     navigationIcon = {
-                        HsIconButton(onClick = navController::popBackStack) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "back button",
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        }
+                        HsBackButton(onClick = navController::popBackStack)
                     }
                 )
 
