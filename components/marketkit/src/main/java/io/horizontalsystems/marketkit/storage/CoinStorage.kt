@@ -107,13 +107,14 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
 
     fun update(coins: List<Coin>, blockchainEntities: List<BlockchainEntity>, tokenEntities: List<TokenEntity>) {
         marketDatabase.runInTransaction {
+            // TODO It's not good solution for update information
             coinDao.deleteAllCoins()
             coinDao.deleteAllBlockchains()
             coinDao.deleteAllTokens()
             coins.forEach { coinDao.insert(it) }
             blockchainEntities.forEach { coinDao.insert(it) }
             tokenEntities.forEach { coinDao.insert(it) }
-            // Temporary workaround for adding PirateCash and Costana tokens
+            // TODO Temporary workaround for adding PirateCash and Costana tokens
             coinDao.insert(TokenEntity(
                 coinUid = "piratecash",
                 blockchainUid = "binance-smart-chain",
