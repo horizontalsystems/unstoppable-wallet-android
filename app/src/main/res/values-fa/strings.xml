@@ -286,6 +286,8 @@
     <string name="Send_Fee">هزينه</string>
     <string name="Send_Button_Paste">چسباندن</string>
     <string name="Send_Button_Max">حداکثر</string>
+    <string name="Send_Advanced">Advanced</string>
+    <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
     <string name="Send_Confirmation_Title">تایید</string>
     <string name="Send_Confirmation_Domain">دامنه</string>
     <string name="Send_Confirmation_YouSend">شما فرستادید</string>
