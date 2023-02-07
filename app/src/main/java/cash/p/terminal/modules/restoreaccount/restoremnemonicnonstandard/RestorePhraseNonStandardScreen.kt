@@ -99,13 +99,7 @@ fun RestorePhraseNonStandard(
         AppBar(
             title = TranslatableString.ResString(R.string.Restore_NonStandardRestore),
             navigationIcon = {
-                HsIconButton(onClick = navController::popBackStack) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "back",
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
+                HsBackButton(onClick = navController::popBackStack)
             },
             menuItems = listOf(
                 MenuItem(

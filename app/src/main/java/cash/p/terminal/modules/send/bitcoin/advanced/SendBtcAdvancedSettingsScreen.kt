@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,13 +40,7 @@ fun SendBtcAdvancedSettingsScreen(
             AppBar(
                 title = TranslatableString.ResString(R.string.Send_Advanced),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {

@@ -12,14 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
@@ -34,7 +32,7 @@ import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellNews
-import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.helpers.LinkHelper
 
@@ -89,13 +87,7 @@ private fun CoinReportsScreen(
         AppBar(
             title = TranslatableString.ResString(R.string.CoinPage_Reports),
             navigationIcon = {
-                HsIconButton(onClick = onClickNavigation) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "back button",
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
+                HsBackButton(onClick = onClickNavigation)
             }
         )
         HSSwipeRefresh(

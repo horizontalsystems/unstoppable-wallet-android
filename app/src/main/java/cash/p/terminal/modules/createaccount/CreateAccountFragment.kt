@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -83,13 +82,7 @@ private fun CreateAccountIntroScreen(navController: NavController, popUpToInclus
                         )
                     ),
                     navigationIcon = {
-                        HsIconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "back button",
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        }
+                        HsBackButton(onClick = { navController.popBackStack() })
                     },
                     backgroundColor = Color.Transparent
                 )

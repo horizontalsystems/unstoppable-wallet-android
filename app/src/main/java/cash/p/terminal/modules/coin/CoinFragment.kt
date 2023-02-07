@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
@@ -247,13 +245,7 @@ fun CoinTabs(
         AppBar(
             title = TranslatableString.PlainString(viewModel.fullCoin.coin.code),
             navigationIcon = {
-                HsIconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "back button",
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
+                HsBackButton(onClick = { navController.popBackStack() })
             },
             menuItems = buildList {
                 when (viewModel.coinState) {
@@ -359,13 +351,7 @@ fun CoinNotFound(coinUid: String, navController: NavController) {
         AppBar(
             title = TranslatableString.PlainString(coinUid),
             navigationIcon = {
-                HsIconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "back button",
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
+                HsBackButton(onClick = { navController.popBackStack() })
             }
         )
 

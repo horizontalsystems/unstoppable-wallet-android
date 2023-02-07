@@ -13,7 +13,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -103,13 +102,7 @@ private fun AboutScreen(
             AppBar(
                 TranslatableString.ResString(R.string.SettingsAboutApp_Title),
                 navigationIcon = {
-                    HsIconButton(onClick = onBackPress) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            tint = ComposeAppTheme.colors.jacob,
-                            contentDescription = null,
-                        )
-                    }
+                    HsBackButton(onClick = onBackPress)
                 }
             )
 

@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -88,13 +87,7 @@ private fun CoinInvestmentsScreen(
         AppBar(
             title = TranslatableString.ResString(R.string.CoinPage_FundsInvested),
             navigationIcon = {
-                HsIconButton(onClick = onClickNavigation) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "back button",
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
+                HsBackButton(onClick = onClickNavigation)
             }
         )
 

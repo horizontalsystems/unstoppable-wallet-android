@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -17,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
@@ -72,13 +70,7 @@ class CoinTreasuriesFragment : BaseFragment() {
             AppBar(
                 title = TranslatableString.ResString(R.string.CoinPage_Treasuries),
                 navigationIcon = {
-                    HsIconButton(onClick = { findNavController().popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = { findNavController().popBackStack() })
                 }
             )
             HSSwipeRefresh(

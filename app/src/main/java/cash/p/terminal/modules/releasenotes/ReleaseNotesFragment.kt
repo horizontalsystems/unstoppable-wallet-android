@@ -24,10 +24,7 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.modules.markdown.MarkdownContent
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.caption_grey
+import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 
@@ -83,13 +80,7 @@ fun ReleaseNotesScreen(
             } else {
                 AppBar(
                     navigationIcon = {
-                        HsIconButton(onClick = onCloseClick) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "back button",
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        }
+                        HsBackButton(onClick = onCloseClick)
                     }
                 )
             }

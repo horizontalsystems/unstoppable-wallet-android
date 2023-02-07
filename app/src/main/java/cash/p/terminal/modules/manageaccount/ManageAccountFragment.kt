@@ -79,13 +79,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
             AppBar(
                 title = TranslatableString.PlainString(viewModel.account.name),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = { navController.popBackStack() })
                 },
                 menuItems = listOf(
                     MenuItem(

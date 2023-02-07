@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,7 +18,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -38,7 +36,7 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.SnackbarDuration
@@ -152,13 +150,7 @@ private fun SendEvmConfirmationScreen(
                 AppBar(
                     title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
                     navigationIcon = {
-                        HsIconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "back button",
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        }
+                        HsBackButton(onClick = { navController.popBackStack() })
                     },
                     menuItems = listOf(
                         MenuItem(

@@ -4,11 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,7 +17,7 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.animations.CrossSlide
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
 
@@ -40,13 +38,7 @@ fun PinEdit(
             AppBar(
                 title = TranslatableString.ResString(R.string.EditPin_Title),
                 navigationIcon = {
-                    HsIconButton(onClick = onBackPress) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = onBackPress)
                 }
             )
         }

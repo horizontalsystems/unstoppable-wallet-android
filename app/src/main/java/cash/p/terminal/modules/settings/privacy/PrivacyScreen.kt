@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -20,7 +18,7 @@ import cash.p.terminal.R
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoTextBody
 
 
@@ -35,13 +33,7 @@ fun PrivacyScreen(navController: NavController) {
             AppBar(
                 title = TranslatableString.ResString(R.string.Settings_Privacy),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = { navController.popBackStack() })
                 }
             )
             Column(

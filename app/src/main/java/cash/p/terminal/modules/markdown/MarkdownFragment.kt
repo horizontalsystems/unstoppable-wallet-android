@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
@@ -18,7 +16,7 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.HsBackButton
 import io.horizontalsystems.core.findNavController
 
 class MarkdownFragment : BaseFragment() {
@@ -70,13 +68,7 @@ private fun MarkdownScreen(
         Column {
             AppBar(
                 navigationIcon = {
-                    HsIconButton(onClick = onCloseClick) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = onCloseClick)
                 }
             )
 

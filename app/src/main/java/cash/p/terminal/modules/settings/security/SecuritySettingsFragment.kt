@@ -33,6 +33,7 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
@@ -134,13 +135,7 @@ private fun SecurityCenterScreen(
             AppBar(
                 TranslatableString.ResString(R.string.Settings_SecurityCenter),
                 navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
 
