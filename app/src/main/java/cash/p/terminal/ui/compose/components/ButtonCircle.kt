@@ -17,6 +17,7 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 @Composable
 fun ButtonPrimaryCircle(
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_left_24,
+    contentDescription: String? = null,
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
@@ -32,7 +33,7 @@ fun ButtonPrimaryCircle(
     ) {
         Icon(
             painter = painterResource(id = icon),
-            contentDescription = null,
+            contentDescription = contentDescription,
             tint = if (enabled) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.grey50
         )
     }
@@ -42,6 +43,7 @@ fun ButtonPrimaryCircle(
 fun ButtonSecondaryCircle(
     modifier: Modifier = Modifier,
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_20,
+    contentDescription: String? = null,
     tint: Color = ComposeAppTheme.colors.leah,
     onClick: () -> Unit,
 ) {
@@ -55,7 +57,7 @@ fun ButtonSecondaryCircle(
     ) {
         Icon(
             painter = painterResource(id = icon),
-            contentDescription = null,
+            contentDescription = contentDescription,
             tint = tint
         )
     }

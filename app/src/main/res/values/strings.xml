@@ -46,6 +46,9 @@
     <string name="Button_Send">Send</string>
     <string name="Button_Search">Search</string>
     <string name="Button_Back">Back</string>
+    <string name="Button_Copy">Copy</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">Delete</string>
 
 
     <string name="Error">Error</string>
@@ -1154,6 +1157,7 @@
 
     <!--Coin Page-->
 
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Price</string>
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>

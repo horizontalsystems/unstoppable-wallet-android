@@ -308,6 +308,7 @@ fun ZcashAppBar(
             AppBarMenuButton(
                 icon = R.drawable.ic_close,
                 onClick = onCloseClick,
+                description = stringResource(R.string.Button_Close)
             )
         },
         elevation = 0.dp

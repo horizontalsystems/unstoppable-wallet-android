@@ -216,6 +216,7 @@ fun BalanceItems(
             } else {
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_manage_2,
+                    contentDescription = stringResource(R.string.ManageCoins_title),
                     onClick = {
                         navController.slideFromRight(R.id.manageWalletsFragment)
                     }

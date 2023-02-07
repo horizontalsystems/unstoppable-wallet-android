@@ -32,7 +32,7 @@ data class MenuItem(
 fun AppBarMenuButton(
     @DrawableRes icon: Int,
     onClick: () -> Unit,
-    description: String? = null,
+    description: String,
     enabled: Boolean = true,
     tint: Color = Color.Unspecified,
 ) {
@@ -90,6 +90,7 @@ fun AppBar(
                         onClick = menuItem.onClick,
                         enabled = menuItem.enabled,
                         tint = menuItem.tint,
+                        description = menuItem.title.getString()
                     )
                 } else {
                     val color = if (menuItem.enabled) {
