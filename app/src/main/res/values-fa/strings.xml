@@ -37,6 +37,11 @@
     <string name="Button_IAgree">موافقم</string>
     <string name="Button_Continue">ادامه</string>
     <string name="Button_Send">ارسال</string>
+    <string name="Button_Search">Search</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">رونوشت</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">Delete</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
@@ -942,6 +947,7 @@
     <string name="CoinOption_bip49_Title">Good</string>
     <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">قیمت</string>
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>
