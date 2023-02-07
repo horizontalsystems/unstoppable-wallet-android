@@ -37,6 +37,11 @@
     <string name="Button_IAgree">Kabul Ediyorum</string>
     <string name="Button_Continue">Devam</string>
     <string name="Button_Send">Gönder</string>
+    <string name="Button_Search">Ara</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">Kopyala</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">Sil</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Herhangi</string>
@@ -938,6 +943,7 @@
     <string name="CoinOption_bip49_Title">İyi</string>
     <string name="CoinOption_bip84_Title">En İyi</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Fiyat</string>
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>
