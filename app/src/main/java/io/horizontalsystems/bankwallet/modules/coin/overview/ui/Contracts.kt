@@ -102,6 +102,7 @@ fun Contracts(
                 }
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_copy_20,
+                    contentDescription = stringResource(R.string.Button_Copy),
                     onClick = {
                         onClickCopy.invoke(contractInfo)
                     }
@@ -110,6 +111,7 @@ fun Contracts(
                     ButtonSecondaryCircle(
                         modifier = Modifier.padding(start = 16.dp),
                         icon = R.drawable.ic_globe_20,
+                        contentDescription = stringResource(R.string.Button_Browser),
                         onClick = {
                             onClickExplorer.invoke(explorerUrl)
                         }

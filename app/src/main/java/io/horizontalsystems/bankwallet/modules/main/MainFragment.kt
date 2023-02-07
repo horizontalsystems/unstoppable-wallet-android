@@ -165,8 +165,8 @@ private fun MainScreen(
                                 icon = {
                                     BadgedIcon(item.badge) {
                                         Icon(
-                                            painterResource(item.mainNavItem.iconRes),
-                                            contentDescription = null
+                                            painter = painterResource(item.mainNavItem.iconRes),
+                                            contentDescription = stringResource(item.mainNavItem.titleRes)
                                         )
                                     }
                                 },
