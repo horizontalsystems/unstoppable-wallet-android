@@ -286,6 +286,8 @@
     <string name="Send_Fee">Frais</string>
     <string name="Send_Button_Paste">Coller</string>
     <string name="Send_Button_Max">Max</string>
+    <string name="Send_Advanced">Avancé</string>
+    <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_Domain">Domaine</string>
     <string name="Send_Confirmation_YouSend">Vous envoyez</string>
