@@ -37,6 +37,11 @@
     <string name="Button_IAgree">Ich stimme zu</string>
     <string name="Button_Continue">Weiter</string>
     <string name="Button_Send">Senden</string>
+    <string name="Button_Search">Suchen</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">Kopieren</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">Löschen</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">k. A.</string>
     <string name="Any">Beliebig</string>
@@ -946,6 +951,7 @@
     <string name="CoinOption_bip49_Title">Gut</string>
     <string name="CoinOption_bip84_Title">Beste</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Preis</string>
     <string name="Coin_Tab_Market">Märkte</string>
     <string name="Coin_Tab_Details">Analytics</string>
