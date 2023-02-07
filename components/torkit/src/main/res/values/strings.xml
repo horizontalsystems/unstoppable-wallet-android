@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Tor-Kit</string>
+    <string name="foreground_notification_class_name">.MainActivity</string>
+</resources>

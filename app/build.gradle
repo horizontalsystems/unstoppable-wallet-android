@@ -10,7 +10,7 @@ android {
         applicationId "cash.p.terminal"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 74
+        versionCode 75
         versionName "0.30.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -271,7 +271,7 @@ dependencies {
     implementation "org.web3j:core:4.9.0"
 
     // in case native file tor.so not loading, do full gradle clean and build.
-    implementation 'com.github.horizontalsystems:tor-kit-android:9237dab'
+    //implementation 'com.github.horizontalsystems:tor-kit-android:9237dab'
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
@@ -283,6 +283,7 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
     implementation project(':components:marketkit')
+    implementation project(':components:torkit')
 
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.6.1'

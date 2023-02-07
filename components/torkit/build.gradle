@@ -1,0 +1,67 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'maven-publish'
+}
+
+android {
+    compileSdkVersion 31
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 31
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+
+    ndkVersion "21.1.6352462"
+}
+
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.so','*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+
+    //Android Tor
+    implementation 'info.guardianproject:tor-android:0.4.7.8'
+    implementation 'info.guardianproject:jtorctl:0.4.5.7'
+
+    //api 'info.pluggabletransports.aptds:apt-meek-obfs4-legacy:1.0.7'
+    api 'com.jaredrummler:android-shell:1.0.0'
+    api 'com.jaredrummler:android-shell:1.0.0'
+    api 'com.offbynull.portmapper:portmapper:2.0.5'
+
+    //  RxJava
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
+
+    //  Test helpers
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.4.1'
+ 
+    androidTestImplementation 'androidx.test:runner:1.4.1-alpha03'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha03'
+}
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
+}
