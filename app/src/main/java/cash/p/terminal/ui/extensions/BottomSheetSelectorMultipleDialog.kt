@@ -103,7 +103,7 @@ class BottomSheetSelectorMultipleDialog(
                                 iconUrl = url,
                                 modifier = Modifier
                                     .padding(end = 16.dp)
-                                    .size(24.dp)
+                                    .size(32.dp)
                             )
                         }
                         Column(modifier = Modifier.padding(vertical = 12.dp)) {
