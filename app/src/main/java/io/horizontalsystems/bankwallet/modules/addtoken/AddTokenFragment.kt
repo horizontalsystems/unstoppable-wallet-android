@@ -121,13 +121,7 @@ private fun AddTokenScreen(
             AppBar(
                 title = TranslatableString.ResString(R.string.AddToken_Title),
                 navigationIcon = {
-                    HsIconButton(onClick = onBackPress) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
+                    HsBackButton(onClick = onBackPress)
                 },
                 menuItems = listOf(
                     MenuItem(

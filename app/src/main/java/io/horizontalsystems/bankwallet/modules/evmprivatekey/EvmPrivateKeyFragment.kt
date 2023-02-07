@@ -15,7 +15,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -98,13 +97,7 @@ private fun EvmPrivateKeyScreen(
                 AppBar(
                     title = TranslatableString.ResString(R.string.EvmPrivateKey_Title),
                     navigationIcon = {
-                        HsIconButton(onClick = navController::popBackStack) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "back button",
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        }
+                        HsBackButton(onClick = navController::popBackStack)
                     },
                 )
 

@@ -68,13 +68,7 @@ fun WCPairingsScreen(navController: NavController) {
                 AppBar(
                     title = TranslatableString.ResString(R.string.WalletConnect_PairedDApps),
                     navigationIcon = {
-                        HsIconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "back button",
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        }
+                        HsBackButton(onClick = { navController.popBackStack() })
                     },
                 )
             }
