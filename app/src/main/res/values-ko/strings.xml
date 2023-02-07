@@ -37,6 +37,11 @@
     <string name="Button_IAgree">동의함</string>
     <string name="Button_Continue">계속</string>
     <string name="Button_Send">전송</string>
+    <string name="Button_Search">Search</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">복사</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">삭제</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
@@ -941,6 +946,7 @@
     <string name="CoinOption_bip49_Title">좋은</string>
     <string name="CoinOption_bip84_Title">최상의</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">금액</string>
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>
