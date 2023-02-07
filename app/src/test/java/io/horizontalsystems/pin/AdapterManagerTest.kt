@@ -1,14 +1,14 @@
-//package io.horizontalsystems.bankwallet.core.managers
+//package cash.p.terminal.core.managers
 //
 //import com.nhaarman.mockito_kotlin.verify
 //import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 //import com.nhaarman.mockito_kotlin.whenever
-//import io.horizontalsystems.bankwallet.core.IAdapter
-//import io.horizontalsystems.bankwallet.core.Wallet
-//import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-//import io.horizontalsystems.bankwallet.entities.AuthData
-//import io.horizontalsystems.bankwallet.entities.Coin
-//import io.horizontalsystems.bankwallet.entities.CoinType
+//import cash.p.terminal.core.IAdapter
+//import cash.p.terminal.core.Wallet
+//import cash.p.terminal.core.factories.AdapterFactory
+//import cash.p.terminal.entities.AuthData
+//import cash.p.terminal.entities.Coin
+//import cash.p.terminal.entities.CoinType
 //import org.junit.Before
 //import org.junit.Test
 //import org.mockito.Mockito.mock

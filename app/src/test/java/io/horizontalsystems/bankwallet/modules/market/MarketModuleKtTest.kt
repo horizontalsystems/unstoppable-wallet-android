@@ -1,6 +1,6 @@
-//package io.horizontalsystems.bankwallet.modules.market
+//package cash.p.terminal.modules.market
 //
-//import io.horizontalsystems.bankwallet.entities.CurrencyValue
+//import cash.p.terminal.entities.CurrencyValue
 //import io.horizontalsystems.coinkit.models.CoinType
 //import io.horizontalsystems.core.entities.Currency
 //import junit.framework.TestCase

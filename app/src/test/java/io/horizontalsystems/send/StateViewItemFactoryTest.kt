@@ -1,6 +1,6 @@
-//package io.horizontalsystems.bankwallet.modules.send
+//package cash.p.terminal.modules.send
 //
-//import io.horizontalsystems.bankwallet.entities.*
+//import cash.p.terminal.entities.*
 //import org.junit.Assert
 //import org.junit.Before
 //import org.junit.Test

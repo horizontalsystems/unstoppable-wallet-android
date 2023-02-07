@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.managers
+package cash.p.terminal.core.managers
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

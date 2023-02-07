@@ -1,0 +1,65 @@
+package cash.p.terminal.modules.launcher
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import cash.p.terminal.modules.intro.IntroActivity
+import cash.p.terminal.modules.keystore.KeyStoreActivity
+import cash.p.terminal.modules.lockscreen.LockScreenActivity
+import cash.p.terminal.modules.main.MainModule
+import cash.p.terminal.modules.pin.PinModule
+import cash.p.terminal.modules.tor.TorConnectionActivity
+
+class LauncherActivity : AppCompatActivity() {
+    private val viewModel by viewModels<LaunchViewModel> { LaunchModule.Factory() }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+        super.onCreate(savedInstanceState)
+
+        when (viewModel.getPage()) {
+            LaunchViewModel.Page.Welcome -> {
+                IntroActivity.start(this)
+                finish()
+            }
+            LaunchViewModel.Page.Main -> {
+                openMain()
+            }
+            LaunchViewModel.Page.Unlock -> {
+                val unlockResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                    when (result.resultCode) {
+                        PinModule.RESULT_OK -> openMain()
+                        PinModule.RESULT_CANCELLED -> finishAffinity()
+                    }
+                }
+
+                val intent = Intent(this, LockScreenActivity::class.java)
+                unlockResultLauncher.launch(intent)
+            }
+            LaunchViewModel.Page.NoSystemLock -> {
+                KeyStoreActivity.startForNoSystemLock(this)
+            }
+            LaunchViewModel.Page.KeyInvalidated -> {
+                KeyStoreActivity.startForInvalidKey(this)
+            }
+            LaunchViewModel.Page.UserAuthentication -> {
+                KeyStoreActivity.startForUserAuthentication(this)
+            }
+        }
+    }
+
+    private fun openMain() {
+        MainModule.start(this, intent.data)
+        intent.data = null
+
+        if (viewModel.torEnabled) {
+            val intent = Intent(this, TorConnectionActivity::class.java)
+            startActivity(intent)
+        }
+        finish()
+    }
+
+}

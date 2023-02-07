@@ -1,0 +1,111 @@
+package cash.p.terminal.ui.extensions
+
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import cash.p.terminal.R
+import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.body_leah
+
+class BottomSheetSwapProviderSelectDialog() : BaseComposableBottomSheetFragment() {
+
+    var items: List<SwapMainModule.ISwapProvider>? = null
+    var selectedItem: SwapMainModule.ISwapProvider? = null
+    var onSelectListener: ((SwapMainModule.ISwapProvider) -> Unit)? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    BottomSheetScreen(
+                        swapProviders = items,
+                        selectedItem = selectedItem,
+                        onSelectListener = onSelectListener,
+                        onCloseClick = { close() }
+                    )
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun BottomSheetScreen(
+    swapProviders: List<SwapMainModule.ISwapProvider>?,
+    selectedItem: SwapMainModule.ISwapProvider?,
+    onSelectListener: ((SwapMainModule.ISwapProvider) -> Unit)?,
+    onCloseClick: () -> Unit
+) {
+    val context = LocalContext.current
+
+    BottomSheetHeader(
+        iconPainter = painterResource(R.drawable.ic_swap_24),
+        title = stringResource(R.string.Swap_SelectSwapProvider_Title),
+        onCloseClick = onCloseClick,
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+    ) {
+        Spacer(Modifier.height(12.dp))
+        swapProviders?.let { items ->
+            CellUniversalLawrenceSection(items, showFrame = true) { item ->
+                RowUniversal(
+                    onClick = {
+                        onSelectListener?.invoke(item)
+                        onCloseClick.invoke()
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
+                    Image(
+                        modifier = Modifier.size(32.dp),
+                        painter = painterResource(
+                            id = getDrawableResource(item.id, context)
+                                ?: R.drawable.coin_placeholder
+                        ),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    body_leah(text = item.title)
+                    Spacer(modifier = Modifier.weight(1f))
+                    if (item == selectedItem) {
+                        Image(
+                            modifier = Modifier.padding(start = 5.dp),
+                            painter = painterResource(id = R.drawable.ic_checkmark_20),
+                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                            contentDescription = null
+                        )
+                    }
+
+                }
+            }
+        }
+        Spacer(Modifier.height(44.dp))
+    }
+}
+
+private fun getDrawableResource(name: String, context: Context): Int? {
+    val resourceId = context.resources.getIdentifier(name, "drawable", context.packageName)
+    return if (resourceId == 0) null else resourceId
+}

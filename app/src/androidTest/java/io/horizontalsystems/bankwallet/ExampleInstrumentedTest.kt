@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet
+package cash.p.terminal
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("io.horizontalsystems.bankwallet", appContext.packageName)
+        assertEquals("cash.p.terminal", appContext.packageName)
     }
 }

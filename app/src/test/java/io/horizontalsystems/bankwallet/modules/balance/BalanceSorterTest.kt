@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.balance
+package cash.p.terminal.modules.balance
 
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
-//import io.horizontalsystems.bankwallet.entities.Coin
-//import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.Wallet
+//import cash.p.terminal.entities.Coin
+//import cash.p.terminal.entities.CoinType
+import cash.p.terminal.entities.Wallet
 import org.junit.Assert
 import org.junit.Test
 

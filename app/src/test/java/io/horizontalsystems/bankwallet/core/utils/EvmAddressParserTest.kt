@@ -1,6 +1,6 @@
-package io.horizontalsystems.bankwallet.core.utils
+package cash.p.terminal.core.utils
 
-import io.horizontalsystems.bankwallet.entities.AddressData
+import cash.p.terminal.entities.AddressData
 import org.junit.Assert
 import org.junit.Test
 import java.math.BigDecimal

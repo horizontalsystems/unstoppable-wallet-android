@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.factories
+package cash.p.terminal.core.factories
 
 //class TransactionViewItemFactoryTest {
 //

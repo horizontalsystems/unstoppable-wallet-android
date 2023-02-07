@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.main.MainFragment">
+        android:name="cash.p.terminal.modules.main.MainFragment">
         <deepLink
             app:action=""
             android:id="@+id/deepLink"
@@ -20,317 +20,317 @@
     </fragment>
     <fragment
         android:id="@+id/wc2SessionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.session.v2.WC2SessionFragment"/>
     <fragment
         android:id="@+id/wc2RequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.request.WC2RequestFragment"/>
     <fragment
         android:id="@+id/wcDisplayTypedMessageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
     <fragment
         android:id="@+id/sendEvmConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
+        android:name="cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
     <fragment
         android:id="@+id/sendEvmFeeSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment" />
+        android:name="cash.p.terminal.modules.evmfee.EvmFeeSettingsFragment" />
     <fragment
         android:id="@+id/filterCoinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.transactions.FilterCoinFragment" />
+        android:name="cash.p.terminal.modules.transactions.FilterCoinFragment" />
     <fragment
         android:id="@+id/transactionInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment" />
+        android:name="cash.p.terminal.modules.transactionInfo.TransactionInfoFragment" />
     <fragment
         android:id="@+id/transactionSpeedUpCancelFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"/>
+        android:name="cash.p.terminal.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"/>
     <fragment
         android:id="@+id/manageWalletsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment"/>
+        android:name="cash.p.terminal.modules.managewallets.ManageWalletsFragment"/>
     <fragment
         android:id="@+id/manageAccountsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment" />
+        android:name="cash.p.terminal.modules.manageaccounts.ManageAccountsFragment" />
     <fragment
         android:id="@+id/manageAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment"/>
+        android:name="cash.p.terminal.modules.manageaccount.ManageAccountFragment"/>
     <fragment
         android:id="@+id/recoveryPhraseFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.recoveryphrase.RecoveryPhraseFragment"/>
+        android:name="cash.p.terminal.modules.recoveryphrase.RecoveryPhraseFragment"/>
     <fragment
         android:id="@+id/evmPrivateKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.evmprivatekey.EvmPrivateKeyFragment"/>
+        android:name="cash.p.terminal.modules.evmprivatekey.EvmPrivateKeyFragment"/>
     <fragment
         android:id="@+id/accountExtendedKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.showextendedkey.account.AccountExtendedKeyFragment"/>
+        android:name="cash.p.terminal.modules.showextendedkey.account.AccountExtendedKeyFragment"/>
     <fragment
         android:id="@+id/backupKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyFragment"/>
+        android:name="cash.p.terminal.modules.backupkey.BackupKeyFragment"/>
     <fragment
         android:id="@+id/backupConfirmationKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyFragment" />
+        android:name="cash.p.terminal.modules.backupconfirmkey.BackupConfirmKeyFragment" />
     <fragment
         android:id="@+id/securityParamsInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.SecurityParamsInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.SecurityParamsInfoFragment"/>
     <fragment
         android:id="@+id/tokenTvlInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TokenTvlInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.TokenTvlInfoFragment"/>
     <fragment
         android:id="@+id/tokenDistributionInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TokenDistributionInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.TokenDistributionInfoFragment"/>
     <fragment
         android:id="@+id/tokenLiquidityInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TokenLiquidityInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.TokenLiquidityInfoFragment"/>
     <fragment
         android:id="@+id/btcBlockchainTransactionInputOutputsInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.BtcBlockchainTransactionInputsOutputsInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.BtcBlockchainTransactionInputsOutputsInfoFragment"/>
     <fragment
         android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
     <fragment
         android:id="@+id/evmBlockchainSyncModeInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.EvmBlockchainSyncModeInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.EvmBlockchainSyncModeInfoFragment"/>
      <fragment
         android:id="@+id/transactionLockTimeInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.TransactionLockTimeInfoFragment"/>
     <fragment
         android:id="@+id/transactionDoubleSpendInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment"/>
+        android:name="cash.p.terminal.modules.info.TransactionDoubleSpendInfoFragment"/>
     <fragment
         android:id="@+id/securitySettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment"/>
+        android:name="cash.p.terminal.modules.settings.security.SecuritySettingsFragment"/>
     <fragment
         android:id="@+id/blockchainSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsFragment"/>
+        android:name="cash.p.terminal.modules.blockchainsettings.BlockchainSettingsFragment"/>
     <fragment
         android:id="@+id/faqListFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment"
+        android:name="cash.p.terminal.modules.settings.faq.FaqListFragment"
         android:label="@string/Settings_Faq"/>
     <fragment
         android:id="@+id/academyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.guides.GuidesFragment"
+        android:name="cash.p.terminal.modules.settings.guides.GuidesFragment"
         android:label="@string/Guides_Title" />
     <fragment
         android:id="@+id/appearanceFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceFragment" />
+        android:name="cash.p.terminal.modules.settings.appearance.AppearanceFragment" />
     <fragment
         android:id="@+id/baseCurrencySettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment" />
+        android:name="cash.p.terminal.modules.basecurrency.BaseCurrencySettingsFragment" />
     <fragment
         android:id="@+id/languageSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsFragment" />
+        android:name="cash.p.terminal.modules.settings.language.LanguageSettingsFragment" />
     <fragment
         android:id="@+id/termsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"/>
+        android:name="cash.p.terminal.modules.settings.terms.TermsFragment"/>
     <fragment
         android:id="@+id/aboutAppFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"/>
+        android:name="cash.p.terminal.modules.settings.about.AboutFragment"/>
     <fragment
         android:id="@+id/experimentalFeaturesFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesFragment"/>
+        android:name="cash.p.terminal.modules.settings.experimental.ExperimentalFeaturesFragment"/>
     <fragment
         android:id="@+id/timeLockFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.timelock.TimeLockFragment"/>
+        android:name="cash.p.terminal.modules.settings.experimental.timelock.TimeLockFragment"/>
     <fragment
         android:id="@+id/testnetSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.testnet.TestnetSettingsFragment"/>
+        android:name="cash.p.terminal.modules.settings.experimental.testnet.TestnetSettingsFragment"/>
     <fragment
         android:id="@+id/metricsPageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment" />
+        android:name="cash.p.terminal.modules.market.metricspage.MetricsPageFragment" />
     <fragment
         android:id="@+id/coinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment" >
+        android:name="cash.p.terminal.modules.coin.CoinFragment" >
         <deepLink
             app:action="android.intent.action.VIEW"
             app:uri="unstoppable://coin-page?uid={coinUid}" />
     </fragment>
     <fragment
         android:id="@+id/coinMajorHoldersFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment" />
+        android:name="cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment" />
     <fragment
         android:id="@+id/coinTreasuriesFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment" />
+        android:name="cash.p.terminal.modules.coin.treasuries.CoinTreasuriesFragment" />
     <fragment
         android:id="@+id/coinAuditsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment" />
+        android:name="cash.p.terminal.modules.coin.audits.CoinAuditsFragment" />
     <fragment
         android:id="@+id/coinInvestmentsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment" />
+        android:name="cash.p.terminal.modules.coin.investments.CoinInvestmentsFragment" />
     <fragment
         android:id="@+id/coinReportsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment" />
+        android:name="cash.p.terminal.modules.coin.reports.CoinReportsFragment" />
     <fragment
         android:id="@+id/pinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.pin.PinFragment" />
+        android:name="cash.p.terminal.modules.pin.PinFragment" />
     <fragment
         android:id="@+id/releaseNotesFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment" />
+        android:name="cash.p.terminal.modules.releasenotes.ReleaseNotesFragment" />
     <fragment
         android:id="@+id/markdownFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment"/>
+        android:name="cash.p.terminal.modules.markdown.MarkdownFragment"/>
     <fragment
         android:id="@+id/addTokenFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"/>
+        android:name="cash.p.terminal.modules.addtoken.AddTokenFragment"/>
     <fragment
         android:id="@+id/swapFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment"
+        android:name="cash.p.terminal.modules.swap.SwapMainFragment"
         android:label="@string/Swap"
         tools:layout="@layout/fragment_swap"/>
     <fragment
         android:id="@+id/swapApproveFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment" />
+        android:name="cash.p.terminal.modules.swap.approve.SwapApproveFragment" />
     <fragment
         android:id="@+id/uniswapConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"/>
+        android:name="cash.p.terminal.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"/>
     <fragment
         android:id="@+id/oneInchConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"/>
+        android:name="cash.p.terminal.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"/>
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
+        android:name="cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
     <fragment
         android:id="@+id/uniswapSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment"
+        android:name="cash.p.terminal.modules.swap.settings.uniswap.UniswapSettingsFragment"
         />
     <fragment
         android:id="@+id/oneinchSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment"
+        android:name="cash.p.terminal.modules.swap.settings.oneinch.OneInchSettingsFragment"
         />
     <fragment
         android:id="@+id/marketSearchFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"/>
+        android:name="cash.p.terminal.modules.market.search.MarketSearchFragment"/>
     <fragment
         android:id="@+id/marketTopPlatformsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment"/>
+        android:name="cash.p.terminal.modules.market.topplatforms.TopPlatformsFragment"/>
     <fragment
         android:id="@+id/marketPlatformFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment">
+        android:name="cash.p.terminal.modules.market.platform.MarketPlatformFragment">
         <deepLink
             app:action="android.intent.action.VIEW"
             app:uri="unstoppable://top-platforms?uid={platformUid}&amp;title={platformName}" />
     </fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersFragment"/>
+        android:name="cash.p.terminal.modules.market.filters.MarketFiltersFragment"/>
     <fragment
         android:id="@+id/blockchainsSelectorFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.filters.BlockchainsSelectorFragment"/>
+        android:name="cash.p.terminal.modules.market.filters.BlockchainsSelectorFragment"/>
     <fragment
         android:id="@+id/marketTopCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment"/>
+        android:name="cash.p.terminal.modules.market.topcoins.MarketTopCoinsFragment"/>
     <fragment
         android:id="@+id/marketTopNftCollectionsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsFragment"/>
+        android:name="cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsFragment"/>
     <fragment
         android:id="@+id/marketCategoryFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"/>
+        android:name="cash.p.terminal.modules.market.category.MarketCategoryFragment"/>
     <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsFragment"/>
+        android:name="cash.p.terminal.modules.market.filtersresult.MarketFiltersResultsFragment"/>
     <fragment
         android:id="@+id/createAccountAdvancedFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountAdvancedFragment" />
+        android:name="cash.p.terminal.modules.createaccount.CreateAccountAdvancedFragment" />
     <fragment
         android:id="@+id/createAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment" />
+        android:name="cash.p.terminal.modules.createaccount.CreateAccountFragment" />
     <fragment
         android:id="@+id/restoreMnemonicNonStandardFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestoreMnemonicNonStandardFragment" />
+        android:name="cash.p.terminal.modules.restoreaccount.restoremnemonicnonstandard.RestoreMnemonicNonStandardFragment" />
     <fragment
         android:id="@+id/restoreAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountFragment" />
+        android:name="cash.p.terminal.modules.restoreaccount.RestoreAccountFragment" />
     <fragment
         android:id="@+id/restoreAccountAdvancedFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountAdvancedFragment" />
+        android:name="cash.p.terminal.modules.restoreaccount.RestoreAccountAdvancedFragment" />
     <fragment
         android:id="@+id/watchAddressFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment" />
+        android:name="cash.p.terminal.modules.watchaddress.WatchAddressFragment" />
     <fragment
         android:id="@+id/selectBlockchainsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment" />
+        android:name="cash.p.terminal.modules.watchaddress.selectblockchains.SelectBlockchainsFragment" />
     <fragment
         android:id="@+id/restoreSelectCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment"/>
+        android:name="cash.p.terminal.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment"/>
     <fragment
         android:id="@+id/zcashConfigure"
-        android:name="io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure"/>
+        android:name="cash.p.terminal.modules.zcashconfigure.ZcashConfigure"/>
     <fragment
         android:id="@+id/receiveFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment"
+        android:name="cash.p.terminal.modules.receive.ReceiveFragment"
         android:label="ReceiveFragment" />
     <fragment
         android:id="@+id/evmNetworkFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment"
+        android:name="cash.p.terminal.modules.evmnetwork.EvmNetworkFragment"
         android:label="EvmNetworkFragment" />
     <fragment
         android:id="@+id/solanaNetworkFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.solananetwork.SolanaNetworkFragment"
+        android:name="cash.p.terminal.modules.solananetwork.SolanaNetworkFragment"
         android:label="SolanaNetworkFragment" />
     <fragment
         android:id="@+id/btcBlockchainSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment"/>
+        android:name="cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsFragment"/>
     <fragment
         android:id="@+id/tvlFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment" />
+        android:name="cash.p.terminal.modules.market.tvl.TvlFragment" />
     <fragment
         android:id="@+id/nftsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.holdings.NftHoldingsFragment" />
+        android:name="cash.p.terminal.modules.nft.holdings.NftHoldingsFragment" />
     <fragment
         android:id="@+id/nftAssetFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
+        android:name="cash.p.terminal.modules.nft.asset.NftAssetFragment" />
     <fragment
         android:id="@+id/nftSendFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.send.SendNftFragment" />
+        android:name="cash.p.terminal.modules.nft.send.SendNftFragment" />
     <fragment
         android:id="@+id/nftCollectionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment">
+        android:name="cash.p.terminal.modules.nft.collection.NftCollectionFragment">
         <deepLink
             app:action="android.intent.action.VIEW"
             app:uri="unstoppable://nft-collection?uid={collectionUid}" />
     </fragment>
     <fragment
         android:id="@+id/sendXFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.send.SendFragment" />
+        android:name="cash.p.terminal.modules.send.SendFragment" />
     <fragment
         android:id="@+id/sendConfirmation"
-        android:name="io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment" />
+        android:name="cash.p.terminal.modules.send.SendConfirmationFragment" />
     <fragment
         android:id="@+id/feeSettings"
-        android:name="io.horizontalsystems.bankwallet.modules.fee.FeeSettingsFragment" />
+        android:name="cash.p.terminal.modules.fee.FeeSettingsFragment" />
     <fragment
         android:id="@+id/feePriorityInfo"
-        android:name="io.horizontalsystems.bankwallet.modules.info.FeePriorityInfoFragment" />
+        android:name="cash.p.terminal.modules.info.FeePriorityInfoFragment" />
     <fragment
         android:id="@+id/statusInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment" />
+        android:name="cash.p.terminal.modules.info.TransactionStatusInfoFragment" />
     <fragment
         android:id="@+id/selectSwapCoinDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment" />
+        android:name="cash.p.terminal.modules.swap.coinselect.SelectSwapCoinFragment" />
     <dialog
         android:id="@+id/wcErrorNoAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />
+        android:name="cash.p.terminal.modules.walletconnect.WCErrorNoAccountFragment" />
     <dialog
         android:id="@+id/wcAccountTypeNotSupportedDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
+        android:name="cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
     <dialog
         android:id="@+id/backupRequiredDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
+        android:name="cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog" />
     <dialog
         android:id="@+id/backupRecoveryPhraseDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.backupalert.BackupRecoveryPhraseDialog" />
+        android:name="cash.p.terminal.modules.backupalert.BackupRecoveryPhraseDialog" />
     <dialog
         android:id="@+id/syncErrorDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog" />
+        android:name="cash.p.terminal.modules.syncerror.SyncErrorDialog" />
     <dialog
         android:id="@+id/unlinkConfirmationDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog" />
+        android:name="cash.p.terminal.modules.unlinkaccount.UnlinkAccountDialog" />
     <dialog
         android:id="@+id/feeSettingsInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog" />
+        android:name="cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog" />
     <dialog
         android:id="@+id/proUsersInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProUsersInfoDialog" />
+        android:name="cash.p.terminal.modules.profeatures.yakauthorization.ProUsersInfoDialog" />
     <dialog
         android:id="@+id/proUsersActivateDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProUsersActivateDialog" />
+        android:name="cash.p.terminal.modules.profeatures.yakauthorization.ProUsersActivateDialog" />
     <dialog
         android:id="@+id/confirmDeleteAllPairingsDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.pairing.ConfirmDeleteAllPairingsDialog" />
+        android:name="cash.p.terminal.modules.walletconnect.pairing.ConfirmDeleteAllPairingsDialog" />
 </navigation>

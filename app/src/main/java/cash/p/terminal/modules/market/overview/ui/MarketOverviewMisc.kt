@@ -1,0 +1,40 @@
+package cash.p.terminal.modules.market.overview.ui
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import cash.p.terminal.R
+import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.coin.CoinFragment
+import cash.p.terminal.modules.market.MarketViewItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.body_leah
+
+fun onItemClick(marketViewItem: MarketViewItem, navController: NavController) {
+    val arguments = CoinFragment.prepareParams(marketViewItem.coinUid)
+    navController.slideFromRight(R.id.coinFragment, arguments)
+}
+
+@Composable
+fun SeeAllButton(onClick: () -> Unit) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
+    ) {
+        body_leah(
+            text = stringResource(R.string.Market_SeeAll),
+            maxLines = 1,
+        )
+        Spacer(Modifier.weight(1f))
+        Image(
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = "right arrow icon",
+        )
+    }
+}

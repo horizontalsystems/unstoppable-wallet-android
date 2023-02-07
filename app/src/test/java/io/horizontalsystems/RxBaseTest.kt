@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules
+package cash.p.terminal.modules
 
 import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins

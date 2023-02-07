@@ -1,6 +1,6 @@
-package io.horizontalsystems.bankwallet.core
+package cash.p.terminal.core
 
-import io.horizontalsystems.bankwallet.core.utils.EthInputParser
+import cash.p.terminal.core.utils.EthInputParser
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

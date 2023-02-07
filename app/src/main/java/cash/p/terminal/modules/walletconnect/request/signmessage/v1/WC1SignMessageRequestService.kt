@@ -1,0 +1,76 @@
+package cash.p.terminal.modules.walletconnect.request.signmessage.v1
+
+import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
+import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage.WCSignType
+import cash.p.terminal.modules.walletconnect.request.signmessage.SignMessage
+import cash.p.terminal.modules.walletconnect.request.signmessage.WCSignMessageRequestModule
+import cash.p.terminal.modules.walletconnect.version1.WC1Service
+import cash.p.terminal.modules.walletconnect.version1.WC1SignMessageRequest
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.core.signer.Signer
+
+class WC1SignMessageRequestService(
+    private val request: WC1SignMessageRequest,
+    override val dAppName: String?,
+    private val baseService: WC1Service,
+    private val signer: Signer
+) : WCSignMessageRequestModule.RequestAction {
+
+    override val isLegacySignRequest =
+        request.message.type == WCSignType.MESSAGE && request.message.data.hexStringToByteArray().size == 32
+
+    override val message: SignMessage by lazy {
+        val messageData = request.message.data
+        when (request.message.type) {
+            WCSignType.MESSAGE -> {
+                if (isLegacySignRequest) {
+                    SignMessage.Message(messageData, true)
+                } else {
+                    SignMessage.Message(hexStringToUtf8String(messageData))
+                }
+            }
+            WCSignType.PERSONAL_MESSAGE -> SignMessage.PersonalMessage(
+                hexStringToUtf8String(messageData)
+            )
+            WCSignType.TYPED_MESSAGE -> {
+                val typeData = signer.parseTypedData(messageData)
+                val domain = typeData?.domain?.get("name")?.toString()
+                SignMessage.TypedMessage(messageData, domain)
+            }
+        }
+    }
+
+    override fun sign() {
+        val signedMessage = signMessage(request.message)
+        baseService.approveRequest(request.id, signedMessage)
+    }
+
+    override fun reject() {
+        baseService.rejectRequest(request.id)
+    }
+
+    private fun hexStringToUtf8String(hexString: String) = try {
+        String(hexString.hexStringToByteArray())
+    } catch (_: Throwable) {
+        hexString
+    }
+
+    private fun signMessage(message: WCEthereumSignMessage): ByteArray {
+        return when (message.type) {
+            WCSignType.MESSAGE -> {
+                if (isLegacySignRequest) {
+                    signer.signByteArrayLegacy(message = message.data.hexStringToByteArray())
+                } else {
+                    signer.signByteArray(message = message.data.hexStringToByteArray())
+                }
+            }
+            WCSignType.PERSONAL_MESSAGE -> {
+                signer.signByteArray(message = message.data.hexStringToByteArray())
+            }
+            WCSignType.TYPED_MESSAGE -> {
+                signer.signTypedData(rawJsonMessage = message.data)
+            }
+        }
+    }
+
+}

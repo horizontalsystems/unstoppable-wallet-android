@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.balance
+package cash.p.terminal.modules.balance
 
 /*class BalanceViewItemFactoryTest {
 

@@ -5,26 +5,26 @@
     app:startDestination="@+id/wcListFragment">
     <fragment
         android:id="@+id/wcListFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.list.WCListFragment"/>
     <fragment
         android:id="@+id/wcSessionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.session.v1.WCSessionFragment"/>
     <fragment
         android:id="@+id/wc2SessionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.session.v2.WC2SessionFragment"/>
     <fragment
         android:id="@+id/wcSendEthereumTransactionRequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestFragment"/>
     <fragment
         android:id="@+id/wcSignMessageRequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v1.WCSignMessageRequestFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.request.signmessage.v1.WCSignMessageRequestFragment"/>
     <fragment
         android:id="@+id/wc2RequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.request.WC2RequestFragment"/>
     <fragment
         android:id="@+id/wcDisplayTypedMessageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
     <fragment
         android:id="@+id/wc2PairingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.pairing.WC2PairingsFragment"/>
+        android:name="cash.p.terminal.modules.walletconnect.pairing.WC2PairingsFragment"/>
 </navigation>

@@ -1,12 +1,12 @@
-//package io.horizontalsystems.bankwallet.modules.settings.security
+//package cash.p.terminal.modules.settings.security
 //
 //import com.nhaarman.mockito_kotlin.doReturn
 //import com.nhaarman.mockito_kotlin.mock
 //import com.nhaarman.mockito_kotlin.verify
 //import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-//import io.horizontalsystems.bankwallet.core.*
-//import io.horizontalsystems.bankwallet.entities.BiometryType
-//import io.horizontalsystems.bankwallet.modules.RxBaseTest
+//import cash.p.terminal.core.*
+//import cash.p.terminal.entities.BiometryType
+//import cash.p.terminal.modules.RxBaseTest
 //import io.reactivex.Flowable
 //import org.junit.After
 //import org.junit.Assert.*
