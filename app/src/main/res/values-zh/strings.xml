@@ -37,6 +37,11 @@
     <string name="Button_IAgree">我同意</string>
     <string name="Button_Continue">继续</string>
     <string name="Button_Send">发送​​</string>
+    <string name="Button_Search">查询</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">复制</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">删除</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
@@ -942,6 +947,7 @@
     <string name="CoinOption_bip49_Title">好</string>
     <string name="CoinOption_bip84_Title">最佳的</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">行情</string>
     <string name="Coin_Tab_Market">市场</string>
     <string name="Coin_Tab_Details">分析</string>
