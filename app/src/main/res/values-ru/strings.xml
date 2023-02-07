@@ -37,6 +37,11 @@
     <string name="Button_IAgree">Я принимаю</string>
     <string name="Button_Continue">Продолжить</string>
     <string name="Button_Send">Отправить</string>
+    <string name="Button_Search">Поиск</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">Скопировать</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">Удалить</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Any">Любые</string>
@@ -940,6 +945,7 @@
     <string name="CoinOption_bip49_Title">Новый</string>
     <string name="CoinOption_bip84_Title">Новейший</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Цена</string>
     <string name="Coin_Tab_Market">Рынки</string>
     <string name="Coin_Tab_Details">Аналитика</string>
