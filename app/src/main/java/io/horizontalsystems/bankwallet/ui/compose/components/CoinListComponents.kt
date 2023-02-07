@@ -80,7 +80,7 @@ fun CoinList(
                     Icon(
                         painter = painterResource(id = if (item.favorited) R.drawable.ic_star_off_24 else R.drawable.ic_star_24),
                         tint = ComposeAppTheme.colors.claude,
-                        contentDescription = "delete",
+                        contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
                     )
                 }
                 DraggableCardSimple(
