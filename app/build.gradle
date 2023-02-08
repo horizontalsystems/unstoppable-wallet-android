@@ -283,7 +283,6 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
     implementation project(':components:marketkit')
-    implementation project(':components:tor-android')
     implementation project(':components:torkit')
 
     // Integration with activities

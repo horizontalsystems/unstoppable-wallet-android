@@ -39,7 +39,8 @@ dependencies {
 
     //Android Tor
     //implementation 'info.guardianproject:tor-android:0.4.7.8'
-    //implementation 'info.guardianproject:jtorctl:0.4.5.7'
+    api project(':components:tor-android')
+    implementation 'info.guardianproject:jtorctl:0.4.5.7'
 
     //api 'info.pluggabletransports.aptds:apt-meek-obfs4-legacy:1.0.7'
     api 'com.jaredrummler:android-shell:1.0.0'
