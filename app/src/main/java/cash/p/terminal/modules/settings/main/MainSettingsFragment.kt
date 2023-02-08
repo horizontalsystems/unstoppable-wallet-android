@@ -217,7 +217,7 @@ private fun SettingSections(
             )
         }
     )
-
+/*
     Spacer(Modifier.height(32.dp))
 
     CellUniversalLawrenceSection(
@@ -239,7 +239,7 @@ private fun SettingSections(
             )
         })
     )
-
+*/
     Spacer(Modifier.height(32.dp))
 
     CellUniversalLawrenceSection(
