@@ -74,7 +74,7 @@
         </provider>
 
         <activity-alias
-            android:name=".modules.launcher.MainLauncherAlias"
+            android:name="${applicationId}.MainLauncherAlias"
             android:enabled="true"
             android:icon="@mipmap/launcher_main"
             android:label="@string/App_Name"
