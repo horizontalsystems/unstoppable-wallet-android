@@ -8,7 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,8 +65,9 @@ fun ReleaseNotesScreen(
     viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory())
 ) {
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
             if (closeablePopup) {
                 AppBar(
                     menuItems = listOf(
@@ -84,7 +85,9 @@ fun ReleaseNotesScreen(
                     }
                 )
             }
-
+        }
+    ) {
+        Column(Modifier.padding(it)) {
             MarkdownContent(
                 modifier = Modifier.weight(1f),
                 viewState = viewModel.viewState,
@@ -125,7 +128,6 @@ fun ReleaseNotesScreen(
                     text = stringResource(R.string.ReleaseNotes_FollowUs)
                 )
             }
-
         }
     }
 }
