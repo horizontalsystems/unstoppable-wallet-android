@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.evmfee.legacy
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -23,14 +25,17 @@ class LegacyFeeSettingsViewModel(
     private val cautionViewItemFactory: CautionViewItemFactory
 ) : ViewModel() {
 
+    private val scale = coinService.token.blockchainType.feePriceScale
     private val disposable = CompositeDisposable()
 
-    val sliderViewItemLiveData = MutableLiveData<SliderViewItem>()
-    val feeViewItemLiveData = MutableLiveData<FeeViewItem>()
-    val feeViewItemStateLiveData = MutableLiveData<ViewState>()
-    val feeViewItemLoadingLiveData = MutableLiveData<Boolean>()
+    var feeSummaryViewItem by mutableStateOf<FeeSummaryViewItem?>(null)
+        private set
 
-    val cautionsLiveData = MutableLiveData<List<CautionViewItem>>()
+    var feeViewItem by mutableStateOf<FeeViewItem?>(null)
+        private set
+
+    var cautions by mutableStateOf<List<CautionViewItem>>(listOf())
+        private set
 
     init {
         sync(gasPriceService.state)
@@ -55,33 +60,35 @@ class LegacyFeeSettingsViewModel(
         gasPriceService.setGasPrice(gasPrice)
     }
 
+    fun onIncrementGasPrice(currentWeiValue: Long) {
+        gasPriceService.setGasPrice(currentWeiValue + scale.scaleValue)
+    }
+
+    fun onDecrementGasPrice(currentWeiValue: Long) {
+        gasPriceService.setGasPrice((currentWeiValue - scale.scaleValue).coerceAtLeast(0))
+    }
+
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
         syncFeeViewItems(transactionStatus)
         syncCautions(transactionStatus)
     }
 
     private fun syncFeeViewItems(transactionStatus: DataState<Transaction>) {
+        val notAvailable = Translator.getString(R.string.NotAvailable)
         when (transactionStatus) {
             DataState.Loading -> {
-                feeViewItemLoadingLiveData.postValue(true)
+                feeSummaryViewItem = FeeSummaryViewItem(notAvailable, notAvailable, ViewState.Loading)
             }
             is DataState.Error -> {
-                feeViewItemLoadingLiveData.postValue(false)
-                feeViewItemStateLiveData.postValue(ViewState.Error(transactionStatus.error))
-
-                val notAvailable = Translator.getString(R.string.NotAvailable)
-                feeViewItemLiveData.postValue(FeeViewItem(notAvailable, notAvailable))
+                feeSummaryViewItem = FeeSummaryViewItem(notAvailable, notAvailable, ViewState.Error(transactionStatus.error))
             }
             is DataState.Success -> {
                 val transaction = transactionStatus.data
-                feeViewItemLoadingLiveData.postValue(false)
-
                 val viewState = transaction.errors.firstOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
-                feeViewItemStateLiveData.postValue(viewState)
-
                 val fee = coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
                 val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
-                feeViewItemLiveData.postValue(FeeViewItem(fee, gasLimit))
+
+                feeSummaryViewItem = FeeSummaryViewItem(fee, gasLimit, viewState)
             }
         }
     }
@@ -97,23 +104,12 @@ class LegacyFeeSettingsViewModel(
             errors.addAll(transactionStatus.data.errors)
         }
 
-        cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(warnings, errors))
+        cautions = cautionViewItemFactory.cautionViewItems(warnings, errors)
     }
 
     private fun sync(state: DataState<GasPriceInfo>) {
         if (state is DataState.Success) {
-            sliderViewItemLiveData.postValue(
-                SliderViewItem(
-                    initialWeiValue = state.data.gasPrice.max,
-                    weiRange = gasPriceService.gasPriceRange
-                        ?: gasPriceService.defaultGasPriceRange,
-                    stepSize = EvmFeeModule.stepSize(
-                        gasPriceService.recommendedGasPrice
-                            ?: gasPriceService.defaultGasPriceRange.first
-                    ),
-                    scale = coinService.token.blockchainType.feePriceScale
-                )
-            )
+            feeViewItem = FeeViewItem(weiValue = state.data.gasPrice.max, scale = scale)
         }
     }
 
