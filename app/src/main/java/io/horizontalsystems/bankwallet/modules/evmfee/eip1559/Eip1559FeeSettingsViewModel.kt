@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.evmfee.eip1559
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -12,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.feePriceScale
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.FeePriceScale
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.*
 import io.horizontalsystems.ethereumkit.models.GasPrice
@@ -24,15 +27,23 @@ class Eip1559FeeSettingsViewModel(
     private val cautionViewItemFactory: CautionViewItemFactory
 ) : ViewModel() {
 
+    private val scale = coinService.token.blockchainType.feePriceScale
     private val disposable = CompositeDisposable()
 
-    val baseFeeSliderViewItemLiveData = MutableLiveData<SliderViewItem>()
-    val priorityFeeSliderViewItemLiveData = MutableLiveData<SliderViewItem>()
-    val currentBaseFeeLiveData = MutableLiveData<String>()
-    val feeViewItemLiveData = MutableLiveData<FeeViewItem>()
-    val feeViewItemStateLiveData = MutableLiveData<ViewState>()
-    val feeViewItemLoadingLiveData = MutableLiveData<Boolean>()
-    val cautionsLiveData = MutableLiveData<List<CautionViewItem>>()
+    var feeSummaryViewItem by mutableStateOf<FeeSummaryViewItem?>(null)
+        private set
+
+    var currentBaseFee by mutableStateOf<String?>(null)
+        private set
+
+    var baseFeeViewItem by mutableStateOf<FeeViewItem?>(null)
+        private set
+
+    var priorityFeeViewItem by mutableStateOf<FeeViewItem?>(null)
+        private set
+
+    var cautions by mutableStateOf<List<CautionViewItem>>(listOf())
+        private set
 
     init {
         sync(gasPriceService.state)
@@ -57,6 +68,22 @@ class Eip1559FeeSettingsViewModel(
         gasPriceService.setGasPrice(baseFee, maxPriorityFee)
     }
 
+    fun onIncrementBaseFee(currentBaseFee: Long, currentMaxPriorityFee: Long) {
+        gasPriceService.setGasPrice(currentBaseFee + scale.scaleValue, currentMaxPriorityFee)
+    }
+
+    fun onDecrementBaseFee(currentBaseFee: Long, currentMaxPriorityFee: Long) {
+        gasPriceService.setGasPrice((currentBaseFee - scale.scaleValue).coerceAtLeast(0), currentMaxPriorityFee)
+    }
+
+    fun onIncrementPriorityFee(currentBaseFee: Long, currentMaxPriorityFee: Long) {
+        gasPriceService.setGasPrice(currentBaseFee, currentMaxPriorityFee + scale.scaleValue)
+    }
+
+    fun onDecrementPriorityFee(currentBaseFee: Long, currentMaxPriorityFee: Long) {
+        gasPriceService.setGasPrice(currentBaseFee, (currentMaxPriorityFee - scale.scaleValue).coerceAtLeast(0))
+    }
+
     override fun onCleared() {
         disposable.clear()
     }
@@ -66,39 +93,28 @@ class Eip1559FeeSettingsViewModel(
 
         state.dataOrNull?.let { gasPriceInfo ->
             if (gasPriceInfo.gasPrice is GasPrice.Eip1559) {
-                baseFeeSliderViewItemLiveData.postValue(
-                    SliderViewItem(
-                        initialWeiValue = gasPriceInfo.gasPrice.maxFeePerGas - gasPriceInfo.gasPrice.maxPriorityFeePerGas,
-                        weiRange = gasPriceService.baseFeeRange
-                            ?: gasPriceService.defaultBaseFeeRange,
-                        stepSize = EvmFeeModule.stepSize(
-                            gasPriceService.currentBaseFee
-                                ?: gasPriceService.defaultBaseFeeRange.first
-                        ),
-                        scale = coinService.token.blockchainType.feePriceScale
-                    )
+                baseFeeViewItem = FeeViewItem(
+                    weiValue = gasPriceInfo.gasPrice.maxFeePerGas - gasPriceInfo.gasPrice.maxPriorityFeePerGas,
+                    scale = scale
                 )
-                priorityFeeSliderViewItemLiveData.postValue(
-                    SliderViewItem(
-                        initialWeiValue = gasPriceInfo.gasPrice.maxPriorityFeePerGas,
-                        weiRange = gasPriceService.priorityFeeRange
-                            ?: gasPriceService.defaultPriorityFeeRange,
-                        stepSize = EvmFeeModule.stepSize(
-                            gasPriceService.currentPriorityFee
-                                ?: gasPriceService.defaultPriorityFeeRange.first
-                        ),
-                        scale = coinService.token.blockchainType.feePriceScale
-                    )
+                priorityFeeViewItem = FeeViewItem(
+                    weiValue = gasPriceInfo.gasPrice.maxPriorityFeePerGas,
+                    scale = scale
                 )
             }
         }
     }
 
-    private fun sync(currentBaseFee: Long?) {
-        if (currentBaseFee != null) {
-            currentBaseFeeLiveData.postValue(EvmFeeModule.scaledString(currentBaseFee, coinService.token.blockchainType.feePriceScale))
+    private fun scaledString(wei: Long, scale: FeePriceScale): String {
+        val gwei = wei.toDouble() / scale.scaleValue
+        return "${gwei.toBigDecimal().toPlainString()} ${scale.unit}"
+    }
+
+    private fun sync(baseFee: Long?) {
+        currentBaseFee = if (baseFee != null) {
+            scaledString(baseFee, coinService.token.blockchainType.feePriceScale)
         } else {
-            currentBaseFeeLiveData.postValue(Translator.getString(R.string.NotAvailable))
+            Translator.getString(R.string.NotAvailable)
         }
     }
 
@@ -108,27 +124,21 @@ class Eip1559FeeSettingsViewModel(
     }
 
     private fun syncFeeViewItems(transactionStatus: DataState<Transaction>) {
+        val notAvailable = Translator.getString(R.string.NotAvailable)
         when (transactionStatus) {
             DataState.Loading -> {
-                feeViewItemLoadingLiveData.postValue(true)
+                feeSummaryViewItem = FeeSummaryViewItem(notAvailable, notAvailable, ViewState.Loading)
             }
             is DataState.Error -> {
-                feeViewItemLoadingLiveData.postValue(false)
-                feeViewItemStateLiveData.postValue(ViewState.Error(transactionStatus.error))
-
-                val notAvailable = Translator.getString(R.string.NotAvailable)
-                feeViewItemLiveData.postValue(FeeViewItem(notAvailable, notAvailable))
+                feeSummaryViewItem = FeeSummaryViewItem(notAvailable, notAvailable, ViewState.Error(transactionStatus.error))
             }
             is DataState.Success -> {
                 val transaction = transactionStatus.data
-                feeViewItemLoadingLiveData.postValue(false)
-
                 val viewState = transaction.errors.firstOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
-                feeViewItemStateLiveData.postValue(viewState)
-
                 val fee = coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
                 val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
-                feeViewItemLiveData.postValue(FeeViewItem(fee, gasLimit))
+
+                feeSummaryViewItem = FeeSummaryViewItem(fee, gasLimit, viewState)
             }
         }
     }
@@ -144,7 +154,7 @@ class Eip1559FeeSettingsViewModel(
             errors.addAll(transactionStatus.data.errors)
         }
 
-        cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(warnings, errors))
+        cautions = cautionViewItemFactory.cautionViewItems(warnings, errors)
     }
 
 }

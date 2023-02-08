@@ -26,5 +26,4 @@ class SendEvmSettingsViewModel(
     fun onClickReset() {
         gasPriceService.setRecommended()
     }
-
 }

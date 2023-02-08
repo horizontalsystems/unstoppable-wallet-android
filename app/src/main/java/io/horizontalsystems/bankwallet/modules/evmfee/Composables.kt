@@ -2,18 +2,27 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -22,48 +31,42 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.animations.shake
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import java.math.BigDecimal
 
 @Composable
 fun Eip1559FeeSettings(
     viewModel: Eip1559FeeSettingsViewModel,
     navController: NavController
 ) {
-    val feeViewItem by viewModel.feeViewItemLiveData.observeAsState()
-    val feeViewItemState by viewModel.feeViewItemStateLiveData.observeAsState()
-    val feeViewItemLoading by viewModel.feeViewItemLoadingLiveData.observeAsState(false)
-    val currentBaseFee by viewModel.currentBaseFeeLiveData.observeAsState()
-    val maxBaseFeeSlider by viewModel.baseFeeSliderViewItemLiveData.observeAsState()
-    val maxPriorityFeeSlider by viewModel.priorityFeeSliderViewItemLiveData.observeAsState()
-    val cautions by viewModel.cautionsLiveData.observeAsState(listOf())
-
-    val settingsViewItems = mutableListOf<@Composable () -> Unit>()
-    var maxBaseFee by remember { mutableStateOf(0L) }
-    var maxPriorityFee by remember { mutableStateOf(1L) }
-    var valueChanged by remember { mutableStateOf(false) }
+    val summaryViewItem = viewModel.feeSummaryViewItem
+    val currentBaseFee = viewModel.currentBaseFee
+    val baseFeeViewItem = viewModel.baseFeeViewItem
+    val priorityFeeViewItem = viewModel.priorityFeeViewItem
+    val cautions = viewModel.cautions
 
     Column {
         Spacer(modifier = Modifier.height(12.dp))
-
         CellSingleLineLawrenceSection(
             listOf(
                 {
                     MaxFeeCell(
                         title = stringResource(R.string.FeeSettings_MaxFee),
-                        value = feeViewItem?.fee ?: "",
-                        loading = feeViewItemLoading,
-                        viewState = feeViewItemState,
+                        value = summaryViewItem?.fee ?: "",
+                        viewState = summaryViewItem?.viewState,
                         navController = navController
                     )
                 },
                 {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_GasLimit),
-                        value = feeViewItem?.gasLimit,
+                        value = summaryViewItem?.gasLimit,
                         infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
                         infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
                         navController = navController
@@ -75,62 +78,148 @@ fun Eip1559FeeSettings(
             )
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        baseFeeViewItem?.let { baseFeeSlider ->
+            priorityFeeViewItem?.let { priorityFeeSlider ->
 
-        maxBaseFeeSlider?.let { baseFeeSlider ->
-            maxPriorityFeeSlider?.let { priorityFeeSlider ->
-                maxBaseFee = baseFeeSlider.initialSliderValue
+                Spacer(modifier = Modifier.height(24.dp))
+                EvmSettingsInput(
+                    title = stringResource(R.string.FeeSettings_MaxBaseFee),
+                    info = stringResource(R.string.FeeSettings_MaxBaseFee_Info),
+                    value = BigDecimal(baseFeeSlider.weiValue).divide(BigDecimal(baseFeeSlider.scale.scaleValue)),
+                    decimals = baseFeeSlider.scale.decimals,
+                    navController = navController,
+                    onValueChange = {
+                        viewModel.onSelectGasPrice(baseFeeSlider.wei(it), priorityFeeSlider.weiValue)
+                    },
+                    onClickIncrement = {
+                        viewModel.onIncrementBaseFee(baseFeeSlider.weiValue, priorityFeeSlider.weiValue)
+                    },
+                    onClickDecrement = {
+                        viewModel.onDecrementBaseFee(baseFeeSlider.weiValue, priorityFeeSlider.weiValue)
+                    }
+                )
 
-                settingsViewItems.add {
-                    FeeInfoCell(
-                        title = stringResource(R.string.FeeSettings_MaxBaseFee),
-                        value = baseFeeSlider.scaledString(maxBaseFee),
-                        infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
-                        infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
-                        navController = navController
-                    )
-                }
-
-                settingsViewItems.add {
-                    HsSlider(
-                        value = baseFeeSlider.initialSliderValue,
-                        onValueChange = { maxBaseFee = it },
-                        valueRange = baseFeeSlider.range.first..baseFeeSlider.range.last,
-                        onValueChangeFinished = { viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee)) }
-                    )
-                }
-
-                settingsViewItems.add {
-                    FeeInfoCell(
-                        title = stringResource(R.string.FeeSettings_MaxMinerTips),
-                        value = if (valueChanged) priorityFeeSlider.scaledString(maxPriorityFee) else priorityFeeSlider.initialValueScaledString,
-                        infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
-                        infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
-                        navController = navController
-                    )
-                }
-
-                settingsViewItems.add {
-                    HsSlider(
-                        value = priorityFeeSlider.initialSliderValue,
-                        onValueChange = {
-                            valueChanged = true
-                            maxPriorityFee = it
-                        },
-                        valueRange = priorityFeeSlider.range.first..priorityFeeSlider.range.last,
-                        onValueChangeFinished = {
-                            viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee))
-                        }
-                    )
-                }
+                Spacer(modifier = Modifier.height(24.dp))
+                EvmSettingsInput(
+                    title = stringResource(R.string.FeeSettings_MaxMinerTips),
+                    info = stringResource(R.string.FeeSettings_MaxMinerTips_Info),
+                    value = BigDecimal(priorityFeeSlider.weiValue).divide(BigDecimal(priorityFeeSlider.scale.scaleValue)),
+                    decimals = priorityFeeSlider.scale.decimals,
+                    navController = navController,
+                    onValueChange = {
+                        viewModel.onSelectGasPrice(baseFeeSlider.weiValue, priorityFeeSlider.wei(it))
+                    },
+                    onClickIncrement = {
+                        viewModel.onIncrementPriorityFee(baseFeeSlider.weiValue, priorityFeeSlider.weiValue)
+                    },
+                    onClickDecrement = {
+                        viewModel.onDecrementPriorityFee(baseFeeSlider.weiValue, priorityFeeSlider.weiValue)
+                    }
+                )
             }
         }
-
-        CellSingleLineLawrenceSection(settingsViewItems)
 
         Cautions(cautions)
 
         Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@Composable
+fun EvmSettingsInput(
+    title: String,
+    info: String,
+    value: BigDecimal,
+    decimals: Int,
+    state: DataState<Any>? = null,
+    navController: NavController,
+    onValueChange: (BigDecimal) -> Unit,
+    onClickIncrement: () -> Unit,
+    onClickDecrement: () -> Unit
+) {
+    HeaderText(text = title) {
+        navController.slideFromBottom(
+            R.id.feeSettingsInfoDialog,
+            FeeSettingsInfoDialog.prepareParams(title, info)
+        )
+    }
+    NumberInputWithButtons(value, decimals, state, onValueChange, onClickIncrement, onClickDecrement)
+}
+
+@Composable
+private fun NumberInputWithButtons(
+    value: BigDecimal,
+    decimals: Int,
+    state: DataState<Any>? = null,
+    onValueChange: (BigDecimal) -> Unit,
+    onClickIncrement: () -> Unit,
+    onClickDecrement: () -> Unit
+) {
+    val borderColor = when (state) {
+        is DataState.Error -> ComposeAppTheme.colors.red50
+        else -> ComposeAppTheme.colors.steel20
+    }
+
+    var textState by rememberSaveable(value, stateSaver = TextFieldValue.Saver) {
+        val text = value.toString()
+        mutableStateOf(TextFieldValue(text, TextRange(text.length)))
+    }
+    var playShakeAnimation by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 44.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+            .background(ComposeAppTheme.colors.lawrence),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        BasicTextField(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .weight(1f)
+                .shake(
+                    enabled = playShakeAnimation,
+                    onAnimationFinish = { playShakeAnimation = false }
+                ),
+            value = textState,
+            onValueChange = { textFieldValue ->
+                val newValue = textFieldValue.text.toBigDecimalOrNull() ?: BigDecimal.ZERO
+                if (newValue.scale() <= decimals) {
+                    textState = textFieldValue
+                    onValueChange(newValue)
+                } else {
+                    playShakeAnimation = true
+                }
+            },
+            singleLine = true,
+            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+
+        ButtonSecondaryCircle(
+            modifier = Modifier.padding(end = 16.dp),
+            icon = R.drawable.ic_minus_20,
+            onClick = onClickDecrement
+        )
+
+        ButtonSecondaryCircle(
+            modifier = Modifier.padding(end = 16.dp),
+            icon = R.drawable.ic_plus_20,
+            onClick = onClickIncrement
+        )
+    }
+
+    if (state is DataState.Error) {
+        caption_lucian(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp),
+            text = state.error.message ?: state.error.javaClass.simpleName,
+        )
     }
 }
 
@@ -166,62 +255,53 @@ fun LegacyFeeSettings(
     viewModel: LegacyFeeSettingsViewModel,
     navController: NavController
 ) {
-    val feeViewItem by viewModel.feeViewItemLiveData.observeAsState()
-    val feeViewItemState by viewModel.feeViewItemStateLiveData.observeAsState()
-    val feeViewItemLoading by viewModel.feeViewItemLoadingLiveData.observeAsState(false)
-    val sliderViewItem by viewModel.sliderViewItemLiveData.observeAsState()
-    val cautions by viewModel.cautionsLiveData.observeAsState(listOf())
-
-    val settingsViewItems = mutableListOf<@Composable () -> Unit>()
-    var selectedGasPrice by remember { mutableStateOf(1L) }
+    val summaryViewItem = viewModel.feeSummaryViewItem
+    val viewItem = viewModel.feeViewItem
+    val cautions = viewModel.cautions
 
     Column {
         Spacer(modifier = Modifier.height(12.dp))
+        CellSingleLineLawrenceSection(
+            listOf(
+                {
+                    MaxFeeCell(
+                        title = stringResource(R.string.FeeSettings_MaxFee),
+                        value = summaryViewItem?.fee ?: "",
+                        viewState = summaryViewItem?.viewState,
+                        navController = navController
+                    )
+                },
+                {
+                    FeeInfoCell(
+                        title = stringResource(R.string.FeeSettings_GasLimit),
+                        value = summaryViewItem?.gasLimit,
+                        infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
+                        infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
+                        navController = navController
+                    )
+                }
+            )
+        )
 
-        settingsViewItems.add {
-            MaxFeeCell(
-                title = stringResource(R.string.FeeSettings_MaxFee),
-                value = feeViewItem?.fee ?: "",
-                loading = feeViewItemLoading,
-                viewState = feeViewItemState,
-                navController = navController
+        viewItem?.let { fee ->
+            Spacer(modifier = Modifier.height(24.dp))
+            EvmSettingsInput(
+                title = stringResource(R.string.FeeSettings_GasPrice),
+                info = stringResource(R.string.FeeSettings_GasPrice_Info),
+                value = BigDecimal(fee.weiValue).divide(BigDecimal(fee.scale.scaleValue)),
+                decimals = fee.scale.decimals,
+                navController = navController,
+                onValueChange = {
+                    viewModel.onSelectGasPrice(fee.wei(it))
+                },
+                onClickIncrement = {
+                    viewModel.onIncrementGasPrice(fee.weiValue)
+                },
+                onClickDecrement = {
+                    viewModel.onDecrementGasPrice(fee.weiValue)
+                }
             )
         }
-
-        settingsViewItems.add {
-            FeeInfoCell(
-                title = stringResource(R.string.FeeSettings_GasLimit),
-                value = feeViewItem?.gasLimit,
-                infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
-                infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
-                navController = navController
-            )
-        }
-
-        selectedGasPrice = sliderViewItem?.initialSliderValue ?: 0
-
-        sliderViewItem?.let { slider ->
-            settingsViewItems.add {
-                FeeInfoCell(
-                    title = stringResource(R.string.FeeSettings_GasPrice),
-                    value = slider.scaledString(selectedGasPrice),
-                    infoTitle = Translator.getString(R.string.FeeSettings_GasPrice),
-                    infoText = Translator.getString(R.string.FeeSettings_GasPrice_Info),
-                    navController = navController
-                )
-            }
-
-            settingsViewItems.add {
-                HsSlider(
-                    value = slider.initialSliderValue,
-                    onValueChange = { selectedGasPrice = it },
-                    valueRange = slider.range.first..slider.range.last,
-                    onValueChangeFinished = { viewModel.onSelectGasPrice(slider.wei(selectedGasPrice)) }
-                )
-            }
-        }
-
-        CellSingleLineLawrenceSection(settingsViewItems)
 
         Cautions(cautions)
 
@@ -408,7 +488,6 @@ fun HSFeeCell(
 fun MaxFeeCell(
     title: String,
     value: String,
-    loading: Boolean,
     viewState: ViewState?,
     navController: NavController
 ) {
@@ -437,7 +516,7 @@ fun MaxFeeCell(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.End
         ) {
-            if (loading) {
+            if (viewState == ViewState.Loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
                     color = ComposeAppTheme.colors.grey,

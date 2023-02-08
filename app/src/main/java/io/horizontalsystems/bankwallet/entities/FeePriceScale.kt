@@ -15,4 +15,10 @@ enum class FeePriceScale {
             Satoshi -> 1
             Gwei, Navax -> 1_000_000_000
         }
+
+    val decimals: Int
+        get() = when(this) {
+            Satoshi -> 1
+            Gwei, Navax -> 9
+        }
 }
