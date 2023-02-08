@@ -298,7 +298,13 @@ val FullCoin.iconPlaceholder: Int
     get() = if (tokens.size == 1) {
         tokens.first().iconPlaceholder
     } else {
-        R.drawable.coin_placeholder
+        // TODO Add static images for PirateCash and Cosanta
+        var pirate: String = "piratecash"
+        if (coin.uid == pirate){
+            R.drawable.ic_piratecash
+        } else {
+            R.drawable.coin_placeholder
+        }
     }
 
 fun FullCoin.eligibleTokens(accountType: AccountType): List<Token> {
