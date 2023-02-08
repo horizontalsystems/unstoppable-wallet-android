@@ -14,5 +14,4 @@ object SendEvmSettingsModule {
             ) as T
         }
     }
-
 }

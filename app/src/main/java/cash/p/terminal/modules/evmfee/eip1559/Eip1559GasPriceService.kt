@@ -4,7 +4,6 @@ import cash.p.terminal.core.Warning
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.*
-import cash.p.terminal.modules.evmfee.FeeRangeConfig.Bound
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.FeeHistory
@@ -38,14 +37,6 @@ class Eip1559GasPriceService(
     private val initialBaseFee: Long? = initialGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
     private val initialPriorityFee: Long? = initialGasPrice?.maxPriorityFeePerGas
 
-    private val baseFeeRangeConfig = FeeRangeConfig(
-        lowerBound = Bound.Multiplied(BigDecimal(0.5)),
-        upperBound = Bound.Multiplied(BigDecimal(3.0))
-    )
-    private val priorityFeeRangeConfig = FeeRangeConfig(
-        lowerBound = Bound.Fixed(0),
-        upperBound = Bound.Multiplied(BigDecimal(10))
-    )
     private val overpricingBound = Bound.Multiplied(BigDecimal(1.5))
     private val riskOfStuckBound = Bound.Multiplied(BigDecimal(0.9))
 
@@ -69,14 +60,6 @@ class Eip1559GasPriceService(
         private set
 
     var currentPriorityFee: Long? = null
-        private set
-
-    val defaultBaseFeeRange: LongRange = 1_000_000_000..100_000_000_000
-    var baseFeeRange: LongRange? = null
-        private set
-
-    val defaultPriorityFeeRange: LongRange = 1_000_000_000..100_000_000_000
-    var priorityFeeRange: LongRange? = null
         private set
 
     init {
@@ -170,8 +153,6 @@ class Eip1559GasPriceService(
 
         val newRecommendGasPrice = GasPrice.Eip1559(recommendedBaseFee + recommendedPriorityFee, recommendedPriorityFee)
 
-        syncFeeRanges(newRecommendGasPrice)
-
         recommendedGasPrice = newRecommendGasPrice
 
         if (recommendedGasPriceSelected.value) {
@@ -202,42 +183,4 @@ class Eip1559GasPriceService(
         else
             0
     }
-
-    private fun syncFeeRanges(newRecommendGasPrice: GasPrice.Eip1559) {
-        val recommendedBaseFee = newRecommendGasPrice.maxFeePerGas - newRecommendGasPrice.maxPriorityFeePerGas
-        val recommendedPriorityFee = newRecommendGasPrice.maxPriorityFeePerGas
-
-        baseFeeRange = getAdjustedFeeRange(
-            baseFeeRange,
-            recommendedBaseFee,
-            baseFeeRangeConfig
-        )
-
-        priorityFeeRange = getAdjustedFeeRange(
-            priorityFeeRange,
-            recommendedPriorityFee,
-            priorityFeeRangeConfig
-        )
-    }
-
-    private fun getAdjustedFeeRange(
-        feeRange: LongRange?,
-        recommendedFee: Long,
-        config: FeeRangeConfig
-    ): LongRange {
-        val baseFeeRangeLowerBound = if (feeRange == null || feeRange.first > recommendedFee) {
-            config.lowerBound.calculate(recommendedFee)
-        } else {
-            feeRange.first
-        }
-
-        val baseFeeRangeUpperBound = if (feeRange == null || feeRange.last < recommendedFee) {
-            config.upperBound.calculate(recommendedFee)
-        } else {
-            feeRange.last
-        }
-
-        return baseFeeRangeLowerBound..baseFeeRangeUpperBound
-    }
-
 }

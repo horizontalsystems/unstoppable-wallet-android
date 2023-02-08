@@ -7,6 +7,7 @@ import cash.p.terminal.core.ethereum.CautionViewItemFactory
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.FeePriceScale
+import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
@@ -51,25 +52,6 @@ object EvmFeeModule {
             }
         }
     }
-
-    fun scaledString(wei: Long, scale: FeePriceScale): String {
-        val gwei = wei.toDouble() / scale.scaleValue
-
-        return "${gwei.toBigDecimal().toPlainString()} ${scale.unit}"
-    }
-
-    fun stepSize(weiValue: Long): Long {
-        var digitsCount = 0
-        var value = weiValue
-
-        while (value > 0) {
-            value /= 10
-            digitsCount += 1
-        }
-
-        return 1L * 10.toBigDecimal().pow(Integer.max(digitsCount - 2, 0)).toLong()
-    }
-
 }
 
 interface IEvmFeeService {
@@ -103,17 +85,13 @@ data class GasPriceInfo(
 )
 
 open class GasData(val gasLimit: Long, val gasPrice: GasPrice) {
-
     open val fee: BigInteger
         get() = gasLimit.toBigInteger() * gasPrice.max.toBigInteger()
-
 }
 
-class RollupGasData(gasLimit: Long, gasPrice: GasPrice, val l1Fee: BigInteger): GasData(gasLimit, gasPrice) {
-
+class RollupGasData(gasLimit: Long, gasPrice: GasPrice, val l1Fee: BigInteger) : GasData(gasLimit, gasPrice) {
     override val fee: BigInteger
         get() = super.fee + l1Fee
-
 }
 
 data class Transaction(
@@ -126,55 +104,36 @@ data class Transaction(
         get() = transactionData.value + gasData.fee
 }
 
-data class FeeRangeConfig(
-    val lowerBound: Bound,
-    val upperBound: Bound
-) {
-    sealed class Bound {
-        class Fixed(val value: Long) : Bound()
-        class Multiplied(val multiplier: BigDecimal) : Bound()
-        class Added(val addend: Long) : Bound()
+sealed class Bound {
+    class Fixed(val value: Long) : Bound()
+    class Multiplied(val multiplier: BigDecimal) : Bound()
+    class Added(val addend: Long) : Bound()
 
-        fun calculate(selectedValue: Long) = when (this) {
-            is Added -> selectedValue + addend
-            is Fixed -> value
-            is Multiplied -> {
-                (BigDecimal(selectedValue) * multiplier)
-                    .setScale(0, RoundingMode.HALF_UP)
-                    .toLong()
-            }
+    fun calculate(selectedValue: Long) = when (this) {
+        is Added -> selectedValue + addend
+        is Fixed -> value
+        is Multiplied -> {
+            (BigDecimal(selectedValue) * multiplier)
+                .setScale(0, RoundingMode.HALF_UP)
+                .toLong()
         }
     }
 }
 
 sealed class GasDataError : Error() {
     object NoTransactionData : GasDataError()
-    object InsufficientBalance : GasDataError()
 }
 
-data class FeeViewItem(val fee: String, val gasLimit: String)
+data class FeeSummaryViewItem(val fee: String, val gasLimit: String, val viewState: ViewState)
 
-data class SliderViewItem(
-    private val initialWeiValue: Long,
-    private val weiRange: LongRange,
-    private val stepSize: Long,
-    private val scale: FeePriceScale
+data class FeeViewItem(
+    val weiValue: Long,
+    val scale: FeePriceScale
 ) {
 
-    val initialSliderValue: Long = sliderValue(initialWeiValue)
-    val range: LongRange = LongRange(sliderValue(weiRange.first), sliderValue(weiRange.last))
-    val initialValueScaledString = EvmFeeModule.scaledString(initialWeiValue, scale)
-
-    fun wei(sliderValue: Long): Long {
-        return sliderValue * stepSize
+    fun wei(scaledValue: BigDecimal): Long {
+        return (scaledValue * BigDecimal(scale.scaleValue)).toLong()
     }
-
-    fun sliderValue(wei: Long): Long {
-        return wei / stepSize
-    }
-
-    fun scaledString(sliderValue: Long): String = EvmFeeModule.scaledString(wei(sliderValue), scale)
-
 }
 
 internal val BlockchainType.l1GasFeeContractAddress: Address?
