@@ -10,8 +10,8 @@ android {
         applicationId "cash.p.terminal"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 75
-        versionName "0.30.0"
+        versionCode 76
+        versionName "0.30.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -283,6 +283,7 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
     implementation project(':components:marketkit')
+    implementation project(':components:tor-android')
     implementation project(':components:torkit')
 
     // Integration with activities
