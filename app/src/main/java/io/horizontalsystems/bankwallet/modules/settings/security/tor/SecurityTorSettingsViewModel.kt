@@ -8,9 +8,10 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.core.IPinComponent
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 
 class SecurityTorSettingsViewModel(
     private val torManager: ITorManager,
@@ -18,7 +19,6 @@ class SecurityTorSettingsViewModel(
 ) : ViewModel() {
 
     private val logger = AppLogger("SecurityTorSettingsViewModel")
-    private var disposables: CompositeDisposable = CompositeDisposable()
 
     var torConnectionStatus by mutableStateOf(TorStatus.Closed)
         private set
@@ -40,10 +40,6 @@ class SecurityTorSettingsViewModel(
             }.launchIn(viewModelScope)
     }
 
-    override fun onCleared() {
-        disposables.clear()
-    }
-
     fun setTorEnabledWithChecks(enabled: Boolean) {
         torCheckEnabled = enabled
         showRestartAlert = true
@@ -55,16 +51,15 @@ class SecurityTorSettingsViewModel(
             restartApp = true
         } else {
             torManager.setTorAsDisabled()
-            torManager.stop()
-                .subscribe({
+            viewModelScope.launch {
+                try {
+                    torManager.stop().await()
                     pinComponent.updateLastExitDateBeforeRestart()
                     restartApp = true
-                }, {
-                    logger.warning("Tor exception", it)
-                })
-                .let {
-                    disposables.add(it)
+                } catch (e: Throwable) {
+                    logger.warning("Tor exception", e)
                 }
+            }
         }
     }
 
