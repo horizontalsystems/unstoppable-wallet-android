@@ -4,28 +4,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.core.ISystemInfoManager
 
 class SecurityPasscodeSettingsViewModel(
-    private val service: SecurityPasscodeSettingsService
+    private val systemInfoManager: ISystemInfoManager,
+    private val pinComponent: IPinComponent
 ) : ViewModel() {
 
-    var pinEnabled by mutableStateOf(service.isPinSet)
+    var pinEnabled by mutableStateOf(pinComponent.isPinSet)
         private set
 
-    var biometricSettingsVisible by mutableStateOf(service.isPinSet && service.isBiometricAuthSupported)
+    var biometricSettingsVisible by mutableStateOf(pinComponent.isPinSet && systemInfoManager.biometricAuthSupported)
         private set
 
-    var biometricEnabled by mutableStateOf(service.isBiometricAuthEnabled)
+    var biometricEnabled by mutableStateOf(pinComponent.isBiometricAuthEnabled)
         private set
-
 
     fun setBiometricAuth(enabled: Boolean) {
-        service.isBiometricAuthEnabled = enabled
+        pinComponent.isBiometricAuthEnabled = enabled
         biometricEnabled = enabled
     }
 
     fun disablePin() {
-        service.disablePin()
+        pinComponent.clear()
+        biometricEnabled = false
         syncPinSet(false)
     }
 
@@ -35,7 +38,7 @@ class SecurityPasscodeSettingsViewModel(
 
     private fun syncPinSet(pinSet: Boolean) {
         pinEnabled = pinSet
-        biometricSettingsVisible = pinSet && service.isBiometricAuthSupported
+        biometricSettingsVisible = pinSet && systemInfoManager.biometricAuthSupported
     }
 
 }
