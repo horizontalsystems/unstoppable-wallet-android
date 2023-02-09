@@ -1,13 +1,20 @@
 package cash.p.terminal.modules.settings.security.tor
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.ITorManager
+import io.horizontalsystems.core.IPinComponent
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class SecurityTorSettingsViewModel(
-    private val service: SecurityTorSettingsService
+    private val torManager: ITorManager,
+    private val pinComponent: IPinComponent,
 ) : ViewModel() {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -15,7 +22,7 @@ class SecurityTorSettingsViewModel(
     var torConnectionStatus by mutableStateOf(TorStatus.Closed)
         private set
 
-    var torCheckEnabled by mutableStateOf(service.torEnabled)
+    var torCheckEnabled by mutableStateOf(torManager.isTorEnabled)
         private set
 
     var showRestartAlert by mutableStateOf(false)
@@ -26,26 +33,14 @@ class SecurityTorSettingsViewModel(
 
 
     init {
-        service.torConnectionStatusObservable
-            .subscribe {
-                onTorConnectionStatusUpdated(it)
-            }.let {
-                disposables.add(it)
-            }
-
-        service.restartAppObservable
-            .subscribe {
-                restartApp = true
-            }.let {
-                disposables.add(it)
-            }
-
-        service.start()
+        torManager.torStatusFlow
+            .onEach { connectionStatus ->
+                torConnectionStatus = connectionStatus
+            }.launchIn(viewModelScope)
     }
 
     override fun onCleared() {
         disposables.clear()
-        service.stop()
     }
 
     fun setTorEnabledWithChecks(enabled: Boolean) {
@@ -53,11 +48,22 @@ class SecurityTorSettingsViewModel(
         showRestartAlert = true
     }
 
-    fun setTorEnabled(enabled: Boolean) {
-        if (enabled) {
-            service.enableTor()
+    fun setTorEnabled() {
+        if (torCheckEnabled) {
+            torManager.setTorAsEnabled()
+            restartApp = true
         } else {
-            service.disableTor()
+            torManager.setTorAsDisabled()
+            torManager.stop()
+                .subscribe({
+                    pinComponent.updateLastExitDateBeforeRestart()
+                    restartApp = true
+                }, {
+                    Log.e("SecurityTorSettingsViewModel", "stopTor", it)
+                })
+                .let {
+                    disposables.add(it)
+                }
         }
     }
 
@@ -69,13 +75,8 @@ class SecurityTorSettingsViewModel(
         restartApp = false
     }
 
-    private fun onTorConnectionStatusUpdated(connectionStatus: TorStatus) {
-        torConnectionStatus = connectionStatus
-        torCheckEnabled = service.torEnabled
-    }
-
     fun resetSwitch() {
-        torCheckEnabled = service.torEnabled
+        torCheckEnabled = torManager.isTorEnabled
     }
 
 }

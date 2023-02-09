@@ -84,7 +84,7 @@ class SecuritySettingsFragment : BaseFragment() {
             fragmentManager = childFragmentManager,
             listener = object : ConfirmationDialog.Listener {
                 override fun onActionButtonClick() {
-                    torViewModel.setTorEnabled(torViewModel.torCheckEnabled)
+                    torViewModel.setTorEnabled()
                 }
 
                 override fun onTransparentButtonClick() {
