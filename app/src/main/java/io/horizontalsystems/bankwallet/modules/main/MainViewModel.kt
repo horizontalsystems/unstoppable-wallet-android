@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
-import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.IPinComponent
@@ -28,7 +27,6 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val localStorage: ILocalStorage,
-    torManager: ITorManager,
     wc2SessionManager: WC2SessionManager,
     private val wc1Manager: WC1Manager,
     private val wcDeepLink: String?
@@ -70,6 +68,8 @@ class MainViewModel(
             )
         }
 
+    val torEnabled = localStorage.torEnabled
+
     val wallets: List<Account>
         get() = accountManager.accounts.filter { !it.isWatchAccount }
 
@@ -94,9 +94,6 @@ class MainViewModel(
     var activeWallet by mutableStateOf(accountManager.activeAccount)
         private set
 
-    var torIsActive by mutableStateOf(false)
-        private set
-
     var wcSupportState by mutableStateOf<WC1Manager.SupportState?>(null)
         private set
 
@@ -109,10 +106,6 @@ class MainViewModel(
 
         termsManager.termsAcceptedSignalFlow.collectWith(viewModelScope) {
             updateSettingsBadge()
-        }
-
-        torManager.torStatusFlow.collectWith(viewModelScope) { connectionStatus ->
-            torIsActive = connectionStatus == TorStatus.Connected
         }
 
         wc2SessionManager.pendingRequestCountFlow.collectWith(viewModelScope) {

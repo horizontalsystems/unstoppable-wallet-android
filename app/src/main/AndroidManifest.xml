@@ -41,9 +41,6 @@
         </activity>
 
         <activity
-            android:name=".modules.tor.TorConnectionActivity"
-            android:launchMode="singleTask" />
-        <activity
             android:name=".modules.launcher.LauncherActivity"
             android:theme="@style/Theme.App.Starting" />
         <activity

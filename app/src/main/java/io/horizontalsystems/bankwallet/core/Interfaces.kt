@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.Bep2TokenInfoService
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -410,9 +409,8 @@ interface ITorManager {
     fun stop(): Single<Boolean>
     fun setTorAsEnabled()
     fun setTorAsDisabled()
-    fun setListener(listener: TorManager.Listener)
     val isTorEnabled: Boolean
-    val torStatusFlow: Flow<TorStatus>
+    val torStatusFlow: StateFlow<TorStatus>
     val torObservable: Subject<TorStatus>
 }
 

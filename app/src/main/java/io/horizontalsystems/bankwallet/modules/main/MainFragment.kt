@@ -5,15 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
+import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -54,7 +52,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBottomNavigation
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBottomNavigationItem
-import io.horizontalsystems.bankwallet.ui.compose.components.micro_leah
 import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
 import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.launch
@@ -156,33 +153,40 @@ private fun MainScreen(
             Scaffold(
                 backgroundColor = ComposeAppTheme.colors.tyler,
                 bottomBar = {
-                    HsBottomNavigation(
-                        backgroundColor = ComposeAppTheme.colors.tyler,
-                        elevation = 10.dp
-                    ) {
-                        viewModel.mainNavItems.forEach { item ->
-                            HsBottomNavigationItem(
-                                icon = {
-                                    BadgedIcon(item.badge) {
-                                        Icon(
-                                            painter = painterResource(item.mainNavItem.iconRes),
-                                            contentDescription = stringResource(item.mainNavItem.titleRes)
-                                        )
-                                    }
-                                },
-                                selected = item.selected,
-                                enabled = item.enabled,
-                                selectedContentColor = ComposeAppTheme.colors.jacob,
-                                unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.grey50,
-                                onClick = { viewModel.onSelect(item.mainNavItem) },
-                                onLongClick = {
-                                    if (item.mainNavItem == MainNavigation.Balance) {
-                                        coroutineScope.launch {
-                                            modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                    Column {
+                        if (viewModel.torEnabled) {
+                            TorStatusView()
+                        }
+                        HsBottomNavigation(
+                            backgroundColor = ComposeAppTheme.colors.tyler,
+                            elevation = 10.dp
+                        ) {
+                            viewModel.mainNavItems.forEach { item ->
+                                HsBottomNavigationItem(
+                                    icon = {
+                                        BadgedIcon(item.badge) {
+                                            Icon(
+                                                painter = painterResource(item.mainNavItem.iconRes),
+                                                contentDescription = stringResource(item.mainNavItem.titleRes)
+                                            )
+                                        }
+                                    },
+                                    selected = item.selected,
+                                    enabled = item.enabled,
+                                    selectedContentColor = ComposeAppTheme.colors.jacob,
+                                    unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.grey50,
+                                    onClick = { viewModel.onSelect(item.mainNavItem) },
+                                    onLongClick = {
+                                        if (item.mainNavItem == MainNavigation.Balance) {
+                                            coroutineScope.launch {
+                                                modalBottomSheetState.animateTo(
+                                                    ModalBottomSheetValue.Expanded
+                                                )
+                                            }
                                         }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }
@@ -202,12 +206,12 @@ private fun MainScreen(
                         when (viewModel.mainNavItems[page].mainNavItem) {
                             MainNavigation.Market -> MarketScreen(fragmentNavController)
                             MainNavigation.Balance -> BalanceScreen(fragmentNavController)
-                            MainNavigation.Transactions -> TransactionsScreen(fragmentNavController, transactionsViewModel)
+                            MainNavigation.Transactions -> TransactionsScreen(
+                                fragmentNavController,
+                                transactionsViewModel
+                            )
                             MainNavigation.Settings -> SettingsScreen(fragmentNavController)
                         }
-                    }
-                    if (viewModel.torIsActive) {
-                        TorIsActiveStatus()
                     }
                 }
             }
@@ -323,25 +327,5 @@ private fun BadgedIcon(
                 icon()
             }
         }
-    }
-}
-
-@Composable
-private fun TorIsActiveStatus() {
-    val startColor = ComposeAppTheme.colors.remus
-    val endColor = ComposeAppTheme.colors.lawrence
-    val color = remember { Animatable(startColor) }
-    LaunchedEffect(Unit) {
-        color.animateTo(endColor, animationSpec = tween(1000))
-    }
-    Box(
-        modifier = Modifier.fillMaxWidth()
-            .height(20.dp)
-            .background(color.value),
-        contentAlignment = Alignment.Center
-    ) {
-        micro_leah(
-            text = stringResource(R.string.Tor_TorIsActive),
-        )
     }
 }

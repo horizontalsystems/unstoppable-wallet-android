@@ -1139,9 +1139,9 @@
     <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Starting Tor...</string>
     <string name="Tor_Status_Error">Error starting Tor !</string>
-    <string name="TorPage_Connecting">Connecting…</string>
+    <string name="TorPage_Connecting">Connecting Tor…</string>
     <string name="TorPage_Connected">Connected</string>
-    <string name="TorPage_Failed">Failed</string>
+    <string name="TorPage_Failed">Failed to Connect Tor</string>
     <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>

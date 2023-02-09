@@ -5,49 +5,74 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ITorManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
+import io.horizontalsystems.bankwallet.modules.tor.TorConnectionModule.TorViewState
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class TorConnectionViewModel(
-    private val torManager: ITorManager
+    private val torManager: ITorManager,
+    private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
 
-    var closeView by mutableStateOf(false)
-    var restartApp by mutableStateOf(false)
-    var torStatus by mutableStateOf<TorStatus?>(null)
+    var torViewState by mutableStateOf(getState())
+
+    private var stateText = R.string.TorPage_Connecting
+    private var showRetryButton = false
+    private var showNoNetworkConnectionError = false
+    private var torIsActive = false
 
     init {
-        viewModelScope.launch {
-            torManager.torStatusFlow.collect { connectionStatus ->
-                if (connectionStatus == TorStatus.Connected) {
-                    closeView = true
-                } else {
-                    torStatus = connectionStatus
-                }
-            }
-        }
+        torManager.torStatusFlow
+            .onEach { connectionStatus ->
+                updateTorViewState(connectionStatus)
+            }.launchIn(viewModelScope)
     }
 
     fun restartTor() {
+        if (!connectivityManager.isConnected){
+            showNoNetworkConnectionError = true
+            emitState()
+            return
+        }
         torManager.start()
     }
 
-    fun stopTor() {
-        torManager.setTorAsDisabled()
-        viewModelScope.launch {
-            torManager.stop().toObservable().asFlow().collect {
-                restartApp = true
-            }
+    fun networkErrorShown(){
+        showNoNetworkConnectionError = false
+        emitState()
+    }
+
+    private fun updateTorViewState(torStatus: TorStatus) {
+        torIsActive = torStatus == TorStatus.Connected
+        showRetryButton = torStatus == TorStatus.Failed
+
+        if (torStatus != TorStatus.Connected && !connectivityManager.isConnected) {
+            showNoNetworkConnectionError = true
         }
+
+        stateText = when(torStatus) {
+            TorStatus.Connected -> R.string.Tor_TorIsActive
+            TorStatus.Failed -> R.string.TorPage_Failed
+            else -> R.string.TorPage_Connecting
+        }
+
+        emitState()
     }
 
-    fun viewClosed() {
-        closeView = false
+    private fun getState(): TorViewState {
+        return TorViewState(
+            stateText = stateText,
+            showRetryButton = showRetryButton,
+            torIsActive = torIsActive,
+            showNetworkConnectionError = showNoNetworkConnectionError
+        )
     }
 
-    fun restartAppCalled() {
-        restartApp = false
+    private fun emitState(){
+        torViewState = getState()
     }
 }

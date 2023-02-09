@@ -24,7 +24,6 @@ object MainModule {
                 App.accountManager,
                 App.releaseNotesManager,
                 App.localStorage,
-                App.torKitManager,
                 App.wc2SessionManager,
                 App.wc1Manager,
                 wcDeepLink
