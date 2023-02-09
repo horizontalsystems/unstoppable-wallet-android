@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.settings.security.tor
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.ITorManager
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.disposables.CompositeDisposable
@@ -17,6 +17,7 @@ class SecurityTorSettingsViewModel(
     private val pinComponent: IPinComponent,
 ) : ViewModel() {
 
+    private val logger = AppLogger("SecurityTorSettingsViewModel")
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     var torConnectionStatus by mutableStateOf(TorStatus.Closed)
@@ -59,7 +60,7 @@ class SecurityTorSettingsViewModel(
                     pinComponent.updateLastExitDateBeforeRestart()
                     restartApp = true
                 }, {
-                    Log.e("SecurityTorSettingsViewModel", "stopTor", it)
+                    logger.warning("Tor exception", it)
                 })
                 .let {
                     disposables.add(it)

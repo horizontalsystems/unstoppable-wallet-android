@@ -1,7 +1,6 @@
 package cash.p.terminal.core.managers
 
 import android.content.Context
-import android.util.Log
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ITorManager
@@ -43,7 +42,7 @@ class TorManager(
                 .subscribe({ torInfo ->
                     _torStatusFlow.update { getStatus(torInfo) }
                 }, {
-                    Log.e("TorManager", "Tor exception", it)
+                    logger.warning("Tor exception", it)
                 })
         )
         executorService.execute {
