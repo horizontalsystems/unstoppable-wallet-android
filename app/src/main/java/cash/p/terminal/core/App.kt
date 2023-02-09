@@ -155,6 +155,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
 
+        LocalStorageManager(preferences).apply {
+            localStorage = this
+            pinStorage = this
+            thirdKeyboardStorage = this
+            marketStorage = this
+        }
+
+        torKitManager = TorManager(instance, localStorage)
+
         marketKit = MarketKitWrapper(
             context = this,
             hsApiBaseUrl = appConfig.marketApiBaseUrl,
@@ -188,13 +197,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
-        LocalStorageManager(preferences).apply {
-            localStorage = this
-            pinStorage = this
-            thirdKeyboardStorage = this
-            marketStorage = this
-        }
-
         evmTestnetManager = EvmTestnetManager(localStorage)
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage, evmTestnetManager)
@@ -207,8 +209,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         solanaKitManager = SolanaKitManager(solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-
-        torKitManager = TorManager(instance, localStorage)
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
