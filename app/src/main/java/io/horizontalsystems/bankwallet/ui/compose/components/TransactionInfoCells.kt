@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
@@ -121,10 +122,20 @@ fun TransactionAmountCell(
     fiatAmount: ColoredValue?,
     coinAmount: ColoredValue,
     coinIconUrl: String?,
-    coinIconPlaceholder: Int?
+    coinIconPlaceholder: Int?,
+    coinUid: String?,
+    navController: NavController
 ) {
+    val clickable = coinUid?.let {
+        Modifier.clickable {
+            navController.slideFromRight(R.id.coinFragment, CoinFragment.prepareParams(it))
+        }
+    } ?: Modifier
+
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .then(clickable)
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
