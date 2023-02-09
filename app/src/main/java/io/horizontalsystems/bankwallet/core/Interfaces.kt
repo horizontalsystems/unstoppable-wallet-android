@@ -32,7 +32,6 @@ import io.horizontalsystems.solanakit.models.FullTransaction
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.subjects.Subject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
@@ -411,7 +410,6 @@ interface ITorManager {
     fun setTorAsDisabled()
     val isTorEnabled: Boolean
     val torStatusFlow: StateFlow<TorStatus>
-    val torObservable: Subject<TorStatus>
 }
 
 interface IRateAppManager {
