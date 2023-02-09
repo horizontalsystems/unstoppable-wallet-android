@@ -10,11 +10,7 @@ object SecurityTorSettingsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = SecurityTorSettingsService(
-                App.torKitManager,
-                App.pinComponent,
-            )
-            return SecurityTorSettingsViewModel(service) as T
+            return SecurityTorSettingsViewModel(App.torKitManager, App.pinComponent) as T
         }
     }
 
