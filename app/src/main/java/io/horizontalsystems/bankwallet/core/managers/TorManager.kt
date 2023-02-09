@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITorManager
@@ -43,7 +42,7 @@ class TorManager(
                 .subscribe({ torInfo ->
                     _torStatusFlow.update { getStatus(torInfo) }
                 }, {
-                    Log.e("TorManager", "Tor exception", it)
+                    logger.warning("Tor exception", it)
                 })
         )
         executorService.execute {
