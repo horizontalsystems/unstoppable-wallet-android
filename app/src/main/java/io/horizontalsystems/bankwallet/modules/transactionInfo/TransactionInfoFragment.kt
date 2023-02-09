@@ -110,7 +110,14 @@ fun TransactionInfoSection(
                     }
                     is TransactionInfoViewItem.Amount -> {
                         add {
-                            TransactionAmountCell(fiatAmount = viewItem.fiatValue, coinAmount = viewItem.coinValue, coinIconUrl = viewItem.coinIconUrl, coinIconPlaceholder = viewItem.coinIconPlaceholder)
+                            TransactionAmountCell(
+                                fiatAmount = viewItem.fiatValue,
+                                coinAmount = viewItem.coinValue,
+                                coinIconUrl = viewItem.coinIconUrl,
+                                coinIconPlaceholder = viewItem.coinIconPlaceholder,
+                                coinUid = viewItem.coinUid,
+                                navController = navController
+                            )
                         }
                     }
                     is TransactionInfoViewItem.NftAmount -> {
