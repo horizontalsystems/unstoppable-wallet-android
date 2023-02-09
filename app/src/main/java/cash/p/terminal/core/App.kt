@@ -40,7 +40,6 @@ import cash.p.terminal.modules.pin.PinComponent
 import cash.p.terminal.modules.profeatures.ProFeaturesAuthorizationManager
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesStorage
 import cash.p.terminal.modules.theme.ThemeType
-import cash.p.terminal.modules.tor.TorConnectionActivity
 import cash.p.terminal.modules.walletconnect.storage.WC1SessionStorage
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionStorage
 import cash.p.terminal.modules.walletconnect.version1.WC1Manager
@@ -277,7 +276,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                         KeyStoreActivity::class.java.name,
                         LockScreenActivity::class.java.name,
                         LauncherActivity::class.java.name,
-                        TorConnectionActivity::class.java.name
                 )
         )
 
@@ -311,10 +309,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 
         setAppTheme()
-
-        registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
-
-
 
         val nftStorage = NftStorage(appDatabase.nftDao(), marketKit)
         nftMetadataManager = NftMetadataManager(marketKit, appConfigProvider, nftStorage)

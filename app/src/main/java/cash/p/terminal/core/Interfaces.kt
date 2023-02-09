@@ -6,7 +6,6 @@ import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.Bep2TokenInfoService
 import cash.p.terminal.core.managers.EvmKitWrapper
-import cash.p.terminal.core.managers.TorManager
 import cash.p.terminal.entities.*
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.amount.AmountInputType
@@ -410,9 +409,8 @@ interface ITorManager {
     fun stop(): Single<Boolean>
     fun setTorAsEnabled()
     fun setTorAsDisabled()
-    fun setListener(listener: TorManager.Listener)
     val isTorEnabled: Boolean
-    val torStatusFlow: Flow<TorStatus>
+    val torStatusFlow: StateFlow<TorStatus>
     val torObservable: Subject<TorStatus>
 }
 

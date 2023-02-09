@@ -11,7 +11,6 @@ import cash.p.terminal.modules.keystore.KeyStoreActivity
 import cash.p.terminal.modules.lockscreen.LockScreenActivity
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.pin.PinModule
-import cash.p.terminal.modules.tor.TorConnectionActivity
 
 class LauncherActivity : AppCompatActivity() {
     private val viewModel by viewModels<LaunchViewModel> { LaunchModule.Factory() }
@@ -54,11 +53,6 @@ class LauncherActivity : AppCompatActivity() {
     private fun openMain() {
         MainModule.start(this, intent.data)
         intent.data = null
-
-        if (viewModel.torEnabled) {
-            val intent = Intent(this, TorConnectionActivity::class.java)
-            startActivity(intent)
-        }
         finish()
     }
 

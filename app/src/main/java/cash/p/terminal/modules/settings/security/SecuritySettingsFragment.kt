@@ -1,25 +1,21 @@
 package cash.p.terminal.modules.settings.security
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.settings.security.passcode.SecurityPasscodeSettingsModule
@@ -28,13 +24,11 @@ import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsModule
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewModel
 import cash.p.terminal.modules.settings.security.ui.PasscodeBlock
 import cash.p.terminal.modules.settings.security.ui.TorBlock
-import cash.p.terminal.modules.tor.TorConnectionActivity
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import kotlin.system.exitProcess
@@ -107,10 +101,6 @@ class SecuritySettingsFragment : BaseFragment() {
     private fun restartApp() {
         activity?.let {
             MainModule.startAsNewTask(it)
-            if (App.localStorage.torEnabled) {
-                val intent = Intent(it, TorConnectionActivity::class.java)
-                startActivity(intent)
-            }
             exitProcess(0)
         }
     }
