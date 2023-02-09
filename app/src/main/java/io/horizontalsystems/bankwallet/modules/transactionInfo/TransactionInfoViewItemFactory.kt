@@ -223,6 +223,9 @@ class TransactionInfoViewItemFactory(
         }
 
         itemSections.add(getStatusSectionItems(transaction, status, rates))
+        if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
+            itemSections.add(listOf(SpeedUpCancel(transactionHash = transaction.transactionHash)))
+        }
         itemSections.add(getExplorerSectionItems(transactionItem.explorerData))
 
         return itemSections
@@ -496,10 +499,6 @@ class TransactionInfoViewItemFactory(
             Value(getString(R.string.TransactionInfo_Date), dateHelper.getFullDate(Date(transaction.timestamp * 1000))),
             Status(status)
         )
-
-        if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
-            items.add(SpeedUpCancel(transactionHash = transaction.transactionHash))
-        }
 
         when (transaction) {
             is EvmTransactionRecord -> {
