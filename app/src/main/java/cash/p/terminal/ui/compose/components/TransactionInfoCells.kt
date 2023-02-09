@@ -197,24 +197,20 @@ fun TransactionInfoStatusCell(
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
-        if (status !is TransactionStatus.Completed) {
-            HsIconButton(
-                modifier = Modifier.size(20.dp),
-                onClick = { navController.slideFromBottom(R.id.statusInfoDialog) }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_info_24),
-                    tint = ComposeAppTheme.colors.jacob,
-                    contentDescription = null
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-        }
         subhead2_grey(
             text = stringResource(R.string.TransactionInfo_Status),
-            modifier = Modifier.padding(end = 16.dp)
         )
-        Spacer(Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(8.dp))
+        HsIconButton(
+            modifier = Modifier.size(20.dp),
+            onClick = { navController.slideFromBottom(R.id.statusInfoDialog) }
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_info_20),
+                contentDescription = null
+            )
+        }
+        Spacer(Modifier.weight(1f).defaultMinSize(minWidth = 8.dp))
         subhead1_leah(
             text = stringResource(statusTitle(status)),
             maxLines = 1,
