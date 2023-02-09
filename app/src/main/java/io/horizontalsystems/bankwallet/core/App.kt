@@ -40,7 +40,6 @@ import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
-import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionStorage
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionStorage
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
@@ -277,7 +276,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                         KeyStoreActivity::class.java.name,
                         LockScreenActivity::class.java.name,
                         LauncherActivity::class.java.name,
-                        TorConnectionActivity::class.java.name
                 )
         )
 
@@ -311,10 +309,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 
         setAppTheme()
-
-        registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
-
-
 
         val nftStorage = NftStorage(appDatabase.nftDao(), marketKit)
         nftMetadataManager = NftMetadataManager(marketKit, appConfigProvider, nftStorage)

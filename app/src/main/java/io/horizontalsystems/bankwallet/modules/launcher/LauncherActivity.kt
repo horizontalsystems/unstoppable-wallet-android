@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
-import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 
 class LauncherActivity : AppCompatActivity() {
     private val viewModel by viewModels<LaunchViewModel> { LaunchModule.Factory() }
@@ -54,11 +53,6 @@ class LauncherActivity : AppCompatActivity() {
     private fun openMain() {
         MainModule.start(this, intent.data)
         intent.data = null
-
-        if (viewModel.torEnabled) {
-            val intent = Intent(this, TorConnectionActivity::class.java)
-            startActivity(intent)
-        }
         finish()
     }
 
