@@ -9,8 +9,7 @@ object SecurityPasscodeSettingsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = SecurityPasscodeSettingsService(App.systemInfoManager, App.pinComponent)
-            return SecurityPasscodeSettingsViewModel(service) as T
+            return SecurityPasscodeSettingsViewModel(App.systemInfoManager, App.pinComponent) as T
         }
     }
 
