@@ -300,10 +300,17 @@ val FullCoin.iconPlaceholder: Int
     } else {
         // TODO Add static images for PirateCash and Cosanta
         var pirate: String = "piratecash"
-        if (coin.uid == pirate){
-            R.drawable.ic_piratecash
-        } else {
-            R.drawable.coin_placeholder
+        var cosa: String = "cosanta"
+        when (coin.uid) {
+            pirate -> {
+                R.drawable.ic_piratecash
+            }
+            cosa -> {
+                R.drawable.ic_cosanta
+            }
+            else -> {
+                R.drawable.coin_placeholder
+            }
         }
     }
 

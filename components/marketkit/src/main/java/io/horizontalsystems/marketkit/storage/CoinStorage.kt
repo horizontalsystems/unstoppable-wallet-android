@@ -127,6 +127,20 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
                 name = "Cosanta",
                 code = "COSA"
             ))
+            coinDao.insert(
+                BlockchainEntity(
+                    uid = "cosanta",
+                    name = "Cosanta",
+                    explorerUrl = "https://explorer.cosanta.net"
+            )
+            )
+            coinDao.insert(TokenEntity(
+                coinUid = "cosanta",
+                blockchainUid = "cosanta",
+                type = "native",
+                decimals = null,
+                reference = null
+            ))
             coinDao.insert(TokenEntity(
                 coinUid = "cosanta",
                 blockchainUid = "binance-smart-chain",
