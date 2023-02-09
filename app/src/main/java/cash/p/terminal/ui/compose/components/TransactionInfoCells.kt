@@ -23,6 +23,7 @@ import cash.p.terminal.core.shorten
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.nft.NftUid
+import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.info.TransactionDoubleSpendInfoFragment
 import cash.p.terminal.modules.info.TransactionLockTimeInfoFragment
 import cash.p.terminal.modules.nft.asset.NftAssetModule
@@ -121,10 +122,20 @@ fun TransactionAmountCell(
     fiatAmount: ColoredValue?,
     coinAmount: ColoredValue,
     coinIconUrl: String?,
-    coinIconPlaceholder: Int?
+    coinIconPlaceholder: Int?,
+    coinUid: String?,
+    navController: NavController
 ) {
+    val clickable = coinUid?.let {
+        Modifier.clickable {
+            navController.slideFromRight(R.id.coinFragment, CoinFragment.prepareParams(it))
+        }
+    } ?: Modifier
+
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .then(clickable)
     ) {
         CoinImage(
             iconUrl = coinIconUrl,

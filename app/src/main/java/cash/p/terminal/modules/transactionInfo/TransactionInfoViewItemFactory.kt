@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.R
 import cash.p.terminal.core.IAppNumberFormatter
+import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.CurrencyValue
@@ -448,7 +449,7 @@ class TransactionInfoViewItemFactory(
 
         return listOf(
             Transaction(getString(R.string.Transactions_Approve), value.fullName, R.drawable.ic_checkmark_24),
-            Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coinIconUrl, value.coinIconPlaceholder),
+            Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coinIconUrl, value.coinIconPlaceholder, value.coin?.uid),
             Address(getString(R.string.TransactionInfo_Spender), spenderAddress)
         )
     }
@@ -601,7 +602,12 @@ class TransactionInfoViewItemFactory(
         } ?: "---"
 
         val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
-        return Amount(coinValueColored, fiatValueColored, value.coinIconUrl, value.coinIconPlaceholder)
+        val coinUid = if (value is TransactionValue.CoinValue && !value.token.isCustom) {
+            value.token.coin.uid
+        } else {
+            null
+        }
+        return Amount(coinValueColored, fiatValueColored, value.coinIconUrl, value.coinIconPlaceholder, coinUid)
     }
 
     private fun getNftAmount(
