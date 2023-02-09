@@ -142,7 +142,10 @@ fun TransactionInfoSection(
                     }
                     is TransactionInfoViewItem.SpeedUpCancel -> {
                         add {
-                            TransactionInfoSpeedUpCancelCell(transactionHash = viewItem.transactionHash, navController = navController)
+                            TransactionInfoSpeedUpCell(transactionHash = viewItem.transactionHash, navController = navController)
+                        }
+                        add {
+                            TransactionInfoCancelCell(transactionHash = viewItem.transactionHash, navController = navController)
                         }
                     }
                     is TransactionInfoViewItem.TransactionHash -> {

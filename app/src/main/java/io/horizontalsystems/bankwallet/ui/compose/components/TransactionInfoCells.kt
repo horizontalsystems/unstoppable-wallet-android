@@ -248,42 +248,52 @@ fun TransactionInfoStatusCell(
 }
 
 @Composable
-fun TransactionInfoSpeedUpCancelCell(
+fun TransactionInfoSpeedUpCell(
     transactionHash: String,
     navController: NavController
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = {
+            openTransactionOptionsModule(
+                TransactionInfoOptionsModule.Type.SpeedUp,
+                transactionHash,
+                navController
+            )
+        }
     ) {
-        subhead2_grey(
-            text = stringResource(R.string.TransactionInfo_Options),
-            modifier = Modifier.padding(end = 16.dp)
+        Icon(
+            painter = painterResource(R.drawable.ic_arrow_medium2_up_24),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.jacob
         )
-        Spacer(Modifier.weight(1f))
-        ButtonSecondaryDefault(
-            modifier = Modifier
-                .height(28.dp)
-                .padding(end = 8.dp),
-            title = stringResource(R.string.TransactionInfo_SpeedUp),
-            onClick = {
-                openTransactionOptionsModule(
-                    TransactionInfoOptionsModule.Type.SpeedUp,
-                    transactionHash,
-                    navController
-                )
-            }
+        Spacer(Modifier.width(16.dp))
+        body_jacob(text = stringResource(R.string.TransactionInfo_SpeedUp))
+    }
+}
+
+@Composable
+fun TransactionInfoCancelCell(
+    transactionHash: String,
+    navController: NavController
+) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = {
+            openTransactionOptionsModule(
+                TransactionInfoOptionsModule.Type.Cancel,
+                transactionHash,
+                navController
+            )
+        }
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_outgoingraw_24),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.redL
         )
-        ButtonSecondaryDefault(
-            modifier = Modifier.height(28.dp),
-            title = stringResource(R.string.TransactionInfo_Cancel),
-            onClick = {
-                openTransactionOptionsModule(
-                    TransactionInfoOptionsModule.Type.Cancel,
-                    transactionHash,
-                    navController
-                )
-            }
-        )
+        Spacer(Modifier.width(16.dp))
+        body_lucian(text = stringResource(R.string.TransactionInfo_Cancel))
     }
 }
 
