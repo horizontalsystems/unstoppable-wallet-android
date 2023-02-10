@@ -24,11 +24,13 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.modules.evmprivatekey.ActionButton
 import cash.p.terminal.modules.evmprivatekey.HidableContent
 import cash.p.terminal.modules.recoveryphrase.ConfirmCopyBottomSheet
 import cash.p.terminal.modules.showextendedkey.account.ShowExtendedKeyModule.DisplayKeyType
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -113,7 +115,16 @@ private fun AccountExtendedKeyScreen(
                     title = viewModel.title,
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
-                    }
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Info_Title),
+                            icon = R.drawable.ic_info_24,
+                            onClick = {
+                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                            }
+                        )
+                    )
                 )
 
                 Column(

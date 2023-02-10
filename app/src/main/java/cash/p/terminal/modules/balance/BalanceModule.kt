@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BalanceData
-import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 
@@ -42,8 +41,6 @@ object BalanceModule {
                 App.balanceViewTypeManager,
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
-                App.languageManager,
-                FaqManager
             ) as T
         }
     }

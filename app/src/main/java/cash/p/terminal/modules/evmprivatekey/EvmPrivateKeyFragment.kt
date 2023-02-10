@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.recoveryphrase.ConfirmCopyBottomSheet
@@ -99,6 +100,15 @@ private fun EvmPrivateKeyScreen(
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
                     },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Info_Title),
+                            icon = R.drawable.ic_info_24,
+                            onClick = {
+                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                            }
+                        )
+                    )
                 )
 
                 Column(

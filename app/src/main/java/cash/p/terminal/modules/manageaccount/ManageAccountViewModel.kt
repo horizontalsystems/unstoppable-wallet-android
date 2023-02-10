@@ -6,13 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.Clearable
-import cash.p.terminal.core.managers.FaqManager
-import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.balance.HeaderNote
-import cash.p.terminal.modules.balance.faqUrl
 import cash.p.terminal.modules.balance.headerNote
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -20,13 +17,10 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey.DerivedType
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.disposables.CompositeDisposable
-import java.net.URL
 
 class ManageAccountViewModel(
     private val service: ManageAccountService,
     private val clearables: List<Clearable>,
-    private val faqManager: FaqManager,
-    private val languageManager: LanguageManager
 ) : ViewModel() {
     val disposable = CompositeDisposable()
 
@@ -110,12 +104,6 @@ class ManageAccountViewModel(
     fun onSave() {
         service.saveAccount()
         finishLiveEvent.postValue(Unit)
-    }
-
-    fun getFaqUrl(headerNote: HeaderNote): String {
-        val baseUrl = URL(faqManager.faqListUrl)
-        val faqUrl = headerNote.faqUrl(languageManager.currentLocale.language)
-        return URL(baseUrl, faqUrl).toString()
     }
 
     override fun onCleared() {

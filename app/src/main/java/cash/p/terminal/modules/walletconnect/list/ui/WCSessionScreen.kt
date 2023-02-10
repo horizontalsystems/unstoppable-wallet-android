@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -97,10 +98,10 @@ fun WCSessionsScreen(
                 },
                 menuItems = listOf(
                     MenuItem(
-                        title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
-                        icon = R.drawable.ic_qr_scan_24px,
+                        title = TranslatableString.ResString(R.string.Info_Title),
+                        icon = R.drawable.ic_info_24,
                         onClick = {
-                            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+                            FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
                         }
                     )
                 )
