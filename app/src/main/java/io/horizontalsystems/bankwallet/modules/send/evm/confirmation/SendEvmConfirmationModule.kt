@@ -62,7 +62,6 @@ object SendEvmConfirmationModule {
                 feeToken,
                 App.marketKit,
                 App.currencyManager,
-                App.evmTestnetManager,
                 App.coinManager
             )
         }

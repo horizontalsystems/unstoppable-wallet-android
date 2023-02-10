@@ -38,7 +38,6 @@ object ManageWalletsModule {
                 App.accountManager,
                 enableCoinService,
                 App.restoreSettingsManager,
-                App.evmTestnetManager
             )
         }
 

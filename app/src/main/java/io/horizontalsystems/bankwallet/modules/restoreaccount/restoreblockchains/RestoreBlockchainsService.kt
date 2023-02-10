@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchain
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
-import io.horizontalsystems.bankwallet.core.managers.EvmTestnetManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
@@ -25,7 +24,6 @@ class RestoreBlockchainsService(
     private val marketKit: MarketKitWrapper,
     private val enableCoinService: EnableCoinService,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val evmTestnetManager: EvmTestnetManager
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
@@ -95,11 +93,7 @@ class RestoreBlockchainsService(
             }
         }
 
-        val testnetTokens = evmTestnetManager.nativeTokens()
-            .filter { it.blockchainType.supports(accountType) }
-            .map { InternalItem(it.blockchain, it) }
-
-        internalItems = allTokens + testnetTokens
+        internalItems = allTokens
     }
 
     private fun handleEnableCoin(
