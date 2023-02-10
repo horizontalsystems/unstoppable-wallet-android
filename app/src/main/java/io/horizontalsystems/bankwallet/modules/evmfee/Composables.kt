@@ -47,7 +47,7 @@ fun Eip1559FeeSettings(
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val currentBaseFee = viewModel.currentBaseFee
-    val baseFeeViewItem = viewModel.baseFeeViewItem
+    val maxFeeViewItem = viewModel.maxFeeViewItem
     val priorityFeeViewItem = viewModel.priorityFeeViewItem
     val cautions = viewModel.cautions
 
@@ -57,7 +57,7 @@ fun Eip1559FeeSettings(
             listOf(
                 {
                     MaxFeeCell(
-                        title = stringResource(R.string.FeeSettings_MaxFee),
+                        title = stringResource(R.string.FeeSettings_Fee),
                         value = summaryViewItem?.fee ?: "",
                         viewState = summaryViewItem?.viewState,
                         navController = navController
@@ -73,29 +73,35 @@ fun Eip1559FeeSettings(
                     )
                 },
                 {
-                    FeeCell(title = stringResource(R.string.FeeSettings_CurrentBaseFee), value = currentBaseFee)
+                    FeeInfoCell(
+                        title = stringResource(R.string.FeeSettings_BaseFee),
+                        value = currentBaseFee,
+                        infoTitle = Translator.getString(R.string.FeeSettings_BaseFee),
+                        infoText = Translator.getString(R.string.FeeSettings_BaseFee_Info),
+                        navController = navController
+                    )
                 }
             )
         )
 
-        baseFeeViewItem?.let { baseFeeSlider ->
-            priorityFeeViewItem?.let { priorityFeeSlider ->
+        maxFeeViewItem?.let { maxFee ->
+            priorityFeeViewItem?.let { priorityFee ->
 
                 Spacer(modifier = Modifier.height(24.dp))
                 EvmSettingsInput(
-                    title = stringResource(R.string.FeeSettings_MaxBaseFee),
-                    info = stringResource(R.string.FeeSettings_MaxBaseFee_Info),
-                    value = BigDecimal(baseFeeSlider.weiValue).divide(BigDecimal(baseFeeSlider.scale.scaleValue)),
-                    decimals = baseFeeSlider.scale.decimals,
+                    title = stringResource(R.string.FeeSettings_MaxFee),
+                    info = stringResource(R.string.FeeSettings_MaxFee_Info),
+                    value = BigDecimal(maxFee.weiValue).divide(BigDecimal(maxFee.scale.scaleValue)),
+                    decimals = maxFee.scale.decimals,
                     navController = navController,
                     onValueChange = {
-                        viewModel.onSelectGasPrice(baseFeeSlider.wei(it), priorityFeeSlider.weiValue)
+                        viewModel.onSelectGasPrice(maxFee.wei(it), priorityFee.weiValue)
                     },
                     onClickIncrement = {
-                        viewModel.onIncrementBaseFee(baseFeeSlider.weiValue, priorityFeeSlider.weiValue)
+                        viewModel.onIncrementBaseFee(maxFee.weiValue, priorityFee.weiValue)
                     },
                     onClickDecrement = {
-                        viewModel.onDecrementBaseFee(baseFeeSlider.weiValue, priorityFeeSlider.weiValue)
+                        viewModel.onDecrementBaseFee(maxFee.weiValue, priorityFee.weiValue)
                     }
                 )
 
@@ -103,17 +109,17 @@ fun Eip1559FeeSettings(
                 EvmSettingsInput(
                     title = stringResource(R.string.FeeSettings_MaxMinerTips),
                     info = stringResource(R.string.FeeSettings_MaxMinerTips_Info),
-                    value = BigDecimal(priorityFeeSlider.weiValue).divide(BigDecimal(priorityFeeSlider.scale.scaleValue)),
-                    decimals = priorityFeeSlider.scale.decimals,
+                    value = BigDecimal(priorityFee.weiValue).divide(BigDecimal(priorityFee.scale.scaleValue)),
+                    decimals = priorityFee.scale.decimals,
                     navController = navController,
                     onValueChange = {
-                        viewModel.onSelectGasPrice(baseFeeSlider.weiValue, priorityFeeSlider.wei(it))
+                        viewModel.onSelectGasPrice(maxFee.weiValue, priorityFee.wei(it))
                     },
                     onClickIncrement = {
-                        viewModel.onIncrementPriorityFee(baseFeeSlider.weiValue, priorityFeeSlider.weiValue)
+                        viewModel.onIncrementPriorityFee(maxFee.weiValue, priorityFee.weiValue)
                     },
                     onClickDecrement = {
-                        viewModel.onDecrementPriorityFee(baseFeeSlider.weiValue, priorityFeeSlider.weiValue)
+                        viewModel.onDecrementPriorityFee(maxFee.weiValue, priorityFee.weiValue)
                     }
                 )
             }
@@ -343,25 +349,6 @@ fun Cautions(cautions: List<CautionViewItem>) {
 }
 
 @Composable
-fun FeeCell(title: String, value: String?) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        subhead2_grey(text = title)
-        subhead1_leah(
-            modifier = Modifier.weight(1f),
-            text = value ?: "",
-            textAlign = TextAlign.End,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
-@Composable
 fun FeeInfoCell(
     title: String,
     value: String?,
@@ -498,8 +485,8 @@ fun MaxFeeCell(
                 navController.slideFromBottom(
                     R.id.feeSettingsInfoDialog,
                     FeeSettingsInfoDialog.prepareParams(
-                        Translator.getString(R.string.FeeSettings_MaxFee),
-                        Translator.getString(R.string.FeeSettings_MaxFee_Info)
+                        Translator.getString(R.string.FeeSettings_Fee),
+                        Translator.getString(R.string.FeeSettings_Fee_Info)
                     )
                 )
             }

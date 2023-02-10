@@ -30,7 +30,7 @@ fun HeaderText(
     ) {
         subhead1_grey(
             modifier = Modifier.padding(horizontal = 32.dp),
-            text = text.uppercase(),
+            text = text,
             maxLines = 1
         )
         onInfoClick?.let { onClick ->

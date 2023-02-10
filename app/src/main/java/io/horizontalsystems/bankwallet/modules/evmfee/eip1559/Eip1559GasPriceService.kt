@@ -84,10 +84,10 @@ class Eip1559GasPriceService(
         } ?: syncRecommended()
     }
 
-    fun setGasPrice(baseFee: Long, maxPriorityFee: Long) {
+    fun setGasPrice(maxFee: Long, priorityFee: Long) {
         recommendedGasPriceSelected.update { false }
 
-        val newGasPrice = GasPrice.Eip1559(baseFee + maxPriorityFee, maxPriorityFee)
+        val newGasPrice = GasPrice.Eip1559(maxFee, priorityFee)
         state = validatedGasPriceInfoState(newGasPrice)
     }
 
