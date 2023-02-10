@@ -139,7 +139,7 @@
         android:name="cash.p.terminal.modules.coin.CoinFragment" >
         <deepLink
             app:action="android.intent.action.VIEW"
-            app:uri="unstoppable://coin-page?uid={coinUid}" />
+            app:uri="pcash://coin-page?uid={coinUid}" />
     </fragment>
     <fragment
         android:id="@+id/coinMajorHoldersFragment"
@@ -204,7 +204,7 @@
         android:name="cash.p.terminal.modules.market.platform.MarketPlatformFragment">
         <deepLink
             app:action="android.intent.action.VIEW"
-            app:uri="unstoppable://top-platforms?uid={platformUid}&amp;title={platformName}" />
+            app:uri="pcash://top-platforms?uid={platformUid}&amp;title={platformName}" />
     </fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchFragment"
@@ -283,7 +283,7 @@
         android:name="cash.p.terminal.modules.nft.collection.NftCollectionFragment">
         <deepLink
             app:action="android.intent.action.VIEW"
-            app:uri="unstoppable://nft-collection?uid={collectionUid}" />
+            app:uri="pcash://nft-collection?uid={collectionUid}" />
     </fragment>
     <fragment
         android:id="@+id/sendXFragment"

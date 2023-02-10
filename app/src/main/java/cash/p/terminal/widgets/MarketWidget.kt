@@ -161,13 +161,13 @@ class MarketWidget : GlanceAppWidget() {
     private fun getDeeplinkUri(item: MarketWidgetItem, type: MarketWidgetType): Uri = when (type) {
         MarketWidgetType.Watchlist,
         MarketWidgetType.TopGainers -> {
-            "unstoppable://coin-page?uid=${item.uid}".toUri()
+            "pcash://coin-page?uid=${item.uid}".toUri()
         }
         MarketWidgetType.TopNfts -> {
-            "unstoppable://nft-collection?uid=${item.uid}&blockchainTypeUid=${item.blockchainTypeUid}".toUri()
+            "pcash://nft-collection?uid=${item.uid}&blockchainTypeUid=${item.blockchainTypeUid}".toUri()
         }
         MarketWidgetType.TopPlatforms -> {
-            "unstoppable://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
+            "pcash://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
         }
     }
 
