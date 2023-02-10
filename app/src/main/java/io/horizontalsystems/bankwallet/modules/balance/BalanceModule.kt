@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 
@@ -42,8 +41,6 @@ object BalanceModule {
                 App.balanceViewTypeManager,
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
-                App.languageManager,
-                FaqManager
             ) as T
         }
     }

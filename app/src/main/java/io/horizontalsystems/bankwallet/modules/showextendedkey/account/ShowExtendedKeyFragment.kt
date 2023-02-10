@@ -24,11 +24,13 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.modules.evmprivatekey.ActionButton
 import io.horizontalsystems.bankwallet.modules.evmprivatekey.HidableContent
 import io.horizontalsystems.bankwallet.modules.recoveryphrase.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.showextendedkey.account.ShowExtendedKeyModule.DisplayKeyType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -113,7 +115,16 @@ private fun AccountExtendedKeyScreen(
                     title = viewModel.title,
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
-                    }
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Info_Title),
+                            icon = R.drawable.ic_info_24,
+                            onClick = {
+                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                            }
+                        )
+                    )
                 )
 
                 Column(

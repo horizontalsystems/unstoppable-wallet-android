@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyModule
@@ -70,6 +71,13 @@ fun RecoveryPhraseScreen(
                 AppBar(
                     title = TranslatableString.ResString(R.string.RecoveryPhrase_Title),
                     menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Info_Title),
+                            icon = R.drawable.ic_info_24,
+                            onClick = {
+                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                            }
+                        ),
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
