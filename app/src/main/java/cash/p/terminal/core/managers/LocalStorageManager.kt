@@ -70,7 +70,6 @@ class LocalStorageManager(
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
-    private val TESTNET_ENABLED = "testnet_enabled"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
 
     private val gson by lazy { Gson() }
@@ -411,12 +410,6 @@ class LocalStorageManager(
 
     private val _marketsTabEnabledFlow = MutableStateFlow(marketsTabEnabled)
     override val marketsTabEnabledFlow = _marketsTabEnabledFlow.asStateFlow()
-
-    override var testnetEnabled: Boolean
-        get() = preferences.getBoolean(TESTNET_ENABLED, false)
-        set(enabled) {
-            preferences.edit().putBoolean(TESTNET_ENABLED, enabled).apply()
-        }
 
     override var nonRecommendedAccountAlertDismissedAccounts: Set<String>
         get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf()) ?: setOf()

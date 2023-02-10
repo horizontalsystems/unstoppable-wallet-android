@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.managewallets
 
 import cash.p.terminal.core.*
-import cash.p.terminal.core.managers.EvmTestnetManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
@@ -21,7 +20,6 @@ class ManageWalletsService(
     accountManager: IAccountManager,
     private val enableCoinService: EnableCoinService,
     private val restoreSettingsManager: RestoreSettingsManager,
-    private val evmTestnetManager: EvmTestnetManager,
 ) : Clearable {
 
     val itemsObservable = PublishSubject.create<List<Item>>()
@@ -75,7 +73,6 @@ class ManageWalletsService(
     private fun fetchFullCoins(): List<FullCoin> {
         return if (filter.isBlank()) {
             val account = this.account ?: return emptyList()
-            val testnetFullCoins = evmTestnetManager.nativeTokens(filter).map { it.fullCoin }
             val featuredFullCoins = marketKit.fullCoins("", 100).toMutableList()
                 .filter { it.eligibleTokens(account.type).isNotEmpty() }
 
@@ -85,14 +82,14 @@ class ManageWalletsService(
             )
             val customFullCoins = wallets.filter { it.token.isCustom }.map { it.token.fullCoin }
 
-            featuredFullCoins + enabledFullCoins + customFullCoins + testnetFullCoins
+            featuredFullCoins + enabledFullCoins + customFullCoins
         } else if (isContractAddress(filter)) {
-            val tokens = marketKit.tokens(filter) + evmTestnetManager.nativeTokens(filter)
+            val tokens = marketKit.tokens(filter)
             val coinUids = tokens.map { it.coin.uid }
 
             marketKit.fullCoins(coinUids).toMutableList()
         } else {
-            marketKit.fullCoins(filter, 20).toMutableList() + evmTestnetManager.nativeTokens(filter).map { it.fullCoin }
+            marketKit.fullCoins(filter, 20).toMutableList()
         }
     }
 

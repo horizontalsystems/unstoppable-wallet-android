@@ -1,6 +1,9 @@
 package cash.p.terminal.modules.blockchainsettings
 
-import cash.p.terminal.core.managers.*
+import cash.p.terminal.core.managers.BtcBlockchainManager
+import cash.p.terminal.core.managers.EvmBlockchainManager
+import cash.p.terminal.core.managers.EvmSyncSourceManager
+import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.reactivex.Observable
@@ -11,7 +14,6 @@ class BlockchainSettingsService(
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val evmTestnetManager: EvmTestnetManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
 ) {
 
@@ -44,13 +46,6 @@ class BlockchainSettingsService(
             }
 
         evmSyncSourceManager.syncSourceObservable
-            .subscribeIO {
-                syncBlockchainItems()
-            }.let {
-                disposables.add(it)
-            }
-
-        evmTestnetManager.testnetUpdatedSignal
             .subscribeIO {
                 syncBlockchainItems()
             }.let {

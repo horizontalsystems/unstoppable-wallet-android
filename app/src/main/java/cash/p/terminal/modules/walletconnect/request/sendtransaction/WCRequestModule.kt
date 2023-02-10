@@ -59,7 +59,6 @@ object WCRequestModule {
                 token,
                 App.marketKit,
                 App.currencyManager,
-                App.evmTestnetManager,
                 App.coinManager
             )
         }
@@ -124,7 +123,6 @@ object WCRequestModule {
                 token,
                 App.marketKit,
                 App.currencyManager,
-                App.evmTestnetManager,
                 App.coinManager
             )
         }
@@ -179,7 +177,6 @@ object WCRequestModule {
             Chain.Optimism -> BlockchainType.Optimism
             Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
             Chain.Gnosis -> BlockchainType.Gnosis
-            Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
             else -> BlockchainType.Ethereum
         }
         return App.evmBlockchainManager.getBaseToken(blockchainType)!!

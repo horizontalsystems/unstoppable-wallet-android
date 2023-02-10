@@ -126,9 +126,6 @@
         android:id="@+id/timeLockFragment"
         android:name="cash.p.terminal.modules.settings.experimental.timelock.TimeLockFragment"/>
     <fragment
-        android:id="@+id/testnetSettingsFragment"
-        android:name="cash.p.terminal.modules.settings.experimental.testnet.TestnetSettingsFragment"/>
-    <fragment
         android:id="@+id/metricsPageFragment"
         android:name="cash.p.terminal.modules.market.metricspage.MetricsPageFragment" />
     <fragment

@@ -38,7 +38,6 @@ class ExperimentalFeaturesFragment : BaseFragment() {
             setContent {
                 ExperimentalScreen(
                     onCloseClick = { findNavController().popBackStack() },
-                    openTestnetSettings = { findNavController().slideFromRight(R.id.testnetSettingsFragment) },
                     openTimeLock = { findNavController().slideFromRight(R.id.timeLockFragment) },
                 )
             }
@@ -49,7 +48,6 @@ class ExperimentalFeaturesFragment : BaseFragment() {
 @Composable
 private fun ExperimentalScreen(
     onCloseClick: () -> Unit,
-    openTestnetSettings: () -> Unit,
     openTimeLock: () -> Unit,
 ) {
     ComposeAppTheme {
@@ -71,11 +69,9 @@ private fun ExperimentalScreen(
                 )
                 Spacer(Modifier.height(24.dp))
                 CellUniversalLawrenceSection(
-                    listOf({
+                    listOf {
                         ItemCell(R.string.BitcoinHodling_Title, openTimeLock)
-                    }, {
-                        ItemCell(R.string.TestnetSettings_EvmTestnet, openTestnetSettings)
-                    })
+                    }
                 )
                 Spacer(Modifier.height(24.dp))
             }

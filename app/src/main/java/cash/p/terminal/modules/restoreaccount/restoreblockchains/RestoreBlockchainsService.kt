@@ -2,7 +2,6 @@ package cash.p.terminal.modules.restoreaccount.restoreblockchains
 
 import cash.p.terminal.core.*
 import cash.p.terminal.core.managers.EvmBlockchainManager
-import cash.p.terminal.core.managers.EvmTestnetManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.entities.AccountOrigin
@@ -25,7 +24,6 @@ class RestoreBlockchainsService(
     private val marketKit: MarketKitWrapper,
     private val enableCoinService: EnableCoinService,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val evmTestnetManager: EvmTestnetManager
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
@@ -95,11 +93,7 @@ class RestoreBlockchainsService(
             }
         }
 
-        val testnetTokens = evmTestnetManager.nativeTokens()
-            .filter { it.blockchainType.supports(accountType) }
-            .map { InternalItem(it.blockchain, it) }
-
-        internalItems = allTokens + testnetTokens
+        internalItems = allTokens
     }
 
     private fun handleEnableCoin(

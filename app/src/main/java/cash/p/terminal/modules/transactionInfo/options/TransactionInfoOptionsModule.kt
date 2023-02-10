@@ -110,7 +110,6 @@ object TransactionInfoOptionsModule {
                 baseToken,
                 App.marketKit,
                 App.currencyManager,
-                App.evmTestnetManager,
                 App.coinManager
             )
         }

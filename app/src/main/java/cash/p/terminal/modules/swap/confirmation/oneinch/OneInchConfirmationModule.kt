@@ -50,7 +50,6 @@ object OneInchConfirmationModule {
                 token,
                 App.marketKit,
                 App.currencyManager,
-                App.evmTestnetManager,
                 App.coinManager
             )
         }
