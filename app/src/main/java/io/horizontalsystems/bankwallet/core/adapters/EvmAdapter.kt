@@ -59,19 +59,16 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
     companion object {
         const val decimal = 18
 
-        fun clear(walletId: String, testMode: Boolean) {
-            val networkTypes = when {
-                testMode -> listOf(Chain.EthereumGoerli)
-                else -> listOf(
-                    Chain.Ethereum,
-                    Chain.BinanceSmartChain,
-                    Chain.Polygon,
-                    Chain.Avalanche,
-                    Chain.Optimism,
-                    Chain.ArbitrumOne,
-                    Chain.Gnosis,
-                )
-            }
+        fun clear(walletId: String) {
+            val networkTypes = listOf(
+                Chain.Ethereum,
+                Chain.BinanceSmartChain,
+                Chain.Polygon,
+                Chain.Avalanche,
+                Chain.Optimism,
+                Chain.ArbitrumOne,
+                Chain.Gnosis,
+            )
             networkTypes.forEach {
                 EthereumKit.clear(App.instance, it, walletId)
             }

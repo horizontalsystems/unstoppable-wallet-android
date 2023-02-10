@@ -7,12 +7,10 @@ import kotlinx.coroutines.runBlocking
 
 class ZcashBirthdayProvider(
     private val context: Context,
-    testMode: Boolean
 ) {
-    private val network = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
     fun getLatestCheckpointBlockHeight(): Long {
         val walletBirthday = runBlocking {
-            BlockHeight.ofLatestCheckpoint(context, network)
+            BlockHeight.ofLatestCheckpoint(context, ZcashNetwork.Mainnet)
         }
         return walletBirthday.value
     }

@@ -221,7 +221,7 @@ interface ITransactionsAdapter {
         transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>>
 
-    fun getTransactionUrl(transactionHash: String): String?
+    fun getTransactionUrl(transactionHash: String): String
 }
 
 class UnsupportedFilterException : Exception()

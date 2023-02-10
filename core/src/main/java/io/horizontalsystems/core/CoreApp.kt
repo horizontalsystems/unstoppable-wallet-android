@@ -20,8 +20,6 @@ abstract class CoreApp : Application() {
         override lateinit var instance: CoreApp
     }
 
-    open val testMode = false
-
     abstract fun localizedContext(): Context
 
     fun localeAwareContext(base: Context): Context {

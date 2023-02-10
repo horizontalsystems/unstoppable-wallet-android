@@ -87,19 +87,16 @@ class Eip20Adapter(
     }
 
     companion object {
-        fun clear(walletId: String, testMode: Boolean) {
-            val networkTypes = when {
-                testMode -> listOf(Chain.EthereumGoerli)
-                else -> listOf(
-                    Chain.Ethereum,
-                    Chain.BinanceSmartChain,
-                    Chain.Polygon,
-                    Chain.Avalanche,
-                    Chain.Optimism,
-                    Chain.ArbitrumOne,
-                    Chain.Gnosis,
-                )
-            }
+        fun clear(walletId: String) {
+            val networkTypes = listOf(
+                Chain.Ethereum,
+                Chain.BinanceSmartChain,
+                Chain.Polygon,
+                Chain.Avalanche,
+                Chain.Optimism,
+                Chain.ArbitrumOne,
+                Chain.Gnosis,
+            )
 
             networkTypes.forEach {
                 Erc20Kit.clear(App.instance, it, walletId)
