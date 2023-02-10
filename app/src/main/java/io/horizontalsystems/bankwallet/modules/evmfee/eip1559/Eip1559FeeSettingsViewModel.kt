@@ -36,7 +36,7 @@ class Eip1559FeeSettingsViewModel(
     var currentBaseFee by mutableStateOf<String?>(null)
         private set
 
-    var baseFeeViewItem by mutableStateOf<FeeViewItem?>(null)
+    var maxFeeViewItem by mutableStateOf<FeeViewItem?>(null)
         private set
 
     var priorityFeeViewItem by mutableStateOf<FeeViewItem?>(null)
@@ -64,24 +64,24 @@ class Eip1559FeeSettingsViewModel(
             }
     }
 
-    fun onSelectGasPrice(baseFee: Long, maxPriorityFee: Long) {
-        gasPriceService.setGasPrice(baseFee, maxPriorityFee)
+    fun onSelectGasPrice(maxFee: Long, priorityFee: Long) {
+        gasPriceService.setGasPrice(maxFee, priorityFee)
     }
 
-    fun onIncrementBaseFee(currentBaseFee: Long, currentMaxPriorityFee: Long) {
-        gasPriceService.setGasPrice(currentBaseFee + scale.scaleValue, currentMaxPriorityFee)
+    fun onIncrementBaseFee(maxFee: Long, priorityFee: Long) {
+        gasPriceService.setGasPrice(maxFee + scale.scaleValue, priorityFee)
     }
 
-    fun onDecrementBaseFee(currentBaseFee: Long, currentMaxPriorityFee: Long) {
-        gasPriceService.setGasPrice((currentBaseFee - scale.scaleValue).coerceAtLeast(0), currentMaxPriorityFee)
+    fun onDecrementBaseFee(maxFee: Long, priorityFee: Long) {
+        gasPriceService.setGasPrice((maxFee - scale.scaleValue).coerceAtLeast(0), priorityFee)
     }
 
-    fun onIncrementPriorityFee(currentBaseFee: Long, currentMaxPriorityFee: Long) {
-        gasPriceService.setGasPrice(currentBaseFee, currentMaxPriorityFee + scale.scaleValue)
+    fun onIncrementPriorityFee(maxFee: Long, priorityFee: Long) {
+        gasPriceService.setGasPrice(maxFee, priorityFee + scale.scaleValue)
     }
 
-    fun onDecrementPriorityFee(currentBaseFee: Long, currentMaxPriorityFee: Long) {
-        gasPriceService.setGasPrice(currentBaseFee, (currentMaxPriorityFee - scale.scaleValue).coerceAtLeast(0))
+    fun onDecrementPriorityFee(maxFee: Long, priorityFee: Long) {
+        gasPriceService.setGasPrice(maxFee, (priorityFee - scale.scaleValue).coerceAtLeast(0))
     }
 
     override fun onCleared() {
@@ -93,8 +93,8 @@ class Eip1559FeeSettingsViewModel(
 
         state.dataOrNull?.let { gasPriceInfo ->
             if (gasPriceInfo.gasPrice is GasPrice.Eip1559) {
-                baseFeeViewItem = FeeViewItem(
-                    weiValue = gasPriceInfo.gasPrice.maxFeePerGas - gasPriceInfo.gasPrice.maxPriorityFeePerGas,
+                maxFeeViewItem = FeeViewItem(
+                    weiValue = gasPriceInfo.gasPrice.maxFeePerGas,
                     scale = scale
                 )
                 priorityFeeViewItem = FeeViewItem(
