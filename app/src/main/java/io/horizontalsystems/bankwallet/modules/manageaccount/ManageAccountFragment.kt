@@ -20,12 +20,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.authorizedAction
+import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.modules.balance.ui.NoteWarning
 import io.horizontalsystems.bankwallet.modules.evmprivatekey.EvmPrivateKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
-import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.recoveryphrase.RecoveryPhraseModule
 import io.horizontalsystems.bankwallet.modules.showextendedkey.account.ShowExtendedKeyModule
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
@@ -110,7 +109,10 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp,  top = 32.dp),
                             text = stringResource(R.string.AccountRecovery_MigrationRequired),
                             onClick = {
-                                openMarkDown(viewModel.getFaqUrl(HeaderNote.NonStandardAccount), navController)
+                                FaqManager.showFaqPage(
+                                    navController,
+                                    FaqManager.faqPathMigrationRequired
+                                )
                             }
                         )
                     }
@@ -119,7 +121,10 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp),
                             text = stringResource(R.string.AccountRecovery_MigrationRecommended),
                             onClick = {
-                                openMarkDown(viewModel.getFaqUrl(HeaderNote.NonRecommendedAccount), navController)
+                                FaqManager.showFaqPage(
+                                    navController,
+                                    FaqManager.faqPathMigrationRecommended
+                                )
                             },
                             onClose = null
                         )
@@ -288,20 +293,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
             }
         }
     }
-}
-
-private fun openMarkDown(
-    markDownUrl: String,
-    navController: NavController
-) {
-    val arguments = bundleOf(
-        MarkdownFragment.markdownUrlKey to markDownUrl,
-        MarkdownFragment.handleRelativeUrlKey to true
-    )
-    navController.slideFromRight(
-        R.id.markdownFragment,
-        arguments
-    )
 }
 
 @Composable

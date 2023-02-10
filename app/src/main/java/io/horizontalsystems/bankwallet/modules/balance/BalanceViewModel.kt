@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -16,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.URL
 
 class BalanceViewModel(
     private val service: BalanceService,
@@ -24,8 +21,6 @@ class BalanceViewModel(
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
-    private val languageManager: LanguageManager,
-    private val faqManager: FaqManager
 ) : ViewModel(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
@@ -184,12 +179,6 @@ class BalanceViewModel(
         }
     }
 
-    fun getFaqUrl(headerNote: HeaderNote): String {
-        val baseUrl = URL(faqManager.faqListUrl)
-        val faqUrl = headerNote.faqUrl(languageManager.currentLocale.language)
-        return URL(baseUrl, faqUrl).toString()
-    }
-
     fun disable(viewItem: BalanceViewItem) {
         service.disable(viewItem.wallet)
     }
@@ -229,12 +218,6 @@ enum class HeaderNote {
     None,
     NonStandardAccount,
     NonRecommendedAccount
-}
-
-fun HeaderNote.faqUrl(language: String) = when (this) {
-    HeaderNote.NonStandardAccount -> "faq/$language/management/migration_required.md"
-    HeaderNote.NonRecommendedAccount -> "faq/$language/management/migration_recommended.md"
-    HeaderNote.None -> null
 }
 
 fun Account.headerNote(nonRecommendedDismissed: Boolean): HeaderNote = when {
