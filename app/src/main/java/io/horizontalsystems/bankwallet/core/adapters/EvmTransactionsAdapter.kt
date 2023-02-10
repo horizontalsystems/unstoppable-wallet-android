@@ -34,7 +34,7 @@ class EvmTransactionsAdapter(
     override val explorerTitle: String
         get() = evmTransactionSource.name
 
-    override fun getTransactionUrl(transactionHash: String): String? =
+    override fun getTransactionUrl(transactionHash: String): String =
         evmTransactionSource.transactionUrl(transactionHash)
 
     override val lastBlockInfo: LastBlockInfo?
@@ -111,18 +111,16 @@ class EvmTransactionsAdapter(
     companion object {
         const val decimal = 18
 
-        fun clear(walletId: String, testMode: Boolean) {
-            val networkTypes = when {
-                testMode -> listOf(Chain.EthereumGoerli)
-                else -> listOf(
-                    Chain.Ethereum,
-                    Chain.BinanceSmartChain,
-                    Chain.Polygon,
-                    Chain.Optimism,
-                    Chain.ArbitrumOne,
-                    Chain.Gnosis,
-                )
-            }
+        fun clear(walletId: String) {
+            val networkTypes = listOf(
+                Chain.Ethereum,
+                Chain.BinanceSmartChain,
+                Chain.Polygon,
+                Chain.Optimism,
+                Chain.ArbitrumOne,
+                Chain.Gnosis,
+            )
+
             networkTypes.forEach {
                 EthereumKit.clear(App.instance, it, walletId)
             }
