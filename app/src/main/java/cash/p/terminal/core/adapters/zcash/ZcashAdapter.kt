@@ -42,13 +42,12 @@ class ZcashAdapter(
         context: Context,
         private val wallet: Wallet,
         restoreSettings: RestoreSettings,
-        private val testMode: Boolean
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
     private val decimalCount = 8
-    private val network: ZcashNetwork = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
-    private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
+    private val network: ZcashNetwork = ZcashNetwork.Mainnet
+    private val feeChangeHeight: Long = 1_077_550
     private val lightWalletEndpoint = LightWalletEndpoint.defaultForNetwork(network)
 
     private val synchronizer: Synchronizer
@@ -202,8 +201,8 @@ class ZcashAdapter(
         }
     }
 
-    override fun getTransactionUrl(transactionHash: String): String? =
-        if (testMode) null else "https://blockchair.com/zcash/transaction/$transactionHash"
+    override fun getTransactionUrl(transactionHash: String): String =
+        "https://blockchair.com/zcash/transaction/$transactionHash"
 
     override val availableBalance: BigDecimal
         get() = synchronizer.saplingBalances.value
@@ -400,10 +399,9 @@ class ZcashAdapter(
             return ALIAS_PREFIX + accountId.replace("-", "_")
         }
 
-        fun clear(accountId: String, testMode: Boolean) {
-            val network = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
+        fun clear(accountId: String) {
             runBlocking {
-                Initializer.erase(App.instance, network, getValidAliasFromAccountId(accountId))
+                Initializer.erase(App.instance, ZcashNetwork.Mainnet, getValidAliasFromAccountId(accountId))
             }
         }
     }

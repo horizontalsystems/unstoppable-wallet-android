@@ -28,8 +28,8 @@ class SolanaTransactionsAdapter(
     override val explorerTitle: String
         get() = "Solscan.io"
 
-    override fun getTransactionUrl(transactionHash: String): String? =
-            "https://solscan.io/tx/$transactionHash"
+    override fun getTransactionUrl(transactionHash: String): String =
+        "https://solscan.io/tx/$transactionHash"
 
     override val lastBlockInfo: LastBlockInfo?
         get() = kit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
@@ -100,7 +100,7 @@ class SolanaTransactionsAdapter(
     companion object {
         const val decimal = 18
 
-        fun clear(walletId: String, testMode: Boolean) {
+        fun clear(walletId: String) {
             SolanaKit.clear(App.instance, walletId)
         }
     }

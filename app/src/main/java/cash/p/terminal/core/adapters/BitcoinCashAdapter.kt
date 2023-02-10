@@ -24,11 +24,13 @@ class BitcoinCashAdapter(
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         wallet: Wallet,
-        testMode: Boolean
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), BitcoinCashKit.Listener, ISendBitcoinAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean, backgroundManager: BackgroundManager) :
-            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
+    constructor(
+        wallet: Wallet,
+        syncMode: BitcoinCore.SyncMode,
+        backgroundManager: BackgroundManager
+    ) : this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
 
     init {
         kit.listener = this
@@ -47,8 +49,8 @@ class BitcoinCashAdapter(
     override val explorerTitle: String
         get() = "btc.com"
 
-    override fun getTransactionUrl(transactionHash: String): String? =
-        if (testMode) null else "https://bch.btc.com/$transactionHash"
+    override fun getTransactionUrl(transactionHash: String): String =
+        "https://bch.btc.com/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -85,14 +87,14 @@ class BitcoinCashAdapter(
 
     companion object {
 
-        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean): BitcoinCashKit {
+        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): BitcoinCashKit {
             val account = wallet.account
             val bchCoinType = wallet.coinSettings.bitcoinCashCoinType ?: throw AdapterErrorWrongParameters("BitcoinCashCoinType is null")
             val kitCoinType = when(bchCoinType){
                 BitcoinCashCoinType.type145 -> MainNetBitcoinCash.CoinType.Type145
                 BitcoinCashCoinType.type0 -> MainNetBitcoinCash.CoinType.Type0
             }
-            val networkType = getNetworkType(testMode, kitCoinType)
+            val networkType = getNetworkType(kitCoinType)
             when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
                     return BitcoinCashKit(
@@ -120,11 +122,11 @@ class BitcoinCashAdapter(
 
         }
 
-        fun clear(walletId: String, testMode: Boolean) {
-            BitcoinCashKit.clear(App.instance, getNetworkType(testMode), walletId)
+        fun clear(walletId: String) {
+            BitcoinCashKit.clear(App.instance, getNetworkType(), walletId)
         }
 
-        private fun getNetworkType(testMode: Boolean, kitCoinType: MainNetBitcoinCash.CoinType = MainNetBitcoinCash.CoinType.Type145) =
-                if (testMode) NetworkType.TestNet else NetworkType.MainNet(kitCoinType)
+        private fun getNetworkType(kitCoinType: MainNetBitcoinCash.CoinType = MainNetBitcoinCash.CoinType.Type145) =
+            NetworkType.MainNet(kitCoinType)
     }
 }

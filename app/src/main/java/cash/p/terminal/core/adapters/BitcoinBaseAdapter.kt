@@ -33,7 +33,6 @@ abstract class BitcoinBaseAdapter(
     open val syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
     val wallet: Wallet,
-    protected val testMode: Boolean
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, BackgroundManager.Listener {
 
     init {

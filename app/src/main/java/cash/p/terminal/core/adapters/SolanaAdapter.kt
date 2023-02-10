@@ -78,7 +78,7 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     companion object {
         const val decimal = 9
 
-        fun clear(walletId: String, testMode: Boolean) {
+        fun clear(walletId: String) {
             SolanaKit.clear(App.instance, walletId)
         }
     }

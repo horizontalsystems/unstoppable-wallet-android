@@ -46,7 +46,6 @@ android {
             debuggable true
             minifyEnabled false
             applicationIdSuffix ".dev"
-            buildConfigField "boolean", "testMode", "false"
             resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
             resValue "string", "cryptoCompareApiKey", "2b08fe1dba559ca6acf5e1897b6de8749cee0ace6052d7aa7fccf6aa9f1b3255"
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
@@ -70,13 +69,6 @@ android {
             resValue "string", "walletConnectV2Key", "8b4f41c60880a3e3ad57d82fddb30568"
         }
 
-        apptestnet {
-            initWith debug
-            applicationIdSuffix ".dev.testnet"
-            buildConfigField "boolean", "testMode", "true"
-            matchingFallbacks = ['debug']
-        }
-
         appcenterdebug {
             initWith debug
             defaultConfig.versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
@@ -88,7 +80,6 @@ android {
         release {
             debuggable false
             minifyEnabled false
-            buildConfigField "boolean", "testMode", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
             resValue "string", "cryptoCompareApiKey", ""
@@ -243,7 +234,6 @@ dependencies {
 
     def leakCanary = 'com.squareup.leakcanary:leakcanary-android:2.10'
     appcenterdebugImplementation leakCanary
-    apptestnetImplementation leakCanary
     debugImplementation leakCanary
 
     // Wallet kits
