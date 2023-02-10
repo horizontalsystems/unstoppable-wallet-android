@@ -120,7 +120,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
-        lateinit var evmTestnetManager: EvmTestnetManager
         lateinit var solanaRpcSourceManager: SolanaRpcSourceManager
         lateinit var nftMetadataManager: NftMetadataManager
         lateinit var nftAdapterManager: NftAdapterManager
@@ -197,11 +196,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
-        evmTestnetManager = EvmTestnetManager(localStorage)
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(marketKit, enabledWalletsStorage, evmTestnetManager)
+        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
-        walletManager = WalletManager(accountManager, walletStorage, evmTestnetManager)
+        walletManager = WalletManager(accountManager, walletStorage)
         coinManager = CoinManager(marketKit, walletManager)
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
@@ -240,7 +238,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmSyncSourceManager,
             marketKit,
             evmAccountManagerFactory,
-            evmTestnetManager
         )
 
         systemInfoManager = SystemInfoManager()

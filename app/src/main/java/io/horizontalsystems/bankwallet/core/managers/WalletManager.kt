@@ -7,14 +7,12 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class WalletManager(
     private val accountManager: IAccountManager,
     private val storage: IWalletStorage,
-    testnetManager: EvmTestnetManager
 ) : IWalletManager {
 
     override val activeWallets get() = walletsSet.toList()
@@ -27,14 +25,6 @@ class WalletManager(
         accountManager.activeAccountObservable
             .subscribeIO {
                 handleUpdated(it.orElse(null))
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        testnetManager.testnetUpdatedSignal
-            .subscribeIO {
-                handleTestnetUpdated(it)
             }
             .let {
                 disposables.add(it)
@@ -94,21 +84,6 @@ class WalletManager(
     private fun setWallets(activeWallets: List<Wallet>) {
         walletsSet.clear()
         walletsSet.addAll(activeWallets)
-    }
-
-    @Synchronized
-    private fun handleTestnetUpdated(isEnabled: Boolean) {
-        if (isEnabled) {
-            return
-        }
-
-        val deletedWallets = accountManager.accounts.map { account ->
-            storage.wallets(account).filter {
-                it.token.blockchainType is BlockchainType.EthereumGoerli
-            }
-        }
-
-        handle(listOf(), deletedWallets.flatten())
     }
 
     override fun saveEnabledWallets(enabledWallets: List<EnabledWallet>) {
