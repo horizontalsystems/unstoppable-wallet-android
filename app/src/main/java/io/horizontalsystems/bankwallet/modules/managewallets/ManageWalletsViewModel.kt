@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(
@@ -14,7 +15,7 @@ class ManageWalletsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<String>>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
     var showBirthdayHeightLiveEvent = SingleLiveEvent<BirthdayHeightViewItem>()
 
     private var disposables = CompositeDisposable()
@@ -35,13 +36,14 @@ class ManageWalletsViewModel(
     private fun viewItem(
         item: ManageWalletsService.Item,
     ) = CoinViewItem(
-        item = item.fullCoin.coin.uid,
-        imageSource = ImageSource.Remote(item.fullCoin.coin.iconUrl, item.fullCoin.iconPlaceholder),
-        title = item.fullCoin.coin.code,
-        subtitle = item.fullCoin.coin.name,
+        item = item.token,
+        imageSource = ImageSource.Remote(item.token.coin.iconUrl, item.token.iconPlaceholder),
+        title = item.token.coin.code,
+        subtitle = item.token.coin.name,
         enabled = item.enabled,
         hasSettings = item.hasSettings,
-        hasInfo = item.hasInfo
+        hasInfo = item.hasInfo,
+        label = item.token.protocolType?.uppercase()
     )
 
     fun enable(fullCoin: FullCoin) {
