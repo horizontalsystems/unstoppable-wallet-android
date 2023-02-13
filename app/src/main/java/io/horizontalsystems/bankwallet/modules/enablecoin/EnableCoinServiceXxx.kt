@@ -24,41 +24,24 @@ class EnableCoinServiceXxx(
 
     val enableCoinObservable = PublishSubject.create<Pair<List<ConfiguredToken>, RestoreSettings>>()
     val enableSingleCoinObservable = PublishSubject.create<Pair<ConfiguredToken, RestoreSettings>>()
-    val cancelEnableCoinObservable = PublishSubject.create<FullCoin>()
 
     init {
         coinTokensService.approveTokensObservable
             .subscribeIO { handleApproveCoinTokens(it.tokens) }
             .let { disposable.add(it) }
 
-        coinTokensService.rejectApproveTokensObservable
-            .subscribeIO { handleRejectApprovePlatformSettings(it) }
-            .let { disposable.add(it) }
-
         restoreSettingsService.approveSettingsObservable
             .subscribeIO { handleApproveRestoreSettings(it.token, it.settings) }
             .let { disposable.add(it) }
 
-        restoreSettingsService.rejectApproveSettingsObservable
-            .subscribeIO { handleRejectApproveRestoreSettings(it) }
-            .let { disposable.add(it) }
-
         coinSettingsService.approveSettingsObservable
             .subscribeIO { handleApproveCoinSettings(it.token, it.settingsList) }
-            .let { disposable.add(it) }
-
-        coinSettingsService.rejectApproveSettingsObservable
-            .subscribeIO { handleRejectApproveCoinSettings(it) }
             .let { disposable.add(it) }
     }
 
     private fun handleApproveCoinTokens(tokens: List<Token>) {
         val configuredTokens = tokens.map { ConfiguredToken(it) }
         enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
-    }
-
-    private fun handleRejectApprovePlatformSettings(fullCoin: FullCoin) {
-        cancelEnableCoinObservable.onNext(fullCoin)
     }
 
     private fun handleApproveRestoreSettings(
@@ -68,17 +51,9 @@ class EnableCoinServiceXxx(
         enableCoinObservable.onNext(Pair(listOf(ConfiguredToken(token)), settings))
     }
 
-    private fun handleRejectApproveRestoreSettings(token: Token) {
-        cancelEnableCoinObservable.onNext(token.fullCoin)
-    }
-
     private fun handleApproveCoinSettings(token: Token, settingsList: List<CoinSettings> = listOf()) {
         val configuredTokens = settingsList.map { ConfiguredToken(token, it) }
         enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
-    }
-
-    private fun handleRejectApproveCoinSettings(token: Token) {
-        cancelEnableCoinObservable.onNext(token.fullCoin)
     }
 
     fun enable(token: Token, accountType: AccountType, account: Account? = null) {
