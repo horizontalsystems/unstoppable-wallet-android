@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -36,7 +35,6 @@ import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
-import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -45,6 +43,7 @@ import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseFragment() {
 
@@ -199,14 +198,18 @@ private fun ManageWalletsScreen(
                         CoinCell(
                             viewItem = viewItem,
                             onItemClick = {
-                                if (viewItem.enabled) {
-                                    viewModel.disable(viewItem.item)
-                                } else {
-                                    viewModel.enable(viewItem.item)
-                                }
+//                                if (viewItem.enabled) {
+//                                    viewModel.disable(viewItem.item)
+//                                } else {
+//                                    viewModel.enable(viewItem.item)
+//                                }
                             },
-                            onSettingClick = { viewModel.onClickSettings(viewItem.item) },
-                            onInfoClick = { viewModel.onClickInfo(viewItem.item) }
+                            onSettingClick = {
+//                                viewModel.onClickSettings(viewItem.item)
+                            },
+                            onInfoClick = {
+//                                viewModel.onClickInfo(viewItem.item)
+                            }
                         )
                     }
                 }
@@ -217,7 +220,7 @@ private fun ManageWalletsScreen(
 
 @Composable
 private fun CoinCell(
-    viewItem: CoinViewItem<String>,
+    viewItem: CoinViewItem<Token>,
     onItemClick: () -> Unit,
     onSettingClick: () -> Unit,
     onInfoClick: () -> Unit
@@ -306,25 +309,25 @@ private fun CoinCell(
     }
 }
 
-@Preview
-@Composable
-fun PreviewCoinCell() {
-    val viewItem = CoinViewItem(
-        item = "ethereum",
-        imageSource = ImageSource.Local(R.drawable.logo_ethereum_24),
-        title = "ETH",
-        subtitle = "Ethereum",
-        enabled = true,
-        hasSettings = true,
-        hasInfo = true,
-        label = "Ethereum"
-    )
-    ComposeAppTheme {
-        CoinCell(
-            viewItem,
-            {},
-            {},
-            {}
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun PreviewCoinCell() {
+//    val viewItem = CoinViewItem(
+//        item = "ethereum",
+//        imageSource = ImageSource.Local(R.drawable.logo_ethereum_24),
+//        title = "ETH",
+//        subtitle = "Ethereum",
+//        enabled = true,
+//        hasSettings = true,
+//        hasInfo = true,
+//        label = "Ethereum"
+//    )
+//    ComposeAppTheme {
+//        CoinCell(
+//            viewItem,
+//            {},
+//            {},
+//            {}
+//        )
+//    }
+//}

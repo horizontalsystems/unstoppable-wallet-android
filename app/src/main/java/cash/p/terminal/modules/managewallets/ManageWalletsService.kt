@@ -62,8 +62,8 @@ class ManageWalletsService(
         syncState()
     }
 
-    private fun isEnabled(coin: Coin): Boolean {
-        return wallets.any { it.token.coin == coin }
+    private fun isEnabled(token: Token): Boolean {
+        return wallets.any { it.token == token }
     }
 
     private fun sync(walletList: List<Wallet>) {
@@ -86,10 +86,9 @@ class ManageWalletsService(
         } else if (isContractAddress(filter)) {
             val tokens = marketKit.tokens(filter)
             val coinUids = tokens.map { it.coin.uid }
-
-            marketKit.fullCoins(coinUids).toMutableList()
+            marketKit.fullCoins(coinUids)
         } else {
-            marketKit.fullCoins(filter, 20).toMutableList()
+            marketKit.fullCoins(filter, 20)
         }
     }
 
@@ -105,32 +104,27 @@ class ManageWalletsService(
     }
 
     private fun sortFullCoins() {
-        fullCoins = fullCoins.sortedByFilter(filter) {
-            isEnabled(it.coin)
-        }
+        // todo
+//        fullCoins = fullCoins.sortedByFilter(filter) {
+//            isEnabled(it.coin)
+//        }
     }
 
-    private fun item(fullCoin: FullCoin): Item? {
-        if (fullCoin.tokens.isNotEmpty() &&
-            fullCoin.tokens.all { it.blockchain.type is BlockchainType.Unsupported }
-        ) {
-            return null
+    private fun item(fullCoin: FullCoin): List<Item> {
+        val accountType = account?.type ?: return listOf()
+
+        return fullCoin.eligibleTokens(accountType).map { token ->
+            Item(
+                token = token,
+                enabled = isEnabled(token),
+                hasSettings = isEnabled(token) && hasSettingsOrPlatforms(
+                    fullCoin.eligibleTokens(
+                        accountType
+                    )
+                ),
+                hasInfo = isEnabled(token) && fullCoin.tokens.firstOrNull()?.blockchainType == BlockchainType.Zcash
+            )
         }
-
-        val accountType = account?.type ?: return null
-
-        val eligibleTokens = fullCoin.eligibleTokens(accountType)
-        if (eligibleTokens.isEmpty()) {
-            return null
-        }
-
-        val enabled = isEnabled(fullCoin.coin)
-        return Item(
-            fullCoin = FullCoin(fullCoin.coin, eligibleTokens),
-            enabled = enabled,
-            hasSettings = enabled && hasSettingsOrPlatforms(eligibleTokens),
-            hasInfo = enabled && fullCoin.tokens.firstOrNull()?.blockchainType == BlockchainType.Zcash
-        )
     }
 
     private fun hasSettingsOrPlatforms(tokens: List<Token>): Boolean {
@@ -143,7 +137,7 @@ class ManageWalletsService(
     }
 
     private fun syncState() {
-        items = fullCoins.mapNotNull { item(it) }
+        items = fullCoins.map { item(it) }.flatten()
     }
 
     private fun handleUpdated(wallets: List<Wallet>) {
@@ -225,7 +219,7 @@ class ManageWalletsService(
     }
 
     data class Item(
-        val fullCoin: FullCoin,
+        val token: Token,
         val enabled: Boolean,
         val hasSettings: Boolean,
         val hasInfo: Boolean
