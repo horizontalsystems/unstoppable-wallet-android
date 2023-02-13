@@ -3,7 +3,7 @@ package cash.p.terminal.modules.managewallets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.enablecoin.EnableCoinService
+import cash.p.terminal.modules.enablecoin.EnableCoinServiceXxx
 import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensService
 import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsService
@@ -28,7 +28,7 @@ object ManageWalletsModule {
         }
 
         private val enableCoinService by lazy {
-            EnableCoinService(coinTokensService, restoreSettingsService, coinSettingsService)
+            EnableCoinServiceXxx(coinTokensService, restoreSettingsService, coinSettingsService)
         }
 
         private val manageWalletsService by lazy {
