@@ -19,7 +19,6 @@ class SendBitcoinAmountService(
     private var amountCaution: HSCaution? = null
 
     private var minimumSendAmount: BigDecimal? = null
-    private var maximumSendAmount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
     private var validAddress: Address? = null
     private var feeRate: Long? = null
@@ -57,10 +56,6 @@ class SendBitcoinAmountService(
         availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, pluginData) }
     }
 
-    private fun refreshMaximumSendAmount() {
-        maximumSendAmount = pluginData?.let { adapter.maximumSendAmount(it) }
-    }
-
     private fun refreshMinimumSendAmount() {
         minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex)
     }
@@ -71,7 +66,6 @@ class SendBitcoinAmountService(
             coinCode,
             availableBalance ?: BigDecimal.ZERO,
             minimumSendAmount,
-            maximumSendAmount
         )
     }
 
@@ -106,7 +100,6 @@ class SendBitcoinAmountService(
         this.pluginData = pluginData
 
         refreshAvailableBalance()
-        refreshMaximumSendAmount()
         validateAmount()
 
         emitState()
