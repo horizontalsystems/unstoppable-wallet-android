@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.amount
 
 import io.horizontalsystems.bankwallet.modules.send.SendErrorInsufficientBalance
-import io.horizontalsystems.bankwallet.modules.send.SendErrorMaximumSendAmount
 import io.horizontalsystems.bankwallet.modules.send.SendErrorMinimumSendAmount
 import java.math.BigDecimal
 
@@ -12,7 +11,6 @@ class AmountValidator {
         coinCode: String,
         availableBalance: BigDecimal,
         minimumSendAmount: BigDecimal? = null,
-        maximumSendAmount: BigDecimal? = null
     ) = when {
         coinAmount == null -> null
         coinAmount == BigDecimal.ZERO -> null
@@ -21,9 +19,6 @@ class AmountValidator {
         }
         minimumSendAmount != null && coinAmount <= minimumSendAmount -> {
             SendErrorMinimumSendAmount(minimumSendAmount)
-        }
-        maximumSendAmount != null && coinAmount > maximumSendAmount -> {
-            SendErrorMaximumSendAmount(maximumSendAmount)
         }
         else -> null
     }

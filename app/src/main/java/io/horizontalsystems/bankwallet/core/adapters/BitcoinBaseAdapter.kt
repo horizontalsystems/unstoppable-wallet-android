@@ -229,12 +229,6 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal? {
-        return kit.maximumSpendLimit(pluginData)?.let { maximumSpendLimit ->
-            satoshiToBTC(maximumSpendLimit, RoundingMode.CEILING)
-        }
-    }
-
     fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal? {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
