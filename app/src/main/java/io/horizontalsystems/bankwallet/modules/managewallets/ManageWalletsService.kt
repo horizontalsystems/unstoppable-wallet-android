@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
+import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinServiceXxx
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.*
 import io.reactivex.disposables.CompositeDisposable
@@ -18,7 +18,7 @@ class ManageWalletsService(
     private val marketKit: MarketKitWrapper,
     private val walletManager: IWalletManager,
     accountManager: IAccountManager,
-    private val enableCoinService: EnableCoinService,
+    private val enableCoinService: EnableCoinServiceXxx,
     private val restoreSettingsManager: RestoreSettingsManager,
 ) : Clearable {
 
@@ -52,6 +52,13 @@ class ManageWalletsService(
         enableCoinService.enableCoinObservable
             .subscribeIO { (configuredPlatformCoins, settings) ->
                 handleEnableCoin(configuredPlatformCoins, settings)
+            }.let {
+                disposables.add(it)
+            }
+
+        enableCoinService.enableSingleCoinObservable
+            .subscribeIO { (configuredPlatformCoins, settings) ->
+                handleEnableSingleCoin(configuredPlatformCoins, settings)
             }.let {
                 disposables.add(it)
             }
@@ -156,22 +163,28 @@ class ManageWalletsService(
         configuredTokens: List<ConfiguredToken>, restoreSettings: RestoreSettings
     ) {
         val account = this.account ?: return
-        val coin = configuredTokens.firstOrNull()?.token?.coin ?: return
 
         if (restoreSettings.isNotEmpty() && configuredTokens.size == 1) {
             enableCoinService.save(restoreSettings, account, configuredTokens.first().token.blockchainType)
         }
 
-        val existingWallets = wallets.filter { it.coin == coin }
-        val existingConfiguredPlatformCoins = existingWallets.map { it.configuredToken }
-        val newConfiguredPlatformCoins = configuredTokens.minus(existingConfiguredPlatformCoins)
+        val newWallets = configuredTokens.map { Wallet(it, account) }
 
-        val removedWallets = existingWallets.filter { !configuredTokens.contains(it.configuredToken) }
-        val newWallets = newConfiguredPlatformCoins.map { Wallet(it, account) }
-
-        if (newWallets.isNotEmpty() || removedWallets.isNotEmpty()) {
-            walletManager.handle(newWallets, removedWallets)
+        if (newWallets.isNotEmpty()) {
+            walletManager.save(newWallets)
         }
+    }
+
+    private fun handleEnableSingleCoin(
+        configuredToken: ConfiguredToken, restoreSettings: RestoreSettings
+    ) {
+        val account = this.account ?: return
+
+        if (restoreSettings.isNotEmpty()) {
+            enableCoinService.save(restoreSettings, account, configuredToken.token.blockchainType)
+        }
+
+        walletManager.save(listOf(Wallet(configuredToken, account)))
     }
 
     fun setFilter(filter: String) {
@@ -182,19 +195,15 @@ class ManageWalletsService(
         syncState()
     }
 
-    fun enable(uid: String) {
-        val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
-        enable(fullCoin)
-    }
-
-    fun enable(fullCoin: FullCoin) {
+    fun enable(token: Token) {
         val account = this.account ?: return
-        enableCoinService.enable(fullCoin, account.type, account)
+        enableCoinService.enable(token, account.type, account)
     }
 
-    fun disable(uid: String) {
-        val walletsToDelete = wallets.filter { it.coin.uid == uid }
-        walletManager.delete(walletsToDelete)
+    fun disable(token: Token) {
+        wallets.firstOrNull { it.token == token }?.let {
+            walletManager.delete(listOf(it))
+        }
     }
 
     fun configure(uid: String) {
