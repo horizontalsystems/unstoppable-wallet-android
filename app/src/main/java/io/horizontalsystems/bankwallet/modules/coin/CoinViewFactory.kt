@@ -192,11 +192,21 @@ class CoinViewFactory(
         .sortedBy { it.blockchainType.order }
         .mapNotNull { token ->
             when (val tokenType = token.type) {
-                is TokenType.Eip20 -> ContractInfo(tokenType.address, token.blockchainType.imageUrl, explorerUrl(token, tokenType.address))
-                is TokenType.Bep2 -> ContractInfo(tokenType.symbol, token.blockchainType.imageUrl,explorerUrl(token, tokenType.symbol))
+                is TokenType.Eip20 -> ContractInfo(
+                    rawValue = tokenType.address,
+                    imgUrl = token.blockchainType.imageUrl,
+                    explorerUrl = explorerUrl(token, tokenType.address),
+                    name = token.blockchain.name
+                )
+                is TokenType.Bep2 -> ContractInfo(
+                    rawValue = tokenType.symbol,
+                    imgUrl = token.blockchainType.imageUrl,
+                    explorerUrl = explorerUrl(token, tokenType.symbol),
+                    name = token.blockchain.name
+                )
                 else -> null
             }
-    }
+        }
 
     private fun explorerUrl(token: Token, reference: String) : String? {
         return token.blockchain.explorerUrl?.let{
