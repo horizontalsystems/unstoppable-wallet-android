@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(
@@ -14,7 +14,7 @@ class ManageWalletsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<ConfiguredToken>>>()
     var showBirthdayHeightLiveEvent = SingleLiveEvent<BirthdayHeightViewItem>()
 
     private var disposables = CompositeDisposable()
@@ -35,22 +35,22 @@ class ManageWalletsViewModel(
     private fun viewItem(
         item: ManageWalletsService.Item,
     ) = CoinViewItem(
-        item = item.token,
-        imageSource = ImageSource.Remote(item.token.coin.iconUrl, item.token.iconPlaceholder),
-        title = item.token.coin.code,
-        subtitle = item.token.coin.name,
+        item = item.configuredToken,
+        imageSource = ImageSource.Remote(item.configuredToken.token.coin.iconUrl, item.configuredToken.token.iconPlaceholder),
+        title = item.configuredToken.token.coin.code,
+        subtitle = item.configuredToken.token.coin.name,
         enabled = item.enabled,
         hasSettings = item.hasSettings,
         hasInfo = item.hasInfo,
-        label = item.token.protocolType?.uppercase()
+        label = item.configuredToken.token.protocolType?.uppercase()
     )
 
-    fun enable(token: Token) {
-        service.enable(token)
+    fun enable(configuredToken: ConfiguredToken) {
+        service.enable(configuredToken)
     }
 
-    fun disable(token: Token) {
-        service.disable(token)
+    fun disable(configuredToken: ConfiguredToken) {
+        service.disable(configuredToken)
     }
 
     fun onClickSettings(uid: String) {
