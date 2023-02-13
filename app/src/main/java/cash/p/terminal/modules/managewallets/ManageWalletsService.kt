@@ -122,7 +122,7 @@ class ManageWalletsService(
 
         return fullCoin.eligibleTokens(accountType).map { token ->
             Item(
-                token = token,
+                configuredToken = ConfiguredToken(token),
                 enabled = isEnabled(token),
                 hasSettings = isEnabled(token) && hasSettingsOrPlatforms(
                     fullCoin.eligibleTokens(
@@ -195,13 +195,13 @@ class ManageWalletsService(
         syncState()
     }
 
-    fun enable(token: Token) {
+    fun enable(configuredToken: ConfiguredToken) {
         val account = this.account ?: return
-        enableCoinService.enable(token, account.type, account)
+        enableCoinService.enable(configuredToken, account.type, account)
     }
 
-    fun disable(token: Token) {
-        wallets.firstOrNull { it.token == token }?.let {
+    fun disable(configuredToken: ConfiguredToken) {
+        wallets.firstOrNull { it.configuredToken == configuredToken }?.let {
             walletManager.delete(listOf(it))
         }
     }
@@ -228,7 +228,7 @@ class ManageWalletsService(
     }
 
     data class Item(
-        val token: Token,
+        val configuredToken: ConfiguredToken,
         val enabled: Boolean,
         val hasSettings: Boolean,
         val hasInfo: Boolean

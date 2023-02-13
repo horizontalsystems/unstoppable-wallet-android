@@ -31,6 +31,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
@@ -43,7 +44,6 @@ import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseFragment() {
 
@@ -220,7 +220,7 @@ private fun ManageWalletsScreen(
 
 @Composable
 private fun CoinCell(
-    viewItem: CoinViewItem<Token>,
+    viewItem: CoinViewItem<ConfiguredToken>,
     onItemClick: () -> Unit,
     onSettingClick: () -> Unit,
     onInfoClick: () -> Unit
