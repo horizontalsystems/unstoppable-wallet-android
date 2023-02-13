@@ -14,9 +14,6 @@ abstract class BaseSolanaAdapter(
     val solanaKit = solanaKitWrapper.solanaKit
     protected val signer: Signer? = solanaKitWrapper.signer
 
-    override val isMainnet: Boolean
-        get() = solanaKit.isMainnet
-
     override val debugInfo: String
         get() = solanaKit.debugInfo()
 

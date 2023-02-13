@@ -37,7 +37,6 @@ data class BalanceViewItem(
     val badge: String?,
     val swapVisible: Boolean,
     val swapEnabled: Boolean = false,
-    val mainNet: Boolean,
     val errorMessage: String?,
     val isWatchAccount: Boolean
 )
@@ -289,7 +288,6 @@ class BalanceViewItemFactory {
                 badge = wallet.badge,
                 swapVisible = wallet.token.swappable,
                 swapEnabled = state is AdapterState.Synced,
-                mainNet = item.mainNet,
                 errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
                 isWatchAccount = watchAccount
         )

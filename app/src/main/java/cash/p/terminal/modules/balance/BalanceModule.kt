@@ -47,7 +47,6 @@ object BalanceModule {
 
     data class BalanceItem(
         val wallet: Wallet,
-        val mainNet: Boolean,
         val balanceData: BalanceData,
         val state: AdapterState,
         val coinPrice: CoinPrice? = null

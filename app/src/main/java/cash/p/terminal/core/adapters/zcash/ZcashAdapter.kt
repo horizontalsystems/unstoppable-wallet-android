@@ -132,8 +132,6 @@ class ZcashAdapter(
     override fun refresh() {
     }
 
-    override val isMainnet = true
-
     override val debugInfo: String
         get() = ""
 

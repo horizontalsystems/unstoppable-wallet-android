@@ -226,7 +226,7 @@ interface ITransactionsAdapter {
 
 class UnsupportedFilterException : Exception()
 
-interface IBalanceAdapter: IBaseAdapter {
+interface IBalanceAdapter {
     val balanceState: AdapterState
     val balanceStateUpdatedFlowable: Flowable<Unit>
 
@@ -238,7 +238,7 @@ data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDe
     val total get() = available + locked
 }
 
-interface IReceiveAdapter: IBaseAdapter {
+interface IReceiveAdapter {
     val receiveAddress: String
 }
 
@@ -301,10 +301,6 @@ interface IAdapter {
     fun refresh()
 
     val debugInfo: String
-}
-
-interface IBaseAdapter {
-    val isMainnet: Boolean
 }
 
 interface ISendSolanaAdapter {
