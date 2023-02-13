@@ -56,16 +56,16 @@ class EnableCoinServiceXxx(
         enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
     }
 
-    fun enable(token: Token, accountType: AccountType, account: Account? = null) {
+    fun enable(configuredToken: ConfiguredToken, accountType: AccountType, account: Account? = null) {
         when {
-            token.blockchainType.restoreSettingTypes.isNotEmpty() -> {
-                restoreSettingsService.approveSettings(token, account)
+            configuredToken.token.blockchainType.restoreSettingTypes.isNotEmpty() -> {
+                restoreSettingsService.approveSettings(configuredToken.token, account)
             }
-            token.blockchainType.coinSettingType != null -> {
-                coinSettingsService.approveSettings(token, accountType, token.blockchainType.defaultSettingsArray(accountType))
+            configuredToken.token.blockchainType.coinSettingType != null -> {
+                coinSettingsService.approveSettings(configuredToken.token, accountType, configuredToken.token.blockchainType.defaultSettingsArray(accountType))
             }
             else -> {
-                enableSingleCoinObservable.onNext(Pair(ConfiguredToken(token), RestoreSettings()))
+                enableSingleCoinObservable.onNext(Pair(configuredToken, RestoreSettings()))
             }
         }
     }
