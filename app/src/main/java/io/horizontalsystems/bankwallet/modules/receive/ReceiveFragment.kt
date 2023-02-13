@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -88,8 +87,7 @@ private fun ReceiveScreen(
     val context = LocalContext.current
     val fullCoin = viewModel.wallet.token.fullCoin
     val qrBitmap = TextHelper.getQrCodeBitmap(viewModel.receiveAddress)
-    val addressHint =
-        getAddressHint(viewModel.watchAccount, viewModel.testNet, viewModel.addressType)
+    val addressHint = getAddressHint(viewModel.watchAccount, viewModel.addressType)
     val title = if (viewModel.watchAccount) {
         ResString(R.string.Deposit_Address)
     } else {
@@ -146,29 +144,12 @@ private fun ReceiveScreen(
                     }
                 }
 
-                if (viewModel.testNet) {
-                    Image(
-                        painter = painterResource(R.drawable.testnet),
-                        contentScale = ContentScale.FillWidth,
-                        contentDescription = null
-                    )
-                }
-
-                if (viewModel.testNet) {
-                    D5(
-                        text = addressHint,
-                        modifier = Modifier.padding(top = 23.dp),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                } else {
-                    D1(
-                        text = addressHint,
-                        modifier = Modifier.padding(top = 23.dp),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
+                D1(
+                    text = addressHint,
+                    modifier = Modifier.padding(top = 23.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
 
                 C2(
                     text = viewModel.receiveAddress,
@@ -221,12 +202,10 @@ private fun ReceiveScreen(
 }
 
 @Composable
-private fun getAddressHint(watchAddress: Boolean, testNet: Boolean, addressType: String?): String {
-    val addressTypeText = if (testNet) "Testnet" else addressType
-
+private fun getAddressHint(watchAddress: Boolean, addressType: String?): String {
     val addressHint = when {
         watchAddress -> stringResource(R.string.Deposit_Address)
-        addressType != null -> stringResource(R.string.Deposit_Your_Address) + " ($addressTypeText)"
+        addressType != null -> stringResource(R.string.Deposit_Your_Address) + " ($addressType)"
         else -> stringResource(R.string.Deposit_Your_Address)
     }
     return addressHint

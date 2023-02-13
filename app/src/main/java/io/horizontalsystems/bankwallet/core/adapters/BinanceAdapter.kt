@@ -51,9 +51,6 @@ class BinanceAdapter(
     override val debugInfo: String
         get() = ""
 
-    // IBaseAdapter
-
-    override val isMainnet = true
 
     // IBalanceAdapter
 

@@ -12,6 +12,5 @@ class ReceiveViewModel(
 
     val receiveAddress  = receiveAdapter.receiveAddress
     val addressType = wallet.coinSettings.derivation?.addressType
-    val testNet = !receiveAdapter.isMainnet
     val watchAccount = wallet.account.isWatchAccount
 }

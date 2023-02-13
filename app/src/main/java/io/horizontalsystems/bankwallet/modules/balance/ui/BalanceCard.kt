@@ -379,13 +379,6 @@ private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel, n
             .fillMaxHeight(),
         contentAlignment = Alignment.Center
     ) {
-        if (!viewItem.mainNet) {
-            Image(
-                modifier = Modifier.align(Alignment.TopCenter),
-                painter = painterResource(R.drawable.testnet),
-                contentDescription = "Testnet"
-            )
-        }
         viewItem.syncingProgress.progress?.let { progress ->
             AndroidView(
                 modifier = Modifier
