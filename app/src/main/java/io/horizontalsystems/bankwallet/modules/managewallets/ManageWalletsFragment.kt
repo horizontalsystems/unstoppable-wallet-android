@@ -198,11 +198,11 @@ private fun ManageWalletsScreen(
                         CoinCell(
                             viewItem = viewItem,
                             onItemClick = {
-//                                if (viewItem.enabled) {
-//                                    viewModel.disable(viewItem.item)
-//                                } else {
-//                                    viewModel.enable(viewItem.item)
-//                                }
+                                if (viewItem.enabled) {
+                                    viewModel.disable(viewItem.item)
+                                } else {
+                                    viewModel.enable(viewItem.item)
+                                }
                             },
                             onSettingClick = {
 //                                viewModel.onClickSettings(viewItem.item)

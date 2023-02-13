@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
+import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinServiceXxx
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
@@ -28,7 +28,7 @@ object ManageWalletsModule {
         }
 
         private val enableCoinService by lazy {
-            EnableCoinService(coinTokensService, restoreSettingsService, coinSettingsService)
+            EnableCoinServiceXxx(coinTokensService, restoreSettingsService, coinSettingsService)
         }
 
         private val manageWalletsService by lazy {

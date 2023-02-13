@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
@@ -46,16 +45,12 @@ class ManageWalletsViewModel(
         label = item.token.protocolType?.uppercase()
     )
 
-    fun enable(fullCoin: FullCoin) {
-        service.enable(fullCoin)
+    fun enable(token: Token) {
+        service.enable(token)
     }
 
-    fun enable(uid: String) {
-        service.enable(uid)
-    }
-
-    fun disable(uid: String) {
-        service.disable(uid)
+    fun disable(token: Token) {
+        service.disable(token)
     }
 
     fun onClickSettings(uid: String) {

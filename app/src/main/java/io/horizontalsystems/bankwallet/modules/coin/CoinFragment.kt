@@ -269,7 +269,10 @@ fun CoinTabs(
                             MenuItem(
                                 title = TranslatableString.ResString(R.string.CoinPage_AddToWallet),
                                 icon = R.drawable.ic_add_to_wallet_2_24,
-                                onClick = { manageWalletsViewModel.enable(viewModel.fullCoin) }
+                                onClick = {
+                                    TODO()
+//                                    manageWalletsViewModel.enable(viewModel.fullCoin)
+                                }
                             )
                         )
                     }
