@@ -128,8 +128,6 @@ abstract class BitcoinBaseAdapter(
         return observable.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override val isMainnet = true
-
     override val debugInfo: String = ""
 
     override val balanceData: BalanceData

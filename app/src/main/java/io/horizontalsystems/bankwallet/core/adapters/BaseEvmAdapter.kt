@@ -13,9 +13,6 @@ abstract class BaseEvmAdapter(
 
     val evmKit = evmKitWrapper.evmKit
 
-    override val isMainnet: Boolean
-        get() = evmKit.chain.isMainNet
-
     override val debugInfo: String
         get() = evmKit.debugInfo()
 
