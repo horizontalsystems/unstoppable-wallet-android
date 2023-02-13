@@ -39,7 +39,16 @@ val Token.swappable: Boolean
 
 val Token.protocolInfo: String
     get() = when (type) {
-        TokenType.Native -> blockchain.name
+        TokenType.Native -> {
+            val parts = mutableListOf(blockchain.name)
+            when (this.blockchainType) {
+                BlockchainType.Ethereum -> parts.add("(ERC20)")
+                BlockchainType.BinanceSmartChain -> parts.add("(BEP20)")
+                BlockchainType.BinanceChain -> parts.add("(BEP2)")
+                else -> {}
+            }
+            parts.joinToString(" ")
+        }
         is TokenType.Eip20,
         is TokenType.Bep2,
         is TokenType.Spl -> protocolType ?: ""
@@ -48,15 +57,7 @@ val Token.protocolInfo: String
 
 val Token.typeInfo: String
     get() = when (val type = type) {
-        TokenType.Native -> {
-            val parts = mutableListOf(Translator.getString(R.string.CoinPlatforms_Native))
-            when (this.blockchainType) {
-                BlockchainType.BinanceSmartChain -> parts.add("(BEP20)")
-                BlockchainType.BinanceChain -> parts.add("(BEP2)")
-                else -> {}
-            }
-            parts.joinToString(" ")
-        }
+        TokenType.Native -> Translator.getString(R.string.CoinPlatforms_Native)
         is TokenType.Eip20 -> type.address.shorten()
         is TokenType.Bep2 -> type.symbol
         is TokenType.Spl -> type.address.shorten()
