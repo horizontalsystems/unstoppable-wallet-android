@@ -252,7 +252,6 @@ interface ISendBitcoinAdapter {
     ): BigDecimal
 
     fun minimumSendAmount(address: String?): BigDecimal?
-    fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
     fun fee(
         amount: BigDecimal,
         feeRate: Long,
