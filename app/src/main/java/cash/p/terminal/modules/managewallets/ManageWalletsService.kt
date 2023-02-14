@@ -5,7 +5,7 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.entities.*
-import cash.p.terminal.modules.enablecoin.EnableCoinServiceXxx
+import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -18,8 +18,8 @@ class ManageWalletsService(
     private val marketKit: MarketKitWrapper,
     private val walletManager: IWalletManager,
     accountManager: IAccountManager,
-    private val enableCoinService: EnableCoinServiceXxx,
     private val restoreSettingsManager: RestoreSettingsManager,
+    private val restoreSettingsService: RestoreSettingsService,
 ) : Clearable {
 
     val itemsObservable = PublishSubject.create<List<Item>>()
@@ -49,9 +49,9 @@ class ManageWalletsService(
                 disposables.add(it)
             }
 
-        enableCoinService.enableSingleCoinObservable
-            .subscribeIO { (configuredToken, settings) ->
-                handleEnableSingleCoin(configuredToken, settings)
+        restoreSettingsService.approveSettingsObservable
+            .subscribeIO {
+                enable(ConfiguredToken(it.token), it.settings)
             }.let {
                 disposables.add(it)
             }
@@ -169,13 +169,11 @@ class ManageWalletsService(
         syncState()
     }
 
-    private fun handleEnableSingleCoin(
-        configuredToken: ConfiguredToken, restoreSettings: RestoreSettings
-    ) {
+    private fun enable(configuredToken: ConfiguredToken, restoreSettings: RestoreSettings) {
         val account = this.account ?: return
 
         if (restoreSettings.isNotEmpty()) {
-            enableCoinService.save(restoreSettings, account, configuredToken.token.blockchainType)
+            restoreSettingsService.save(restoreSettings, account, configuredToken.token.blockchainType)
         }
 
         walletManager.save(listOf(Wallet(configuredToken, account)))
@@ -191,7 +189,12 @@ class ManageWalletsService(
 
     fun enable(configuredToken: ConfiguredToken) {
         val account = this.account ?: return
-        enableCoinService.enable(configuredToken, account)
+
+        if (configuredToken.token.blockchainType.restoreSettingTypes.isNotEmpty()) {
+            restoreSettingsService.approveSettings(configuredToken.token, account)
+        } else {
+            enable(configuredToken, RestoreSettings())
+        }
     }
 
     fun disable(configuredToken: ConfiguredToken) {
