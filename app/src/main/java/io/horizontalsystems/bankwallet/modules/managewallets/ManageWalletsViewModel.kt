@@ -42,7 +42,7 @@ class ManageWalletsViewModel(
         enabled = item.enabled,
         hasSettings = item.hasSettings,
         hasInfo = item.hasInfo,
-        label = item.configuredToken.token.protocolType?.uppercase()
+        label = item.configuredToken.badge
     )
 
     fun enable(configuredToken: ConfiguredToken) {
