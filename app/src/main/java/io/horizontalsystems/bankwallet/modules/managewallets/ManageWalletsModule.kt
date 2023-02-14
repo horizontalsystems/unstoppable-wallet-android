@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinServiceXxx
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 
@@ -15,17 +14,13 @@ object ManageWalletsModule {
             RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider)
         }
 
-        private val enableCoinService by lazy {
-            EnableCoinServiceXxx(restoreSettingsService)
-        }
-
         private val manageWalletsService by lazy {
             ManageWalletsService(
                 App.marketKit,
                 App.walletManager,
                 App.accountManager,
-                enableCoinService,
                 App.restoreSettingsManager,
+                restoreSettingsService
             )
         }
 
