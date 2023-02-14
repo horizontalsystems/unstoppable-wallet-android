@@ -11,12 +11,9 @@ import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
-class EnableCoinServiceXxx(
-    private val restoreSettingsService: RestoreSettingsService
-) {
+class EnableCoinServiceXxx(private val restoreSettingsService: RestoreSettingsService) {
     private val disposable = CompositeDisposable()
 
-    val enableCoinObservable = PublishSubject.create<Pair<List<ConfiguredToken>, RestoreSettings>>()
     val enableSingleCoinObservable = PublishSubject.create<Pair<ConfiguredToken, RestoreSettings>>()
 
     init {
@@ -25,21 +22,15 @@ class EnableCoinServiceXxx(
             .let { disposable.add(it) }
     }
 
-    private fun handleApproveRestoreSettings(
-        token: Token,
-        settings: RestoreSettings = RestoreSettings()
-    ) {
-        enableCoinObservable.onNext(Pair(listOf(ConfiguredToken(token)), settings))
+    private fun handleApproveRestoreSettings(token: Token, settings: RestoreSettings) {
+        enableSingleCoinObservable.onNext(Pair(ConfiguredToken(token), settings))
     }
 
     fun enable(configuredToken: ConfiguredToken, account: Account) {
-        when {
-            configuredToken.token.blockchainType.restoreSettingTypes.isNotEmpty() -> {
-                restoreSettingsService.approveSettings(configuredToken.token, account)
-            }
-            else -> {
-                enableSingleCoinObservable.onNext(Pair(configuredToken, RestoreSettings()))
-            }
+        if (configuredToken.token.blockchainType.restoreSettingTypes.isNotEmpty()) {
+            restoreSettingsService.approveSettings(configuredToken.token, account)
+        } else {
+            enableSingleCoinObservable.onNext(Pair(configuredToken, RestoreSettings()))
         }
     }
 
