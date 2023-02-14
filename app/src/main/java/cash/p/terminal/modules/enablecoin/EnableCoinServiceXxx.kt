@@ -1,7 +1,10 @@
 package cash.p.terminal.modules.enablecoin
 
-import cash.p.terminal.core.*
+import cash.p.terminal.core.coinSettingType
 import cash.p.terminal.core.managers.RestoreSettings
+import cash.p.terminal.core.restoreSettingTypes
+import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.supportedTokens
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CoinSettings
@@ -56,13 +59,10 @@ class EnableCoinServiceXxx(
         enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
     }
 
-    fun enable(configuredToken: ConfiguredToken, accountType: AccountType, account: Account? = null) {
+    fun enable(configuredToken: ConfiguredToken, account: Account) {
         when {
             configuredToken.token.blockchainType.restoreSettingTypes.isNotEmpty() -> {
                 restoreSettingsService.approveSettings(configuredToken.token, account)
-            }
-            configuredToken.token.blockchainType.coinSettingType != null -> {
-                coinSettingsService.approveSettings(configuredToken.token, accountType, configuredToken.token.blockchainType.defaultSettingsArray(accountType))
             }
             else -> {
                 enableSingleCoinObservable.onNext(Pair(configuredToken, RestoreSettings()))

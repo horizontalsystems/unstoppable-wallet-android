@@ -1,6 +1,8 @@
 package cash.p.terminal.entities
 
 import android.os.Parcelable
+import cash.p.terminal.core.protocolType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.util.*
@@ -20,4 +22,14 @@ data class ConfiguredToken(
                 other.token == token &&
                 other.coinSettings == coinSettings
     }
+
+    val badge
+        get() = when (token.blockchainType) {
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin,
+            -> coinSettings.derivation?.value?.uppercase()
+            BlockchainType.BitcoinCash -> coinSettings.bitcoinCashCoinType?.value?.uppercase()
+            else -> token.protocolType?.uppercase()
+        }
+
 }
