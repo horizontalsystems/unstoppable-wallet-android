@@ -32,8 +32,6 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ConfiguredToken
-import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
-import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
@@ -41,7 +39,6 @@ import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
-import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 
@@ -49,9 +46,7 @@ class ManageWalletsFragment : BaseFragment() {
 
     private val vmFactory by lazy { ManageWalletsModule.Factory() }
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
-    private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
-    private val coinTokensViewModel by viewModels<CoinTokensViewModel> { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,22 +74,6 @@ class ManageWalletsFragment : BaseFragment() {
     }
 
     private fun observe() {
-        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
-            hideKeyboard()
-            showBottomSelectorDialog(
-                config,
-                onSelect = { indexes -> coinSettingsViewModel.onSelect(indexes) },
-                onCancel = { coinSettingsViewModel.onCancelSelect() }
-            )
-        }
-
-        coinTokensViewModel.openSelectorEvent.observe(viewLifecycleOwner) { config ->
-            showBottomSelectorDialog(
-                config,
-                onSelect = { indexes -> coinTokensViewModel.onSelect(indexes) },
-                onCancel = { coinTokensViewModel.onCancelSelect() }
-            )
-        }
         viewModel.showBirthdayHeightLiveEvent.observe(viewLifecycleOwner) {
             BirthdayHeightDialog(
                 blockchainIcon = it.blockchainIcon,
@@ -103,28 +82,6 @@ class ManageWalletsFragment : BaseFragment() {
             ).show(childFragmentManager, "birthday_height_dialog")
         }
     }
-
-    private fun showBottomSelectorDialog(
-        config: BottomSheetSelectorMultipleDialog.Config,
-        onSelect: (indexes: List<Int>) -> Unit,
-        onCancel: () -> Unit
-    ) {
-        hideKeyboard()
-        BottomSheetSelectorMultipleDialog.show(
-            fragmentManager = childFragmentManager,
-            title = config.title,
-            icon = config.icon,
-            items = config.viewItems,
-            selected = config.selectedIndexes,
-            notifyUnchanged = true,
-            onItemSelected = { onSelect(it) },
-            onCancelled = { onCancel() },
-            warningTitle = config.descriptionTitle,
-            warning = config.description,
-            allowEmpty = config.allowEmpty
-        )
-    }
-
 }
 
 @OptIn(ExperimentalAnimationApi::class)
