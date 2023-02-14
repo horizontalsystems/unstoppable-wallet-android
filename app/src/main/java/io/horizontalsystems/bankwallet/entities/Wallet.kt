@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
-import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.util.*
@@ -26,13 +24,7 @@ data class Wallet(
         get() = token.decimals
 
     val badge
-        get() = when (token.blockchainType) {
-            BlockchainType.Bitcoin,
-            BlockchainType.Litecoin,
-            -> coinSettings.derivation?.value?.uppercase()
-            BlockchainType.BitcoinCash -> coinSettings.bitcoinCashCoinType?.value?.uppercase()
-            else -> token.protocolType?.uppercase()
-        }
+        get() = configuredToken.badge
 
     val transactionSource get() = TransactionSource(token.blockchain, account, coinSettings)
 

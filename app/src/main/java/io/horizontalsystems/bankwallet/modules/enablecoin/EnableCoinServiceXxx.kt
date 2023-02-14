@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.coinSettingType
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
+import io.horizontalsystems.bankwallet.core.restoreSettingTypes
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.supportedTokens
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CoinSettings
@@ -56,13 +59,10 @@ class EnableCoinServiceXxx(
         enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
     }
 
-    fun enable(configuredToken: ConfiguredToken, accountType: AccountType, account: Account? = null) {
+    fun enable(configuredToken: ConfiguredToken, account: Account) {
         when {
             configuredToken.token.blockchainType.restoreSettingTypes.isNotEmpty() -> {
                 restoreSettingsService.approveSettings(configuredToken.token, account)
-            }
-            configuredToken.token.blockchainType.coinSettingType != null -> {
-                coinSettingsService.approveSettings(configuredToken.token, accountType, configuredToken.token.blockchainType.defaultSettingsArray(accountType))
             }
             else -> {
                 enableSingleCoinObservable.onNext(Pair(configuredToken, RestoreSettings()))

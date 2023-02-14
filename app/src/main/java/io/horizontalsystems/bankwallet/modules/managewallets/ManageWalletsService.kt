@@ -4,13 +4,13 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.ConfiguredToken
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinServiceXxx
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -69,8 +69,8 @@ class ManageWalletsService(
         syncState()
     }
 
-    private fun isEnabled(token: Token): Boolean {
-        return wallets.any { it.token == token }
+    private fun isEnabled(configuredToken: ConfiguredToken): Boolean {
+        return wallets.any { it.configuredToken == configuredToken }
     }
 
     private fun sync(walletList: List<Wallet>) {
@@ -117,34 +117,53 @@ class ManageWalletsService(
 //        }
     }
 
-    private fun item(fullCoin: FullCoin): List<Item> {
+    private fun getItemsForFullCoin(fullCoin: FullCoin): List<Item> {
         val accountType = account?.type ?: return listOf()
 
-        return fullCoin.eligibleTokens(accountType).map { token ->
-            Item(
-                configuredToken = ConfiguredToken(token),
-                enabled = isEnabled(token),
-                hasSettings = isEnabled(token) && hasSettingsOrPlatforms(
-                    fullCoin.eligibleTokens(
-                        accountType
-                    )
-                ),
-                hasInfo = isEnabled(token) && fullCoin.tokens.firstOrNull()?.blockchainType == BlockchainType.Zcash
-            )
+        val items = mutableListOf<Item>()
+        fullCoin.eligibleTokens(accountType).forEach { token ->
+            items.addAll(getItemsForToken(token, accountType))
         }
+
+        return items
     }
 
-    private fun hasSettingsOrPlatforms(tokens: List<Token>): Boolean {
-        return if (tokens.size == 1) {
-            val token = tokens[0]
-            token.blockchainType.coinSettingType != null || token.type !is TokenType.Native
-        } else {
-            true
+    private fun getItemsForToken(token: Token, accountType: AccountType): List<Item> {
+        val items = mutableListOf<Item>()
+        when (token.blockchainType.coinSettingType) {
+            CoinSettingType.derivation -> {
+                accountType.supportedDerivations.forEach {
+                    val coinSettings = CoinSettings(mapOf(CoinSettingType.derivation to it.value))
+                    items.add(getItemForConfiguredToken(ConfiguredToken(token, coinSettings)))
+                }
+            }
+            CoinSettingType.bitcoinCashCoinType -> {
+                BitcoinCashCoinType.values().forEach {
+                    val coinSettings = CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to it.value))
+                    items.add(getItemForConfiguredToken(ConfiguredToken(token, coinSettings)))
+                }
+            }
+            else -> {
+                items.add(getItemForConfiguredToken(ConfiguredToken(token)))
+            }
         }
+
+        return items
+    }
+
+    private fun getItemForConfiguredToken(configuredToken: ConfiguredToken): Item {
+        val enabled = isEnabled(configuredToken)
+        val item = Item(
+            configuredToken = configuredToken,
+            enabled = enabled,
+            hasSettings = true,
+            hasInfo = enabled && configuredToken.token.blockchainType == BlockchainType.Zcash
+        )
+        return item
     }
 
     private fun syncState() {
-        items = fullCoins.map { item(it) }.flatten()
+        items = fullCoins.map { getItemsForFullCoin(it) }.flatten()
     }
 
     private fun handleUpdated(wallets: List<Wallet>) {
@@ -197,7 +216,7 @@ class ManageWalletsService(
 
     fun enable(configuredToken: ConfiguredToken) {
         val account = this.account ?: return
-        enableCoinService.enable(configuredToken, account.type, account)
+        enableCoinService.enable(configuredToken, account)
     }
 
     fun disable(configuredToken: ConfiguredToken) {
