@@ -153,13 +153,11 @@ class ManageWalletsService(
 
     private fun getItemForConfiguredToken(configuredToken: ConfiguredToken): Item {
         val enabled = isEnabled(configuredToken)
-        val item = Item(
+        return Item(
             configuredToken = configuredToken,
             enabled = enabled,
-            hasSettings = true,
             hasInfo = enabled && configuredToken.token.blockchainType == BlockchainType.Zcash
         )
-        return item
     }
 
     private fun syncState() {
@@ -249,7 +247,6 @@ class ManageWalletsService(
     data class Item(
         val configuredToken: ConfiguredToken,
         val enabled: Boolean,
-        val hasSettings: Boolean,
         val hasInfo: Boolean
     )
 }
