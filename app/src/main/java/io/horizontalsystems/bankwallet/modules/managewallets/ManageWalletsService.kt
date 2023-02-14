@@ -49,16 +49,9 @@ class ManageWalletsService(
                 disposables.add(it)
             }
 
-        enableCoinService.enableCoinObservable
-            .subscribeIO { (configuredPlatformCoins, settings) ->
-                handleEnableCoin(configuredPlatformCoins, settings)
-            }.let {
-                disposables.add(it)
-            }
-
         enableCoinService.enableSingleCoinObservable
-            .subscribeIO { (configuredPlatformCoins, settings) ->
-                handleEnableSingleCoin(configuredPlatformCoins, settings)
+            .subscribeIO { (configuredToken, settings) ->
+                handleEnableSingleCoin(configuredToken, settings)
             }.let {
                 disposables.add(it)
             }
@@ -174,22 +167,6 @@ class ManageWalletsService(
         }
 
         syncState()
-    }
-
-    private fun handleEnableCoin(
-        configuredTokens: List<ConfiguredToken>, restoreSettings: RestoreSettings
-    ) {
-        val account = this.account ?: return
-
-        if (restoreSettings.isNotEmpty() && configuredTokens.size == 1) {
-            enableCoinService.save(restoreSettings, account, configuredTokens.first().token.blockchainType)
-        }
-
-        val newWallets = configuredTokens.map { Wallet(it, account) }
-
-        if (newWallets.isNotEmpty()) {
-            walletManager.save(newWallets)
-        }
     }
 
     private fun handleEnableSingleCoin(
