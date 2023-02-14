@@ -40,7 +40,6 @@ class ManageWalletsViewModel(
         title = item.configuredToken.token.coin.code,
         subtitle = item.configuredToken.token.coin.name,
         enabled = item.enabled,
-        hasSettings = item.hasSettings,
         hasInfo = item.hasInfo,
         label = item.configuredToken.badge
     )
