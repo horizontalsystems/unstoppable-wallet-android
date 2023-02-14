@@ -162,7 +162,7 @@ private fun ManageWalletsScreen(
                                 }
                             },
                             onInfoClick = {
-//                                viewModel.onClickInfo(viewItem.item)
+                                viewModel.onClickInfo(viewItem.item)
                             }
                         )
                     }

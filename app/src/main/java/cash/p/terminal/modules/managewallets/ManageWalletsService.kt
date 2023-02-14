@@ -223,8 +223,8 @@ class ManageWalletsService(
         }
     }
 
-    fun birthdayHeight(uid: String): Pair<Blockchain, Long>? {
-        val token = fullCoins.firstOrNull { it.coin.uid == uid }?.tokens?.firstOrNull() ?: return null
+    fun birthdayHeight(configuredToken: ConfiguredToken): Pair<Blockchain, Long>? {
+        val token = configuredToken.token
         val account = this.account ?: return null
         val settings = restoreSettingsManager.settings(account, token.blockchainType)
 

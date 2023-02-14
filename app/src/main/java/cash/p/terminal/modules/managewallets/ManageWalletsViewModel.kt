@@ -56,8 +56,8 @@ class ManageWalletsViewModel(
         service.setFilter(filter)
     }
 
-    fun onClickInfo(uid: String) {
-        val (blockchain, birthdayHeight) = service.birthdayHeight(uid) ?: return
+    fun onClickInfo(configuredToken: ConfiguredToken) {
+        val (blockchain, birthdayHeight) = service.birthdayHeight(configuredToken) ?: return
         showBirthdayHeightLiveEvent.postValue(
             BirthdayHeightViewItem(
                 blockchainIcon = ImageSource.Remote(blockchain.type.imageUrl),
