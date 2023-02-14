@@ -24,10 +24,10 @@ class RateAppManager(
 
     override val showRateAppObservable = PublishSubject.create<RateUsType>()
 
-    private val MIN_LAUNCH_COUNT = 500000
-    private val MIN_COINS_COUNT = 500000
+    private val MIN_LAUNCH_COUNT = 10
+    private val MIN_COINS_COUNT = 2
     private val COUNTDOWN_TIME_INTERVAL: Long = 10 * 1000 // 10 seconds
-    private val REQUEST_TIME_INTERVAL = 500000 * 24 * 60 * 60 // 500000 Days %)
+    private val REQUEST_TIME_INTERVAL = 40 * 24 * 60 * 60 // 40 Days %)
 
     private var isCountdownAllowed = false
     private var isCountdownPassed = false

@@ -84,7 +84,7 @@
     <string name="Language_Czech">Чешский</string>
     <string name="Language_Portuguese">Португальский</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">ДД!</string>
+    <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐️</string>
     <string name="RateApp_Description_Rate_This_App">Вам нравится P.CASH? Поделитесь отзывами и идеями для дальнейшего развития кошелька.</string>
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>

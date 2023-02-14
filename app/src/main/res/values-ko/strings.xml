@@ -83,7 +83,7 @@
     <string name="Language_Czech">체코어</string>
     <string name="Language_Portuguese">포르투갈어</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">안녕</string>
+    <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐</string>
     <string name="RateApp_Description_Rate_This_App">P.CASH을 즐기고 계십니까? 더 발전하기 위해 피드백과 아이디어를 공유해 주세요.</string>
     <string name="RateApp_Button_RateIt">평가 하기</string>
     <string name="RateApp_Button_NotNow">다음에 확인</string>
