@@ -223,13 +223,6 @@ class ManageWalletsService(
         }
     }
 
-    fun configure(uid: String) {
-        val account = this.account ?: return
-        val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
-        val coinWallets = wallets.filter { it.coin == fullCoin.coin }
-        enableCoinService.configure(fullCoin, account.type, coinWallets.map { it.configuredToken })
-    }
-
     fun birthdayHeight(uid: String): Pair<Blockchain, Long>? {
         val token = fullCoins.firstOrNull { it.coin.uid == uid }?.tokens?.firstOrNull() ?: return null
         val account = this.account ?: return null

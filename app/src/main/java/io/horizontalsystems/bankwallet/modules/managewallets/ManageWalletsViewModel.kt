@@ -52,10 +52,6 @@ class ManageWalletsViewModel(
         service.disable(configuredToken)
     }
 
-    fun onClickSettings(uid: String) {
-        service.configure(uid)
-    }
-
     fun updateFilter(filter: String) {
         service.setFilter(filter)
     }
