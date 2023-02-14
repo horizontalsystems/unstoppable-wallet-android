@@ -104,10 +104,7 @@ class ManageWalletsService(
     }
 
     private fun sortFullCoins() {
-        // todo
-//        fullCoins = fullCoins.sortedByFilter(filter) {
-//            isEnabled(it.coin)
-//        }
+        fullCoins = fullCoins.sortedByFilter(filter)
     }
 
     private fun getItemsForFullCoin(fullCoin: FullCoin): List<Item> {
