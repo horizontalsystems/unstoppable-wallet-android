@@ -49,26 +49,23 @@ val CoinTreasury.logoUrl: String
 val Auditor.logoUrl: String
     get() = "https://cdn.blocksdecoded.com/auditor-icons/$name@3x.png"
 
-fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean): List<FullCoin> {
-    var comparator: Comparator<FullCoin> = compareByDescending {
-        enabled.invoke(it)
-    }
-    if (filter.isNotBlank()) {
-        val lowercasedFilter = filter.lowercase()
-        comparator = comparator
-            .thenByDescending {
-                it.coin.code.lowercase() == lowercasedFilter
-            }.thenByDescending {
-                it.coin.code.lowercase().startsWith(lowercasedFilter)
-            }.thenByDescending {
-                it.coin.name.lowercase().startsWith(lowercasedFilter)
-            }
-    }
-    comparator = comparator.thenBy {
+fun List<FullCoin>.sortedByFilter(filter: String): List<FullCoin> {
+    val baseComparator = compareBy<FullCoin> {
         it.coin.marketCapRank ?: Int.MAX_VALUE
-    }
-    comparator = comparator.thenBy {
+    }.thenBy {
         it.coin.name.lowercase(Locale.ENGLISH)
+    }
+    val comparator = if (filter.isNotBlank()) {
+        val lowercasedFilter = filter.lowercase()
+        compareByDescending<FullCoin> {
+            it.coin.code.lowercase() == lowercasedFilter
+        }.thenByDescending {
+            it.coin.code.lowercase().startsWith(lowercasedFilter)
+        }.thenByDescending {
+            it.coin.name.lowercase().startsWith(lowercasedFilter)
+        }.thenComparing(baseComparator)
+    } else {
+        baseComparator
     }
 
     return sortedWith(comparator)
