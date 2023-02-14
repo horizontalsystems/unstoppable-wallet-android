@@ -204,9 +204,6 @@ private fun ManageWalletsScreen(
                                     viewModel.enable(viewItem.item)
                                 }
                             },
-                            onSettingClick = {
-//                                viewModel.onClickSettings(viewItem.item)
-                            },
                             onInfoClick = {
 //                                viewModel.onClickInfo(viewItem.item)
                             }
@@ -222,7 +219,6 @@ private fun ManageWalletsScreen(
 private fun CoinCell(
     viewItem: CoinViewItem<ConfiguredToken>,
     onItemClick: () -> Unit,
-    onSettingClick: () -> Unit,
     onInfoClick: () -> Unit
 ) {
     Column {
@@ -276,17 +272,6 @@ private fun CoinCell(
                 )
             }
             Spacer(Modifier.width(12.dp))
-            if (viewItem.hasSettings) {
-                HsIconButton(
-                    onClick = onSettingClick
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_edit_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
-            }
             if (viewItem.hasInfo) {
                 HsIconButton(onClick = onInfoClick) {
                     Icon(
