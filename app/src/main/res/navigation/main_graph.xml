@@ -52,14 +52,23 @@
         android:id="@+id/manageAccountFragment"
         android:name="cash.p.terminal.modules.manageaccount.ManageAccountFragment"/>
     <fragment
+        android:id="@+id/privateKeysFragment"
+        android:name="cash.p.terminal.modules.manageaccount.privatekeys.PrivateKeysFragment"/>
+     <fragment
+        android:id="@+id/publicKeysFragment"
+        android:name="cash.p.terminal.modules.manageaccount.publickeys.PublicKeysFragment"/>
+    <fragment
+        android:id="@+id/evmAddressFragment"
+        android:name="cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment"/>
+    <fragment
         android:id="@+id/recoveryPhraseFragment"
         android:name="cash.p.terminal.modules.recoveryphrase.RecoveryPhraseFragment"/>
     <fragment
         android:id="@+id/evmPrivateKeyFragment"
-        android:name="cash.p.terminal.modules.evmprivatekey.EvmPrivateKeyFragment"/>
+        android:name="cash.p.terminal.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment"/>
     <fragment
         android:id="@+id/accountExtendedKeyFragment"
-        android:name="cash.p.terminal.modules.showextendedkey.account.AccountExtendedKeyFragment"/>
+        android:name="cash.p.terminal.modules.manageaccount.showextendedkey.AccountExtendedKeyFragment"/>
     <fragment
         android:id="@+id/backupKeyFragment"
         android:name="cash.p.terminal.modules.backupkey.BackupKeyFragment"/>

@@ -8,8 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.ComposeView
@@ -32,11 +30,10 @@ import cash.p.terminal.modules.backupkey.BackupKeyModule
 import cash.p.terminal.modules.balance.HeaderNote
 import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
-import cash.p.terminal.modules.evmprivatekey.EvmPrivateKeyModule
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
-import cash.p.terminal.modules.manageaccount.ManageAccountViewModel.KeyActionState
+import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
+import cash.p.terminal.modules.manageaccount.publickeys.PublicKeysModule
 import cash.p.terminal.modules.recoveryphrase.RecoveryPhraseModule
-import cash.p.terminal.modules.showextendedkey.account.ShowExtendedKeyModule
 import cash.p.terminal.modules.unlinkaccount.UnlinkAccountDialog
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -64,29 +61,26 @@ class ManageAccountFragment : BaseFragment() {
 
 @Composable
 fun ManageAccountScreen(navController: NavController, accountId: String) {
-    val viewModel = viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
+    val viewModel =
+        viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
-    val saveEnabled by viewModel.saveEnabledLiveData.observeAsState(false)
-    val finish by viewModel.finishLiveEvent.observeAsState()
-
-    if (finish != null) {
+    if (viewModel.viewState.closeScreen) {
         navController.popBackStack()
+        viewModel.onClose()
     }
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.PlainString(viewModel.account.name),
+                title = TranslatableString.PlainString(viewModel.viewState.title),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccount_Save),
-                        onClick = {
-                            viewModel.onSave()
-                        },
-                        enabled = saveEnabled
+                        onClick = { viewModel.onSave() },
+                        enabled = viewModel.viewState.canSave
                     )
                 )
             )
@@ -96,17 +90,17 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.account.name,
+                    initial = viewModel.viewState.title,
                     hint = "",
                     onValueChange = {
                         viewModel.onChange(it)
                     }
                 )
 
-                when (viewModel.headerNote) {
+                when (viewModel.viewState.headerNote) {
                     HeaderNote.NonStandardAccount -> {
                         NoteError(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp,  top = 32.dp),
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp),
                             text = stringResource(R.string.AccountRecovery_MigrationRequired),
                             onClick = {
                                 FaqManager.showFaqPage(
@@ -132,149 +126,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     HeaderNote.None -> Unit
                 }
 
-                when (viewModel.keyActionState) {
-                    KeyActionState.ShowRecoveryPhrase -> {
-                        if (viewModel.showRecoveryPhrase) {
-                            Spacer(modifier = Modifier.height(32.dp))
-                            CellUniversalLawrenceSection(
-                                listOf {
-                                    AccountActionItem(
-                                        title = stringResource(id = R.string.RecoveryPhrase_Title),
-                                        icon = painterResource(id = R.drawable.icon_paper_contract_20)
-                                    ) {
-                                        navController.authorizedAction {
-                                            navController.slideFromRight(
-                                                R.id.recoveryPhraseFragment,
-                                                RecoveryPhraseModule.prepareParams(viewModel.account)
-                                            )
-                                        }
-                                    }
-                                })
-                        }
-                        if (viewModel.showEvmPrivateKey) {
-                            Spacer(modifier = Modifier.height(32.dp))
-                            CellUniversalLawrenceSection(
-                                listOf {
-                                AccountActionItem(
-                                    title = stringResource(id = R.string.EvmPrivateKey_Title),
-                                    icon = painterResource(id = R.drawable.ic_key_20)
-                                ) {
-                                    navController.authorizedAction {
-                                        navController.slideFromRight(
-                                            R.id.evmPrivateKeyFragment,
-                                            EvmPrivateKeyModule.prepareParams(viewModel.account)
-                                        )
-                                    }
-                                }
-                            })
-                        }
-                        val keyActions = buildList<@Composable () -> Unit> {
-                            if (viewModel.bip32RootKey != null) {
-                                add {
-                                    AccountActionItem(
-                                        title = stringResource(id = R.string.Bip32RootKey),
-                                        icon = painterResource(id = R.drawable.ic_key_20)
-                                    ) {
-                                        navController.authorizedAction {
-                                            navController.slideFromRight(
-                                                R.id.accountExtendedKeyFragment,
-                                                ShowExtendedKeyModule.prepareParams(
-                                                    viewModel.bip32RootKey,
-                                                    ShowExtendedKeyModule.DisplayKeyType.Bip32RootKey
-                                                )
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (viewModel.bip32RootKey != null || viewModel.accountExtendedPrivateKey != null) {
-                                add {
-                                    AccountActionItem(
-                                        title = stringResource(id = R.string.AccountExtendedPrivateKey),
-                                        icon = painterResource(id = R.drawable.ic_key_20)
-                                    ) {
-                                        navController.authorizedAction {
-                                            if (viewModel.bip32RootKey != null) {
-                                                navController.slideFromRight(
-                                                    R.id.accountExtendedKeyFragment,
-                                                    ShowExtendedKeyModule.prepareParams(
-                                                        viewModel.bip32RootKey,
-                                                        ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(true)
-                                                    )
-                                                )
-                                            } else if (viewModel.accountExtendedPrivateKey != null) {
-                                                navController.slideFromRight(
-                                                    R.id.accountExtendedKeyFragment,
-                                                    ShowExtendedKeyModule.prepareParams(
-                                                        viewModel.accountExtendedPrivateKey,
-                                                        ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(false)
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (viewModel.bip32RootKey != null || viewModel.accountExtendedPublicKey != null || viewModel.accountExtendedPrivateKey != null) {
-                                add {
-                                    AccountActionItem(
-                                        title = stringResource(id = R.string.AccountExtendedPublicKey),
-                                        icon = painterResource(id = R.drawable.icon_link_20)
-                                    ) {
-                                        if (viewModel.bip32RootKey != null) {
-                                            navController.slideFromRight(
-                                                R.id.accountExtendedKeyFragment,
-                                                ShowExtendedKeyModule.prepareParams(
-                                                    viewModel.bip32RootKey,
-                                                    ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(true)
-                                                )
-                                            )
-                                        } else if (viewModel.accountExtendedPublicKey != null) {
-                                            navController.slideFromRight(
-                                                R.id.accountExtendedKeyFragment,
-                                                ShowExtendedKeyModule.prepareParams(
-                                                    viewModel.accountExtendedPublicKey,
-                                                    ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(false)
-                                                )
-                                            )
-                                        } else if (viewModel.accountExtendedPrivateKey != null) {
-                                            navController.slideFromRight(
-                                                R.id.accountExtendedKeyFragment,
-                                                ShowExtendedKeyModule.prepareParams(
-                                                    viewModel.accountExtendedPrivateKey,
-                                                    ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(false)
-                                                )
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (keyActions.isNotEmpty()) {
-                            Spacer(modifier = Modifier.height(32.dp))
-                            CellUniversalLawrenceSection(keyActions)
-                        }
-                    }
-                    KeyActionState.BackupRecoveryPhrase -> {
-                        Spacer(modifier = Modifier.height(32.dp))
-                        CellUniversalLawrenceSection(
-                            listOf {
-                                RedActionItem(
-                                    title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
-                                    icon = painterResource(id = R.drawable.icon_warning_2_20)
-                                ) {
-                                    navController.authorizedAction {
-                                        navController.slideFromBottom(
-                                            R.id.backupKeyFragment,
-                                            BackupKeyModule.prepareParams(viewModel.account)
-                                        )
-                                    }
-                                }
-                            })
-                    }
-                    KeyActionState.None -> Unit
-                }
+                KeyActions(viewModel, navController)
 
                 Spacer(modifier = Modifier.height(32.dp))
                 CellUniversalLawrenceSection(
@@ -292,6 +144,84 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
+    }
+}
+
+@Composable
+private fun KeyActions(
+    viewModel: ManageAccountViewModel,
+    navController: NavController
+) {
+    val actionItems = mutableListOf<@Composable () -> Unit>()
+
+    viewModel.viewState.keyActions.forEach { keyAction ->
+        when (keyAction) {
+            KeyAction.RecoveryPhrase -> {
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.RecoveryPhrase_Title),
+                        icon = painterResource(id = R.drawable.icon_paper_contract_20)
+                    ) {
+                        navController.authorizedAction {
+                            navController.slideFromRight(
+                                R.id.recoveryPhraseFragment,
+                                RecoveryPhraseModule.prepareParams(viewModel.account)
+                            )
+                        }
+                    }
+                }
+            }
+            KeyAction.PrivateKeys -> {
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.PrivateKeys_Title),
+                        icon = painterResource(id = R.drawable.ic_key_20)
+                    ) {
+                        navController.authorizedAction {
+                            navController.slideFromRight(
+                                R.id.privateKeysFragment,
+                                PublicKeysModule.prepareParams(viewModel.account)
+                            )
+                        }
+                    }
+                }
+            }
+            KeyAction.PublicKeys -> {
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.PublicKeys_Title),
+                        icon = painterResource(id = R.drawable.icon_binocule_20)
+                    ) {
+                        navController.authorizedAction {
+                            navController.slideFromRight(
+                                R.id.publicKeysFragment,
+                                PublicKeysModule.prepareParams(viewModel.account)
+                            )
+                        }
+                    }
+                }
+            }
+            KeyAction.Backup -> {
+                actionItems.add {
+                    RedActionItem(
+                        title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
+                        icon = painterResource(id = R.drawable.icon_warning_2_20)
+                    ) {
+                        navController.authorizedAction {
+                            navController.slideFromBottom(
+                                R.id.backupKeyFragment,
+                                BackupKeyModule.prepareParams(viewModel.account)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (actionItems.isNotEmpty()) {
+        Spacer(modifier = Modifier.height(32.dp))
+        CellUniversalLawrenceSection(actionItems)
     }
 }
 

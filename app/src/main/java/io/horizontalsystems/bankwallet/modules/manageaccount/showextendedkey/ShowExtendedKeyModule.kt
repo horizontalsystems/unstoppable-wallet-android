@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.showextendedkey.account
+package cash.p.terminal.modules.manageaccount.showextendedkey
 
 import android.os.Parcelable
 import androidx.core.os.bundleOf

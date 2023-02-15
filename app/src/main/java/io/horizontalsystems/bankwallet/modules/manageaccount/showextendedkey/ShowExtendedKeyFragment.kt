@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.showextendedkey.account
+package cash.p.terminal.modules.manageaccount.showextendedkey
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,10 +25,10 @@ import androidx.navigation.findNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.managers.FaqManager
-import cash.p.terminal.modules.evmprivatekey.ActionButton
-import cash.p.terminal.modules.evmprivatekey.HidableContent
+import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType
+import cash.p.terminal.modules.manageaccount.ui.ActionButton
+import cash.p.terminal.modules.manageaccount.ui.HidableContent
 import cash.p.terminal.modules.recoveryphrase.ConfirmCopyBottomSheet
-import cash.p.terminal.modules.showextendedkey.account.ShowExtendedKeyModule.DisplayKeyType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
@@ -135,6 +135,14 @@ private fun AccountExtendedKeyScreen(
                 ) {
                     Spacer(Modifier.height(12.dp))
 
+                    if(viewModel.displayKeyType.isPrivate) {
+                        TextImportantWarning(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            text = stringResource(R.string.PrivateKeys_NeverShareWarning)
+                        )
+                        Spacer(Modifier.height(24.dp))
+                    }
+
                     var showBlockchainSelectorDialog by remember { mutableStateOf(false) }
                     var showPurposeSelectorDialog by remember { mutableStateOf(false) }
                     var showAccountSelectorDialog by remember { mutableStateOf(false) }
@@ -174,13 +182,10 @@ private fun AccountExtendedKeyScreen(
                     }
 
                     Spacer(Modifier.height(32.dp))
-                    var hidden by remember { mutableStateOf(true) }
                     if (viewModel.displayKeyType.isPrivate) {
-                        HidableContent(viewModel.accountExtendedKey, hidden, viewModel.showKeyTitle.getString()) {
-                            hidden = it
-                        }
+                        HidableContent(viewModel.accountExtendedKey, stringResource(R.string.ExtendedKey_TapToShowPrivateKey))
                     } else {
-                        HidableContent(viewModel.accountExtendedKey, false, viewModel.showKeyTitle.getString(), null)
+                        HidableContent(viewModel.accountExtendedKey)
                     }
 
                     if (showPurposeSelectorDialog) {
@@ -193,7 +198,6 @@ private fun AccountExtendedKeyScreen(
                                 showPurposeSelectorDialog = false
                             },
                             onSelectItem = {
-                                hidden = true
                                 viewModel.set(it)
                             }
                         )
@@ -208,7 +212,6 @@ private fun AccountExtendedKeyScreen(
                                 showBlockchainSelectorDialog = false
                             },
                             onSelectItem = {
-                                hidden = true
                                 viewModel.set(it)
                             }
                         )
@@ -223,7 +226,6 @@ private fun AccountExtendedKeyScreen(
                                 showAccountSelectorDialog = false
                             },
                             onSelectItem = {
-                                hidden = true
                                 viewModel.set(it)
                             }
                         )
