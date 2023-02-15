@@ -6,9 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.Warning
-import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.ethereum.CautionViewItemFactory
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.core.feePriceScale
 import cash.p.terminal.core.providers.Translator
@@ -23,8 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
 class Eip1559FeeSettingsViewModel(
     private val gasPriceService: Eip1559GasPriceService,
     feeService: IEvmFeeService,
-    private val coinService: EvmCoinService,
-    private val cautionViewItemFactory: CautionViewItemFactory
+    private val coinService: EvmCoinService
 ) : ViewModel() {
 
     private val scale = coinService.token.blockchainType.feePriceScale
@@ -40,9 +36,6 @@ class Eip1559FeeSettingsViewModel(
         private set
 
     var priorityFeeViewItem by mutableStateOf<FeeViewItem?>(null)
-        private set
-
-    var cautions by mutableStateOf<List<CautionViewItem>>(listOf())
         private set
 
     init {
@@ -68,11 +61,11 @@ class Eip1559FeeSettingsViewModel(
         gasPriceService.setGasPrice(maxFee, priorityFee)
     }
 
-    fun onIncrementBaseFee(maxFee: Long, priorityFee: Long) {
+    fun onIncrementMaxFee(maxFee: Long, priorityFee: Long) {
         gasPriceService.setGasPrice(maxFee + scale.scaleValue, priorityFee)
     }
 
-    fun onDecrementBaseFee(maxFee: Long, priorityFee: Long) {
+    fun onDecrementMaxFee(maxFee: Long, priorityFee: Long) {
         gasPriceService.setGasPrice((maxFee - scale.scaleValue).coerceAtLeast(0), priorityFee)
     }
 
@@ -120,7 +113,6 @@ class Eip1559FeeSettingsViewModel(
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
         syncFeeViewItems(transactionStatus)
-        syncCautions(transactionStatus)
     }
 
     private fun syncFeeViewItems(transactionStatus: DataState<Transaction>) {
@@ -142,19 +134,4 @@ class Eip1559FeeSettingsViewModel(
             }
         }
     }
-
-    private fun syncCautions(transactionStatus: DataState<Transaction>) {
-        val warnings = mutableListOf<Warning>()
-        val errors = mutableListOf<Throwable>()
-
-        if (transactionStatus is DataState.Error) {
-            errors.add(transactionStatus.error)
-        } else if (transactionStatus is DataState.Success) {
-            warnings.addAll(transactionStatus.data.warnings)
-            errors.addAll(transactionStatus.data.errors)
-        }
-
-        cautions = cautionViewItemFactory.cautionViewItems(warnings, errors)
-    }
-
 }

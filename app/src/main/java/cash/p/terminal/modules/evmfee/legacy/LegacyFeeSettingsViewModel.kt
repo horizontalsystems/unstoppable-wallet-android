@@ -6,9 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.Warning
-import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.ethereum.CautionViewItemFactory
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.core.feePriceScale
 import cash.p.terminal.core.providers.Translator
@@ -21,8 +18,7 @@ import io.reactivex.disposables.CompositeDisposable
 class LegacyFeeSettingsViewModel(
     private val gasPriceService: LegacyGasPriceService,
     private val feeService: IEvmFeeService,
-    private val coinService: EvmCoinService,
-    private val cautionViewItemFactory: CautionViewItemFactory
+    private val coinService: EvmCoinService
 ) : ViewModel() {
 
     private val scale = coinService.token.blockchainType.feePriceScale
@@ -32,9 +28,6 @@ class LegacyFeeSettingsViewModel(
         private set
 
     var feeViewItem by mutableStateOf<FeeViewItem?>(null)
-        private set
-
-    var cautions by mutableStateOf<List<CautionViewItem>>(listOf())
         private set
 
     init {
@@ -70,7 +63,6 @@ class LegacyFeeSettingsViewModel(
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
         syncFeeViewItems(transactionStatus)
-        syncCautions(transactionStatus)
     }
 
     private fun syncFeeViewItems(transactionStatus: DataState<Transaction>) {
@@ -91,20 +83,6 @@ class LegacyFeeSettingsViewModel(
                 feeSummaryViewItem = FeeSummaryViewItem(fee, gasLimit, viewState)
             }
         }
-    }
-
-    private fun syncCautions(transactionStatus: DataState<Transaction>) {
-        val warnings = mutableListOf<Warning>()
-        val errors = mutableListOf<Throwable>()
-
-        if (transactionStatus is DataState.Error) {
-            errors.add(transactionStatus.error)
-        } else if (transactionStatus is DataState.Success) {
-            warnings.addAll(transactionStatus.data.warnings)
-            errors.addAll(transactionStatus.data.errors)
-        }
-
-        cautions = cautionViewItemFactory.cautionViewItems(warnings, errors)
     }
 
     private fun sync(state: DataState<GasPriceInfo>) {

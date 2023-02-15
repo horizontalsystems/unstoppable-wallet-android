@@ -11,6 +11,8 @@ import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
 import cash.p.terminal.modules.evmfee.IEvmGasPriceService
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyGasPriceService
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
+import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.swap.SwapViewItemHelper
 import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
@@ -53,10 +55,12 @@ object OneInchConfirmationModule {
                 App.coinManager
             )
         }
+        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit)) }
         private val sendService by lazy {
             OneInchSendEvmTransactionService(
                 evmKitWrapper,
                 feeService,
+                settingsService,
                 SwapViewItemHelper(App.numberFormatter)
             )
         }

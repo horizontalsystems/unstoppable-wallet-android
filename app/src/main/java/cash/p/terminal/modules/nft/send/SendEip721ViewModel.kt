@@ -58,8 +58,7 @@ class SendEip721ViewModel(
             SendEvmData.NftShortMeta(it.displayName, it.previewImageUrl)
         }
 
-        val additionalInfo =
-            SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(domain, nftShortMeta))
+        val additionalInfo = SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(domain, nftShortMeta))
 
         return SendEvmData(transactionData, additionalInfo)
     }

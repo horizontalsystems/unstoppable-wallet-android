@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -16,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,17 +28,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.modules.evmfee.Eip1559FeeSettings
-import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
-import cash.p.terminal.modules.evmfee.EvmFeeModule
-import cash.p.terminal.modules.evmfee.LegacyFeeSettings
+import cash.p.terminal.modules.evmfee.*
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
+import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.MenuItem
+import java.math.BigDecimal
 
 class SendEvmSettingsFragment : BaseFragment() {
 
@@ -44,6 +47,7 @@ class SendEvmSettingsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+        val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -59,7 +63,7 @@ class SendEvmSettingsFragment : BaseFragment() {
                         )
                     )
                     val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
-                        factory = SendEvmSettingsModule.Factory(feeViewModel.gasPriceService)
+                        factory = SendEvmSettingsModule.Factory(sendViewModel.service.settingsService, feeViewModel.coinService)
                     )
                     SendEvmFeeSettingsScreen(
                         viewModel = sendSettingsViewModel,
@@ -86,6 +90,9 @@ fun SendEvmFeeSettingsScreen(
     feeSettingsViewModel: ViewModel,
     navController: NavController
 ) {
+    val cautions = viewModel.cautions
+    val nonce = viewModel.nonce
+
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -120,5 +127,24 @@ fun SendEvmFeeSettingsScreen(
                 Eip1559FeeSettings(feeSettingsViewModel, navController)
             }
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+        EvmSettingsInput(
+            title = stringResource(id = R.string.SendEvmSettings_Nonce),
+            info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
+            value = nonce?.toBigDecimal() ?: BigDecimal.ZERO,
+            decimals = 0,
+            navController = navController,
+            onValueChange = {
+                viewModel.onEnterNonce(it.toLong())
+            },
+            onClickIncrement = viewModel::onIncrementNonce,
+            onClickDecrement = viewModel::onDecrementNonce
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+        Cautions(cautions)
+
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }

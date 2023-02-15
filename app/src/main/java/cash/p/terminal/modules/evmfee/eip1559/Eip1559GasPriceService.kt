@@ -12,10 +12,6 @@ import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import kotlin.math.max
 import kotlin.math.min
@@ -52,9 +48,7 @@ class Eip1559GasPriceService(
     override val stateObservable: Observable<DataState<GasPriceInfo>>
         get() = stateSubject
 
-    private val recommendedGasPriceSelected = MutableStateFlow(true)
-    override val recommendedGasPriceSelectedFlow: StateFlow<Boolean>
-        get() = recommendedGasPriceSelected.asStateFlow()
+    private var recommendedGasPriceSelected = true
 
     var currentBaseFee: Long? = null
         private set
@@ -77,15 +71,22 @@ class Eip1559GasPriceService(
     }
 
     override fun setRecommended() {
-        recommendedGasPriceSelected.update { true }
+        recommendedGasPriceSelected = true
 
         recommendedGasPrice?.let {
-            state = DataState.Success(GasPriceInfo(it, listOf(), listOf()))
+            state = DataState.Success(
+                GasPriceInfo(
+                    gasPrice = it,
+                    default = true,
+                    warnings = listOf(),
+                    errors = listOf()
+                )
+            )
         } ?: syncRecommended()
     }
 
     fun setGasPrice(maxFee: Long, priorityFee: Long) {
-        recommendedGasPriceSelected.update { false }
+        recommendedGasPriceSelected = false
 
         val newGasPrice = GasPrice.Eip1559(maxFee, priorityFee)
         state = validatedGasPriceInfoState(newGasPrice)
@@ -113,9 +114,9 @@ class Eip1559GasPriceService(
             val tip = min(gasPriceEip1559.maxFeePerGas - recommendedBaseFee, gasPriceEip1559.maxPriorityFeePerGas)
 
             when {
-                tip < 0 -> {
-                    errors.add(FeeSettingsError.LowMaxFee)
-                }
+//                tip < 0 -> {
+//                    errors.add(FeeSettingsError.LowMaxFee)
+//                }
                 tip <= riskOfStuckBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
                     warnings.add(FeeSettingsWarning.RiskOfGettingStuck)
                 }
@@ -125,7 +126,12 @@ class Eip1559GasPriceService(
             }
         }
 
-        return GasPriceInfo(gasPriceEip1559, warnings, errors)
+        return GasPriceInfo(
+            gasPrice = gasPriceEip1559,
+            default = recommendedGasPriceSelected,
+            warnings = warnings,
+            errors = errors
+        )
     }
 
     private fun syncRecommended() {
@@ -155,7 +161,7 @@ class Eip1559GasPriceService(
 
         recommendedGasPrice = newRecommendGasPrice
 
-        if (recommendedGasPriceSelected.value) {
+        if (recommendedGasPriceSelected) {
             state = validatedGasPriceInfoState(newRecommendGasPrice)
         } else {
             state.dataOrNull?.let {

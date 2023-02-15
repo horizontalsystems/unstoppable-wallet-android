@@ -3,6 +3,7 @@ package cash.p.terminal.modules.sendevmtransaction
 import androidx.annotation.ColorRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.EvmError
@@ -33,11 +34,12 @@ import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapDecoration
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.BigInteger
 
 class SendEvmTransactionViewModel(
-    private val service: ISendEvmTransactionService,
+    val service: ISendEvmTransactionService,
     private val coinServiceFactory: EvmCoinServiceFactory,
     private val cautionViewItemFactory: CautionViewItemFactory,
     private val evmLabelManager: EvmLabelManager
@@ -59,6 +61,10 @@ class SendEvmTransactionViewModel(
 
         sync(service.state)
         sync(service.sendState)
+
+        viewModelScope.launch {
+            service.start()
+        }
     }
 
     fun send(logger: AppLogger) {
@@ -88,7 +94,7 @@ class SendEvmTransactionViewModel(
         val additionalInfo = dataState.additionalInfo
 
         if (dataState.decoration != null) {
-            val sections = getViewItems(dataState.decoration, dataState.transactionData, additionalInfo)
+            val sections = getViewItems(dataState.decoration, dataState.nonce, additionalInfo)
             if (sections != null) return sections
         }
 
@@ -102,6 +108,7 @@ class SendEvmTransactionViewModel(
         if (dataState.transactionData != null) {
             return getUnknownMethodItems(
                 dataState.transactionData,
+                dataState.nonce,
                 service.methodName(dataState.transactionData.input),
                 additionalInfo?.walletConnectInfo?.dAppName
             )
@@ -125,7 +132,7 @@ class SendEvmTransactionViewModel(
 
     private fun getViewItems(
         decoration: TransactionDecoration,
-        transactionData: TransactionData?,
+        nonce: Long?,
         additionalInfo: SendEvmData.AdditionalInfo?
     ): List<SectionViewItem>? =
         when (decoration) {
@@ -139,7 +146,7 @@ class SendEvmTransactionViewModel(
                 decoration.to,
                 decoration.value,
                 decoration.contractAddress,
-                transactionData?.nonce,
+                nonce,
                 additionalInfo?.sendInfo
             )
 
@@ -147,7 +154,7 @@ class SendEvmTransactionViewModel(
                 decoration.spender,
                 decoration.value,
                 decoration.contractAddress,
-                transactionData?.nonce
+                nonce
             )
 
             is SwapDecoration -> getUniswapViewItems(
@@ -181,7 +188,7 @@ class SendEvmTransactionViewModel(
             is OutgoingEip721Decoration -> getNftTransferItems(
                 decoration.to,
                 BigInteger.ONE,
-                transactionData?.nonce,
+                nonce,
                 additionalInfo?.sendInfo,
                 decoration.tokenId,
             )
@@ -189,7 +196,7 @@ class SendEvmTransactionViewModel(
             is OutgoingEip1155Decoration -> getNftTransferItems(
                 decoration.to,
                 decoration.value,
-                transactionData?.nonce,
+                nonce,
                 additionalInfo?.sendInfo,
                 decoration.tokenId,
             )
@@ -349,7 +356,7 @@ class SendEvmTransactionViewModel(
                     )
 
                 } else {
-                    inViewItems.add(getMaxAmount(maxAmountData, coinServiceIn.token, ValueType.Outgoing))
+                    inViewItems.add(getMaxAmount(maxAmountData, coinServiceIn.token))
                 }
             }
         }
@@ -379,7 +386,7 @@ class SendEvmTransactionViewModel(
                         )
                     )
                 } else {
-                    outViewItems.add(getGuaranteedAmount(guaranteedAmountData, coinServiceOut.token, ValueType.Incoming))
+                    outViewItems.add(getGuaranteedAmount(guaranteedAmountData, coinServiceOut.token))
                 }
             }
         }
@@ -464,7 +471,7 @@ class SendEvmTransactionViewModel(
                     ValueType.Regular
                 )
             } else {
-                outViewItems.add(getGuaranteedAmount(guaranteedAmountData, coinServiceOut.token, ValueType.Incoming))
+                outViewItems.add(getGuaranteedAmount(guaranteedAmountData, coinServiceOut.token))
             }
         }
         sections.add(SectionViewItem(outViewItems))
@@ -695,6 +702,7 @@ class SendEvmTransactionViewModel(
 
     private fun getUnknownMethodItems(
         transactionData: TransactionData,
+        nonce: Long?,
         methodName: String?,
         dAppName: String?
     ): List<SectionViewItem> {
@@ -713,11 +721,11 @@ class SendEvmTransactionViewModel(
             )
         )
 
-        if (transactionData.nonce != null) {
+        nonce?.let {
             viewItems.add(
                 ViewItem.Value(
                     Translator.getString(R.string.Send_Confirmation_Nonce),
-                    "${transactionData.nonce}",
+                    "$nonce",
                     ValueType.Regular
                 ),
             )
@@ -798,19 +806,19 @@ class SendEvmTransactionViewModel(
         amountData.secondary?.getFormatted() ?: "n/a"
     )
 
-    private fun getGuaranteedAmount(amountData: SendModule.AmountData, token: Token, valueType: ValueType = ValueType.Regular) =
+    private fun getGuaranteedAmount(amountData: SendModule.AmountData, token: Token) =
         ViewItem.Amount(
             amountData.secondary?.getFormatted(),
             "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
-            valueType,
+            ValueType.Incoming,
             token
         )
 
-    private fun getMaxAmount(amountData: SendModule.AmountData, token: Token, valueType: ValueType = ValueType.Regular) =
+    private fun getMaxAmount(amountData: SendModule.AmountData, token: Token) =
         ViewItem.Amount(
             amountData.secondary?.getFormatted(),
             "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
-            valueType,
+            ValueType.Outgoing,
             token
         )
 

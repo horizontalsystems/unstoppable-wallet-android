@@ -14,6 +14,8 @@ import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyGasPriceService
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmModule
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
+import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
@@ -52,8 +54,9 @@ object UniswapConfirmationModule {
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
+        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit)) }
         private val sendService by lazy {
-            SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService, App.evmLabelManager)
+            SendEvmTransactionService(sendEvmData, evmKitWrapper, settingsService, App.evmLabelManager)
         }
 
         @Suppress("UNCHECKED_CAST")

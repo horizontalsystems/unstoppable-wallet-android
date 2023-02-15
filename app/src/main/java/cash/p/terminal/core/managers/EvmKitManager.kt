@@ -205,7 +205,7 @@ class EvmKitWrapper(
         transactionData: TransactionData,
         gasPrice: GasPrice,
         gasLimit: Long,
-        nonce: Long? = null
+        nonce: Long?
     ): Single<FullTransaction> {
         return if (signer != null) {
             evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)

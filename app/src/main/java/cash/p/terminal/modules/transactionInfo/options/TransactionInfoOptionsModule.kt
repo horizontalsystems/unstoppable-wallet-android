@@ -14,6 +14,8 @@ import cash.p.terminal.modules.evmfee.IEvmGasPriceService
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyGasPriceService
 import cash.p.terminal.modules.send.evm.SendEvmData
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
+import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.transactions.TransactionSource
@@ -88,19 +90,18 @@ object TransactionInfoOptionsModule {
         private val transactionData by lazy {
             when (optionType) {
                 Type.SpeedUp -> {
-                    TransactionData(transaction.to!!, transaction.value!!, transaction.input!!, transaction.nonce)
+                    TransactionData(transaction.to!!, transaction.value!!, transaction.input!!)
                 }
                 Type.Cancel -> {
                     TransactionData(
                         evmKitWrapper.evmKit.receiveAddress,
                         BigInteger.ZERO,
-                        byteArrayOf(),
-                        transaction.nonce
+                        byteArrayOf()
                     )
                 }
             }
         }
-        private val transactionService by lazy {
+        private val feeService by lazy {
             val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimit = transaction.gasLimit)
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
@@ -114,12 +115,12 @@ object TransactionInfoOptionsModule {
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-
+        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce)) }
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 evmKitWrapper,
-                transactionService,
+                settingsService,
                 App.evmLabelManager
             )
         }
@@ -131,7 +132,7 @@ object TransactionInfoOptionsModule {
                     SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory, App.evmLabelManager) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
-                    EvmFeeCellViewModel(transactionService, gasPriceService, coinServiceFactory.baseCoinService) as T
+                    EvmFeeCellViewModel(feeService, gasPriceService, coinServiceFactory.baseCoinService) as T
                 }
                 TransactionSpeedUpCancelViewModel::class.java -> {
                     TransactionSpeedUpCancelViewModel(

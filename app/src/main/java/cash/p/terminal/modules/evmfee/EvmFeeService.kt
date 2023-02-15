@@ -12,7 +12,7 @@ import java.math.BigInteger
 
 class EvmFeeService(
     private val evmKit: EthereumKit,
-    gasPriceService: IEvmGasPriceService,
+    private val gasPriceService: IEvmGasPriceService,
     private val gasDataService: EvmCommonGasDataService,
     private val transactionData: TransactionData
 ) : IEvmFeeService {
@@ -39,6 +39,10 @@ class EvmFeeService(
             }.let { disposable.add(it) }
     }
 
+    override fun reset() {
+        gasPriceService.setRecommended()
+    }
+
     fun onCleared() {
         disposable.clear()
         gasPriceInfoDisposable?.dispose()
@@ -62,11 +66,12 @@ class EvmFeeService(
         gasPriceInfoDisposable?.dispose()
 
         val gasPrice = gasPriceInfo.gasPrice
+        val default = gasPriceInfo.default
         val warnings = gasPriceInfo.warnings
         val errors = gasPriceInfo.errors
 
         val transactionSingle = gasDataService.predefinedGasDataAsync(gasPrice, transactionData)?.map { gasData ->
-            Transaction(transactionData, gasData, warnings, errors)
+            Transaction(transactionData, gasData, default, warnings, errors)
 
         } ?: if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
             gasDataService.estimatedGasDataAsync(gasPrice, transactionData, BigInteger.ONE).map { gasData ->
@@ -76,23 +81,23 @@ class EvmFeeService(
                     throw FeeSettingsError.InsufficientBalance
                 } else {
                     val transactionData = TransactionData(transactionData.to, adjustedValue, byteArrayOf())
-                    Transaction(transactionData, gasData, warnings, errors)
+                    Transaction(transactionData, gasData, default, warnings, errors)
                 }
             }
 
         } else {
             gasDataService.estimatedGasDataAsync(gasPriceInfo.gasPrice, transactionData, null).map { gasData ->
-                Transaction(transactionData, gasData, warnings, errors)
+                Transaction(transactionData, gasData, default, warnings, errors)
             }
         }
 
         transactionSingle
-                .subscribeIO({ transaction ->
-                    sync(transaction)
-                }, {
-                    transactionStatus = DataState.Error(it)
-                })
-                .let { gasPriceInfoDisposable = it }
+            .subscribeIO({ transaction ->
+                sync(transaction)
+            }, {
+                transactionStatus = DataState.Error(it)
+            })
+            .let { gasPriceInfoDisposable = it }
     }
 
     private fun sync(transaction: Transaction) {

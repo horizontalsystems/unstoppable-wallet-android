@@ -14,6 +14,8 @@ import cash.p.terminal.modules.evmfee.legacy.LegacyGasPriceService
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmData.AdditionalInfo
 import cash.p.terminal.modules.send.evm.SendEvmData.WalletConnectInfo
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
+import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestService
@@ -68,11 +70,12 @@ object WCRequestModule {
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName))
+        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce)) }
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
                 evmKitWrapper,
-                feeService,
+                settingsService,
                 App.evmLabelManager
             )
         }
@@ -132,13 +135,14 @@ object WCRequestModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val additionalInfo =
-            AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName))
+        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName))
+        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(service.evmKitWrapper.evmKit, transaction.nonce)) }
+
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
                 service.evmKitWrapper,
-                feeService,
+                settingsService,
                 App.evmLabelManager
             )
         }
