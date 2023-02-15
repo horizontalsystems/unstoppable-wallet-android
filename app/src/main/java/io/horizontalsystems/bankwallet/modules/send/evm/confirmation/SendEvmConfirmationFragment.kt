@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -58,7 +57,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
             SendEvmData(transactionData, additionalInfo)
         )
     }
-    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    private val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
     private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
@@ -67,8 +66,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
 
     private val transactionData: TransactionData
         get() {
-            val transactionDataParcelable =
-                arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
+            val transactionDataParcelable = arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
             return TransactionData(
                 Address(transactionDataParcelable.toAddress),
                 transactionDataParcelable.value,

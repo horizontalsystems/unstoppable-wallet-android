@@ -1,0 +1,103 @@
+package io.horizontalsystems.bankwallet.modules.send.evm.settings
+
+import android.util.Log
+import io.horizontalsystems.bankwallet.core.Warning
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.evmfee.*
+import io.horizontalsystems.ethereumkit.models.TransactionData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.withContext
+
+class SendEvmSettingsService(
+    private val feeService: IEvmFeeService,
+    private val nonceService: SendEvmNonceService
+) {
+    var state: DataState<Transaction> = DataState.Loading
+        private set(value) {
+            field = value
+            _stateFlow.update { value }
+        }
+    private val _stateFlow = MutableStateFlow(state)
+    val stateFlow: Flow<DataState<Transaction>> = _stateFlow
+
+    suspend fun start() = withContext(Dispatchers.IO) {
+        Log.e("e", "settingService.start()")
+
+        launch {
+            feeService.transactionStatusObservable.asFlow().collect {
+                Log.e("e", "feeService state: ${it.javaClass.simpleName}")
+                sync()
+            }
+        }
+
+        launch {
+            nonceService.stateFlow.collect {
+                Log.e("e", "nonceService state: ${it.javaClass.simpleName}")
+                sync()
+            }
+        }
+
+        nonceService.start()
+    }
+
+    fun setNonce(nonce: Long) {
+        nonceService.setNonce(nonce)
+    }
+
+    fun incrementNonce() {
+        nonceService.increment()
+    }
+
+    fun decrementNonce() {
+        nonceService.decrement()
+    }
+
+    private fun sync() {
+        val feeState = feeService.transactionStatus
+        val nonceState = nonceService.state
+
+        state = when {
+            feeState == DataState.Loading -> DataState.Loading
+            nonceState == DataState.Loading -> DataState.Loading
+            feeState is DataState.Error -> feeState
+            nonceState is DataState.Error -> nonceState
+            feeState is DataState.Success && nonceState is DataState.Success -> {
+                val feeData = feeState.data
+                val nonceData = nonceState.data
+
+                Log.e("e", "fee default=${feeData.default}, nonce default=${nonceData.default}")
+                DataState.Success(
+                    Transaction(
+                        transactionData = feeData.transactionData,
+                        gasData = feeData.gasData,
+                        nonce = nonceData.nonce,
+                        default = feeData.default && nonceData.default,
+                        warnings = feeData.warnings + nonceData.warnings,
+                        errors = feeData.errors + nonceData.errors
+                    )
+                )
+            }
+            else -> DataState.Loading
+        }
+    }
+
+    suspend fun reset() {
+        feeService.reset()
+        nonceService.reset()
+    }
+
+    data class Transaction(
+        val transactionData: TransactionData,
+        val gasData: GasData,
+        val nonce: Long?,
+        val default: Boolean,
+        val warnings: List<Warning> = listOf(),
+        val errors: List<Throwable> = listOf()
+    )
+
+}

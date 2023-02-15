@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.Warning
-import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.FeePriceScale
@@ -17,7 +16,6 @@ import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
-import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
@@ -29,8 +27,6 @@ object EvmFeeModule {
         private val evmCoinService: EvmCoinService
     ) : ViewModelProvider.Factory {
 
-        private val cautionViewItemFactory by lazy { CautionViewItemFactory(evmCoinService) }
-
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (gasPriceService) {
@@ -38,15 +34,13 @@ object EvmFeeModule {
                     LegacyFeeSettingsViewModel(
                         gasPriceService,
                         feeService,
-                        evmCoinService,
-                        cautionViewItemFactory
+                        evmCoinService
                     ) as T
                 is Eip1559GasPriceService ->
                     Eip1559FeeSettingsViewModel(
                         gasPriceService,
                         feeService,
-                        evmCoinService,
-                        cautionViewItemFactory
+                        evmCoinService
                     ) as T
                 else -> throw IllegalArgumentException()
             }
@@ -57,12 +51,13 @@ object EvmFeeModule {
 interface IEvmFeeService {
     val transactionStatus: DataState<Transaction>
     val transactionStatusObservable: Observable<DataState<Transaction>>
+
+    fun reset()
 }
 
 interface IEvmGasPriceService {
     val state: DataState<GasPriceInfo>
     val stateObservable: Observable<DataState<GasPriceInfo>>
-    val recommendedGasPriceSelectedFlow: StateFlow<Boolean>
 
     fun setRecommended()
 }
@@ -80,6 +75,7 @@ abstract class FeeSettingsWarning : Warning() {
 
 data class GasPriceInfo(
     val gasPrice: GasPrice,
+    val default: Boolean,
     val warnings: List<Warning>,
     val errors: List<Throwable>
 )
@@ -94,9 +90,11 @@ class RollupGasData(gasLimit: Long, gasPrice: GasPrice, val l1Fee: BigInteger) :
         get() = super.fee + l1Fee
 }
 
+//TODO rename to FeeData
 data class Transaction(
     val transactionData: TransactionData,
     val gasData: GasData,
+    val default: Boolean,
     val warnings: List<Warning> = listOf(),
     val errors: List<Throwable> = listOf()
 ) {

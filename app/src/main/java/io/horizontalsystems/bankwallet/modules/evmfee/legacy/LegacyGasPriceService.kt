@@ -13,10 +13,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import java.lang.Long.max
 import java.math.BigDecimal
 
@@ -51,10 +47,6 @@ class LegacyGasPriceService(
                     recommendedGasPrice = adjustedGasPrice
                 }
 
-    private val recommendedGasPriceSelected = MutableStateFlow(true)
-    override val recommendedGasPriceSelectedFlow: StateFlow<Boolean>
-        get() = recommendedGasPriceSelected.asStateFlow()
-
     init {
         if (initialGasPrice != null) {
             setGasPrice(initialGasPrice)
@@ -64,8 +56,6 @@ class LegacyGasPriceService(
     }
 
     override fun setRecommended() {
-        recommendedGasPriceSelected.update { true }
-
         state = DataState.Loading
         disposable?.dispose()
 
@@ -74,6 +64,7 @@ class LegacyGasPriceService(
                 state = DataState.Success(
                     GasPriceInfo(
                         gasPrice = GasPrice.Legacy(recommended),
+                        default = true,
                         warnings = listOf(),
                         errors = listOf()
                     )
@@ -86,8 +77,6 @@ class LegacyGasPriceService(
     }
 
     fun setGasPrice(value: Long) {
-        recommendedGasPriceSelected.update { false }
-
         state = DataState.Loading
         disposable?.dispose()
 
@@ -104,7 +93,14 @@ class LegacyGasPriceService(
                     warnings.add(FeeSettingsWarning.Overpricing)
                 }
 
-                state = DataState.Success(GasPriceInfo(GasPrice.Legacy(value), warnings, errors))
+                state = DataState.Success(
+                    GasPriceInfo(
+                        gasPrice = GasPrice.Legacy(value),
+                        default = false,
+                        warnings = warnings,
+                        errors = errors
+                    )
+                )
             }, {
                 state = DataState.Error(it)
             }).let {

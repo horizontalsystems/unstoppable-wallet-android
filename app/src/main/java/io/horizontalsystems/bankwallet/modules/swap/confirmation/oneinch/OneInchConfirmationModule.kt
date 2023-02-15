@@ -11,6 +11,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
@@ -53,10 +55,12 @@ object OneInchConfirmationModule {
                 App.coinManager
             )
         }
+        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit)) }
         private val sendService by lazy {
             OneInchSendEvmTransactionService(
                 evmKitWrapper,
                 feeService,
+                settingsService,
                 SwapViewItemHelper(App.numberFormatter)
             )
         }

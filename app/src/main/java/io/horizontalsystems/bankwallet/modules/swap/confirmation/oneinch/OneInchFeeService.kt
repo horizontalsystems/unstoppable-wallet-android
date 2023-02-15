@@ -55,6 +55,10 @@ class OneInchFeeService(
             .let { disposable.add(it) }
     }
 
+    override fun reset() {
+        gasPriceService.setRecommended()
+    }
+
     private fun sync(gasPriceServiceState: DataState<GasPriceInfo>) {
         when (gasPriceServiceState) {
             is DataState.Error -> {
@@ -101,7 +105,7 @@ class OneInchFeeService(
         )
 
         val transactionData = TransactionData(swapTx.to, swapTx.value, swapTx.data)
-        val transaction = Transaction(transactionData, gasData, gasPriceInfo.warnings, gasPriceInfo.errors)
+        val transaction = Transaction(transactionData, gasData, gasPriceInfo.default, gasPriceInfo.warnings, gasPriceInfo.errors)
 
         transactionStatus = if (transaction.totalAmount > evmBalance) {
             DataState.Success(
