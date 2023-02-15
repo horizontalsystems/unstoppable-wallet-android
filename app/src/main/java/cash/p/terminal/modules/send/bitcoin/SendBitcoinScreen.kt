@@ -33,8 +33,8 @@ import cash.p.terminal.modules.fee.HSFeeInputRaw
 import cash.p.terminal.modules.hodler.HSHodlerInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
+import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
+import cash.p.terminal.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import cash.p.terminal.modules.settings.about.*
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*

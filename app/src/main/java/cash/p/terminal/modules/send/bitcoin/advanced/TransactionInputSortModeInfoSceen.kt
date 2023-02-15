@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced
+package cash.p.terminal.modules.send.bitcoin.advanced
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced
+package cash.p.terminal.modules.send.bitcoin.advanced
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.entities.TransactionDataSortMode
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule.SortModeViewItem
+import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule.SortModeViewItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class SendBtcAdvancedSettingsViewModel(

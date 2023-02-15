@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced
+package cash.p.terminal.modules.send.bitcoin.advanced
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.TransactionDataSortMode
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.*
+import cash.p.terminal.modules.send.bitcoin.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object SendBtcAdvancedSettingsModule {
