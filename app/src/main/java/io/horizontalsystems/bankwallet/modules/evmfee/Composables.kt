@@ -49,7 +49,6 @@ fun Eip1559FeeSettings(
     val currentBaseFee = viewModel.currentBaseFee
     val maxFeeViewItem = viewModel.maxFeeViewItem
     val priorityFeeViewItem = viewModel.priorityFeeViewItem
-    val cautions = viewModel.cautions
 
     Column {
         Spacer(modifier = Modifier.height(12.dp))
@@ -98,10 +97,10 @@ fun Eip1559FeeSettings(
                         viewModel.onSelectGasPrice(maxFee.wei(it), priorityFee.weiValue)
                     },
                     onClickIncrement = {
-                        viewModel.onIncrementBaseFee(maxFee.weiValue, priorityFee.weiValue)
+                        viewModel.onIncrementMaxFee(maxFee.weiValue, priorityFee.weiValue)
                     },
                     onClickDecrement = {
-                        viewModel.onDecrementBaseFee(maxFee.weiValue, priorityFee.weiValue)
+                        viewModel.onDecrementMaxFee(maxFee.weiValue, priorityFee.weiValue)
                     }
                 )
 
@@ -124,10 +123,6 @@ fun Eip1559FeeSettings(
                 )
             }
         }
-
-        Cautions(cautions)
-
-        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -144,10 +139,7 @@ fun EvmSettingsInput(
     onClickDecrement: () -> Unit
 ) {
     HeaderText(text = title) {
-        navController.slideFromBottom(
-            R.id.feeSettingsInfoDialog,
-            FeeSettingsInfoDialog.prepareParams(title, info)
-        )
+        navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(title, info))
     }
     NumberInputWithButtons(value, decimals, state, onValueChange, onClickIncrement, onClickDecrement)
 }
@@ -263,7 +255,6 @@ fun LegacyFeeSettings(
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val viewItem = viewModel.feeViewItem
-    val cautions = viewModel.cautions
 
     Column {
         Spacer(modifier = Modifier.height(12.dp))
@@ -308,12 +299,7 @@ fun LegacyFeeSettings(
                 }
             )
         }
-
-        Cautions(cautions)
-
-        Spacer(modifier = Modifier.height(32.dp))
     }
-
 }
 
 @Composable

@@ -6,9 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.Warning
-import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.feePriceScale
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -23,8 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
 class Eip1559FeeSettingsViewModel(
     private val gasPriceService: Eip1559GasPriceService,
     feeService: IEvmFeeService,
-    private val coinService: EvmCoinService,
-    private val cautionViewItemFactory: CautionViewItemFactory
+    private val coinService: EvmCoinService
 ) : ViewModel() {
 
     private val scale = coinService.token.blockchainType.feePriceScale
@@ -40,9 +36,6 @@ class Eip1559FeeSettingsViewModel(
         private set
 
     var priorityFeeViewItem by mutableStateOf<FeeViewItem?>(null)
-        private set
-
-    var cautions by mutableStateOf<List<CautionViewItem>>(listOf())
         private set
 
     init {
@@ -68,11 +61,11 @@ class Eip1559FeeSettingsViewModel(
         gasPriceService.setGasPrice(maxFee, priorityFee)
     }
 
-    fun onIncrementBaseFee(maxFee: Long, priorityFee: Long) {
+    fun onIncrementMaxFee(maxFee: Long, priorityFee: Long) {
         gasPriceService.setGasPrice(maxFee + scale.scaleValue, priorityFee)
     }
 
-    fun onDecrementBaseFee(maxFee: Long, priorityFee: Long) {
+    fun onDecrementMaxFee(maxFee: Long, priorityFee: Long) {
         gasPriceService.setGasPrice((maxFee - scale.scaleValue).coerceAtLeast(0), priorityFee)
     }
 
@@ -120,7 +113,6 @@ class Eip1559FeeSettingsViewModel(
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
         syncFeeViewItems(transactionStatus)
-        syncCautions(transactionStatus)
     }
 
     private fun syncFeeViewItems(transactionStatus: DataState<Transaction>) {
@@ -142,19 +134,4 @@ class Eip1559FeeSettingsViewModel(
             }
         }
     }
-
-    private fun syncCautions(transactionStatus: DataState<Transaction>) {
-        val warnings = mutableListOf<Warning>()
-        val errors = mutableListOf<Throwable>()
-
-        if (transactionStatus is DataState.Error) {
-            errors.add(transactionStatus.error)
-        } else if (transactionStatus is DataState.Success) {
-            warnings.addAll(transactionStatus.data.warnings)
-            errors.addAll(transactionStatus.data.errors)
-        }
-
-        cautions = cautionViewItemFactory.cautionViewItems(warnings, errors)
-    }
-
 }

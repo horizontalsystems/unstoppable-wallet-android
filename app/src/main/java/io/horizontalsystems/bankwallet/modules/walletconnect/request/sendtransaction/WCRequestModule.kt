@@ -14,6 +14,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceServi
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData.AdditionalInfo
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData.WalletConnectInfo
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestService
@@ -68,11 +70,12 @@ object WCRequestModule {
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName))
+        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce)) }
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
                 evmKitWrapper,
-                feeService,
+                settingsService,
                 App.evmLabelManager
             )
         }
@@ -132,13 +135,14 @@ object WCRequestModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val additionalInfo =
-            AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName))
+        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName))
+        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(service.evmKitWrapper.evmKit, transaction.nonce)) }
+
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
                 service.evmKitWrapper,
-                feeService,
+                settingsService,
                 App.evmLabelManager
             )
         }

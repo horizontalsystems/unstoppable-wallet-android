@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.Warning
@@ -7,9 +8,8 @@ import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.evmfee.IEvmFeeService
-import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -17,6 +17,9 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigInteger
 
 interface ISendEvmTransactionService {
@@ -30,6 +33,9 @@ interface ISendEvmTransactionService {
 
     val ownAddress: Address
 
+    val settingsService: SendEvmSettingsService
+
+    suspend fun start()
     fun send(logger: AppLogger)
     fun methodName(input: ByteArray): String?
 }
@@ -37,7 +43,7 @@ interface ISendEvmTransactionService {
 class SendEvmTransactionService(
     private val sendEvmData: SendEvmData,
     private val evmKitWrapper: EvmKitWrapper,
-    private val feeService: IEvmFeeService,
+    override val settingsService: SendEvmSettingsService,
     private val evmLabelManager: EvmLabelManager
 ) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
@@ -62,6 +68,7 @@ class SendEvmTransactionService(
 
     override var txDataState: TxDataState = TxDataState(
         sendEvmData.transactionData,
+        settingsService.state.dataOrNull?.nonce,
         sendEvmData.additionalInfo,
         evmKit.decorate(sendEvmData.transactionData)
     )
@@ -69,27 +76,34 @@ class SendEvmTransactionService(
 
     override val ownAddress: Address = evmKit.receiveAddress
 
-    init {
-        feeService.transactionStatusObservable
-            .subscribeIO { sync(it) }
-            .let { disposable.add(it) }
+    override suspend fun start() = withContext(Dispatchers.IO) {
+        Log.e("e", "txService: start 1")
+        launch {
+            settingsService.stateFlow
+                .collect {
+                    sync(it)
+                }
+        }
+
+        Log.e("e", "txService: start 2")
+        settingsService.start()
     }
 
-    private fun sync(transactionStatus: DataState<Transaction>) {
-        when (transactionStatus) {
+    private fun sync(settingsState: DataState<SendEvmSettingsService.Transaction>) {
+        when (settingsState) {
             is DataState.Error -> {
-                state = State.NotReady(errors = listOf(transactionStatus.error))
+                state = State.NotReady(errors = listOf(settingsState.error))
                 syncTxDataState()
             }
             DataState.Loading -> {
                 state = State.NotReady()
             }
             is DataState.Success -> {
-                syncTxDataState(transactionStatus.data)
+                syncTxDataState(settingsState.data)
 
-                val warnings = transactionStatus.data.warnings + sendEvmData.warnings
-                state = if (transactionStatus.data.errors.isNotEmpty()) {
-                    State.NotReady(warnings, transactionStatus.data.errors)
+                val warnings = settingsState.data.warnings + sendEvmData.warnings
+                state = if (settingsState.data.errors.isNotEmpty()) {
+                    State.NotReady(warnings, settingsState.data.errors)
                 } else {
                     State.Ready(warnings)
                 }
@@ -102,16 +116,16 @@ class SendEvmTransactionService(
             logger.info("state is not Ready: ${state.javaClass.simpleName}")
             return
         }
-        val transaction = feeService.transactionStatus.dataOrNull ?: return
+        val txConfig = settingsService.state.dataOrNull ?: return
 
         sendState = SendState.Sending
         logger.info("sending tx")
 
         evmKitWrapper.sendSingle(
-            transaction.transactionData,
-            transaction.gasData.gasPrice,
-            transaction.gasData.gasLimit,
-            transaction.transactionData.nonce
+            txConfig.transactionData,
+            txConfig.gasData.gasPrice,
+            txConfig.gasData.gasLimit,
+            txConfig.nonce
         )
             .subscribeIO({ fullTransaction ->
                 sendState = SendState.Sent(fullTransaction.transaction.hash)
@@ -130,9 +144,9 @@ class SendEvmTransactionService(
         disposable.clear()
     }
 
-    private fun syncTxDataState(transaction: Transaction? = null) {
+    private fun syncTxDataState(transaction: SendEvmSettingsService.Transaction? = null) {
         val transactionData = transaction?.transactionData ?: sendEvmData.transactionData
-        txDataState = TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
+        txDataState = TxDataState(transactionData, transaction?.nonce, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
     }
 
     sealed class State {
@@ -142,6 +156,7 @@ class SendEvmTransactionService(
 
     data class TxDataState(
         val transactionData: TransactionData?,
+        val nonce: Long?,
         val additionalInfo: SendEvmData.AdditionalInfo?,
         val decoration: TransactionDecoration?
     )

@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToBigIntegerOrNull
 import io.horizontalsystems.ethereumkit.core.rollup.L1FeeProvider
-import io.horizontalsystems.ethereumkit.core.toHexString
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Single
@@ -47,6 +46,6 @@ class EvmRollupGasDataService(
     }
 
     private fun l1GasFee(transactionData: TransactionData, gasPrice: GasPrice, gasLimit: Long): Single<BigInteger> =
-        l1FeeProvider.getL1Fee(gasPrice, gasLimit, transactionData.to, transactionData.value, transactionData.input, transactionData.nonce)
+        l1FeeProvider.getL1Fee(gasPrice, gasLimit, transactionData.to, transactionData.value, transactionData.input)
 
 }
