@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.showextendedkey.account
+package io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey
 
 import android.os.Parcelable
 import androidx.core.os.bundleOf
