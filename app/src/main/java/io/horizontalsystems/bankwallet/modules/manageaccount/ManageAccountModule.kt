@@ -4,6 +4,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 
 object ManageAccountModule {
     const val ACCOUNT_ID_KEY = "account_id_key"
@@ -11,12 +12,25 @@ object ManageAccountModule {
     class Factory(private val accountId: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = ManageAccountService(accountId, App.accountManager)
-
-            return ManageAccountViewModel(service, listOf(service)) as T
+            return ManageAccountViewModel(accountId, App.accountManager) as T
         }
     }
 
     fun prepareParams(accountId: String) = bundleOf(ACCOUNT_ID_KEY to accountId)
 
+    data class ViewState(
+        val title: String,
+        val newName: String,
+        val canSave: Boolean,
+        val closeScreen: Boolean,
+        val headerNote: HeaderNote,
+        val keyActions: List<KeyAction>
+    )
+
+    enum class KeyAction {
+        RecoveryPhrase,
+        PublicKeys,
+        PrivateKeys,
+        Backup,
+    }
 }

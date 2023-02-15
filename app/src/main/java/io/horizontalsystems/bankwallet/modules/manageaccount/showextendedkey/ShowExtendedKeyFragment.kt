@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.showextendedkey.account
+package io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,10 +25,10 @@ import androidx.navigation.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.modules.evmprivatekey.ActionButton
-import io.horizontalsystems.bankwallet.modules.evmprivatekey.HidableContent
+import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType
+import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
+import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.modules.recoveryphrase.ConfirmCopyBottomSheet
-import io.horizontalsystems.bankwallet.modules.showextendedkey.account.ShowExtendedKeyModule.DisplayKeyType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -135,6 +135,14 @@ private fun AccountExtendedKeyScreen(
                 ) {
                     Spacer(Modifier.height(12.dp))
 
+                    if(viewModel.displayKeyType.isPrivate) {
+                        TextImportantWarning(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            text = stringResource(R.string.PrivateKeys_NeverShareWarning)
+                        )
+                        Spacer(Modifier.height(24.dp))
+                    }
+
                     var showBlockchainSelectorDialog by remember { mutableStateOf(false) }
                     var showPurposeSelectorDialog by remember { mutableStateOf(false) }
                     var showAccountSelectorDialog by remember { mutableStateOf(false) }
@@ -174,13 +182,10 @@ private fun AccountExtendedKeyScreen(
                     }
 
                     Spacer(Modifier.height(32.dp))
-                    var hidden by remember { mutableStateOf(true) }
                     if (viewModel.displayKeyType.isPrivate) {
-                        HidableContent(viewModel.accountExtendedKey, hidden, viewModel.showKeyTitle.getString()) {
-                            hidden = it
-                        }
+                        HidableContent(viewModel.accountExtendedKey, stringResource(R.string.ExtendedKey_TapToShowPrivateKey))
                     } else {
-                        HidableContent(viewModel.accountExtendedKey, false, viewModel.showKeyTitle.getString(), null)
+                        HidableContent(viewModel.accountExtendedKey)
                     }
 
                     if (showPurposeSelectorDialog) {
@@ -193,7 +198,6 @@ private fun AccountExtendedKeyScreen(
                                 showPurposeSelectorDialog = false
                             },
                             onSelectItem = {
-                                hidden = true
                                 viewModel.set(it)
                             }
                         )
@@ -208,7 +212,6 @@ private fun AccountExtendedKeyScreen(
                                 showBlockchainSelectorDialog = false
                             },
                             onSelectItem = {
-                                hidden = true
                                 viewModel.set(it)
                             }
                         )
@@ -223,7 +226,6 @@ private fun AccountExtendedKeyScreen(
                                 showAccountSelectorDialog = false
                             },
                             onSelectItem = {
-                                hidden = true
                                 viewModel.set(it)
                             }
                         )
