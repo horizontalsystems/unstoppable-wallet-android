@@ -3,8 +3,6 @@ package io.horizontalsystems.bankwallet.modules.coin
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -12,7 +10,10 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.LinkType
+import io.horizontalsystems.marketkit.models.MarketInfoOverview
+import io.horizontalsystems.marketkit.models.TokenHolder
 import java.math.BigDecimal
 import java.net.URI
 
@@ -103,7 +104,6 @@ class CoinViewFactory(
         return CoinOverviewViewItem(
             roi = getRoi(overview.performance),
             categories = overview.categories.map { it.name },
-            contracts = getContractInfo(overview.fullCoin.tokens),
             links = getLinks(overview, item.guideUrl),
             about = overview.description,
             marketData = getMarketItems(item)
@@ -186,32 +186,6 @@ class CoinViewFactory(
         }
 
         return items
-    }
-
-    private fun getContractInfo(tokens: List<Token>) = tokens
-        .sortedBy { it.blockchainType.order }
-        .mapNotNull { token ->
-            when (val tokenType = token.type) {
-                is TokenType.Eip20 -> ContractInfo(
-                    rawValue = tokenType.address,
-                    imgUrl = token.blockchainType.imageUrl,
-                    explorerUrl = explorerUrl(token, tokenType.address),
-                    name = token.blockchain.name
-                )
-                is TokenType.Bep2 -> ContractInfo(
-                    rawValue = tokenType.symbol,
-                    imgUrl = token.blockchainType.imageUrl,
-                    explorerUrl = explorerUrl(token, tokenType.symbol),
-                    name = token.blockchain.name
-                )
-                else -> null
-            }
-        }
-
-    private fun explorerUrl(token: Token, reference: String) : String? {
-        return token.blockchain.explorerUrl?.let{
-            it.replace("\$ref", reference)
-        }
     }
 
     fun getLinks(coinMarketDetails: MarketInfoOverview, guideUrl: String?): List<CoinLink> {
