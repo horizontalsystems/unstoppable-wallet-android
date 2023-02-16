@@ -668,7 +668,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다.</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">복원 소스를 변경한 후 지갑은 Bitcoin 블록체인과 자체적으로 다시 동기화해야 합니다.</string>
     <string name="BtcBlockchainSettings_RestoreSource">매개 변수 복원</string>
@@ -842,7 +842,6 @@
     <string name="RecoveryPhrase_Description">이 단어들을 올바른 순서로 기록하고 안전한 장소에 보관하십시오</string>
     <string name="RecoveryPhrase_ShowPhrase">탭하여 복구 문구 표시</string>
     <string name="RecoveryPhrase_Verify">확인하기</string>
-    <string name="RecoveryPhrase_Warning">복구 문구를 누구와도 공유하지 마십시오. Unstoppable 팀은 복구 문구를 요구하지 않습니다.</string>
     <string name="RecoveryPhrase_CopyWarning_Title">복사의 위험</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM 개인 키</string>
@@ -855,13 +854,25 @@
     <string name="ExtendedKey_Purpose">Purpose</string>
     <string name="ExtendedKey_Account">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">개인 키 보기</string>
-    <string name="ExtendedKey_TapToShowPublicKey">탭하여 공개 키 표시</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_EvmPrivateKey">EVM 개인 키</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
+    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">공개 키</string>
+    <string name="PublicKeys_EvmAddress">EVM 주소</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">확인하기</string>
     <string name="RecoveryPhraseVerify_Description">지갑 복구 문구에서 요청한 단어 2개 선택</string>
@@ -935,9 +946,9 @@
     <string name="Tor_Alert_Title">인터넷</string>
     <string name="Tor_Status_Starting">토르 시작중...</string>
     <string name="Tor_Status_Error">토르 시작 오류 !</string>
-    <string name="TorPage_Connecting">연결중...</string>
+    <string name="TorPage_Connecting">Connecting Tor…</string>
     <string name="TorPage_Connected">연결됨</string>
-    <string name="TorPage_Failed">실패</string>
+    <string name="TorPage_Failed">Failed to Connect Tor</string>
     <string name="TorPage_ConnectionClosed">연결 해제</string>
     <string name="Tor_TorIsActive">Tor 활성화</string>
     <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
