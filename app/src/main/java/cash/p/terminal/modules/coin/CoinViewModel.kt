@@ -24,23 +24,10 @@ class CoinViewModel(
     val isWatchlistEnabled = localStorage.marketsTabEnabled
     var isFavorite by mutableStateOf<Boolean>(false)
         private set
-    var coinState by mutableStateOf<CoinState?>(null)
-        private set
     var successMessage by mutableStateOf<Int?>(null)
         private set
 
     init {
-        viewModelScope.launch {
-            val coinStateFlow: Flow<CoinState> = service.coinState.asFlow()
-            coinStateFlow.collect {
-                coinState = it
-
-                if (it == CoinState.AddedToWallet) {
-                    successMessage = R.string.Hud_Added_To_Wallet
-                }
-            }
-        }
-
         viewModelScope.launch {
             val isFavoriteFlow: Flow<Boolean> = service.isFavorite.asFlow()
             isFavoriteFlow.collect {

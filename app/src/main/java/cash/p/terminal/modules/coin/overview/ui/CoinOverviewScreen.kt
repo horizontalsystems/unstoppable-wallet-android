@@ -63,35 +63,6 @@ fun CoinOverviewScreen(
     val view = LocalView.current
     val context = LocalContext.current
 
-//                when (viewModel.coinState) {
-//                    null,
-//                    CoinState.Unsupported,
-//                    CoinState.NoActiveAccount,
-//                    CoinState.WatchAccount -> {
-//                    }
-//                    CoinState.AddedToWallet,
-//                    CoinState.InWallet -> {
-//                        add(
-//                            MenuItem(
-//                                title = TranslatableString.ResString(R.string.CoinPage_InWallet),
-//                                icon = R.drawable.ic_in_wallet_dark_24,
-//                                onClick = { HudHelper.showInProcessMessage(view, R.string.Hud_Already_In_Wallet, showProgressBar = false) }
-//                            )
-//                        )
-//                    }
-//                    CoinState.NotInWallet -> {
-//                        add(
-//                            MenuItem(
-//                                title = TranslatableString.ResString(R.string.CoinPage_AddToWallet),
-//                                icon = R.drawable.ic_add_to_wallet_2_24,
-//                                onClick = {
-//                                    manageWalletsViewModel.enable(TODO())
-//                                }
-//                            )
-//                        )
-//                    }
-//                }
-
     val vmFactory1 = remember { ManageWalletsModule.Factory() }
     val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
     val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory1)
