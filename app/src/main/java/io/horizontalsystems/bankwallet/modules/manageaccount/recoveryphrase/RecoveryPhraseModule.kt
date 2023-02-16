@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.recoveryphrase
+package io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
