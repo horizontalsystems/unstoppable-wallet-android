@@ -426,8 +426,10 @@
     <string name="FeeSettings_MaxFee_Info">The max. fee rate is the maximum price for a gas unit a user is willing to pay when sending the given transaction.</string>
     <string name="FeeSettings_MaxMinerTips">Max Miner Tip (Gwei/Gas)</string>
     <string name="FeeSettings_MaxMinerTips_Info">The miner tip is essentially a small tip to blockchain nodes (aka miners) in order to incentivize the faster processing of the given transaction.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risky</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">The transaction may remain pending for a while or fail entirely.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risky</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
     <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
     <string name="FeeSettings_Info_IUnderstand">I Understand</string>

@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.send.evm.settings
 
-import android.util.Log
 import cash.p.terminal.core.Warning
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.*
@@ -26,18 +25,14 @@ class SendEvmSettingsService(
     val stateFlow: Flow<DataState<Transaction>> = _stateFlow
 
     suspend fun start() = withContext(Dispatchers.IO) {
-        Log.e("e", "settingService.start()")
-
         launch {
             feeService.transactionStatusObservable.asFlow().collect {
-                Log.e("e", "feeService state: ${it.javaClass.simpleName}")
                 sync()
             }
         }
 
         launch {
             nonceService.stateFlow.collect {
-                Log.e("e", "nonceService state: ${it.javaClass.simpleName}")
                 sync()
             }
         }
@@ -70,7 +65,6 @@ class SendEvmSettingsService(
                 val feeData = feeState.data
                 val nonceData = nonceState.data
 
-                Log.e("e", "fee default=${feeData.default}, nonce default=${nonceData.default}")
                 DataState.Success(
                     Transaction(
                         transactionData = feeData.transactionData,

@@ -1,14 +1,15 @@
 package cash.p.terminal.modules.send.evm.settings
 
-import android.util.Log
 import cash.p.terminal.core.Warning
 import cash.p.terminal.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.withContext
 
 class SendEvmNonceService(
     private val evmKit: EthereumKit,
@@ -35,10 +36,9 @@ class SendEvmNonceService(
         setRecommended()
     }
 
-    private suspend fun setRecommended() {
+    private suspend fun setRecommended() = withContext(Dispatchers.IO) {
         val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
 
-        Log.e("e", "setRecommended: $nonce")
         state = DataState.Success(State(nonce = nonce, default = true))
     }
 

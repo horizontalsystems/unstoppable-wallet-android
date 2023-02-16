@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.sendevmtransaction
 
-import android.util.Log
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.Warning
@@ -77,7 +76,6 @@ class SendEvmTransactionService(
     override val ownAddress: Address = evmKit.receiveAddress
 
     override suspend fun start() = withContext(Dispatchers.IO) {
-        Log.e("e", "txService: start 1")
         launch {
             settingsService.stateFlow
                 .collect {
@@ -85,7 +83,6 @@ class SendEvmTransactionService(
                 }
         }
 
-        Log.e("e", "txService: start 2")
         settingsService.start()
     }
 

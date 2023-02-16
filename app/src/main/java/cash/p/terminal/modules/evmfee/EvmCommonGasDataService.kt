@@ -11,18 +11,14 @@ import java.math.BigInteger
 open class EvmCommonGasDataService(
         private val evmKit: EthereumKit,
         private val gasLimitSurchargePercent: Int = 0,
-        private val gasLimit: Long? = null
+        protected val gasLimit: Long? = null
 ) {
 
-    open fun predefinedGasDataAsync(gasPrice: GasPrice, transactionData: TransactionData): Single<GasData>? {
-        if (gasLimit == null) {
-            return null
+    open fun estimatedGasDataAsync(gasPrice: GasPrice, transactionData: TransactionData, stubAmount: BigInteger? = null): Single<GasData> {
+        if (gasLimit != null) {
+            return Single.just(GasData(gasLimit, gasPrice))
         }
 
-        return Single.just(GasData(gasLimit, gasPrice))
-    }
-
-    open fun estimatedGasDataAsync(gasPrice: GasPrice, transactionData: TransactionData, stubAmount: BigInteger?): Single<GasData> {
         val stubTransactionData = if (stubAmount != null)  {
             TransactionData(transactionData.to, BigInteger.ONE, transactionData.input)
         } else {

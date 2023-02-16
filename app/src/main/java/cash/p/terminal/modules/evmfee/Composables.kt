@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -158,11 +157,15 @@ private fun NumberInputWithButtons(
         else -> ComposeAppTheme.colors.steel20
     }
 
-    var textState by rememberSaveable(value, stateSaver = TextFieldValue.Saver) {
+    var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         val text = value.toString()
-        mutableStateOf(TextFieldValue(text, TextRange(text.length)))
+        mutableStateOf(TextFieldValue(text))
     }
     var playShakeAnimation by remember { mutableStateOf(false) }
+
+    LaunchedEffect(value) {
+        textState = textState.copy(text = value.toString())
+    }
 
     Row(
         modifier = Modifier
@@ -187,8 +190,11 @@ private fun NumberInputWithButtons(
             onValueChange = { textFieldValue ->
                 val newValue = textFieldValue.text.toBigDecimalOrNull() ?: BigDecimal.ZERO
                 if (newValue.scale() <= decimals) {
+                    val currentText = textState.text
                     textState = textFieldValue
-                    onValueChange(newValue)
+                    if (currentText != textFieldValue.text) {
+                        onValueChange(newValue)
+                    }
                 } else {
                     playShakeAnimation = true
                 }

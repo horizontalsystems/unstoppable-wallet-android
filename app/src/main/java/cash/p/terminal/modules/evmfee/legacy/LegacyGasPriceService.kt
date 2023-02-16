@@ -64,6 +64,7 @@ class LegacyGasPriceService(
                 state = DataState.Success(
                     GasPriceInfo(
                         gasPrice = GasPrice.Legacy(recommended),
+                        gasPriceDefault = GasPrice.Legacy(recommended),
                         default = true,
                         warnings = listOf(),
                         errors = listOf()
@@ -86,7 +87,7 @@ class LegacyGasPriceService(
                 val errors = mutableListOf<Throwable>()
 
                 if (value < riskOfStuckBound.calculate(recommended)) {
-                    warnings.add(FeeSettingsWarning.RiskOfGettingStuck)
+                    warnings.add(FeeSettingsWarning.RiskOfGettingStuckLegacy)
                 }
 
                 if (value >= overpricingBound.calculate(recommended)) {
@@ -96,6 +97,7 @@ class LegacyGasPriceService(
                 state = DataState.Success(
                     GasPriceInfo(
                         gasPrice = GasPrice.Legacy(value),
+                        gasPriceDefault = GasPrice.Legacy(recommended),
                         default = false,
                         warnings = warnings,
                         errors = errors

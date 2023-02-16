@@ -34,7 +34,7 @@ class Eip1559GasPriceService(
     private val initialPriorityFee: Long? = initialGasPrice?.maxPriorityFeePerGas
 
     private val overpricingBound = Bound.Multiplied(BigDecimal(1.5))
-    private val riskOfStuckBound = Bound.Multiplied(BigDecimal(0.9))
+    private val riskOfStuckBound = Bound.Multiplied(BigDecimal(1))
 
     private var recommendedGasPrice: GasPrice.Eip1559? = null
 
@@ -77,6 +77,7 @@ class Eip1559GasPriceService(
             state = DataState.Success(
                 GasPriceInfo(
                     gasPrice = it,
+                    gasPriceDefault = it,
                     default = true,
                     warnings = listOf(),
                     errors = listOf()
@@ -114,10 +115,7 @@ class Eip1559GasPriceService(
             val tip = min(gasPriceEip1559.maxFeePerGas - recommendedBaseFee, gasPriceEip1559.maxPriorityFeePerGas)
 
             when {
-//                tip < 0 -> {
-//                    errors.add(FeeSettingsError.LowMaxFee)
-//                }
-                tip <= riskOfStuckBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
+                tip < riskOfStuckBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
                     warnings.add(FeeSettingsWarning.RiskOfGettingStuck)
                 }
                 tip >= overpricingBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
@@ -128,6 +126,7 @@ class Eip1559GasPriceService(
 
         return GasPriceInfo(
             gasPrice = gasPriceEip1559,
+            gasPriceDefault = recommendedGasPrice ?: gasPriceEip1559,
             default = recommendedGasPriceSelected,
             warnings = warnings,
             errors = errors
