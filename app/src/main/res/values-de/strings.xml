@@ -669,7 +669,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Einfacher Auth (optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC-Quelle</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC-Quelle mit dieser URL existiert bereits</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Nach dem Ändern der Quelle wiederherstellen muss sich die Wallet mit der %@ Blockchain synchronisieren.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Parameter wiederherstellen</string>
@@ -847,7 +847,6 @@
     <string name="RecoveryPhrase_Description">Schreibe diese Wörter in die richtige Reihenfolge und halte sie an einem sicheren Ort</string>
     <string name="RecoveryPhrase_ShowPhrase">Tippen, um Wiederherstellungsphrase anzuzeigen</string>
     <string name="RecoveryPhrase_Verify">Prüfen</string>
-    <string name="RecoveryPhrase_Warning">Teilen Sie niemals Ihre Wiederherstellungsphrase mit niemandem. Das unaufhaltsame Team wird niemals nach Ihrer Wiederherstellungsphrase fragen.</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Kopierrisiko</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM privater Schlüssel</string>
@@ -860,13 +859,25 @@
     <string name="ExtendedKey_Purpose">Purpose</string>
     <string name="ExtendedKey_Account">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
-    <string name="ExtendedKey_TapToShowPublicKey">Tippen um den öffentlichen Schlüssel anzuzeigen</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPrivKey</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
+    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Öffentliche Schlüssel</string>
+    <string name="PublicKeys_EvmAddress">EVM-Adresse</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">Prüfen</string>
     <string name="RecoveryPhraseVerify_Description">Wählen Sie zwei angeforderte Wörter aus Ihrer Wallet-Wiederherstellungsphrase</string>
@@ -940,9 +951,9 @@
     <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Tor starten...</string>
     <string name="Tor_Status_Error">Fehler beim Starten von Tor!</string>
-    <string name="TorPage_Connecting">Verbinde…</string>
+    <string name="TorPage_Connecting">Connecting Tor…</string>
     <string name="TorPage_Connected">Verbunden</string>
-    <string name="TorPage_Failed">Fehlgeschlagen</string>
+    <string name="TorPage_Failed">Failed to Connect Tor</string>
     <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
     <string name="Tor_TorIsActive">Tor ist aktiv</string>
     <string name="Tor_PrerequisitesAlert_Content">Durch die Aktivierung von TOR wird die Ethereum-Blockchain-Verbindung wieder auf Infura zurückgesetzt.</string>
