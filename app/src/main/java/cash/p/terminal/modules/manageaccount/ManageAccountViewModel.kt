@@ -4,13 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.balance.headerNote
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountViewModel(
     accountId: String,
@@ -32,12 +33,12 @@ class ManageAccountViewModel(
         private set
 
     private var newName = account.name
-    private val disposable = CompositeDisposable()
 
     init {
-        accountManager.accountsFlowable
-            .subscribeIO { handleUpdatedAccounts(it) }
-            .let { disposable.add(it) }
+        viewModelScope.launch {
+            accountManager.accountsFlowable.asFlow()
+                .collect { handleUpdatedAccounts(it) }
+        }
     }
 
     fun onChange(name: String) {
@@ -57,10 +58,6 @@ class ManageAccountViewModel(
 
     fun onClose() {
         viewState = viewState.copy(closeScreen = false)
-    }
-
-    override fun onCleared() {
-        disposable.clear()
     }
 
     private fun getKeyActions(account: Account): List<KeyAction> {

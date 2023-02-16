@@ -46,12 +46,10 @@ class PrivateKeysViewModel(
             null
         }
 
-        var accountExtendedDisplayType =
-            ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(true)
+        var accountExtendedDisplayType = ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(true)
         val accountExtendedPrivateKey = bip32RootKey
             ?: if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Account && !hdExtendedKey.info.isPublic) {
-                accountExtendedDisplayType =
-                    ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(false)
+                accountExtendedDisplayType = ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(false)
                 hdExtendedKey
             } else {
                 null
@@ -60,16 +58,10 @@ class PrivateKeysViewModel(
         viewState = PrivateKeysModule.ViewState(
             evmPrivateKey = ethereumPrivateKey,
             bip32RootKey = bip32RootKey?.let {
-                PrivateKeysModule.ExtendedKey(
-                    it,
-                    ShowExtendedKeyModule.DisplayKeyType.Bip32RootKey
-                )
+                PrivateKeysModule.ExtendedKey(it, ShowExtendedKeyModule.DisplayKeyType.Bip32RootKey)
             },
             accountExtendedPrivateKey = accountExtendedPrivateKey?.let {
-                PrivateKeysModule.ExtendedKey(
-                    it,
-                    accountExtendedDisplayType
-                )
+                PrivateKeysModule.ExtendedKey(it, accountExtendedDisplayType)
             }
         )
     }
