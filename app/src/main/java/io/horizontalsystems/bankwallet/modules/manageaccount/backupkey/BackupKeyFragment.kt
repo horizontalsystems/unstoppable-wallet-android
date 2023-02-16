@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.backupkey
+package cash.p.terminal.modules.manageaccount.backupkey
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,8 +19,8 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.backupconfirmkey.BackupConfirmKeyModule
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.modules.manageaccount.backupconfirmkey.BackupConfirmKeyModule
 import cash.p.terminal.modules.manageaccount.ui.PassphraseCell
 import cash.p.terminal.modules.manageaccount.ui.SeedPhraseList
 import cash.p.terminal.ui.compose.ComposeAppTheme

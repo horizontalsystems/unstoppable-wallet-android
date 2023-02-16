@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.backupconfirmkey
+package cash.p.terminal.modules.manageaccount.backupconfirmkey
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel

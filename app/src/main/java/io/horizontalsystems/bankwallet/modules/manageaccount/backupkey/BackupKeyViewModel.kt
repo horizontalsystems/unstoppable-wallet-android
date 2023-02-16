@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.backupkey
+package cash.p.terminal.modules.manageaccount.backupkey
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

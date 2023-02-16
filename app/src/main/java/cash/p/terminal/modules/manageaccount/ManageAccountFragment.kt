@@ -26,7 +26,7 @@ import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.backupkey.BackupKeyModule
+import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.modules.balance.HeaderNote
 import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning

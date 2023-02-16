@@ -71,10 +71,10 @@
         android:name="cash.p.terminal.modules.manageaccount.showextendedkey.AccountExtendedKeyFragment"/>
     <fragment
         android:id="@+id/backupKeyFragment"
-        android:name="cash.p.terminal.modules.backupkey.BackupKeyFragment"/>
+        android:name="cash.p.terminal.modules.manageaccount.backupkey.BackupKeyFragment"/>
     <fragment
         android:id="@+id/backupConfirmationKeyFragment"
-        android:name="cash.p.terminal.modules.backupconfirmkey.BackupConfirmKeyFragment" />
+        android:name="cash.p.terminal.modules.manageaccount.backupconfirmkey.BackupConfirmKeyFragment" />
     <fragment
         android:id="@+id/securityParamsInfoFragment"
         android:name="cash.p.terminal.modules.info.SecurityParamsInfoFragment"/>

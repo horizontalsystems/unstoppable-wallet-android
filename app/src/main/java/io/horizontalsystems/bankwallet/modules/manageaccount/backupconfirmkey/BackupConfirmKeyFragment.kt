@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.backupconfirmkey
+package cash.p.terminal.modules.manageaccount.backupconfirmkey
 
 import android.os.Bundle
 import android.view.LayoutInflater

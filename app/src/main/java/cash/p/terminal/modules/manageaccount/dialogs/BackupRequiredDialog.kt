@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.backupkey.BackupKeyModule
+import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.TextImportantWarning
