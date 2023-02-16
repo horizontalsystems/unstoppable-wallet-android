@@ -68,7 +68,14 @@ class MainViewModel(
             )
         }
 
-    val torEnabled = localStorage.torEnabled
+    private var selectedPageIndex = getPageIndexToOpen()
+    private var mainNavItems = navigationItems()
+    private var showRateAppDialog = false
+    private var contentHidden = pinComponent.isLocked
+    private var showWhatsNew = false
+    private var activeWallet = accountManager.activeAccount
+    private var wcSupportState: WC1Manager.SupportState? = null
+    private var torEnabled = localStorage.torEnabled
 
     val wallets: List<Account>
         get() = accountManager.accounts.filter { !it.isWatchAccount }
@@ -76,27 +83,19 @@ class MainViewModel(
     val watchWallets: List<Account>
         get() = accountManager.accounts.filter { it.isWatchAccount }
 
-    var selectedPageIndex by mutableStateOf(getPageIndexToOpen())
+    var uiState by mutableStateOf(
+        MainModule.UiState(
+            selectedPageIndex = selectedPageIndex,
+            mainNavItems = mainNavItems,
+            showRateAppDialog = showRateAppDialog,
+            contentHidden = contentHidden,
+            showWhatsNew = showWhatsNew,
+            activeWallet = activeWallet,
+            wcSupportState = wcSupportState,
+            torEnabled = torEnabled
+        )
+    )
         private set
-
-    var mainNavItems by mutableStateOf(navigationItems())
-        private set
-
-    var showRateAppDialog by mutableStateOf(false)
-        private set
-
-    var contentHidden by mutableStateOf(pinComponent.isLocked)
-        private set
-
-    var showWhatsNew by mutableStateOf(false)
-        private set
-
-    var activeWallet by mutableStateOf(accountManager.activeAccount)
-        private set
-
-    var wcSupportState by mutableStateOf<WC1Manager.SupportState?>(null)
-        private set
-
 
     init {
         localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) {
@@ -115,6 +114,7 @@ class MainViewModel(
 
         rateAppManager.showRateAppFlow.collectWith(viewModelScope) {
             showRateAppDialog = it
+            syncState()
         }
 
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
@@ -133,11 +133,13 @@ class MainViewModel(
 
         wcDeepLink?.let {
             wcSupportState = wc1Manager.getWalletConnectSupportState()
+            syncState()
         }
 
         accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
             (it as? ActiveAccountState.ActiveAccount)?.let { state ->
                 activeWallet = state.account
+                syncState()
             }
         }
 
@@ -152,19 +154,23 @@ class MainViewModel(
 
     fun whatsNewShown() {
         showWhatsNew = false
+        syncState()
     }
 
     fun closeRateDialog() {
         showRateAppDialog = false
+        syncState()
     }
 
     fun onSelect(account: Account) {
         accountManager.setActiveAccountId(account.id)
         activeWallet = account
+        syncState()
     }
 
     fun onResume() {
         contentHidden = pinComponent.isLocked
+        syncState()
     }
 
     fun onSelect(mainNavItem: MainNavigation) {
@@ -182,6 +188,20 @@ class MainViewModel(
 
     fun wcSupportStateHandled() {
         wcSupportState = null
+        syncState()
+    }
+
+    private fun syncState() {
+        uiState = MainModule.UiState(
+            selectedPageIndex = selectedPageIndex,
+            mainNavItems = mainNavItems,
+            showRateAppDialog = showRateAppDialog,
+            contentHidden = contentHidden,
+            showWhatsNew = showWhatsNew,
+            activeWallet = activeWallet,
+            wcSupportState = wcSupportState,
+            torEnabled = torEnabled
+        )
     }
 
     private fun navigationItems(): List<MainModule.NavigationViewItem> {
@@ -246,6 +266,7 @@ class MainViewModel(
 
     private fun syncNavigation() {
         mainNavItems = navigationItems()
+        syncState()
     }
 
     private fun showWhatsNew() {
@@ -253,6 +274,7 @@ class MainViewModel(
             if (releaseNotesManager.shouldShowChangeLog()) {
                 delay(2000)
                 showWhatsNew = true
+                syncState()
             }
         }
     }

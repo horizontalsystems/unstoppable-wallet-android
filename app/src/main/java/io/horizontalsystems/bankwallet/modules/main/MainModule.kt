@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import kotlinx.parcelize.Parcelize
 
 object MainModule {
@@ -70,4 +72,15 @@ object MainModule {
             fun fromString(type: String?): MainNavigation? = map[type]
         }
     }
+
+    data class UiState(
+        val selectedPageIndex: Int,
+        val mainNavItems: List<NavigationViewItem>,
+        val showRateAppDialog: Boolean,
+        val contentHidden: Boolean,
+        val showWhatsNew: Boolean,
+        val activeWallet: Account?,
+        val torEnabled: Boolean,
+        val wcSupportState: WC1Manager.SupportState?
+    )
 }
