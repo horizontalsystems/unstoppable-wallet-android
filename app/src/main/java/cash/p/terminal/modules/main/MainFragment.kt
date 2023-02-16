@@ -121,8 +121,9 @@ private fun MainScreen(
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory(deepLink))
 ) {
 
-    val selectedPage = viewModel.selectedPageIndex
-    val pagerState = rememberPagerState(initialPage = viewModel.selectedPageIndex)
+    val uiState = viewModel.uiState
+    val selectedPage = uiState.selectedPageIndex
+    val pagerState = rememberPagerState(initialPage = selectedPage)
 
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -134,7 +135,7 @@ private fun MainScreen(
             WalletSwitchBottomSheet(
                 wallets = viewModel.wallets,
                 watchingAddresses = viewModel.watchWallets,
-                selectedAccount = viewModel.activeWallet,
+                selectedAccount = uiState.activeWallet,
                 onSelectListener = {
                     coroutineScope.launch {
                         modalBottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
@@ -154,14 +155,14 @@ private fun MainScreen(
                 backgroundColor = ComposeAppTheme.colors.tyler,
                 bottomBar = {
                     Column {
-                        if (viewModel.torEnabled) {
+                        if (uiState.torEnabled) {
                             TorStatusView()
                         }
                         HsBottomNavigation(
                             backgroundColor = ComposeAppTheme.colors.tyler,
                             elevation = 10.dp
                         ) {
-                            viewModel.mainNavItems.forEach { item ->
+                            uiState.mainNavItems.forEach { item ->
                                 HsBottomNavigationItem(
                                     icon = {
                                         BadgedIcon(item.badge) {
@@ -198,12 +199,12 @@ private fun MainScreen(
 
                     HorizontalPager(
                         modifier = Modifier.weight(1f),
-                        count = viewModel.mainNavItems.size,
+                        count = uiState.mainNavItems.size,
                         state = pagerState,
                         userScrollEnabled = false,
                         verticalAlignment = Alignment.Top
                     ) { page ->
-                        when (viewModel.mainNavItems[page].mainNavItem) {
+                        when (uiState.mainNavItems[page].mainNavItem) {
                             MainNavigation.Market -> MarketScreen(fragmentNavController)
                             MainNavigation.Balance -> BalanceScreen(fragmentNavController)
                             MainNavigation.Transactions -> TransactionsScreen(
@@ -215,11 +216,11 @@ private fun MainScreen(
                     }
                 }
             }
-            HideContentBox(viewModel.contentHidden)
+            HideContentBox(uiState.contentHidden)
         }
     }
 
-    if (viewModel.showWhatsNew) {
+    if (uiState.showWhatsNew) {
         LaunchedEffect(Unit) {
             fragmentNavController.slideFromBottom(
                 R.id.releaseNotesFragment,
@@ -229,7 +230,7 @@ private fun MainScreen(
         }
     }
 
-    if (viewModel.showRateAppDialog) {
+    if (uiState.showRateAppDialog) {
         val context = LocalContext.current
         RateApp(
             onRateClick = {
@@ -240,8 +241,8 @@ private fun MainScreen(
         )
     }
 
-    if (viewModel.wcSupportState != null) {
-        when (val wcSupportState = viewModel.wcSupportState) {
+    if (uiState.wcSupportState != null) {
+        when (val wcSupportState = uiState.wcSupportState) {
             SupportState.Supported -> {
                 fragmentNavController.slideFromRight(R.id.wallet_connect_graph)
             }
