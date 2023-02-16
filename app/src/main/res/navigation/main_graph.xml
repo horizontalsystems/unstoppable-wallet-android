@@ -62,7 +62,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.EvmAddressFragment"/>
     <fragment
         android:id="@+id/recoveryPhraseFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.recoveryphrase.RecoveryPhraseFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseFragment"/>
     <fragment
         android:id="@+id/evmPrivateKeyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment"/>
