@@ -71,10 +71,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.AccountExtendedKeyFragment"/>
     <fragment
         android:id="@+id/backupKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyFragment"/>
     <fragment
         android:id="@+id/backupConfirmationKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey.BackupConfirmKeyFragment" />
     <fragment
         android:id="@+id/securityParamsInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.SecurityParamsInfoFragment"/>

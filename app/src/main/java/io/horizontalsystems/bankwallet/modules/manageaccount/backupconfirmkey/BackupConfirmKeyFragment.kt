@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backupconfirmkey
+package io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey
 
 import android.os.Bundle
 import android.view.LayoutInflater

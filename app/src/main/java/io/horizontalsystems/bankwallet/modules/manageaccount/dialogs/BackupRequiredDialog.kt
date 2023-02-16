@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning

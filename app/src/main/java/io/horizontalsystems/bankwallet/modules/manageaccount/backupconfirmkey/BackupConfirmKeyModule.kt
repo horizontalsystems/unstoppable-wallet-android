@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backupconfirmkey
+package io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel

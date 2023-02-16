@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backupkey
+package io.horizontalsystems.bankwallet.modules.manageaccount.backupkey
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
