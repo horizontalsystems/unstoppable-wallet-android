@@ -12,22 +12,22 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.entities.ConfiguredToken
-import cash.p.terminal.modules.coin.overview.XxxTokenInfo
+import cash.p.terminal.modules.coin.overview.XxxTokens
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 
 @Composable
 fun Tokens(
-    tokens: List<XxxTokenInfo>,
+    tokens: XxxTokens,
     onClickAddToWallet: (ConfiguredToken) -> Unit,
     onClickExplorer: (String) -> Unit,
 ) {
     Column {
         CellSingleLineClear(borderTop = true) {
-            body_leah(text = stringResource(id = R.string.CoinPage_Contracts))
+            body_leah(text = stringResource(id = tokens.type.titleResId))
         }
 
-        CellUniversalLawrenceSection(tokens) { tokenInfo ->
+        CellUniversalLawrenceSection(tokens.tokens) { tokenInfo ->
             RowUniversal(
                 modifier = Modifier
                     .fillMaxWidth()

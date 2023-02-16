@@ -126,10 +126,10 @@ fun CoinOverviewScreen(
                                     Categories(overview.categories)
                                 }
 
-                                if (viewModel.xxxTokens.isNotEmpty()) {
+                                viewModel.xxxTokens?.let { xxxTokens ->
                                     Spacer(modifier = Modifier.height(24.dp))
                                     Tokens(
-                                        tokens = viewModel.xxxTokens,
+                                        tokens = xxxTokens,
                                         onClickAddToWallet = {
                                             manageWalletsViewModel.enable(it)
                                         },
