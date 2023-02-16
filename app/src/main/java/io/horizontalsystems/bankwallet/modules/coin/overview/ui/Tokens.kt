@@ -12,22 +12,22 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
-import io.horizontalsystems.bankwallet.modules.coin.overview.XxxTokenInfo
+import io.horizontalsystems.bankwallet.modules.coin.overview.XxxTokens
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun Tokens(
-    tokens: List<XxxTokenInfo>,
+    tokens: XxxTokens,
     onClickAddToWallet: (ConfiguredToken) -> Unit,
     onClickExplorer: (String) -> Unit,
 ) {
     Column {
         CellSingleLineClear(borderTop = true) {
-            body_leah(text = stringResource(id = R.string.CoinPage_Contracts))
+            body_leah(text = stringResource(id = tokens.type.titleResId))
         }
 
-        CellUniversalLawrenceSection(tokens) { tokenInfo ->
+        CellUniversalLawrenceSection(tokens.tokens) { tokenInfo ->
             RowUniversal(
                 modifier = Modifier
                     .fillMaxWidth()
