@@ -3,6 +3,8 @@ package cash.p.terminal.modules.coin.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.shorten
+import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterSignificant
 import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartViewModel
@@ -27,7 +29,12 @@ object CoinOverviewModule {
                         App.languageManager
                     )
 
-                    CoinOverviewViewModel(service, CoinViewFactory(currency, App.numberFormatter)) as T
+                    CoinOverviewViewModel(
+                        service,
+                        CoinViewFactory(currency, App.numberFormatter),
+                        App.walletManager,
+                        App.accountManager
+                    ) as T
                 }
                 ChartViewModel::class.java -> {
                     val chartService = CoinOverviewChartService(App.marketKit, App.currencyManager, fullCoin.coin.uid)
@@ -47,10 +54,21 @@ data class CoinOverviewItem(
     val guideUrl: String?,
 )
 
+data class XxxTokenInfo(
+    val rawValue: String,
+    val imgUrl: String,
+    val explorerUrl: String?,
+    val name: String?,
+    val configuredToken: ConfiguredToken,
+    val canAddToWallet: Boolean,
+    val inWallet: Boolean,
+) {
+    val shortened = rawValue.shorten()
+}
+
 data class CoinOverviewViewItem(
     val roi: List<RoiViewItem>,
     val categories: List<String>,
-    val contracts: List<ContractInfo>,
     val links: List<CoinLink>,
     val about: String,
     val marketData: MutableList<CoinDataItem>

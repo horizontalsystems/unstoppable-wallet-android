@@ -9,6 +9,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
@@ -29,15 +31,19 @@ import cash.p.terminal.modules.coin.CoinLink
 import cash.p.terminal.modules.coin.overview.CoinOverviewModule
 import cash.p.terminal.modules.coin.overview.CoinOverviewViewModel
 import cash.p.terminal.modules.coin.ui.CoinScreenTitle
+import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
+import cash.p.terminal.modules.managewallets.ManageWalletsModule
+import cash.p.terminal.modules.managewallets.ManageWalletsViewModel
 import cash.p.terminal.modules.markdown.MarkdownFragment
+import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.CellFooter
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
-import cash.p.terminal.ui.helpers.TextHelper
-import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.LinkType
 
@@ -56,6 +62,59 @@ fun CoinOverviewScreen(
 
     val view = LocalView.current
     val context = LocalContext.current
+
+//                when (viewModel.coinState) {
+//                    null,
+//                    CoinState.Unsupported,
+//                    CoinState.NoActiveAccount,
+//                    CoinState.WatchAccount -> {
+//                    }
+//                    CoinState.AddedToWallet,
+//                    CoinState.InWallet -> {
+//                        add(
+//                            MenuItem(
+//                                title = TranslatableString.ResString(R.string.CoinPage_InWallet),
+//                                icon = R.drawable.ic_in_wallet_dark_24,
+//                                onClick = { HudHelper.showInProcessMessage(view, R.string.Hud_Already_In_Wallet, showProgressBar = false) }
+//                            )
+//                        )
+//                    }
+//                    CoinState.NotInWallet -> {
+//                        add(
+//                            MenuItem(
+//                                title = TranslatableString.ResString(R.string.CoinPage_AddToWallet),
+//                                icon = R.drawable.ic_add_to_wallet_2_24,
+//                                onClick = {
+//                                    manageWalletsViewModel.enable(TODO())
+//                                }
+//                            )
+//                        )
+//                    }
+//                }
+
+    val vmFactory1 = remember { ManageWalletsModule.Factory() }
+    val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
+    val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory1)
+
+    if (restoreSettingsViewModel.openZcashConfigure != null) {
+        restoreSettingsViewModel.zcashConfigureOpened()
+
+        navController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
+            val requestResult = bundle.getInt(ZcashConfigure.requestResultKey)
+
+            if (requestResult == ZcashConfigure.RESULT_OK) {
+                val zcashConfig = bundle.getParcelable<ZCashConfig>(ZcashConfigure.zcashConfigKey)
+                zcashConfig?.let { config ->
+                    restoreSettingsViewModel.onEnter(config)
+                }
+            } else {
+                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+            }
+        }
+
+        navController.slideFromBottom(R.id.zcashConfigure)
+    }
+
 
     HSSwipeRefresh(
         refreshing = refreshing,
@@ -96,13 +155,12 @@ fun CoinOverviewScreen(
                                     Categories(overview.categories)
                                 }
 
-                                if (overview.contracts.isNotEmpty()) {
+                                if (viewModel.xxxTokens.isNotEmpty()) {
                                     Spacer(modifier = Modifier.height(24.dp))
-                                    Contracts(
-                                        contracts = overview.contracts,
-                                        onClickCopy = {
-                                            TextHelper.copyText(it.rawValue)
-                                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                                    Tokens(
+                                        tokens = viewModel.xxxTokens,
+                                        onClickAddToWallet = {
+                                            manageWalletsViewModel.enable(it)
                                         },
                                         onClickExplorer = {
                                             LinkHelper.openLinkInAppBrowser(context, it)

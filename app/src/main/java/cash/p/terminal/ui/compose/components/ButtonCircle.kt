@@ -42,6 +42,7 @@ fun ButtonPrimaryCircle(
 @Composable
 fun ButtonSecondaryCircle(
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_20,
     contentDescription: String? = null,
     tint: Color = ComposeAppTheme.colors.leah,
@@ -53,6 +54,7 @@ fun ButtonSecondaryCircle(
             .size(28.dp)
             .clip(CircleShape)
             .background(ComposeAppTheme.colors.steel20),
+        enabled = enabled,
         rippleColor = tint
     ) {
         Icon(
