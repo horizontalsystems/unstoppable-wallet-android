@@ -101,13 +101,15 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         title = stringResource(id = R.string.PrivateKeys_Bip32RootKey),
                         description = stringResource(id = R.string.PrivateKeys_Bip32RootKeyDescription),
                     ) {
-                        navController.slideFromRight(
-                            R.id.accountExtendedKeyFragment,
-                            ShowExtendedKeyModule.prepareParams(
-                                key.hdKey,
-                                key.displayKeyType
+                        navController.authorizedAction {
+                            navController.slideFromRight(
+                                R.id.accountExtendedKeyFragment,
+                                ShowExtendedKeyModule.prepareParams(
+                                    key.hdKey,
+                                    key.displayKeyType
+                                )
                             )
-                        )
+                        }
                     }
                 }
                 viewModel.viewState.accountExtendedPrivateKey?.let { key ->
@@ -115,10 +117,12 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         title = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKey),
                         description = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKeyDescription),
                     ) {
-                        navController.slideFromRight(
-                            R.id.accountExtendedKeyFragment,
-                            ShowExtendedKeyModule.prepareParams(key.hdKey, key.displayKeyType)
-                        )
+                        navController.authorizedAction {
+                            navController.slideFromRight(
+                                R.id.accountExtendedKeyFragment,
+                                ShowExtendedKeyModule.prepareParams(key.hdKey, key.displayKeyType)
+                            )
+                        }
                     }
                 }
             }
