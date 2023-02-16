@@ -54,9 +54,7 @@ class PrivateKeysFragment : BaseFragment() {
                     ManageAccountScreen(findNavController(), account)
                 }
             } catch (t: Throwable) {
-                Toast.makeText(
-                    App.instance, t.message ?: t.javaClass.simpleName, Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(App.instance, t.message ?: t.javaClass.simpleName, Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             }
         }
@@ -119,10 +117,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     ) {
                         navController.slideFromRight(
                             R.id.accountExtendedKeyFragment,
-                            ShowExtendedKeyModule.prepareParams(
-                                key.hdKey,
-                                key.displayKeyType
-                            )
+                            ShowExtendedKeyModule.prepareParams(key.hdKey, key.displayKeyType)
                         )
                     }
                 }
