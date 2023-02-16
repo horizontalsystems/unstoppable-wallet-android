@@ -668,7 +668,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Autenticação básica (opcional)</string>
     <string name="AddEvmSyncSource_RpcSource">Fonte RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">Fonte RPC com esta url já existe</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Url inserida é inválida. URL válida deve ter um dos seguintes esquemas: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte de restauração, a carteira terá que ressincronizar-se com a blockchain do Bitcoin.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Restaurar Fonte</string>
@@ -836,7 +836,6 @@
     <string name="RecoveryPhrase_Description">Escreva essas palavras na ordem correta e mantenha-as em um lugar seguro</string>
     <string name="RecoveryPhrase_ShowPhrase">Toque para mostrar a frase de recuperação</string>
     <string name="RecoveryPhrase_Verify">Verificar</string>
-    <string name="RecoveryPhrase_Warning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe Unstoppable nunca pedirá a sua frase de recuperação.</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Risco de Copiar</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">Chave Privada EVM</string>
@@ -849,13 +848,25 @@
     <string name="ExtendedKey_Purpose">Propósito</string>
     <string name="ExtendedKey_Account">Conta</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Toque para mostrar a chave privada</string>
-    <string name="ExtendedKey_TapToShowPublicKey">Toque para mostrar a chave privada</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_EvmPrivateKey">Chave Privada EVM</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
+    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Chaves públicas</string>
+    <string name="PublicKeys_EvmAddress">Endereço EVM</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">Verificar</string>
     <string name="RecoveryPhraseVerify_Description">Selecione duas palavras solicitadas da sua frase de recuperação de carteira</string>
@@ -929,9 +940,9 @@
     <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Iniciando o Tor...</string>
     <string name="Tor_Status_Error">Erro ao iniciar o Tor!</string>
-    <string name="TorPage_Connecting">Conectando...</string>
+    <string name="TorPage_Connecting">Connecting Tor…</string>
     <string name="TorPage_Connected">Conectado</string>
-    <string name="TorPage_Failed">Falhou</string>
+    <string name="TorPage_Failed">Failed to Connect Tor</string>
     <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="Tor_TorIsActive">Tor está ativo</string>
     <string name="Tor_PrerequisitesAlert_Content">Ativando TOR irá redefinir a conexão blockchain do Ethereum de volta para o Infura.</string>
