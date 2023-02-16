@@ -26,12 +26,12 @@ import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.modules.balance.HeaderNote
 import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
+import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.modules.manageaccount.publickeys.PublicKeysModule
 import cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
 import cash.p.terminal.modules.unlinkaccount.UnlinkAccountDialog
@@ -177,12 +177,10 @@ private fun KeyActions(
                         title = stringResource(id = R.string.PrivateKeys_Title),
                         icon = painterResource(id = R.drawable.ic_key_20)
                     ) {
-                        navController.authorizedAction {
-                            navController.slideFromRight(
-                                R.id.privateKeysFragment,
-                                PublicKeysModule.prepareParams(viewModel.account)
-                            )
-                        }
+                        navController.slideFromRight(
+                            R.id.privateKeysFragment,
+                            PublicKeysModule.prepareParams(viewModel.account)
+                        )
                     }
                 }
             }
@@ -192,12 +190,10 @@ private fun KeyActions(
                         title = stringResource(id = R.string.PublicKeys_Title),
                         icon = painterResource(id = R.drawable.icon_binocule_20)
                     ) {
-                        navController.authorizedAction {
-                            navController.slideFromRight(
-                                R.id.publicKeysFragment,
-                                PublicKeysModule.prepareParams(viewModel.account)
-                            )
-                        }
+                        navController.slideFromRight(
+                            R.id.publicKeysFragment,
+                            PublicKeysModule.prepareParams(viewModel.account)
+                        )
                     }
                 }
             }
