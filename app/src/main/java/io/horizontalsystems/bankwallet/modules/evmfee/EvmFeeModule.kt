@@ -64,23 +64,24 @@ interface IEvmGasPriceService {
 
 abstract class FeeSettingsError : Throwable() {
     object InsufficientBalance : FeeSettingsError()
-    object LowMaxFee : FeeSettingsError()
     class InvalidGasPriceType(override val message: String) : FeeSettingsError()
 }
 
 abstract class FeeSettingsWarning : Warning() {
     object RiskOfGettingStuck : FeeSettingsWarning()
+    object RiskOfGettingStuckLegacy : FeeSettingsWarning()
     object Overpricing : FeeSettingsWarning()
 }
 
 data class GasPriceInfo(
     val gasPrice: GasPrice,
+    val gasPriceDefault: GasPrice,
     val default: Boolean,
     val warnings: List<Warning>,
     val errors: List<Throwable>
 )
 
-open class GasData(val gasLimit: Long, val gasPrice: GasPrice) {
+open class GasData(val gasLimit: Long, var gasPrice: GasPrice) {
     open val fee: BigInteger
         get() = gasLimit.toBigInteger() * gasPrice.max.toBigInteger()
 }
