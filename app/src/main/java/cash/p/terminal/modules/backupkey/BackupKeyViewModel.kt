@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.modules.recoveryphrase.RecoveryPhraseModule
+import cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
 
 class BackupKeyViewModel(val account: Account) : ViewModel() {
 

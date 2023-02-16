@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.recoveryphrase
+package cash.p.terminal.modules.manageaccount.recoveryphrase
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel

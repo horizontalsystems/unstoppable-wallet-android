@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.recoveryphrase
+package cash.p.terminal.modules.manageaccount.recoveryphrase
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

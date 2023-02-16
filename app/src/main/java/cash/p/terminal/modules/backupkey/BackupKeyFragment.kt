@@ -21,8 +21,8 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.backupconfirmkey.BackupConfirmKeyModule
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.recoveryphrase.PassphraseCell
-import cash.p.terminal.modules.recoveryphrase.SeedPhraseList
+import cash.p.terminal.modules.manageaccount.ui.PassphraseCell
+import cash.p.terminal.modules.manageaccount.ui.SeedPhraseList
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar

@@ -62,7 +62,7 @@
         android:name="cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment"/>
     <fragment
         android:id="@+id/recoveryPhraseFragment"
-        android:name="cash.p.terminal.modules.recoveryphrase.RecoveryPhraseFragment"/>
+        android:name="cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseFragment"/>
     <fragment
         android:id="@+id/evmPrivateKeyFragment"
         android:name="cash.p.terminal.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment"/>

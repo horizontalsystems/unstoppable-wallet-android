@@ -33,7 +33,7 @@ import cash.p.terminal.modules.balance.ui.NoteWarning
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
 import cash.p.terminal.modules.manageaccount.publickeys.PublicKeysModule
-import cash.p.terminal.modules.recoveryphrase.RecoveryPhraseModule
+import cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
 import cash.p.terminal.modules.unlinkaccount.UnlinkAccountDialog
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
