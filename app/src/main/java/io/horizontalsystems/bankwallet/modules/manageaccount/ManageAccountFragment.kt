@@ -26,12 +26,12 @@ import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.balance.ui.NoteError
 import io.horizontalsystems.bankwallet.modules.balance.ui.NoteWarning
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.KeyAction
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
@@ -177,12 +177,10 @@ private fun KeyActions(
                         title = stringResource(id = R.string.PrivateKeys_Title),
                         icon = painterResource(id = R.drawable.ic_key_20)
                     ) {
-                        navController.authorizedAction {
-                            navController.slideFromRight(
-                                R.id.privateKeysFragment,
-                                PublicKeysModule.prepareParams(viewModel.account)
-                            )
-                        }
+                        navController.slideFromRight(
+                            R.id.privateKeysFragment,
+                            PublicKeysModule.prepareParams(viewModel.account)
+                        )
                     }
                 }
             }
@@ -192,12 +190,10 @@ private fun KeyActions(
                         title = stringResource(id = R.string.PublicKeys_Title),
                         icon = painterResource(id = R.drawable.icon_binocule_20)
                     ) {
-                        navController.authorizedAction {
-                            navController.slideFromRight(
-                                R.id.publicKeysFragment,
-                                PublicKeysModule.prepareParams(viewModel.account)
-                            )
-                        }
+                        navController.slideFromRight(
+                            R.id.publicKeysFragment,
+                            PublicKeysModule.prepareParams(viewModel.account)
+                        )
                     }
                 }
             }
