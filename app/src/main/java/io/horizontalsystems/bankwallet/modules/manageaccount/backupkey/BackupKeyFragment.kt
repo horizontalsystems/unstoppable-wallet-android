@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backupkey
+package io.horizontalsystems.bankwallet.modules.manageaccount.backupkey
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,8 +19,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyModule
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey.BackupConfirmKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme

@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.balance.ui.NoteError
 import io.horizontalsystems.bankwallet.modules.balance.ui.NoteWarning
