@@ -69,6 +69,13 @@ class CautionViewItemFactory(
                     CautionViewItem.Type.Error
                 )
             }
+            FeeSettingsError.UsedNonce -> {
+                CautionViewItem(
+                    Translator.getString(R.string.SendEvmSettings_Error_NonceUsed_Title),
+                    Translator.getString(R.string.SendEvmSettings_Error_NonceUsed),
+                    CautionViewItem.Type.Error
+                )
+            }
             else -> {
                 val (title, text) = convertError(error)
                 CautionViewItem(title, text, CautionViewItem.Type.Error)

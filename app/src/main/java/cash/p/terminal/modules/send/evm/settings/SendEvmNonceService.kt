@@ -2,6 +2,7 @@ package cash.p.terminal.modules.send.evm.settings
 
 import cash.p.terminal.core.Warning
 import cash.p.terminal.entities.DataState
+import cash.p.terminal.modules.evmfee.FeeSettingsError
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,9 @@ class SendEvmNonceService(
     private val evmKit: EthereumKit,
     private val nonce: Long? = null
 ) {
-    var state: DataState<State> = DataState.Success(State(1, false))
+    private var latestNonce: Long? = null
+
+    var state: DataState<State> = DataState.Loading
         private set(value) {
             field = value
             _stateFlow.update { value }
@@ -36,26 +39,41 @@ class SendEvmNonceService(
         setRecommended()
     }
 
-    private suspend fun setRecommended() = withContext(Dispatchers.IO) {
-        val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
-
-        state = DataState.Success(State(nonce = nonce, default = true))
-    }
-
     fun setNonce(nonce: Long) {
-        state = DataState.Success(State(nonce = nonce, default = false))
+        sync(nonce)
     }
 
     fun increment() {
         state.dataOrNull?.let { currentState ->
-            state = DataState.Success(State(nonce = currentState.nonce + 1, default = false))
+            sync(currentState.nonce + 1)
         }
     }
 
     fun decrement() {
         state.dataOrNull?.let { currentState ->
-            state = DataState.Success(State(nonce = currentState.nonce - 1, default = false))
+            sync(currentState.nonce - 1)
         }
+    }
+
+    private fun sync(nonce: Long) {
+        state = DataState.Success(State(nonce = nonce, default = false, errors = errors(nonce)))
+    }
+
+    private fun errors(nonce: Long): List<FeeSettingsError> {
+        return latestNonce?.let {
+            if (it > nonce) {
+                listOf(FeeSettingsError.UsedNonce)
+            } else {
+                listOf()
+            }
+        } ?: listOf()
+    }
+
+    private suspend fun setRecommended() = withContext(Dispatchers.IO) {
+        val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
+        state = DataState.Success(State(nonce = nonce, default = true))
+
+        latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
     }
 
     data class State(

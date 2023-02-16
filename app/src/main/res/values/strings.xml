@@ -408,7 +408,8 @@
     <string name="SendEvmSettings_Title">Advanced</string>
     <string name="SendEvmSettings_Nonce">TX Nonce</string>
     <string name="SendEvmSettings_Nonce_Info">The nonce is the number of transactions sent from a given address. Each time user sends a transaction, the nonce value increases by 1. Changing the nonce might be needed when a user tries to invalidate the currently pending transaction (that might have been sent in error etc) by sending another transaction with the same nonce but a higher fee. If there are two pending transactions with the same nonce only one will be accepted.</string>
-
+    <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
+    <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
 
     <!-- Fee Settings -->
 

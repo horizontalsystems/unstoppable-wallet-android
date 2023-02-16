@@ -64,6 +64,7 @@ interface IEvmGasPriceService {
 
 abstract class FeeSettingsError : Throwable() {
     object InsufficientBalance : FeeSettingsError()
+    object UsedNonce : FeeSettingsError()
     class InvalidGasPriceType(override val message: String) : FeeSettingsError()
 }
 
