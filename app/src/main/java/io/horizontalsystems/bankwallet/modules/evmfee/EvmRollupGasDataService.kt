@@ -9,25 +9,21 @@ import io.reactivex.Single
 import java.math.BigInteger
 
 class EvmRollupGasDataService(
-        evmKit: EthereumKit,
-        private val l1FeeProvider: L1FeeProvider,
-        gasLimitSurchargePercent: Int = 0,
-        gasLimit: Long? = null
-): EvmCommonGasDataService(evmKit, gasLimitSurchargePercent, gasLimit) {
-
-    override fun predefinedGasDataAsync(gasPrice: GasPrice, transactionData: TransactionData): Single<GasData>? =
-            super.predefinedGasDataAsync(gasPrice, transactionData)?.flatMap { gasData ->
-                val gasLimit = gasData.gasLimit
-
-                l1GasFee(transactionData, gasPrice, gasLimit).map { l1Fee ->
-                    RollupGasData(gasLimit, gasPrice, l1Fee)
-                }
-            }
+    evmKit: EthereumKit,
+    private val l1FeeProvider: L1FeeProvider,
+    gasLimitSurchargePercent: Int = 0,
+    gasLimit: Long? = null
+) : EvmCommonGasDataService(evmKit, gasLimitSurchargePercent, gasLimit) {
 
     override fun estimatedGasDataAsync(gasPrice: GasPrice, transactionData: TransactionData, stubAmount: BigInteger?): Single<GasData> =
+        if (gasLimit != null) {
+            l1GasFee(transactionData, gasPrice, gasLimit).map { l1Fee ->
+                RollupGasData(gasLimit, gasPrice, l1Fee)
+            }
+        } else {
             super.estimatedGasDataAsync(gasPrice, transactionData, stubAmount).flatMap { gasData ->
                 val gasLimit = gasData.gasLimit
-                val stubTransactionData = if (stubAmount != null)  {
+                val stubTransactionData = if (stubAmount != null) {
                     TransactionData(transactionData.to, maxBytes(transactionData.value), transactionData.input)
                 } else {
                     transactionData
@@ -37,6 +33,7 @@ class EvmRollupGasDataService(
                     RollupGasData(gasLimit, gasPrice, l1Fee)
                 }
             }
+        }
 
     private fun maxBytes(value: BigInteger): BigInteger {
         val hexString = value.toString(16)

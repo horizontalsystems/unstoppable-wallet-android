@@ -102,7 +102,11 @@ object TransactionInfoOptionsModule {
             }
         }
         private val feeService by lazy {
-            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimit = transaction.gasLimit)
+            val gasLimit = when(optionType) {
+                Type.SpeedUp -> transaction.gasLimit
+                Type.Cancel -> null
+            }
+            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimit = gasLimit)
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
 

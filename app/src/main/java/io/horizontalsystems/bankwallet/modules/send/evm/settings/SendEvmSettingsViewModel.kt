@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.settings
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -31,23 +30,17 @@ class SendEvmSettingsViewModel(
             service.stateFlow.collect {
                 sync(it)
             }
-
-            Log.e("e", "settingViewModel.init()")
-            // service.start()
         }
     }
 
     private fun sync(state: DataState<SendEvmSettingsService.Transaction>) {
         when (state) {
             is DataState.Error -> {
-                Log.e("e", "settings state: error ${state.error.message ?: state.error::class.simpleName}")
+                isRecommendedSettingsSelected = false
             }
             DataState.Loading -> {
-                Log.e("e", "settings state: loading")
             }
             is DataState.Success -> {
-                Log.e("e", "settings state: success nonce=${state.data.nonce}, recommended: ${state.data.default}")
-
                 nonce = state.data.nonce
                 isRecommendedSettingsSelected = state.data.default
             }
@@ -65,8 +58,6 @@ class SendEvmSettingsViewModel(
             warnings.addAll(state.data.warnings)
             errors.addAll(state.data.errors)
         }
-
-        Log.e("e", "cautions: warnings=${warnings.firstOrNull()?.javaClass?.simpleName}, errors: ${errors.firstOrNull()?.javaClass?.simpleName}")
 
         cautions = cautionViewItemFactory.cautionViewItems(warnings, errors)
     }
