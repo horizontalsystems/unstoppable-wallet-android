@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
@@ -24,35 +23,21 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
 import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsScreen
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationModule
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationViewModel
-import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.core.CustomSnackbar
-import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 class CoinFragment : BaseFragment() {
-    private val vmFactory by lazy { ManageWalletsModule.Factory() }
-    private val manageWalletsViewModel by viewModels<ManageWalletsViewModel> { vmFactory }
-    private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
-    private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
-    private val coinTokensViewModel by viewModels<CoinTokensViewModel> { vmFactory }
     private val authorizationViewModel by navGraphViewModels<YakAuthorizationViewModel>(R.id.coinFragment) { YakAuthorizationModule.Factory() }
 
     private var snackbarInProcess: CustomSnackbar? = null
@@ -82,10 +67,8 @@ class CoinFragment : BaseFragment() {
                     coinUid,
                     coinViewModel(coinUid),
                     authorizationViewModel,
-                    manageWalletsViewModel,
                     findNavController(),
-                    childFragmentManager,
-                    restoreSettingsViewModel
+                    childFragmentManager
                 )
             }
         }
@@ -135,23 +118,6 @@ class CoinFragment : BaseFragment() {
 //                    )
 //            }
 //        }
-
-        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
-            hideKeyboard()
-            showBottomSelectorDialog(
-                config,
-                onSelect = { indexes -> coinSettingsViewModel.onSelect(indexes) },
-                onCancel = { coinSettingsViewModel.onCancelSelect() }
-            )
-        }
-
-        coinTokensViewModel.openSelectorEvent.observe(viewLifecycleOwner) { config ->
-            showBottomSelectorDialog(
-                config,
-                onSelect = { indexes -> coinTokensViewModel.onSelect(indexes) },
-                onCancel = { coinTokensViewModel.onCancelSelect() }
-            )
-        }
     }
 
     private fun coinViewModel(coinUid: String): CoinViewModel? = try {
@@ -195,33 +161,12 @@ fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
     authorizationViewModel: YakAuthorizationViewModel,
-    manageWalletsViewModel: ManageWalletsViewModel,
     navController: NavController,
-    fragmentManager: FragmentManager,
-    restoreSettingsViewModel: RestoreSettingsViewModel
+    fragmentManager: FragmentManager
 ) {
-    if (restoreSettingsViewModel.openZcashConfigure != null) {
-        restoreSettingsViewModel.zcashConfigureOpened()
-
-        navController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
-            val requestResult = bundle.getInt(ZcashConfigure.requestResultKey)
-
-            if (requestResult == ZcashConfigure.RESULT_OK) {
-                val zcashConfig = bundle.getParcelable<ZCashConfig>(ZcashConfigure.zcashConfigKey)
-                zcashConfig?.let { config ->
-                    restoreSettingsViewModel.onEnter(config)
-                }
-            } else {
-                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-            }
-        }
-
-        navController.slideFromBottom(R.id.zcashConfigure)
-    }
-
     ComposeAppTheme {
         if (coinViewModel != null) {
-            CoinTabs(coinViewModel, authorizationViewModel, manageWalletsViewModel, navController, fragmentManager)
+            CoinTabs(coinViewModel, authorizationViewModel, navController, fragmentManager)
         } else {
             CoinNotFound(coinUid, navController)
         }
@@ -233,7 +178,6 @@ fun CoinScreen(
 fun CoinTabs(
     viewModel: CoinViewModel,
     authorizationViewModel: YakAuthorizationViewModel,
-    manageWalletsViewModel: ManageWalletsViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
@@ -248,35 +192,6 @@ fun CoinTabs(
                 HsBackButton(onClick = { navController.popBackStack() })
             },
             menuItems = buildList {
-                when (viewModel.coinState) {
-                    null,
-                    CoinState.Unsupported,
-                    CoinState.NoActiveAccount,
-                    CoinState.WatchAccount -> {
-                    }
-                    CoinState.AddedToWallet,
-                    CoinState.InWallet -> {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.CoinPage_InWallet),
-                                icon = R.drawable.ic_in_wallet_dark_24,
-                                onClick = { HudHelper.showInProcessMessage(view, R.string.Hud_Already_In_Wallet, showProgressBar = false) }
-                            )
-                        )
-                    }
-                    CoinState.NotInWallet -> {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.CoinPage_AddToWallet),
-                                icon = R.drawable.ic_add_to_wallet_2_24,
-                                onClick = {
-                                    TODO()
-//                                    manageWalletsViewModel.enable(viewModel.fullCoin)
-                                }
-                            )
-                        )
-                    }
-                }
                 if (viewModel.isWatchlistEnabled) {
                     if (viewModel.isFavorite) {
                         add(

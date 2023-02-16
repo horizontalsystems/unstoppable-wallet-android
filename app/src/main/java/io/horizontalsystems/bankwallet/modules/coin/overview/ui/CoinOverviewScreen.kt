@@ -9,6 +9,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
@@ -29,15 +31,19 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewModule
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.LinkType
 
@@ -56,6 +62,59 @@ fun CoinOverviewScreen(
 
     val view = LocalView.current
     val context = LocalContext.current
+
+//                when (viewModel.coinState) {
+//                    null,
+//                    CoinState.Unsupported,
+//                    CoinState.NoActiveAccount,
+//                    CoinState.WatchAccount -> {
+//                    }
+//                    CoinState.AddedToWallet,
+//                    CoinState.InWallet -> {
+//                        add(
+//                            MenuItem(
+//                                title = TranslatableString.ResString(R.string.CoinPage_InWallet),
+//                                icon = R.drawable.ic_in_wallet_dark_24,
+//                                onClick = { HudHelper.showInProcessMessage(view, R.string.Hud_Already_In_Wallet, showProgressBar = false) }
+//                            )
+//                        )
+//                    }
+//                    CoinState.NotInWallet -> {
+//                        add(
+//                            MenuItem(
+//                                title = TranslatableString.ResString(R.string.CoinPage_AddToWallet),
+//                                icon = R.drawable.ic_add_to_wallet_2_24,
+//                                onClick = {
+//                                    manageWalletsViewModel.enable(TODO())
+//                                }
+//                            )
+//                        )
+//                    }
+//                }
+
+    val vmFactory1 = remember { ManageWalletsModule.Factory() }
+    val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
+    val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory1)
+
+    if (restoreSettingsViewModel.openZcashConfigure != null) {
+        restoreSettingsViewModel.zcashConfigureOpened()
+
+        navController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
+            val requestResult = bundle.getInt(ZcashConfigure.requestResultKey)
+
+            if (requestResult == ZcashConfigure.RESULT_OK) {
+                val zcashConfig = bundle.getParcelable<ZCashConfig>(ZcashConfigure.zcashConfigKey)
+                zcashConfig?.let { config ->
+                    restoreSettingsViewModel.onEnter(config)
+                }
+            } else {
+                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+            }
+        }
+
+        navController.slideFromBottom(R.id.zcashConfigure)
+    }
+
 
     HSSwipeRefresh(
         refreshing = refreshing,
@@ -96,13 +155,12 @@ fun CoinOverviewScreen(
                                     Categories(overview.categories)
                                 }
 
-                                if (overview.contracts.isNotEmpty()) {
+                                if (viewModel.xxxTokens.isNotEmpty()) {
                                     Spacer(modifier = Modifier.height(24.dp))
-                                    Contracts(
-                                        contracts = overview.contracts,
-                                        onClickCopy = {
-                                            TextHelper.copyText(it.rawValue)
-                                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                                    Tokens(
+                                        tokens = viewModel.xxxTokens,
+                                        onClickAddToWallet = {
+                                            manageWalletsViewModel.enable(it)
                                         },
                                         onClickExplorer = {
                                             LinkHelper.openLinkInAppBrowser(context, it)
