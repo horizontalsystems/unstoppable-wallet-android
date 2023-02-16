@@ -43,7 +43,7 @@ class AddRpcViewModel(
 
         try {
             sourceUrl = URL(url)
-            val hasRequiredProtocol = listOf("http", "https", "ws", "wss").contains(sourceUrl.protocol)
+            val hasRequiredProtocol = listOf("https", "wss").contains(sourceUrl.protocol)
             if (!hasRequiredProtocol) {
                 throw MalformedURLException()
             }
