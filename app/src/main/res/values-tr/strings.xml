@@ -668,7 +668,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth (optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Kaynak</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">Bu URL\'ye sahip RPC kaynak zaten var</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Girilen Url geçersiz. Geçerli url aşağıdaki şemalardan birine sahip olmalıdır: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Bu değişiklikten sonra cüzdan Bitcoin blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Geri Yükleme Kaynağı</string>
@@ -839,7 +839,6 @@
     <string name="RecoveryPhrase_Description">Bu kelimeleri doğru sırayla yazın ve güvenli bir yerde saklayın</string>
     <string name="RecoveryPhrase_ShowPhrase">Kurtarma ifadesini göstermek için dokunun</string>
     <string name="RecoveryPhrase_Verify">Doğrula</string>
-    <string name="RecoveryPhrase_Warning">Kurtarma ifadenizi asla kimseyle paylaşmayın. Unstoppable ekip asla kurtarma ifadenizi istemez.</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Kopyalama Riski</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM Özel anahtar</string>
@@ -852,13 +851,25 @@
     <string name="ExtendedKey_Purpose">Purpose</string>
     <string name="ExtendedKey_Account">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
-    <string name="ExtendedKey_TapToShowPublicKey">Genel anahtarı göstermek için dokunun</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
+    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Genel Anahtarlar</string>
+    <string name="PublicKeys_EvmAddress">EVM Adresi</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">Doğrula</string>
     <string name="RecoveryPhraseVerify_Description">Cüzdan kurtarma ifadenizden istenen iki kelimeyi seçin</string>
@@ -932,9 +943,9 @@
     <string name="Tor_Alert_Title">İnternet</string>
     <string name="Tor_Status_Starting">Tor Başlatılıyor...</string>
     <string name="Tor_Status_Error">Tor başlatma hatası !</string>
-    <string name="TorPage_Connecting">Bağlanıyor…</string>
+    <string name="TorPage_Connecting">Connecting Tor…</string>
     <string name="TorPage_Connected">Bağlandı</string>
-    <string name="TorPage_Failed">Başarısız</string>
+    <string name="TorPage_Failed">Failed to Connect Tor</string>
     <string name="TorPage_ConnectionClosed">Bağlantı kesildi</string>
     <string name="Tor_TorIsActive">Tor aktif</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
