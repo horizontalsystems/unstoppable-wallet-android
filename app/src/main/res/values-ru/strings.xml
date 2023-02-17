@@ -49,8 +49,7 @@
     <string name="PercentTitle">Процент</string>
     <string name="Keyboard">Клавиатура</string>
     <string name="AccountRecovery_Note">Примечание</string>
-    <string name="AccountRecovery_MigrationRecommended">Похоже, этот кошелек использует нестандартный символ в списке мнемонических слов и/или парольной фразе. Если вы не видите баланс или транзакции, пожалуйста, прочтите подробности ниже.
-\n\nПОЖАЛУЙСТА НАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ.</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Продолжить</string>
@@ -66,7 +65,7 @@
     <string name="Welcome_PrivacySettings">Настройки Приватности</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Доп. Настройки</string>
-    <string name="CreateWallet_Mnemonic">Мнемоническая Фраза</string>
+    <string name="CreateWallet_Mnemonic">Фраза восстановления</string>
     <string name="CreateWallet_Wordlist">Список слов</string>
     <string name="Passphrase">Кодовая Фраза</string>
     <string name="ConfirmPassphrase">Подтвердить</string>
@@ -76,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="CreateWallet_PassphraseDescription">Кодовая фраза добавляет дополнительный слой безопасности для кошельков. Чтобы восстановить такой кошелек требуется как мнемоник, так и кодовая фраза.\n\Кодовая фраза также облегчает пользователям возможность иметь множество мульти-монетных кошельков, используя одну фразу восстановления, но другой пароль.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">Английский</string>
     <string name="Language_Japanese">Японский</string>
@@ -100,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная контрольная сумма</string>
-    <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">Блокчейны</string>
     <string name="Restore_Key">Ключ</string>
     <string name="Restore_By">Через</string>
@@ -110,8 +109,7 @@
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите фразу восстановления</string>
     <string name="Restore_NonStandardRestore">Нестандартный импорт</string>
-    <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
-\n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">Неверный ключ</string>
     <string name="Select_Coins">Выберите токены</string>
     <string name="Restore_BirthdayHeight">Блок создания</string>
@@ -311,7 +309,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">Доступ к камере для этого приложения запрещен, вы можете перейти в настройки и разрешить доступ</string>
     <string name="ScanQr_GoToSettings">Перейти в настройки</string>
     <string name="Send_Error_IncorrectAddress">Неверный адрес</string>
-    <string name="Send_Error_UnsupportedAddress">Блокировка по времени работает только с адресами P2PKH (начиная с 1)</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
     <string name="Send_Error_MinimumAmount">Мин. сумма %s</string>
     <string name="Send_Error_MaximumAmount">Макс. сумма %s</string>
@@ -1023,6 +1021,9 @@
     <string name="CoinPage_Category">Категория</string>
     <string name="CoinPage_Categories">Категории</string>
     <string name="CoinPage_Contracts">Контракты</string>
+    <string name="CoinPage_Blockchains">Блокчейны</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Coin Types</string>
     <string name="CoinPage_Links">Ссылки</string>
     <string name="CoinPage_Guide">Руководство</string>
     <string name="CoinPage_Website">Веб-сайт</string>
@@ -1055,6 +1056,8 @@
     <string name="CoinPage_Performance_Month">1 Месяц</string>
     <string name="CoinPage_ReadMore">Подробнее</string>
     <string name="CoinPage_ReadLess">Свернуть</string>
+    <string name="CoinPage_ShowMore">Show More</string>
+    <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Дата старта</string>
     <string name="CoinPage_Tvl">Всего Залоченных Активов</string>
     <string name="CoinPage_TvlRank">Рейтинг TVL</string>
