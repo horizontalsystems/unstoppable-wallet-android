@@ -43,7 +43,9 @@ import cash.p.terminal.ui.compose.components.CellFooter
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.LinkType
 
@@ -62,6 +64,12 @@ fun CoinOverviewScreen(
 
     val view = LocalView.current
     val context = LocalContext.current
+
+    viewModel.successMessage?.let {
+        HudHelper.showSuccessMessage(view, it)
+
+        viewModel.onSuccessMessageShown()
+    }
 
     val vmFactory1 = remember { ManageWalletsModule.Factory() }
     val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
@@ -132,6 +140,10 @@ fun CoinOverviewScreen(
                                         tokens = xxxTokens,
                                         onClickAddToWallet = {
                                             manageWalletsViewModel.enable(it)
+                                        },
+                                        onClickCopy = {
+                                            TextHelper.copyText(it)
+                                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                                         },
                                         onClickExplorer = {
                                             LinkHelper.openLinkInAppBrowser(context, it)

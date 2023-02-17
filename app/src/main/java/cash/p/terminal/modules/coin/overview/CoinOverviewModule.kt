@@ -3,7 +3,6 @@ package cash.p.terminal.modules.coin.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.shorten
 import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterSignificant
 import cash.p.terminal.modules.chart.ChartModule
@@ -55,7 +54,8 @@ data class CoinOverviewItem(
 )
 
 data class XxxTokenInfo(
-    val rawValue: String,
+    val value: String,
+    val copyValue: String?,
     val imgUrl: String,
     val explorerUrl: String?,
     val name: String?,
@@ -63,7 +63,6 @@ data class XxxTokenInfo(
     val canAddToWallet: Boolean,
     val inWallet: Boolean,
 ) {
-    val shortened = rawValue.shorten()
 }
 
 data class CoinOverviewViewItem(

@@ -29,6 +29,8 @@ class CoinOverviewViewModel(
 
     var xxxTokens by mutableStateOf<XxxTokens?>(null)
         private set
+    var successMessage by mutableStateOf<Int?>(null)
+        private set
 
     private val disposables = CompositeDisposable()
 
@@ -56,8 +58,12 @@ class CoinOverviewViewModel(
         service.start()
 
         walletManager.activeWalletsUpdatedObservable
-            .subscribeIO {
-                activeWallets = it
+            .subscribeIO { wallets ->
+                if (wallets.size > activeWallets.size) {
+                    successMessage = R.string.Hud_Added_To_Wallet
+                }
+
+                activeWallets = wallets
                 refreshXxxTokensInfo()
             }
             .let {
@@ -65,6 +71,10 @@ class CoinOverviewViewModel(
             }
 
         refreshXxxTokensInfo()
+    }
+
+    fun onSuccessMessageShown() {
+        successMessage = null
     }
 
     private fun refreshXxxTokensInfo() {
@@ -108,7 +118,8 @@ class CoinOverviewViewModel(
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
                         XxxTokenInfo(
-                            rawValue = tokenType.address,
+                            value = tokenType.address.shorten(),
+                            copyValue = tokenType.address,
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = explorerUrl(token, tokenType.address),
                             name = token.blockchain.name,
@@ -124,7 +135,8 @@ class CoinOverviewViewModel(
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
                         XxxTokenInfo(
-                            rawValue = tokenType.symbol,
+                            value = tokenType.symbol,
+                            copyValue = tokenType.symbol,
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = explorerUrl(token, tokenType.symbol),
                             name = token.blockchain.name,
@@ -140,7 +152,8 @@ class CoinOverviewViewModel(
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
                         XxxTokenInfo(
-                            rawValue = tokenType.address,
+                            value = tokenType.address.shorten(),
+                            copyValue = tokenType.address,
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = explorerUrl(token, tokenType.address),
                             name = token.blockchain.name,
@@ -162,7 +175,8 @@ class CoinOverviewViewModel(
                                 canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                             items.add(
                                 XxxTokenInfo(
-                                    rawValue = derivation.addressType,
+                                    value = derivation.addressType,
+                                    copyValue = null,
                                     imgUrl = token.blockchainType.imageUrl,
                                     explorerUrl = null,
                                     name = derivation.rawName,
@@ -184,7 +198,8 @@ class CoinOverviewViewModel(
                                 canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                             items.add(
                                 XxxTokenInfo(
-                                    rawValue = Translator.getString(bchCoinType.title),
+                                    value = Translator.getString(bchCoinType.title),
+                                    copyValue = null,
                                     imgUrl = token.blockchainType.imageUrl,
                                     explorerUrl = null,
                                     name = bchCoinType.value,
@@ -201,7 +216,8 @@ class CoinOverviewViewModel(
                             canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                         items.add(
                             XxxTokenInfo(
-                                rawValue = Translator.getString(R.string.CoinPlatforms_Native),
+                                value = Translator.getString(R.string.CoinPlatforms_Native),
+                                copyValue = null,
                                 imgUrl = token.blockchainType.imageUrl,
                                 explorerUrl = null,
                                 name = token.blockchain.name,
