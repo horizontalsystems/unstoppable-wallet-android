@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterSignificant
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
@@ -55,7 +54,8 @@ data class CoinOverviewItem(
 )
 
 data class XxxTokenInfo(
-    val rawValue: String,
+    val value: String,
+    val copyValue: String?,
     val imgUrl: String,
     val explorerUrl: String?,
     val name: String?,
@@ -63,7 +63,6 @@ data class XxxTokenInfo(
     val canAddToWallet: Boolean,
     val inWallet: Boolean,
 ) {
-    val shortened = rawValue.shorten()
 }
 
 data class CoinOverviewViewItem(
