@@ -69,18 +69,19 @@ class LegacyFeeSettingsViewModel(
         val notAvailable = Translator.getString(R.string.NotAvailable)
         when (transactionStatus) {
             DataState.Loading -> {
-                feeSummaryViewItem = FeeSummaryViewItem(notAvailable, notAvailable, ViewState.Loading)
+                feeSummaryViewItem = FeeSummaryViewItem(null, notAvailable, ViewState.Loading)
             }
             is DataState.Error -> {
-                feeSummaryViewItem = FeeSummaryViewItem(notAvailable, notAvailable, ViewState.Error(transactionStatus.error))
+                feeSummaryViewItem = FeeSummaryViewItem(null, notAvailable, ViewState.Error(transactionStatus.error))
             }
             is DataState.Success -> {
                 val transaction = transactionStatus.data
                 val viewState = transaction.errors.firstOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
-                val fee = coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
+                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.fee)
+                val evmFeeViewItem = EvmFeeViewItem(feeAmountData.primary.getFormattedPlain(), feeAmountData.secondary?.getFormattedPlain())
                 val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
 
-                feeSummaryViewItem = FeeSummaryViewItem(fee, gasLimit, viewState)
+                feeSummaryViewItem = FeeSummaryViewItem(evmFeeViewItem, gasLimit, viewState)
             }
         }
     }
