@@ -49,7 +49,7 @@
     <string name="PercentTitle">百分比</string>
     <string name="Keyboard">键盘</string>
     <string name="AccountRecovery_Note">备注</string>
-    <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <string name="AccountRecovery_MigrationRequired">这是一个不符合标准的钱包。 详情请阅读下文。\n\n点击获取更多信息</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -65,7 +65,7 @@
     <string name="Welcome_PrivacySettings">隐私设置</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">高级</string>
-    <string name="CreateWallet_Mnemonic">助记词</string>
+    <string name="CreateWallet_Mnemonic">恢复码</string>
     <string name="CreateWallet_Wordlist">字符列表</string>
     <string name="Passphrase">密码</string>
     <string name="ConfirmPassphrase">确认</string>
@@ -75,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请只使用支持的符号： <![CDATA[A-Z a-z 0-9 \' " & / ? ！: ; 。 ，~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
-    <string name="CreateWallet_PassphraseDescription">密码为钱包添加一个额外的安全层。要恢复这个钱包，用户既需要密码，也需要密码。\n\n密码也使得用户可以轻松地使用单一的密钥但不同的密码来拥有许多多币钱包。</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">汉语</string>
     <string name="Language_Japanese">日语</string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">个数有误。必须为12到24个单词。您输入了：%d</string>
     <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
-    <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">选择区块链</string>
     <string name="Restore_Key">密钥</string>
     <string name="Restore_By">由</string>
@@ -109,7 +109,7 @@
     <string name="Restore_PrivateKeyHint">輸入 EVM 私鑰、BIP32 Root Key 或  Account Extended Private Key</string>
     <string name="Restore_PhraseHint">输入12、15、18、21或24个单词</string>
     <string name="Restore_NonStandardRestore">非标准还原</string>
-    <string name="Restore_NonStandard_Description">此页面为拥有非标准钱包的 Unstoppable 用户提供了一种特殊的钱包恢复机制。 通常，此类钱包可以在 Unstoppable 版本 0.27 - 0.28 中使用非英语助记词列表和/或钱包密码短语中的特殊字符（即变音符号）创建。\n\n如果您是受影响的用户，那么在 0.29 或更高版本中恢复此类钱包后，您的钱包余额将显示为 0。 此页面将使您能够恢复对非标准钱包的访问。 恢复后，建议您创建一个新钱包（符合标准）并将资金转移到那里。</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
@@ -309,7 +309,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">无法访问相机此应用，您可以进入设置并允许访问</string>
     <string name="ScanQr_GoToSettings">前往设置</string>
     <string name="Send_Error_IncorrectAddress">错误地址</string>
-    <string name="Send_Error_UnsupportedAddress">时间锁定只能和P2PKH地址（以1开头）一起使用</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
     <string name="Send_Error_MinimumAmount">最小金额 %s</string>
     <string name="Send_Error_MaximumAmount">最大金额 %s</string>
@@ -1025,6 +1025,9 @@
     <string name="CoinPage_Category">分类</string>
     <string name="CoinPage_Categories">分类</string>
     <string name="CoinPage_Contracts">合约</string>
+    <string name="CoinPage_Blockchains">区块链</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Coin Types</string>
     <string name="CoinPage_Links">链接</string>
     <string name="CoinPage_Guide">指南</string>
     <string name="CoinPage_Website">网站</string>
@@ -1057,6 +1060,8 @@
     <string name="CoinPage_Performance_Month">1月</string>
     <string name="CoinPage_ReadMore">查看更多</string>
     <string name="CoinPage_ReadLess">关闭</string>
+    <string name="CoinPage_ShowMore">Show More</string>
+    <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">起始日期</string>
     <string name="CoinPage_Tvl">总锁定</string>
     <string name="CoinPage_TvlRank">锁仓排名</string>
