@@ -2,9 +2,7 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +15,7 @@ class EvmFeeCellViewModel(
 
     private val disposable = CompositeDisposable()
 
-    val feeLiveData = MutableLiveData("")
+    val feeLiveData = MutableLiveData<EvmFeeViewItem?>()
     val viewStateLiveData = MutableLiveData<ViewState>()
     val loadingLiveData = MutableLiveData<Boolean>()
 
@@ -40,7 +38,7 @@ class EvmFeeCellViewModel(
             is DataState.Error -> {
                 loadingLiveData.postValue(false)
                 viewStateLiveData.postValue(ViewState.Error(transactionStatus.error))
-                feeLiveData.postValue(Translator.getString(R.string.NotAvailable))
+                feeLiveData.postValue(null)
             }
             is DataState.Success -> {
                 val transaction = transactionStatus.data
@@ -52,10 +50,19 @@ class EvmFeeCellViewModel(
                     viewStateLiveData.postValue(ViewState.Success)
                 }
 
-                val fee = coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
-                feeLiveData.postValue(fee)
+                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.fee)
+                val feeViewItem = EvmFeeViewItem(
+                    primary = feeAmountData.primary.getFormattedPlain(),
+                    secondary = feeAmountData.secondary?.getFormattedPlain()
+                )
+                feeLiveData.postValue(feeViewItem)
             }
         }
     }
 
 }
+
+data class EvmFeeViewItem(
+    val primary: String,
+    val secondary: String?
+)

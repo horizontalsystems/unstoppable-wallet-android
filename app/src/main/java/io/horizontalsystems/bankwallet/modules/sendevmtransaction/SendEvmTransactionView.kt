@@ -37,7 +37,7 @@ fun SendEvmTransactionView(
     ComposeAppTheme {
 
         val items by transactionViewModel.viewItemsLiveData.observeAsState(listOf())
-        val fee by feeCellViewModel.feeLiveData.observeAsState("")
+        val fee by feeCellViewModel.feeLiveData.observeAsState(null)
         val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
         val loading by feeCellViewModel.loadingLiveData.observeAsState(false)
 

@@ -124,7 +124,7 @@ sealed class GasDataError : Error() {
     object NoTransactionData : GasDataError()
 }
 
-data class FeeSummaryViewItem(val fee: String, val gasLimit: String, val viewState: ViewState)
+data class FeeSummaryViewItem(val fee: EvmFeeViewItem?, val gasLimit: String, val viewState: ViewState)
 
 data class FeeViewItem(
     val weiValue: Long,

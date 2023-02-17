@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
@@ -51,12 +52,12 @@ fun Eip1559FeeSettings(
 
     Column {
         Spacer(modifier = Modifier.height(12.dp))
-        CellSingleLineLawrenceSection(
+        CellUniversalLawrenceSection(
             listOf(
                 {
                     MaxFeeCell(
                         title = stringResource(R.string.FeeSettings_Fee),
-                        value = summaryViewItem?.fee ?: "",
+                        value = summaryViewItem?.fee,
                         viewState = summaryViewItem?.viewState,
                         navController = navController
                     )
@@ -264,12 +265,12 @@ fun LegacyFeeSettings(
 
     Column {
         Spacer(modifier = Modifier.height(12.dp))
-        CellSingleLineLawrenceSection(
+        CellUniversalLawrenceSection(
             listOf(
                 {
                     MaxFeeCell(
                         title = stringResource(R.string.FeeSettings_MaxFee),
-                        value = summaryViewItem?.fee ?: "",
+                        value = summaryViewItem?.fee,
                         viewState = summaryViewItem?.viewState,
                         navController = navController
                     )
@@ -350,7 +351,7 @@ fun FeeInfoCell(
     infoText: String,
     navController: NavController
 ) {
-    Row(
+    RowUniversal(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
@@ -380,11 +381,9 @@ fun FeeInfoCell(
 @Composable
 fun EvmFeeCell(
     title: String,
-    value: String?,
+    value: EvmFeeViewItem?,
     loading: Boolean,
-    viewState: ViewState?,
-    highlightEditButton: Boolean = false,
-    onClick: (() -> Unit)? = null
+    viewState: ViewState?
 ) {
     CellUniversalLawrenceSection(
         listOf {
@@ -392,10 +391,7 @@ fun EvmFeeCell(
                 title = title,
                 value = value,
                 loading = loading,
-                viewState = viewState,
-                highlightEditButton = highlightEditButton,
-                enabled = onClick != null,
-                onClick = { onClick?.invoke() }
+                viewState = viewState
             )
         })
 }
@@ -403,31 +399,31 @@ fun EvmFeeCell(
 @Composable
 fun HSFeeCell(
     title: String,
-    value: String?,
+    value: EvmFeeViewItem?,
     loading: Boolean,
     viewState: ViewState?,
     highlightEditButton: Boolean = false,
-    enabled: Boolean = true,
-    onClick: () -> Unit
+    enabled: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
 
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = if (enabled) onClick else null,
+        onClick = onClick
     ) {
         subhead2_grey(text = title)
 
-        Row(
-            modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.End
-        ) {
+        Spacer(Modifier.weight(1f))
+
+        Box(contentAlignment = Alignment.Center) {
             if (loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
                     color = ComposeAppTheme.colors.grey,
                     strokeWidth = 1.5.dp
                 )
-            } else {
+            }
+            Column(horizontalAlignment = Alignment.End) {
                 val color = if (viewState is ViewState.Error) {
                     ComposeAppTheme.colors.lucian
                 } else if (value == null) {
@@ -435,13 +431,19 @@ fun HSFeeCell(
                 } else {
                     ComposeAppTheme.colors.leah
                 }
-
                 Text(
-                    text = value ?: stringResource(R.string.NotAvailable),
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = color,
+                    modifier = Modifier.alpha(if (loading) 0f else 1f),
+                    text = value?.primary ?: stringResource(id = R.string.NotAvailable),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = color
+                )
+                Text(
+                    modifier = Modifier.alpha(if (loading) 0f else 1f),
+                    text = value?.secondary ?: stringResource(id = R.string.NotAvailable),
+                    maxLines = 1,
+                    style = ComposeAppTheme.typography.caption,
+                    color = ComposeAppTheme.colors.grey
                 )
             }
         }
@@ -468,11 +470,11 @@ fun HSFeeCell(
 @Composable
 fun MaxFeeCell(
     title: String,
-    value: String,
+    value: EvmFeeViewItem?,
     viewState: ViewState?,
     navController: NavController
 ) {
-    Row(
+    RowUniversal(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
@@ -491,25 +493,40 @@ fun MaxFeeCell(
             modifier = Modifier.padding(end = 16.dp),
             painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
         )
+
         subhead2_grey(text = title)
 
-        Row(
-            modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.End
-        ) {
+        Spacer(Modifier.weight(1f))
+
+        Box(contentAlignment = Alignment.Center) {
             if (viewState == ViewState.Loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
                     color = ComposeAppTheme.colors.grey,
                     strokeWidth = 1.5.dp
                 )
-            } else {
+            }
+            Column(horizontalAlignment = Alignment.End) {
+                val color = if (viewState is ViewState.Error) {
+                    ComposeAppTheme.colors.lucian
+                } else if (value == null) {
+                    ComposeAppTheme.colors.grey50
+                } else {
+                    ComposeAppTheme.colors.leah
+                }
                 Text(
-                    text = value,
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = if (viewState is ViewState.Error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
+                    modifier = Modifier.alpha(if (viewState == ViewState.Loading) 0f else 1f),
+                    text = value?.primary ?: stringResource(id = R.string.NotAvailable),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = color
+                )
+                Text(
+                    modifier = Modifier.alpha(if (viewState == ViewState.Loading) 0f else 1f),
+                    text = value?.secondary ?: stringResource(id = R.string.NotAvailable),
+                    maxLines = 1,
+                    style = ComposeAppTheme.typography.caption,
+                    color = ComposeAppTheme.colors.grey
                 )
             }
         }
