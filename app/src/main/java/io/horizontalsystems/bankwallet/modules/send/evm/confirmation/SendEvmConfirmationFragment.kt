@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -59,6 +60,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
     }
     private val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
     private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
+    private val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
 
@@ -91,6 +93,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
                 SendEvmConfirmationScreen(
                     sendEvmTransactionViewModel = sendEvmTransactionViewModel,
                     feeViewModel = feeViewModel,
+                    nonceViewModel = nonceViewModel,
                     parentNavGraphId = R.id.sendEvmConfirmationFragment,
                     navController = findNavController(),
                     onSendClick = {
@@ -135,6 +138,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
 private fun SendEvmConfirmationScreen(
     sendEvmTransactionViewModel: SendEvmTransactionViewModel,
     feeViewModel: EvmFeeCellViewModel,
+    nonceViewModel: SendEvmNonceViewModel,
     parentNavGraphId: Int,
     navController: NavController,
     onSendClick: () -> Unit
@@ -174,7 +178,8 @@ private fun SendEvmConfirmationScreen(
                 ) {
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
-                        feeViewModel
+                        feeViewModel,
+                        nonceViewModel
                     )
                 }
                 ButtonsGroupWithShade {

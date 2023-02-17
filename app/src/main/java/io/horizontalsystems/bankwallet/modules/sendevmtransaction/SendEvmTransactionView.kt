@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -30,6 +31,7 @@ import io.horizontalsystems.marketkit.models.*
 fun SendEvmTransactionView(
     transactionViewModel: SendEvmTransactionViewModel,
     feeCellViewModel: EvmFeeCellViewModel,
+    nonceViewModel: SendEvmNonceViewModel,
     description: String? = null
 ) {
     ComposeAppTheme {
@@ -50,7 +52,9 @@ fun SendEvmTransactionView(
                 SectionView(sectionViewItem.viewItems)
             }
 
-            Spacer(Modifier.height(12.dp))
+            NonceView(nonceViewModel)
+
+            Spacer(Modifier.height(16.dp))
             EvmFeeCell(
                 title = stringResource(R.string.FeeSettings_Fee),
                 value = fee,
@@ -64,6 +68,32 @@ fun SendEvmTransactionView(
             }
         }
     }
+}
+
+@Composable
+private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
+    if (nonceViewModel.default) return
+    val nonce = nonceViewModel.nonce ?: return
+
+    Spacer(Modifier.height(16.dp))
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                subhead2_grey(
+                    text = stringResource(id = R.string.Send_Confirmation_Nonce)
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = nonce.toString(),
+                    maxLines = 1,
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = setColorByType(ValueType.Regular)
+                )
+            }
+        }
+    )
 }
 
 @Composable

@@ -32,7 +32,7 @@ class WCSendEthereumTransactionRequestFragment : BaseFragment() {
         )
     }
     private val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
-    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    private val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.wcSendEthereumTransactionRequestFragment) { vmFactory }
     private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wcSendEthereumTransactionRequestFragment) { vmFactory }
 
     override fun onCreateView(

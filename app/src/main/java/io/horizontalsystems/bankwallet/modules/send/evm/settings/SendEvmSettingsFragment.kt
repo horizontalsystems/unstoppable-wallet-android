@@ -47,6 +47,7 @@ class SendEvmSettingsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+        val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
         val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
 
         return ComposeView(requireContext()).apply {
@@ -68,6 +69,7 @@ class SendEvmSettingsFragment : BaseFragment() {
                     SendEvmFeeSettingsScreen(
                         viewModel = sendSettingsViewModel,
                         feeSettingsViewModel = feeSettingsViewModel,
+                        nonceViewModel = nonceViewModel,
                         navController = findNavController()
                     )
                 }
@@ -88,11 +90,9 @@ class SendEvmSettingsFragment : BaseFragment() {
 fun SendEvmFeeSettingsScreen(
     viewModel: SendEvmSettingsViewModel,
     feeSettingsViewModel: ViewModel,
+    nonceViewModel: SendEvmNonceViewModel,
     navController: NavController
 ) {
-    val cautions = viewModel.cautions
-    val nonce = viewModel.nonce
-
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -132,18 +132,17 @@ fun SendEvmFeeSettingsScreen(
         EvmSettingsInput(
             title = stringResource(id = R.string.SendEvmSettings_Nonce),
             info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
-            value = nonce?.toBigDecimal() ?: BigDecimal.ZERO,
+            value = nonceViewModel.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
             decimals = 0,
             navController = navController,
             onValueChange = {
-                viewModel.onEnterNonce(it.toLong())
+                nonceViewModel.onEnterNonce(it.toLong())
             },
-            onClickIncrement = viewModel::onIncrementNonce,
-            onClickDecrement = viewModel::onDecrementNonce
+            onClickIncrement = nonceViewModel::onIncrementNonce,
+            onClickDecrement = nonceViewModel::onDecrementNonce
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
-        Cautions(cautions)
+        Cautions(viewModel.cautions)
 
         Spacer(modifier = Modifier.height(32.dp))
     }

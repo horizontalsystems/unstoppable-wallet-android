@@ -94,7 +94,7 @@ class SendEvmTransactionViewModel(
         val additionalInfo = dataState.additionalInfo
 
         if (dataState.decoration != null) {
-            val sections = getViewItems(dataState.decoration, dataState.nonce, additionalInfo)
+            val sections = getViewItems(dataState.decoration, additionalInfo)
             if (sections != null) return sections
         }
 
@@ -108,7 +108,6 @@ class SendEvmTransactionViewModel(
         if (dataState.transactionData != null) {
             return getUnknownMethodItems(
                 dataState.transactionData,
-                dataState.nonce,
                 service.methodName(dataState.transactionData.input),
                 additionalInfo?.walletConnectInfo?.dAppName
             )
@@ -132,7 +131,6 @@ class SendEvmTransactionViewModel(
 
     private fun getViewItems(
         decoration: TransactionDecoration,
-        nonce: Long?,
         additionalInfo: SendEvmData.AdditionalInfo?
     ): List<SectionViewItem>? =
         when (decoration) {
@@ -146,15 +144,13 @@ class SendEvmTransactionViewModel(
                 decoration.to,
                 decoration.value,
                 decoration.contractAddress,
-                nonce,
                 additionalInfo?.sendInfo
             )
 
             is ApproveEip20Decoration -> getEip20ApproveViewItems(
                 decoration.spender,
                 decoration.value,
-                decoration.contractAddress,
-                nonce
+                decoration.contractAddress
             )
 
             is SwapDecoration -> getUniswapViewItems(
@@ -188,7 +184,6 @@ class SendEvmTransactionViewModel(
             is OutgoingEip721Decoration -> getNftTransferItems(
                 decoration.to,
                 BigInteger.ONE,
-                nonce,
                 additionalInfo?.sendInfo,
                 decoration.tokenId,
             )
@@ -196,7 +191,6 @@ class SendEvmTransactionViewModel(
             is OutgoingEip1155Decoration -> getNftTransferItems(
                 decoration.to,
                 decoration.value,
-                nonce,
                 additionalInfo?.sendInfo,
                 decoration.tokenId,
             )
@@ -207,13 +201,11 @@ class SendEvmTransactionViewModel(
     private fun getNftTransferItems(
         recipient: Address,
         value: BigInteger,
-        nonce: Long?,
         sendInfo: SendEvmData.SendInfo?,
         tokenId: BigInteger
     ): List<SectionViewItem> {
 
         val sections = mutableListOf<SectionViewItem>()
-        val otherViewItems = mutableListOf<ViewItem>()
         val addressValue = recipient.eip55
         val addressTitle = sendInfo?.domain ?: evmLabelManager.mapped(addressValue)
 
@@ -227,7 +219,6 @@ class SendEvmTransactionViewModel(
                     ),
                     getNftAmount(
                         value,
-                        ValueType.Regular,
                         sendInfo?.nftShortMeta?.previewImageUrl
                     ),
                     ViewItem.Address(
@@ -238,20 +229,6 @@ class SendEvmTransactionViewModel(
                 )
             )
         )
-
-        nonce?.let {
-            otherViewItems.add(
-                ViewItem.Value(
-                    Translator.getString(R.string.Send_Confirmation_Nonce),
-                    "$it",
-                    ValueType.Regular
-                ),
-            )
-        }
-
-        if (otherViewItems.isNotEmpty()) {
-            sections.add(SectionViewItem(otherViewItems))
-        }
 
         return sections
     }
@@ -598,7 +575,6 @@ class SendEvmTransactionViewModel(
         to: Address,
         value: BigInteger,
         contractAddress: Address,
-        nonce: Long?,
         sendInfo: SendEvmData.SendInfo?
     ): List<SectionViewItem>? {
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
@@ -625,24 +601,13 @@ class SendEvmTransactionViewModel(
                 value = addressValue
             )
         )
-        nonce?.let {
-            viewItems.add(
-                ViewItem.Value(
-                    Translator.getString(R.string.Send_Confirmation_Nonce),
-                    "$it",
-                    ValueType.Regular
-                ),
-            )
-        }
-
         return listOf(SectionViewItem(viewItems))
     }
 
     private fun getEip20ApproveViewItems(
         spender: Address,
         value: BigInteger,
-        contractAddress: Address,
-        nonce: Long?
+        contractAddress: Address
     ): List<SectionViewItem>? {
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
@@ -687,22 +652,11 @@ class SendEvmTransactionViewModel(
             )
         }
 
-        nonce?.let {
-            viewItems.add(
-                ViewItem.Value(
-                    Translator.getString(R.string.Send_Confirmation_Nonce),
-                    "$it",
-                    ValueType.Regular
-                ),
-            )
-        }
-
         return listOf(SectionViewItem(viewItems))
     }
 
     private fun getUnknownMethodItems(
         transactionData: TransactionData,
-        nonce: Long?,
         methodName: String?,
         dAppName: String?
     ): List<SectionViewItem> {
@@ -720,16 +674,6 @@ class SendEvmTransactionViewModel(
                 toValue
             )
         )
-
-        nonce?.let {
-            viewItems.add(
-                ViewItem.Value(
-                    Translator.getString(R.string.Send_Confirmation_Nonce),
-                    "$nonce",
-                    ValueType.Regular
-                ),
-            )
-        }
 
         methodName?.let {
             viewItems.add(ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
@@ -790,8 +734,8 @@ class SendEvmTransactionViewModel(
     private fun getCoinService(token: Token) =
         coinServiceFactory.getCoinService(token)
 
-    private fun getNftAmount(value: BigInteger, valueType: ValueType, previewImageUrl: String?): ViewItem.NftAmount =
-        ViewItem.NftAmount(previewImageUrl, "$value NFT", valueType)
+    private fun getNftAmount(value: BigInteger, previewImageUrl: String?): ViewItem.NftAmount =
+        ViewItem.NftAmount(previewImageUrl, "$value NFT", ValueType.Regular,)
 
     private fun getAmount(amountData: SendModule.AmountData, valueType: ValueType, token: Token) =
         ViewItem.Amount(
