@@ -49,7 +49,7 @@
     <string name="PercentTitle">Yüzde</string>
     <string name="Keyboard">Klavye</string>
     <string name="AccountRecovery_Note">Not</string>
-    <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -65,7 +65,7 @@
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">İleri düzey</string>
-    <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="CreateWallet_Mnemonic">Kurtarma cümlesi</string>
     <string name="CreateWallet_Wordlist">Kelime Listesi</string>
     <string name="Passphrase">Parola</string>
     <string name="ConfirmPassphrase">Onayla</string>
@@ -75,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Lütfen yalnızca desteklenen sembolleri kullanın:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
-    <string name="CreateWallet_PassphraseDescription">Parolalar, cüzdanlar için ek bir güvenlik katmanı ekler. Bir cüzdanı geri yüklemek için bir kullanıcı hem anımsatıcı hem de bir parola gerektiriyordu.\n\n\nParolalar, kullanıcıların tek bir anımsatıcı ancak farklı bir parola kullanarak çok paralı cüzdanlara sahip olmalarını da kolaylaştırır.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">İngilizce</string>
     <string name="Language_Japanese">Japonca</string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
-    <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolayı girin. Mevcut bir cüzdanı yeni bir parolayla geri yüklemek, yepyeni bir cüzdan oluşturur.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">Blok Zincirleri Seç</string>
     <string name="Restore_Key">Anahtar</string>
     <string name="Restore_By">İçerik</string>
@@ -109,7 +109,7 @@
     <string name="Restore_PrivateKeyHint">EVM Özel Anahtarını, BIP32 Root Key veya Account Extended Private Key girin</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 veya 24 kelime girin</string>
     <string name="Restore_NonStandardRestore">Standart Olmayan Geri Yükleme</string>
-    <string name="Restore_NonStandard_Description">Bu sayfa, standart olmayan bir cüzdanı olan Unstoppable kullanıcıları için özel geri yükleme mekanizması sağlar. Genel olarak, bu tür cüzdanlar, İngilizce olmayan bir anımsatma kelimeleri listesi ve/veya cüzdan şifresinde özel bir karakter (yani aksan simgesi) kullanılarak Unstoppable 0.27 - 0.28 sürümünde oluşturulmuş olabilir.\n\n Bu durumdan etkilenen bir kullanıcıysanız, 0.29 sürümüne güncelledikten sonra cüzdan bakiyeniz 0 olarak görüntülenir. Bu sayfa, standart olmayan cüzdanınıza erişimi geri yüklemenizi sağlayacaktır. Geri yüklendikten sonra, yeni bir cüzdan oluşturmanız (standartlarla uyumlu) ve paranızı oraya taşımanız önerilir.</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
@@ -309,7 +309,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">Bu uygulama için kameranıza erişim reddedildi, ayarlara gidip erişime izin verebilirsiniz</string>
     <string name="ScanQr_GoToSettings">Ayarlara gidin</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
-    <string name="Send_Error_UnsupportedAddress">Zaman kilitleme sadece P2PKH adresleriyle çalışır (1 ile başlayan)</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
     <string name="Send_Error_MinimumAmount">Minimum miktar %s</string>
     <string name="Send_Error_MaximumAmount">Maksimum miktar %s</string>
@@ -1021,6 +1021,9 @@
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Categories">Categories</string>
     <string name="CoinPage_Contracts">Contracts</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Coin Types</string>
     <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">Web sitesi</string>
@@ -1053,6 +1056,8 @@
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
+    <string name="CoinPage_ShowMore">Show More</string>
+    <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Inception Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
