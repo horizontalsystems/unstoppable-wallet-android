@@ -49,7 +49,7 @@
     <string name="PercentTitle">Percent</string>
     <string name="Keyboard">Teclado</string>
     <string name="AccountRecovery_Note">Nota</string>
-    <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -65,7 +65,7 @@
     <string name="Welcome_PrivacySettings">Ajustes de privacidad</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Avanzado</string>
-    <string name="CreateWallet_Mnemonic">Mnemotécnica</string>
+    <string name="CreateWallet_Mnemonic">Frase de Recuperación</string>
     <string name="CreateWallet_Wordlist">Lista de palabras</string>
     <string name="Passphrase">Frase de contraseña</string>
     <string name="ConfirmPassphrase">Confirmar</string>
@@ -75,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor usa solo símbolos compatibles: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmación de la frase de contraseña no coincide</string>
-    <string name="CreateWallet_PassphraseDescription">Las contraseñas añaden una capa de seguridad adicional para las carteras. Para restaurar dicha cartera, un usuario requiere tanto mnemonic como una contraseña.\n\nPassphrases también facilita a los usuarios tener muchos monederos multi-moneda usando un solo mnemónico pero diferente contraseña.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">Inglés</string>
     <string name="Language_Japanese">Japonés</string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">Número de palabras erróneas. Debe tener entre 12 y 24 palabras. Has ingresado: %d</string>
     <string name="Restore_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
     <string name="Restore_InvalidChecksum">Suma de verificación inválida</string>
-    <string name="Restore_PassphraseDescription">Introduzca su frase de contraseña que utilizó al crear esta frase mnemotécnica.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">Elegir Blockchain</string>
     <string name="Restore_Key">Clave</string>
     <string name="Restore_By">Por</string>
@@ -109,7 +109,7 @@
     <string name="Restore_PrivateKeyHint">Introduzca la clave privada EVM, BIP32 Root Key o Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Introduzca 12, 15, 18, 21 o 24 palabras</string>
     <string name="Restore_NonStandardRestore">Restauración no estándar</string>
-    <string name="Restore_NonStandard_Description">Esta página proporciona un mecanismo especial de restauración de monedero para usuarios de Unstoppable que tienen un monedero no estándar. Por lo general, dichos monederos se podrían haber creado en la versión 0.27 - 0.28 de Unstoppable utilizando una lista de palabras mnemotécnicas que no están en inglés y/o un carácter especial en la frase de contraseña del monedero (es decir, un símbolo diacrítico).\n\nSi es un usuario afectado, el saldo de su billetera se mostrará en 0 después de restaurar dicha billetera en la versión 0.29 o superior. Esta página te permitirá restaurar el acceso a tu monedero no estándar. Una vez restaurado, se recomienda crear un nuevo monedero (que cumplirá con los estándares) y mover todos los fondos allí.</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">Clave no válida</string>
     <string name="Select_Coins">Elegir monedas</string>
     <string name="Restore_BirthdayHeight">Altura de Cumpleaños</string>
@@ -309,7 +309,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">Se ha denegado el acceso a tu cámara para esta aplicación, puedes ir a ajustes y permitir el acceso</string>
     <string name="ScanQr_GoToSettings">Ir a Ajustes</string>
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
-    <string name="Send_Error_UnsupportedAddress">El bloqueo del tiempo solo funciona con direcciones P2PKH (a partir de 1)</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_BalanceAmount">Saldo %s</string>
     <string name="Send_Error_MinimumAmount">Monto mínimo %s</string>
     <string name="Send_Error_MaximumAmount">Monto máximo %s</string>
@@ -1024,6 +1024,9 @@
     <string name="CoinPage_Category">Categoría</string>
     <string name="CoinPage_Categories">Categorías</string>
     <string name="CoinPage_Contracts">Contratos</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Coin Types</string>
     <string name="CoinPage_Links">Enlaces</string>
     <string name="CoinPage_Guide">Instructivos</string>
     <string name="CoinPage_Website">Sitio Web</string>
@@ -1056,6 +1059,8 @@
     <string name="CoinPage_Performance_Month">1 Mes</string>
     <string name="CoinPage_ReadMore">Leer más</string>
     <string name="CoinPage_ReadLess">Leer menos</string>
+    <string name="CoinPage_ShowMore">Show More</string>
+    <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Fecha de inicio</string>
     <string name="CoinPage_Tvl">Valor total bloqueado</string>
     <string name="CoinPage_TvlRank">Rango TVL</string>
