@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceSer
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -102,7 +103,7 @@ object TransactionInfoOptionsModule {
             }
         }
         private val feeService by lazy {
-            val gasLimit = when(optionType) {
+            val gasLimit = when (optionType) {
                 Type.SpeedUp -> transaction.gasLimit
                 Type.Cancel -> null
             }
@@ -119,7 +120,8 @@ object TransactionInfoOptionsModule {
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce)) }
+        private val nonceService = SendEvmNonceService(evmKitWrapper.evmKit)
+        private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
@@ -144,6 +146,9 @@ object TransactionInfoOptionsModule {
                         optionType,
                         fullTransaction.transaction.blockNumber == null
                     ) as T
+                }
+                SendEvmNonceViewModel::class.java -> {
+                    SendEvmNonceViewModel(nonceService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

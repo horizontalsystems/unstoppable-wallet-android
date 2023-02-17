@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -63,8 +64,9 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
         )
     }
     private val speedUpCancelViewModel by viewModels<TransactionSpeedUpCancelViewModel> { vmFactory }
-    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    private val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.transactionSpeedUpCancelFragment) { vmFactory }
     private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.transactionSpeedUpCancelFragment) { vmFactory }
+    private val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(R.id.transactionSpeedUpCancelFragment) { vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
 
@@ -83,6 +85,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
                 TransactionSpeedUpCancelScreen(
                     sendEvmTransactionViewModel = sendEvmTransactionViewModel,
                     feeViewModel = feeViewModel,
+                    nonceViewModel = nonceViewModel,
                     parentNavGraphId = R.id.transactionSpeedUpCancelFragment,
                     speedUpCancelViewModel = speedUpCancelViewModel,
                     navController = findNavController(),
@@ -158,6 +161,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
 private fun TransactionSpeedUpCancelScreen(
     sendEvmTransactionViewModel: SendEvmTransactionViewModel,
     feeViewModel: EvmFeeCellViewModel,
+    nonceViewModel: SendEvmNonceViewModel,
     speedUpCancelViewModel: TransactionSpeedUpCancelViewModel,
     parentNavGraphId: Int,
     navController: NavController,
@@ -199,6 +203,7 @@ private fun TransactionSpeedUpCancelScreen(
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
                         feeViewModel,
+                        nonceViewModel,
                         speedUpCancelViewModel.description
                     )
                 }

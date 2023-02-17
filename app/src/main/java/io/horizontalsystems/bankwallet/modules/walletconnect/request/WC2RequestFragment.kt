@@ -54,7 +54,7 @@ class WC2RequestFragment : BaseFragment() {
                     is WC2SendEthereumTransactionRequest -> {
                         val vmFactory by lazy { WCRequestModule.FactoryV2(requestData) }
                         val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
-                        val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+                        val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.wc2RequestFragment) { vmFactory }
                         val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wc2RequestFragment) { vmFactory }
 
                         sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) { transactionHash ->
