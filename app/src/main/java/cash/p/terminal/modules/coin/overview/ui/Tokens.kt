@@ -29,7 +29,10 @@ fun Tokens(
             body_leah(text = stringResource(id = tokens.type.titleResId))
         }
 
-        CellUniversalLawrenceSection(tokens.tokens) { tokenInfo ->
+        CellUniversalLawrenceSection(
+            items = tokens.tokens,
+            limit = 3
+        ) { tokenInfo ->
             RowUniversal(
                 modifier = Modifier
                     .fillMaxWidth()

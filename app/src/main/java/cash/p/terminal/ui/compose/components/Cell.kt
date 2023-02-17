@@ -1,12 +1,13 @@
 package cash.p.terminal.ui.compose.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -428,6 +429,74 @@ fun <T> CellUniversalLawrenceSection(
                 borderTop = index != 0,
             ) {
                 itemContent(itemData)
+            }
+        }
+    }
+}
+
+@Composable
+fun <T> CellUniversalLawrenceSection(
+    items: List<T>,
+    showFrame: Boolean = false,
+    limit: Int,
+    itemContent: @Composable (T) -> Unit
+) {
+    val frameModifier = if (showFrame) {
+        Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+    } else {
+        Modifier
+    }
+
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+            .then(frameModifier)
+    ) {
+        val size = items.size
+        items.subList(0, limit.coerceAtMost(size)).forEachIndexed { index, itemData ->
+            SectionUniversalItem(
+                borderTop = index != 0,
+            ) {
+                itemContent(itemData)
+            }
+        }
+
+        if (size > limit) {
+            var visible by remember { mutableStateOf(false) }
+            AnimatedVisibility(visible = visible) {
+                Column {
+                    items.subList(limit, size).forEachIndexed { index, itemData ->
+                        SectionUniversalItem(
+                            borderTop = true,
+                        ) {
+                            itemContent(itemData)
+                        }
+                    }
+                }
+            }
+
+            RowUniversal(
+                modifier = Modifier
+                    .height(48.dp)
+                    .fillMaxWidth(),
+                verticalPadding = 0.dp,
+                onClick = {
+                    visible = !visible
+                }
+            ) {
+                val text = if (visible) {
+                    stringResource(id = R.string.CoinPage_ShowLess)
+                } else {
+                    stringResource(id = R.string.CoinPage_ShowMore)
+                }
+
+                body_leah(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = text,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
