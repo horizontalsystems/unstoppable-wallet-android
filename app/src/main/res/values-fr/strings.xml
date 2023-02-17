@@ -49,7 +49,7 @@
     <string name="PercentTitle">Pourcent</string>
     <string name="Keyboard">Clavier</string>
     <string name="AccountRecovery_Note">Remarque</string>
-    <string name="AccountRecovery_MigrationRecommended">Ce portefeuille semble utiliser un caractère non-standard dans sa liste de mots secrets et/ou dans une phrase de passe. Si vous ne voyez pas de solde ou de transactions, veuillez vous reporter aux informations ci-dessous. \n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <string name="AccountRecovery_MigrationRequired">Ce portefeuille n\'est pas conforme aux normes.\n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
@@ -65,7 +65,7 @@
     <string name="Welcome_PrivacySettings">Paramètres de Confidentialité</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Avancé</string>
-    <string name="CreateWallet_Mnemonic">Mnémonique</string>
+    <string name="CreateWallet_Mnemonic">Phrase de récupération</string>
     <string name="CreateWallet_Wordlist">Listes de mots</string>
     <string name="Passphrase">Phrase d\'authentification</string>
     <string name="ConfirmPassphrase">Confirmer</string>
@@ -75,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser uniquement les symboles pris en charge : <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
-    <string name="CreateWallet_PassphraseDescription">Les phrases de passe ajoutent une couche de sécurité supplémentaire pour les portefeuilles. Pour restaurer un tel portefeuille, un utilisateur a besoin à la fois de mnémonique et d\'une phrase de passe.\n\nLes phrases de passe permettent également aux utilisateurs d\'avoir facilement de nombreux portefeuilles multi-pièces en utilisant un seul mot de passe mnémonique mais différent.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">Anglais</string>
     <string name="Language_Japanese">Japonais</string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être compris entre 12 et 24 mots. Vous avez saisi : %d</string>
     <string name="Restore_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
-    <string name="Restore_PassphraseDescription">Entrez la phrase d\'authentification que vous avez utilisée pour créer cette phrase mnémonique.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">Choisir la blockchain</string>
     <string name="Restore_Key">Clé</string>
     <string name="Restore_By">Par</string>
@@ -109,7 +109,7 @@
     <string name="Restore_PrivateKeyHint">Entrez clé privée EVM, BIP32 Root Key ou Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Entrez 12, 15, 18, 21 ou 24 mots</string>
     <string name="Restore_NonStandardRestore">Restauration non-standard</string>
-    <string name="Restore_NonStandard_Description">Sur cette page, vous trouverez un mécanisme spécial de restauration de portefeuille pour les utilisateurs d\'Unstoppable dont le portefeuille n\'est pas standard. En général, de tels portefeuilles ont été créés dans la version 0.27 - 0.28 d\'Unstoppable en utilisant une liste de mots mnémoniques non-anglais et/ou un caractère spécial dans la phrase de passe du portefeuille (c\'est-à-dire un symbole diacritique).\n\nSi vous êtes un utilisateur concerné, le solde de votre portefeuille sera affiché à 0 après la restauration de ce portefeuille dans la version 0.29 ou supérieure. Grâce à cette page, vous pourrez restaurer l\'accès à votre portefeuille non-standard. Une fois la restauration effectuée, il est conseillé de créer un nouveau portefeuille (qui sera conforme aux normes) et d\'y transférer vos fonds.</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">Clé invalide</string>
     <string name="Select_Coins">Crypto Monnaie</string>
     <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
@@ -309,7 +309,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">L\'accès à votre caméra pour cette application a été refusé, vous pouvez aller dans les paramètres et autoriser l\'accès</string>
     <string name="ScanQr_GoToSettings">Accéder aux paramètres</string>
     <string name="Send_Error_IncorrectAddress">Adresse incorrect</string>
-    <string name="Send_Error_UnsupportedAddress">Time lock ne fonctionne qu\'avec les adresses P2PKH (commençant par 1)</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_BalanceAmount">Solde : %s</string>
     <string name="Send_Error_MinimumAmount">Montant minimum %s</string>
     <string name="Send_Error_MaximumAmount">Montant maximum %s</string>
@@ -1024,6 +1024,9 @@
     <string name="CoinPage_Category">Catégorie</string>
     <string name="CoinPage_Categories">Catégories</string>
     <string name="CoinPage_Contracts">Contrats</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Coin Types</string>
     <string name="CoinPage_Links">Liens</string>
     <string name="CoinPage_Guide">Tutoriel</string>
     <string name="CoinPage_Website">Site Web</string>
@@ -1056,6 +1059,8 @@
     <string name="CoinPage_Performance_Month">1 Mois</string>
     <string name="CoinPage_ReadMore">Plus d\'infos</string>
     <string name="CoinPage_ReadLess">Moins d’infos</string>
+    <string name="CoinPage_ShowMore">Show More</string>
+    <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Date de création</string>
     <string name="CoinPage_Tvl">Valeur totale verrouillée</string>
     <string name="CoinPage_TvlRank">Rang TVL</string>
