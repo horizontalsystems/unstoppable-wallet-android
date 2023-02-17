@@ -52,7 +52,7 @@ object SendModule {
 
         fun getFormattedPlain(): String = when (this) {
             is CoinValueInfo -> {
-                App.numberFormatter.format(value, 0, 8)
+                App.numberFormatter.formatCoinFull(value, coinValue.coin.code, coinValue.decimal)
             }
             is CurrencyValueInfo -> {
                 App.numberFormatter.formatFiatFull(currencyValue.value, currencyValue.currency.symbol)
