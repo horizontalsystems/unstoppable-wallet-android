@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 fun Tokens(
     tokens: XxxTokens,
     onClickAddToWallet: (ConfiguredToken) -> Unit,
+    onClickCopy: (String) -> Unit,
     onClickExplorer: (String) -> Unit,
 ) {
     Column {
@@ -61,7 +63,14 @@ fun Tokens(
                         Spacer(Modifier.height(1.dp))
                     }
                     subhead2_grey(
-                        text = tokenInfo.shortened,
+                        modifier = Modifier
+                            .clickable(
+                                enabled = tokenInfo.copyValue != null,
+                                onClick = {
+                                    onClickCopy.invoke(tokenInfo.copyValue ?: "")
+                                }
+                            ),
+                        text = tokenInfo.value,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -77,7 +86,6 @@ fun Tokens(
 //                                HudHelper.showInProcessMessage(view, R.string.Hud_Already_In_Wallet, showProgressBar = false)
                             }
                         )
-
                     } else {
                         ButtonSecondaryCircle(
                             icon = R.drawable.ic_add_to_wallet_2_24,
