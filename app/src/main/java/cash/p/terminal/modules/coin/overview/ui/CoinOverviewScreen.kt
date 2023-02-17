@@ -129,11 +129,6 @@ fun CoinOverviewScreen(
                                     Roi(overview.roi)
                                 }
 
-                                if (overview.categories.isNotEmpty()) {
-                                    Spacer(modifier = Modifier.height(24.dp))
-                                    Categories(overview.categories)
-                                }
-
                                 viewModel.xxxTokens?.let { xxxTokens ->
                                     Spacer(modifier = Modifier.height(24.dp))
                                     Tokens(
@@ -149,6 +144,11 @@ fun CoinOverviewScreen(
                                             LinkHelper.openLinkInAppBrowser(context, it)
                                         },
                                     )
+                                }
+
+                                if (overview.categories.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    Categories(overview.categories)
                                 }
 
                                 if (overview.about.isNotBlank()) {
