@@ -27,7 +27,7 @@ class CoinOverviewViewModel(
     val overviewLiveData = MutableLiveData<CoinOverviewViewItem>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
 
-    var xxxTokens by mutableStateOf<XxxTokens?>(null)
+    var tokenVariants by mutableStateOf<TokenVariants?>(null)
         private set
     var successMessage by mutableStateOf<Int?>(null)
         private set
@@ -64,21 +64,21 @@ class CoinOverviewViewModel(
                 }
 
                 activeWallets = wallets
-                refreshXxxTokensInfo()
+                refreshTokensVariants()
             }
             .let {
                 disposables.add(it)
             }
 
-        refreshXxxTokensInfo()
+        refreshTokensVariants()
     }
 
     fun onSuccessMessageShown() {
         successMessage = null
     }
 
-    private fun refreshXxxTokensInfo() {
-        xxxTokens = getTokenInfo(fullCoin, activeAccount, activeWallets)
+    private fun refreshTokensVariants() {
+        tokenVariants = getTokenVariants(fullCoin, activeAccount, activeWallets)
     }
 
     override fun onCleared() {
@@ -96,9 +96,9 @@ class CoinOverviewViewModel(
         service.refresh()
     }
 
-    private fun getTokenInfo(fullCoin: FullCoin, account: Account?, activeWallets: List<Wallet>): XxxTokens? {
-        val items = mutableListOf<XxxTokenInfo>()
-        var type = XxxTokens.Type.Blockchains
+    private fun getTokenVariants(fullCoin: FullCoin, account: Account?, activeWallets: List<Wallet>): TokenVariants? {
+        val items = mutableListOf<TokenVariant>()
+        var type = TokenVariants.Type.Blockchains
 
         val accountTypeNotWatch = if (account != null && !account.isWatchAccount) {
             account.type
@@ -117,7 +117,7 @@ class CoinOverviewViewModel(
                     val inWallet =
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
-                        XxxTokenInfo(
+                        TokenVariant(
                             value = tokenType.address.shorten(),
                             copyValue = tokenType.address,
                             imgUrl = token.blockchainType.imageUrl,
@@ -134,7 +134,7 @@ class CoinOverviewViewModel(
                     val inWallet =
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
-                        XxxTokenInfo(
+                        TokenVariant(
                             value = tokenType.symbol,
                             copyValue = tokenType.symbol,
                             imgUrl = token.blockchainType.imageUrl,
@@ -151,7 +151,7 @@ class CoinOverviewViewModel(
                     val inWallet =
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
-                        XxxTokenInfo(
+                        TokenVariant(
                             value = tokenType.address.shorten(),
                             copyValue = tokenType.address,
                             imgUrl = token.blockchainType.imageUrl,
@@ -165,7 +165,7 @@ class CoinOverviewViewModel(
                 }
                 TokenType.Native -> when (token.blockchainType.coinSettingType) {
                     CoinSettingType.derivation -> {
-                        type = XxxTokens.Type.Bips
+                        type = TokenVariants.Type.Bips
 
                         AccountType.Derivation.values().forEach { derivation ->
                             val coinSettings =
@@ -174,7 +174,7 @@ class CoinOverviewViewModel(
                             val inWallet =
                                 canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                             items.add(
-                                XxxTokenInfo(
+                                TokenVariant(
                                     value = derivation.addressType,
                                     copyValue = null,
                                     imgUrl = token.blockchainType.imageUrl,
@@ -188,7 +188,7 @@ class CoinOverviewViewModel(
                         }
                     }
                     CoinSettingType.bitcoinCashCoinType -> {
-                        type = XxxTokens.Type.CoinTypes
+                        type = TokenVariants.Type.CoinTypes
 
                         BitcoinCashCoinType.values().forEach { bchCoinType ->
                             val coinSettings =
@@ -197,7 +197,7 @@ class CoinOverviewViewModel(
                             val inWallet =
                                 canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                             items.add(
-                                XxxTokenInfo(
+                                TokenVariant(
                                     value = Translator.getString(bchCoinType.title),
                                     copyValue = null,
                                     imgUrl = token.blockchainType.imageUrl,
@@ -215,7 +215,7 @@ class CoinOverviewViewModel(
                         val inWallet =
                             canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                         items.add(
-                            XxxTokenInfo(
+                            TokenVariant(
                                 value = Translator.getString(R.string.CoinPlatforms_Native),
                                 copyValue = null,
                                 imgUrl = token.blockchainType.imageUrl,
@@ -233,7 +233,7 @@ class CoinOverviewViewModel(
         }
 
         return when {
-            items.isNotEmpty() -> XxxTokens(items, type)
+            items.isNotEmpty() -> TokenVariants(items, type)
             else -> null
         }
     }
@@ -244,7 +244,7 @@ class CoinOverviewViewModel(
 
 }
 
-data class XxxTokens(val tokens: List<XxxTokenInfo>, val type: Type) {
+data class TokenVariants(val items: List<TokenVariant>, val type: Type) {
     enum class Type(@StringRes val titleResId: Int) {
         Blockchains(R.string.CoinPage_Blockchains),
         Bips(R.string.CoinPage_Bips),

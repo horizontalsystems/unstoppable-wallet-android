@@ -53,7 +53,7 @@ data class CoinOverviewItem(
     val guideUrl: String?,
 )
 
-data class XxxTokenInfo(
+data class TokenVariant(
     val value: String,
     val copyValue: String?,
     val imgUrl: String,
