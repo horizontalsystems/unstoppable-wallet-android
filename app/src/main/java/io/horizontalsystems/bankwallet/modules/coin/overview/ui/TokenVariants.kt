@@ -13,26 +13,26 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
-import io.horizontalsystems.bankwallet.modules.coin.overview.XxxTokens
+import io.horizontalsystems.bankwallet.modules.coin.overview.TokenVariants
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
-fun Tokens(
-    tokens: XxxTokens,
+fun TokenVariants(
+    tokenVariants: TokenVariants,
     onClickAddToWallet: (ConfiguredToken) -> Unit,
     onClickCopy: (String) -> Unit,
     onClickExplorer: (String) -> Unit,
 ) {
     Column {
         CellSingleLineClear(borderTop = true) {
-            body_leah(text = stringResource(id = tokens.type.titleResId))
+            body_leah(text = stringResource(id = tokenVariants.type.titleResId))
         }
 
         CellUniversalLawrenceSection(
-            items = tokens.tokens,
+            items = tokenVariants.items,
             limit = 3
-        ) { tokenInfo ->
+        ) { tokenVariant ->
             RowUniversal(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -41,7 +41,7 @@ fun Tokens(
                 Image(
                     modifier = Modifier.size(32.dp),
                     painter = rememberAsyncImagePainter(
-                        model = tokenInfo.imgUrl,
+                        model = tokenVariant.imgUrl,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
                     ),
                     contentDescription = "platform"
@@ -51,7 +51,7 @@ fun Tokens(
                         .weight(1f)
                         .padding(horizontal = 16.dp)
                 ) {
-                    tokenInfo.name?.let {
+                    tokenVariant.name?.let {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
@@ -68,18 +68,18 @@ fun Tokens(
                     subhead2_grey(
                         modifier = Modifier
                             .clickable(
-                                enabled = tokenInfo.copyValue != null,
+                                enabled = tokenVariant.copyValue != null,
                                 onClick = {
-                                    onClickCopy.invoke(tokenInfo.copyValue ?: "")
+                                    onClickCopy.invoke(tokenVariant.copyValue ?: "")
                                 }
                             ),
-                        text = tokenInfo.value,
+                        text = tokenVariant.value,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                if (tokenInfo.canAddToWallet) {
-                    if (tokenInfo.inWallet) {
+                if (tokenVariant.canAddToWallet) {
+                    if (tokenVariant.inWallet) {
                         ButtonSecondaryCircle(
                             icon = R.drawable.ic_in_wallet_dark_24,
                             contentDescription = stringResource(R.string.CoinPage_InWallet),
@@ -94,13 +94,13 @@ fun Tokens(
                             icon = R.drawable.ic_add_to_wallet_2_24,
                             contentDescription = stringResource(R.string.CoinPage_AddToWallet),
                             onClick = {
-                                onClickAddToWallet.invoke(tokenInfo.configuredToken)
+                                onClickAddToWallet.invoke(tokenVariant.configuredToken)
                             }
                         )
                     }
 
                 }
-                tokenInfo.explorerUrl?.let { explorerUrl ->
+                tokenVariant.explorerUrl?.let { explorerUrl ->
                     ButtonSecondaryCircle(
                         modifier = Modifier.padding(start = 16.dp),
                         icon = R.drawable.ic_globe_20,

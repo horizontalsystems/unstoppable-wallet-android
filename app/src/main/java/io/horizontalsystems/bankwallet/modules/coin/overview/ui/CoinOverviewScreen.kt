@@ -129,10 +129,10 @@ fun CoinOverviewScreen(
                                     Roi(overview.roi)
                                 }
 
-                                viewModel.xxxTokens?.let { xxxTokens ->
+                                viewModel.tokenVariants?.let { tokenVariants ->
                                     Spacer(modifier = Modifier.height(24.dp))
-                                    Tokens(
-                                        tokens = xxxTokens,
+                                    TokenVariants(
+                                        tokenVariants = tokenVariants,
                                         onClickAddToWallet = {
                                             manageWalletsViewModel.enable(it)
                                         },
