@@ -67,7 +67,6 @@ class SendEvmTransactionService(
 
     override var txDataState: TxDataState = TxDataState(
         sendEvmData.transactionData,
-        settingsService.state.dataOrNull?.nonce,
         sendEvmData.additionalInfo,
         evmKit.decorate(sendEvmData.transactionData)
     )
@@ -143,7 +142,7 @@ class SendEvmTransactionService(
 
     private fun syncTxDataState(transaction: SendEvmSettingsService.Transaction? = null) {
         val transactionData = transaction?.transactionData ?: sendEvmData.transactionData
-        txDataState = TxDataState(transactionData, transaction?.nonce, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
+        txDataState = TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
     }
 
     sealed class State {
@@ -153,7 +152,6 @@ class SendEvmTransactionService(
 
     data class TxDataState(
         val transactionData: TransactionData?,
-        val nonce: Long?,
         val additionalInfo: SendEvmData.AdditionalInfo?,
         val decoration: TransactionDecoration?
     )

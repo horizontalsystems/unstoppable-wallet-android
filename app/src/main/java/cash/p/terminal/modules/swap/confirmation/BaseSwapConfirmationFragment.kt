@@ -6,9 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -28,6 +26,7 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -49,6 +48,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
     protected abstract val logger: AppLogger
     protected abstract val sendEvmTransactionViewModel: SendEvmTransactionViewModel
     protected abstract val feeViewModel: EvmFeeCellViewModel
+    protected abstract val nonceViewModel: SendEvmNonceViewModel
     protected abstract val navGraphId: Int
 
     private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
@@ -72,6 +72,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
                 BaseSwapConfirmationScreen(
                     sendEvmTransactionViewModel = sendEvmTransactionViewModel,
                     feeViewModel = feeViewModel,
+                    nonceViewModel = nonceViewModel,
                     parentNavGraphId = navGraphId,
                     navController = findNavController(),
                     onSendClick = {
@@ -116,6 +117,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
 private fun BaseSwapConfirmationScreen(
     sendEvmTransactionViewModel: SendEvmTransactionViewModel,
     feeViewModel: EvmFeeCellViewModel,
+    nonceViewModel: SendEvmNonceViewModel,
     parentNavGraphId: Int,
     navController: NavController,
     onSendClick: () -> Unit
@@ -155,8 +157,10 @@ private fun BaseSwapConfirmationScreen(
                 ) {
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
-                        feeViewModel
+                        feeViewModel,
+                        nonceViewModel
                     )
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
                 ButtonsGroupWithShade {
                     ButtonPrimaryYellow(

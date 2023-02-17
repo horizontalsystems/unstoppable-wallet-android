@@ -310,6 +310,8 @@ fun LegacyFeeSettings(
 
 @Composable
 fun Cautions(cautions: List<CautionViewItem>) {
+    Spacer(modifier = Modifier.height(32.dp))
+
     val modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
 
     Column(

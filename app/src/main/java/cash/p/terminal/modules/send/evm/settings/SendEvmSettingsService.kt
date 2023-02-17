@@ -30,7 +30,6 @@ class SendEvmSettingsService(
                 sync()
             }
         }
-
         launch {
             nonceService.stateFlow.collect {
                 sync()
@@ -38,18 +37,6 @@ class SendEvmSettingsService(
         }
 
         nonceService.start()
-    }
-
-    fun setNonce(nonce: Long) {
-        nonceService.setNonce(nonce)
-    }
-
-    fun incrementNonce() {
-        nonceService.increment()
-    }
-
-    fun decrementNonce() {
-        nonceService.decrement()
     }
 
     private fun sync() {
@@ -65,14 +52,20 @@ class SendEvmSettingsService(
                 val feeData = feeState.data
                 val nonceData = nonceState.data
 
+                val errors = feeData.errors.ifEmpty { nonceData.errors }
+                val warnings = if (errors.isEmpty())
+                    feeData.warnings.ifEmpty { nonceData.warnings }
+                else
+                    listOf()
+
                 DataState.Success(
                     Transaction(
                         transactionData = feeData.transactionData,
                         gasData = feeData.gasData,
                         nonce = nonceData.nonce,
                         default = feeData.default && nonceData.default,
-                        warnings = feeData.warnings + nonceData.warnings,
-                        errors = feeData.errors + nonceData.errors
+                        warnings = warnings,
+                        errors = errors
                     )
                 )
             }

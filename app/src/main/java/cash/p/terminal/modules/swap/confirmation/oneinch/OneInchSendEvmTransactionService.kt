@@ -16,6 +16,9 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 
 class OneInchSendEvmTransactionService(
@@ -40,7 +43,6 @@ class OneInchSendEvmTransactionService(
 
     override var txDataState: SendEvmTransactionService.TxDataState = SendEvmTransactionService.TxDataState(
         null,
-        settingsService.state.dataOrNull?.nonce,
         getAdditionalInfo(feeService.parameters),
         null
     )
@@ -59,11 +61,15 @@ class OneInchSendEvmTransactionService(
         get() = evmKit.receiveAddress
 
 
-    override suspend fun start() {
-        settingsService.stateFlow
-            .collect {
-                sync(it)
-            }
+    override suspend fun start() = withContext(Dispatchers.IO) {
+        launch {
+            settingsService.stateFlow
+                .collect {
+                    sync(it)
+                }
+        }
+
+        settingsService.start()
     }
 
     private fun sync(settingsState: DataState<SendEvmSettingsService.Transaction>) {
@@ -94,7 +100,6 @@ class OneInchSendEvmTransactionService(
 
         txDataState = SendEvmTransactionService.TxDataState(
             transactionData,
-            transaction.nonce,
             additionalInfo,
             decoration
         )

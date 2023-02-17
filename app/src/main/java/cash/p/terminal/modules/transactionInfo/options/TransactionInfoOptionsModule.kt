@@ -15,6 +15,7 @@ import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyGasPriceService
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -102,7 +103,7 @@ object TransactionInfoOptionsModule {
             }
         }
         private val feeService by lazy {
-            val gasLimit = when(optionType) {
+            val gasLimit = when (optionType) {
                 Type.SpeedUp -> transaction.gasLimit
                 Type.Cancel -> null
             }
@@ -119,7 +120,8 @@ object TransactionInfoOptionsModule {
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce)) }
+        private val nonceService = SendEvmNonceService(evmKitWrapper.evmKit)
+        private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
@@ -144,6 +146,9 @@ object TransactionInfoOptionsModule {
                         optionType,
                         fullTransaction.transaction.blockNumber == null
                     ) as T
+                }
+                SendEvmNonceViewModel::class.java -> {
+                    SendEvmNonceViewModel(nonceService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

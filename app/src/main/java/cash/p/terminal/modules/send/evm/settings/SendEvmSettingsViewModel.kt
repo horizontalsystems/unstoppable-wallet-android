@@ -16,9 +16,6 @@ class SendEvmSettingsViewModel(
     private val cautionViewItemFactory: CautionViewItemFactory
 ) : ViewModel() {
 
-    var nonce by mutableStateOf<Long?>(null)
-        private set
-
     var cautions by mutableStateOf<List<CautionViewItem>>(listOf())
         private set
 
@@ -41,7 +38,6 @@ class SendEvmSettingsViewModel(
             DataState.Loading -> {
             }
             is DataState.Success -> {
-                nonce = state.data.nonce
                 isRecommendedSettingsSelected = state.data.default
             }
         }
@@ -67,17 +63,4 @@ class SendEvmSettingsViewModel(
             service.reset()
         }
     }
-
-    fun onEnterNonce(nonce: Long) {
-        service.setNonce(nonce)
-    }
-
-    fun onIncrementNonce() {
-        service.incrementNonce()
-    }
-
-    fun onDecrementNonce() {
-        service.decrementNonce()
-    }
-
 }

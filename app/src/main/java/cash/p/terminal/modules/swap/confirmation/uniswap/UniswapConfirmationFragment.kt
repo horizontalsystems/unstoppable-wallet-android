@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.swap.confirmation.uniswap
 
-import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmModule
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.swap.confirmation.BaseSwapConfirmationFragment
 import io.horizontalsystems.ethereumkit.models.Address
@@ -37,7 +37,8 @@ class UniswapConfirmationFragment(
             SendEvmData(transactionData, additionalInfo)
         )
     }
-    override val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    override val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(navGraphId) { vmFactory }
     override val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(navGraphId) { vmFactory }
+    override val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(navGraphId) { vmFactory }
 
 }
