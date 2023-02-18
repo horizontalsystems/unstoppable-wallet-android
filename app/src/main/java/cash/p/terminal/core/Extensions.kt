@@ -51,6 +51,8 @@ val Auditor.logoUrl: String
 
 fun List<FullCoin>.sortedByFilter(filter: String): List<FullCoin> {
     val baseComparator = compareBy<FullCoin> {
+        it.coin.priority ?: Int.MAX_VALUE
+    }.thenBy {
         it.coin.marketCapRank ?: Int.MAX_VALUE
     }.thenBy {
         it.coin.name.lowercase(Locale.ENGLISH)

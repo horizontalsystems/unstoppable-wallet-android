@@ -91,6 +91,7 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
         "`Coin`.`name` LIKE '%$filter%' OR `Coin`.`code` LIKE '%$filter%'"
 
     private fun filterOrderByStatement(filter: String) = """
+        priority ASC,
         CASE 
             WHEN `Coin`.`code` LIKE '$filter' THEN 1 
             WHEN `Coin`.`code` LIKE '$filter%' THEN 2 
@@ -115,6 +116,9 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
             blockchainEntities.forEach { coinDao.insert(it) }
             tokenEntities.forEach { coinDao.insert(it) }
             // TODO Temporary workaround for adding PirateCash and Costana tokens
+            coinDao.fixCoinPriority()
+            coinDao.fixPiratePriority()
+
             coinDao.insert(TokenEntity(
                 coinUid = "piratecash",
                 blockchainUid = "binance-smart-chain",
@@ -125,7 +129,8 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
             coinDao.insert(Coin(
                 uid = "cosanta",
                 name = "Cosanta",
-                code = "COSA"
+                code = "COSA",
+                priority = 1
             ))
             coinDao.insert(
                 BlockchainEntity(

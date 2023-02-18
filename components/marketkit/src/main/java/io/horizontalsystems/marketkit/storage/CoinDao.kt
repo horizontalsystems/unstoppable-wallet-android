@@ -53,6 +53,12 @@ interface CoinDao {
     @Query("DELETE FROM TokenEntity")
     fun  deleteAllTokens()
 
+    @Query("UPDATE Coin set priority=100 WHERE priority IS NULL;")
+    fun  fixCoinPriority()
+
+    @Query("UPDATE Coin set priority=1 WHERE uid='piratecash';")
+    fun  fixPiratePriority()
+
     data class FullCoinWrapper(
         @Embedded
         val coin: Coin,

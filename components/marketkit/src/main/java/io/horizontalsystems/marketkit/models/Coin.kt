@@ -18,7 +18,8 @@ data class Coin(
     val name: String,
     val code: String,
     val marketCapRank: Int? = null,
-    val coinGeckoId: String? = null
+    val coinGeckoId: String? = null,
+    val priority: Int? = null
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         return other is Coin && other.uid == uid
@@ -29,6 +30,6 @@ data class Coin(
     }
 
     override fun toString(): String {
-        return "Coin [uid: $uid; name: $name; code: $code; marketCapRank: $marketCapRank; coinGeckoId: $coinGeckoId]"
+        return "Coin [uid: $uid; name: $name; code: $code; marketCapRank: $marketCapRank; coinGeckoId: $coinGeckoId; priority: $priority]"
     }
 }

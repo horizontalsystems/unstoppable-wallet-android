@@ -11,6 +11,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 //import java.util.concurrent.Executors
 import java.util.logging.Logger
+import io.horizontalsystems.marketkit.storage.migrations.*
 
 
 @Database(
@@ -25,7 +26,7 @@ import java.util.logging.Logger
         Exchange::class,
         SyncerState::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(DatabaseTypeConverters::class)
@@ -70,6 +71,9 @@ abstract class MarketDatabase : RoomDatabase() {
 //                }, Executors.newSingleThreadExecutor())
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
+                .addMigrations(
+                    Migration_6_7,
+                )
                 .build()
 
             // force db creation
