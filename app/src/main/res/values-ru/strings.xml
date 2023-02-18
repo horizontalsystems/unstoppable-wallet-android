@@ -852,6 +852,10 @@
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+
+    <!-- Private Keys -->
+    <string name="PrivateKeys_NeverShareWarning">Никогда и никому не сообщайте этот ключ. Служба поддержки P.CASH Wallet никогда не попросит об этом.</string>
+
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Публичные Ключи</string>
     <!-- Recovery Phrase Verify -->
