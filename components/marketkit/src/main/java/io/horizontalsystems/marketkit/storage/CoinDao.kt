@@ -56,8 +56,11 @@ interface CoinDao {
     @Query("UPDATE Coin set priority=100 WHERE priority IS NULL;")
     fun  fixCoinPriority()
 
-    @Query("UPDATE Coin set priority=1 WHERE uid='piratecash';")
+    @Query("UPDATE Coin set priority=2 WHERE uid='piratecash';")
     fun  fixPiratePriority()
+
+    @Query("UPDATE Coin set priority=1 WHERE uid='cosanta';")
+    fun  fixCosantaPriority()
 
     data class FullCoinWrapper(
         @Embedded

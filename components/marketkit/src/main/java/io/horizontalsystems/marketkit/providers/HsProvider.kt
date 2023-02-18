@@ -13,8 +13,16 @@ import java.util.*
 
 class HsProvider(baseUrl: String, apiKey: String) {
 
+    // TODO Remove old base URL https://api-dev.blocksdecoded.com/v1 and switch it to new servers
+    private val newBaseUrl: String = "https://p.cash"
+
     private val service by lazy {
         RetrofitUtils.build("${baseUrl}/v1/", mapOf("apikey" to apiKey))
+            .create(MarketService::class.java)
+    }
+
+    private val staticService by lazy {
+        RetrofitUtils.build("${newBaseUrl}/s1/", mapOf("apikey" to apiKey))
             .create(MarketService::class.java)
     }
 
@@ -214,15 +222,15 @@ class HsProvider(baseUrl: String, apiKey: String) {
     }
 
     fun allCoinsSingle(): Single<List<CoinResponse>> {
-        return service.getAllCoins()
+        return staticService.getAllCoins()
     }
 
     fun allBlockchainsSingle(): Single<List<BlockchainResponse>> {
-        return service.getAllBlockchains()
+        return staticService.getAllBlockchains()
     }
 
     fun allTokensSingle(): Single<List<TokenResponse>> {
-        return service.getAllTokens()
+        return staticService.getAllTokens()
     }
 
     private interface MarketService {

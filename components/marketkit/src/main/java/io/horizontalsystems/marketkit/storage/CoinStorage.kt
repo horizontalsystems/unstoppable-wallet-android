@@ -115,44 +115,10 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
             coins.forEach { coinDao.insert(it) }
             blockchainEntities.forEach { coinDao.insert(it) }
             tokenEntities.forEach { coinDao.insert(it) }
-            // TODO Temporary workaround for adding PirateCash and Costana tokens
+            // TODO coin priority is in response https://p.cash/s1/coins/list
             coinDao.fixCoinPriority()
             coinDao.fixPiratePriority()
-
-            coinDao.insert(TokenEntity(
-                coinUid = "piratecash",
-                blockchainUid = "binance-smart-chain",
-                type = "eip20",
-                decimals = 8,
-                reference = "0x35f3fffFcb622bC9f64fA561D74e983Fd488D90c"
-            ))
-            coinDao.insert(Coin(
-                uid = "cosanta",
-                name = "Cosanta",
-                code = "COSA",
-                priority = 1
-            ))
-            coinDao.insert(
-                BlockchainEntity(
-                    uid = "cosanta",
-                    name = "Cosanta",
-                    explorerUrl = "https://explorer.cosanta.net"
-            )
-            )
-            coinDao.insert(TokenEntity(
-                coinUid = "cosanta",
-                blockchainUid = "cosanta",
-                type = "native",
-                decimals = null,
-                reference = null
-            ))
-            coinDao.insert(TokenEntity(
-                coinUid = "cosanta",
-                blockchainUid = "binance-smart-chain",
-                type = "eip20",
-                decimals = 8,
-                reference = "0x499954F9C977B74a48D4BB14BA9904bEA6CB7B01"
-            ))
+            coinDao.fixCosantaPriority()
         }
     }
 
