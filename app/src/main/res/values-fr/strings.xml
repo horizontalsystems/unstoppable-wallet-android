@@ -38,9 +38,9 @@
     <string name="Button_Continue">Continuer</string>
     <string name="Button_Send">Envoyer</string>
     <string name="Button_Search">Chercher</string>
-    <string name="Button_Back">Back</string>
+    <string name="Button_Back">Retour</string>
     <string name="Button_Copy">Copier</string>
-    <string name="Button_Browser">Browser</string>
+    <string name="Button_Browser">Navigateur</string>
     <string name="Button_Delete">Supprimer</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
