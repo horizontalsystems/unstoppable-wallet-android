@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.fee
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -32,26 +33,28 @@ fun FeeCell(
     RowUniversal(
         modifier = Modifier
             .fillMaxSize()
-            .clickable(
-                enabled = navController != null,
-                onClick = {
-                    navController?.slideFromBottom(
-                        R.id.feeSettingsInfoDialog,
-                        FeeSettingsInfoDialog.prepareParams(title, info)
-                    )
-                }
-            )
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        navController?.let {
-            Image(
-                modifier = Modifier.padding(end = 16.dp),
-                painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
-            )
-        }
+        Row(
+            modifier = Modifier.clickable(
+                enabled = navController != null,
+                onClick = { navController?.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(title, info)) },
+                interactionSource = MutableInteractionSource(),
+                indication = null
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            subhead2_grey(text = title)
 
-        subhead2_grey(text = title)
+            navController?.let {
+                Image(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = ""
+                )
+            }
+        }
 
         Spacer(Modifier.weight(1f))
 
