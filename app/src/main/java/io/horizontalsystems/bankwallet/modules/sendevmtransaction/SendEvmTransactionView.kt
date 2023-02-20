@@ -13,13 +13,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.fee.FeeCell
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -32,6 +33,7 @@ fun SendEvmTransactionView(
     transactionViewModel: SendEvmTransactionViewModel,
     feeCellViewModel: EvmFeeCellViewModel,
     nonceViewModel: SendEvmNonceViewModel,
+    navController: NavController,
     description: String? = null
 ) {
     ComposeAppTheme {
@@ -39,7 +41,6 @@ fun SendEvmTransactionView(
         val items by transactionViewModel.viewItemsLiveData.observeAsState(listOf())
         val fee by feeCellViewModel.feeLiveData.observeAsState(null)
         val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
-        val loading by feeCellViewModel.loadingLiveData.observeAsState(false)
 
         Column {
             description?.let {
@@ -55,11 +56,16 @@ fun SendEvmTransactionView(
             NonceView(nonceViewModel)
 
             Spacer(Modifier.height(16.dp))
-            EvmFeeCell(
-                title = stringResource(R.string.FeeSettings_Fee),
-                value = fee,
-                loading = loading,
-                viewState = viewState
+            CellUniversalLawrenceSection(
+                listOf {
+                    FeeCell(
+                        title = stringResource(R.string.FeeSettings_Fee),
+                        info = stringResource(R.string.FeeSettings_Fee_Info),
+                        value = fee,
+                        viewState = viewState,
+                        navController = navController
+                    )
+                }
             )
 
             val cautions by transactionViewModel.cautionsLiveData.observeAsState()

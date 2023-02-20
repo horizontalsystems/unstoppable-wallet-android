@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettings
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
+import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -124,7 +125,7 @@ sealed class GasDataError : Error() {
     object NoTransactionData : GasDataError()
 }
 
-data class FeeSummaryViewItem(val fee: EvmFeeViewItem?, val gasLimit: String, val viewState: ViewState)
+data class FeeSummaryViewItem(val fee: FeeItem?, val gasLimit: String, val viewState: ViewState)
 
 data class FeeViewItem(
     val weiValue: Long,

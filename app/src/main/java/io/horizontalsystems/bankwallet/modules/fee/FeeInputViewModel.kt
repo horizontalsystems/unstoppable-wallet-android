@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeViewItem
 import java.math.BigDecimal
 
 class FeeInputViewModel(
@@ -20,7 +19,7 @@ class FeeInputViewModel(
     var fee: BigDecimal? = null
     var rate: CurrencyValue? = null
 
-    var formatted by mutableStateOf<EvmFeeViewItem?>(null)
+    var formatted by mutableStateOf<FeeItem?>(null)
         private set
 
     fun refreshFormatted() {
@@ -31,7 +30,7 @@ class FeeInputViewModel(
             val currencyAmount = rate?.let {
                 it.copy(value = tmpFee.times(it.value)).getFormattedFull()
             }
-            EvmFeeViewItem(coinAmount, currencyAmount)
+            FeeItem(coinAmount, currencyAmount)
         } else {
             null
         }

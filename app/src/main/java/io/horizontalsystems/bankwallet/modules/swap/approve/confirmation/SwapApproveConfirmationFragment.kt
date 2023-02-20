@@ -211,7 +211,8 @@ private fun SwapApproveConfirmationScreen(
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
                         feeViewModel,
-                        nonceViewModel
+                        nonceViewModel,
+                        navController
                     )
                 }
                 ButtonsGroupWithShade {

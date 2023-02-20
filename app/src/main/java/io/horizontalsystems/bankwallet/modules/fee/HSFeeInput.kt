@@ -7,7 +7,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
-import io.horizontalsystems.bankwallet.modules.evmfee.HSFeeCell
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import java.math.BigDecimal
 
@@ -62,12 +61,11 @@ fun HSFeeInputRaw(
         viewModel.refreshFormatted()
     }
 
-    HSFeeCell(
+    FeeCell(
         title = stringResource(R.string.Send_Fee),
+        info = "",
         value = formatted,
-        loading = false,
         viewState = null,
-        enabled = enabled,
-        onClick = onClick
+        navController = null
     )
 }
