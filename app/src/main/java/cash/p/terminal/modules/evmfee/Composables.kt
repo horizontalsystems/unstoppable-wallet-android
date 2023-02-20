@@ -269,7 +269,7 @@ fun LegacyFeeSettings(
             listOf(
                 {
                     MaxFeeCell(
-                        title = stringResource(R.string.FeeSettings_MaxFee),
+                        title = stringResource(R.string.FeeSettings_Fee),
                         value = summaryViewItem?.fee,
                         viewState = summaryViewItem?.viewState,
                         navController = navController

@@ -121,7 +121,7 @@ fun SendEthRequestScreen(
                 }
 
                 EvmFeeCell(
-                    title = stringResource(R.string.FeeSettings_MaxFee),
+                    title = stringResource(R.string.FeeSettings_Fee),
                     value = fee,
                     loading = loading,
                     viewState = viewState
