@@ -128,19 +128,22 @@ fun SendEvmFeeSettingsScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
-        EvmSettingsInput(
-            title = stringResource(id = R.string.SendEvmSettings_Nonce),
-            info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
-            value = nonceViewModel.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
-            decimals = 0,
-            navController = navController,
-            onValueChange = {
-                nonceViewModel.onEnterNonce(it.toLong())
-            },
-            onClickIncrement = nonceViewModel::onIncrementNonce,
-            onClickDecrement = nonceViewModel::onDecrementNonce
-        )
+        val nonceUiState = nonceViewModel.uiState
+        if (nonceUiState.showInSettings) {
+            Spacer(modifier = Modifier.height(24.dp))
+            EvmSettingsInput(
+                title = stringResource(id = R.string.SendEvmSettings_Nonce),
+                info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
+                value = nonceUiState.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
+                decimals = 0,
+                navController = navController,
+                onValueChange = {
+                    nonceViewModel.onEnterNonce(it.toLong())
+                },
+                onClickIncrement = nonceViewModel::onIncrementNonce,
+                onClickDecrement = nonceViewModel::onDecrementNonce
+            )
+        }
 
         Cautions(viewModel.cautions)
 

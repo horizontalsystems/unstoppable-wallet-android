@@ -11,17 +11,23 @@ class SendEvmNonceViewModel(
     private val service: SendEvmNonceService
 ) : ViewModel() {
 
-    var nonce by mutableStateOf<Long?>(null)
-        private set
+    private var nonce: Long? = null
+    private var showInConfirmation = false
+    private var showInSettings = false
 
-    var default by mutableStateOf(true)
+    var uiState by mutableStateOf(UiState(nonce, showInConfirmation, showInSettings))
         private set
 
     init {
         viewModelScope.launch {
             service.stateFlow.collect { state ->
-                nonce = state.dataOrNull?.nonce
-                default = state.dataOrNull?.default ?: true
+                state.dataOrNull?.let {
+                    nonce = it.nonce
+                    showInConfirmation = !it.default || it.fixed
+                    showInSettings = !it.fixed
+
+                    emitState()
+                }
             }
         }
     }
@@ -38,4 +44,13 @@ class SendEvmNonceViewModel(
         service.decrement()
     }
 
+    private fun emitState() {
+        uiState = UiState(nonce, showInConfirmation, showInSettings)
+    }
+
+    data class UiState(
+        val nonce: Long?,
+        val showInConfirmation: Boolean,
+        val showInSettings: Boolean
+    )
 }
