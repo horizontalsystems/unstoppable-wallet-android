@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -25,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
@@ -62,18 +62,16 @@ fun Eip1559FeeSettings(
                 {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_GasLimit),
+                        info = stringResource(R.string.FeeSettings_GasLimit_Info),
                         value = summaryViewItem?.gasLimit,
-                        infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
-                        infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
                         navController = navController
                     )
                 },
                 {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_BaseFee),
+                        info = stringResource(R.string.FeeSettings_BaseFee_Info),
                         value = currentBaseFee,
-                        infoTitle = Translator.getString(R.string.FeeSettings_BaseFee),
-                        infoText = Translator.getString(R.string.FeeSettings_BaseFee_Info),
                         navController = navController
                     )
                 }
@@ -266,8 +264,8 @@ fun LegacyFeeSettings(
             listOf(
                 {
                     FeeCell(
-                        title = stringResource(R.string.FeeSettings_Fee),
-                        info = stringResource(R.string.FeeSettings_Fee_Info),
+                        title = stringResource(R.string.FeeSettings_FeeLegacy),
+                        info = stringResource(R.string.FeeSettings_FeeLegacy_Info),
                         value = summaryViewItem?.fee,
                         viewState = summaryViewItem?.viewState,
                         navController = navController
@@ -276,9 +274,8 @@ fun LegacyFeeSettings(
                 {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_GasLimit),
+                        info = stringResource(R.string.FeeSettings_GasLimit_Info),
                         value = summaryViewItem?.gasLimit,
-                        infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
-                        infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
                         navController = navController
                     )
                 }
@@ -344,28 +341,33 @@ fun Cautions(cautions: List<CautionViewItem>) {
 @Composable
 fun FeeInfoCell(
     title: String,
+    info: String,
     value: String?,
-    infoTitle: String,
-    infoText: String,
     navController: NavController
 ) {
     RowUniversal(
         modifier = Modifier
             .fillMaxSize()
-            .clickable {
-                navController.slideFromBottom(
-                    R.id.feeSettingsInfoDialog,
-                    FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
-                )
-            }
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            modifier = Modifier.padding(end = 16.dp),
-            painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
-        )
-        subhead1_grey(text = title)
+        Row(
+            modifier = Modifier.clickable(
+                onClick = { navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(title, info)) },
+                interactionSource = MutableInteractionSource(),
+                indication = null
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            subhead1_grey(text = title)
+
+            Image(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                painter = painterResource(id = R.drawable.ic_info_20),
+                contentDescription = ""
+            )
+        }
+
         subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value ?: "",
