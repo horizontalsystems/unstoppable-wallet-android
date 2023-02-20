@@ -120,7 +120,7 @@ object TransactionInfoOptionsModule {
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val nonceService = SendEvmNonceService(evmKitWrapper.evmKit)
+        private val nonceService = SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce)
         private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
         private val sendService by lazy {
             SendEvmTransactionService(

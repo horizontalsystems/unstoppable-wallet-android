@@ -78,8 +78,9 @@ fun SendEvmTransactionView(
 
 @Composable
 private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
-    if (nonceViewModel.default) return
-    val nonce = nonceViewModel.nonce ?: return
+    val uiState = nonceViewModel.uiState
+    if (!uiState.showInConfirmation) return
+    val nonce = uiState.nonce ?: return
 
     Spacer(Modifier.height(16.dp))
     CellUniversalLawrenceSection(

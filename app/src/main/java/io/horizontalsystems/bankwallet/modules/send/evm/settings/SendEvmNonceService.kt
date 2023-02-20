@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 
 class SendEvmNonceService(
     private val evmKit: EthereumKit,
-    private val nonce: Long? = null
+    private val fixedNonce: Long? = null
 ) {
     private var latestNonce: Long? = null
 
@@ -28,8 +28,8 @@ class SendEvmNonceService(
     val stateFlow: Flow<DataState<State>> = _stateFlow
 
     suspend fun start() {
-        if (nonce != null) {
-            state = DataState.Success(State(nonce, default = false))
+        if (fixedNonce != null) {
+            sync(fixedNonce)
         } else {
             setRecommended()
         }
@@ -55,8 +55,12 @@ class SendEvmNonceService(
         }
     }
 
-    private fun sync(nonce: Long) {
-        state = DataState.Success(State(nonce = nonce, default = false, errors = errors(nonce)))
+    private fun sync(nonce: Long, default: Boolean = false) {
+        state = if (fixedNonce != null) {
+            DataState.Success(State(nonce = fixedNonce, default = true, fixed = true))
+        } else {
+            DataState.Success(State(nonce = nonce, default = default, errors = errors(nonce), fixed = false))
+        }
     }
 
     private fun errors(nonce: Long): List<FeeSettingsError> {
@@ -71,7 +75,7 @@ class SendEvmNonceService(
 
     private suspend fun setRecommended() = withContext(Dispatchers.IO) {
         val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
-        state = DataState.Success(State(nonce = nonce, default = true))
+        sync(nonce, default = true)
 
         latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
     }
@@ -79,6 +83,7 @@ class SendEvmNonceService(
     data class State(
         val nonce: Long,
         val default: Boolean,
+        val fixed: Boolean,
         val warnings: List<Warning> = listOf(),
         val errors: List<Throwable> = listOf()
     )
