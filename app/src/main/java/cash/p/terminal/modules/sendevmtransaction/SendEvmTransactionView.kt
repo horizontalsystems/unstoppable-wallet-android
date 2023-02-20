@@ -13,13 +13,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.shorten
 import cash.p.terminal.modules.evmfee.Cautions
-import cash.p.terminal.modules.evmfee.EvmFeeCell
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.fee.FeeCell
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
@@ -32,6 +33,7 @@ fun SendEvmTransactionView(
     transactionViewModel: SendEvmTransactionViewModel,
     feeCellViewModel: EvmFeeCellViewModel,
     nonceViewModel: SendEvmNonceViewModel,
+    navController: NavController,
     description: String? = null
 ) {
     ComposeAppTheme {
@@ -39,7 +41,6 @@ fun SendEvmTransactionView(
         val items by transactionViewModel.viewItemsLiveData.observeAsState(listOf())
         val fee by feeCellViewModel.feeLiveData.observeAsState(null)
         val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
-        val loading by feeCellViewModel.loadingLiveData.observeAsState(false)
 
         Column {
             description?.let {
@@ -55,11 +56,16 @@ fun SendEvmTransactionView(
             NonceView(nonceViewModel)
 
             Spacer(Modifier.height(16.dp))
-            EvmFeeCell(
-                title = stringResource(R.string.FeeSettings_Fee),
-                value = fee,
-                loading = loading,
-                viewState = viewState
+            CellUniversalLawrenceSection(
+                listOf {
+                    FeeCell(
+                        title = stringResource(R.string.FeeSettings_Fee),
+                        info = stringResource(R.string.FeeSettings_Fee_Info),
+                        value = fee,
+                        viewState = viewState,
+                        navController = navController
+                    )
+                }
             )
 
             val cautions by transactionViewModel.cautionsLiveData.observeAsState()

@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
-import cash.p.terminal.modules.evmfee.EvmFeeViewItem
 import java.math.BigDecimal
 
 class FeeInputViewModel(
@@ -20,7 +19,7 @@ class FeeInputViewModel(
     var fee: BigDecimal? = null
     var rate: CurrencyValue? = null
 
-    var formatted by mutableStateOf<EvmFeeViewItem?>(null)
+    var formatted by mutableStateOf<FeeItem?>(null)
         private set
 
     fun refreshFormatted() {
@@ -31,7 +30,7 @@ class FeeInputViewModel(
             val currencyAmount = rate?.let {
                 it.copy(value = tmpFee.times(it.value)).getFormattedFull()
             }
-            EvmFeeViewItem(coinAmount, currencyAmount)
+            FeeItem(coinAmount, currencyAmount)
         } else {
             null
         }

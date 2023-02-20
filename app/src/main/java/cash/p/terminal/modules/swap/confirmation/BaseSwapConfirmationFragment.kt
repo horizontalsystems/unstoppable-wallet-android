@@ -158,7 +158,8 @@ private fun BaseSwapConfirmationScreen(
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
                         feeViewModel,
-                        nonceViewModel
+                        nonceViewModel,
+                        navController
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }

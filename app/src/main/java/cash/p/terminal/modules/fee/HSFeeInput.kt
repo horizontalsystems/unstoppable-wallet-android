@@ -7,7 +7,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
-import cash.p.terminal.modules.evmfee.HSFeeCell
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import java.math.BigDecimal
 
@@ -62,12 +61,11 @@ fun HSFeeInputRaw(
         viewModel.refreshFormatted()
     }
 
-    HSFeeCell(
+    FeeCell(
         title = stringResource(R.string.Send_Fee),
+        info = "",
         value = formatted,
-        loading = false,
         viewState = null,
-        enabled = enabled,
-        onClick = onClick
+        navController = null
     )
 }

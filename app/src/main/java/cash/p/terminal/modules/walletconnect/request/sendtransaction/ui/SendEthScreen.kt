@@ -17,8 +17,8 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.shorten
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.Cautions
-import cash.p.terminal.modules.evmfee.EvmFeeCell
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.fee.FeeCell
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.sendevmtransaction.ViewItem
@@ -43,7 +43,6 @@ fun SendEthRequestScreen(
     val cautions by sendEvmTransactionViewModel.cautionsLiveData.observeAsState()
     val fee by feeViewModel.feeLiveData.observeAsState(null)
     val viewState by feeViewModel.viewStateLiveData.observeAsState()
-    val loading by feeViewModel.loadingLiveData.observeAsState(false)
 
     ComposeAppTheme {
         Column(
@@ -120,11 +119,16 @@ fun SendEthRequestScreen(
                     }
                 }
 
-                EvmFeeCell(
-                    title = stringResource(R.string.FeeSettings_Fee),
-                    value = fee,
-                    loading = loading,
-                    viewState = viewState
+                CellUniversalLawrenceSection(
+                    listOf {
+                        FeeCell(
+                            title = stringResource(R.string.FeeSettings_Fee),
+                            info = stringResource(R.string.FeeSettings_Fee_Info),
+                            value = fee,
+                            viewState = viewState,
+                            navController = navController
+                        )
+                    }
                 )
 
                 cautions?.let {

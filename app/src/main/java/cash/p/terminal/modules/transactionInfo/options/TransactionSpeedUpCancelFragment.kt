@@ -204,6 +204,7 @@ private fun TransactionSpeedUpCancelScreen(
                         sendEvmTransactionViewModel,
                         feeViewModel,
                         nonceViewModel,
+                        navController,
                         speedUpCancelViewModel.description
                     )
                 }
