@@ -179,7 +179,8 @@ private fun SendEvmConfirmationScreen(
                     SendEvmTransactionView(
                         sendEvmTransactionViewModel,
                         feeViewModel,
-                        nonceViewModel
+                        nonceViewModel,
+                        navController
                     )
                 }
                 ButtonsGroupWithShade {

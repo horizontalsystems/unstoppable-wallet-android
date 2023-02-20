@@ -17,8 +17,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.fee.FeeCell
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
@@ -43,7 +43,6 @@ fun SendEthRequestScreen(
     val cautions by sendEvmTransactionViewModel.cautionsLiveData.observeAsState()
     val fee by feeViewModel.feeLiveData.observeAsState(null)
     val viewState by feeViewModel.viewStateLiveData.observeAsState()
-    val loading by feeViewModel.loadingLiveData.observeAsState(false)
 
     ComposeAppTheme {
         Column(
@@ -120,11 +119,16 @@ fun SendEthRequestScreen(
                     }
                 }
 
-                EvmFeeCell(
-                    title = stringResource(R.string.FeeSettings_Fee),
-                    value = fee,
-                    loading = loading,
-                    viewState = viewState
+                CellUniversalLawrenceSection(
+                    listOf {
+                        FeeCell(
+                            title = stringResource(R.string.FeeSettings_Fee),
+                            info = stringResource(R.string.FeeSettings_Fee_Info),
+                            value = fee,
+                            viewState = viewState,
+                            navController = navController
+                        )
+                    }
                 )
 
                 cautions?.let {
