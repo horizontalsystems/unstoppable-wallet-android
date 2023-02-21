@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
@@ -52,18 +53,27 @@ fun SwapAllowance(
         Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
             val infoTitle = stringResource(id = R.string.SwapInfo_AllowanceTitle)
             val infoText = stringResource(id = R.string.SwapInfo_AllowanceDescription)
-            Image(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .clickable {
+            Row(
+                modifier = Modifier.clickable(
+                    onClick = {
                         navController.slideFromBottom(
                             R.id.feeSettingsInfoDialog,
                             FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
                         )
                     },
-                painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
-            )
-            subhead2_grey(text = stringResource(R.string.Swap_Allowance))
+                    interactionSource = MutableInteractionSource(),
+                    indication = null
+                ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                subhead2_grey(text = stringResource(R.string.Swap_Allowance))
+
+                Image(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = ""
+                )
+            }
             Spacer(Modifier.weight(1f))
             allowanceAmount?.let { amount ->
                 if (isError) {
