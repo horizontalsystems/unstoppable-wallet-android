@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -299,18 +300,27 @@ private fun PriceImpact(
     Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
         val infoTitle = stringResource(id = R.string.SwapInfo_PriceImpactTitle)
         val infoText = stringResource(id = R.string.SwapInfo_PriceImpactDescription)
-        Image(
-            modifier = Modifier
-                .padding(end = 8.dp)
-                .clickable {
+        Row(
+            modifier = Modifier.clickable(
+                onClick = {
                     navController.slideFromBottom(
                         R.id.feeSettingsInfoDialog,
                         FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
                     )
                 },
-            painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
-        )
-        subhead2_grey(text = stringResource(R.string.Swap_PriceImpact))
+                interactionSource = MutableInteractionSource(),
+                indication = null
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            subhead2_grey(text = stringResource(R.string.Swap_PriceImpact))
+
+            Image(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                painter = painterResource(id = R.drawable.ic_info_20),
+                contentDescription = ""
+            )
+        }
         Spacer(Modifier.weight(1f))
         Text(
             text = priceImpact.value,
