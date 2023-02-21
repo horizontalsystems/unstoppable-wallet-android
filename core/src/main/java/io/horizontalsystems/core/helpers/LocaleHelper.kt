@@ -9,6 +9,8 @@ import java.util.*
 
 object LocaleHelper {
 
+    val fallbackLocale: Locale = Locale.ENGLISH
+
     private const val SELECTED_LANGUAGE = "Locale.Helper.Selected.Language"
     private val RTL: Set<String> by lazy {
         hashSetOf(
@@ -71,7 +73,7 @@ object LocaleHelper {
 
     private fun load(context: Context): Locale {
         val preferences = getPreferences(context)
-        val languageTag = preferences.getString(SELECTED_LANGUAGE, null) ?: Locale.getDefault().toLanguageTag()
+        val languageTag = preferences.getString(SELECTED_LANGUAGE, null) ?: fallbackLocale.toLanguageTag()
         return Locale.forLanguageTag(languageTag)
     }
 
