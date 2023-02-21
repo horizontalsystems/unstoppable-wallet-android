@@ -1,11 +1,12 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.App
+import io.horizontalsystems.core.helpers.LocaleHelper
 import java.util.*
 
 class LanguageManager {
 
-    var fallbackLocale: Locale = Locale.ENGLISH
+    val fallbackLocale by LocaleHelper::fallbackLocale
 
     var currentLocale: Locale = App.instance.getLocale()
         set(value) {
