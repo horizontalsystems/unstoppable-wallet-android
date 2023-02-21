@@ -59,7 +59,9 @@ fun ButtonSecondaryWithIcon(
             end = 12.dp,
         ),
         content = {
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 subhead1_leah(
                     text = title,
                     maxLines = 1,

@@ -16,6 +16,11 @@ object SendBtcAdvancedSettingsModule {
         }
     }
 
+    data class UiState(
+        val transactionSortOptions: List<SortModeViewItem>,
+        val transactionSortTitle: String
+    )
+
     data class SortModeViewItem(
         val mode: TransactionDataSortMode,
         val selected: Boolean,
