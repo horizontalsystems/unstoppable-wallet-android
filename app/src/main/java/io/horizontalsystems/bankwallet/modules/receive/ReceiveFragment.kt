@@ -135,6 +135,10 @@ private fun ReceiveScreen(
                     qrBitmap?.let {
                         Image(
                             modifier = Modifier
+                                .clickable {
+                                    TextHelper.copyText(viewModel.receiveAddress)
+                                    HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+                                }
                                 .padding(8.dp)
                                 .fillMaxSize(),
                             bitmap = it.asImageBitmap(),
