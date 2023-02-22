@@ -47,4 +47,8 @@ class SendBtcAdvancedSettingsViewModel(
             )
         }
     }
+
+    fun reset() {
+        setTransactionMode(TransactionDataSortMode.Shuffle)
+    }
 }

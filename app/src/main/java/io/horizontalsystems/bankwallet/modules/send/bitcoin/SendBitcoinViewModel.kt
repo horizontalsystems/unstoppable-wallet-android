@@ -37,8 +37,6 @@ class SendBitcoinViewModel(
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
     val blockchainType by adapter::blockchainType
-    val feeRatePriorities by feeRateService::feeRatePriorities
-    val feeRateRange by feeRateService::feeRateRange
     val feeRateChangeable by feeRateService::feeRateChangeable
     val isLockTimeEnabled by pluginService::isLockTimeEnabled
     val lockTimeIntervals by pluginService::lockTimeIntervals
@@ -122,10 +120,30 @@ class SendBitcoinViewModel(
         addressService.setAddress(address)
     }
 
-    fun onEnterFeeRatePriority(feeRatePriority: FeeRatePriority) {
+    fun reset() {
         viewModelScope.launch {
-            feeRateService.setFeeRatePriority(feeRatePriority)
+            feeRateService.setFeeRatePriority(FeeRatePriority.RECOMMENDED)
         }
+        onEnterLockTimeInterval(null)
+    }
+
+    fun updateFeeRate(value: Long) {
+        viewModelScope.launch {
+            feeRateService.setFeeRatePriority(FeeRatePriority.Custom(value))
+        }
+    }
+
+    fun incrementFeeRate() {
+        val incremented = (feeRateState.feeRate ?: 0L) + 1
+        updateFeeRate(incremented)
+    }
+
+    fun decrementFeeRate() {
+        var incremented = (feeRateState.feeRate ?: 0L) - 1
+        if (incremented < 0) {
+            incremented = 0L
+        }
+        updateFeeRate(incremented)
     }
 
     fun onEnterLockTimeInterval(lockTimeInterval: LockTimeInterval?) {

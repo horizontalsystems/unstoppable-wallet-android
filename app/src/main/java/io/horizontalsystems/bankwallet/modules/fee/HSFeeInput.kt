@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -18,7 +19,7 @@ fun HSFeeInput(
     fee: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    onClick: (() -> Unit)? = null,
+    navController: NavController
 ) {
     CellUniversalLawrenceSection(
         listOf {
@@ -29,8 +30,7 @@ fun HSFeeInput(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = rate,
-                enabled = onClick != null,
-                onClick = { onClick?.invoke() }
+                navController = navController
             )
         })
 }
@@ -42,8 +42,7 @@ fun HSFeeInputRaw(
     fee: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
+    navController: NavController
 ) {
     val viewModel = viewModel<FeeInputViewModel>(
         factory = FeeInputModule.Factory(
@@ -63,9 +62,9 @@ fun HSFeeInputRaw(
 
     FeeCell(
         title = stringResource(R.string.Send_Fee),
-        info = "",
+        info = stringResource(R.string.Send_Fee_Info),
         value = formatted,
         viewState = null,
-        navController = null
+        navController = navController
     )
 }

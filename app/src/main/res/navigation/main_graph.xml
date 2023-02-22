@@ -298,9 +298,6 @@
         android:id="@+id/sendConfirmation"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment" />
     <fragment
-        android:id="@+id/feeSettings"
-        android:name="io.horizontalsystems.bankwallet.modules.fee.FeeSettingsFragment" />
-    <fragment
         android:id="@+id/feePriorityInfo"
         android:name="io.horizontalsystems.bankwallet.modules.info.FeePriorityInfoFragment" />
     <fragment
