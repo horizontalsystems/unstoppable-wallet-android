@@ -31,9 +31,6 @@
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
     <fragment
-        android:id="@+id/sendEvmFeeSettingsFragment"
-        android:name="cash.p.terminal.modules.evmfee.EvmFeeSettingsFragment" />
-    <fragment
         android:id="@+id/sendEvmSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment" />
     <fragment
