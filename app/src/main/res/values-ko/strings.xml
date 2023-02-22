@@ -115,13 +115,13 @@
     <string name="Restore_BirthdayHeight">생일 신장</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash 생일 높이</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">지갑의 생일 높이를 알고 있다면 빠른 동기화를 위해 입력하십시오.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000(선택 사항)</string>
     <string name="Restore_ZCash_RestoreAsNew">새 것으로 복원</string>
     <string name="Restore_ZCash_NewWallet">새 지갑</string>
-    <string name="Restore_ZCash_NewWallet_Description">이전에 거래가 없는 경우</string>
-    <string name="Restore_ZCash_OldWallet">오래된 지갑</string>
-    <string name="Restore_ZCash_OldWallet_Description">이전에 사용되었으며 트랜잭션이 있습니다.</string>
+    <string name="Restore_ZCash_NewWallet_Description">Doesn\'t have any transactions</string>
+    <string name="Restore_ZCash_OldWallet">Existing Wallet</string>
+    <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
     <string name="Restore_ZCash_SlowSyncWarningText">블록체인과의 초기 동기화는 많은 인터넷 트래픽을 소비할 수 있습니다.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
@@ -289,6 +289,7 @@
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
     <string name="Send_Fee">수수료</string>
+    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
@@ -366,6 +367,13 @@
     <string name="FeeSettings_Overpricing_Title">수수료가 너무 높음</string>
     <string name="FeeSettings_Overpricing">설정된 거래 수수료가 지금 이 거래를 처리하는 데 필요한 것보다 높습니다.</string>
     <string name="FeeSettings_Info_IUnderstand">이해합니다</string>
+    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
+    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
+        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
+        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
+        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
+        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>
     <string name="FeeInfo_Description">비트코인과 이더리움 블록체인 모두 사용자가 거래를 보낼 때 네트워크 수수료를 지불해야 합니다. 수수료는 네트워크에서 많은 거래가 발생할 때 더 높고 블록체인이 적으면 더 낮습니다.</string>
@@ -687,6 +695,8 @@
 \n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
 \n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
 \n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">트랜잭션 입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">거래 구조를 변경하여 BTC, LTC, BCH 거래를 추적하기 어렵게 만드십시오.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
@@ -708,6 +718,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">권장</string>
