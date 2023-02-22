@@ -41,7 +41,7 @@ class SwapMainService(
 
     private fun getSwapProvider(blockchainType: BlockchainType): SwapMainModule.ISwapProvider? {
         val providerId = localStorage.getSwapProviderId(blockchainType)
-            ?: SwapMainModule.OneInchProvider.id
+            ?: SwapMainModule.PancakeSwapProvider.id
 
         return providers.firstOrNull { it.id == providerId }
     }
