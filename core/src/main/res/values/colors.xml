@@ -5,8 +5,8 @@
     <color name="ripple_black">#1f000000</color>
     <color name="transparent">#00000000</color>
 
-    <color name="yellow_d">#ffa800</color>
-    <color name="yellow_l">#f58400</color>
+    <color name="yellow_d">#EB8F09</color>
+    <color name="yellow_l">#A96806</color>
     <color name="green_d">#05C46B</color>
     <color name="green_l">#04AD5F</color>
     <color name="red_d">#F43A4F</color>
