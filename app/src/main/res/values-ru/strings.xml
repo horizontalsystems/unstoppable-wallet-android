@@ -115,13 +115,13 @@
     <string name="Restore_BirthdayHeight">Блок создания</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Блок создания Zcash</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете дату создания вашего кошелька, укажите ее для быстрой синхронизации.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
     <string name="Restore_ZCash_RestoreAsNew">Восстановить как новый</string>
     <string name="Restore_ZCash_NewWallet">Создать кошелек</string>
-    <string name="Restore_ZCash_NewWallet_Description">Не было транзакций до</string>
-    <string name="Restore_ZCash_OldWallet">Старый кошелёк</string>
-    <string name="Restore_ZCash_OldWallet_Description">Использовался до и есть транзакции</string>
+    <string name="Restore_ZCash_NewWallet_Description">Doesn\'t have any transactions</string>
+    <string name="Restore_ZCash_OldWallet">Existing Wallet</string>
+    <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Первоначальная синхронизация с блокчейном может потреблять много интернет-трафика.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
@@ -289,6 +289,7 @@
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
     <string name="Send_Fee">Комиссия</string>
+    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Advanced">Доп. Настройки</string>
@@ -366,6 +367,13 @@
     <string name="FeeSettings_Overpricing_Title">Слишком Высокая Комиссия</string>
     <string name="FeeSettings_Overpricing">Установленная комиссия за транзакцию больше чем требуется для обработки этой транзакции.</string>
     <string name="FeeSettings_Info_IUnderstand">Я понимаю</string>
+    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
+    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
+        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
+        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
+        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
+        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Скорость транзакции</string>
     <string name="FeeInfo_Description">Пользователи блокчейнов для Bitcoin и Ethereum должны оплачивать сетевые комиссии при отправке транзакций. Комиссии обычно выше при обработке большего количества транзакций в сети и ниже при меньшей занятости блокчейна.</string>
@@ -684,6 +692,8 @@
     <string name="BtcBlockchainSettings_RestoreSource">Источник Восстановления</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите источник данных для восстановления кошелька с транзакциями.</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">Этот параметр актуален только при восстановлении существующего кошелька. Это процесс получения истории транзакций для данной монеты, чтобы приложение кошелька могло отображать предыдущие транзакции и определять последний баланс. Это должно произойти только один раз при восстановлении пользователем ранее созданного кошелька. На данный момент у такого мобильного кошелька, как Unstoppable, есть два возможных способа для реализации этого вопроса: \n\n1. С сервера API: существует предопределенный сторонний сервер, на котором размещается вся цепочка блоков, происходит обработка всех данных и их подготовка к быстрому предоставлению. Это быстрый метод, однако он предполагает потенциальное отслеживание IP-адресов и запрашиваемых данных. Этот вариант рекомендуется использовать из-за скорости получения данных (5-10 минут). Он сопряжен с минимальными рисками. Если пользователь восстанавливает данные со своего собственного сервера, то нет никакой угрозы конфиденциальности.\n\n2. Из блокчейна: в этом случае приложение пытается восстановить данные напрямую из p2p-сети узлов блокчейна. Приложение пингует многие из этих узлов и запрашивает у них данные. Потенциально эти узлы могут отслеживать IP-адрес пользователя и сделанные запросы, однако во время восстановления данных приложение может переключаться между узлами. В любое время в сети находится около 10 000 биткойн-узлов. Это медленный вариант обработки данных, она может занять 2-3 часа и приложение должно быть открыто во время их восстановления.</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Вводы / выводы транзакций</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Поменяйте способ структурирования транзакций, чтобы затруднить отслеживание ваших операций с BTC, LTC, BCH.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Многие биткойн-транзакции, а также транзакции, осуществляемые в похожих криптовалютах, включая Bitcoin Cash, Dash и Litecoin, генерируют два типа выходных данных. Первый тип выходных данных - это сумма, отправляемая получателю, а второй - сдача, возвращаемая отправителю. Руководствуясь принципом обработки транзакций большинства кошельков, третья сторона может легко понять, какие из выходных данных были отправлены принимающей стороне, а также узнать сумму сдачи, возвращенную отправителю. Поскольку сдача, возвращаемая отправителю, позже используется для осуществлениях других транзакций, связь между этими двумя типами выходных данных становится очевидной.\n\nКошелек Unstoppable применяет специальные меры для сокрытия направлений отправки двух типов выходных данных.\n\nПользователям Unstoppable доступны два варианта устранения этой проблемы:\n\n1. Микширование: Порядок вывода транзакций рандомизируется для каждой транзакции. Сдача может быть первым типом выходных данных,  а иногда, наоборот, вторым. Если пользователь доверяет разработчику приложения, то рекомендуется использовать этот вариант.\n\n2. Детерминирование: существует общепринятый стандарт для упорядочения выходных данных транзакций под названием BIP69. В кошельках с открытым исходным кодом применение этого стандарта гарантирует, что пользователям кошелька не нужно будет полагаться на принцип реализации порядка выходных данных разработчиками приложения. Поскольку этот стандарт является новым, многие кошельки его пока еще не внедрили. Поэтому в блокчейне видно, была ли транзакция отправлена ​​из кошелька с таким стандартом или нет.</string>
@@ -701,6 +711,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Wallet отключены. Чтобы получать уведомления об изменении цен, вам нужно включить уведомления и разрешить запуск приложения в фоновом режиме.</string>
     <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Случайное Индексирование</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Детерминированный BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая Индексация</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Рекомендовано</string>
