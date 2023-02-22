@@ -21,11 +21,11 @@ import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
-import cash.p.terminal.modules.fee.FeeRateCaution
 import cash.p.terminal.modules.fee.HSFeeInput
 import cash.p.terminal.modules.memo.HSMemoInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
+import cash.p.terminal.modules.send.bitcoin.advanced.FeeRateCaution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 
@@ -115,6 +115,7 @@ fun SendBinanceScreen(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.feeCoinRate,
+                navController = navController
             )
 
             uiState.feeCaution?.let { caution ->

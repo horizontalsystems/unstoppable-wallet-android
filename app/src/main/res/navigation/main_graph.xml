@@ -298,9 +298,6 @@
         android:id="@+id/sendConfirmation"
         android:name="cash.p.terminal.modules.send.SendConfirmationFragment" />
     <fragment
-        android:id="@+id/feeSettings"
-        android:name="cash.p.terminal.modules.fee.FeeSettingsFragment" />
-    <fragment
         android:id="@+id/feePriorityInfo"
         android:name="cash.p.terminal.modules.info.FeePriorityInfoFragment" />
     <fragment

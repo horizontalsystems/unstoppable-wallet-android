@@ -16,33 +16,46 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import cash.p.terminal.R
+import cash.p.terminal.core.HSCaution
 import cash.p.terminal.entities.TransactionDataSortMode
+import cash.p.terminal.modules.amount.AmountInputType
+import cash.p.terminal.modules.evmfee.EvmSettingsInput
+import cash.p.terminal.modules.fee.HSFeeInputRaw
 import cash.p.terminal.modules.hodler.HSHodlerInput
+import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
 import cash.p.terminal.modules.send.bitcoin.TransactionInputsSortInfoPage
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SendBtcAdvancedSettingsScreen(
+    fragmentNavController: NavController,
     navController: NavHostController,
-    blockchainType: BlockchainType,
-    lockTimeEnabled: Boolean,
-    lockTimeIntervals: List<LockTimeInterval?>,
-    lockTimeInterval: LockTimeInterval?,
-    onEnterLockTimeInterval: (LockTimeInterval?) -> Unit,
+    sendBitcoinViewModel: SendBitcoinViewModel,
+    amountInputType: AmountInputType,
 ) {
+
+    val wallet = sendBitcoinViewModel.wallet
+    val sendUiState = sendBitcoinViewModel.uiState
+    val feeRateVisible = sendBitcoinViewModel.feeRateChangeable
+    val rate = sendBitcoinViewModel.coinRate
+    val blockchainType = sendBitcoinViewModel.blockchainType
+    val lockTimeIntervals = sendBitcoinViewModel.lockTimeIntervals
+    val lockTimeEnabled = sendBitcoinViewModel.isLockTimeEnabled
+    val lockTimeInterval = sendUiState.lockTimeInterval
+    val feeRate = sendUiState.feeRate
+
     val viewModel: SendBtcAdvancedSettingsViewModel =
         viewModel(factory = SendBtcAdvancedSettingsModule.Factory(blockchainType))
 
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    var selectedLockTimeInterval by remember { mutableStateOf(lockTimeInterval) }
+
     ComposeAppTheme {
         ModalBottomSheetLayout(
             sheetState = modalBottomSheetState,
@@ -67,9 +80,57 @@ fun SendBtcAdvancedSettingsScreen(
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Reset),
+                            onClick = {
+                                sendBitcoinViewModel.reset()
+                                viewModel.reset()
+                            }
+                        )
+                    )
                 )
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 
+                    Spacer(modifier = Modifier.height(12.dp))
+                    CellUniversalLawrenceSection(
+                        listOf {
+                            HSFeeInputRaw(
+                                coinCode = wallet.coin.code,
+                                coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
+                                fiatDecimal = sendBitcoinViewModel.fiatMaxAllowedDecimals,
+                                fee = sendUiState.fee,
+                                amountInputType = amountInputType,
+                                rate = rate,
+                                navController = fragmentNavController
+                            )
+                        }
+                    )
+
+                    if(feeRateVisible) {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        EvmSettingsInput(
+                            title = stringResource(R.string.FeeSettings_FeeRate),
+                            info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                            value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+                            decimals = 0,
+                            navController = fragmentNavController,
+                            onValueChange = {
+                                sendBitcoinViewModel.updateFeeRate(it.toLong())
+                            },
+                            onClickIncrement = {
+                                sendBitcoinViewModel.incrementFeeRate()
+                            },
+                            onClickDecrement = {
+                                sendBitcoinViewModel.decrementFeeRate()
+                            }
+                        )
+                        InfoText(
+                            text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
                     TransactionDataSortSettings(
                         navController,
                         viewModel.uiState.transactionSortTitle,
@@ -85,10 +146,9 @@ fun SendBtcAdvancedSettingsScreen(
                             listOf {
                                 HSHodlerInput(
                                     lockTimeIntervals = lockTimeIntervals,
-                                    lockTimeInterval = selectedLockTimeInterval,
+                                    lockTimeInterval = lockTimeInterval,
                                     onSelect = {
-                                        selectedLockTimeInterval = it
-                                        onEnterLockTimeInterval(it)
+                                        sendBitcoinViewModel.onEnterLockTimeInterval(it)
                                     }
                                 )
                             }
@@ -97,6 +157,14 @@ fun SendBtcAdvancedSettingsScreen(
                             text = stringResource(R.string.Send_Hodler_Description),
                         )
                     }
+
+                    sendUiState.feeRateCaution?.let {
+                        FeeRateCaution(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                            feeRateCaution = it
+                        )
+                    }
+
                     Spacer(Modifier.height(32.dp))
                 }
             }
@@ -183,4 +251,26 @@ private fun TransactionDataSortSettings(
     InfoText(
         text = stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription),
     )
+}
+
+@Composable
+fun FeeRateCaution(modifier: Modifier, feeRateCaution: HSCaution) {
+    when (feeRateCaution.type) {
+        HSCaution.Type.Error -> {
+            TextImportantError(
+                modifier = modifier,
+                icon = R.drawable.ic_attention_20,
+                title = feeRateCaution.getString(),
+                text = feeRateCaution.getDescription() ?: ""
+            )
+        }
+        HSCaution.Type.Warning -> {
+            TextImportantWarning(
+                modifier = modifier,
+                icon = R.drawable.ic_attention_20,
+                title = feeRateCaution.getString(),
+                text = feeRateCaution.getDescription() ?: ""
+            )
+        }
+    }
 }

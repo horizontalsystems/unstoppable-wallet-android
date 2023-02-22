@@ -13,10 +13,7 @@ import kotlinx.coroutines.withContext
 
 class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
 
-    var feeRatePriorities: List<FeeRatePriority> = listOf()
-        private set
-    var feeRateRange: ClosedRange<Long>? = null
-        private set
+    private var feeRatePriorities: List<FeeRatePriority> = listOf()
     var feeRateChangeable: Boolean = false
         private set
 
@@ -41,7 +38,6 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
         withContext(Dispatchers.IO) {
             try {
                 feeRatePriorities = feeRateProvider.feeRatePriorityList
-                feeRateRange = feeRateProvider.getFeeRateRange()
                 feeRateChangeable = feeRatePriorities.isNotEmpty()
                 lowFeeRate = feeRateProvider.getFeeRate(FeeRatePriority.LOW)
                 mediumFeeRate = feeRateProvider.getFeeRate(FeeRatePriority.RECOMMENDED)
