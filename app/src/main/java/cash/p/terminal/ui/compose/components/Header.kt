@@ -28,7 +28,7 @@ fun HeaderText(
             .height(32.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        subhead1_grey(
+        subhead2_grey(
             modifier = Modifier.padding(horizontal = 32.dp),
             text = text,
             maxLines = 1

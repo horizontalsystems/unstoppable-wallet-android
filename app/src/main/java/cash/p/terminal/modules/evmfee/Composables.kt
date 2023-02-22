@@ -359,7 +359,7 @@ fun FeeInfoCell(
             ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            subhead1_grey(text = title)
+            subhead2_grey(text = title)
 
             Image(
                 modifier = Modifier.padding(horizontal = 8.dp),
