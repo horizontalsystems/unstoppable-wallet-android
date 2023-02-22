@@ -153,8 +153,7 @@ fun SendConfirmationScreen(
                                 fee = fee,
                                 amountInputType = amountInputType,
                                 rate = feeCoinRate,
-                                enabled = false,
-                                onClick = {}
+                                navController = navController
                             )
                         }
                         if (!memo.isNullOrBlank()) {

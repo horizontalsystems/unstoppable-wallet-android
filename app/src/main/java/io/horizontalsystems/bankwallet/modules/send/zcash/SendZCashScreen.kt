@@ -117,6 +117,7 @@ fun SendZCashScreen(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.coinRate,
+                navController = navController
             )
 
             ButtonPrimaryYellow(
