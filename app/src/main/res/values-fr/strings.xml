@@ -115,13 +115,13 @@
     <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
     <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire de Zcash</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Si vous connaissez la hauteur anniversaire de votre portefeuille, saisissez-la pour accélérer la synchronisation.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (facultatif)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restaurer à l\'état d\'usine</string>
     <string name="Restore_ZCash_NewWallet">Nouveau portefeuille</string>
-    <string name="Restore_ZCash_NewWallet_Description">Vous n\'avez pas de transaction avant</string>
-    <string name="Restore_ZCash_OldWallet">Ancien portefeuille</string>
-    <string name="Restore_ZCash_OldWallet_Description">Utilisé avant et a des transactions</string>
+    <string name="Restore_ZCash_NewWallet_Description">Doesn\'t have any transactions</string>
+    <string name="Restore_ZCash_OldWallet">Existing Wallet</string>
+    <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
     <string name="Restore_ZCash_SlowSyncWarningText">La synchronisation initiale avec la blockchain peut consommer beaucoup de trafic Internet.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
@@ -289,6 +289,7 @@
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
     <string name="Send_Fee">Frais</string>
+    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
     <string name="Send_Button_Paste">Coller</string>
     <string name="Send_Button_Max">Max</string>
     <string name="Send_Advanced">Avancé</string>
@@ -366,6 +367,13 @@
     <string name="FeeSettings_Overpricing_Title">Frais trop élevés</string>
     <string name="FeeSettings_Overpricing">Les frais de transaction fixés sont plus élevés que ce qui est nécessaire pour traiter cette transaction immédiatement.</string>
     <string name="FeeSettings_Info_IUnderstand">J’ai Compris</string>
+    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
+    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
+        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
+        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
+        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
+        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Vitesse de transaction</string>
     <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées sur le réseau et inférieurs lorsque la blockchain est moins occupée.</string>
@@ -687,6 +695,8 @@
 \n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
 \n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
 \n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entrées / Sorties de transaction</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Rendez vos transactions BTC, LTC, BCH plus difficiles à détecter en modifiant la structure des transactions.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">La plupart des transactions en Bitcoin, ainsi que les transactions en cryptomonnaies similaires comme Bitcoin Cash, Dash et Litecoin, génèrent deux sorties. Une sortie est le montant qui va au destinataire et l\'autre est la sortie de la monnaie qui est retournée à l\'expéditeur. La façon dont la plupart des portefeuilles construisent les transactions permet à une tierce partie de comprendre facilement laquelle des sorties est allée à la partie réceptrice et laquelle était le montant de la monnaie retournée à l\'expéditeur. Comme le montant retourné à l\'expéditeur est ensuite utilisé dans de futures transactions, un lien entre ces deux transactions devient apparent.\n\nLe portefeuille Unstoppable applique des mesures pour qu\'il soit plus difficile pour quelqu\'un de comprendre quel montant va à quel endroit.\n\nLes utilisateurs d\'Unstoppable disposent de deux options:\n\n1. Mélange : l\'ordre des sorties est aléatoire à chaque transaction. Parfois, la monnaie peut être la première à sortir, parfois, elle peut être la deuxième. Si un utilisateur fait confiance au développeur de l\'application, alors considérez ce choix comme une option recommandée.\n\n2. Déterministe : il existe une norme communément acceptée pour classer les sorties de transaction (connue sous le nom de BIP69). Dans les portefeuilles à code source ouvert, cette norme assure que les utilisateurs de portefeuilles n\'ont pas besoin de faire confiance à la façon dont les développeurs de l\'application mettent en œuvre l\'ordre des sorties. Comme cette norme est nouvelle, peu de portefeuilles l\'ont encore implémentée. Par conséquent, il est en quelque sorte possible de voir sur la blockchain si une transaction a été envoyée depuis un portefeuille qui utilise cette norme ou non.</string>
@@ -704,6 +714,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Les notifications pour l\'application Unstoppable Wallet sont désactivées. Vous devez activer les notifications et autoriser le rafraîchissement de l\'application en arrière-plan afin de pouvoir recevoir des alertes de changement de prix.</string>
     <string name="SettingsSecurity_SortingShuffle">Mélanger</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexation aléatoire</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Recommandé</string>
