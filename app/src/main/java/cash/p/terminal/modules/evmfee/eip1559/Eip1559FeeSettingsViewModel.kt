@@ -89,11 +89,15 @@ class Eip1559FeeSettingsViewModel(
             if (gasPriceInfo.gasPrice is GasPrice.Eip1559) {
                 maxFeeViewItem = FeeViewItem(
                     weiValue = gasPriceInfo.gasPrice.maxFeePerGas,
-                    scale = scale
+                    scale = scale,
+                    warnings = gasPriceInfo.warnings,
+                    errors = gasPriceInfo.errors
                 )
                 priorityFeeViewItem = FeeViewItem(
                     weiValue = gasPriceInfo.gasPrice.maxPriorityFeePerGas,
-                    scale = scale
+                    scale = scale,
+                    warnings = gasPriceInfo.warnings,
+                    errors = gasPriceInfo.errors
                 )
             }
         }

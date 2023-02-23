@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,9 +26,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.Warning
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import cash.p.terminal.modules.fee.FeeCell
@@ -87,6 +88,8 @@ fun Eip1559FeeSettings(
                     info = stringResource(R.string.FeeSettings_MaxFee_Info),
                     value = BigDecimal(maxFee.weiValue).divide(BigDecimal(maxFee.scale.scaleValue)),
                     decimals = maxFee.scale.decimals,
+                    warnings = maxFee.warnings,
+                    errors = maxFee.errors,
                     navController = navController,
                     onValueChange = {
                         viewModel.onSelectGasPrice(maxFee.wei(it), priorityFee.weiValue)
@@ -105,6 +108,8 @@ fun Eip1559FeeSettings(
                     info = stringResource(R.string.FeeSettings_MaxMinerTips_Info),
                     value = BigDecimal(priorityFee.weiValue).divide(BigDecimal(priorityFee.scale.scaleValue)),
                     decimals = priorityFee.scale.decimals,
+                    warnings = priorityFee.warnings,
+                    errors = priorityFee.errors,
                     navController = navController,
                     onValueChange = {
                         viewModel.onSelectGasPrice(maxFee.weiValue, priorityFee.wei(it))
@@ -127,7 +132,8 @@ fun EvmSettingsInput(
     info: String,
     value: BigDecimal,
     decimals: Int,
-    state: DataState<Any>? = null,
+    warnings: List<Warning>,
+    errors: List<Throwable>,
     navController: NavController,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
@@ -136,23 +142,24 @@ fun EvmSettingsInput(
     HeaderText(text = title) {
         navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(title, info))
     }
-    NumberInputWithButtons(value, decimals, state, onValueChange, onClickIncrement, onClickDecrement)
+    val borderColor = when {
+        errors.isNotEmpty() -> ComposeAppTheme.colors.red50
+        warnings.isNotEmpty() -> ComposeAppTheme.colors.yellow50
+        else -> ComposeAppTheme.colors.steel20
+    }
+
+    NumberInputWithButtons(value, decimals, borderColor, onValueChange, onClickIncrement, onClickDecrement)
 }
 
 @Composable
 private fun NumberInputWithButtons(
     value: BigDecimal,
     decimals: Int,
-    state: DataState<Any>? = null,
+    borderColor: Color,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
 ) {
-    val borderColor = when (state) {
-        is DataState.Error -> ComposeAppTheme.colors.red50
-        else -> ComposeAppTheme.colors.steel20
-    }
-
     var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         val text = value.toString()
         mutableStateOf(TextFieldValue(text))
@@ -210,15 +217,6 @@ private fun NumberInputWithButtons(
             modifier = Modifier.padding(end = 16.dp),
             icon = R.drawable.ic_plus_20,
             onClick = onClickIncrement
-        )
-    }
-
-    if (state is DataState.Error) {
-        caption_lucian(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, top = 8.dp, end = 16.dp),
-            text = state.error.message ?: state.error.javaClass.simpleName,
         )
     }
 }
@@ -289,6 +287,8 @@ fun LegacyFeeSettings(
                 info = stringResource(R.string.FeeSettings_GasPrice_Info),
                 value = BigDecimal(fee.weiValue).divide(BigDecimal(fee.scale.scaleValue)),
                 decimals = fee.scale.decimals,
+                warnings = fee.warnings,
+                errors = fee.errors,
                 navController = navController,
                 onValueChange = {
                     viewModel.onSelectGasPrice(fee.wei(it))

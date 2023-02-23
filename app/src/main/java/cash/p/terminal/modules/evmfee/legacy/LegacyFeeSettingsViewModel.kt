@@ -89,7 +89,7 @@ class LegacyFeeSettingsViewModel(
 
     private fun sync(state: DataState<GasPriceInfo>) {
         if (state is DataState.Success) {
-            feeViewItem = FeeViewItem(weiValue = state.data.gasPrice.max, scale = scale)
+            feeViewItem = FeeViewItem(weiValue = state.data.gasPrice.max, scale = scale, warnings = state.data.warnings, errors = state.data.errors)
         }
     }
 
