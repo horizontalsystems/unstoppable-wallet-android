@@ -114,6 +114,8 @@ fun SendBtcAdvancedSettingsScreen(
                             info = stringResource(R.string.FeeSettings_FeeRate_Info),
                             value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
                             decimals = 0,
+                            warnings = listOf(),
+                            errors = listOf(),
                             navController = fragmentNavController,
                             onValueChange = {
                                 sendBitcoinViewModel.updateFeeRate(it.toLong())
