@@ -129,7 +129,9 @@ data class FeeSummaryViewItem(val fee: FeeItem?, val gasLimit: String, val viewS
 
 data class FeeViewItem(
     val weiValue: Long,
-    val scale: FeePriceScale
+    val scale: FeePriceScale,
+    val warnings: List<Warning>,
+    val errors: List<Throwable>
 ) {
 
     fun wei(scaledValue: BigDecimal): Long {

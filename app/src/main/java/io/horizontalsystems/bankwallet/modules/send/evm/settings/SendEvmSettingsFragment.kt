@@ -137,6 +137,8 @@ fun SendEvmFeeSettingsScreen(
                 value = nonceUiState.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
                 decimals = 0,
                 navController = navController,
+                warnings = nonceUiState.warnings,
+                errors = nonceUiState.errors,
                 onValueChange = {
                     nonceViewModel.onEnterNonce(it.toLong())
                 },

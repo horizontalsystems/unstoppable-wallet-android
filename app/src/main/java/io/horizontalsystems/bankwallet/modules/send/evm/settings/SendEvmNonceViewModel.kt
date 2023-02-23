@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.Warning
 import kotlinx.coroutines.launch
 
 class SendEvmNonceViewModel(
@@ -14,8 +15,10 @@ class SendEvmNonceViewModel(
     private var nonce: Long? = null
     private var showInConfirmation = false
     private var showInSettings = false
+    private var warnings: List<Warning> = emptyList()
+    private var errors: List<Throwable> = emptyList()
 
-    var uiState by mutableStateOf(UiState(nonce, showInConfirmation, showInSettings))
+    var uiState by mutableStateOf(UiState(nonce, showInConfirmation, showInSettings, warnings, errors))
         private set
 
     init {
@@ -25,7 +28,8 @@ class SendEvmNonceViewModel(
                     nonce = it.nonce
                     showInConfirmation = !it.default || it.fixed
                     showInSettings = !it.fixed
-
+                    warnings = it.warnings
+                    errors = it.errors
                     emitState()
                 }
             }
@@ -45,12 +49,14 @@ class SendEvmNonceViewModel(
     }
 
     private fun emitState() {
-        uiState = UiState(nonce, showInConfirmation, showInSettings)
+        uiState = UiState(nonce, showInConfirmation, showInSettings, warnings, errors)
     }
 
     data class UiState(
         val nonce: Long?,
         val showInConfirmation: Boolean,
-        val showInSettings: Boolean
+        val showInSettings: Boolean,
+        val warnings: List<Warning>,
+        val errors: List<Throwable>
     )
 }
