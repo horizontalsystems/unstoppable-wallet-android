@@ -24,7 +24,7 @@ class IntroViewModel(
         IntroModule.IntroSliderData(
             R.string.Intro_Wallet_Screen4Title,
             R.string.Intro_Wallet_Screen4Description,
-            R.drawable.ic_privacy,
+            R.drawable.ic_privacy_light,
             R.drawable.ic_privacy
         ),
     )
