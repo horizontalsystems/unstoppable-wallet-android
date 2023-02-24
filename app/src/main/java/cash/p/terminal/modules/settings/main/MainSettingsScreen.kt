@@ -134,7 +134,8 @@ private fun SettingSections(
     Spacer(Modifier.height(32.dp))
 
     CellUniversalLawrenceSection(
-        listOf({
+        listOf(
+            {
                 HsSettingCell(
                     R.string.Settings_SecurityCenter,
                     R.drawable.ic_security,
@@ -143,33 +144,45 @@ private fun SettingSections(
                         navController.slideFromRight(R.id.securitySettingsFragment)
                     }
                 )
-            }, {
-            HsSettingCell(
-                R.string.Settings_Appearance,
-                R.drawable.ic_brush_20,
-                onClick = {
-                    navController.slideFromRight(R.id.appearanceFragment)
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_BaseCurrency,
-                R.drawable.ic_currency,
-                value = baseCurrency?.code,
-                onClick = {
-                    navController.slideFromRight(R.id.baseCurrencySettingsFragment)
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_Language,
-                R.drawable.ic_language,
-                value = language,
-                onClick = {
-                    navController.slideFromRight(R.id.languageSettingsFragment)
-                }
-            )
-        },
+            },
+            {
+                HsSettingCell(
+                    R.string.Settings_Appearance,
+                    R.drawable.ic_brush_20,
+                    onClick = {
+                        navController.slideFromRight(R.id.appearanceFragment)
+                    }
+                )
+            },
+            {
+                HsSettingCell(
+                    R.string.Contacts,
+                    R.drawable.ic_user_20,
+                    onClick = {
+                        navController.slideFromRight(R.id.contactsFragment)
+                    }
+                )
+            },
+            {
+                HsSettingCell(
+                    R.string.Settings_BaseCurrency,
+                    R.drawable.ic_currency,
+                    value = baseCurrency?.code,
+                    onClick = {
+                        navController.slideFromRight(R.id.baseCurrencySettingsFragment)
+                    }
+                )
+            },
+            {
+                HsSettingCell(
+                    R.string.Settings_Language,
+                    R.drawable.ic_language,
+                    value = language,
+                    onClick = {
+                        navController.slideFromRight(R.id.languageSettingsFragment)
+                    }
+                )
+            },
         )
     )
 
@@ -290,7 +303,9 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
     ) {
         caption_grey(text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion).uppercase())
         Divider(
-            modifier = Modifier.width(100.dp).padding(top = 8.dp, bottom = 4.5.dp),
+            modifier = Modifier
+                .width(100.dp)
+                .padding(top = 8.dp, bottom = 4.5.dp),
             thickness = 0.5.dp,
             color = ComposeAppTheme.colors.steel20
         )

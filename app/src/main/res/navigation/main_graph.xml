@@ -301,6 +301,9 @@
         android:id="@+id/feePriorityInfo"
         android:name="cash.p.terminal.modules.info.FeePriorityInfoFragment" />
     <fragment
+        android:id="@+id/contactsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment"/>
+    <fragment
         android:id="@+id/statusInfoDialog"
         android:name="cash.p.terminal.modules.info.TransactionStatusInfoFragment" />
     <fragment
