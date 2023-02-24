@@ -1573,4 +1573,10 @@
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Biometrics Scanner</string>
 
+    <!--Contacts-->
+    <string name="Contacts">Contacts</string>
+    <string name="Contacts_Export">Export Contacts</string>
+    <string name="NewContact">New Contact</string>
+    <string name="NewContact_AddAddress">Add Address</string>
+
 </resources>
