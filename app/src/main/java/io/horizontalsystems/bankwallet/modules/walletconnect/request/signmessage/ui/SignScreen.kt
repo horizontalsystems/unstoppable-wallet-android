@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,12 +22,18 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTyp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun SignMessageRequestScreen(
     navController: NavController,
     viewModel: WCSignMessageRequestViewModel,
 ) {
+
+    if (viewModel.showSignError) {
+        HudHelper.showErrorMessage(LocalView.current, R.string.Error)
+        viewModel.signErrorShown()
+    }
 
     ComposeAppTheme {
         Column(

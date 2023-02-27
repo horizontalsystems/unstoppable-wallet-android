@@ -20,9 +20,16 @@ class WCSignMessageRequestViewModel(
     var signEnabled: Boolean by mutableStateOf(signButtonEnabled())
         private set
 
+    var showSignError: Boolean by mutableStateOf(false)
+        private set
+
     fun sign() {
-        service.sign()
-        closeLiveEvent.postValue(Unit)
+        try {
+            service.sign()
+            closeLiveEvent.postValue(Unit)
+        } catch (e: NumberFormatException) {
+            showSignError = true
+        }
     }
 
     fun reject() {
@@ -33,6 +40,10 @@ class WCSignMessageRequestViewModel(
     fun onTrustChecked(checked: Boolean){
         trustCheckmarkChecked = checked
         signEnabled = signButtonEnabled()
+    }
+
+    fun signErrorShown() {
+        showSignError = false
     }
 
     private fun signButtonEnabled(): Boolean {
