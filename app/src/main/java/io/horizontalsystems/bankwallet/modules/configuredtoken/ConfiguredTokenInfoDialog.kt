@@ -11,19 +11,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -32,8 +31,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.helpers.HudHelper
 
 class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
 
@@ -66,7 +64,8 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
 
 @Composable
 private fun ConfiguredTokenInfo(navController: NavController, configuredToken: ConfiguredToken) {
-    val context = LocalContext.current
+    val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(configuredToken))
+
     val token = configuredToken.token
     ComposeAppTheme {
         BottomSheetHeader(
@@ -75,67 +74,87 @@ private fun ConfiguredTokenInfo(navController: NavController, configuredToken: C
             subtitle = token.coin.name,
             onCloseClick = { navController.popBackStack() }
         ) {
-            when (token.blockchainType) {
-                BlockchainType.Bitcoin,
-                BlockchainType.Litecoin -> {
-                    body_leah(
-                        text = stringResource(id = R.string.ManageCoins_BipsDescription),
-                        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
-                    )
+            when (val tokenInfoType = viewModel.type) {
+                is ConfiguredTokenInfoType.Contract -> {
+                    ContractInfo(tokenInfoType)
                 }
-                BlockchainType.BitcoinCash -> {
+                ConfiguredTokenInfoType.Bch -> {
                     body_leah(
                         text = stringResource(id = R.string.ManageCoins_BchTypeDescription),
                         modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
                     )
                 }
-                else -> {
-                    when (val type = token.type) {
-                        is TokenType.Eip20 -> {
-                            InfoText(text = stringResource(id = R.string.ManageCoins_ContractAddress))
-
-                            CellUniversalLawrenceSection(showFrame = true) {
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                ) {
-                                    Image(
-                                        modifier = Modifier.size(32.dp),
-                                        painter = rememberAsyncImagePainter(
-                                            model = token.blockchain.type.imageUrl,
-                                            error = painterResource(R.drawable.ic_platform_placeholder_32)
-                                        ),
-                                        contentDescription = "platform"
-                                    )
-                                    HSpacer(16.dp)
-                                    subhead2_leah(
-                                        modifier = Modifier.weight(1f),
-                                        text = type.address,
-                                    )
-                                    val explorerUrl = token.blockchain.explorerUrl?.replace("\$ref", type.address)
-
-                                    explorerUrl?.let {
-                                        HSpacer(16.dp)
-                                        ButtonSecondaryCircle(
-                                            icon = R.drawable.ic_globe_20,
-                                            contentDescription = stringResource(R.string.Button_Browser),
-                                            onClick = {
-                                                LinkHelper.openLinkInAppBrowser(context, it)
-                                            }
-                                        )
-                                    }
+                ConfiguredTokenInfoType.Bips -> {
+                    body_leah(
+                        text = stringResource(id = R.string.ManageCoins_BipsDescription),
+                        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
+                    )
+                }
+                is ConfiguredTokenInfoType.BirthdayHeight -> {
+                    CellUniversalLawrenceSection(showFrame = true) {
+                        RowUniversal(
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        ) {
+                            val view = LocalView.current
+                            val clipboardManager = LocalClipboardManager.current
+                            body_leah(
+                                modifier = Modifier.weight(1f),
+                                text = stringResource(R.string.Restore_BirthdayHeight),
+                            )
+                            val birthdayHeight = tokenInfoType.height?.toString() ?: "---"
+                            ButtonSecondaryDefault(
+                                modifier = Modifier.padding(start = 16.dp),
+                                title = birthdayHeight,
+                                onClick = {
+                                    clipboardManager.setText(AnnotatedString(birthdayHeight))
+                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                                 }
-                            }
-
-                            VSpacer(24.dp)
+                            )
                         }
-                        TokenType.Native -> TODO()
-                        is TokenType.Bep2 -> TODO()
-                        is TokenType.Spl -> TODO()
-                        is TokenType.Unsupported -> TODO()
                     }
                 }
+                null -> Unit
             }
             Spacer(Modifier.height(32.dp))
         }
     }
+}
+
+@Composable
+private fun ContractInfo(tokenInfoType: ConfiguredTokenInfoType.Contract) {
+    val context = LocalContext.current
+
+    InfoText(text = stringResource(id = R.string.ManageCoins_ContractAddress))
+    CellUniversalLawrenceSection(showFrame = true) {
+        RowUniversal(
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            Image(
+                modifier = Modifier.size(32.dp),
+                painter = rememberAsyncImagePainter(
+                    model = tokenInfoType.platformImageUrl,
+                    error = painterResource(R.drawable.ic_platform_placeholder_32)
+                ),
+                contentDescription = "platform"
+            )
+            HSpacer(16.dp)
+            subhead2_leah(
+                modifier = Modifier.weight(1f),
+                text = tokenInfoType.reference,
+            )
+
+            tokenInfoType.explorerUrl?.let {
+                HSpacer(16.dp)
+                ButtonSecondaryCircle(
+                    icon = R.drawable.ic_globe_20,
+                    contentDescription = stringResource(R.string.Button_Browser),
+                    onClick = {
+                        LinkHelper.openLinkInAppBrowser(context, it)
+                    }
+                )
+            }
+        }
+    }
+
+    VSpacer(24.dp)
 }
