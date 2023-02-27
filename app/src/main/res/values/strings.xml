@@ -440,7 +440,7 @@
     <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
-        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
+        \n\nThe P.CASH wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
         \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
         \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
         \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
@@ -952,6 +952,20 @@
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
+    <string name="ManageCoins_BipsDescription">There are 3 common address formats Bitcoin wallets can use to receive incoming payments:
+\n
+\n- BIP-44 (older)
+\n- BIP-49 (newer)
+\n- BIP-84 (newest)
+\n
+\nWhile P.CASH wallet supports all 3 of them it recommends to use a Bitcoin wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending Bitcoin transactions.</string>
+    <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
+\n
+\n- TYPE0 (older)
+\n- TYPE145 (newer)
+\n
+\nWhile P.CASH wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
+    <string name="ManageCoins_ContractAddress">CONTRACT ADDRESS</string>
 
     <!-- Experimental Feature -->
 
@@ -1429,7 +1443,7 @@
     <string name="ReleaseNotes_FollowUs">Follow Us</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ProUsersInfo_UnstoppablePass">P.CASH Pass</string>
     <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
