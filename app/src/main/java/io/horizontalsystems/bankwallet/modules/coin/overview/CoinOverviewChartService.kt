@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -14,6 +15,7 @@ import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.rx2.await
+import java.io.IOException
 
 class CoinOverviewChartService(
     private val marketKit: MarketKitWrapper,
@@ -37,7 +39,12 @@ class CoinOverviewChartService(
     private var chartStartTime: Long = 0
 
     override suspend fun start() {
-        chartStartTime = marketKit.chartStartTimeSingle(coinUid).await()
+        try {
+            chartStartTime = marketKit.chartStartTimeSingle(coinUid).await()
+        } catch (e: IOException) {
+            Log.e("CoinOverviewChartService", "start error: ", e)
+        }
+
         val now = System.currentTimeMillis() / 1000L
         val mostPeriodSeconds = now - chartStartTime
 
