@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
@@ -146,7 +145,7 @@ class ManageWalletsService(
         return Item(
             configuredToken = configuredToken,
             enabled = enabled,
-            hasInfo = enabled && configuredToken.token.blockchainType == BlockchainType.Zcash
+            hasInfo = true
         )
     }
 
