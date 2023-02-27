@@ -333,4 +333,7 @@
     <dialog
         android:id="@+id/confirmDeleteAllPairingsDialog"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.pairing.ConfirmDeleteAllPairingsDialog" />
+    <dialog
+        android:id="@+id/configuredTokenInfo"
+        android:name="io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenInfoDialog" />
 </navigation>
