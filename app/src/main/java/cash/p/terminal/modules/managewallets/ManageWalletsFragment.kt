@@ -32,6 +32,7 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ConfiguredToken
+import cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoDialog
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
@@ -162,7 +163,8 @@ private fun ManageWalletsScreen(
                                 }
                             },
                             onInfoClick = {
-                                viewModel.onClickInfo(viewItem.item)
+                                navController.slideFromBottom(R.id.configuredTokenInfo, ConfiguredTokenInfoDialog.prepareParams(viewItem.item))
+//                                viewModel.onClickInfo(viewItem.item)
                             }
                         )
                     }

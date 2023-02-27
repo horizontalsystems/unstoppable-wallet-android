@@ -333,4 +333,7 @@
     <dialog
         android:id="@+id/confirmDeleteAllPairingsDialog"
         android:name="cash.p.terminal.modules.walletconnect.pairing.ConfirmDeleteAllPairingsDialog" />
+    <dialog
+        android:id="@+id/configuredTokenInfo"
+        android:name="cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoDialog" />
 </navigation>
