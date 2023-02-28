@@ -7,9 +7,7 @@ import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.entities.*
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -142,10 +140,25 @@ class ManageWalletsService(
 
     private fun getItemForConfiguredToken(configuredToken: ConfiguredToken): Item {
         val enabled = isEnabled(configuredToken)
+
+        val hasInfo = when (configuredToken.token.type) {
+            is TokenType.Eip20,
+            is TokenType.Bep2,
+            is TokenType.Spl -> true
+            is TokenType.Native -> when (configuredToken.token.blockchainType) {
+                is BlockchainType.Bitcoin,
+                is BlockchainType.Litecoin,
+                is BlockchainType.BitcoinCash -> true
+                is BlockchainType.Zcash -> enabled
+                else -> false
+            }
+            else -> false
+        }
+
         return Item(
             configuredToken = configuredToken,
             enabled = enabled,
-            hasInfo = true
+            hasInfo = hasInfo
         )
     }
 
