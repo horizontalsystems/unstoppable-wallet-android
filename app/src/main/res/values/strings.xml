@@ -1579,7 +1579,11 @@
     <!--Contacts-->
     <string name="Contacts">Contacts</string>
     <string name="Contacts_Export">Export Contacts</string>
-    <string name="NewContact">New Contact</string>
-    <string name="NewContact_AddAddress">Add Address</string>
+    <string name="Contacts_AddressesCount">Addresses: %s</string>
+    <string name="Contacts_NewContact">New Contact</string>
+    <string name="Contacts_NameHint">Name</string>
+    <string name="Contacts_AddAddress">Add Address</string>
+    <string name="Contacts_DeleteContact">Delete Contact</string>
+    <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
 
 </resources>
