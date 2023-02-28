@@ -8,8 +8,10 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -18,7 +20,6 @@ import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.modules.contacts.screen.AddAddressScreen
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactScreen
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactsScreen
-import io.horizontalsystems.bankwallet.modules.contacts.screen.NewContactScreen
 
 class ContactsFragment : BaseFragment() {
 
@@ -38,38 +39,43 @@ class ContactsFragment : BaseFragment() {
     }
 }
 
-object Route {
-    const val Contacts = "contacts"
-    const val Contact = "contact"
-    const val NewContact = "new_contact"
-    const val AddAddress = "add_address"
-}
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ContactsNavHost(navController: NavController) {
     val navHostController = rememberAnimatedNavController()
+    val repository = ContactsRepository()
+
     AnimatedNavHost(
         navController = navHostController,
-        startDestination = Route.Contacts,
+        startDestination = "contacts",
     ) {
-        composable(Route.Contacts) {
+        composable("contacts") {
+            val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(repository))
             ContactsScreen(
-                navController,
-                navHostController
+                viewModel,
+                onNavigateToBack = { navController.popBackStack() },
+                onNavigateToCreateContact = { navHostController.navigate("contact") },
+                onNavigateToContact = { contactId -> navHostController.navigate("contact?contactId=$contactId") }
             )
         }
-        composablePage(Route.Contact) {
+        composablePage(
+            route = "contact?contactId={contactId}",
+            arguments = listOf(navArgument("contactId") { nullable = true })
+        ) { backstackEntry ->
+            val contactId = backstackEntry.arguments?.getString("contactId")
+            val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(repository, contactId))
+
             ContactScreen(
-                navHostController
+                viewModel,
+                onNavigateToBack = {
+                    navHostController.popBackStack()
+                },
+                onNavigateToAddAddress = {
+                    navHostController.navigate("addAddress")
+                }
             )
         }
-        composablePage(Route.NewContact) {
-            NewContactScreen(
-                navHostController
-            )
-        }
-        composablePage(Route.AddAddress) {
+        composablePage("addAddress") {
             AddAddressScreen(
                 navHostController
             )
