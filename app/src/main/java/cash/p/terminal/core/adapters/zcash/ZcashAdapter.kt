@@ -12,6 +12,7 @@ import cash.z.ecc.android.sdk.ext.fromHex
 import cash.z.ecc.android.sdk.model.*
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
+import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import cash.p.terminal.core.*
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.entities.AccountOrigin
@@ -207,7 +208,7 @@ class ZcashAdapter(
             is AddressType.Invalid -> throw ZcashError.InvalidAddress
             is AddressType.Transparent -> ZCashAddressType.Transparent
             is AddressType.Shielded -> ZCashAddressType.Shielded
-            AddressType.Unified -> TODO()
+            AddressType.Unified -> ZCashAddressType.Unified
         }
     }
 
@@ -365,7 +366,7 @@ class ZcashAdapter(
     }
 
     enum class ZCashAddressType{
-        Shielded, Transparent
+        Shielded, Transparent, Unified
     }
 
     sealed class ZcashError : Exception() {
