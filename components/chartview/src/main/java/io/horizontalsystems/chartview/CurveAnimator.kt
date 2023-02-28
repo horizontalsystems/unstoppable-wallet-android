@@ -108,7 +108,7 @@ class CurveAnimator(
         return start + (change * animatedFraction)
     }
 
-    fun getFramePoints(): List<ChartPointF> {
+    fun getFramePoints(extraVerticalOffset: Float = 0f): List<ChartPointF> {
         // timestamp = ax + startTimestamp
         // x = (timestamp - startTimestamp) / a
         // a = (timestamp - startTimestamp) / x
@@ -117,11 +117,11 @@ class CurveAnimator(
         // value = ay + minValue
         // y = (value - minValue) / a
         // a = (value - minValue) / y
-        val yRatio = (frameMaxValue - frameMinValue) / (yMax - curveTopOffset - curveBottomOffset)
+        val yRatio = (frameMaxValue - frameMinValue) / (yMax - curveTopOffset - curveBottomOffset - 2 * extraVerticalOffset)
 
         return frameValues.map { (timestamp, value) ->
             val x = (timestamp - frameStartTimestamp) / xRatio
-            val y = (value - frameMinValue) / yRatio + curveBottomOffset
+            val y = (value - frameMinValue) / yRatio + curveBottomOffset + extraVerticalOffset
 
             val y2 = (y * -1) + yMax
 
