@@ -2,12 +2,11 @@ package io.horizontalsystems.bankwallet.modules.configuredtoken
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.address.*
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
@@ -18,11 +17,11 @@ class ConfiguredTokenInfoViewModel(
     private val restoreSettingsManager: RestoreSettingsManager
 ) : ViewModel() {
 
-    val type: ConfiguredTokenInfoType?
+    val uiState: ConfiguredTokenInfoUiState
 
     init {
         val token = configuredToken.token
-        type = when (val type = token.type) {
+        val type = when (val type = token.type) {
             is TokenType.Eip20 -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.explorerUrl?.replace("\$ref", type.address))
             }
@@ -35,7 +34,7 @@ class ConfiguredTokenInfoViewModel(
             TokenType.Native -> when (token.blockchainType) {
                 BlockchainType.Bitcoin,
                 BlockchainType.Litecoin -> {
-                    ConfiguredTokenInfoType.Bips
+                    ConfiguredTokenInfoType.Bips(token.blockchain.name)
                 }
                 BlockchainType.BitcoinCash -> {
                     ConfiguredTokenInfoType.Bch
@@ -47,9 +46,16 @@ class ConfiguredTokenInfoViewModel(
             }
             is TokenType.Unsupported -> null
         }
+
+        uiState = ConfiguredTokenInfoUiState(
+            iconSource = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
+            title = token.coin.code,
+            subtitle = token.coin.name,
+            tokenInfoType = type
+        )
     }
 
-    fun getBirthdayHeight(token: Token): Long? {
+    private fun getBirthdayHeight(token: Token): Long? {
         val account = accountManager.activeAccount ?: return null
         val restoreSettings = restoreSettingsManager.settings(account, token.blockchainType)
 
@@ -67,4 +73,23 @@ class ConfiguredTokenInfoViewModel(
         }
     }
 
+}
+
+data class ConfiguredTokenInfoUiState(
+    val iconSource: ImageSource,
+    val title: String,
+    val subtitle: String,
+    val tokenInfoType: ConfiguredTokenInfoType?
+)
+
+sealed class ConfiguredTokenInfoType {
+    data class Contract(
+        val reference: String,
+        val platformImageUrl: String,
+        val explorerUrl: String?
+    ) : ConfiguredTokenInfoType()
+
+    data class Bips(val blockchainName: String): ConfiguredTokenInfoType()
+    object Bch: ConfiguredTokenInfoType()
+    data class BirthdayHeight(val height: Long?): ConfiguredTokenInfoType()
 }
