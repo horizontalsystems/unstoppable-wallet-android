@@ -18,7 +18,7 @@ class IntroViewModel(
         IntroModule.IntroSliderData(
             R.string.Intro_Wallet_Screen3Title,
             R.string.Intro_Wallet_Screen3Description,
-            R.drawable.ic_knowledge,
+            R.drawable.ic_knowledge_light,
             R.drawable.ic_knowledge
         ),
         IntroModule.IntroSliderData(
