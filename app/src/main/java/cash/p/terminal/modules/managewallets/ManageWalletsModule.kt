@@ -19,7 +19,6 @@ object ManageWalletsModule {
                 App.marketKit,
                 App.walletManager,
                 App.accountManager,
-                App.restoreSettingsManager,
                 restoreSettingsService
             )
         }

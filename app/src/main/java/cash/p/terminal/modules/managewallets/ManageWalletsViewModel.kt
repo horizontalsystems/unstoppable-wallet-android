@@ -2,11 +2,13 @@ package cash.p.terminal.modules.managewallets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import cash.p.terminal.core.*
+import cash.p.terminal.core.Clearable
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(
@@ -15,7 +17,6 @@ class ManageWalletsViewModel(
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<ConfiguredToken>>>()
-    var showBirthdayHeightLiveEvent = SingleLiveEvent<BirthdayHeightViewItem>()
 
     private var disposables = CompositeDisposable()
 
@@ -55,24 +56,6 @@ class ManageWalletsViewModel(
     fun updateFilter(filter: String) {
         service.setFilter(filter)
     }
-
-    fun onClickInfo(configuredToken: ConfiguredToken) {
-        val (blockchain, birthdayHeight) = service.birthdayHeight(configuredToken) ?: return
-        showBirthdayHeightLiveEvent.postValue(
-            BirthdayHeightViewItem(
-                blockchainIcon = ImageSource.Remote(blockchain.type.imageUrl),
-                blockchainName = blockchain.name,
-                birthdayHeight = birthdayHeight.toString()
-            )
-        )
-    }
-
-    fun onCloseBirthdayHeight() {
-        showBirthdayHeightLiveEvent.postValue(null)
-    }
-
-    private val accountTypeDescription: String
-        get() = service.accountType?.description ?: ""
 
     val addTokenEnabled: Boolean
         get() = service.accountType?.canAddTokens ?: false

@@ -3,11 +3,13 @@ package cash.p.terminal.modules.managewallets
 import cash.p.terminal.core.*
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
-import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.entities.*
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -15,7 +17,6 @@ class ManageWalletsService(
     private val marketKit: MarketKitWrapper,
     private val walletManager: IWalletManager,
     accountManager: IAccountManager,
-    private val restoreSettingsManager: RestoreSettingsManager,
     private val restoreSettingsService: RestoreSettingsService,
 ) : Clearable {
 
@@ -209,16 +210,6 @@ class ManageWalletsService(
     fun disable(configuredToken: ConfiguredToken) {
         wallets.firstOrNull { it.configuredToken == configuredToken }?.let {
             walletManager.delete(listOf(it))
-        }
-    }
-
-    fun birthdayHeight(configuredToken: ConfiguredToken): Pair<Blockchain, Long>? {
-        val token = configuredToken.token
-        val account = this.account ?: return null
-        val settings = restoreSettingsManager.settings(account, token.blockchainType)
-
-        return settings.birthdayHeight?.let {
-            Pair(token.blockchain, it)
         }
     }
 

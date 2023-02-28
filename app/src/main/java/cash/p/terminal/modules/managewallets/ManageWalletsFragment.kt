@@ -69,20 +69,6 @@ class ManageWalletsFragment : BaseFragment() {
             }
         }
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observe()
-    }
-
-    private fun observe() {
-        viewModel.showBirthdayHeightLiveEvent.observe(viewLifecycleOwner) {
-            BirthdayHeightDialog(
-                blockchainIcon = it.blockchainIcon,
-                blockchainName = it.blockchainName,
-                birthdayHeight = it.birthdayHeight
-            ).show(childFragmentManager, "birthday_height_dialog")
-        }
-    }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -164,7 +150,6 @@ private fun ManageWalletsScreen(
                             },
                             onInfoClick = {
                                 navController.slideFromBottom(R.id.configuredTokenInfo, ConfiguredTokenInfoDialog.prepareParams(viewItem.item))
-//                                viewModel.onClickInfo(viewItem.item)
                             }
                         )
                     }
