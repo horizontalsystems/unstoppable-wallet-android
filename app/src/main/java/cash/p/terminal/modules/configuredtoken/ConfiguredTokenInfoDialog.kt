@@ -25,7 +25,7 @@ import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
-import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui.extensions.BottomSheetHeaderMultiline
 import cash.p.terminal.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -65,7 +65,7 @@ private fun ConfiguredTokenInfo(navController: NavController, configuredToken: C
     val uiState = viewModel.uiState
 
     ComposeAppTheme {
-        BottomSheetHeader(
+        BottomSheetHeaderMultiline(
             iconPainter = uiState.iconSource.painter(),
             title = uiState.title,
             subtitle = uiState.subtitle,

@@ -25,10 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import cash.p.terminal.R
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.body_grey
-import cash.p.terminal.ui.compose.components.headline2_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.*
 
 open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -60,10 +57,70 @@ open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
 fun BottomSheetHeader(
     iconPainter: Painter,
     title: String,
-    subtitle: String? = null,
     onCloseClick: () -> Unit,
     iconTint: ColorFilter? = null,
     content: @Composable() (ColumnScope.() -> Unit),
+) {
+    BottomSheetHeader(
+        iconPainter = iconPainter,
+        titleContent = {
+            headline2_leah(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .weight(1f)
+                    .align(Alignment.CenterVertically),
+                text = title,
+                maxLines = 1,
+            )
+        },
+        onCloseClick = onCloseClick,
+        iconTint = iconTint,
+        content = content
+    )
+}
+
+@Composable
+fun BottomSheetHeaderMultiline(
+    iconPainter: Painter,
+    title: String,
+    subtitle: String,
+    onCloseClick: () -> Unit,
+    iconTint: ColorFilter? = null,
+    content: @Composable() (ColumnScope.() -> Unit),
+) {
+    BottomSheetHeader(
+        iconPainter = iconPainter,
+        titleContent = {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .weight(1f)
+                    .align(Alignment.CenterVertically),
+            ) {
+                body_leah(
+                    text = title,
+                    maxLines = 1,
+                )
+                Spacer(modifier = Modifier.height(1.dp))
+                subhead2_grey(
+                    text = subtitle,
+                    maxLines = 1,
+                )
+            }
+        },
+        onCloseClick = onCloseClick,
+        iconTint = iconTint,
+        content = content
+    )
+}
+
+@Composable
+private fun BottomSheetHeader(
+    iconPainter: Painter,
+    titleContent: @Composable() (RowScope.() -> Unit),
+    onCloseClick: () -> Unit,
+    iconTint: ColorFilter?,
+    content: @Composable() (ColumnScope.() -> Unit)
 ) {
     Column(
         modifier = Modifier
@@ -83,24 +140,7 @@ fun BottomSheetHeader(
                 colorFilter = iconTint,
                 contentDescription = null
             )
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .weight(1f)
-                    .align(Alignment.CenterVertically),
-            ) {
-                headline2_leah(
-                    text = title,
-                    maxLines = 1,
-                )
-                subtitle?.let {
-                    Spacer(modifier = Modifier.height(1.dp))
-                    subhead2_grey(
-                        text = it,
-                        maxLines = 1,
-                    )
-                }
-            }
+            titleContent.invoke(this)
             HsIconButton(
                 modifier = Modifier.size(24.dp),
                 onClick = onCloseClick
@@ -127,7 +167,6 @@ private fun BottomSheetHeader_Preview() {
             iconPainter = iconPainter,
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
-            subtitle = "Subtitle",
             onCloseClick = {  },
         ){
             body_grey(
