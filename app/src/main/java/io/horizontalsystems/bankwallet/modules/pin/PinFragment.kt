@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinEdit
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
 
-class PinFragment : Fragment() {
+class PinFragment : BaseFragment() {
 
     private val attachedToLockScreen: Boolean by lazy {
         arguments?.getBoolean(PinModule.keyAttachedToLockScreen) ?: false

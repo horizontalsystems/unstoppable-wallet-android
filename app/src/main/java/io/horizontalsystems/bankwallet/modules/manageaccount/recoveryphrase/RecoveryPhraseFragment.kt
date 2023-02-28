@@ -32,14 +32,13 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
-class RecoveryPhraseFragment : BaseFragment() {
+class RecoveryPhraseFragment : BaseFragment(screenshotEnabled = false) {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        disallowScreenshot()
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -53,10 +52,6 @@ class RecoveryPhraseFragment : BaseFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        allowScreenshot()
-        super.onDestroyView()
-    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

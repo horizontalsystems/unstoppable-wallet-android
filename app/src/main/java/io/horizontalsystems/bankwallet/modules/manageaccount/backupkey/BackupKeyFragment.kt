@@ -31,14 +31,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
 
-class BackupKeyFragment : BaseFragment() {
+class BackupKeyFragment : BaseFragment(screenshotEnabled = false) {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        disallowScreenshot()
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -51,10 +50,6 @@ class BackupKeyFragment : BaseFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        allowScreenshot()
-        super.onDestroyView()
-    }
 }
 
 @Composable

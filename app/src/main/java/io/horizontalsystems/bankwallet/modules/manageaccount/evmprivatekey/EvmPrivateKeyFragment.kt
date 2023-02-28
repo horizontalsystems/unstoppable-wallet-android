@@ -30,7 +30,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
-class EvmPrivateKeyFragment : BaseFragment() {
+class EvmPrivateKeyFragment : BaseFragment(screenshotEnabled = false) {
 
     companion object{
         const val EVM_PRIVATE_KEY = "evm_private_key"
@@ -43,7 +43,6 @@ class EvmPrivateKeyFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        disallowScreenshot()
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -57,10 +56,6 @@ class EvmPrivateKeyFragment : BaseFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        allowScreenshot()
-        super.onDestroyView()
-    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
