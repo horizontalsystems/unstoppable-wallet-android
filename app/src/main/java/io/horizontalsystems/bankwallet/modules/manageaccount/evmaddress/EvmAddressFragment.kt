@@ -32,7 +32,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class EvmAddressFragment : BaseFragment() {
+class EvmAddressFragment : BaseFragment(screenshotEnabled = false) {
 
     companion object {
         const val EVM_ADDRESS_KEY = "evm_address_key"
@@ -43,7 +43,6 @@ class EvmAddressFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        disallowScreenshot()
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)

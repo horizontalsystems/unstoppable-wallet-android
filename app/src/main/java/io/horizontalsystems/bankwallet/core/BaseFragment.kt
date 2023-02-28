@@ -9,7 +9,24 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import io.horizontalsystems.bankwallet.R
 
-abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutResId) {
+abstract class BaseFragment(
+    @LayoutRes layoutResId: Int = 0,
+    private val screenshotEnabled: Boolean = true
+) : Fragment(layoutResId) {
+
+    override fun onResume() {
+        super.onResume()
+        if (screenshotEnabled) {
+            allowScreenshot()
+        } else {
+            disallowScreenshot()
+        }
+    }
+
+    override fun onPause() {
+        disallowScreenshot()
+        super.onPause()
+    }
 
     protected fun hideKeyboard() {
         activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
@@ -25,12 +42,12 @@ abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutRe
         }
     }
 
-    protected fun allowScreenshot() {
+    private fun allowScreenshot() {
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
-    protected fun disallowScreenshot() {
-        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+    private fun disallowScreenshot() {
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
 }

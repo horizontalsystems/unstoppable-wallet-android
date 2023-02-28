@@ -37,14 +37,13 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.launch
 
-class AccountExtendedKeyFragment : BaseFragment() {
+class AccountExtendedKeyFragment : BaseFragment(screenshotEnabled = false) {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        disallowScreenshot()
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -68,10 +67,6 @@ class AccountExtendedKeyFragment : BaseFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        allowScreenshot()
-        super.onDestroyView()
-    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
