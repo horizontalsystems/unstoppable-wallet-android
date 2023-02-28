@@ -21,10 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -65,16 +62,16 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
 @Composable
 private fun ConfiguredTokenInfo(navController: NavController, configuredToken: ConfiguredToken) {
     val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(configuredToken))
+    val uiState = viewModel.uiState
 
-    val token = configuredToken.token
     ComposeAppTheme {
         BottomSheetHeader(
-            iconPainter = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder).painter(),
-            title = token.coin.code,
-            subtitle = token.coin.name,
+            iconPainter = uiState.iconSource.painter(),
+            title = uiState.title,
+            subtitle = uiState.subtitle,
             onCloseClick = { navController.popBackStack() }
         ) {
-            when (val tokenInfoType = viewModel.type) {
+            when (val tokenInfoType = uiState.tokenInfoType) {
                 is ConfiguredTokenInfoType.Contract -> {
                     ContractInfo(tokenInfoType)
                 }
@@ -84,9 +81,9 @@ private fun ConfiguredTokenInfo(navController: NavController, configuredToken: C
                         modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
                     )
                 }
-                ConfiguredTokenInfoType.Bips -> {
+                is ConfiguredTokenInfoType.Bips -> {
                     body_leah(
-                        text = stringResource(id = R.string.ManageCoins_BipsDescription),
+                        text = stringResource(R.string.ManageCoins_BipsDescription, tokenInfoType.blockchainName, tokenInfoType.blockchainName, tokenInfoType.blockchainName),
                         modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
                     )
                 }
