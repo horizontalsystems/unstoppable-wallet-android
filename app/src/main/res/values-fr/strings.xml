@@ -789,6 +789,20 @@
     <string name="ManageCoins_Search">Nom, code ou adresse du contrat</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
+    <string name="ManageCoins_BipsDescription">There are 3 common address formats %s wallets can use to receive incoming payments:
+\n
+\n- BIP-44 (older)
+\n- BIP-49 (newer)
+\n- BIP-84 (newest)
+\n
+\nWhile Unstoppable wallet supports all 3 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
+    <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
+\n
+\n- TYPE0 (older)
+\n- TYPE145 (newer)
+\n
+\nWhile Unstoppable wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
+    <string name="ManageCoins_ContractAddress">CONTRACT ADDRESS</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Expérimental</string>
     <string name="ExperimentalFeatures_Description">Les fonctionnalités ci-dessous sont expérimentales et doivent être utilisées avec prudence. Bien que nous ayons entièrement testé ces fonctionnalités en utilisant nos propres fonds crypto, nous ne pouvons pas garantir qu\'elles fonctionnent comme prévu dans tous les cas de figure possible.</string>
