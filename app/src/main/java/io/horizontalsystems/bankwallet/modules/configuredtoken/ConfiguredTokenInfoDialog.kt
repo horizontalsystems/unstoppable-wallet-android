@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeaderMultiline
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -65,7 +65,7 @@ private fun ConfiguredTokenInfo(navController: NavController, configuredToken: C
     val uiState = viewModel.uiState
 
     ComposeAppTheme {
-        BottomSheetHeader(
+        BottomSheetHeaderMultiline(
             iconPainter = uiState.iconSource.painter(),
             title = uiState.title,
             subtitle = uiState.subtitle,
