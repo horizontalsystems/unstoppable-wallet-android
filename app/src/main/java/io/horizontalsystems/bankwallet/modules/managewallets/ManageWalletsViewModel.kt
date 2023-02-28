@@ -2,11 +2,13 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(
@@ -15,7 +17,6 @@ class ManageWalletsViewModel(
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<ConfiguredToken>>>()
-    var showBirthdayHeightLiveEvent = SingleLiveEvent<BirthdayHeightViewItem>()
 
     private var disposables = CompositeDisposable()
 
@@ -55,24 +56,6 @@ class ManageWalletsViewModel(
     fun updateFilter(filter: String) {
         service.setFilter(filter)
     }
-
-    fun onClickInfo(configuredToken: ConfiguredToken) {
-        val (blockchain, birthdayHeight) = service.birthdayHeight(configuredToken) ?: return
-        showBirthdayHeightLiveEvent.postValue(
-            BirthdayHeightViewItem(
-                blockchainIcon = ImageSource.Remote(blockchain.type.imageUrl),
-                blockchainName = blockchain.name,
-                birthdayHeight = birthdayHeight.toString()
-            )
-        )
-    }
-
-    fun onCloseBirthdayHeight() {
-        showBirthdayHeightLiveEvent.postValue(null)
-    }
-
-    private val accountTypeDescription: String
-        get() = service.accountType?.description ?: ""
 
     val addTokenEnabled: Boolean
         get() = service.accountType?.canAddTokens ?: false
