@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -192,6 +193,11 @@ private fun MainScreen(
                     }
                 }
             ) {
+                BackHandler(enabled = modalBottomSheetState.isVisible) {
+                    coroutineScope.launch {
+                        modalBottomSheetState.hide()
+                    }
+                }
                 Column(modifier = Modifier.padding(it)) {
                     LaunchedEffect(key1 = selectedPage, block = {
                         pagerState.scrollToPage(selectedPage)
