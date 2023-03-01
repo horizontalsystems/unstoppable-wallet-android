@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.coin.details
+package cash.p.terminal.modules.coin.analytics
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
@@ -24,9 +24,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.SecurityViewItem
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ViewItem
 import cash.p.terminal.modules.coin.audits.CoinAuditsFragment
-import cash.p.terminal.modules.coin.details.CoinDetailsModule.SecurityViewItem
-import cash.p.terminal.modules.coin.details.CoinDetailsModule.ViewItem
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsFragment
 import cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -44,13 +44,13 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
-fun CoinDetailsScreen(
+fun CoinAnalyticsScreen(
     fullCoin: FullCoin,
     authorizationViewModel: YakAuthorizationViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
-    val viewModel = viewModel<CoinDetailsViewModel>(factory = CoinDetailsModule.Factory(fullCoin))
+    val viewModel = viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
 
     val viewState by viewModel.viewStateLiveData.observeAsState()
     val viewItem by viewModel.viewItemLiveData.observeAsState()
@@ -197,7 +197,7 @@ private fun TokenTvl(
 
     viewItem.tvlRank?.let {
         tokenTvls.add {
-            CoinDetailsCell(
+            CoinAnalyticsCell(
                 title = stringResource(R.string.TvlRank_Title),
                 value = it,
                 onClick = {
@@ -209,7 +209,7 @@ private fun TokenTvl(
 
     viewItem.tvlRatio?.let {
         tokenTvls.add {
-            CoinDetailsCell(title = stringResource(R.string.CoinPage_TvlMCapRatio), value = it)
+            CoinAnalyticsCell(title = stringResource(R.string.CoinPage_TvlMCapRatio), value = it)
         }
     }
 
@@ -253,7 +253,7 @@ private fun SecurityParameters(
 
     if (viewItem.auditAddresses.isNotEmpty()) {
         securityParams.add {
-            CoinDetailsCell(title = stringResource(R.string.CoinPage_SecurityParams_Audits)) {
+            CoinAnalyticsCell(title = stringResource(R.string.CoinPage_SecurityParams_Audits)) {
                 val arguments = CoinAuditsFragment.prepareParams(viewItem.auditAddresses)
                 navController.slideFromRight(R.id.coinAuditsFragment, arguments)
             }
@@ -268,7 +268,7 @@ private fun SecurityParameters(
 private fun TokenLiquidity(
     coinUid: String,
     viewItem: ViewItem,
-    tokenLiquidityViewItem: CoinDetailsModule.TokenLiquidityViewItem,
+    tokenLiquidityViewItem: CoinAnalyticsModule.TokenLiquidityViewItem,
     borderTop: Boolean,
     navController: NavController,
     fragmentManager: FragmentManager,
@@ -341,7 +341,7 @@ private fun TokenLiquidity(
 private fun TokenDistribution(
     coinUid: String,
     viewItem: ViewItem,
-    tokenDistributionViewItem: CoinDetailsModule.TokenDistributionViewItem,
+    tokenDistributionViewItem: CoinAnalyticsModule.TokenDistributionViewItem,
     borderTop: Boolean,
     navController: NavController,
     fragmentManager: FragmentManager,
@@ -436,7 +436,7 @@ private fun TokenDistribution(
         Spacer(modifier = Modifier.height(12.dp))
 
         CellSingleLineLawrenceSection {
-            CoinDetailsCell(
+            CoinAnalyticsCell(
                 title = stringResource(R.string.CoinPage_MajorHolders),
                 value = null,
                 onClick = {
@@ -471,7 +471,7 @@ private fun InvestorData(
 
     viewItem.treasuries?.let {
         investorDataList.add {
-            CoinDetailsCell(stringResource(R.string.CoinPage_Treasuries), it) {
+            CoinAnalyticsCell(stringResource(R.string.CoinPage_Treasuries), it) {
                 val arguments = CoinTreasuriesFragment.prepareParams(coin)
                 navController.slideFromRight(R.id.coinTreasuriesFragment, arguments)
             }
@@ -479,7 +479,7 @@ private fun InvestorData(
     }
     viewItem.fundsInvested?.let {
         investorDataList.add {
-            CoinDetailsCell(stringResource(R.string.CoinPage_FundsInvested), it) {
+            CoinAnalyticsCell(stringResource(R.string.CoinPage_FundsInvested), it) {
                 val arguments = CoinInvestmentsFragment.prepareParams(coin.uid)
                 navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
 
@@ -488,7 +488,7 @@ private fun InvestorData(
     }
     viewItem.reportsCount?.let {
         investorDataList.add {
-            CoinDetailsCell(stringResource(R.string.CoinPage_Reports), it) {
+            CoinAnalyticsCell(stringResource(R.string.CoinPage_Reports), it) {
                 val arguments = CoinReportsFragment.prepareParams(coin.uid)
                 navController.slideFromRight(R.id.coinReportsFragment, arguments)
             }
@@ -500,7 +500,7 @@ private fun InvestorData(
 }
 
 @Composable
-private fun CoinDetailsCell(title: String, value: String? = null, onClick: (() -> Unit)? = null) {
+private fun CoinAnalyticsCell(title: String, value: String? = null, onClick: (() -> Unit)? = null) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -565,7 +565,7 @@ private fun MiniProChartCard(
     chartType: ProChartModule.ChartType,
     halfWidth: Boolean,
     proChartsActivated: Boolean,
-    chartViewItem: CoinDetailsModule.ChartViewItem,
+    chartViewItem: CoinAnalyticsModule.ChartViewItem,
     title: String,
     description: String,
     fragmentManager: FragmentManager,

@@ -24,7 +24,7 @@ import com.google.accompanist.pager.rememberPagerState
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.modules.coin.coinmarkets.CoinMarketsScreen
-import cash.p.terminal.modules.coin.details.CoinDetailsScreen
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsScreen
 import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen
 import cash.p.terminal.modules.coin.tweets.CoinTweetsScreen
 import cash.p.terminal.modules.profeatures.yakauthorization.YakAuthorizationModule
@@ -242,7 +242,7 @@ fun CoinTabs(
                     CoinMarketsScreen(fullCoin = viewModel.fullCoin)
                 }
                 CoinModule.Tab.Details -> {
-                    CoinDetailsScreen(
+                    CoinAnalyticsScreen(
                         fullCoin = viewModel.fullCoin,
                         authorizationViewModel = authorizationViewModel,
                         navController = navController,

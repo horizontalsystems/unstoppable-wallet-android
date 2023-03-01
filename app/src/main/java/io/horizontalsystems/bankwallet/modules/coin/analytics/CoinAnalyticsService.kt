@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.coin.details
+package cash.p.terminal.modules.coin.analytics
 
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.core.managers.CurrencyManager
@@ -16,7 +16,7 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-class CoinDetailsService(
+class CoinAnalyticsService(
     val fullCoin: FullCoin,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
