@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.chart.SelectedPoint
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
@@ -31,7 +31,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 @Composable
-fun HsChartLineHeader(chartHeaderView: CoinDetailsModule.ChartHeaderView?) {
+fun HsChartLineHeader(chartHeaderView: CoinAnalyticsModule.ChartHeaderView?) {
     TabBalance(borderTop = true) {
         Text(
             modifier = Modifier.padding(end = 8.dp),
@@ -39,7 +39,7 @@ fun HsChartLineHeader(chartHeaderView: CoinDetailsModule.ChartHeaderView?) {
             style = ComposeAppTheme.typography.headline1,
             color = ComposeAppTheme.colors.leah
         )
-        (chartHeaderView as? CoinDetailsModule.ChartHeaderView.Latest)?.let { latest ->
+        (chartHeaderView as? CoinAnalyticsModule.ChartHeaderView.Latest)?.let { latest ->
             Text(
                 text = formatValueAsDiff(latest.diff),
                 style = ComposeAppTheme.typography.subhead1,
