@@ -14,14 +14,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartMinimal
 
 @Composable
 fun MiniChartCard(
     title: String,
-    chartViewItem: CoinDetailsModule.ChartViewItem,
+    chartViewItem: CoinAnalyticsModule.ChartViewItem,
     paddingValues: PaddingValues? = null,
     onClick: () -> Unit,
 ) {
@@ -46,7 +46,7 @@ fun MiniChartCard(
         )
         Spacer(modifier = Modifier.weight(1f))
         Row(verticalAlignment = Alignment.Bottom) {
-            (chartViewItem.headerView as? CoinDetailsModule.ChartHeaderView.Latest)?.let { latest ->
+            (chartViewItem.headerView as? CoinAnalyticsModule.ChartHeaderView.Latest)?.let { latest ->
                 Text(
                     text = App.numberFormatter.formatValueAsDiff(latest.diff),
                     style = ComposeAppTheme.typography.subhead1,

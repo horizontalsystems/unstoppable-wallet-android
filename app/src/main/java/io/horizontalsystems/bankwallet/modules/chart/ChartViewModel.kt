@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartDataBuilder
@@ -125,11 +125,11 @@ open class ChartViewModel(
 
         val headerView = if (!chartPointsWrapper.isMovementChart) {
             val sum = valueFormatter.formatValue(service.currency, chartData.sum())
-            CoinDetailsModule.ChartHeaderView.Sum(sum)
+            CoinAnalyticsModule.ChartHeaderView.Sum(sum)
         } else {
             val lastItemValue = chartItems.last().value
             val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
-            CoinDetailsModule.ChartHeaderView.Latest(currentValue, Value.Percent(chartData.diff()))
+            CoinAnalyticsModule.ChartHeaderView.Latest(currentValue, Value.Percent(chartData.diff()))
         }
 
         val (minValue, maxValue) = getMinMax(chartData.valueRange)

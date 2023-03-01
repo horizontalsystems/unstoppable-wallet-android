@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coin.details
+package io.horizontalsystems.bankwallet.modules.coin.analytics
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -13,15 +13,15 @@ import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
-object CoinDetailsModule {
+object CoinAnalyticsModule {
 
     class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinDetailsService(fullCoin, App.marketKit, App.currencyManager, App.proFeatureAuthorizationManager)
+            val service = CoinAnalyticsService(fullCoin, App.marketKit, App.currencyManager, App.proFeatureAuthorizationManager)
 
-            return CoinDetailsViewModel(
+            return CoinAnalyticsViewModel(
                 service
             ) as T
         }

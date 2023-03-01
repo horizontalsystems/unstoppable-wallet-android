@@ -24,7 +24,7 @@ import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
-import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsScreen
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
 import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsScreen
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationModule
@@ -242,7 +242,7 @@ fun CoinTabs(
                     CoinMarketsScreen(fullCoin = viewModel.fullCoin)
                 }
                 CoinModule.Tab.Details -> {
-                    CoinDetailsScreen(
+                    CoinAnalyticsScreen(
                         fullCoin = viewModel.fullCoin,
                         authorizationViewModel = authorizationViewModel,
                         navController = navController,
