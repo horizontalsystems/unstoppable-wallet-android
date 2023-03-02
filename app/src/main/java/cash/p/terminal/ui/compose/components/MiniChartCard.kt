@@ -54,20 +54,30 @@ fun MiniChartCard(
                 )
                 Spacer(modifier = Modifier.width(12.dp))
             }
-            AndroidView(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 3.dp, bottom = 6.dp)
-                    .height(24.dp),
-                factory = {
-                    ChartMinimal(it)
-                },
-                update = { view ->
-                    view.doOnLayout {
-                        view.setData(chartViewItem.chartData)
+            if (chartViewItem.chartData.isMovementChart) {
+                AndroidView(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(top = 3.dp, bottom = 6.dp)
+                        .height(24.dp),
+                    factory = {
+                        ChartMinimal(it)
+                    },
+                    update = { view ->
+                        view.doOnLayout {
+                            view.setData(chartViewItem.chartData)
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                ChartBars(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(top = 3.dp, bottom = 6.dp)
+                        .height(24.dp),
+                    chartData = chartViewItem.chartData
+                )
+            }
         }
         Spacer(modifier = Modifier.height(4.dp))
     }
