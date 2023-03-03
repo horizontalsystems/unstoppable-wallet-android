@@ -38,7 +38,7 @@
     <string name="Button_Continue">Continuar</string>
     <string name="Button_Send">Enviar</string>
     <string name="Button_Search">Buscar</string>
-    <string name="Button_Back">Back</string>
+    <string name="Button_Back">Voltar</string>
     <string name="Button_Copy">Copiar</string>
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Deletar</string>
@@ -49,7 +49,7 @@
     <string name="PercentTitle">Percentual</string>
     <string name="Keyboard">Teclado</string>
     <string name="AccountRecovery_Note">Observação</string>
-    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRecommended">Esta carteira parece usar um caractere não padrão em sua frase de recuperação e/ou senha. Se você não vir um saldo ou transações, leia abaixo para obter detalhes.\n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
     <string name="AccountRecovery_MigrationRequired">Esta é uma carteira não padrão. \n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Seja Unstoppable</string>
@@ -75,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">A senha não pode estar vazia</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, use apenas símbolos suportados: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ £% ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Confirmação da senha não coincide</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
+    <string name="CreateWallet_PassphraseDescription">Frases secretas adicionam camada de segurança adicional para carteiras. Para restaurar essa carteira, o usuário exigia uma frase de recuperação e uma frase secreta.\n\nAs frases secretas também facilitam para os usuários ter muitas carteiras com várias moedas usando um único mnemônico, mas com senhas diferentes.</string>
     <!--Languages-->
     <string name="Language_English">Inglês</string>
     <string name="Language_Japanese">Japonês</string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">Número incorreto de palavras. Deve ter entre 12 ou 24 palavras. Você inseriu: %d</string>
     <string name="Restore_Error_EmptyPassphrase">A senha não pode estar vazia</string>
     <string name="Restore_InvalidChecksum">Soma de Verificação Inválida</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">Digite a senha que você usou ao criar esta frase de recuperação. A restauração de uma carteira existente com uma nova senha gerará uma nova carteira.</string>
     <string name="Restore_Title">Escolha as Blockchains</string>
     <string name="Restore_Key">Chave</string>
     <string name="Restore_By">Por</string>
@@ -109,25 +109,25 @@
     <string name="Restore_PrivateKeyHint">Insira a Chave Privada EVM, a Chave Raiz BIP32 ou a Chave Privada Estendida de Conta</string>
     <string name="Restore_PhraseHint">Insira 12, 15, 18, 21 ou 24 palavras</string>
     <string name="Restore_NonStandardRestore">Restauração Não-Padrão</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de restauração de carteira para usuários do Unstoppable que possuem uma carteira fora do padrão. Essas carteiras podem ter sido criadas na versão Unstoppable 0.27 - 0.28 usando uma frase de recuperação diferente do inglês e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será ser mostrado 0 após restaurar tal carteira na versão 0.29 ou superior. Esta página permitirá que você restaure o acesso à sua carteira não padrão. Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="Select_Coins">Escolher Moedas</string>
     <string name="Restore_BirthdayHeight">Altura de aniversário</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Insira a data da criação da carteira para uma sincronização mais rápida.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restaurar como novo</string>
     <string name="Restore_ZCash_NewWallet">Nova Carteira</string>
-    <string name="Restore_ZCash_NewWallet_Description">Doesn\'t have any transactions</string>
-    <string name="Restore_ZCash_OldWallet">Existing Wallet</string>
-    <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
+    <string name="Restore_ZCash_NewWallet_Description">Não tem nenhuma transação</string>
+    <string name="Restore_ZCash_OldWallet">Carteira existente</string>
+    <string name="Restore_ZCash_OldWallet_Description">Tem transações</string>
     <string name="Restore_ZCash_SlowSyncWarningText">A sincronização inicial com o blockchain pode consumir muito tráfego na internet.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Verificar…</string>
     <!--Market-->
     <string name="Market_Field_MarketCap">Cap. de mercado</string>
-    <string name="Market_Field_Volume">Vol</string>
+    <string name="Market_Field_Volume">Volume</string>
     <string name="Market_Field_PriceDiff">Preço</string>
     <string name="Market_Title">Mercados</string>
     <string name="Market_Search">Buscar</string>
@@ -340,7 +340,7 @@
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avançado</string>
     <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
-    <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
+    <string name="SendEvmSettings_Nonce_Info">O nonce é um valor inteiro exclusivo para uma transação dentro da carteira do usuário. Ele normalmente aumenta com cada transação enviada e não precisa ser alterado. Os usuários avançados podem defini-lo igual a um nonce de uma transação pendente para cancelar e substituir essa transação, desde que a nova transação tenha uma taxa suficientemente alta para evitar que a antiga seja confirmada (por exemplo, eles podem querer acelerar sua confirmação, ou alterar totalmente os parâmetros da transação). Quando várias transações pendentes têm o mesmo nonce, apenas uma é confirmada, geralmente aquela com a taxa mais alta.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
     <!-- Fee Settings -->
@@ -1077,7 +1077,7 @@
     <string name="CoinPage_MarketCap_Quadrillion">Q</string>
     <string name="CoinPage_MarketCap_TvlRation">Proporção de Capital de M. / TVL</string>
     <string name="CoinPage_MarketCap_TvlRation_Description">A proporção do limite de mercado do token do projeto sobre sua TVL.</string>
-    <string name="CoinPage_Volume">Vol</string>
+    <string name="CoinPage_Volume">Volume</string>
     <string name="CoinPage_NoData">Sem dados</string>
     <string name="CoinPage_NoDataAvailable">Não há dados disponíveis</string>
     <string name="CoinPage_AddToWallet">Adicionar à Carteira</string>
