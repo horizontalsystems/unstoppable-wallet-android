@@ -18,7 +18,6 @@ import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
-import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.layout.*
 import androidx.glance.layout.Alignment.Vertical.Companion.CenterVertically
@@ -104,7 +103,10 @@ class MarketWidget : GlanceAppWidget() {
                                 CircularProgressIndicator(modifier = GlanceModifier.size(20.dp))
                             } else {
                                 Image(
-                                    modifier = GlanceModifier.size(20.dp),
+                                    modifier = GlanceModifier
+                                        .size(20.dp)
+                                        //todo remove after upgrade to glance-appwidget:1.0.0-alpha06
+                                        .clickable(actionRunCallback<UpdateMarketAction>()),
                                     provider = ImageProvider(R.drawable.ic_refresh),
                                     contentDescription = null
                                 )
@@ -129,10 +131,18 @@ class MarketWidget : GlanceAppWidget() {
                                     .height(60.dp)
                                     .background(ImageProvider(R.drawable.widget_list_item_background))
                                     .clickable(
-                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item.uid, item.title, state.type)))
+                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item, state.type)))
                                     )
                             ) {
                                 Item(item = item)
+                                //todo remove after upgrade to glance-appwidget:1.0.0-alpha06
+                                Spacer(
+                                    GlanceModifier
+                                        .fillMaxSize()
+                                        .clickable(
+                                            actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item, state.type)))
+                                        )
+                                )
                             }
                         }
                     }
@@ -148,16 +158,16 @@ class MarketWidget : GlanceAppWidget() {
         }
     }
 
-    private fun getDeeplinkUri(itemUid: String, title: String, type: MarketWidgetType): Uri = when (type) {
+    private fun getDeeplinkUri(item: MarketWidgetItem, type: MarketWidgetType): Uri = when (type) {
         MarketWidgetType.Watchlist,
         MarketWidgetType.TopGainers -> {
-            "unstoppable://coin-page?uid=${itemUid}".toUri()
+            "unstoppable://coin-page?uid=${item.uid}".toUri()
         }
         MarketWidgetType.TopNfts -> {
-            "unstoppable://nft-collection?uid=${itemUid}".toUri()
+            "unstoppable://nft-collection?uid=${item.uid}&blockchainTypeUid=${item.blockchainTypeUid}".toUri()
         }
         MarketWidgetType.TopPlatforms -> {
-            "unstoppable://top-platforms?uid=${itemUid}&title=${title}".toUri()
+            "unstoppable://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
         }
     }
 
@@ -341,7 +351,7 @@ class MarketWidget : GlanceAppWidget() {
 }
 
 class UpdateMarketAction : ActionCallback {
-    override suspend fun onRun(
+    override suspend fun onAction(
         context: Context,
         glanceId: GlanceId,
         parameters: ActionParameters
@@ -351,7 +361,6 @@ class UpdateMarketAction : ActionCallback {
         }
         MarketWidget().update(context, glanceId)
 
-        val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
-        MarketWidgetWorker.enqueue(context = context, widgetId = state.widgetId)
+        MarketWidgetManager().refresh(glanceId)
     }
 }

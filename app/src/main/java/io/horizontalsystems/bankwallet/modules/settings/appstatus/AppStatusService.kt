@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.ISystemInfoManager
@@ -13,7 +14,8 @@ class AppStatusService(
         private val localStorage: ILocalStorage,
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
-        private val adapterManager: IAdapterManager
+        private val adapterManager: IAdapterManager,
+        private val marketKit: MarketKitWrapper
 ) {
 
     val status: LinkedHashMap<String, Any>
@@ -25,6 +27,7 @@ class AppStatusService(
             status["Version History"] = getVersionHistory()
             status["Wallets Status"] = getWalletsStatus()
             status["Blockchain Status"] = getBlockchainStatus()
+            status["Market Last Sync Timestamps"] = getMarketLastSyncTimestamps()
 
             return status
         }
@@ -64,10 +67,9 @@ class AppStatusService(
 
         accountDetails["Origin"] = account.origin.value
 
-        when (val accountType = account.type) {
-            is AccountType.Mnemonic -> {
-                accountDetails["Mnemonic"] = accountType.words.count()
-            }
+        val accountType = account.type
+        if (accountType is AccountType.Mnemonic) {
+            accountDetails["Mnemonic"] = accountType.words.count()
         }
         return accountDetails
     }
@@ -97,6 +99,16 @@ class AppStatusService(
                     }
                 }
         return bitcoinChainStatus
+    }
+
+    private fun getMarketLastSyncTimestamps(): Map<String, Any> {
+        val syncInfo = marketKit.syncInfo()
+        val info = LinkedHashMap<String, Any>()
+        info["Coins"] = syncInfo.coinsTimestamp ?: ""
+        info["Blockchains"] = syncInfo.blockchainsTimestamp ?: ""
+        info["Tokens"] = syncInfo.tokensTimestamp ?: ""
+
+        return info
     }
 
 }

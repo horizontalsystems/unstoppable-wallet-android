@@ -18,7 +18,8 @@ object MainSettingsModule {
                 App.pinComponent,
                 App.wc1SessionManager,
                 App.wc2SessionManager,
-                App.wc1Manager
+                App.wc1Manager,
+                App.accountManager
             )
             val viewModel = MainSettingsViewModel(
                 service,
@@ -27,6 +28,11 @@ object MainSettingsModule {
 
             return viewModel as T
         }
+    }
+
+    sealed class CounterType {
+        class SessionCounter(val number: Int) : CounterType()
+        class PendingRequestCounter(val number: Int) : CounterType()
     }
 
 }

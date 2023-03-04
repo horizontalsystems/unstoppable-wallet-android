@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -21,8 +21,6 @@ import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 
 object SendEvmConfirmationModule {
 
@@ -38,9 +36,11 @@ object SendEvmConfirmationModule {
                 Chain.Avalanche -> BlockchainType.Avalanche
                 Chain.Optimism -> BlockchainType.Optimism
                 Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+                Chain.Gnosis -> BlockchainType.Gnosis
+                Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
                 else -> BlockchainType.Ethereum
             }
-            App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!!
+            App.evmBlockchainManager.getBaseToken(blockchainType)!!
         }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
@@ -57,7 +57,15 @@ object SendEvmConfirmationModule {
             val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimitSurchargePercent)
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, sendEvmData.transactionData)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeToken, App.marketKit, App.currencyManager) }
+        private val coinServiceFactory by lazy {
+            EvmCoinServiceFactory(
+                feeToken,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
+        }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val sendService by lazy {
             SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService, App.evmLabelManager)
@@ -77,9 +85,10 @@ object SendEvmConfirmationModule {
         }
     }
 
-    fun prepareParams(sendData: SendEvmData) = bundleOf(
+    fun prepareParams(sendData: SendEvmData, sendNavId: Int) = bundleOf(
         SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendData.transactionData),
-        SendEvmModule.additionalInfoKey to sendData.additionalInfo
+        SendEvmModule.additionalInfoKey to sendData.additionalInfo,
+        SendEvmModule.sendNavGraphIdKey to sendNavId
     )
 
 }

@@ -7,6 +7,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
@@ -15,6 +17,9 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -31,10 +36,12 @@ class TransactionInfoViewItemFactory(
     private val evmLabelManager: EvmLabelManager,
     private val resendEnabled: Boolean
 ) {
+    private val zeroAddress = "0x0000000000000000000000000000000000000000"
 
     fun getViewItemSections(transactionItem: TransactionInfoItem): List<List<TransactionInfoViewItem>> {
         val transaction = transactionItem.record
         val rates = transactionItem.rates
+        val nftMetadata = transactionItem.nftMetadata
 
         val status = transaction.status(transactionItem.lastBlockInfo?.height)
         val itemSections = mutableListOf<List<TransactionInfoViewItem>>()
@@ -50,7 +57,6 @@ class TransactionInfoViewItemFactory(
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
                     getReceiveSectionItems(
-                        transaction.value.coinName,
                         transaction.value,
                         transaction.from,
                         rates[transaction.value.coinUid]
@@ -61,11 +67,11 @@ class TransactionInfoViewItemFactory(
                 sentToSelf = transaction.sentToSelf
                 itemSections.add(
                     getSendSectionItems(
-                        transaction.value.coinName,
                         transaction.value,
                         transaction.to,
                         rates[transaction.value.coinUid],
-                        transaction.sentToSelf
+                        transaction.sentToSelf,
+                        nftMetadata
                     )
                 )
             }
@@ -87,11 +93,7 @@ class TransactionInfoViewItemFactory(
 
                     if (transaction.recipient != null) {
                         youGetSectionItems.add(
-                            Address(
-                                getString(R.string.TransactionInfo_RecipientHash),
-                                transaction.recipient,
-                                evmLabelManager.mapped(transaction.recipient)
-                            )
+                            Address(getString(R.string.TransactionInfo_RecipientHash), transaction.recipient)
                         )
                     }
 
@@ -123,33 +125,26 @@ class TransactionInfoViewItemFactory(
                 itemSections.add(getContractMethodSectionItems(transaction))
 
                 for (event in transaction.outgoingEvents) {
-                    itemSections.add(getSendSectionItems(event.value.coinName, event.value, event.address, rates[event.value.coinUid]))
+                    itemSections.add(getSendSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
                 }
 
                 for (event in transaction.incomingEvents) {
-                    itemSections.add(getReceiveSectionItems(event.value.coinName, event.value, event.address, rates[event.value.coinUid]))
+                    itemSections.add(getReceiveSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
                 }
             }
 
             is ExternalContractCallTransactionRecord -> {
                 for (event in transaction.outgoingEvents) {
-                    itemSections.add(getSendSectionItems(event.value.coinName, event.value, event.address, rates[event.value.coinUid]))
+                    itemSections.add(getSendSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
                 }
 
                 for (event in transaction.incomingEvents) {
-                    itemSections.add(getReceiveSectionItems(event.value.coinName, event.value, event.address, rates[event.value.coinUid]))
+                    itemSections.add(getReceiveSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
                 }
             }
 
             is BitcoinIncomingTransactionRecord -> {
-                itemSections.add(
-                    getReceiveSectionItems(
-                        transaction.value.coinName,
-                        transaction.value,
-                        transaction.from,
-                        rates[transaction.value.coinUid]
-                    )
-                )
+                itemSections.add(getReceiveSectionItems(transaction.value, transaction.from, rates[transaction.value.coinUid]))
 
                 miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
                 addMemoItem(transaction.memo, miscItemsSection)
@@ -157,29 +152,14 @@ class TransactionInfoViewItemFactory(
 
             is BitcoinOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
-                itemSections.add(
-                    getSendSectionItems(
-                        transaction.value.coinName,
-                        transaction.value,
-                        transaction.to,
-                        rates[transaction.value.coinUid],
-                        transaction.sentToSelf
-                    )
-                )
+                itemSections.add(getSendSectionItems(transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf))
 
                 miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is BinanceChainIncomingTransactionRecord -> {
-                itemSections.add(
-                    getReceiveSectionItems(
-                        transaction.value.coinName,
-                        transaction.value,
-                        transaction.from,
-                        rates[transaction.value.coinUid]
-                    )
-                )
+                itemSections.add(getReceiveSectionItems(transaction.value, transaction.from, rates[transaction.value.coinUid]))
 
                 addMemoItem(transaction.memo, miscItemsSection)
             }
@@ -188,7 +168,6 @@ class TransactionInfoViewItemFactory(
                 sentToSelf = transaction.sentToSelf
                 itemSections.add(
                     getSendSectionItems(
-                        transaction.value.coinName,
                         transaction.value,
                         transaction.to,
                         rates[transaction.value.coinUid],
@@ -197,6 +176,39 @@ class TransactionInfoViewItemFactory(
                 )
 
                 addMemoItem(transaction.memo, miscItemsSection)
+            }
+
+            is SolanaIncomingTransactionRecord ->
+                itemSections.add(
+                    getReceiveSectionItems(
+                        transaction.value,
+                        transaction.from,
+                        rates[transaction.value.coinUid],
+                        nftMetadata
+                    )
+                )
+
+            is SolanaOutgoingTransactionRecord -> {
+                sentToSelf = transaction.sentToSelf
+                itemSections.add(
+                    getSendSectionItems(
+                        transaction.value,
+                        transaction.to,
+                        rates[transaction.value.coinUid],
+                        transaction.sentToSelf,
+                        nftMetadata
+                    )
+                )
+            }
+
+            is SolanaUnknownTransactionRecord -> {
+                for (transfer in transaction.outgoingTransfers) {
+                    itemSections.add(getSendSectionItems(transfer.value, transfer.address, rates[transfer.value.coinUid], nftMetadata = nftMetadata))
+                }
+
+                for (transfer in transaction.incomingTransfers) {
+                    itemSections.add(getReceiveSectionItems(transfer.value, transfer.address, rates[transfer.value.coinUid], nftMetadata = nftMetadata))
+                }
             }
 
             else -> {}
@@ -227,54 +239,102 @@ class TransactionInfoViewItemFactory(
     }
 
     private fun getReceiveSectionItems(
-        coinName: String,
         value: TransactionValue,
         fromAddress: String?,
-        coinPrice: CurrencyValue?
+        coinPrice: CurrencyValue?,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf()
     ): List<TransactionInfoViewItem> {
+        val mint = fromAddress == zeroAddress
+        val title: String = if (mint) getString(R.string.Transactions_Mint) else getString(R.string.Transactions_Receive)
+
+        val subtitle: String
+        val amount: TransactionInfoViewItem
+        val rate: TransactionInfoViewItem?
+
+        when (value) {
+            is TransactionValue.NftValue -> {
+                subtitle = getFullName(value, nftMetadata[value.nftUid])
+                amount = getNftAmount(value, true, nftMetadata[value.nftUid])
+                rate = null
+            }
+            else -> {
+                subtitle = getFullName(value)
+                amount = getAmount(coinPrice, value, true)
+                rate = getHistoricalRate(coinPrice, value)
+            }
+        }
+
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Transaction(getString(R.string.Transactions_Receive), coinName, R.drawable.ic_arrow_down_left_12),
-            getAmount(coinPrice, value, true)
+            Transaction(title, subtitle, R.drawable.ic_arrow_down_left_12),
+            amount
         )
 
-        items.add(getHistoricalRate(coinPrice, value))
-
-        fromAddress?.let {
+        if (!mint && fromAddress != null) {
             items.add(
-                Address(
-                    getString(R.string.TransactionInfo_From),
-                    it,
-                    evmLabelManager.mapped(it)
-                )
+                Address(getString(R.string.TransactionInfo_From), fromAddress)
             )
         }
+
+        rate?.let { items.add(it) }
 
         return items
     }
 
+    private fun getFullName(transactionValue: TransactionValue, nftMetadata: NftAssetBriefMetadata? = null): String =
+        when (transactionValue) {
+            is TransactionValue.CoinValue -> transactionValue.coin.name
+            is TransactionValue.TokenValue -> transactionValue.tokenName
+            is TransactionValue.NftValue -> {
+                nftMetadata?.name ?: transactionValue.tokenName?.let {
+                    when (transactionValue.nftUid) {
+                        is NftUid.Evm -> "$it #${transactionValue.nftUid.tokenId}"
+                        is NftUid.Solana -> it
+                    }
+                } ?: "#${transactionValue.nftUid.tokenId}"
+            }
+            is TransactionValue.RawValue -> ""
+        }
+
     private fun getSendSectionItems(
-        coinName: String,
         value: TransactionValue,
         toAddress: String?,
         coinPrice: CurrencyValue?,
-        sentToSelf: Boolean = false
+        sentToSelf: Boolean = false,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf()
     ): List<TransactionInfoViewItem> {
+        val burn = toAddress == zeroAddress
+
+        val title: String = if (burn) getString(R.string.Transactions_Burn) else getString(R.string.Transactions_Send)
+
+        val subtitle: String
+        val amount: TransactionInfoViewItem
+        val rate: TransactionInfoViewItem?
+
+        when (value) {
+            is TransactionValue.NftValue -> {
+                subtitle = getFullName(value, nftMetadata[value.nftUid])
+                amount = getNftAmount(value, if (sentToSelf) null else false, nftMetadata[value.nftUid])
+                rate = null
+            }
+            else -> {
+                subtitle = getFullName(value)
+                amount = getAmount(coinPrice, value, if (sentToSelf) null else false)
+                rate = getHistoricalRate(coinPrice, value)
+            }
+        }
+
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Transaction(getString(R.string.Transactions_Send), coinName, R.drawable.ic_arrow_up_right_12),
-            getAmount(coinPrice, value, if (sentToSelf) null else false)
+            Transaction(title, subtitle, if (burn) R.drawable.icon_24_flame else R.drawable.ic_arrow_up_right_12),
+            amount
         )
 
-        items.add(getHistoricalRate(coinPrice, value))
-
-        toAddress?.let {
+        if (!burn && toAddress != null) {
             items.add(
-                Address(
-                    getString(R.string.TransactionInfo_To),
-                    toAddress,
-                    evmLabelManager.mapped(toAddress)
-                )
+                Address(getString(R.string.TransactionInfo_To), toAddress)
             )
         }
+
+        rate?.let { items.add(it) }
 
         return items
     }
@@ -289,7 +349,7 @@ class TransactionInfoViewItemFactory(
         listOf(
             Transaction(
                 title,
-                value.coinName,
+                value.fullName,
                 icon = if (incoming) R.drawable.ic_arrow_down_left_12 else R.drawable.ic_arrow_up_right_12
             ),
             getAmount(rate, value, incoming, amount)
@@ -387,9 +447,9 @@ class TransactionInfoViewItemFactory(
         )
 
         return listOf(
-            Transaction(getString(R.string.Transactions_Approve), value.coinName, R.drawable.ic_checkmark_24),
+            Transaction(getString(R.string.Transactions_Approve), value.fullName, R.drawable.ic_checkmark_24),
             Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coinIconUrl, value.coinIconPlaceholder),
-            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, evmLabelManager.mapped(spenderAddress))
+            Address(getString(R.string.TransactionInfo_Spender), spenderAddress)
         )
     }
 
@@ -436,7 +496,7 @@ class TransactionInfoViewItemFactory(
             Status(status)
         )
 
-        if (transaction is EvmOutgoingTransactionRecord && status == TransactionStatus.Pending && resendEnabled) {
+        if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
             items.add(SpeedUpCancel(transactionHash = transaction.transactionHash))
         }
 
@@ -542,6 +602,31 @@ class TransactionInfoViewItemFactory(
 
         val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
         return Amount(coinValueColored, fiatValueColored, value.coinIconUrl, value.coinIconPlaceholder)
+    }
+
+    private fun getNftAmount(
+        value: TransactionValue.NftValue,
+        incoming: Boolean?,
+        nftMetadata: NftAssetBriefMetadata?
+    ): TransactionInfoViewItem {
+        val valueFormatted = value.decimalValue.let { decimalValue ->
+            val sign = when {
+                incoming == null -> ""
+                decimalValue < BigDecimal.ZERO -> "-"
+                decimalValue > BigDecimal.ZERO -> "+"
+                else -> ""
+            }
+            val valueWithCoinCode = numberFormatter.formatCoinFull(decimalValue.abs(), value.coinCode, 8)
+            "$sign$valueWithCoinCode"
+        }
+
+        return NftAmount(
+            ColoredValue(valueFormatted, getAmountColor(incoming)),
+            nftMetadata?.previewImageUrl,
+            R.drawable.icon_24_nft_placeholder,
+            value.nftUid,
+            nftMetadata?.providerCollectionUid
+        )
     }
 
     private fun getHistoricalRate(

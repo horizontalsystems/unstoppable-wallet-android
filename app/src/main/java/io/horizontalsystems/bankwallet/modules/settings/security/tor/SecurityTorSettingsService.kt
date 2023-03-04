@@ -25,9 +25,6 @@ class SecurityTorSettingsService(
     var torEnabled: Boolean = torManager.isTorEnabled
         private set
 
-    val isTorNotificationEnabled: Boolean
-        get() = torManager.isTorNotificationEnabled
-
     fun start() {
         torConnectionStatusSubject.onNext(TorStatus.Closed)
         torManager.torObservable.subscribe { connectionStatus ->

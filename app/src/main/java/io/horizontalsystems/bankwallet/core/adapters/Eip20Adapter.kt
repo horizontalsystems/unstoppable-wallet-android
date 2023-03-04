@@ -89,8 +89,16 @@ class Eip20Adapter(
     companion object {
         fun clear(walletId: String, testMode: Boolean) {
             val networkTypes = when {
-                testMode -> listOf(Chain.EthereumRopsten)
-                else -> listOf(Chain.Ethereum, Chain.BinanceSmartChain)
+                testMode -> listOf(Chain.EthereumGoerli)
+                else -> listOf(
+                    Chain.Ethereum,
+                    Chain.BinanceSmartChain,
+                    Chain.Polygon,
+                    Chain.Avalanche,
+                    Chain.Optimism,
+                    Chain.ArbitrumOne,
+                    Chain.Gnosis,
+                )
             }
 
             networkTypes.forEach {

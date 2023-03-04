@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -13,34 +11,38 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.authorizedAction
+import io.horizontalsystems.bankwallet.core.navigateToSetPin
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.pin.PinModule
+import io.horizontalsystems.core.getNavigationResult
 
 @Composable
 fun PasscodeBlock(
     viewModel: SecurityPasscodeSettingsViewModel,
     navController: NavController,
-    subscribeForPinResult: () -> Unit,
 ) {
 
     Spacer(Modifier.height(12.dp))
 
     val blocks = mutableListOf<@Composable () -> Unit>().apply {
         add {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalPadding = 0.dp,
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_passcode),
                     tint = ComposeAppTheme.colors.grey,
+                    modifier = Modifier
+                        .padding(vertical = 12.dp)
+                        .size(24.dp),
                     contentDescription = null,
                 )
                 Spacer(Modifier.width(16.dp))
@@ -61,17 +63,14 @@ fun PasscodeBlock(
                 HsSwitch(
                     checked = viewModel.pinEnabled,
                     onCheckedChange = { checked ->
-                        subscribeForPinResult()
                         if (checked) {
-                            navController.slideFromRight(
-                                R.id.pinFragment,
-                                PinModule.forSetPin()
-                            )
+                            navController.navigateToSetPin {
+                                viewModel.didSetPin()
+                            }
                         } else {
-                            navController.slideFromRight(
-                                R.id.pinFragment,
-                                PinModule.forUnlock()
-                            )
+                            navController.authorizedAction {
+                                viewModel.disablePin()
+                            }
                         }
                     }
                 )
@@ -79,17 +78,17 @@ fun PasscodeBlock(
         }
         if (viewModel.pinEnabled) {
             add {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable {
-                            navController.slideFromRight(
-                                R.id.pinFragment,
-                                PinModule.forEditPin()
-                            )
+                RowUniversal(
+                    onClick = {
+                        navController.getNavigationResult(PinModule.requestKey) {
+                            //just clean result in backStackEntry
                         }
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                        navController.slideFromRight(
+                            R.id.pinFragment,
+                            PinModule.forEditPin()
+                        )
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 ) {
                     body_leah(text = stringResource(R.string.SettingsSecurity_EditPin))
                     Spacer(Modifier.weight(1f))
@@ -103,24 +102,22 @@ fun PasscodeBlock(
         }
     }
 
-    CellSingleLineLawrenceSection(blocks)
+    CellUniversalLawrenceSection(blocks)
 
     if (viewModel.biometricSettingsVisible) {
         Spacer(Modifier.height(32.dp))
-        CellSingleLineLawrenceSection(
+        CellUniversalLawrenceSection(
             listOf {
-                Row(
-                    modifier = Modifier
-                        .clickable {
-                            viewModel.setBiometricAuth(!viewModel.biometricEnabled)
-                        }
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                RowUniversal(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalPadding = 0.dp,
+                    onClick = { viewModel.setBiometricAuth(!viewModel.biometricEnabled) }
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_fingerprint),
+                        painter = painterResource(R.drawable.icon_touch_id_24),
                         tint = ComposeAppTheme.colors.grey,
                         contentDescription = null,
+                        modifier = Modifier.padding(vertical = 12.dp)
                     )
                     Spacer(Modifier.width(16.dp))
                     body_leah(

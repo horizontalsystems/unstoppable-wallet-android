@@ -13,11 +13,15 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun HsCheckbox(
     checked: Boolean,
+    enabled: Boolean = true,
     onCheckedChange: ((Boolean) -> Unit)?,
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.clickable { onCheckedChange?.invoke(!checked) }
+        modifier = Modifier.clickable(
+            enabled = enabled,
+            onClick = { onCheckedChange?.invoke(!checked) }
+        )
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_checkbox_frame),

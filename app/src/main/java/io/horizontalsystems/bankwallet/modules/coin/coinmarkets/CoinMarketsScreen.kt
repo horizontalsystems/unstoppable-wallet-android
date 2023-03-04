@@ -22,7 +22,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -44,15 +44,15 @@ fun CoinMarketsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Crossfade(viewItemState) { viewItemState ->
             when (viewItemState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
-                is ViewState.Success -> {
+                ViewState.Success -> {
                     viewItems?.let { items ->
-                        Column {
+                        Column(modifier = Modifier.fillMaxSize()) {
                             if (items.isEmpty()) {
                                 ListEmptyView(
                                     text = stringResource(R.string.CoinPage_NoDataAvailable),
@@ -76,6 +76,7 @@ fun CoinMarketsScreen(
                         }
                     }
                 }
+                null -> {}
             }
         }
     }
@@ -155,7 +156,7 @@ fun CoinMarketCell(
     tradeUrl: String?,
 ) {
     val context = LocalContext.current
-    MultilineClear(
+    SectionItemBorderedRowUniversalClear(
         onClick = tradeUrl?.let {
             { LinkHelper.openLinkInAppBrowser(context, it) }
         },
@@ -164,13 +165,13 @@ fun CoinMarketCell(
         Image(
             painter = rememberAsyncImagePainter(
                 model = iconUrl,
-                error = painterResource(R.drawable.coin_placeholder)
+                error = painterResource(R.drawable.ic_platform_placeholder_24)
             ),
             contentDescription = null,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp)
-                .clip(RoundedCornerShape(4.dp)),
+                .size(32.dp)
+                .clip(RoundedCornerShape(8.dp)),
         )
         Column(
             modifier = Modifier.fillMaxWidth()

@@ -21,6 +21,7 @@ class AboutViewModel(
 
     val githubLink = appConfigProvider.appGithubLink
     val appWebPageLink = appConfigProvider.appWebPageLink
+    val twitterLink = appConfigProvider.appTwitterLink
     val reportEmail = appConfigProvider.reportEmail
     val appVersion: String
         get() {
@@ -32,7 +33,7 @@ class AboutViewModel(
             return appVersion
         }
 
-    var termsShowAlert by mutableStateOf(!termsManager.termsAccepted)
+    var termsShowAlert by mutableStateOf(!termsManager.allTermsAccepted)
         private set
 
     init {

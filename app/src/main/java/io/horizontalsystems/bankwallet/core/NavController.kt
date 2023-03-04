@@ -5,6 +5,10 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.pin.PinInteractionType
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
+import io.horizontalsystems.core.getNavigationResult
 
 fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
     val navOptions = NavOptions.Builder()
@@ -26,4 +30,48 @@ fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
         .build()
 
     navigate(resId, args, navOptions)
+}
+
+fun NavController.authorizedAction(action: () -> Unit) {
+    if (App.pinComponent.isPinSet) {
+        getNavigationResult(PinModule.requestKey) { bundle ->
+            val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
+            val resultCode = bundle.getInt(PinModule.requestResult)
+
+            if (resultType == PinInteractionType.UNLOCK && resultCode == PinModule.RESULT_OK) {
+                action.invoke()
+            }
+        }
+        slideFromBottom(R.id.pinFragment, PinModule.forUnlock())
+    } else {
+        action.invoke()
+    }
+}
+
+fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
+    if (!App.termsManager.allTermsAccepted) {
+        getNavigationResult(TermsFragment.resultBundleKey) { bundle ->
+            val agreedToTerms = bundle.getInt(TermsFragment.requestResultKey)
+
+            if (agreedToTerms == TermsFragment.RESULT_OK) {
+                action.invoke()
+            }
+        }
+        slideFromBottom(R.id.termsFragment)
+    } else {
+        action.invoke()
+    }
+}
+
+fun NavController.navigateToSetPin(onSuccess: () -> Unit) {
+    getNavigationResult(PinModule.requestKey) { bundle ->
+        val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
+        val resultCode = bundle.getInt(PinModule.requestResult)
+
+        if (resultCode == PinModule.RESULT_OK && resultType == PinInteractionType.SET_PIN) {
+            onSuccess.invoke()
+        }
+    }
+
+    slideFromRight(R.id.pinFragment, PinModule.forSetPin())
 }

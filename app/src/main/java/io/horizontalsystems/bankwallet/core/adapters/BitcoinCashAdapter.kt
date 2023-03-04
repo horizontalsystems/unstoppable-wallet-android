@@ -87,20 +87,37 @@ class BitcoinCashAdapter(
 
         private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean): BitcoinCashKit {
             val account = wallet.account
-            val accountType = (account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
             val bchCoinType = wallet.coinSettings.bitcoinCashCoinType ?: throw AdapterErrorWrongParameters("BitcoinCashCoinType is null")
             val kitCoinType = when(bchCoinType){
                 BitcoinCashCoinType.type145 -> MainNetBitcoinCash.CoinType.Type145
                 BitcoinCashCoinType.type0 -> MainNetBitcoinCash.CoinType.Type0
             }
+            val networkType = getNetworkType(testMode, kitCoinType)
+            when (val accountType = account.type) {
+                is AccountType.HdExtendedKey -> {
+                    return BitcoinCashKit(
+                        context = App.instance,
+                        extendedKey = accountType.hdExtendedKey,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = networkType,
+                        confirmationsThreshold = confirmationsThreshold
+                    )
+                }
+                is AccountType.Mnemonic -> {
+                    return BitcoinCashKit(
+                        context = App.instance,
+                        words = accountType.words,
+                        passphrase = accountType.passphrase,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = networkType,
+                        confirmationsThreshold = confirmationsThreshold
+                    )
+                }
+                else -> throw UnsupportedAccountException()
+            }
 
-            return BitcoinCashKit(context = App.instance,
-                    words = accountType.words,
-                    passphrase = accountType.passphrase,
-                    walletId = account.id,
-                    syncMode = syncMode,
-                    networkType = getNetworkType(testMode, kitCoinType),
-                    confirmationsThreshold = confirmationsThreshold)
         }
 
         fun clear(walletId: String, testMode: Boolean) {

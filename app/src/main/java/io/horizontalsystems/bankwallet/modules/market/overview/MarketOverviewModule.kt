@@ -45,7 +45,6 @@ object MarketOverviewModule {
 
     data class MarketMetrics(
         val totalMarketCap: MetricData,
-        val btcDominance: MetricData,
         val volume24h: MetricData,
         val defiCap: MetricData,
         val defiTvl: MetricData,

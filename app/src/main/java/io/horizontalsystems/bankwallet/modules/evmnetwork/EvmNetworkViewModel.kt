@@ -6,69 +6,83 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.urls
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.launch
+import io.horizontalsystems.bankwallet.entities.EvmSyncSource
+import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
-class EvmNetworkViewModel(private val service: EvmNetworkService) : ViewModel() {
+class EvmNetworkViewModel(
+    val blockchain: Blockchain,
+    private val evmSyncSourceManager: EvmSyncSourceManager
+) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
+    private var currentSyncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
 
-    var closeScreen by mutableStateOf(false)
+    var viewState by mutableStateOf(ViewState(emptyList(), emptyList()))
         private set
 
-    var viewItems by mutableStateOf<List<ViewItem>>(listOf())
-        private set
+    val title: String = blockchain.name
 
     init {
-        service.itemsObservable
-            .subscribeIO {
-                sync(it)
-            }
-            .let {
-                disposables.add(it)
-            }
+        evmSyncSourceManager.syncSourcesUpdatedFlow
+            .onEach { syncState() }
+            .launchIn(viewModelScope)
+
+        syncState()
     }
 
-    private fun sync(items: List<EvmNetworkService.Item>) {
-        viewModelScope.launch {
-            viewItems = items.map { viewItem(it) }.sortedBy { it.name }
-        }
-    }
-
-    private fun viewItem(item: EvmNetworkService.Item): ViewItem {
-        val url = if (item.syncSource.rpcSource.urls.size == 1)
-            item.syncSource.rpcSource.urls.first().toString()
-        else
-            Translator.getString(R.string.NetworkSettings_SwithesAutomatically)
-
-        return ViewItem(
-            item.syncSource.id,
-            item.syncSource.name,
-            url,
-            item.selected
+    private fun syncState() {
+        viewState = ViewState(
+            defaultItems = viewItems(evmSyncSourceManager.defaultSyncSources(blockchain.type)),
+            customItems = viewItems(evmSyncSourceManager.customSyncSources(blockchain.type))
         )
     }
 
-    val title: String =
-        service.blockchain.name
+    private fun viewItems(evmSyncSources: List<EvmSyncSource>): List<ViewItem> {
+        currentSyncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
+        return evmSyncSources.map { evmSyncSource ->
+            val url = if (evmSyncSource.rpcSource.urls.size == 1)
+                evmSyncSource.rpcSource.urls.first().toString()
+            else
+                Translator.getString(R.string.NetworkSettings_SwithesAutomatically)
 
-    fun onSelectViewItem(viewItem: ViewItem) {
-        service.setCurrentNetwork(viewItem.id)
-        closeScreen = true
+            val currentSyncSourceId = currentSyncSource.id
+
+            ViewItem(
+                syncSource = evmSyncSource,
+                id = evmSyncSource.id,
+                name = evmSyncSource.name,
+                url = url,
+                selected = evmSyncSource.id == currentSyncSourceId
+            )
+        }
     }
 
-    override fun onCleared() {
-        service.clear()
-        disposables.clear()
+    fun onSelectSyncSource(syncSource: EvmSyncSource) {
+        if (currentSyncSource == syncSource) return
+
+        evmSyncSourceManager.save(syncSource, blockchain.type)
+
+        syncState()
+    }
+
+    fun onRemoveCustomRpc(syncSource: EvmSyncSource) {
+        evmSyncSourceManager.delete(syncSource, blockchain.type)
     }
 
     data class ViewItem(
+        val syncSource: EvmSyncSource,
         val id: String,
         val name: String,
         val url: String,
         val selected: Boolean,
+    )
+
+    data class ViewState(
+        val defaultItems: List<ViewItem>,
+        val customItems: List<ViewItem>,
     )
 }

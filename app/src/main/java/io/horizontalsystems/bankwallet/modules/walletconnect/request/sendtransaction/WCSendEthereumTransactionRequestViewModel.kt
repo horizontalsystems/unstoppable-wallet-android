@@ -13,8 +13,4 @@ class WCSendEthereumTransactionRequestViewModel(
     fun reject() {
         service.reject()
     }
-
-    override fun onCleared() {
-        service.stop()
-    }
 }

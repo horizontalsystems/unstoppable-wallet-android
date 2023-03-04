@@ -10,13 +10,12 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 class LockScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_lock_screen)
     }
 
     override fun onBackPressed() {
         val navController = findNavController(R.id.lockScreenNavHost)
-        if (navController.currentDestination?.id == navController.graph.startDestination) {
+        if (navController.currentDestination?.id == navController.graph.startDestinationId) {
             finishAffinity()
         }
 

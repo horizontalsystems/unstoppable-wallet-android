@@ -1,22 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.market.category
 
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.marketkit.models.CoinCategory
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketCategoryService(
     private val marketCategoryRepository: MarketCategoryRepository,
-    private val currencyManager: ICurrencyManager,
-    private val languageManager: ILanguageManager,
+    private val currencyManager: CurrencyManager,
+    private val languageManager: LanguageManager,
     private val favoritesManager: MarketFavoritesManager,
     private val coinCategory: CoinCategory,
     topMarket: TopMarket = TopMarket.Top100,
@@ -37,7 +37,7 @@ class MarketCategoryService(
         private set
 
     val coinCategoryName: String get() = coinCategory.name
-    val coinCategoryDescription: String get() = coinCategory.description[languageManager.currentLanguage]
+    val coinCategoryDescription: String get() = coinCategory.description[languageManager.currentLocaleTag]
         ?: coinCategory.description["en"]
         ?: coinCategory.description.keys.firstOrNull()
         ?: ""

@@ -10,20 +10,30 @@ import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
 
-    fun price(price: BigDecimal?, quoteToken: Token?, baseToken: Token?): String? {
+    fun prices(sellPrice: BigDecimal, buyPrice: BigDecimal, tokenFrom: Token?, tokenTo: Token?): Pair<String?, String?> {
+        val primaryPrice: String?
+        val secondaryPrice: String?
+
+        val sellPriceStr = price(sellPrice, tokenTo, tokenFrom)
+        val buyPriceStr  = price(buyPrice, tokenFrom, tokenTo)
+        if (sellPrice > buyPrice) {
+            primaryPrice = sellPriceStr
+            secondaryPrice = buyPriceStr
+        } else {
+            primaryPrice = buyPriceStr
+            secondaryPrice = sellPriceStr
+        }
+        return Pair(primaryPrice, secondaryPrice)
+    }
+
+    private fun price(price: BigDecimal?, quoteToken: Token?, baseToken: Token?): String? {
         if (price == null || quoteToken == null || baseToken == null)
             return null
 
-        val inversePrice = if (price.compareTo(BigDecimal.ZERO) == 0)
-            BigDecimal.ZERO
-        else
-            BigDecimal.ONE.divide(price, price.scale(), RoundingMode.HALF_UP)
-
-        return "${baseToken.coin.code} = ${coinAmount(inversePrice, quoteToken.coin.code)} "
+        return "1 ${baseToken.coin.code} = ${coinAmount(price, quoteToken.coin.code)}"
     }
 
     fun priceImpactViewItem(

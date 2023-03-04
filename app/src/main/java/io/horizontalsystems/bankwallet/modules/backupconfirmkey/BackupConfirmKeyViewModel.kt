@@ -10,111 +10,127 @@ import io.horizontalsystems.bankwallet.core.IRandomProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.DataState
 
 class BackupConfirmKeyViewModel(
     private val account: Account,
     private val accountManager: IAccountManager,
-    indexesProvider: IRandomProvider
+    private val randomProvider: IRandomProvider
 ) : ViewModel() {
 
-    private val words: List<String>
-    private val passphrase: String
+    private val wordsIndexed: List<Pair<Int, String>>
+    private var hiddenWordItems = listOf<HiddenWordItem>()
+    private var wordOptions = listOf<WordOption>()
+    private var currentHiddenWordItemIndex = -1
+    private var confirmed = false
+    private var error: Throwable? = null
 
-    private var enteredFirstWord: String = ""
-    private var enteredSecondWord: String = ""
-    private var enteredPassphrase: String = ""
+    var uiState by mutableStateOf(
+        BackupConfirmUiState(
+            hiddenWordItems = hiddenWordItems,
+            wordOptions = wordOptions,
+            currentHiddenWordItemIndex = currentHiddenWordItemIndex,
+            confirmed = confirmed,
+            error = error,
+        )
+    )
 
     init {
         if (account.type is AccountType.Mnemonic) {
-            words = account.type.words
-            passphrase = account.type.passphrase
+            wordsIndexed = account.type.words.mapIndexed { index, s ->
+                Pair(index, s)
+            }
+
+            reset()
+            emitState()
         } else {
-            words = listOf()
-            passphrase = ""
+            wordsIndexed = listOf()
         }
     }
 
-    private val indices = indexesProvider.getRandomIndexes(2, words.size)
-
-    val firstInputPrefix = "${indices[0] + 1}."
-
-    val secondInputPrefix = "${indices[1] + 1}."
-
-    var firstInputErrorState by mutableStateOf<DataState.Error?>(null)
-        private set
-
-    var secondInputErrorState by mutableStateOf<DataState.Error?>(null)
-        private set
-
-    var passphraseErrorState by mutableStateOf<DataState.Error?>(null)
-        private set
-
-    val passphraseVisible = passphrase.isNotBlank()
-
-    var successMessage by mutableStateOf<Int?>(null)
-        private set
-
-    fun onChangeFirstWord(v: String) {
-        enteredFirstWord = v
-        firstInputErrorState = null
-    }
-
-    fun onChangeSecondWord(v: String) {
-        enteredSecondWord = v
-        secondInputErrorState = null
-    }
-
-    fun onChangePassphrase(v: String) {
-        enteredPassphrase = v
-        passphraseErrorState = null
-    }
-
-    fun onSuccessMessageShown() {
-        successMessage = null
-    }
-
-    fun onClickDone() {
-        validate()
-
-        if (firstInputErrorState == null &&
-            secondInputErrorState == null &&
-            (passphrase.isBlank() || passphraseErrorState == null)
-        ) {
-            accountManager.update(account.copy(isBackedUp = true))
-            successMessage = R.string.Hud_Text_Done
+    private fun reset() {
+        val wordsCountToGuess = when (wordsIndexed.size) {
+            12 -> 2
+            15, 18, 21 -> 3
+            24 -> 4
+            else -> 2
         }
-    }
 
-    private fun validate() {
-        firstInputErrorState = when {
-            enteredFirstWord.isBlank() -> DataState.Error(Exception(Translator.getString(R.string.BackupConfirmKey_Error_EmptyWord)))
-            enteredFirstWord != words[indices[0]] -> DataState.Error(
-                Exception(
-                    Translator.getString(
-                        R.string.BackupConfirmKey_Error_InvalidWord
-                    )
-                )
+        val shuffled = wordsIndexed.shuffled().take(12)
+        val randomNumbers = randomProvider.getRandomNumbers(wordsCountToGuess, shuffled.size)
+
+        hiddenWordItems = randomNumbers.map { number ->
+            val wordIndexed = shuffled[number]
+            HiddenWordItem(
+                index = wordIndexed.first,
+                word = wordIndexed.second,
+                isRevealed = false
             )
-            else -> null
+        }
+        wordOptions = shuffled.map {
+            WordOption(it.second, true)
+        }
+        currentHiddenWordItemIndex = 0
+    }
+
+    fun onSelectWord(wordOption: WordOption) {
+        val hiddenWordItem = hiddenWordItems[currentHiddenWordItemIndex]
+        if (hiddenWordItem.word != wordOption.word) {
+            reset()
+            error = Exception(Translator.getString(R.string.BackupConfirmKey_Error_InvalidWord))
+        } else {
+            hiddenWordItems = hiddenWordItems.toMutableList().apply {
+                set(currentHiddenWordItemIndex, hiddenWordItem.copy(isRevealed = true))
+            }
+
+            val indexOfWordOption = wordOptions.indexOf(wordOption)
+            wordOptions = wordOptions.toMutableList().apply {
+                set(indexOfWordOption, wordOption.copy(enabled = false))
+            }
+
+            if (currentHiddenWordItemIndex != hiddenWordItems.lastIndex) {
+                currentHiddenWordItemIndex++
+            } else {
+                accountManager.update(account.copy(isBackedUp = true))
+                confirmed = true
+            }
         }
 
-        secondInputErrorState = when {
-            enteredSecondWord.isBlank() -> DataState.Error(Exception(Translator.getString(R.string.BackupConfirmKey_Error_EmptyWord)))
-            enteredSecondWord != words[indices[1]] -> DataState.Error(
-                Exception(
-                    Translator.getString(
-                        R.string.BackupConfirmKey_Error_InvalidWord
-                    )
-                )
-            )
-            else -> null
-        }
+        emitState()
+    }
 
-        passphraseErrorState = when {
-            enteredPassphrase.isBlank() -> DataState.Error(Exception(Translator.getString(R.string.BackupConfirmKey_Error_EmptyPassphrase)))
-            enteredPassphrase != passphrase -> DataState.Error(Exception(Translator.getString(R.string.BackupConfirmKey_Error_InvalidPassphrase)))
-            else -> null
-        }
+    fun onErrorShown() {
+        error = null
+        emitState()
+    }
+
+    private fun emitState() {
+        uiState = BackupConfirmUiState(
+            hiddenWordItems = hiddenWordItems,
+            wordOptions = wordOptions,
+            currentHiddenWordItemIndex = currentHiddenWordItemIndex,
+            confirmed = confirmed,
+            error = error
+        )
+    }
+}
+
+data class BackupConfirmUiState(
+    val hiddenWordItems: List<HiddenWordItem>,
+    val wordOptions: List<WordOption>,
+    val currentHiddenWordItemIndex: Int,
+    val confirmed: Boolean,
+    val error: Throwable?
+)
+
+data class WordOption(val word: String, val enabled: Boolean)
+
+data class HiddenWordItem(
+    val index: Int,
+    val word: String,
+    val isRevealed: Boolean
+) {
+    override fun toString() = when {
+        isRevealed -> "${index + 1}. $word"
+        else -> "${index + 1}."
     }
 }

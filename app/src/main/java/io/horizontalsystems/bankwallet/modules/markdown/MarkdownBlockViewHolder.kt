@@ -10,10 +10,11 @@ import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.core.text.getSpans
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
+import coil.load
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import io.horizontalsystems.bankwallet.databinding.*
-import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.bankwallet.ui.helpers.LayoutHelper
 import org.apache.commons.io.FilenameUtils
 import java.net.URL
 
@@ -76,12 +77,14 @@ class ViewHolderImage(private val binding: ViewHolderMarkdownImageBinding) :
             binding.imageCaption.text = item.title
         }
 
-        Picasso.get().load(item.destination)
-            .into(binding.image, object : Callback.EmptyCallback() {
-                override fun onSuccess() {
+        binding.image.load(item.destination) {
+            listener(object : ImageRequest.Listener {
+                override fun onSuccess(request: ImageRequest, result: SuccessResult) {
+                    super.onSuccess(request, result)
                     binding.placeholder.isVisible = false
                 }
             })
+        }
     }
 
     private fun setConstraints(destination: String, mainImage: Boolean) {

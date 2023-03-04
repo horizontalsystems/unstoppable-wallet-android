@@ -42,8 +42,8 @@ fun ButtonPrimaryCircle(
 fun ButtonSecondaryCircle(
     modifier: Modifier = Modifier,
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_20,
-    onClick: () -> Unit,
     tint: Color = ComposeAppTheme.colors.leah,
+    onClick: () -> Unit,
 ) {
     HsIconButton(
         onClick = onClick,

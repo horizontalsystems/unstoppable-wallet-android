@@ -8,12 +8,12 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.coroutines.launch
 
 class BaseCurrencySettingsFragment : BaseFragment() {
@@ -57,8 +56,6 @@ private fun BaseCurrencyScreen(
         factory = BaseCurrencySettingsModule.Factory()
     )
 ) {
-    val context = LocalContext.current
-
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
@@ -75,7 +72,7 @@ private fun BaseCurrencyScreen(
     }
 
     if (viewModel.showDisclaimer) {
-        scope.launch {
+        LaunchedEffect(Unit) {
             sheetState.show()
         }
     }
@@ -120,13 +117,11 @@ private fun BaseCurrencyScreen(
                     Modifier.verticalScroll(rememberScrollState())
                 ) {
                     Spacer(Modifier.height(12.dp))
-                    CellMultilineLawrenceSection(viewModel.popularItems) { item ->
+                    CellUniversalLawrenceSection(viewModel.popularItems) { item ->
                         CurrencyCell(
                             item.currency.code,
                             item.currency.symbol,
-                            LayoutHelper.getCurrencyDrawableResource(
-                                context, item.currency.code.lowercase()
-                            ),
+                            item.currency.flag,
                             item.selected,
                             { viewModel.onSelectBaseCurrency(item.currency) }
                         )
@@ -135,13 +130,11 @@ private fun BaseCurrencyScreen(
                     HeaderText(
                         stringResource(R.string.SettingsCurrency_Other)
                     )
-                    CellMultilineLawrenceSection(viewModel.otherItems) { item ->
+                    CellUniversalLawrenceSection(viewModel.otherItems) { item ->
                         CurrencyCell(
                             item.currency.code,
                             item.currency.symbol,
-                            LayoutHelper.getCurrencyDrawableResource(
-                                context, item.currency.code.lowercase()
-                            ),
+                            item.currency.flag,
                             item.selected,
                             { viewModel.onSelectBaseCurrency(item.currency) }
                         )
@@ -197,14 +190,13 @@ private fun CurrencyCell(
     checked: Boolean,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        onClick = onClick
     ) {
         Image(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .size(32.dp),
             painter = painterResource(icon),
             contentDescription = null
         )

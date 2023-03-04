@@ -3,34 +3,24 @@ package io.horizontalsystems.bankwallet.modules.coin
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.models.MacdInfo
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.*
-import io.horizontalsystems.views.ListPosition
 import java.math.BigDecimal
 import java.net.URI
 
 data class ChartInfoData(
     val chartData: ChartData,
-    val chartInterval: HsTimePeriod,
+    val chartInterval: HsTimePeriod?,
     val maxValue: String?,
     val minValue: String?
-)
-
-data class ChartPointViewItem(
-    val date: Long,
-    val price: CurrencyValue,
-    val volume: CurrencyValue?,
-    val dominance: BigDecimal?,
-    val macdInfo: MacdInfo?
 )
 
 data class MarketTickerViewItem(
@@ -55,8 +45,10 @@ sealed class RoiViewItem {
 }
 open class ContractInfo(
     val rawValue: String,
-    @DrawableRes val logoResId: Int,
-    val explorerUrl: String?
+    val imgUrl: String,
+    val explorerUrl: String?,
+    val name: String? = null,
+    val schema: String? = null
 ) {
     val shortened = rawValue.shorten()
 }
@@ -68,19 +60,8 @@ data class CoinDataItem(
     val valueLabeledBackground: Int? = null,
     val valueDecorated: Boolean = false,
     @DrawableRes val icon: Int? = null,
-    var listPosition: ListPosition? = null,
     val rankLabel: String? = null
 )
-
-sealed class InvestorItem {
-    data class Header(val title: String) : InvestorItem()
-    data class Fund(
-        val name: String,
-        val url: String,
-        val cleanedUrl: String,
-        val position: ListPosition
-    ) : InvestorItem()
-}
 
 class MajorHolderItem(
     val index: Int,
@@ -94,13 +75,6 @@ data class CoinLink(
     val linkType: LinkType,
     val title: String,
     val icon: Int,
-    var listPosition: ListPosition? = null
-)
-
-data class LastPoint(
-    val rate: BigDecimal,
-    val timestamp: Long,
-    val rateDiff24h: BigDecimal
 )
 
 class CoinViewFactory(
@@ -218,16 +192,8 @@ class CoinViewFactory(
         .sortedBy { it.blockchainType.order }
         .mapNotNull { token ->
             when (val tokenType = token.type) {
-                is TokenType.Eip20 -> when (token.blockchainType) {
-                    is BlockchainType.Ethereum -> ContractInfo(tokenType.address, R.drawable.logo_ethereum_24, explorerUrl(token, tokenType.address))
-                    is BlockchainType.BinanceSmartChain -> ContractInfo(tokenType.address, R.drawable.logo_binance_smart_chain_24, explorerUrl(token, tokenType.address))
-                    is BlockchainType.Polygon -> ContractInfo(tokenType.address, R.drawable.logo_polygon_24, explorerUrl(token, tokenType.address))
-                    is BlockchainType.Avalanche -> ContractInfo(tokenType.address, R.drawable.logo_avalanche_24, explorerUrl(token, tokenType.address))
-                    is BlockchainType.Optimism -> ContractInfo(tokenType.address, R.drawable.logo_optimism_24, explorerUrl(token, tokenType.address))
-                    is BlockchainType.ArbitrumOne -> ContractInfo(tokenType.address, R.drawable.logo_arbitrum_24, explorerUrl(token, tokenType.address))
-                    else -> null
-                }
-                is TokenType.Bep2 -> ContractInfo(tokenType.symbol, R.drawable.logo_binancecoin_24,explorerUrl(token, tokenType.symbol))
+                is TokenType.Eip20 -> ContractInfo(tokenType.address, token.blockchainType.imageUrl, explorerUrl(token, tokenType.address))
+                is TokenType.Bep2 -> ContractInfo(tokenType.symbol, token.blockchainType.imageUrl,explorerUrl(token, tokenType.symbol))
                 else -> null
             }
     }
@@ -264,10 +230,6 @@ class CoinViewFactory(
                     }
                 }
             }
-        }
-
-        links.forEachIndexed { index, link ->
-            link.listPosition = ListPosition.getListPosition(links.size, index)
         }
 
         return links

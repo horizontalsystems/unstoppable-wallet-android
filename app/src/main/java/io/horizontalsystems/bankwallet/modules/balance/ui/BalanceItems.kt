@@ -1,31 +1,131 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.*
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
+
+@Composable
+fun NoteWarning(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: (() -> Unit),
+    onClose: (() -> Unit)?
+) {
+    Note(
+        modifier = modifier.clickable(onClick = onClick),
+        text = text,
+        title = stringResource(id = R.string.AccountRecovery_Note),
+        icon = R.drawable.ic_attention_20,
+        borderColor = ComposeAppTheme.colors.jacob,
+        backgroundColor = ComposeAppTheme.colors.yellow20,
+        textColor = ComposeAppTheme.colors.jacob,
+        iconColor = ComposeAppTheme.colors.jacob,
+        onClose = onClose
+    )
+}
+
+@Composable
+fun NoteError(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: (() -> Unit)
+) {
+    Note(
+        modifier = modifier.clickable(onClick = onClick),
+        text = text,
+        title = stringResource(id = R.string.AccountRecovery_Note),
+        icon = R.drawable.ic_attention_20,
+        borderColor = ComposeAppTheme.colors.lucian,
+        backgroundColor = ComposeAppTheme.colors.red20,
+        textColor = ComposeAppTheme.colors.lucian,
+        iconColor = ComposeAppTheme.colors.lucian
+    )
+}
+
+@Composable
+fun Note(
+    modifier: Modifier = Modifier,
+    text: String,
+    title: String,
+    @DrawableRes icon: Int,
+    iconColor: Color,
+    borderColor: Color,
+    backgroundColor: Color,
+    textColor: Color,
+    onClose: (() -> Unit)? = null
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+            .background(backgroundColor)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                tint = iconColor
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = title,
+                color = textColor,
+                style = ComposeAppTheme.typography.subhead1
+            )
+            onClose?.let {
+                HsIconButton(
+                    modifier = Modifier.size(20.dp),
+                    onClick = onClose
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_close),
+                        tint = iconColor,
+                        contentDescription = null,
+                    )
+                }
+            }
+        }
+        if (text.isNotEmpty()) {
+            subhead2_leah(text = text)
+        }
+    }
+}
 
 @Composable
 fun BalanceItems(
@@ -33,7 +133,8 @@ fun BalanceItems(
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
     navController: NavController,
-    uiState: BalanceUiState
+    uiState: BalanceUiState,
+    totalState: TotalUIState
 ) {
     val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
     DisposableEffect(true) {
@@ -46,34 +147,35 @@ fun BalanceItems(
     Column {
         val context = LocalContext.current
 
-        when (val totalState = uiState.totalState) {
+        when (totalState) {
             TotalUIState.Hidden -> {
                 DoubleText(
                     title = "*****",
                     body = "*****",
                     dimmed = false,
                     onClickTitle = {
-                        viewModel.onBalanceClick()
+                        viewModel.toggleBalanceVisibility()
                         HudHelper.vibrate(context)
                     },
-                    onClickBody = {
-
+                    onClickSubtitle = {
+                        viewModel.toggleTotalType()
+                        HudHelper.vibrate(context)
                     }
                 )
             }
             is TotalUIState.Visible -> {
                 DoubleText(
-                    title = totalState.currencyValueStr,
-                    body = totalState.coinValueStr,
+                    title = totalState.primaryAmountStr,
+                    body = totalState.secondaryAmountStr,
                     dimmed = totalState.dimmed,
                     onClickTitle = {
-                        viewModel.onBalanceClick()
+                        viewModel.toggleBalanceVisibility()
                         HudHelper.vibrate(context)
                     },
-                    onClickBody = {
+                    onClickSubtitle = {
                         viewModel.toggleTotalType()
                         HudHelper.vibrate(context)
-                    }
+                    },
                 )
             }
         }
@@ -106,18 +208,12 @@ fun BalanceItems(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            accountViewItem.address?.let { address ->
-                val clipboardManager = LocalClipboardManager.current
-                val view = LocalView.current
-                ButtonSecondaryDefault(
-                    title = address.shorten(),
-                    onClick = {
-                        clipboardManager.setText(AnnotatedString(address))
-                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                    }
+            if (accountViewItem.isWatchAccount) {
+                Image(
+                    painter = painterResource(R.drawable.icon_binocule_24),
+                    contentDescription = "binoculars icon"
                 )
-            }
-            if (accountViewItem.manageCoinsAllowed) {
+            } else {
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_manage_2,
                     onClick = {
@@ -129,12 +225,49 @@ fun BalanceItems(
             Spacer(modifier = Modifier.width(16.dp))
         }
 
+        when (uiState.headerNote) {
+            HeaderNote.None -> Unit
+            HeaderNote.NonStandardAccount -> {
+                NoteError(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                    text = stringResource(R.string.AccountRecovery_MigrationRequired),
+                    onClick = {
+                        openMarkDown(viewModel.getFaqUrl(HeaderNote.NonStandardAccount), navController)
+                    }
+                )
+            }
+            HeaderNote.NonRecommendedAccount -> {
+                NoteWarning(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                    text = stringResource(R.string.AccountRecovery_MigrationRecommended),
+                    onClick = {
+                        openMarkDown(viewModel.getFaqUrl(HeaderNote.NonRecommendedAccount), navController)
+                    },
+                    onClose = {
+                        viewModel.onCloseHeaderNote(HeaderNote.NonRecommendedAccount)
+                    }
+                )
+            }
+        }
+
         Wallets(balanceViewItems, viewModel, navController, accountViewItem.id, viewModel.sortType, uiState)
     }
 }
 
+private fun openMarkDown(
+    markDownUrl: String,
+    navController: NavController
+) {
+    val arguments = bundleOf(
+        MarkdownFragment.markdownUrlKey to markDownUrl,
+        MarkdownFragment.handleRelativeUrlKey to true
+    )
+    navController.slideFromRight(
+        R.id.markdownFragment,
+        arguments
+    )
+}
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Wallets(
     balanceViewItems: List<BalanceViewItem>,
@@ -155,7 +288,7 @@ fun Wallets(
     }
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(uiState.isRefreshing),
+        refreshing = uiState.isRefreshing,
         onRefresh = {
             viewModel.onRefresh()
         }

@@ -30,7 +30,7 @@ object CoinOverviewModule {
                     CoinOverviewViewModel(service, CoinViewFactory(currency, App.numberFormatter)) as T
                 }
                 ChartViewModel::class.java -> {
-                    val chartService = CoinOverviewChartService(App.marketKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
+                    val chartService = CoinOverviewChartService(App.marketKit, App.currencyManager, fullCoin.coin.uid)
                     val chartNumberFormatter = ChartCurrencyValueFormatterSignificant()
                     ChartModule.createViewModel(chartService, chartNumberFormatter) as T
                 }

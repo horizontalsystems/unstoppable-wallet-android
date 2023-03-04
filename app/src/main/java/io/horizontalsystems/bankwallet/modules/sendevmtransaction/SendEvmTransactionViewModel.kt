@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -27,6 +26,8 @@ import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.nftkit.decorations.OutgoingEip1155Decoration
+import io.horizontalsystems.nftkit.decorations.OutgoingEip721Decoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
@@ -177,8 +178,76 @@ class SendEvmTransactionViewModel(
 
             is OneInchDecoration -> additionalInfo?.oneInchSwapInfo?.let { getOneInchViewItems(it) }
 
+            is OutgoingEip721Decoration -> getNftTransferItems(
+                decoration.to,
+                BigInteger.ONE,
+                transactionData?.nonce,
+                additionalInfo?.sendInfo,
+                decoration.tokenId,
+            )
+
+            is OutgoingEip1155Decoration -> getNftTransferItems(
+                decoration.to,
+                decoration.value,
+                transactionData?.nonce,
+                additionalInfo?.sendInfo,
+                decoration.tokenId,
+            )
+
             else -> null
         }
+
+    private fun getNftTransferItems(
+        recipient: Address,
+        value: BigInteger,
+        nonce: Long?,
+        sendInfo: SendEvmData.SendInfo?,
+        tokenId: BigInteger
+    ): List<SectionViewItem> {
+
+        val sections = mutableListOf<SectionViewItem>()
+        val otherViewItems = mutableListOf<ViewItem>()
+        val addressValue = recipient.eip55
+        val addressTitle = sendInfo?.domain ?: evmLabelManager.mapped(addressValue)
+
+        sections.add(
+            SectionViewItem(
+                listOf(
+                    ViewItem.Subhead(
+                        Translator.getString(R.string.Send_Confirmation_YouSend),
+                        sendInfo?.nftShortMeta?.nftName ?: tokenId.toString(),
+                        R.drawable.ic_arrow_up_right_12
+                    ),
+                    getNftAmount(
+                        value,
+                        ValueType.Regular,
+                        sendInfo?.nftShortMeta?.previewImageUrl
+                    ),
+                    ViewItem.Address(
+                        Translator.getString(R.string.Send_Confirmation_To),
+                        addressTitle,
+                        addressValue
+                    )
+                )
+            )
+        )
+
+        nonce?.let {
+            otherViewItems.add(
+                ViewItem.Value(
+                    Translator.getString(R.string.Send_Confirmation_Nonce),
+                    "$it",
+                    ValueType.Regular
+                ),
+            )
+        }
+
+        if (otherViewItems.isNotEmpty()) {
+            sections.add(SectionViewItem(otherViewItems))
+        }
+
+        return sections
+    }
 
     private fun getUniswapViewItems(
         amountIn: SwapDecoration.Amount,
@@ -195,66 +264,8 @@ class SendEvmTransactionViewModel(
         val sections = mutableListOf<SectionViewItem>()
         val inViewItems = mutableListOf<ViewItem>()
         val outViewItems = mutableListOf<ViewItem>()
-
-        when (amountIn) {
-            is SwapDecoration.Amount.Exact -> {
-                val amountData = coinServiceIn.amountData(amountIn.value)
-                inViewItems.add(getAmount(amountData, ValueType.Outgoing, coinServiceIn.token))
-            }
-
-            is SwapDecoration.Amount.Extremum -> {
-                uniswapInfo?.estimatedIn?.let { estimated ->
-                    val estimatedAmount =
-                        getEstimatedSwapAmount(coinServiceIn.amountData(estimated))
-                    outViewItems.add(
-                        ViewItem.AmountMulti(
-                            listOf(estimatedAmount),
-                            ValueType.Outgoing,
-                            coinServiceIn.token
-                        )
-                    )
-                }
-
-                inViewItems.add(
-                    getMaxAmount(
-                        coinServiceIn.amountData(amountIn.value),
-                        coinServiceIn.token
-                    )
-                )
-            }
-        }
-
-        when (amountOut) {
-            is SwapDecoration.Amount.Exact -> {
-                val amountData = coinServiceOut.amountData(amountOut.value)
-                outViewItems.add(getAmount(
-                    amountData,
-                    ValueType.Incoming,
-                    coinServiceIn.token
-                ))
-            }
-
-            is SwapDecoration.Amount.Extremum -> {
-                val multiAmount = mutableListOf<AmountValues>()
-                uniswapInfo?.estimatedOut?.let { estimated ->
-                    multiAmount.add(
-                        getEstimatedSwapAmount(coinServiceOut.amountData(estimated))
-                    )
-                }
-                multiAmount.add(
-                    getGuaranteedAmount(coinServiceOut.amountData(amountOut.value))
-                )
-                outViewItems.add(
-                    ViewItem.AmountMulti(
-                        multiAmount,
-                        ValueType.Incoming,
-                        coinServiceOut.token
-                    )
-                )
-            }
-        }
-
         val otherViewItems = mutableListOf<ViewItem>()
+
         uniswapInfo?.slippage?.let {
             otherViewItems.add(
                 ViewItem.Value(
@@ -310,18 +321,85 @@ class SendEvmTransactionViewModel(
             )
         }
 
-        inViewItems.add(0, ViewItem.Subhead(
-            Translator.getString(R.string.Swap_FromAmountTitle),
-            coinServiceIn.token.coin.name,
-            R.drawable.ic_arrow_up_right_12
-        ))
+        when (amountIn) {
+            is SwapDecoration.Amount.Exact -> { // you pay exact
+                val amountData = coinServiceIn.amountData(amountIn.value)
+                inViewItems.add(getAmount(amountData, ValueType.Outgoing, coinServiceIn.token))
+            }
+
+            is SwapDecoration.Amount.Extremum -> { // you pay estimated
+                val maxAmountData = coinServiceIn.amountData(amountIn.value)
+                if (uniswapInfo?.estimatedIn != null) {
+                    val estimatedAmount = getEstimatedSwapAmount(coinServiceIn.amountData(uniswapInfo.estimatedIn))
+                    inViewItems.add(
+                        ViewItem.Amount(
+                            estimatedAmount.fiatAmount,
+                            estimatedAmount.coinAmount,
+                            ValueType.Outgoing,
+                            coinServiceIn.token
+                        )
+                    )
+                    otherViewItems.add(
+                        ViewItem.ValueMulti(
+                            Translator.getString(R.string.SwapInfo_MaxSpendTitle),
+                            maxAmountData.primary.getFormatted(),
+                            maxAmountData.secondary?.getFormatted() ?: "---",
+                            ValueType.Regular
+                        )
+                    )
+
+                } else {
+                    inViewItems.add(getMaxAmount(maxAmountData, coinServiceIn.token, ValueType.Outgoing))
+                }
+            }
+        }
+
+        when (amountOut) {
+            is SwapDecoration.Amount.Exact -> { // you get exact
+                val amountData = coinServiceOut.amountData(amountOut.value)
+                outViewItems.add(
+                    getAmount(amountData, ValueType.Incoming, coinServiceOut.token)
+                )
+            }
+
+            is SwapDecoration.Amount.Extremum -> { // you get estimated
+                val guaranteedAmountData = coinServiceOut.amountData(amountOut.value)
+                if (uniswapInfo?.estimatedOut != null) {
+                    getEstimatedSwapAmount(coinServiceOut.amountData(uniswapInfo.estimatedOut)).let {
+                        outViewItems.add(
+                            ViewItem.Amount(it.fiatAmount, it.coinAmount, ValueType.Incoming, coinServiceOut.token)
+                        )
+                    }
+                    otherViewItems.add(
+                        ViewItem.ValueMulti(
+                            Translator.getString(R.string.SwapInfo_GuaranteedAmountTitle),
+                            guaranteedAmountData.primary.getFormatted(),
+                            guaranteedAmountData.secondary?.getFormatted() ?: "---",
+                            ValueType.Regular
+                        )
+                    )
+                } else {
+                    outViewItems.add(getGuaranteedAmount(guaranteedAmountData, coinServiceOut.token, ValueType.Incoming))
+                }
+            }
+        }
+
+        inViewItems.add(
+            0, ViewItem.Subhead(
+                Translator.getString(R.string.Swap_FromAmountTitle),
+                coinServiceIn.token.coin.name,
+                R.drawable.ic_arrow_up_right_12
+            )
+        )
         sections.add(SectionViewItem(inViewItems))
 
-        outViewItems.add(0, ViewItem.Subhead(
-            Translator.getString(R.string.Swap_ToAmountTitle),
-            coinServiceOut.token.coin.name,
-            R.drawable.ic_arrow_down_left_12
-        ))
+        outViewItems.add(
+            0, ViewItem.Subhead(
+                Translator.getString(R.string.Swap_ToAmountTitle),
+                coinServiceOut.token.coin.name,
+                R.drawable.ic_arrow_down_left_12
+            )
+        )
         sections.add(SectionViewItem(outViewItems))
 
         if (otherViewItems.isNotEmpty()) {
@@ -369,39 +447,49 @@ class SendEvmTransactionViewModel(
             )
         )
 
+        var guaranteed: ViewItem? = null
         if (amountOut is OneInchDecoration.Amount.Extremum) {
-            val multiAmount = mutableListOf<AmountValues>()
+            val guaranteedAmountData = coinServiceOut.amountData(amountOut.value)
 
-            oneInchInfo?.estimatedAmountTo?.let {
-                multiAmount.add(
-                    getEstimatedSwapAmount(coinServiceOut.amountData(it))
+            if (oneInchInfo?.estimatedAmountTo != null) {
+                getEstimatedSwapAmount(coinServiceOut.amountData(oneInchInfo.estimatedAmountTo)).let {
+                    outViewItems.add(
+                        ViewItem.Amount(it.fiatAmount, it.coinAmount, ValueType.Incoming, coinServiceOut.token)
+                    )
+                }
+                guaranteed = ViewItem.ValueMulti(
+                    Translator.getString(R.string.SwapInfo_GuaranteedAmountTitle),
+                    guaranteedAmountData.primary.getFormatted(),
+                    guaranteedAmountData.secondary?.getFormatted() ?: "---",
+                    ValueType.Regular
                 )
+            } else {
+                outViewItems.add(getGuaranteedAmount(guaranteedAmountData, coinServiceOut.token, ValueType.Incoming))
             }
-            multiAmount.add(
-                getGuaranteedAmount(coinServiceOut.amountData(amountOut.value))
-            )
-
-            outViewItems.add(
-                ViewItem.AmountMulti(
-                    multiAmount, ValueType.Incoming, coinServiceOut.token
-                )
-            )
         }
+        sections.add(SectionViewItem(outViewItems))
 
-        sections.add(
-            SectionViewItem(outViewItems)
-        )
-
-        val additionalSection = oneInchInfo?.let { additionalSectionViewItem(it, recipient) }
-        if (additionalSection != null) {
-            sections.add(additionalSection)
+        val additionalViewItems = mutableListOf<ViewItem>()
+        oneInchInfo?.let { additionalViewItems.addAll(additionalViewItems(it, recipient)) }
+        guaranteed?.let { additionalViewItems.add(it) }
+        if (additionalViewItems.isNotEmpty()) {
+            sections.add(SectionViewItem(additionalViewItems))
         }
 
         return sections
     }
 
-    private fun additionalSectionViewItem(oneInchSwapInfo: SendEvmData.OneInchSwapInfo, recipient: Address?): SectionViewItem? {
+    private fun additionalViewItems(oneInchSwapInfo: SendEvmData.OneInchSwapInfo, recipient: Address?): List<ViewItem> {
         val viewItems = mutableListOf<ViewItem>()
+        oneInchSwapInfo.price?.let {
+            viewItems.add(
+                ViewItem.Value(
+                    Translator.getString(R.string.Swap_Price),
+                    it,
+                    ValueType.Regular
+                )
+            )
+        }
         getFormattedSlippage(oneInchSwapInfo.slippage)?.let { formattedSlippage ->
             viewItems.add(
                 ViewItem.Value(
@@ -424,12 +512,7 @@ class SendEvmTransactionViewModel(
                 )
             )
         }
-
-        return if (viewItems.isNotEmpty()) {
-            SectionViewItem(viewItems)
-        } else {
-            null
-        }
+        return viewItems
     }
 
     private fun getOneInchViewItems(
@@ -457,14 +540,9 @@ class SendEvmTransactionViewModel(
             )
         )
 
-        val amountOutMin = oneInchSwapInfo.estimatedAmountTo - oneInchSwapInfo.estimatedAmountTo / BigDecimal("100") * oneInchSwapInfo.slippage
-
-        val estimated = getEstimatedSwapAmount(
-            coinServiceOut.amountData(oneInchSwapInfo.estimatedAmountTo)
-        )
-        val guaranteed = getGuaranteedAmount(
-            coinServiceOut.amountData(amountOutMin.scaleUp(oneInchSwapInfo.tokenTo.decimals))
-        )
+        val estimated = getEstimatedSwapAmount(coinServiceOut.amountData(oneInchSwapInfo.estimatedAmountTo)).let {
+            ViewItem.Amount(it.fiatAmount, it.coinAmount, ValueType.Incoming, coinServiceOut.token)
+        }
 
         sections.add(
             SectionViewItem(
@@ -474,13 +552,19 @@ class SendEvmTransactionViewModel(
                         coinServiceOut.token.coin.name,
                         R.drawable.ic_arrow_down_left_12
                     ),
-                    ViewItem.AmountMulti(
-                        listOf(estimated, guaranteed),
-                        ValueType.Incoming,
-                        coinServiceOut.token
-                    )
+                    estimated
                 )
             )
+        )
+
+        val amountOutMin = oneInchSwapInfo.estimatedAmountTo - oneInchSwapInfo.estimatedAmountTo / BigDecimal("100") * oneInchSwapInfo.slippage
+        val guaranteedAmountData = coinServiceOut.amountData(amountOutMin.scaleUp(oneInchSwapInfo.tokenTo.decimals))
+
+        val guaranteed = ViewItem.ValueMulti(
+            Translator.getString(R.string.SwapInfo_GuaranteedAmountTitle),
+            guaranteedAmountData.primary.getFormatted(),
+            guaranteedAmountData.secondary?.getFormatted() ?: "n/a",
+            ValueType.Regular
         )
 
         val recipient = try {
@@ -489,10 +573,8 @@ class SendEvmTransactionViewModel(
             null
         }
 
-        val additionalSection = additionalSectionViewItem(oneInchSwapInfo, recipient)
-        if (additionalSection != null) {
-            sections.add(additionalSection)
-        }
+        val additionalViewItems = additionalViewItems(oneInchSwapInfo, recipient) + guaranteed
+        sections.add(SectionViewItem(additionalViewItems))
 
         return sections
     }
@@ -560,22 +642,44 @@ class SendEvmTransactionViewModel(
         val addressValue = spender.eip55
         val addressTitle = evmLabelManager.mapped(addressValue)
 
-        val viewItems = mutableListOf(
-            ViewItem.Subhead(
-                Translator.getString(R.string.Approve_YouApprove),
-                coinService.token.coin.name,
-            ),
-            getAmount(
-                coinService.amountData(value),
-                ValueType.Regular,
-                coinService.token
-            ),
-            ViewItem.Address(
-                Translator.getString(R.string.Approve_Spender),
-                addressTitle,
-                addressValue
+        val viewItems = mutableListOf<ViewItem>()
+
+        if (value.compareTo(BigInteger.ZERO) == 0) {
+            viewItems.addAll(
+                listOf(
+                    ViewItem.Subhead(
+                        Translator.getString(R.string.Approve_YouRevoke),
+                        coinService.token.coin.name,
+                    ),
+                    ViewItem.TokenItem(coinService.token),
+                    ViewItem.Address(
+                        Translator.getString(R.string.Approve_Spender),
+                        addressTitle,
+                        addressValue
+                    )
+                )
             )
-        )
+        } else {
+            viewItems.addAll(
+                listOf(
+                    ViewItem.Subhead(
+                        Translator.getString(R.string.Approve_YouApprove),
+                        coinService.token.coin.name,
+                    ),
+                    getAmount(
+                        coinService.amountData(value),
+                        ValueType.Regular,
+                        coinService.token
+                    ),
+                    ViewItem.Address(
+                        Translator.getString(R.string.Approve_Spender),
+                        addressTitle,
+                        addressValue
+                    )
+                )
+            )
+        }
+
         nonce?.let {
             viewItems.add(
                 ViewItem.Value(
@@ -642,21 +746,27 @@ class SendEvmTransactionViewModel(
         val toValue = to.eip55
         val baseCoinService = coinServiceFactory.baseCoinService
 
-        return listOf(SectionViewItem(
-            listOf(
-                ViewItem.Subhead(
-                    Translator.getString(R.string.Send_Confirmation_YouSend),
-                    baseCoinService.token.coin.name,
-                    R.drawable.ic_arrow_up_right_12
-                ),
-                getAmount(
-                    baseCoinService.amountData(value),
-                    ValueType.Outgoing,
-                    baseCoinService.token
-                ),
-                ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), sendInfo?.domain ?: evmLabelManager.mapped(toValue), toValue)
+        return listOf(
+            SectionViewItem(
+                listOf(
+                    ViewItem.Subhead(
+                        Translator.getString(R.string.Send_Confirmation_YouSend),
+                        baseCoinService.token.coin.name,
+                        R.drawable.ic_arrow_up_right_12
+                    ),
+                    getAmount(
+                        baseCoinService.amountData(value),
+                        ValueType.Outgoing,
+                        baseCoinService.token
+                    ),
+                    ViewItem.Address(
+                        Translator.getString(R.string.Send_Confirmation_To),
+                        sendInfo?.domain ?: evmLabelManager.mapped(toValue),
+                        toValue
+                    )
+                )
             )
-        ))
+        )
     }
 
     private fun getCoinService(token: SwapDecoration.Token) = when (token) {
@@ -672,6 +782,9 @@ class SendEvmTransactionViewModel(
     private fun getCoinService(token: Token) =
         coinServiceFactory.getCoinService(token)
 
+    private fun getNftAmount(value: BigInteger, valueType: ValueType, previewImageUrl: String?): ViewItem.NftAmount =
+        ViewItem.NftAmount(previewImageUrl, "$value NFT", valueType)
+
     private fun getAmount(amountData: SendModule.AmountData, valueType: ValueType, token: Token) =
         ViewItem.Amount(
             amountData.secondary?.getFormatted(),
@@ -685,19 +798,21 @@ class SendEvmTransactionViewModel(
         amountData.secondary?.getFormatted() ?: "n/a"
     )
 
-    private fun getGuaranteedAmount(amountData: SendModule.AmountData) = AmountValues(
-        "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
-        amountData.secondary?.getFormatted(),
-    )
-
-    private fun getMaxAmount(amountData: SendModule.AmountData, token: Token): ViewItem.Amount {
-        return ViewItem.Amount(
+    private fun getGuaranteedAmount(amountData: SendModule.AmountData, token: Token, valueType: ValueType = ValueType.Regular) =
+        ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
-            ValueType.Regular,
+            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
+            valueType,
             token
         )
-    }
+
+    private fun getMaxAmount(amountData: SendModule.AmountData, token: Token, valueType: ValueType = ValueType.Regular) =
+        ViewItem.Amount(
+            amountData.secondary?.getFormatted(),
+            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
+            valueType,
+            token
+        )
 
     private fun convertError(error: Throwable) =
         when (val convertedError = error.convertedError) {
@@ -741,6 +856,14 @@ sealed class ViewItem {
         @ColorRes val color: Int? = null
     ) : ViewItem()
 
+    class ValueMulti(
+        val title: String,
+        val primaryValue: String,
+        val secondaryValue: String,
+        val type: ValueType,
+        @ColorRes val color: Int? = null
+    ) : ViewItem()
+
     class AmountMulti(
         val amounts: List<AmountValues>,
         val type: ValueType,
@@ -754,10 +877,15 @@ sealed class ViewItem {
         val token: Token
     ) : ViewItem()
 
+    class NftAmount(
+        val iconUrl: String?,
+        val amount: String,
+        val type: ValueType,
+    ) : ViewItem()
+
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
-    class Warning(val title: String, val description: String, @DrawableRes val icon: Int) :
-        ViewItem()
+    class TokenItem(val token: Token) : ViewItem()
 }
 
 data class AmountValues(val coinAmount: String, val fiatAmount: String?)

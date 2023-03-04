@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,8 +57,6 @@ private fun LanguageScreen(
         factory = LanguageSettingsModule.Factory()
     )
 ) {
-    val context = LocalContext.current
-
     if (viewModel.closeScreen) {
         navController.popBackStack()
     }
@@ -85,7 +85,7 @@ private fun LanguageScreen(
                 Modifier.verticalScroll(rememberScrollState())
             ) {
                 Spacer(Modifier.height(12.dp))
-                CellMultilineLawrenceSection(viewModel.languageItems) { item ->
+                CellUniversalLawrenceSection(viewModel.languageItems) { item ->
                     LanguageCell(
                         title = item.name,
                         subtitle = item.nativeName,
@@ -108,14 +108,13 @@ private fun LanguageCell(
     checked: Boolean,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        onClick = onClick
     ) {
         Image(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .size(32.dp),
             painter = painterResource(icon),
             contentDescription = null
         )

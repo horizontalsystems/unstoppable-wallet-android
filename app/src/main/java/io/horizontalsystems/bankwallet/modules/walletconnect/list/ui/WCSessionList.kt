@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -16,22 +18,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 
 @Composable
 fun WCSessionList(
-    viewModelWc2: WC2ListViewModel,
-    viewModelWc1: WalletConnectListViewModel,
+    viewModel: WalletConnectListViewModel,
     navController: NavController
 ) {
+    val uiState = viewModel.uiState
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
-    LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
-        viewModelWc2.sectionItem?.let { section ->
+    LazyColumn(contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)) {
+        uiState.v2SectionItem?.let { section ->
             WCSection(
                 section,
                 navController,
@@ -44,10 +48,39 @@ fun WCSessionList(
                 onConceal = {
                     revealedCardId = null
                 },
-                onDelete = { viewModelWc2.onDelete(it) }
+                onDelete = { viewModel.onDeleteV2(it) }
             )
+            item {
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
-        viewModelWc1.sectionItem?.let { section ->
+        val pairingsNumber = uiState.pairingsNumber
+        if (pairingsNumber > 0) {
+            item {
+                CellSingleLineLawrenceSection {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                navController.slideFromRight(R.id.wc2PairingsFragment)
+                            }
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        body_leah(text = stringResource(R.string.WalletConnect_Pairings))
+                        Spacer(modifier = Modifier.weight(1f))
+                        subhead1_grey(text = pairingsNumber.toString())
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = null
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+        }
+        uiState.v1SectionItem?.let { section ->
             WCSection(
                 section,
                 navController,
@@ -60,7 +93,7 @@ fun WCSessionList(
                 onConceal = {
                     revealedCardId = null
                 },
-                onDelete = { viewModelWc1.onDelete(it) }
+                onDelete = { viewModel.onDelete(it) }
             )
         }
     }
@@ -80,19 +113,11 @@ private fun LazyListScope.WCSection(
             text = stringResource(section.version.value),
         )
     }
-    section.pendingRequests?.let {
-        item {
-            PendingRequestsCell(it, navController)
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-    }
     itemsIndexed(section.sessions, key = { _, item -> item.sessionId }) { index, item ->
         val showDivider = showDivider(section.sessions.size, index)
         val shape = getShape(section.sessions.size, index)
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp),
+            modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             ActionsRow(
@@ -131,14 +156,14 @@ private fun LazyListScope.WCSection(
     }
 }
 
-private fun getShape(itemsCount: Int, index: Int): Shape = when {
+fun getShape(itemsCount: Int, index: Int): Shape = when {
     itemsCount == 1 -> RoundedCornerShape(12.dp)
     itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
     0 == index -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
     else -> RoundedCornerShape(0.dp)
 }
 
-private fun showDivider(itemsCount: Int, index: Int): Boolean = when {
+fun showDivider(itemsCount: Int, index: Int): Boolean = when {
     itemsCount == 1 || index == 0 -> false
     else -> true
 }

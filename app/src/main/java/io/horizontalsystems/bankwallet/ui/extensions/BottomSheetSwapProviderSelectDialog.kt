@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
@@ -21,7 +19,8 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSectionFramed
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class BottomSheetSwapProviderSelectDialog() : BaseComposableBottomSheetFragment() {
@@ -71,19 +70,16 @@ private fun BottomSheetScreen(
     ) {
         Spacer(Modifier.height(12.dp))
         swapProviders?.let { items ->
-            CellSingleLineLawrenceSectionFramed(items) { item ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable {
-                            onSelectListener?.invoke(item)
-                            onCloseClick.invoke()
-                        }
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            CellUniversalLawrenceSection(items, showFrame = true) { item ->
+                RowUniversal(
+                    onClick = {
+                        onSelectListener?.invoke(item)
+                        onCloseClick.invoke()
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 ) {
                     Image(
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(32.dp),
                         painter = painterResource(
                             id = getDrawableResource(item.id, context)
                                 ?: R.drawable.coin_placeholder

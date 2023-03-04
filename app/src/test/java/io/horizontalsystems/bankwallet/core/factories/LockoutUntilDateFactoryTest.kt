@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.core.ICurrentDateProvider
-import io.horizontalsystems.pin.core.LockoutUntilDateFactory
+import io.horizontalsystems.bankwallet.modules.pin.core.LockoutUntilDateFactory
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito

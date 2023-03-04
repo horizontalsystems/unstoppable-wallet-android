@@ -1,20 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class ProChartService(
-    override val currencyManager: ICurrencyManager,
+    override val currencyManager: CurrencyManager,
     private val proFeaturesAuthorizationManager: ProFeaturesAuthorizationManager,
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val coinUid: String,
     private val chartType: ProChartModule.ChartType
 ) : AbstractChartService() {
@@ -51,6 +51,14 @@ class ProChartService(
                     .map { response -> response.countPoints }
         }
 
+        val isMovementChart = when (chartType) {
+            ProChartModule.ChartType.DexLiquidity,
+            ProChartModule.ChartType.AddressesCount -> true
+            ProChartModule.ChartType.DexVolume,
+            ProChartModule.ChartType.TxCount,
+            ProChartModule.ChartType.TxVolume -> false
+        }
+
         return chartDataSingle
             .map { chartPoints ->
                 val items = chartPoints.mapNotNull { chartPoint ->
@@ -62,7 +70,8 @@ class ProChartService(
                     items,
                     null,
                     null,
-                    false
+                    false,
+                    isMovementChart
                 )
             }
     }

@@ -26,14 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
@@ -113,14 +112,14 @@ private fun PlatformScreen(
             TopCloseButton(interactionSource, onCloseButtonClick)
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(viewModel.isRefreshing),
+                refreshing = viewModel.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                 }
             ) {
                 Crossfade(viewModel.viewState) { state ->
                     when (state) {
-                        is ViewState.Loading -> {
+                        ViewState.Loading -> {
                             Loading()
                         }
                         is ViewState.Error -> {
@@ -129,9 +128,8 @@ private fun PlatformScreen(
                                 viewModel::onErrorClick
                             )
                         }
-                        is ViewState.Success -> {
+                        ViewState.Success -> {
                             viewModel.viewItems.let { viewItems ->
-
                                 CoinList(
                                     items = viewItems,
                                     scrollToTop = scrollToTopAfterUpdate,

@@ -11,10 +11,9 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
 import cash.z.ecc.android.sdk.ext.fromHex
+import cash.z.ecc.android.sdk.model.*
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
-import cash.z.ecc.android.sdk.type.WalletBalance
-import cash.z.ecc.android.sdk.type.ZcashNetwork
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
@@ -35,8 +34,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
-import java.lang.Integer.max
 import java.math.BigDecimal
+import kotlin.math.max
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ZcashAdapter(
@@ -50,8 +49,7 @@ class ZcashAdapter(
     private val decimalCount = 8
     private val network: ZcashNetwork = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
-    private val lightWalletDHost = if (testMode) network.defaultHost else "zcash.horizontalsystems.xyz"
-    private val lightWalletDPort = 9067
+    private val lightWalletEndpoint = LightWalletEndpoint.defaultForNetwork(network)
 
     private val synchronizer: Synchronizer
     private val transactionsProvider: ZcashTransactionsProvider
@@ -78,23 +76,21 @@ class ZcashAdapter(
                     config.newWallet(
                         viewingKey = viewingKey,
                         network = network,
-                        host = lightWalletDHost,
-                        port = lightWalletDPort,
+                        lightWalletEndpoint = lightWalletEndpoint,
                         alias = getValidAliasFromAccountId(wallet.account.id)
                     )
                 }
             }
             AccountOrigin.Restored -> {
                 val birthdayHeight = restoreSettings.birthdayHeight?.let { height ->
-                    max(network.saplingActivationHeight, height)
+                    max(network.saplingActivationHeight.value, height.toLong())
                 }
                 Initializer.Config { config ->
                     config.importWallet(
                         viewingKey = viewingKey,
-                        birthdayHeight = birthdayHeight,
+                        birthday = birthdayHeight?.let { BlockHeight.new(network, it) },
                         network = network,
-                        host = lightWalletDHost,
-                        port = lightWalletDPort,
+                        lightWalletEndpoint = lightWalletEndpoint,
                         alias = getValidAliasFromAccountId(wallet.account.id)
                     )
                 }
@@ -109,12 +105,13 @@ class ZcashAdapter(
         synchronizer.onChainErrorHandler = ::onChainError
     }
 
-    private fun defaultFee(height: Long? = null): Long {
-        return if (height == null || height > feeChangeHeight) 1_000 else 10_000
+    private fun defaultFee(height: Long? = null): Zatoshi {
+        val value = if (height == null || height > feeChangeHeight) 1_000L else 10_000L
+        return Zatoshi(value)
     }
 
     private var syncState: AdapterState = AdapterState.Zcash(
-        ZcashState.DownloadingBlocks(null)
+        ZcashState.DownloadingBlocks(BlockProgress(null, null))
     )
         set(value) {
             if (value != field) {
@@ -152,21 +149,14 @@ class ZcashAdapter(
 
     private val balance: BigDecimal
         get() {
-            val totalZatoshi = synchronizer.saplingBalances.value.availableZatoshi
-            return if (totalZatoshi > 0)
-                totalZatoshi.convertZatoshiToZec(decimalCount)
-            else
-                BigDecimal.ZERO
+            val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
+            return walletBalance.available.convertZatoshiToZec(decimalCount)
         }
 
     private val balanceLocked: BigDecimal
         get() {
-            val latestBalance = synchronizer.saplingBalances.value
-            val lockedBalance = synchronizer.saplingBalances.value.pendingZatoshi
-            return if (lockedBalance > 0)
-                lockedBalance.convertZatoshiToZec(decimalCount)
-            else
-                BigDecimal.ZERO
+            val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
+            return walletBalance.pending.convertZatoshiToZec(decimalCount)
         }
 
     override val balanceUpdatedFlowable: Flowable<Unit>
@@ -182,7 +172,7 @@ class ZcashAdapter(
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val lastBlockInfo: LastBlockInfo?
-        get() = LastBlockInfo(synchronizer.latestHeight)
+        get() = synchronizer.latestHeight?.value?.toInt()?.let { LastBlockInfo(it) }
 
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -216,7 +206,11 @@ class ZcashAdapter(
         if (testMode) null else "https://blockchair.com/zcash/transaction/$transactionHash"
 
     override val availableBalance: BigDecimal
-        get() = (synchronizer.saplingBalances.value.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec(decimalCount)
+        get() = synchronizer.saplingBalances.value
+            ?.available
+            ?.minus(defaultFee())
+            .convertZatoshiToZec(decimalCount)
+            .coerceAtLeast(BigDecimal.ZERO)
 
     override val fee: BigDecimal
         get() = defaultFee().convertZatoshiToZec(decimalCount)
@@ -279,7 +273,7 @@ class ZcashAdapter(
         val scope = synchronizer.coroutineScope
         synchronizer.clearedTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onClearedTransactions)
         synchronizer.pendingTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onPendingTransactions)
-        synchronizer.status.distinctUntilChanged().collectWith(scope, ::onStatus)
+        synchronizer.status.collectWith(scope, ::onStatus)
         synchronizer.progress.distinctUntilChanged().collectWith(scope, ::onDownloadProgress)
         synchronizer.saplingBalances.collectWith(scope, ::onBalance)
         synchronizer.processorInfo.distinctUntilChanged().collectWith(scope, ::onProcessorInfo)
@@ -290,13 +284,19 @@ class ZcashAdapter(
         return true
     }
 
-    private fun onChainError(errorHeight: Int, rewindHeight: Int) {
+    private fun onChainError(errorHeight: BlockHeight, rewindHeight: BlockHeight) {
     }
 
     private fun onStatus(status: Synchronizer.Status) {
         syncState = when (status) {
             Synchronizer.Status.STOPPED -> AdapterState.NotSynced(Exception("stopped"))
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
+            Synchronizer.Status.DOWNLOADING -> AdapterState.Zcash(
+                ZcashState.DownloadingBlocks(BlockProgress(null, null))
+            )
+            Synchronizer.Status.SCANNING -> AdapterState.Zcash(
+                ZcashState.ScanningBlocks(BlockProgress(null, null))
+            )
             Synchronizer.Status.SYNCED -> AdapterState.Synced
             else -> syncState
         }
@@ -309,8 +309,8 @@ class ZcashAdapter(
             syncState = AdapterState.Zcash(
                 ZcashState.DownloadingBlocks(
                     BlockProgress(
-                        processorInfo.lastDownloadedHeight,
-                        processorInfo.networkBlockHeight
+                        processorInfo.lastDownloadedHeight?.value,
+                        processorInfo.networkBlockHeight?.value
                     )
                 )
             )
@@ -318,8 +318,8 @@ class ZcashAdapter(
             syncState = AdapterState.Zcash(
                 ZcashState.ScanningBlocks(
                     BlockProgress(
-                        processorInfo.lastScannedHeight,
-                        processorInfo.networkBlockHeight
+                        processorInfo.lastScannedHeight?.value,
+                        processorInfo.networkBlockHeight?.value
                     )
                 )
             )
@@ -328,7 +328,7 @@ class ZcashAdapter(
         lastBlockUpdatedSubject.onNext(Unit)
     }
 
-    private fun onBalance(balance: WalletBalance) {
+    private fun onBalance(balance: WalletBalance?) {
         balanceUpdatedSubject.onNext(Unit)
     }
 
@@ -341,15 +341,15 @@ class ZcashAdapter(
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
                 transactionIndex = transaction.transactionIndex,
-                blockHeight = transaction.minedHeight,
+                blockHeight = transaction.minedHeight.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(decimalCount),
+                fee = defaultFee(transaction.minedHeight).convertZatoshiToZec(decimalCount),
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
-                amount = transaction.value.convertZatoshiToZec(decimalCount),
+                amount = Zatoshi(transaction.value).convertZatoshiToZec(decimalCount),
                 from = null,
                 memo = transaction.memo,
                 source = wallet.transactionSource
@@ -360,15 +360,15 @@ class ZcashAdapter(
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
                 transactionIndex = transaction.transactionIndex,
-                blockHeight = transaction.minedHeight,
+                blockHeight = transaction.minedHeight.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(decimalCount),
+                fee = defaultFee(transaction.minedHeight).convertZatoshiToZec(decimalCount),
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
-                amount = transaction.value.convertZatoshiToZec(decimalCount).negate(),
+                amount = Zatoshi(transaction.value).convertZatoshiToZec(decimalCount).negate(),
                 to = transaction.toAddress,
                 sentToSelf = false,
                 memo = transaction.memo,
@@ -387,11 +387,11 @@ class ZcashAdapter(
     }
 
     sealed class ZcashState{
-        class DownloadingBlocks(val blockProgress: BlockProgress?): ZcashState()
+        class DownloadingBlocks(val blockProgress: BlockProgress): ZcashState()
         class ScanningBlocks(val blockProgress: BlockProgress): ZcashState()
     }
 
-    class BlockProgress(val current: Int, val total: Int)
+    class BlockProgress(val current: Long?, val total: Long?)
 
     companion object {
         private const val ALIAS_PREFIX = "zcash_"

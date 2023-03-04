@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
-import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class TopSectorsRepository(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
 ) {
     private val itemsCount = 4
     private var itemsCache: List<Category>? = null

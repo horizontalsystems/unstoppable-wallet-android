@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -51,7 +53,8 @@ fun AppBar(
     title: TranslatableString? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<MenuItem> = listOf(),
-    showSpinner: Boolean = false
+    showSpinner: Boolean = false,
+    backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
     TopAppBar(
         modifier = Modifier.height(56.dp),
@@ -64,7 +67,7 @@ fun AppBar(
                 )
             }
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = backgroundColor,
         navigationIcon = navigationIcon?.let {
             {
                 navigationIcon()
@@ -97,12 +100,12 @@ fun AppBar(
 
                     Text(
                         modifier = Modifier
-                            .padding(end = 16.dp)
+                            .padding(horizontal = 16.dp)
                             .clickable(
                                 enabled = menuItem.enabled,
                                 onClick = menuItem.onClick
                             ),
-                        text = menuItem.title.getString(),
+                        text = menuItem.title.getString().toUpperCase(Locale.current),
                         style = ComposeAppTheme.typography.headline2,
                         color = color
                     )

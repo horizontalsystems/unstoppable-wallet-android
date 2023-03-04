@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -77,7 +76,6 @@ fun TransactionInfoScreen(
                     )
                 )
             )
-            Spacer(modifier = Modifier.height(12.dp))
             TransactionInfo(viewModel, navController)
         }
     }
@@ -88,7 +86,7 @@ fun TransactionInfo(
     viewModel: TransactionInfoViewModel,
     navController: NavController
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp), contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)) {
         items(viewModel.viewItems) { section ->
             TransactionInfoSection(section, navController, viewModel::getRawTransaction)
         }
@@ -101,7 +99,7 @@ fun TransactionInfoSection(
     navController: NavController,
     getRawTransaction: () -> String?
 ) {
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         buildList {
             for (viewItem in section) {
                 when (viewItem) {
@@ -115,6 +113,11 @@ fun TransactionInfoSection(
                             TransactionAmountCell(fiatAmount = viewItem.fiatValue, coinAmount = viewItem.coinValue, coinIconUrl = viewItem.coinIconUrl, coinIconPlaceholder = viewItem.coinIconPlaceholder)
                         }
                     }
+                    is TransactionInfoViewItem.NftAmount -> {
+                        add {
+                            TransactionNftAmountCell(viewItem.nftValue, viewItem.iconUrl, viewItem.iconPlaceholder, viewItem.nftUid, viewItem.providerCollectionUid, navController)
+                        }
+                    }
                     is TransactionInfoViewItem.Value -> {
                         add {
                             TitleAndValueCell(title = viewItem.title, value = viewItem.value)
@@ -122,7 +125,7 @@ fun TransactionInfoSection(
                     }
                     is TransactionInfoViewItem.Address -> {
                         add {
-                            TransactionInfoAddressCell(title = viewItem.title, value = viewItem.value, valueTitle = viewItem.valueTitle)
+                            TransactionInfoAddressCell(title = viewItem.title, value = viewItem.value)
                         }
                     }
                     is TransactionInfoViewItem.Status -> {

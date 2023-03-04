@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -101,10 +102,11 @@ fun AppearanceScreen(navController: NavController) {
                             .verticalScroll(rememberScrollState()),
                     ) {
                         HeaderText(text = stringResource(id = R.string.Appearance_Theme))
-                        CellSingleLineLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
+                        CellUniversalLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
                             RowSelect(
                                 imageContent = {
                                     Image(
+                                        modifier = Modifier.size(24.dp),
                                         painter = painterResource(id = option.iconRes),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
@@ -118,23 +120,62 @@ fun AppearanceScreen(navController: NavController) {
                         }
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
-                        CellSingleLineLawrenceSection(uiState.launchScreenOptions.options) { option ->
-                            RowSelect(
-                                imageContent = {
+                        HeaderText(text = stringResource(id = R.string.Appearance_Tab))
+                        CellUniversalLawrenceSection(
+                            listOf {
+                                RowUniversal(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    verticalPadding = 0.dp,
+                                ) {
                                     Image(
-                                        painter = painterResource(id = option.iconRes),
+                                        modifier = Modifier.size(24.dp),
+                                        painter = painterResource(id = R.drawable.ic_market_20),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
                                     )
-                                },
-                                text = option.title.getString(),
-                                selected = option == uiState.launchScreenOptions.selected
-                            ) {
-                                viewModel.onEnterLaunchPage(option)
+
+                                    body_leah(
+                                        text = stringResource(id = R.string.Appearance_MarketsTab),
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(horizontal = 16.dp)
+                                    )
+
+                                    HsSwitch(
+                                        checked = uiState.marketsTabEnabled,
+                                        onCheckedChange = {
+                                            viewModel.onSetMarketTabsEnabled(it)
+                                        }
+                                    )
+
+                                }
+
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        AnimatedVisibility(visible = uiState.marketsTabEnabled) {
+                            Column {
+                                HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
+                                CellUniversalLawrenceSection(uiState.launchScreenOptions.options) { option ->
+                                    RowSelect(
+                                        imageContent = {
+                                            Image(
+                                                modifier = Modifier.size(24.dp),
+                                                painter = painterResource(id = option.iconRes),
+                                                contentDescription = null,
+                                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                                            )
+                                        },
+                                        text = option.title.getString(),
+                                        selected = option == uiState.launchScreenOptions.selected
+                                    ) {
+                                        viewModel.onEnterLaunchPage(option)
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(24.dp))
                             }
                         }
-                        Spacer(modifier = Modifier.height(24.dp))
 
                         HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
                         AppIconSection(uiState.appIconOptions) {
@@ -146,12 +187,12 @@ fun AppearanceScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(24.dp))
 
                         HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
-                        CellSingleLineLawrenceSection(uiState.baseTokenOptions.options) { option ->
+                        CellUniversalLawrenceSection(uiState.baseTokenOptions.options) { option ->
                             RowSelect(
                                 imageContent = {
                                     CoinImage(
                                         iconUrl = option.coin.iconUrl,
-                                        modifier = Modifier.size(24.dp)
+                                        modifier = Modifier.size(32.dp)
                                     )
                                 },
                                 text = option.coin.code,
@@ -163,7 +204,7 @@ fun AppearanceScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(24.dp))
 
                         HeaderText(text = stringResource(id = R.string.Appearance_BalanceValue))
-                        CellMultilineLawrenceSection(uiState.balanceViewTypeOptions.options) { option ->
+                        CellUniversalLawrenceSection(uiState.balanceViewTypeOptions.options) { option ->
                             RowMultilineSelect(
                                 title = stringResource(id = option.titleResId),
                                 subtitle = stringResource(id = option.subtitleResId),
@@ -299,12 +340,9 @@ private fun RowMultilineSelect(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
     ) {
         MultitextM1(
             title = { B2(text = title) },
@@ -328,12 +366,9 @@ fun RowSelect(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
     ) {
         imageContent.invoke(this)
         body_leah(

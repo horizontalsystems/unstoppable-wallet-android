@@ -27,4 +27,10 @@ abstract class SwapBaseFragment : BaseFragment() {
         mainViewModel.providerState = getProviderState()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mainViewModel.providerState = getProviderState()
+    }
+
 }

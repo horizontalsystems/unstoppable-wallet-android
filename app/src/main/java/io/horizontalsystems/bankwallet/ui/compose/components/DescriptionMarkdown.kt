@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnPreDraw
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.bankwallet.ui.helpers.LayoutHelper
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonSpansFactory

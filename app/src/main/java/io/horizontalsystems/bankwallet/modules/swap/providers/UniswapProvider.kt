@@ -18,6 +18,9 @@ class UniswapProvider(private val uniswapKit: UniswapKit) {
     val routerAddress: Address
         get() = uniswapKit.routerAddress
 
+    val wethAddress: Address
+        get() = uniswapKit.etherToken().address
+
     fun swapDataSingle(tokenIn: Token?, tokenOut: Token?): Single<SwapData> {
         return try {
             val uniswapTokenIn = uniswapToken(tokenIn)

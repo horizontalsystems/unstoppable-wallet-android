@@ -21,7 +21,8 @@ object AppearanceModule {
                 appIconService,
                 themeService,
                 App.baseTokenManager,
-                App.balanceViewTypeManager
+                App.balanceViewTypeManager,
+                App.localStorage
             ) as T
         }
     }
@@ -37,7 +38,7 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
     Yak(R.drawable.launcher_yak_preview, "Yak"),
     Punk(R.drawable.launcher_punk_preview, "Punk"),
     Ape(R.drawable.launcher_ape_preview, "#1874"),
-    HashTag1009(R.drawable.launcher_1009_preview, "#1009");
+    Ball8(R.drawable.launcher_8ball_preview, "8ball");
 
     override val title: TranslatableString
         get() = TranslatableString.PlainString(titleText)

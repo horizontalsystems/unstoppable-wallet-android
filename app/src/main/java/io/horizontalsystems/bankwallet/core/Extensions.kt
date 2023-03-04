@@ -2,17 +2,22 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Intent
 import android.os.Parcelable
-import android.view.View
 import android.widget.ImageView
 import androidx.annotation.CheckResult
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import coil.load
+import com.google.accompanist.navigation.animation.composable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
+import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.*
-import io.horizontalsystems.views.SingleClickListener
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -27,22 +32,22 @@ val <T> Optional<T>.orNull: T?
     }
 
 val Platform.iconUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/platform-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
 
 val Coin.iconUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
 
 val CoinCategory.imageUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/category-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/category-icons/$uid@3x.png"
 
 val CoinInvestment.Fund.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/fund-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/fund-icons/$uid@3x.png"
 
 val CoinTreasury.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/treasury-icons/$fundUid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/treasury-icons/$fundUid@3x.png"
 
 val Auditor.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/auditor-icons/$name@3x.png"
+    get() = "https://cdn.blocksdecoded.com/auditor-icons/$name@3x.png"
 
 fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean): List<FullCoin> {
     var comparator: Comparator<FullCoin> = compareByDescending {
@@ -69,6 +74,20 @@ fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean
     return sortedWith(comparator)
 }
 
+val Language.displayNameStringRes: Int
+    get() = when (this) {
+        Language.English -> R.string.Language_English
+        Language.Japanese -> R.string.Language_Japanese
+        Language.Korean -> R.string.Language_Korean
+        Language.Spanish -> R.string.Language_Spanish
+        Language.SimplifiedChinese -> R.string.Language_SimplifiedChinese
+        Language.TraditionalChinese -> R.string.Language_TraditionalChinese
+        Language.French -> R.string.Language_French
+        Language.Italian -> R.string.Language_Italian
+        Language.Czech -> R.string.Language_Czech
+        Language.Portuguese -> R.string.Language_Portuguese
+    }
+
 // ImageView
 
 fun ImageView.setRemoteImage(url: String, placeholder: Int? = R.drawable.ic_placeholder) {
@@ -84,17 +103,6 @@ fun ImageView.setImage(imageSource: ImageSource) {
         is ImageSource.Local -> setImageResource(imageSource.resId)
         is ImageSource.Remote -> setRemoteImage(imageSource.url, imageSource.placeholder)
     }
-}
-
-// View
-
-fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
-    this.setOnClickListener(
-        object : SingleClickListener() {
-            override fun onSingleClick(v: View) {
-                l.invoke(v)
-            }
-        })
 }
 
 // String
@@ -142,7 +150,10 @@ fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
 }
 
 @CheckResult
-fun <T> Observable<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable) -> Unit): Disposable {
+fun <T> Observable<T>.subscribeIO(
+    onSuccess: (t: T) -> Unit,
+    onError: (e: Throwable) -> Unit
+): Disposable {
     return this
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
@@ -158,7 +169,10 @@ fun <T> Flowable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
 }
 
 @CheckResult
-fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable) -> Unit): Disposable {
+fun <T> Single<T>.subscribeIO(
+    onSuccess: (t: T) -> Unit,
+    onError: (e: Throwable) -> Unit
+): Disposable {
     return this
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
@@ -187,5 +201,56 @@ fun String.shorten(): String {
     val withoutPrefix = this.removePrefix(prefix)
 
     val characters = 4
-    return prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
+    return if (withoutPrefix.length > characters * 2)
+        prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
+    else
+        this
+}
+
+//Compose Animated Navigation
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.composablePage(
+    route: String,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route,
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentScope.SlideDirection.Left,
+                animationSpec = tween(300)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentScope.SlideDirection.Right,
+                animationSpec = tween(300)
+            )
+        },
+        content = content
+    )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.composablePopup(
+    route: String,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route,
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentScope.SlideDirection.Up,
+                animationSpec = tween(250)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentScope.SlideDirection.Down,
+                animationSpec = tween(250)
+            )
+        },
+        content = content
+    )
 }

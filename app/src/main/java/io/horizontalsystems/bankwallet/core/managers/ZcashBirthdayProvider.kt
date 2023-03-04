@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
-import cash.z.ecc.android.sdk.tool.WalletBirthdayTool
-import cash.z.ecc.android.sdk.type.ZcashNetwork
+import cash.z.ecc.android.sdk.model.BlockHeight
+import cash.z.ecc.android.sdk.model.ZcashNetwork
 import kotlinx.coroutines.runBlocking
 
 class ZcashBirthdayProvider(
@@ -10,18 +10,10 @@ class ZcashBirthdayProvider(
     testMode: Boolean
 ) {
     private val network = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
-    fun getNearestBirthdayHeight(birthdayHeight: Int? = null): Int {
+    fun getLatestCheckpointBlockHeight(): Long {
         val walletBirthday = runBlocking {
-            WalletBirthdayTool.loadNearest(context, network, birthdayHeight)
+            BlockHeight.ofLatestCheckpoint(context, network)
         }
-        return walletBirthday.height
+        return walletBirthday.value
     }
-
-    @Throws
-    fun validateBirthdayHeight(birthdayHeight: Int) {
-        runBlocking {
-            WalletBirthdayTool.loadNearest(context, network, birthdayHeight)
-        }
-    }
-
 }

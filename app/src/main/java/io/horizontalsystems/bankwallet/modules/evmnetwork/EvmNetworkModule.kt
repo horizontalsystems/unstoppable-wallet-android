@@ -18,13 +18,7 @@ object EvmNetworkModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-            val service = EvmNetworkService(
-                blockchain,
-                App.evmSyncSourceManager
-            )
-
-            return EvmNetworkViewModel(service) as T
+            return EvmNetworkViewModel(blockchain, App.evmSyncSourceManager) as T
         }
     }
 

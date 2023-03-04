@@ -3,31 +3,35 @@ package io.horizontalsystems.bankwallet.modules.chart
 import android.util.Range
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
-    val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod>>>()
+    val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod?>>>()
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()
@@ -41,7 +45,8 @@ open class ChartViewModel(
         service.chartTypeObservable
             .subscribeIO { chartType ->
                 val tabItems = service.chartIntervals.map {
-                    TabItem(Translator.getString(it.stringResId), it == chartType, it)
+                    val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
+                    TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
                 }
                 tabItemsLiveData.postValue(tabItems)
             }
@@ -86,10 +91,12 @@ open class ChartViewModel(
                 disposables.add(it)
             }
 
-        service.start()
+        viewModelScope.launch(Dispatchers.IO) {
+            service.start()
+        }
     }
 
-    fun onSelectChartInterval(chartInterval: HsTimePeriod) {
+    fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
         loadingLiveData.postValue(true)
         service.updateChartInterval(chartInterval)
     }
@@ -108,17 +115,22 @@ open class ChartViewModel(
         val chartItems = chartPointsWrapper.items
         if (chartItems.isEmpty()) return
 
-        val lastItemValue = chartItems.last().value
-        val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
-
-        val firstItemValue = chartItems.first().value
-        val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
-
         val chartData = ChartDataBuilder.buildFromPoints(
             chartPointsWrapper.items,
             chartPointsWrapper.startTimestamp,
             chartPointsWrapper.endTimestamp,
-            chartPointsWrapper.isExpired)
+            chartPointsWrapper.isExpired,
+            chartPointsWrapper.isMovementChart
+        )
+
+        val headerView = if (!chartPointsWrapper.isMovementChart) {
+            val sum = valueFormatter.formatValue(service.currency, chartData.sum())
+            CoinDetailsModule.ChartHeaderView.Sum(sum)
+        } else {
+            val lastItemValue = chartItems.last().value
+            val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
+            CoinDetailsModule.ChartHeaderView.Latest(currentValue, Value.Percent(chartData.diff()))
+        }
 
         val (minValue, maxValue) = getMinMax(chartData.valueRange)
 
@@ -129,7 +141,7 @@ open class ChartViewModel(
             minValue
         )
 
-        dataWrapperLiveData.postValue(ChartDataWrapper(currentValue, currentValueDiff, chartInfoData))
+        dataWrapperLiveData.postValue(ChartDataWrapper(headerView, chartInfoData))
     }
 
     private val noChangesLimitPercent = 0.2f
@@ -161,7 +173,7 @@ open class ChartViewModel(
     fun getSelectedPoint(item: ChartDataItemImmutable): SelectedPoint? {
         return item.values[Indicator.Candle]?.let { candle ->
             val value = valueFormatter.formatValue(service.currency, candle.value.toBigDecimal())
-            val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
+            val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
 
             SelectedPoint(
                 value = value,
@@ -229,4 +241,5 @@ val HsTimePeriod.stringResId: Int
         HsTimePeriod.Month3 -> R.string.CoinPage_TimeDuration_Month3
         HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
         HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
+        HsTimePeriod.Year2 -> R.string.CoinPage_TimeDuration_Year2
     }

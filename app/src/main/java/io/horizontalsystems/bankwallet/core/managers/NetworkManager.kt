@@ -3,11 +3,10 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.annotation.SuppressLint
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
 import io.reactivex.Single
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -51,12 +50,8 @@ class NetworkManager : INetworkManager {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
 
-    override suspend fun getBep2TokeInfo(blockchainUid: String, symbol: String): TokenInfoService.Bep2TokenInfo {
-        return TokenInfoService.service().getBep2TokenInfo(blockchainUid, symbol)
-    }
-
-    override suspend fun getEvmTokeInfo(blockchainUid: String, address: String): TokenInfoService.EvmTokenInfo {
-        return TokenInfoService.service().getEip20TokenInfo(blockchainUid, address)
+    override suspend fun getBep2Tokens(): List<Bep2TokenInfoService.Bep2Token> {
+        return Bep2TokenInfoService.service().tokens()
     }
 }
 
@@ -103,41 +98,26 @@ object ServiceEvmContractInfo {
 
 }
 
-object TokenInfoService {
-    private val apiUrl = "${App.appConfigProvider.marketApiBaseUrl}/v1/token_info/"
+object Bep2TokenInfoService {
+    private val apiUrl = "https://dex.binance.org/api/v1/"
 
     fun service(): TokenInfoAPI {
         return APIClient.retrofit(apiUrl, 60)
             .create(TokenInfoAPI::class.java)
     }
 
-    data class Bep2TokenInfo(
-        val name: String,
-        @SerializedName("original_symbol")
-        val originalSymbol: String,
-        @SerializedName("contract_decimals")
-        val decimals: Int
-    )
-
-    data class EvmTokenInfo(
-        val name: String,
-        val symbol: String,
-        val decimals: Int
-    )
-
     interface TokenInfoAPI {
-        @GET("bep2")
-        suspend fun getBep2TokenInfo(
-            @Query("blockchain") blockchain: String,
-            @Query("symbol") symbol: String
-        ): Bep2TokenInfo
-
-        @GET("eip20")
-        suspend fun getEip20TokenInfo(
-            @Query("blockchain") blockchain: String,
-            @Query("address") address: String
-        ): EvmTokenInfo
+        @GET("tokens")
+        suspend fun tokens(
+            @Query("limit") limit: Int = 1000
+        ): List<Bep2Token>
     }
+
+    data class Bep2Token(
+        val name: String,
+        val original_symbol: String,
+        val symbol: String
+    )
 }
 
 object ServiceGuide {
@@ -169,6 +149,36 @@ object APIClient {
 
     private val logger = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BASIC
+    }
+
+    private fun buildClient(headers: Map<String, String>): OkHttpClient {
+        val headersInterceptor = Interceptor { chain ->
+            val requestBuilder = chain.request().newBuilder()
+            headers.forEach { (name, value) ->
+                requestBuilder.header(name, value)
+            }
+            chain.proceed(requestBuilder.build())
+        }
+
+        return OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(logger)
+            .addInterceptor(headersInterceptor)
+            .build()
+    }
+
+    fun build(baseUrl: String, headers: Map<String, String> = mapOf()): Retrofit {
+        val client = buildClient(headers)
+
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(
+                GsonConverterFactory.create(GsonBuilder().setLenient().create())
+            )
+            .build()
     }
 
     //share OkHttpClient

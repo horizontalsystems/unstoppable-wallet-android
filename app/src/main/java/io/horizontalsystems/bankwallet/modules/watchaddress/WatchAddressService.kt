@@ -1,41 +1,92 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.WalletActivator
+import io.horizontalsystems.bankwallet.core.order
+import io.horizontalsystems.bankwallet.core.supports
+import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class WatchAddressService(
-    private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
+    private val walletActivator: WalletActivator,
+    private val accountFactory: IAccountFactory,
+    private val marketKit: MarketKitWrapper,
+    private val evmBlockchainManager: EvmBlockchainManager,
 ) {
-    val defaultName = accountFactory.getNextWatchAccountName()
 
-    var nameState by mutableStateOf("")
+    fun nextWatchAccountName() = accountFactory.getNextWatchAccountName()
 
-    var name: String = ""
-
-    var address: Address? = null
-        set(value) {
-            field = value
-            if (value?.domain != null && name.isBlank()) {
-                name = value.domain
-                nameState = value.domain
+    fun configuredTokens(accountType: AccountType) = buildList {
+        when (accountType) {
+            is AccountType.Mnemonic,
+            is AccountType.EvmPrivateKey -> Unit // N/A
+            is AccountType.SolanaAddress -> {
+                token(BlockchainType.Solana, accountType)?.let {
+                    add(ConfiguredToken(it))
+                }
+            }
+            is AccountType.EvmAddress -> {
+                evmBlockchainManager.allMainNetBlockchains.forEach { blockchain ->
+                    token(blockchain.type, accountType)?.let { token ->
+                        add(ConfiguredToken(token))
+                    }
+                }
+            }
+            is AccountType.HdExtendedKey -> {
+                token(BlockchainType.Bitcoin, accountType)?.let { token ->
+                    add(
+                        ConfiguredToken(
+                            token,
+                            CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value))
+                        )
+                    )
+                }
+                token(BlockchainType.Dash, accountType)?.let { token ->
+                    add(ConfiguredToken(token))
+                }
+                token(BlockchainType.BitcoinCash, accountType)?.let { token ->
+                    BitcoinCashCoinType.values().map { coinType ->
+                        add(ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to coinType.value))))
+                    }
+                }
+                token(BlockchainType.Litecoin, accountType)?.let { token ->
+                    add(
+                        ConfiguredToken(
+                            token,
+                            CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value))
+                        )
+                    )
+                }
             }
         }
+    }.sortedBy { it.token.blockchainType.order }
 
-    val isCreatable
-        get() = address != null
+    fun watchAll(accountType: AccountType, name: String?) {
+        watchConfiguredTokens(accountType, configuredTokens(accountType), name)
+    }
 
-    fun createAccount() {
-        val tmpAddress = address ?: throw EmptyAddressException()
-        val accountName = name.ifBlank { defaultName }
-        val account = accountFactory.watchAccount(accountName, tmpAddress.hex, tmpAddress.domain)
+    fun watchConfiguredTokens(accountType: AccountType, configuredTokens: List<ConfiguredToken>, name: String? = null) {
+        val accountName = name ?: accountFactory.getNextWatchAccountName()
+        val account = accountFactory.watchAccount(accountName, accountType)
 
         accountManager.save(account)
-    }
-}
 
-class EmptyAddressException : Exception()
+        try {
+            walletActivator.activateConfiguredTokens(account, configuredTokens)
+        } catch (e: Exception) {
+        }
+    }
+
+    private fun token(blockchainType: BlockchainType, accountType: AccountType): Token? =
+        if (blockchainType.supports(accountType))
+            marketKit.token(TokenQuery(blockchainType, TokenType.Native))
+        else
+            null
+}

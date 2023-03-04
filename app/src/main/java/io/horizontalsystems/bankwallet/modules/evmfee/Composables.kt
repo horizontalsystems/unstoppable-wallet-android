@@ -385,17 +385,18 @@ fun EvmFeeCell(
     highlightEditButton: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
-    CellSingleLineLawrenceSection {
-        HSFeeCell(
-            title = title,
-            value = value,
-            loading = loading,
-            viewState = viewState,
-            highlightEditButton = highlightEditButton,
-            enabled = onClick != null,
-            onClick = { onClick?.invoke() }
-        )
-    }
+    CellUniversalLawrenceSection(
+        listOf {
+            HSFeeCell(
+                title = title,
+                value = value,
+                loading = loading,
+                viewState = viewState,
+                highlightEditButton = highlightEditButton,
+                enabled = onClick != null,
+                onClick = { onClick?.invoke() }
+            )
+        })
 }
 
 @Composable
@@ -408,12 +409,10 @@ fun HSFeeCell(
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(enabled = enabled, onClick = { onClick.invoke() })
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = if (enabled) onClick else null,
     ) {
         subhead2_grey(text = title)
 

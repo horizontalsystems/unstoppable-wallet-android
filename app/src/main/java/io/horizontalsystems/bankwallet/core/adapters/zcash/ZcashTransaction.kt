@@ -10,7 +10,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     val transactionIndex: Int
     val toAddress: String?
     val expiryHeight: Int?
-    val minedHeight: Int
+    val minedHeight: Long
     val timestamp: Long
     val value: Long
     val memo: String?
@@ -39,7 +39,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             transactionHash = it.rawTransactionId ?: byteArrayOf()
             transactionIndex = -1
             toAddress = it.toAddress
-            expiryHeight = it.expiryHeight
+            expiryHeight = it.expiryHeight.toInt()
             minedHeight = it.minedHeight
             timestamp = it.createTime / 1000
             value = it.value

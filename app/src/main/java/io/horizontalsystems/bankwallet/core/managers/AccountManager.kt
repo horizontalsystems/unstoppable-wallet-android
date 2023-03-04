@@ -9,6 +9,9 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -21,6 +24,12 @@ class AccountManager(
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
     private val activeAccountSubject = PublishSubject.create<Optional<Account>>()
+    private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
+
+    override val activeAccountStateFlow = _activeAccountStateFlow
+
+    override val hasNonStandardAccount: Boolean
+        get() = cache.accountsMap.any { it.value.nonStandard }
 
     override val activeAccount: Account?
         get() = cache.activeAccount
@@ -40,11 +49,15 @@ class AccountManager(
     override val accountsDeletedFlowable: Flowable<Unit>
         get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
+    private val _newAccountBackupRequiredFlow = MutableStateFlow<Account?>(null)
+    override val newAccountBackupRequiredFlow = _newAccountBackupRequiredFlow.asStateFlow()
+
     override fun setActiveAccountId(activeAccountId: String?) {
         if (cache.activeAccountId != activeAccountId) {
             storage.activeAccountId = activeAccountId
             cache.activeAccountId = activeAccountId
             activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+            _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
         }
     }
 
@@ -55,6 +68,12 @@ class AccountManager(
     override fun loadAccounts() {
         cache.set(storage.allAccounts())
         cache.activeAccountId = storage.activeAccountId
+        activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+        _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
+    }
+
+    override fun onHandledBackupRequiredNewAccount() {
+        _newAccountBackupRequiredFlow.update { null }
     }
 
     override fun save(account: Account) {
@@ -64,6 +83,11 @@ class AccountManager(
         accountsSubject.onNext(accounts)
 
         setActiveAccountId(account.id)
+        if (!account.isBackedUp) {
+            _newAccountBackupRequiredFlow.update {
+                account
+            }
+        }
     }
 
     override fun update(account: Account) {
@@ -75,6 +99,7 @@ class AccountManager(
         activeAccount?.id?.let {
             if (account.id == it) {
                 activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+                _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
             }
         }
     }
@@ -135,3 +160,8 @@ class AccountManager(
 }
 
 class NoActiveAccount : Exception()
+
+sealed class ActiveAccountState() {
+    class ActiveAccount(val account: Account?) : ActiveAccountState()
+    object NotLoaded : ActiveAccountState()
+}

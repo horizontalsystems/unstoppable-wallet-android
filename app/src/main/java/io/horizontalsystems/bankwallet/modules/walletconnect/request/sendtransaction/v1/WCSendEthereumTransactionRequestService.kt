@@ -16,5 +16,4 @@ class WCSendEthereumTransactionRequestService(
         baseService.rejectRequest(requestId)
     }
 
-    override fun stop() {}
 }

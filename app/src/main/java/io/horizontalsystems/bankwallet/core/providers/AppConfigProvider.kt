@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 
 class AppConfigProvider {
 
@@ -52,6 +52,9 @@ class AppConfigProvider {
      val arbiscanApiKey by lazy {
         Translator.getString(R.string.arbiscanApiKey)
     }
+    val gnosisscanApiKey by lazy {
+        Translator.getString(R.string.gnosisscanApiKey)
+    }
      val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }
@@ -76,21 +79,22 @@ class AppConfigProvider {
      val fiatDecimal: Int = 2
      val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
-     val currencies: List<Currency> = listOf(
-            Currency("AUD", "A$", 2),
-            Currency("BRL", "R$", 2),
-            Currency("CAD", "C$", 2),
-            Currency("CHF", "₣", 2),
-            Currency("CNY", "¥", 2),
-            Currency("EUR", "€", 2),
-            Currency("GBP", "£", 2),
-            Currency("HKD", "HK$", 2),
-            Currency("ILS", "₪", 2),
-            Currency("JPY", "¥", 2),
-            Currency("RUB", "₽", 2),
-            Currency("SGD", "S$", 2),
-            Currency("USD", "$", 2),
-            Currency("ZAR", "R", 2),
+    val currencies: List<Currency> = listOf(
+        Currency("AUD", "A$", 2, R.drawable.icon_32_flag_australia),
+        Currency("BRL", "R$", 2, R.drawable.icon_32_flag_brazil),
+        Currency("CAD", "C$", 2, R.drawable.icon_32_flag_canada),
+        Currency("CHF", "₣", 2, R.drawable.icon_32_flag_switzerland),
+        Currency("CNY", "¥", 2, R.drawable.icon_32_flag_china),
+        Currency("EUR", "€", 2, R.drawable.icon_32_flag_europe),
+        Currency("GBP", "£", 2, R.drawable.icon_32_flag_england),
+        Currency("HKD", "HK$", 2, R.drawable.icon_32_flag_hongkong),
+        Currency("ILS", "₪", 2, R.drawable.icon_32_flag_israel),
+        Currency("INR", "₹", 2, R.drawable.icon_32_flag_india),
+        Currency("JPY", "¥", 2, R.drawable.icon_32_flag_japan),
+        Currency("RUB", "₽", 2, R.drawable.icon_32_flag_russia),
+        Currency("SGD", "S$", 2, R.drawable.icon_32_flag_singapore),
+        Currency("USD", "$", 2, R.drawable.icon_32_flag_usa),
+        Currency("ZAR", "R", 2, R.drawable.icon_32_flag_south_africa),
     )
 
 }

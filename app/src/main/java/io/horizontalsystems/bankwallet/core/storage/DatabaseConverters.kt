@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 import java.util.*
 
@@ -97,13 +97,23 @@ class DatabaseConverters {
     }
 
     @TypeConverter
-    fun fromAttributes(attributes: List<NftAssetAttribute>): String {
-        return gson.toJson(attributes)
+    fun fromBlockchainType(blockchainType: BlockchainType): String {
+        return blockchainType.uid
     }
 
     @TypeConverter
-    fun toAttributes(json: String): List<NftAssetAttribute> {
-        return gson.fromJson(json, object : TypeToken<List<NftAssetAttribute>>() {}.type)
+    fun toBlockchainType(string: String): BlockchainType {
+        return BlockchainType.fromUid(string)
+    }
+
+    @TypeConverter
+    fun fromNftUid(nftUid: NftUid): String {
+        return nftUid.uid
+    }
+
+    @TypeConverter
+    fun toNftUid(string: String): NftUid {
+        return NftUid.fromUid(string)
     }
 
 }

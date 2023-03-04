@@ -14,6 +14,12 @@ interface WC2Request {
     val dAppName: String?
 }
 
+class WC2UnsupportedRequest(
+    override val id: Long,
+    override val topic: String,
+    override val dAppName: String?,
+) : WC2Request
+
 class WC2SendEthereumTransactionRequest(
         override val id: Long,
         override val topic: String,

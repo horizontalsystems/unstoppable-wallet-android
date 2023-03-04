@@ -111,6 +111,23 @@ fun BadgeCircle(modifier: Modifier = Modifier, text: String) {
     )
 }
 
+@Composable
+fun BadgeStepCircle(
+    modifier: Modifier = Modifier,
+    text: String,
+    background: Color,
+    textColor: Color
+) {
+    Text(
+        text = text,
+        modifier = modifier
+            .background(background, shape = CircleShape)
+            .badgeLayout(),
+        color = textColor,
+        style = ComposeAppTheme.typography.captionSB,
+    )
+}
+
 fun Modifier.badgeLayout() =
     layout { measurable, constraints ->
         val placeable = measurable.measure(constraints)
@@ -169,7 +186,20 @@ fun BagdeCirclePreview() {
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            BadgeCircle(text = "123")
+            BadgeCircle(text = "1")
+        }
+    }
+}
+
+@Preview
+@Composable
+fun BagdeStepCircle_Preview() {
+    ComposeAppTheme {
+        Box(
+            modifier = Modifier.padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            BadgeStepCircle(text = "2", background = ComposeAppTheme.colors.claude,  textColor = ComposeAppTheme.colors.leah)
         }
     }
 }

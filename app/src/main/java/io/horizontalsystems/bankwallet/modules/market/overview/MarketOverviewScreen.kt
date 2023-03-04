@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,12 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.*
 import io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment
@@ -43,23 +43,25 @@ fun MarketOverviewScreen(
     val scrollState = rememberScrollState()
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        refreshing = isRefreshing,
         onRefresh = {
             viewModel.refresh()
         }
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
-                is ViewState.Success -> {
+                ViewState.Success -> {
                     viewItem?.let { viewItem ->
                         Column(
-                            modifier = Modifier.verticalScroll(scrollState)
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(scrollState)
                         ) {
                             Box(
                                 modifier = Modifier.height(240.dp)
@@ -104,8 +106,8 @@ fun MarketOverviewScreen(
                                 onSelectTimeDuration = { timeDuration ->
                                     viewModel.onSelectTopNftsTimeDuration(timeDuration)
                                 },
-                                onClickCollection = { collectionUid ->
-                                    val args = NftCollectionFragment.prepareParams(collectionUid)
+                                onClickCollection = { blockchainType, collectionUid ->
+                                    val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
                                     navController.slideFromBottom(R.id.nftCollectionFragment, args)
                                 },
                                 onClickSeeAll = {
@@ -135,6 +137,7 @@ fun MarketOverviewScreen(
                         }
                     }
                 }
+                null -> {}
             }
         }
     }

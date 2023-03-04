@@ -4,23 +4,24 @@ import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletStorage(
-    private val marketKit: MarketKit,
-    private val storage: IEnabledWalletStorage
+    private val marketKit: MarketKitWrapper,
+    private val storage: IEnabledWalletStorage,
+    private val evmTestnetManager: EvmTestnetManager
 ) : IWalletStorage {
 
     override fun wallets(account: Account): List<Wallet> {
         val enabledWallets = storage.enabledWallets(account.id)
 
         val queries = enabledWallets.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
-        val tokens = marketKit.tokens(queries)
+        val tokens = marketKit.tokens(queries) + evmTestnetManager.tokens(queries)
 
         val blockchainUids = queries.map { it.blockchainType.uid }
-        val blockchains = marketKit.blockchains(blockchainUids)
+        val testnetBlockchains = queries.map { it.blockchainType }.mapNotNull { evmTestnetManager.blockchain(it) }
+        val blockchains = marketKit.blockchains(blockchainUids) + testnetBlockchains
 
         return enabledWallets.mapNotNull { enabledWallet ->
             val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
@@ -66,6 +67,10 @@ class WalletStorage(
 
     override fun delete(wallets: List<Wallet>) {
         storage.delete(wallets.map { enabledWallet(it) })
+    }
+
+    override fun handle(newEnabledWallets: List<EnabledWallet>) {
+        storage.save(newEnabledWallets)
     }
 
     override fun clear() {

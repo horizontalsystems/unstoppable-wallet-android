@@ -3,14 +3,14 @@ package io.horizontalsystems.bankwallet.modules.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IBackupManager
-import io.horizontalsystems.bankwallet.core.IRateAppManager
-import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -26,6 +26,10 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val service: MainService,
+    private val torManager: ITorManager,
+    wc2SessionManager: WC2SessionManager,
+    private val wc1Manager: WC1Manager,
+    private val wcDeepLink: String?
 ) : ViewModel() {
 
     val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
@@ -33,38 +37,67 @@ class MainViewModel(
     val showWhatsNewLiveEvent = SingleLiveEvent<Unit>()
     val openPlayMarketLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
-    val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
+    val settingsBadgeLiveData = MutableLiveData<MainModule.BadgeType?>(null)
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
+    val marketsTabEnabledLiveData = MutableLiveData<Boolean>()
     val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<Account>, Account?>>()
+    val torIsActiveLiveData = MutableLiveData(false)
+    val playTorActiveAnimationLiveData = MutableLiveData(false)
+    val walletConnectSupportState = MutableLiveData<WC1Manager.SupportState?>()
 
     private val disposables = CompositeDisposable()
     private var contentHidden = pinComponent.isLocked
+    private var wc2PendingRequestsCount = 0
 
     val initialTab = getTabToOpen()
 
     init {
+        viewModelScope.launch {
+            service.marketsTabEnabledFlow.collect {
+                marketsTabEnabledLiveData.postValue(it)
+            }
+        }
 
         if (!service.ignoreRootCheck && service.isDeviceRooted) {
             showRootedDeviceWarningLiveEvent.call()
         }
 
-        updateBadgeVisibility()
+        updateSettingsBadge()
         updateTransactionsTabEnabled()
 
-        disposables.add(backupManager.allBackedUpFlowable.subscribe {
-            updateBadgeVisibility()
-        })
+        viewModelScope.launch {
+            termsManager.termsAcceptedSignalFlow.collect {
+                updateSettingsBadge()
+            }
+        }
 
-        disposables.add(termsManager.termsAcceptedSignal.subscribe {
-            updateBadgeVisibility()
+        viewModelScope.launch {
+            torManager.torStatusFlow.collect { connectionStatus ->
+                if (torIsActiveLiveData.value == false && connectionStatus == TorStatus.Connected) {
+                    playTorActiveAnimationLiveData.postValue(true)
+                }
+                torIsActiveLiveData.postValue(connectionStatus == TorStatus.Connected)
+            }
+        }
+
+        viewModelScope.launch {
+            wc2SessionManager.pendingRequestCountFlow.collect {
+                wc2PendingRequestsCount = it
+                updateSettingsBadge()
+            }
+        }
+
+        disposables.add(backupManager.allBackedUpFlowable.subscribe {
+            updateSettingsBadge()
         })
 
         disposables.add(pinComponent.pinSetFlowable.subscribe {
-            updateBadgeVisibility()
+            updateSettingsBadge()
         })
 
         disposables.add(accountManager.accountsFlowable.subscribe {
             updateTransactionsTabEnabled()
+            updateSettingsBadge()
         })
 
         rateAppManager.showRateAppObservable
@@ -75,19 +108,30 @@ class MainViewModel(
                     disposables.add(it)
                 }
 
+        wcDeepLink?.let {
+            val wcSupportState = wc1Manager.getWalletConnectSupportState()
+            walletConnectSupportState.postValue(wcSupportState)
+        }
+
         showWhatsNew()
     }
 
-    private fun getTabToOpen(): MainModule.MainTab {
-        if(service.relaunchBySettingChange){
-            service.relaunchBySettingChange = false
-            return MainModule.MainTab.Settings
+    private fun getTabToOpen() = when {
+        wcDeepLink != null -> {
+            MainModule.MainTab.Settings
         }
-        return when(service.launchPage){
+        service.relaunchBySettingChange -> {
+            service.relaunchBySettingChange = false
+            MainModule.MainTab.Settings
+        }
+        !service.marketsTabEnabledFlow.value -> {
+            MainModule.MainTab.Balance
+        }
+        else -> when (service.launchPage) {
             LaunchPage.Market,
             LaunchPage.Watchlist -> MainModule.MainTab.Market
             LaunchPage.Balance -> MainModule.MainTab.Balance
-            LaunchPage.Auto -> service.currentMainTab ?: MainModule.MainTab.Market
+            LaunchPage.Auto -> service.currentMainTab ?: MainModule.MainTab.Balance
         }
     }
 
@@ -121,6 +165,14 @@ class MainViewModel(
         transactionTabEnabledLiveData.postValue(!accountManager.isAccountsEmpty)
     }
 
+    fun animationPlayed() {
+        playTorActiveAnimationLiveData.postValue(false)
+    }
+
+    fun wcSupportStateHandled() {
+        walletConnectSupportState.postValue(null)
+    }
+
     private fun showWhatsNew() {
         viewModelScope.launch(Dispatchers.IO){
             if (releaseNotesManager.shouldShowChangeLog()){
@@ -137,9 +189,16 @@ class MainViewModel(
         }
     }
 
-    private fun updateBadgeVisibility() {
-        val visible = !(backupManager.allBackedUp && termsManager.termsAccepted && pinComponent.isPinSet)
-        setBadgeVisibleLiveData.postValue(visible)
+    private fun updateSettingsBadge() {
+        val showDotBadge = !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
+
+        if (wc2PendingRequestsCount > 0) {
+            settingsBadgeLiveData.postValue(MainModule.BadgeType.BadgeNumber(wc2PendingRequestsCount))
+        } else if (showDotBadge) {
+            settingsBadgeLiveData.postValue(MainModule.BadgeType.BadgeDot)
+        } else {
+            settingsBadgeLiveData.postValue(null)
+        }
     }
 
 }

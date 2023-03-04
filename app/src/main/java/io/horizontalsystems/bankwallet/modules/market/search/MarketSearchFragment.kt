@@ -32,7 +32,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
@@ -90,7 +90,7 @@ fun MarketSearchScreen(
             )
             Crossfade(viewState) { viewState ->
                 when (viewState) {
-                    is ViewState.Loading -> {
+                    ViewState.Loading -> {
                         Loading()
                     }
                     is ViewState.Error -> {
@@ -144,7 +144,7 @@ fun MarketSearchScreen(
                                     }
                                 }
                             }
-                            else -> {}
+                            null -> {}
                         }
                     }
                 }
@@ -173,12 +173,11 @@ fun MarketSearchResults(
         }
         items(coinResult) { coinViewItem ->
             MarketCoin(
-                coinViewItem.fullCoin.coin.name,
                 coinViewItem.fullCoin.coin.code,
+                coinViewItem.fullCoin.coin.name,
                 coinViewItem.fullCoin.coin.iconUrl,
                 coinViewItem.fullCoin.iconPlaceholder,
                 favorited = coinViewItem.favourited,
-                label = coinViewItem.fullCoin.typeLabel,
                 onClick = { onCoinClick(coinViewItem.fullCoin.coin) },
                 onFavoriteClick = {
                     onFavoriteClick(
@@ -318,8 +317,8 @@ fun CardsGrid(
 
 @Composable
 private fun MarketCoin(
-    coinName: String,
     coinCode: String,
+    coinName: String,
     coinIconUrl: String,
     coinIconPlaceholder: Int,
     favorited: Boolean,
@@ -327,10 +326,9 @@ private fun MarketCoin(
     onClick: () -> Unit,
     coinRate: String? = null,
     marketDataValue: MarketDataValue? = null,
-    label: String? = null,
 ) {
 
-    MultilineClear(
+    SectionItemBorderedRowUniversalClear(
         borderBottom = true,
         onClick = onClick
     ) {
@@ -339,14 +337,14 @@ private fun MarketCoin(
             placeholder = coinIconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp)
+                .size(32.dp)
         )
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            MarketCoinFirstRow(coinName, coinRate)
+            MarketCoinFirstRow(coinCode, coinRate)
             Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinCode, marketDataValue, label)
+            MarketCoinSecondRow(coinName, marketDataValue, null)
         }
 
         HsIconButton(onClick = onFavoriteClick) {
@@ -365,14 +363,13 @@ fun MarketCoinPreview() {
     val coin = Coin("ether", "Ethereum", "ETH")
     ComposeAppTheme {
         MarketCoin(
-            coin.name,
             coin.code,
+            coin.name,
             coin.iconUrl,
             R.drawable.coin_placeholder,
             false,
             {},
             {},
-            label = "label",
         )
     }
 }

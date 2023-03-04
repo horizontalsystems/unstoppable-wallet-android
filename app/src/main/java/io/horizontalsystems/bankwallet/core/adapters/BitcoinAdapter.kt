@@ -88,17 +88,36 @@ class BitcoinAdapter(
 
         private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean): BitcoinKit {
             val account = wallet.account
-            val accountType = (account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
-            val derivation = wallet.coinSettings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
+            val accountType = account.type
 
-            return BitcoinKit(context = App.instance,
-                    words = accountType.words,
-                    passphrase = accountType.passphrase,
-                    walletId = account.id,
-                    syncMode = syncMode,
-                    networkType = getNetworkType(testMode),
-                    confirmationsThreshold = confirmationsThreshold,
-                    bip = getBip(derivation))
+            when (accountType) {
+                is AccountType.HdExtendedKey -> {
+                    return BitcoinKit(
+                        context = App.instance,
+                        extendedKey = accountType.hdExtendedKey,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = getNetworkType(testMode),
+                        confirmationsThreshold = confirmationsThreshold
+                    )
+                }
+                is AccountType.Mnemonic -> {
+                    val derivation = wallet.coinSettings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
+
+                    return BitcoinKit(
+                        context = App.instance,
+                        words = accountType.words,
+                        passphrase = accountType.passphrase,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = getNetworkType(testMode),
+                        confirmationsThreshold = confirmationsThreshold,
+                        purpose = getPurpose(derivation)
+                    )
+                }
+                else -> throw UnsupportedAccountException()
+            }
+
         }
 
         fun clear(walletId: String, testMode: Boolean) {

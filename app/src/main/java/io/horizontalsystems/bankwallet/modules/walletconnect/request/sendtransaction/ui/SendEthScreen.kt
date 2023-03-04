@@ -69,7 +69,7 @@ fun SendEthRequestScreen(
                 Spacer(Modifier.height(12.dp))
                 transactionInfoItems?.let { sections ->
                     sections.forEach { section ->
-                        CellSingleLineLawrenceSection(section.viewItems) { item ->
+                        CellUniversalLawrenceSection(section.viewItems) { item ->
                             when (item) {
                                 is ViewItem.Subhead -> SubheadCell(
                                     item.title,
@@ -97,16 +97,14 @@ fun SendEthRequestScreen(
                                     item.type,
                                     item.token
                                 )
+                                is ViewItem.TokenItem -> TokenCell(item.token)
                                 is ViewItem.AmountMulti -> AmountMultiCell(
                                     item.amounts,
                                     item.type,
                                     item.token
                                 )
-                                is ViewItem.Warning -> TextImportantWarning(
-                                    text = item.description,
-                                    title = item.title,
-                                    icon = item.icon
-                                )
+                                is ViewItem.NftAmount,
+                                is ViewItem.ValueMulti -> {}
                             }
                         }
                         Spacer(Modifier.height(12.dp))

@@ -2,15 +2,10 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Unsupported
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItemState
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
 
@@ -20,17 +15,13 @@ class ManageWalletsViewModel(
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<String>>>()
-    val disableCoinLiveData = MutableLiveData<String>()
+    var showBirthdayHeightLiveEvent = SingleLiveEvent<BirthdayHeightViewItem>()
 
     private var disposables = CompositeDisposable()
 
     init {
         service.itemsObservable
             .subscribeIO { sync(it) }
-            .let { disposables.add(it) }
-
-        service.cancelEnableCoinObservable
-            .subscribeIO { disableCoinLiveData.postValue(it.uid) }
             .let { disposables.add(it) }
 
         sync(service.items)
@@ -43,22 +34,15 @@ class ManageWalletsViewModel(
 
     private fun viewItem(
         item: ManageWalletsService.Item,
-    ): CoinViewItem<String> {
-        val state = when (item.state) {
-            is Supported -> CoinViewItemState.ToggleVisible(
-                item.state.enabled,
-                item.state.hasSettings
-            )
-            is Unsupported -> CoinViewItemState.ToggleHidden
-        }
-        return CoinViewItem(
-            item = item.fullCoin.coin.uid,
-            imageSource = ImageSource.Remote(item.fullCoin.coin.iconUrl, item.fullCoin.iconPlaceholder),
-            title = item.fullCoin.coin.code,
-            subtitle = item.fullCoin.coin.name,
-            state = state,
-        )
-    }
+    ) = CoinViewItem(
+        item = item.fullCoin.coin.uid,
+        imageSource = ImageSource.Remote(item.fullCoin.coin.iconUrl, item.fullCoin.iconPlaceholder),
+        title = item.fullCoin.coin.code,
+        subtitle = item.fullCoin.coin.name,
+        enabled = item.enabled,
+        hasSettings = item.hasSettings,
+        hasInfo = item.hasInfo
+    )
 
     fun enable(fullCoin: FullCoin) {
         service.enable(fullCoin)
@@ -80,9 +64,35 @@ class ManageWalletsViewModel(
         service.setFilter(filter)
     }
 
+    fun onClickInfo(uid: String) {
+        val (blockchain, birthdayHeight) = service.birthdayHeight(uid) ?: return
+        showBirthdayHeightLiveEvent.postValue(
+            BirthdayHeightViewItem(
+                blockchainIcon = ImageSource.Remote(blockchain.type.imageUrl),
+                blockchainName = blockchain.name,
+                birthdayHeight = birthdayHeight.toString()
+            )
+        )
+    }
+
+    fun onCloseBirthdayHeight() {
+        showBirthdayHeightLiveEvent.postValue(null)
+    }
+
+    private val accountTypeDescription: String
+        get() = service.accountType?.description ?: ""
+
+    val addTokenEnabled: Boolean
+        get() = service.accountType?.canAddTokens ?: false
+
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
         disposables.clear()
     }
 
+    data class BirthdayHeightViewItem(
+        val blockchainIcon: ImageSource,
+        val blockchainName: String,
+        val birthdayHeight: String
+    )
 }

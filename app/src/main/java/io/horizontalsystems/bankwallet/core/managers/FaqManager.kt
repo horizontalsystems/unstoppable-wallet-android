@@ -13,7 +13,7 @@ import java.net.URL
 
 object FaqManager {
 
-    private val faqListUrl = App.appConfigProvider.faqUrl
+    val faqListUrl = App.appConfigProvider.faqUrl
 
     private val gson = GsonBuilder()
         .setDateFormat("yyyy-MM-dd")
@@ -30,7 +30,7 @@ object FaqManager {
             val response = OkHttpClient().newCall(request).execute()
 
             val listType = object : TypeToken<List<FaqMap>>() {}.type
-            val list: List<FaqMap> = gson.fromJson(response.body?.charStream(), listType)
+            val list: List<FaqMap> = gson.fromJson(response.body.charStream(), listType)
             response.close()
 
             list

@@ -147,13 +147,16 @@ fun WCSessionPage(
                     },
                     iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
                 ) {
-                    CellSingleLineLawrenceSectionFramed(blockchainSelect.options) { option ->
-                        Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(12.dp))
+                    CellUniversalLawrenceSection(
+                        items= blockchainSelect.options,
+                        showFrame = true
+                    ) { option ->
                         RowSelect(
                             imageContent = {
                                 CoinImage(
                                     iconUrl = option.type.imageUrl,
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(32.dp)
                                 )
                             },
                             text = option.name,
@@ -241,7 +244,7 @@ private fun ColumnScope.WCSessionListContent(
                 color = ComposeAppTheme.colors.leah
             )
         }
-        CellSingleLineLawrenceSection(
+        CellUniversalLawrenceSection(
             listOf(
                 {
                     StatusCell(status)

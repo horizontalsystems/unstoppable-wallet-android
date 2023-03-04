@@ -3,12 +3,16 @@ package io.horizontalsystems.bankwallet.modules.enablecoin
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CoinSettings
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -24,7 +28,7 @@ class EnableCoinService(
 
     init {
         coinTokensService.approveTokensObservable
-            .subscribeIO { handleApproveCoinTokens(it.coin, it.tokens) }
+            .subscribeIO { handleApproveCoinTokens(it.tokens) }
             .let { disposable.add(it) }
 
         coinTokensService.rejectApproveTokensObservable
@@ -48,7 +52,7 @@ class EnableCoinService(
             .let { disposable.add(it) }
     }
 
-    private fun handleApproveCoinTokens(coin: Coin, tokens: List<Token>) {
+    private fun handleApproveCoinTokens(tokens: List<Token>) {
         val configuredTokens = tokens.map { ConfiguredToken(it) }
         enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
     }
@@ -77,7 +81,7 @@ class EnableCoinService(
         cancelEnableCoinObservable.onNext(token.fullCoin)
     }
 
-    fun enable(fullCoin: FullCoin, account: Account? = null) {
+    fun enable(fullCoin: FullCoin, accountType: AccountType, account: Account? = null) {
         val supportedTokens = fullCoin.supportedTokens
         if (supportedTokens.size == 1) {
             val token = supportedTokens.first()
@@ -85,8 +89,8 @@ class EnableCoinService(
                 token.blockchainType.restoreSettingTypes.isNotEmpty() -> {
                     restoreSettingsService.approveSettings(token, account)
                 }
-                token.blockchainType.coinSettingTypes.isNotEmpty() -> {
-                    coinSettingsService.approveSettings(token, token.blockchainType.defaultSettingsArray)
+                token.blockchainType.coinSettingType != null -> {
+                    coinSettingsService.approveSettings(token, accountType, token.blockchainType.defaultSettingsArray(accountType))
                 }
                 token.type != TokenType.Native -> {
                     coinTokensService.approveTokens(fullCoin)
@@ -100,14 +104,12 @@ class EnableCoinService(
         }
     }
 
-    fun configure(fullCoin: FullCoin, configuredTokens: List<ConfiguredToken>) {
-        val supportedTokens = fullCoin.supportedTokens
-        if (supportedTokens.size == 1) {
-            val token = supportedTokens.first()
-            if (token.blockchainType.coinSettingTypes.isNotEmpty()) {
-                val settings = configuredTokens.map { it.coinSettings }
-                coinSettingsService.approveSettings(token, settings, true)
-            }
+    fun configure(fullCoin: FullCoin, accountType: AccountType, configuredTokens: List<ConfiguredToken>) {
+        val singleToken = fullCoin.supportedTokens.singleOrNull()
+
+        if (singleToken != null && singleToken.blockchainType.coinSettingType != null) {
+            val settings = configuredTokens.map { it.coinSettings }
+            coinSettingsService.approveSettings(singleToken, accountType, settings, true)
         } else {
             val currentTokens = configuredTokens.map { it.token }
             coinTokensService.approveTokens(fullCoin, currentTokens, true)

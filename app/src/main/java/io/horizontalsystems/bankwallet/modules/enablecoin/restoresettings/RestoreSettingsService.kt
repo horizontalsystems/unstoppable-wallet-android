@@ -55,9 +55,9 @@ class RestoreSettingsService(
         val settings = RestoreSettings()
         settings.birthdayHeight =
             if (zcashConfig.restoreAsNew)
-                zcashBirthdayProvider.getNearestBirthdayHeight()
+                zcashBirthdayProvider.getLatestCheckpointBlockHeight()
             else
-                zcashConfig.birthdayHeight?.toIntOrNull()
+                zcashConfig.birthdayHeight?.toLongOrNull()
 
         val tokenWithSettings = TokenWithSettings(token, settings)
         approveSettingsObservable.onNext(tokenWithSettings)

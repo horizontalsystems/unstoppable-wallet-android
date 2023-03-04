@@ -29,8 +29,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.HSSectionRounded
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import java.math.BigDecimal
 
 @Composable
@@ -111,8 +110,9 @@ fun SendBitcoinScreen(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            HSSectionRounded {
-                CellSingleLineLawrence {
+
+            val additionalItems = buildList<@Composable () -> Unit> {
+                add {
                     HSFeeInputRaw(
                         coinCode = wallet.coin.code,
                         coinDecimal = viewModel.coinMaxAllowedDecimals,
@@ -127,7 +127,7 @@ fun SendBitcoinScreen(
                     )
                 }
                 if (isLockTimeEnabled) {
-                    CellSingleLineLawrence(borderTop = true) {
+                    add {
                         HSHodlerInput(
                             lockTimeIntervals = lockTimeIntervals,
                             lockTimeInterval = lockTimeInterval,
@@ -138,6 +138,8 @@ fun SendBitcoinScreen(
                     }
                 }
             }
+
+            CellUniversalLawrenceSection(additionalItems)
 
             feeRateCaution?.let {
                 FeeRateCaution(

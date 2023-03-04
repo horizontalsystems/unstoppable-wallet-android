@@ -1,16 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
+import io.horizontalsystems.erc20kit.core.Eip20Provider
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.RpcSource
+import io.horizontalsystems.marketkit.models.*
+import kotlinx.coroutines.rx2.await
 
 class AddEvmTokenBlockchainService(
-    private val blockchainType: BlockchainType,
-    private val networkManager: INetworkManager
+    private val blockchain: Blockchain,
+    private val eip20Provider: Eip20Provider
 ) : IAddTokenBlockchainService {
 
     override fun isValid(reference: String): Boolean {
@@ -23,11 +25,28 @@ class AddEvmTokenBlockchainService(
     }
 
     override fun tokenQuery(reference: String): TokenQuery {
-        return TokenQuery(blockchainType, TokenType.Eip20(reference.lowercase()))
+        return TokenQuery(blockchain.type, TokenType.Eip20(reference.lowercase()))
     }
 
-    override suspend fun customCoin(reference: String): CustomCoin {
-        val tokenInfo = networkManager.getEvmTokeInfo(blockchainType.uid, reference)
-        return CustomCoin(tokenQuery(reference), tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals)
+    override suspend fun token(reference: String): Token {
+        val tokenInfo = eip20Provider.getTokenInfo(Address(reference)).await()
+        val tokenQuery = tokenQuery(reference)
+        return Token(
+            coin = Coin(tokenQuery.customCoinUid, tokenInfo.tokenName, tokenInfo.tokenSymbol, tokenInfo.tokenDecimal),
+            blockchain = blockchain,
+            type = tokenQuery.tokenType,
+            decimals = tokenInfo.tokenDecimal
+        )
+    }
+
+    companion object {
+        fun getInstance(blockchain: Blockchain): AddEvmTokenBlockchainService {
+            val httpSyncSource = App.evmSyncSourceManager.getHttpSyncSource(blockchain.type)
+            val httpRpcSource = httpSyncSource?.rpcSource as? RpcSource.Http
+                ?: throw IllegalStateException("No HTTP RPC Source for blockchain ${blockchain.type}")
+
+            val eip20Provider = Eip20Provider.instance(httpRpcSource)
+            return AddEvmTokenBlockchainService(blockchain, eip20Provider)
+        }
     }
 }

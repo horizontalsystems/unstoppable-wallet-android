@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
@@ -12,13 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
 import kotlinx.parcelize.IgnoredOnParcel
@@ -167,81 +164,6 @@ sealed class MarketDataValue {
     class Volume(val value: String) : MarketDataValue()
     class Diff(val value: BigDecimal?) : MarketDataValue()
     class DiffNew(val value: Value) : MarketDataValue()
-}
-
-@Immutable
-data class MarketViewItem(
-    val fullCoin: FullCoin,
-    val coinRate: String,
-    val marketDataValue: MarketDataValue,
-    val rank: String?,
-    val favorited: Boolean,
-) {
-
-    val coinUid: String
-        get() = fullCoin.coin.uid
-
-    val coinCode: String
-        get() = fullCoin.coin.code
-
-    val coinName: String
-        get() = fullCoin.coin.name
-
-    val iconUrl: String
-        get() = fullCoin.coin.iconUrl
-
-    val iconPlaceHolder: Int
-        get() = fullCoin.iconPlaceholder
-
-    fun areItemsTheSame(other: MarketViewItem): Boolean {
-        return fullCoin.coin == other.fullCoin.coin
-    }
-
-    fun areContentsTheSame(other: MarketViewItem): Boolean {
-        return this == other
-    }
-
-    companion object {
-        fun create(
-            marketItem: MarketItem,
-            marketField: MarketField,
-            favorited: Boolean = false
-        ): MarketViewItem {
-            val marketDataValue = when (marketField) {
-                MarketField.MarketCap -> {
-                    val marketCapFormatted = App.numberFormatter.formatFiatShort(
-                        marketItem.marketCap.value,
-                        marketItem.marketCap.currency.symbol,
-                        2
-                    )
-
-                    MarketDataValue.MarketCap(marketCapFormatted)
-                }
-                MarketField.Volume -> {
-                    val volumeFormatted = App.numberFormatter.formatFiatShort(
-                        marketItem.volume.value,
-                        marketItem.volume.currency.symbol,
-                        2
-                    )
-
-                    MarketDataValue.Volume(volumeFormatted)
-                }
-                MarketField.PriceDiff -> {
-                    MarketDataValue.Diff(marketItem.diff)
-                }
-            }
-            return MarketViewItem(
-                marketItem.fullCoin,
-                App.numberFormatter.formatFiatFull(
-                    marketItem.rate.value,
-                    marketItem.rate.currency.symbol
-                ),
-                marketDataValue,
-                marketItem.rank?.toString(),
-                favorited
-            )
-        }
-    }
 }
 
 inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.allowance
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState.*
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -11,7 +12,9 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 
 enum class SwapPendingAllowanceState {
-    NA, Pending, Approved
+    NA, Revoking, Revoked, Approving, Approved;
+
+    fun loading() = this == Revoking || this == Approving
 }
 
 class SwapPendingAllowanceService(
@@ -24,7 +27,7 @@ class SwapPendingAllowanceService(
     private val disposables = CompositeDisposable()
 
     private val stateSubject = PublishSubject.create<SwapPendingAllowanceState>()
-    var state: SwapPendingAllowanceState = SwapPendingAllowanceState.NA
+    var state: SwapPendingAllowanceState = NA
         private set(value) {
             if (field != value) {
                 field = value
@@ -71,14 +74,23 @@ class SwapPendingAllowanceService(
         val allowanceState = allowanceService.state
 
         if (pendingAllowance == null || allowanceState == null || allowanceState !is SwapAllowanceService.State.Ready) {
-            state = SwapPendingAllowanceState.NA
+            state = NA
             return
         }
 
-        state = if (allowanceState.allowance.value.compareTo(pendingAllowance) != 0)
-            SwapPendingAllowanceState.Pending
-        else
-            SwapPendingAllowanceState.Approved
+        val pendingAllowanceConfirmed = allowanceState.allowance.value.compareTo(pendingAllowance) == 0
+
+        state = if (pendingAllowance.compareTo(BigDecimal.ZERO) == 0) {
+            when {
+                pendingAllowanceConfirmed -> Revoked
+                else -> Revoking
+            }
+        } else {
+            when {
+                pendingAllowanceConfirmed -> Approved
+                else -> Approving
+            }
+        }
     }
 
 }

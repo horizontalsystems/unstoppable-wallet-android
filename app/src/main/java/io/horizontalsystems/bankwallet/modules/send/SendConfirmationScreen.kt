@@ -29,10 +29,10 @@ import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 
@@ -120,15 +120,15 @@ fun SendConfirmationScreen(
                         .padding(bottom = 106.dp)
                 ) {
                     Spacer(modifier = Modifier.height(12.dp))
-                    HSSectionRounded {
-                        CellSingleLineLawrence {
+                    val topSectionItems = buildList<@Composable () -> Unit> {
+                        add {
                             SectionTitleCell(
                                 stringResource(R.string.Send_Confirmation_YouSend),
                                 coin.name,
                                 R.drawable.ic_arrow_up_right_12
                             )
                         }
-                        CellSingleLineLawrence(borderTop = true) {
+                        add {
                             val coinAmount = App.numberFormatter.formatCoinFull(
                                 amount,
                                 coin.code,
@@ -142,19 +142,22 @@ fun SendConfirmationScreen(
 
                             ConfirmAmountCell(currencyAmount, coinAmount, coin)
                         }
-                        CellSingleLineLawrence(borderTop = true) {
+                        add {
                             AddressCell(address.hex)
                         }
                         if (lockTimeInterval != null) {
-                            CellSingleLineLawrence(borderTop = true) {
+                            add {
                                 HSHodlerInput(lockTimeInterval = lockTimeInterval)
                             }
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
-                    HSSectionRounded {
-                        CellSingleLineLawrence {
+                    CellUniversalLawrenceSection(topSectionItems)
+
+                    Spacer(modifier = Modifier.height(28.dp))
+
+                    val bottomSectionItems = buildList<@Composable () -> Unit> {
+                        add {
                             HSFeeInputRaw(
                                 coinCode = feeCoin.code,
                                 coinDecimal = feeCoinMaxAllowedDecimals,
@@ -167,11 +170,13 @@ fun SendConfirmationScreen(
                             )
                         }
                         if (!memo.isNullOrBlank()) {
-                            CellSingleLineLawrence(borderTop = true) {
+                            add {
                                 MemoCell(memo)
                             }
                         }
                     }
+
+                    CellUniversalLawrenceSection(bottomSectionItems)
                 }
 
                 SendButton(
@@ -219,16 +224,13 @@ private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend:
 
 @Composable
 fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             iconUrl = coin.iconUrl,
             placeholder = R.drawable.coin_placeholder,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(32.dp)
         )
         subhead2_leah(
             modifier = Modifier.padding(start = 16.dp),
@@ -246,17 +248,15 @@ fun AddressCell(address: String) {
     val clipboardManager = LocalClipboardManager.current
     val view = LocalView.current
 
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(text = stringResource(R.string.Send_Confirmation_To))
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
             modifier = Modifier
-                .padding(start = 8.dp),
+                .padding(start = 8.dp)
+                .height(28.dp),
             title = address.shorten(),
             onClick = {
                 clipboardManager.setText(AnnotatedString(address))
@@ -268,11 +268,8 @@ fun AddressCell(address: String) {
 
 @Composable
 fun MemoCell(value: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(
             modifier = Modifier.padding(end = 16.dp),

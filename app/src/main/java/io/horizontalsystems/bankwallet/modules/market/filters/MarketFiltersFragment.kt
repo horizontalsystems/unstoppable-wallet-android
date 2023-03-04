@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.*
-import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PriceChange
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -448,16 +447,18 @@ private fun <ItemClass> SingleSelectBottomSheetContent(
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
     ) {
         Spacer(Modifier.height(12.dp))
-        CellSingleLineLawrenceSectionFramed(items) { itemWrapper ->
-            Row(
+        CellUniversalLawrenceSection(
+            items = items,
+            showFrame = true
+        ) { itemWrapper ->
+            RowUniversal(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        onSelect(itemWrapper)
-                        onClose()
-                    }
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                onClick = {
+                    onSelect(itemWrapper)
+                    onClose()
+                }
             ) {
                 if (itemWrapper.title != null && itemWrapper.item is FilterPriceChange) {
                     when (itemWrapper.item.color) {

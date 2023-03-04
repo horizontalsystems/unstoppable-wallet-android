@@ -5,6 +5,7 @@ import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.supportedNftTypes
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
@@ -13,6 +14,8 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.*
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.nftkit.core.NftKit
+import io.horizontalsystems.nftkit.models.NftType
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
@@ -73,21 +76,13 @@ class EvmKitManager(
 
     @Synchronized
     fun getEvmKitWrapper(account: Account, blockchainType: BlockchainType): EvmKitWrapper {
-        if (this.evmKitWrapper != null && currentAccount != account) {
+        if (evmKitWrapper != null && currentAccount != account) {
             stopEvmKit()
         }
 
         if (this.evmKitWrapper == null) {
             val accountType = account.type
-            this.evmKitWrapper = when (accountType) {
-                is AccountType.Mnemonic -> {
-                    createKitInstance(accountType, account, blockchainType)
-                }
-                is AccountType.Address -> {
-                    createKitInstance(accountType, account, blockchainType)
-                }
-                else -> throw UnsupportedAccountException()
-            }
+            evmKitWrapper = createKitInstance(accountType, account, blockchainType)
             useCount = 0
             currentAccount = account
         }
@@ -97,16 +92,32 @@ class EvmKitManager(
     }
 
     private fun createKitInstance(
-        accountType: AccountType.Mnemonic,
+        accountType: AccountType,
         account: Account,
         blockchainType: BlockchainType
     ): EvmKitWrapper {
         val syncSource = syncSourceManager.getSyncSource(blockchainType)
-        val seed = accountType.seed
-        val address = Signer.address(seed, chain)
-        val signer = Signer.getInstance(seed, chain)
 
-        val kit = EthereumKit.getInstance(
+        val address: Address
+        var signer: Signer? = null
+
+        when (accountType) {
+            is AccountType.Mnemonic -> {
+                val seed: ByteArray = accountType.seed
+                address = Signer.address(seed, chain)
+                signer = Signer.getInstance(seed, chain)
+            }
+            is AccountType.EvmPrivateKey -> {
+                address = Signer.address(accountType.key)
+                signer = Signer.getInstance(accountType.key, chain)
+            }
+            is AccountType.EvmAddress -> {
+                address = Address(accountType.address)
+            }
+            else -> throw UnsupportedAccountException()
+        }
+
+        val evmKit = EthereumKit.getInstance(
             App.instance,
             address,
             chain,
@@ -115,43 +126,34 @@ class EvmKitManager(
             account.id
         )
 
-        Erc20Kit.addTransactionSyncer(kit)
-        Erc20Kit.addDecorators(kit)
+        Erc20Kit.addTransactionSyncer(evmKit)
+        Erc20Kit.addDecorators(evmKit)
 
-        UniswapKit.addDecorators(kit)
-        OneInchKit.addDecorators(kit)
+        UniswapKit.addDecorators(evmKit)
+        OneInchKit.addDecorators(evmKit)
 
-        kit.start()
+        var nftKit: NftKit? = null
+        val supportedNftTypes = blockchainType.supportedNftTypes
+        if (supportedNftTypes.isNotEmpty()) {
+            val nftKitInstance = NftKit.getInstance(App.instance, evmKit)
+            supportedNftTypes.forEach {
+                when (it) {
+                    NftType.Eip721 -> {
+                        nftKitInstance.addEip721TransactionSyncer()
+                        nftKitInstance.addEip721Decorators()
+                    }
+                    NftType.Eip1155 -> {
+                        nftKitInstance.addEip1155TransactionSyncer()
+                        nftKitInstance.addEip1155Decorators()
+                    }
+                }
+            }
+            nftKit = nftKitInstance
+        }
 
-        return EvmKitWrapper(kit, blockchainType, signer)
-    }
+        evmKit.start()
 
-    private fun createKitInstance(
-        accountType: AccountType.Address,
-        account: Account,
-        blockchainType: BlockchainType
-    ): EvmKitWrapper {
-        val syncSource = syncSourceManager.getSyncSource(blockchainType)
-        val address = accountType.address
-
-        val kit = EthereumKit.getInstance(
-            App.instance,
-            Address(address),
-            chain,
-            syncSource.rpcSource,
-            syncSource.transactionSource,
-            account.id
-        )
-
-        Erc20Kit.addTransactionSyncer(kit)
-        Erc20Kit.addDecorators(kit)
-
-        UniswapKit.addDecorators(kit)
-        OneInchKit.addDecorators(kit)
-
-        kit.start()
-
-        return EvmKitWrapper(kit, blockchainType, null)
+        return EvmKitWrapper(evmKit, nftKit, blockchainType, signer)
     }
 
     @Synchronized
@@ -192,7 +194,12 @@ val RpcSource.urls: List<URL>
         is RpcSource.Http -> urls
     }
 
-class EvmKitWrapper(val evmKit: EthereumKit, val blockchainType: BlockchainType, val signer: Signer?) {
+class EvmKitWrapper(
+    val evmKit: EthereumKit,
+    val nftKit: NftKit?,
+    val blockchainType: BlockchainType,
+    val signer: Signer?
+) {
 
     fun sendSingle(
         transactionData: TransactionData,

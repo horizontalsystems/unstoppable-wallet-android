@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="io.horizontalsystems.bankwallet">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -267,9 +266,9 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name="${applicationId}.HashTag1009LauncherAlias"
+            android:name="${applicationId}.Ball8LauncherAlias"
             android:enabled="false"
-            android:icon="@mipmap/launcher_1009"
+            android:icon="@mipmap/launcher_8ball"
             android:label="@string/App_Name"
             android:exported="true"
             android:targetActivity=".modules.launcher.LauncherActivity">

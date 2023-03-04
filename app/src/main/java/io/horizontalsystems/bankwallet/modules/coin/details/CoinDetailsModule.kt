@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 object CoinDetailsModule {
 
@@ -30,7 +32,6 @@ object CoinDetailsModule {
         val proChartsActivated: Boolean,
         val tokenLiquidityViewItem: TokenLiquidityViewItem?,
         val tokenDistributionViewItem: TokenDistributionViewItem?,
-        val volumeChart: ChartViewItem?,
         val tvlChart: ChartViewItem?,
         val tvlRank: String?,
         val tvlRatio: String?,
@@ -41,19 +42,25 @@ object CoinDetailsModule {
         val auditAddresses: List<String>
     )
 
+    sealed class ChartHeaderView {
+        abstract val value: String
+
+        data class Latest(override val value: String, val diff: Value.Percent) : ChartHeaderView()
+        data class Sum(override val value: String) : ChartHeaderView()
+
+    }
+
     @Immutable
     data class ChartViewItem(
-        val badge: String?,
-        val value: String,
-        val diff: String,
+        val headerView: ChartHeaderView,
         val chartData: ChartData,
-        val movementTrend: ChartMovementTrend
-    )
-
-    enum class ChartMovementTrend {
-        Neutral,
-        Down,
-        Up,
+        val timePeriod: HsTimePeriod?
+    ) {
+        val timePeriodString: Int?
+            get() = when (timePeriod) {
+                HsTimePeriod.Month1 -> R.string.CoinPage_DetailsChartPeriod_Month1
+                else -> null
+            }
     }
 
     @Immutable

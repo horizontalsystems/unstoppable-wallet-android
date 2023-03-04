@@ -4,49 +4,65 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.Fragment1inchBinding
+import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel.ActionState
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel.Buttons
+import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.Keyboard
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
+import java.util.*
+
+private val uuidFrom = UUID.randomUUID().leastSignificantBits
+private val uuidTo = UUID.randomUUID().leastSignificantBits
 
 class OneInchFragment : SwapBaseFragment() {
 
     private val vmFactory by lazy { OneInchModule.Factory(dex) }
     private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) { vmFactory }
-    private val allowanceViewModelFactory by lazy {
-        OneInchModule.AllowanceViewModelFactory(
-            oneInchViewModel.service
-        )
-    }
+    private val allowanceViewModelFactory by lazy { OneInchModule.AllowanceViewModelFactory(oneInchViewModel.service) }
+    private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
     private val allowanceViewModel by viewModels<SwapAllowanceViewModel> { allowanceViewModelFactory }
-    private val coinCardViewModelFactory by lazy {
+    private val cardsFactory by lazy {
         SwapMainModule.CoinCardViewModelFactory(
             this,
             dex,
             oneInchViewModel.service,
-            oneInchViewModel.tradeService
+            oneInchViewModel.tradeService,
+            mainViewModel.switchService
         )
     }
 
@@ -58,22 +74,41 @@ class OneInchFragment : SwapBaseFragment() {
         return oneInchViewModel.getProviderState()
     }
 
-    private var _binding: Fragment1inchBinding? = null
-    private val binding get() = _binding!!
+    private val fromCoinCardViewModel by lazy {
+        ViewModelProvider(
+            this,
+            cardsFactory
+        )[SwapMainModule.coinCardTypeFrom, SwapCoinCardViewModel::class.java]
+    }
+
+    private val toCoinCardViewModel by lazy {
+        ViewModelProvider(
+            this,
+            cardsFactory
+        )[SwapMainModule.coinCardTypeTo, SwapCoinCardViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = Fragment1inchBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+
+            setContent {
+                OneInchScreen(
+                    viewModel = oneInchViewModel,
+                    fromCoinCardViewModel = fromCoinCardViewModel,
+                    toCoinCardViewModel = toCoinCardViewModel,
+                    allowanceViewModel = allowanceViewModel,
+                    navController = findNavController(),
+                )
+            }
+        }
     }
 
     override fun onStart() {
@@ -88,148 +123,157 @@ class OneInchFragment : SwapBaseFragment() {
         oneInchViewModel.onStop()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+}
 
-        val fromCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
-            SwapMainModule.coinCardTypeFrom,
-            SwapCoinCardViewModel::class.java
-        )
-        binding.fromCoinCard.initialize(
-            getString(R.string.Swap_FromAmountTitle),
-            fromCoinCardViewModel,
-            this,
-            viewLifecycleOwner
-        )
+@Composable
+private fun OneInchScreen(
+    viewModel: OneInchSwapViewModel,
+    fromCoinCardViewModel: SwapCoinCardViewModel,
+    toCoinCardViewModel: SwapCoinCardViewModel,
+    allowanceViewModel: SwapAllowanceViewModel,
+    navController: NavController
+) {
+    val buttons by viewModel.buttonsLiveData().observeAsState()
+    val tradeViewItem by viewModel.tradeViewItemLiveData().observeAsState()
+    val isLoading by viewModel.isLoadingLiveData().observeAsState(false)
+    val swapError by viewModel.swapErrorLiveData().observeAsState()
+    val availableBalance by fromCoinCardViewModel.balanceLiveData().observeAsState()
+    val hasNonZeroBalance by fromCoinCardViewModel.hasNonZeroBalance().observeAsState()
+    val keyboardState by observeKeyboardState()
+    val fromAmount by fromCoinCardViewModel.amountLiveData().observeAsState()
+    val tradeTimeoutProgress by viewModel.tradeTimeoutProgressLiveData().observeAsState()
 
-        val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
-            SwapMainModule.coinCardTypeTo,
-            SwapCoinCardViewModel::class.java
-        )
-        binding.toCoinCard.initialize(
-            getString(R.string.Swap_ToAmountTitle),
-            toCoinCardViewModel,
-            this,
-            viewLifecycleOwner
-        )
-        binding.toCoinCard.setAmountEnabled(false)
+    ComposeAppTheme {
+        val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
+        var showSuggestions by remember { mutableStateOf(false) }
 
-        binding.allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
-
-        observeViewModel()
-
-        binding.switchButton.setOnClickListener {
-            oneInchViewModel.onTapSwitch()
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
         }
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
 
-        binding.buttonsCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-    }
+                Spacer(Modifier.height(12.dp))
 
-    private fun subscribeToApproveResult() {
-        getNavigationResult(SwapApproveModule.requestKey) {
-            if (it.getBoolean(SwapApproveModule.resultKey)) {
-                oneInchViewModel.didApprove()
-            }
-        }
-    }
-
-    private fun observeViewModel() {
-        oneInchViewModel.isLoadingLiveData().observe(viewLifecycleOwner, { isLoading ->
-            binding.progressBar.isVisible = isLoading
-        })
-
-        oneInchViewModel.swapErrorLiveData().observe(viewLifecycleOwner, { error ->
-            binding.commonError.text = error
-            binding.commonError.isVisible = error != null
-        })
-
-        oneInchViewModel.buttonsLiveData().observe(viewLifecycleOwner, { buttons ->
-            setButtons(buttons)
-        })
-
-        oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner) { approveData ->
-            subscribeToApproveResult()
-            findNavController().slideFromBottom(
-                R.id.swapApproveFragment,
-                SwapApproveModule.prepareParams(approveData)
-            )
-        }
-
-        oneInchViewModel.openConfirmationLiveEvent()
-            .observe(viewLifecycleOwner, { oneInchSwapParameters ->
-                findNavController().slideFromRight(
-                    R.id.oneInchConfirmationFragment,
-                    OneInchConfirmationModule.prepareParams(oneInchSwapParameters)
-                )
-            })
-
-        oneInchViewModel.approveStepLiveData().observe(viewLifecycleOwner, { approveStep ->
-            when (approveStep) {
-                ApproveStep.ApproveRequired, ApproveStep.Approving -> {
-                    binding.approveStepsView.setStepOne()
-                }
-                ApproveStep.Approved -> {
-                    binding.approveStepsView.setStepTwo()
-                }
-                ApproveStep.NA, null -> {
-                    binding.approveStepsView.hide()
-                }
-            }
-        })
-    }
-
-    private fun setButtons(buttons: Buttons) {
-        val approveButtonVisible = buttons.approve != ActionState.Hidden
-        binding.buttonsCompose.setContent {
-            ComposeAppTheme {
-                Row(
+                Column(
                     modifier = Modifier
-                        .width(IntrinsicSize.Max)
-                        .padding(top = 28.dp, bottom = 24.dp)
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(ComposeAppTheme.colors.lawrence)
                 ) {
-                    if (approveButtonVisible) {
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(end = 4.dp),
-                            title = getTitle(buttons.approve),
-                            onClick = {
-                                oneInchViewModel.onTapApprove()
-                            },
-                            enabled = buttons.approve is ActionState.Enabled
-                        )
+                    SwapCoinCardView(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 22.dp),
+                        viewModel = fromCoinCardViewModel,
+                        uuid = uuidFrom,
+                        amountEnabled = true,
+                        navController = navController,
+                        focusRequester = focusRequester
+                    ) { isFocused ->
+                        showSuggestions = isFocused
                     }
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .weight(1f)
-                            .then(getProceedButtonModifier(approveButtonVisible)),
-                        title = getTitle(buttons.proceed),
-                        onClick = {
-                            oneInchViewModel.onTapProceed()
-                        },
-                        enabled = buttons.proceed is ActionState.Enabled
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SwitchCoinsSection { viewModel.onTapSwitch() }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    SwapCoinCardView(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 22.dp),
+                        viewModel = toCoinCardViewModel,
+                        uuid = uuidTo,
+                        amountEnabled = false,
+                        navController = navController,
+                        isLoading = isLoading
                     )
                 }
+
+                if (swapError != null) {
+                    swapError?.let {
+                        SwapError(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp), text = it)
+                    }
+                } else {
+                    val infoItems = mutableListOf<@Composable () -> Unit>()
+                    tradeViewItem?.primaryPrice?.let { primaryPrice ->
+                        tradeViewItem?.secondaryPrice?.let { secondaryPrice ->
+                            infoItems.add { Price(primaryPrice, secondaryPrice, tradeTimeoutProgress ?: 1f, tradeViewItem?.expired ?: false) }
+                        }
+                    }
+                    if (allowanceViewModel.uiState.isVisible && !allowanceViewModel.uiState.revokeRequired) {
+                        infoItems.add { SwapAllowance(allowanceViewModel, navController) }
+                    }
+                    if (infoItems.isEmpty()) {
+                        availableBalance?.let { infoItems.add { AvailableBalance(it) } }
+                    }
+                    if (infoItems.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        SingleLineGroup(infoItems)
+                    }
+
+                    if (buttons?.revoke is SwapActionState.Enabled && allowanceViewModel.uiState.revokeRequired) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        TextImportantWarning(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            text = stringResource(R.string.Approve_RevokeAndApproveInfo, allowanceViewModel.uiState.allowance ?: "")
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(32.dp))
+
+                ActionButtons(
+                    buttons = buttons,
+                    onTapRevoke = {
+                        navController.getNavigationResult(SwapApproveModule.requestKey) {
+                            if (it.getBoolean(SwapApproveModule.resultKey)) {
+                                viewModel.didApprove()
+                            }
+                        }
+
+                        viewModel.revokeEvmData?.let { revokeEvmData ->
+                            navController.slideFromBottom(
+                                R.id.swapApproveConfirmationFragment,
+                                SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.blockchainType, false)
+                            )
+                        }
+                    },
+                    onTapApprove = {
+                        navController.getNavigationResult(SwapApproveModule.requestKey) {
+                            if (it.getBoolean(SwapApproveModule.resultKey)) {
+                                viewModel.didApprove()
+                            }
+                        }
+
+                        viewModel.approveData?.let { data ->
+                            navController.slideFromBottom(
+                                R.id.swapApproveFragment,
+                                SwapApproveModule.prepareParams(data)
+                            )
+                        }
+                    },
+                    onTapProceed = {
+                        viewModel.proceedParams?.let { params ->
+                            navController.slideFromRight(
+                                R.id.oneInchConfirmationFragment,
+                                OneInchConfirmationModule.prepareParams(params)
+                            )
+                        }
+                    }
+                )
+
+                Spacer(Modifier.height(32.dp))
+            }
+
+            if (hasNonZeroBalance == true && fromAmount?.second.isNullOrEmpty() && showSuggestions && keyboardState == Keyboard.Opened) {
+                SuggestionsBar(modifier = Modifier.align(Alignment.BottomCenter)) {
+                    focusManager.clearFocus()
+                    fromCoinCardViewModel.onSetAmountInBalancePercent(it)
+                }
             }
         }
     }
-
-    private fun getProceedButtonModifier(approveButtonVisible: Boolean): Modifier {
-        return if (approveButtonVisible) {
-            Modifier.padding(start = 4.dp)
-        } else {
-            Modifier.fillMaxWidth()
-        }
-    }
-
-    private fun getTitle(action: ActionState?): String {
-        return when (action) {
-            is ActionState.Enabled -> action.title
-            is ActionState.Disabled -> action.title
-            else -> ""
-        }
-    }
-
 }

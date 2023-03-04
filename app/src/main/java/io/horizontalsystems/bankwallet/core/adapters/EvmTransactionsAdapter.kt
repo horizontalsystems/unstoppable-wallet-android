@@ -94,11 +94,11 @@ class EvmTransactionsAdapter(
         val filterTag = when (filter) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> when {
-                token != null -> TransactionTag.eip20Incoming(coinTagName(token))
+                token != null -> TransactionTag.tokenIncoming(coinTagName(token))
                 else -> TransactionTag.INCOMING
             }
             FilterTransactionType.Outgoing -> when {
-                token != null -> TransactionTag.eip20Outgoing(coinTagName(token))
+                token != null -> TransactionTag.tokenOutgoing(coinTagName(token))
                 else -> TransactionTag.OUTGOING
             }
             FilterTransactionType.Swap -> TransactionTag.SWAP
@@ -113,13 +113,14 @@ class EvmTransactionsAdapter(
 
         fun clear(walletId: String, testMode: Boolean) {
             val networkTypes = when {
-                testMode -> listOf(Chain.EthereumRopsten)
+                testMode -> listOf(Chain.EthereumGoerli)
                 else -> listOf(
                     Chain.Ethereum,
                     Chain.BinanceSmartChain,
                     Chain.Polygon,
                     Chain.Optimism,
-                    Chain.ArbitrumOne
+                    Chain.ArbitrumOne,
+                    Chain.Gnosis,
                 )
             }
             networkTypes.forEach {

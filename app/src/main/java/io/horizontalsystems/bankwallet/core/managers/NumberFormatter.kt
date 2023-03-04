@@ -4,18 +4,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.core.ILanguageManager
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 class NumberFormatter(
-        private val languageManager: ILanguageManager
+        private val languageManager: LanguageManager
         ) : IAppNumberFormatter {
 
-    private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
+    private var formatters = ConcurrentHashMap<String, NumberFormat>()
     private val numberRounding = NumberRounding()
 
     override fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String, suffix: String): String {

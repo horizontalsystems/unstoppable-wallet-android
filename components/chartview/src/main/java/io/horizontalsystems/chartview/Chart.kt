@@ -180,7 +180,6 @@ class Chart @JvmOverloads constructor(
 
     fun setData(
         data: ChartData,
-        chartType: ChartView.ChartType,
         maxValue: String?,
         minValue: String?
     ) {
@@ -242,7 +241,6 @@ class Chart @JvmOverloads constructor(
             config.volumeOffset
         )
         val timeline = GridHelper.map(
-            chartType,
             data.startTimestamp,
             data.endTimestamp,
             binding.chartMain.shape.right

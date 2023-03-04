@@ -22,7 +22,8 @@ object TransactionsModule {
                     TransactionSyncStateRepository(App.transactionAdapterManager),
                     App.transactionAdapterManager,
                     App.walletManager,
-                    TransactionFilterService()
+                    TransactionFilterService(),
+                    NftMetadataService(App.nftMetadataManager)
                 ),
                 TransactionViewItemFactory(App.evmLabelManager)
             ) as T

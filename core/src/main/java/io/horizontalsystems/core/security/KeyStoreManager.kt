@@ -1,5 +1,6 @@
 package io.horizontalsystems.core.security
 
+import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
@@ -87,15 +88,30 @@ class KeyStoreManager(
 
     @Synchronized
     private fun createKey(): SecretKey {
-        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+        val keyGenerator =
+            KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
 
-        keyGenerator.init(KeyGenParameterSpec.Builder(keyAlias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                .setBlockModes(BLOCK_MODE)
-                .setUserAuthenticationRequired(true)
-                .setUserAuthenticationValidityDurationSeconds(AUTH_DURATION_SEC)
-                .setRandomizedEncryptionRequired(false)
-                .setEncryptionPaddings(PADDING)
-                .build())
+        val builder = KeyGenParameterSpec.Builder(
+            keyAlias,
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        )
+            .setBlockModes(BLOCK_MODE)
+            .setUserAuthenticationRequired(true)
+            .setRandomizedEncryptionRequired(false)
+            .setEncryptionPaddings(PADDING)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            builder.setUserAuthenticationParameters(
+                AUTH_DURATION_SEC,
+                KeyProperties.AUTH_DEVICE_CREDENTIAL
+                        or KeyProperties.AUTH_BIOMETRIC_STRONG
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            builder.setUserAuthenticationValidityDurationSeconds(AUTH_DURATION_SEC)
+        }
+
+        keyGenerator.init(builder.build())
 
         return keyGenerator.generateKey()
     }

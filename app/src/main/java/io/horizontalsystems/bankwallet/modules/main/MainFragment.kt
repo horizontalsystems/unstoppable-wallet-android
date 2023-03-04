@@ -1,34 +1,42 @@
 package io.horizontalsystems.bankwallet.modules.main
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentMainBinding
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager.SupportState
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetWalletSelectDialog
 import io.horizontalsystems.core.findNavController
 
 class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
-    private val viewModel by viewModels<MainViewModel> { MainModule.Factory() }
-    private var bottomBadgeView: View? = null
+    private val viewModel by viewModels<MainViewModel> {
+        MainModule.Factory(activity?.intent?.data?.toString())
+    }
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
@@ -54,14 +62,13 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        bottomBadgeView = null
         _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mainViewPagerAdapter = MainViewPagerAdapter(this)
+        val mainViewPagerAdapter = MainViewPagerAdapter(this, viewModel.marketsTabEnabledLiveData.value ?: false)
 
         binding.viewPager.offscreenPageLimit = 1
         binding.viewPager.adapter = mainViewPagerAdapter
@@ -76,7 +83,7 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             }
         })
 
-        binding.bottomNavigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_market -> binding.viewPager.setCurrentItem(0, false)
                 R.id.navigation_balance -> binding.viewPager.setCurrentItem(1, false)
@@ -86,11 +93,48 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             true
         }
 
-        binding.bottomNavigation.findViewById<View>(R.id.navigation_balance)
-            ?.setOnLongClickListener {
-                viewModel.onLongPressBalanceTab()
-                true
+        (binding.bottomNavigation.getChildAt(0) as? ViewGroup)?.let { viewGroup ->
+            viewGroup.forEach {
+                it.setOnLongClickListener {
+                    if (it.id == R.id.navigation_balance) {
+                        viewModel.onLongPressBalanceTab()
+                        true
+                    } else {
+                        false
+                    }
+                }
             }
+        }
+
+        viewModel.walletConnectSupportState.observe(viewLifecycleOwner) { wcSupportState ->
+            viewModel.wcSupportStateHandled()
+            when (wcSupportState) {
+                SupportState.Supported -> {
+                    findNavController().slideFromRight(R.id.wallet_connect_graph)
+                }
+                SupportState.NotSupportedDueToNoActiveAccount -> {
+                    activity?.intent?.data = null
+                    findNavController().slideFromBottom(R.id.wcErrorNoAccountFragment)
+                }
+                is SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                    activity?.intent?.data = null
+                    val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup, wcSupportState.account.name)
+                    findNavController().slideFromBottom(
+                        R.id.backupRequiredDialog,
+                        BackupRequiredDialog.prepareParams(wcSupportState.account, text)
+                    )
+                }
+                is SupportState.NotSupported -> {
+                    activity?.intent?.data = null
+                    findNavController().slideFromBottom(
+                        R.id.wcAccountTypeNotSupportedDialog,
+                        WCAccountTypeNotSupportedDialog.prepareParams(wcSupportState.accountTypeDescription)
+                    )
+                }
+                null -> {}
+            }
+        }
+
 
         viewModel.openWalletSwitcherLiveEvent.observe(
             viewLifecycleOwner,
@@ -125,22 +169,46 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             binding.screenSecureDim.isVisible = hide
         })
 
-        viewModel.setBadgeVisibleLiveData.observe(viewLifecycleOwner, Observer { visible ->
-            val bottomMenu = binding.bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-            val settingsNavigationViewItem = bottomMenu?.getChildAt(3) as? BottomNavigationItemView
-
-            if (visible) {
-                if (bottomBadgeView?.parent == null) {
-                    settingsNavigationViewItem?.addView(getBottomBadge())
-                }
-            } else {
-                settingsNavigationViewItem?.removeView(bottomBadgeView)
-            }
-        })
+        viewModel.settingsBadgeLiveData.observe(viewLifecycleOwner) {
+            setSettingsBadge(it)
+        }
 
         viewModel.transactionTabEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
             binding.bottomNavigation.menu.getItem(2).isEnabled = enabled
         })
+
+        viewModel.marketsTabEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
+            binding.bottomNavigation.menu.getItem(0).isVisible = enabled
+            mainViewPagerAdapter.setMarketsTabEnabled(enabled)
+        }
+
+        viewModel.torIsActiveLiveData.observe(viewLifecycleOwner) { torIsActive ->
+            binding.torIsActiveState.isVisible = torIsActive
+        }
+        viewModel.playTorActiveAnimationLiveData.observe(viewLifecycleOwner) { playAnimation ->
+            if (playAnimation) {
+                context?.let { ctx ->
+                    ValueAnimator().apply {
+                        setIntValues(
+                            ContextCompat.getColor(ctx, R.color.remus),
+                            ContextCompat.getColor(ctx, R.color.lawrence)
+                        )
+                        setEvaluator(ArgbEvaluator())
+                        addUpdateListener { valueAnimator ->
+                            try {
+                                binding.torIsActiveState.setBackgroundColor((valueAnimator.animatedValue as Int))
+                            } catch (e: Exception) {
+                                //binding is null
+                            }
+                        }
+
+                        duration = 1000
+                        start()
+                    }
+                }
+                viewModel.animationPlayed()
+            }
+        }
 
     }
 
@@ -175,15 +243,26 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         }
     }
 
-    private fun getBottomBadge(): View? {
-        if (bottomBadgeView != null) {
-            return bottomBadgeView
+    private fun setSettingsBadge(badgeType: MainModule.BadgeType?) {
+        val context = requireContext()
+        val badge = binding.bottomNavigation.getOrCreateBadge(R.id.navigation_settings)
+        badge.backgroundColor = context.getColor(R.color.lucian)
+        badge.badgeTextColor = context.getColor(R.color.white)
+
+        when (badgeType) {
+            MainModule.BadgeType.BadgeDot -> {
+                badge.clearNumber()
+                badge.isVisible = true
+            }
+            is MainModule.BadgeType.BadgeNumber -> {
+                badge.number = badgeType.number
+                badge.isVisible = true
+            }
+            else -> {
+                badge.isVisible = false
+                badge.clearNumber()
+            }
         }
-
-        val bottomMenu = binding.bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-        bottomBadgeView = LayoutInflater.from(activity)
-            .inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
-
-        return bottomBadgeView
     }
+
 }

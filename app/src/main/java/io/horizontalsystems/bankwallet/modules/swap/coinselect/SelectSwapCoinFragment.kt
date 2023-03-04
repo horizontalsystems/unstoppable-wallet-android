@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -108,20 +107,19 @@ fun SelectSwapCoinDialogScreen(
 
             LazyColumn {
                 items(coinItems) { coinItem ->
-                    CellMultilineClear(borderTop = true) {
-                        Row(
+                    SectionUniversalItem(borderTop = true) {
+                        RowUniversal(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .clickable {
-                                    onClickItem.invoke(coinItem)
-                                }
+                                .fillMaxWidth()
                                 .padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
+                            onClick = {
+                                onClickItem.invoke(coinItem)
+                            }
                         ) {
                             CoinImage(
                                 iconUrl = coinItem.token.coin.iconUrl,
                                 placeholder = coinItem.token.iconPlaceholder,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(32.dp)
                             )
                             Spacer(modifier = Modifier.size(16.dp))
                             MultitextM1(

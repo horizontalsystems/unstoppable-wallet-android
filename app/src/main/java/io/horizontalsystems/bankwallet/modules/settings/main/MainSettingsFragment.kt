@@ -31,9 +31,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -94,11 +98,11 @@ private fun SettingSections(
     val showAlertManageWallet by viewModel.manageWalletShowAlertLiveData.observeAsState(false)
     val showAlertSecurityCenter by viewModel.securityCenterShowAlertLiveData.observeAsState(false)
     val showAlertAboutApp by viewModel.aboutAppShowAlertLiveData.observeAsState(false)
-    val walletConnectSessionCount by viewModel.walletConnectSessionCountLiveData.observeAsState(0)
+    val wcCounter by viewModel.wcCounterLiveData.observeAsState()
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
     val language by viewModel.languageLiveData.observeAsState()
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
@@ -113,11 +117,10 @@ private fun SettingSections(
             )
         }, {
             HsSettingCell(
-                R.string.Settings_SecurityCenter,
-                R.drawable.ic_security,
-                showAlert = showAlertSecurityCenter,
+                R.string.BlockchainSettings_Title,
+                R.drawable.ic_blocks_20,
                 onClick = {
-                    navController.slideFromRight(R.id.securitySettingsFragment)
+                    navController.slideFromRight(R.id.blockchainSettingsFragment)
                 }
             )
         })
@@ -125,22 +128,33 @@ private fun SettingSections(
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
                 R.string.Settings_WalletConnect,
                 R.drawable.ic_wallet_connect_20,
-                value = if (walletConnectSessionCount > 0) walletConnectSessionCount.toString() else null,
+                value = (wcCounter as? CounterType.SessionCounter)?.number?.toString(),
+                counterBadge = (wcCounter as? CounterType.PendingRequestCounter)?.number?.toString(),
                 onClick = {
-                    when (viewModel.getWalletConnectSupportState()) {
+                    when (val state = viewModel.getWalletConnectSupportState()) {
                         WC1Manager.SupportState.Supported -> {
                             navController.slideFromRight(R.id.wallet_connect_graph)
                         }
                         WC1Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                         }
-                        WC1Manager.SupportState.NotSupportedDueToWatchAccount -> {
-                            navController.slideFromBottom(R.id.wcErrorWatchAccountFragment)
+                        is WC1Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                            val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup, state.account.name)
+                            navController.slideFromBottom(
+                                R.id.backupRequiredDialog,
+                                BackupRequiredDialog.prepareParams(state.account, text)
+                            )
+                        }
+                        is WC1Manager.SupportState.NotSupported -> {
+                            navController.slideFromBottom(
+                                R.id.wcAccountTypeNotSupportedDialog,
+                                WCAccountTypeNotSupportedDialog.prepareParams(state.accountTypeDescription)
+                            )
                         }
                     }
                 }
@@ -150,8 +164,17 @@ private fun SettingSections(
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
+                HsSettingCell(
+                    R.string.Settings_SecurityCenter,
+                    R.drawable.ic_security,
+                    showAlert = showAlertSecurityCenter,
+                    onClick = {
+                        navController.slideFromRight(R.id.securitySettingsFragment)
+                    }
+                )
+            }, {
             HsSettingCell(
                 R.string.Settings_Appearance,
                 R.drawable.ic_brush_20,
@@ -177,7 +200,14 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.languageSettingsFragment)
                 }
             )
-        }, {
+        },
+        )
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellUniversalLawrenceSection(
+        listOf {
             HsSettingCell(
                 R.string.Settings_ExperimentalFeatures,
                 R.drawable.ic_experimental,
@@ -185,12 +215,12 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.experimentalFeaturesFragment)
                 }
             )
-        })
+        }
     )
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.Settings_Faq,
@@ -212,7 +242,7 @@ private fun SettingSections(
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
                 R.string.SettingsAboutApp_Title,
@@ -233,18 +263,16 @@ fun HsSettingCell(
     @StringRes title: Int,
     @DrawableRes icon: Int,
     value: String? = null,
+    counterBadge: String? = null,
     showAlert: Boolean = false,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = { onClick.invoke() })
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
     ) {
         Image(
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier.size(24.dp),
             painter = painterResource(id = icon),
             contentDescription = null,
         )
@@ -254,13 +282,20 @@ fun HsSettingCell(
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         Spacer(Modifier.weight(1f))
-        value?.let {
+
+        if (counterBadge != null) {
+            BadgeCount(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                text = counterBadge
+            )
+        } else if (value != null) {
             subhead1_grey(
-                text = it,
+                text = value,
                 maxLines = 1,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
+
         if (showAlert) {
             Image(
                 modifier = Modifier.size(20.dp),
@@ -341,7 +376,7 @@ private fun previewSettingsScreen() {
                     HsSettingCell(
                         R.string.Settings_WalletConnect,
                         R.drawable.ic_wallet_connect_20,
-                        value = "value",
+                        counterBadge = "13",
                         onClick = { }
                     )
                 }

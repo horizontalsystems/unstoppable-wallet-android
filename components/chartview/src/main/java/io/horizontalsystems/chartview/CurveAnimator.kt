@@ -185,7 +185,7 @@ class CurveAnimator(
 
             val prevTimestamps = prevPointsMutableMap.keys.toList()
 
-            for ((timestamp, value) in nextPointsMap) {
+            for ((timestamp, _) in nextPointsMap) {
                 if (!prevPointsMutableMap.containsKey(timestamp)) {
                     valueForTimestamp(timestamp, prevTimestamps, prevPointsMutableMap)?.let {
                         prevPointsMutableMap[timestamp] = it

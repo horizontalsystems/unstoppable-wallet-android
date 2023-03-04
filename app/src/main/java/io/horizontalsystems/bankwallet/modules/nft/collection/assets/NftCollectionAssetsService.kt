@@ -1,13 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.assets
 
 import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
+import io.horizontalsystems.bankwallet.core.providers.nft.PaginationData
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.nft.NftManager
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
-import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.NftAsset
+import io.horizontalsystems.marketkit.models.NftPrice
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -16,15 +18,15 @@ import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NftCollectionAssetsService(
+    private val blockchainType: BlockchainType,
     private val collectionUid: String,
-    private val marketKit: MarketKit,
-    private val nftManager: NftManager,
+    private val provider: INftProvider,
     private val xRateRepository: BalanceXRateRepository
 ) {
-    private val _items = MutableStateFlow<Result<List<CollectionAsset>>?>(null)
+    private val _items = MutableStateFlow<Result<List<Item>>?>(null)
     val items = _items.filterNotNull()
 
-    private var cursor: String? = null
+    private var paginationData: PaginationData? = null
     private val loading = AtomicBoolean(false)
     private val started = AtomicBoolean(false)
     private val coinUidsSet = mutableSetOf<String>()
@@ -52,7 +54,7 @@ class NftCollectionAssetsService(
         loadingJob?.cancel()
         loading.set(false)
 
-        cursor = null
+        paginationData = null
 
         load(true)
     }
@@ -72,12 +74,11 @@ class NftCollectionAssetsService(
 
         loadingJob = launch {
             try {
-                if (!initialLoad && cursor == null) {
+                if (!initialLoad && paginationData == null) {
                     _items.update { it }
                 } else {
-                    val pagedAssets = marketKit.nftAssets(collectionUid, cursor)
-
-                    _items.update { handleAssets(pagedAssets.assets, pagedAssets.cursor) }
+                    val (assets, paginationData) = provider.collectionAssetsMetadata(blockchainType, collectionUid, paginationData)
+                    _items.update { handle(assets, paginationData) }
                 }
 
                 loading.set(false)
@@ -89,53 +90,40 @@ class NftCollectionAssetsService(
         }
     }
 
-    private fun handleAssets(
-        assets: List<NftAsset>,
-        cursor: String?
-    ): Result<List<CollectionAsset>> {
-        this.cursor = cursor
+    private fun handle(
+        assets: List<NftAssetMetadata>,
+        paginationData: PaginationData?
+    ): Result<List<Item>> {
+        this.paginationData = paginationData
 
-        val assetItems = assets.map { asset -> collectionAsset(asset) }
-        val newCoinUids = assetItems.mapNotNull { it.price?.coinValue?.coin?.uid }
+        val assetItems = assets.map { asset -> Item(asset, asset.lastSalePrice) }
+        val newCoinUids = assetItems.mapNotNull { it.price?.token?.coin?.uid }
 
         coinUidsSet.addAll(newCoinUids)
 
         xRateRepository.setCoinUids(coinUidsSet.toList())
 
-        val xRatesMap = xRateRepository.getLatestRates()
+        val latestRates = xRateRepository.getLatestRates()
 
         val wholeList = (_items.value?.getOrNull() ?: listOf()) + assetItems
 
-        return Result.success(updateCurrencyValues(wholeList, xRatesMap))
+        return Result.success(updateCurrencyValues(wholeList, latestRates))
     }
 
     private fun updateCurrencyValues(
-        assets: List<CollectionAsset>,
-        xRatesMap: Map<String, CoinPrice?>
+        assets: List<Item>,
+        latestRates: Map<String, CoinPrice?>
     ) = assets.map { asset ->
         val coinValue = asset.price?.coinValue ?: return@map asset
-        val coinPrice = xRatesMap[coinValue.coin.uid] ?: return@map asset
+        val coinPrice = latestRates[coinValue.coin.uid] ?: return@map asset
 
         val currencyValue = CurrencyValue(baseCurrency, coinValue.value.times(coinPrice.value))
-
-        asset.copy(price = NftAssetModuleAssetItem.Price(coinValue, currencyValue), xRate = coinPrice)
+        asset.copy(priceInFiat = currencyValue)
     }
 
-    private fun collectionAsset(asset: NftAsset) =
-        nftManager.assetItem(
-            asset,
-            collectionName = "",
-            collectionLinks = null,
-            averagePrice7d = null,
-            averagePrice30d = null,
-            totalSupply = 0
-        ).let {
-            CollectionAsset(it, it.stats.lastSale)
-        }
+    data class Item(
+        val asset: NftAssetMetadata,
+        val price: NftPrice?,
+        val priceInFiat: CurrencyValue? = null
+    )
 }
-
-data class CollectionAsset(
-    val asset: NftAssetModuleAssetItem,
-    val price: NftAssetModuleAssetItem.Price?,
-    val xRate: CoinPrice? = null
-)

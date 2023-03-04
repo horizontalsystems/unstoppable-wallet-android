@@ -58,6 +58,7 @@ class CoinMajorHoldersViewModel(
                                 errorMessage = errorText(it)
                             }
                         }
+                        DataState.Loading -> {}
                     }
 
                 }

@@ -1,34 +1,90 @@
 package io.horizontalsystems.core.helpers
 
 import android.content.Context
+import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.View
+import androidx.annotation.DrawableRes
+import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.R
-import io.horizontalsystems.snackbar.CustomSnackbar
-import io.horizontalsystems.snackbar.SnackbarDuration
-import io.horizontalsystems.snackbar.SnackbarGravity
+import io.horizontalsystems.core.SnackbarDuration
+import io.horizontalsystems.core.SnackbarGravity
 
 object HudHelper {
 
-    fun showInProcessMessage(contenView: View, resId: Int, duration: SnackbarDuration = SnackbarDuration.SHORT, gravity: SnackbarGravity = SnackbarGravity.BOTTOM, showProgressBar: Boolean = true): CustomSnackbar? {
-        return showHudNotification(contenView, contenView.context.getString(resId), R.color.grey, duration, gravity, showProgressBar = showProgressBar)
+    fun showInProcessMessage(
+        contenView: View,
+        resId: Int,
+        duration: SnackbarDuration = SnackbarDuration.SHORT,
+        gravity: SnackbarGravity = SnackbarGravity.BOTTOM,
+        showProgressBar: Boolean = true
+    ): CustomSnackbar? {
+        return showHudNotification(
+            contentView = contenView,
+            text = contenView.context.getString(resId),
+            backgroundColor = R.color.grey,
+            duration = duration,
+            gravity = gravity,
+            showProgressBar = showProgressBar
+        )
     }
 
-    fun showSuccessMessage(contenView: View, resId: Int, duration: SnackbarDuration = SnackbarDuration.SHORT, gravity: SnackbarGravity = SnackbarGravity.BOTTOM): CustomSnackbar? {
-        return showHudNotification(contenView, contenView.context.getString(resId), R.color.green_d, duration, gravity, false)
+    fun showSuccessMessage(
+        contenView: View,
+        resId: Int,
+        duration: SnackbarDuration = SnackbarDuration.SHORT,
+        gravity: SnackbarGravity = SnackbarGravity.BOTTOM,
+        @DrawableRes icon: Int? = null,
+        iconTint: Int? = null,
+    ): CustomSnackbar? {
+        return showHudNotification(
+            contentView = contenView,
+            text = contenView.context.getString(resId),
+            backgroundColor = R.color.green_d,
+            duration = duration,
+            gravity = gravity,
+            icon = icon,
+            iconTint = iconTint
+        )
     }
 
-    fun showSuccessMessage(contenView: View, text: String, duration: SnackbarDuration = SnackbarDuration.SHORT, gravity: SnackbarGravity = SnackbarGravity.BOTTOM): CustomSnackbar? {
-        return showHudNotification(contenView, text, R.color.green_d, duration, gravity, false)
+    fun showSuccessMessage(
+        contenView: View,
+        text: String,
+        duration: SnackbarDuration = SnackbarDuration.SHORT,
+        gravity: SnackbarGravity = SnackbarGravity.BOTTOM
+    ): CustomSnackbar? {
+        return showHudNotification(
+            contentView = contenView,
+            text = text,
+            backgroundColor = R.color.green_d,
+            duration = duration,
+            gravity = gravity,
+        )
     }
 
-    fun showErrorMessage(contenView: View, textRes: Int, gravity: SnackbarGravity = SnackbarGravity.BOTTOM) {
+    fun showErrorMessage(
+        contenView: View,
+        textRes: Int,
+        gravity: SnackbarGravity = SnackbarGravity.BOTTOM
+    ) {
         showErrorMessage(contenView, contenView.context.getString(textRes), gravity)
     }
 
-    fun showErrorMessage(contenView: View, text: String, gravity: SnackbarGravity = SnackbarGravity.BOTTOM): CustomSnackbar? {
-        return showHudNotification(contenView, text, R.color.red_d, SnackbarDuration.LONG, gravity, false)
+    fun showErrorMessage(
+        contenView: View,
+        text: String,
+        gravity: SnackbarGravity = SnackbarGravity.BOTTOM
+    ): CustomSnackbar? {
+        return showHudNotification(
+            contentView = contenView,
+            text = text,
+            backgroundColor = R.color.red_d,
+            duration = SnackbarDuration.LONG,
+            gravity = gravity,
+        )
     }
 
     fun showWarningMessage(
@@ -38,17 +94,25 @@ object HudHelper {
         gravity: SnackbarGravity = SnackbarGravity.BOTTOM
     ): CustomSnackbar? {
         return showHudNotification(
-            contentView,
-            contentView.context.getString(resId),
-            R.color.grey,
-            duration,
-            gravity,
-            showWarningIcon = true
+            contentView = contentView,
+            text = contentView.context.getString(resId),
+            backgroundColor = R.color.grey,
+            duration = duration,
+            gravity = gravity,
+            icon = R.drawable.ic_attention_24,
+            iconTint = R.color.jacob
         )
     }
 
     fun vibrate(context: Context) {
-        val vibratorService = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+        val vibratorService = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager =
+                context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
+            vibratorManager?.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+        }
 
         val vibrationEffect = VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
 
@@ -61,11 +125,21 @@ object HudHelper {
         backgroundColor: Int,
         duration: SnackbarDuration,
         gravity: SnackbarGravity,
-        showWarningIcon: Boolean = false,
-        showProgressBar: Boolean = false
+        showProgressBar: Boolean = false,
+        @DrawableRes icon: Int? = null,
+        iconTint: Int? = null,
     ): CustomSnackbar? {
 
-        val snackbar = CustomSnackbar.make(contentView, text, backgroundColor, duration, gravity, showProgressBar, showWarningIcon)
+        val snackbar = CustomSnackbar.make(
+            contentView,
+            text,
+            backgroundColor,
+            duration,
+            gravity,
+            showProgressBar,
+            icon,
+            iconTint
+        )
         snackbar?.show()
 
         return snackbar

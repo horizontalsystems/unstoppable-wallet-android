@@ -16,25 +16,27 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.solanakit.models.FullTransaction
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
+import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
@@ -70,7 +72,7 @@ interface ILocalStorage {
     var rateAppLastRequestTime: Long
     var balanceHidden: Boolean
     var balanceTotalCoinUid: String?
-    var checkedTerms: List<Term>
+    var termsAccepted: Boolean
     var mainShowedOnce: Boolean
     var notificationId: String?
     var notificationServerTime: Long
@@ -81,20 +83,18 @@ interface ILocalStorage {
     var launchPage: LaunchPage?
     var appIcon: AppIcon?
     var mainTab: MainModule.MainTab?
-    var favoriteCoinIdsMigrated: Boolean
-    var fillWalletInfoDone: Boolean
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
+    var marketsTabEnabled: Boolean
+    val marketsTabEnabledFlow: StateFlow<Boolean>
+    var testnetEnabled: Boolean
+    var nonRecommendedAccountAlertDismissedAccounts: Set<String>
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
 
     fun clear()
-}
-
-interface IChartTypeStorage {
-    var chartInterval: HsTimePeriod
 }
 
 interface IRestoreSettingsStorage {
@@ -109,12 +109,15 @@ interface IMarketStorage {
 }
 
 interface IAccountManager {
+    val hasNonStandardAccount: Boolean
     val activeAccount: Account?
+    val activeAccountStateFlow: Flow<ActiveAccountState>
     val activeAccountObservable: Flowable<Optional<Account>>
     val isAccountsEmpty: Boolean
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
     val accountsDeletedFlowable: Flowable<Unit>
+    val newAccountBackupRequiredFlow: StateFlow<Account?>
 
     fun setActiveAccountId(activeAccountId: String?)
     fun account(id: String): Account?
@@ -124,6 +127,7 @@ interface IAccountManager {
     fun delete(id: String)
     fun clear()
     fun clearAccounts()
+    fun onHandledBackupRequiredNewAccount()
 }
 
 interface IBackupManager {
@@ -133,7 +137,7 @@ interface IBackupManager {
 
 interface IAccountFactory {
     fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
-    fun watchAccount(name: String, address: String, domain: String?): Account
+    fun watchAccount(name: String, type: AccountType): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
 }
@@ -142,11 +146,12 @@ interface IWalletStorage {
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
+    fun handle(newEnabledWallets: List<EnabledWallet>)
     fun clear()
 }
 
 interface IRandomProvider {
-    fun getRandomIndexes(count: Int, maxIndex: Int): List<Int>
+    fun getRandomNumbers(count: Int, maxIndex: Int): List<Int>
 }
 
 interface INetworkManager {
@@ -161,8 +166,7 @@ interface INetworkManager {
 
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
-    suspend fun getBep2TokeInfo(blockchainUid: String, symbol: String): TokenInfoService.Bep2TokenInfo
-    suspend fun getEvmTokeInfo(blockchainUid: String, address: String): TokenInfoService.EvmTokenInfo
+    suspend fun getBep2Tokens(): List<Bep2TokenInfoService.Bep2Token>
 }
 
 interface IClipboardManager {
@@ -173,6 +177,7 @@ interface IClipboardManager {
 
 interface IWordsManager {
     fun validateChecksum(words: List<String>)
+    fun validateChecksumStrict(words: List<String>)
     fun isWordValid(word: String): Boolean
     fun isWordPartiallyValid(word: String): Boolean
     fun generateWords(count: Int = 12): List<String>
@@ -302,6 +307,11 @@ interface IBaseAdapter {
     val isMainnet: Boolean
 }
 
+interface ISendSolanaAdapter {
+    val availableBalance: BigDecimal
+    suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
+}
+
 interface IAccountsStorage {
     var activeAccountId: String?
     val isAccountsEmpty: Boolean
@@ -330,6 +340,7 @@ interface IWalletManager {
 
     fun loadWallets()
     fun save(wallets: List<Wallet>)
+    fun saveEnabledWallets(enabledWallets: List<EnabledWallet>)
     fun delete(wallets: List<Wallet>)
     fun clear()
     fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)
@@ -398,7 +409,7 @@ interface ITorManager {
     fun setTorAsDisabled()
     fun setListener(listener: TorManager.Listener)
     val isTorEnabled: Boolean
-    val isTorNotificationEnabled: Boolean
+    val torStatusFlow: Flow<TorStatus>
     val torObservable: Subject<TorStatus>
 }
 
@@ -416,11 +427,10 @@ interface ICoinManager {
 }
 
 interface ITermsManager {
-    val termsAcceptedSignal: Subject<Boolean>
     val termsAcceptedSignalFlow: Flow<Boolean>
-    val terms: List<Term>
-    val termsAccepted: Boolean
-    fun update(term: Term)
+    val terms: List<TermsModule.TermType>
+    val allTermsAccepted: Boolean
+    fun acceptTerms()
 }
 
 sealed class FeeRatePriority(val titleRes: Int) {

@@ -22,13 +22,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsModule
-import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.settings.security.ui.BlockchainSettingsBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
@@ -39,16 +36,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.pin.PinInteractionType
-import io.horizontalsystems.pin.PinModule
 import kotlin.system.exitProcess
 
 class SecuritySettingsFragment : BaseFragment() {
-
-    private val blockchainSettingsViewModel by viewModels<BlockchainSettingsViewModel> {
-        BlockchainSettingsModule.Factory()
-    }
 
     private val torViewModel by viewModels<SecurityTorSettingsViewModel> {
         SecurityTorSettingsModule.Factory()
@@ -73,11 +63,9 @@ class SecuritySettingsFragment : BaseFragment() {
                     SecurityCenterScreen(
                         passcodeViewModel = passcodeViewModel,
                         torViewModel = torViewModel,
-                        blockchainSettingsViewModel = blockchainSettingsViewModel,
                         navController = findNavController(),
                         showAppRestartAlert = { showAppRestartAlert() },
                         restartApp = { restartApp() },
-                        subscribeForPinResult = { subscribeFragmentResult() },
                     )
                 }
             }
@@ -125,32 +113,15 @@ class SecuritySettingsFragment : BaseFragment() {
             exitProcess(0)
         }
     }
-
-    private fun subscribeFragmentResult() {
-        getNavigationResult(PinModule.requestKey) { bundle ->
-            val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
-            val resultCode = bundle.getInt(PinModule.requestResult)
-
-            if (resultCode == PinModule.RESULT_OK) {
-                when (resultType) {
-                    PinInteractionType.SET_PIN -> passcodeViewModel.didSetPin()
-                    PinInteractionType.UNLOCK -> passcodeViewModel.disablePin()
-                    else -> Unit
-                }
-            }
-        }
-    }
 }
 
 @Composable
 private fun SecurityCenterScreen(
     passcodeViewModel: SecurityPasscodeSettingsViewModel,
     torViewModel: SecurityTorSettingsViewModel,
-    blockchainSettingsViewModel: BlockchainSettingsViewModel,
     navController: NavController,
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
-    subscribeForPinResult: () -> Unit,
 ) {
 
     if (torViewModel.restartApp) {
@@ -181,8 +152,7 @@ private fun SecurityCenterScreen(
                 item {
                     PasscodeBlock(
                         passcodeViewModel,
-                        navController,
-                        subscribeForPinResult
+                        navController
                     )
                 }
 
@@ -194,16 +164,8 @@ private fun SecurityCenterScreen(
                         showAppRestartAlert,
                     )
                 }
-
-                item {
-                    Spacer(Modifier.height(24.dp))
-                    HeaderText(stringResource(R.string.SecurityCenter_BlockchainSettings))
-                    BlockchainSettingsBlock(blockchainSettingsViewModel, navController)
-                }
-
             }
         }
-
     }
 
 }

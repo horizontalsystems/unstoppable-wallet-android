@@ -26,7 +26,32 @@ fun HSAddressInput(
     onStateChange: ((DataState<Address>?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null
 ) {
-    val viewModel = viewModel<AddressViewModel>(factory = AddressInputModule.Factory(tokenQuery, coinCode))
+    val viewModel = viewModel<AddressViewModel>(
+            factory = AddressInputModule.FactoryToken(tokenQuery, coinCode),
+            key = "address_view_model_${tokenQuery.id}"
+    )
+
+    HSAddressInput(
+        modifier = modifier,
+        viewModel = viewModel,
+        initial = initial,
+        error = error,
+        textPreprocessor = textPreprocessor,
+        onStateChange = onStateChange,
+        onValueChange = onValueChange
+    )
+}
+
+@Composable
+fun HSAddressInput(
+    modifier: Modifier = Modifier,
+    viewModel: AddressViewModel,
+    initial: Address? = null,
+    error: Throwable? = null,
+    textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
+    onStateChange: ((DataState<Address>?) -> Unit)? = null,
+    onValueChange: ((Address?) -> Unit)? = null
+) {
 
     val scope = rememberCoroutineScope()
     var addressState by remember { mutableStateOf<DataState<Address>?>(initial?.let { DataState.Success(it) }) }

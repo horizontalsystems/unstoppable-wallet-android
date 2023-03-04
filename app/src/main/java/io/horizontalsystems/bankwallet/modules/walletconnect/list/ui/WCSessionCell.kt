@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -22,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
@@ -35,7 +37,6 @@ fun WCSessionCell(
 ) {
     Box(
         modifier = Modifier
-            .height(60.dp)
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(shape)
@@ -45,8 +46,7 @@ fun WCSessionCell(
                     navController.slideFromBottom(
                         R.id.wc2SessionFragment,
                         WC2SessionModule.prepareParams(
-                            session.sessionId,
-                            null,
+                            session.sessionId
                         )
                     )
                 } else {
@@ -69,30 +69,40 @@ fun WCSessionCell(
             )
         }
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 modifier = Modifier
-                    .size(24.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp)),
                 painter = rememberAsyncImagePainter(
                     model = session.imageUrl,
-                    error = painterResource(R.drawable.coin_placeholder)
+                    error = painterResource(R.drawable.ic_platform_placeholder_24)
                 ),
                 contentDescription = null,
             )
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
+                val title = when {
+                    session.title.isNotBlank() -> session.title
+                    else -> stringResource(id = R.string.WalletConnect_Unnamed)
+                }
+
                 body_leah(
-                    text = session.title,
+                    text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 subhead2_grey(text = session.subtitle)
             }
+            if (session.pendingRequestsCount > 0) {
+                BadgeCount(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    text = session.pendingRequestsCount.toString()
+                )
+            }
             Image(
-                modifier = Modifier.padding(start = 5.dp),
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = null
             )

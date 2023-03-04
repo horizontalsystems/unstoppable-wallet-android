@@ -10,9 +10,11 @@ import io.horizontalsystems.oneinchkit.Quote
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
+import kotlin.concurrent.schedule
 
 class OneInchTradeService(
     private val evmKit: EthereumKit,
@@ -21,6 +23,9 @@ class OneInchTradeService(
 
     private var quoteDisposable: Disposable? = null
     private var lastBlockDisposable: Disposable? = null
+    private var timer: Timer? = null
+    private val timeoutPeriodSeconds = evmKit.chain.syncInterval
+    private val timeoutProgressStep = 1f / (timeoutPeriodSeconds * 2)
 
     //region internal subjects
     private val amountTypeSubject = PublishSubject.create<AmountType>()
@@ -29,6 +34,7 @@ class OneInchTradeService(
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
+    private val timeoutProgressSubject = BehaviorSubject.create<Float>()
     //endregion
 
     //region outputs
@@ -66,6 +72,9 @@ class OneInchTradeService(
             amountTypeSubject.onNext(value)
         }
     override val amountTypeObservable: Observable<AmountType> = amountTypeSubject
+
+    override val timeoutProgressObservable: Observable<Float>
+        get() = timeoutProgressSubject
 
     var state: State = State.NotReady()
         private set(value) {
@@ -146,27 +155,20 @@ class OneInchTradeService(
     override fun restoreState(swapProviderState: SwapMainModule.SwapProviderState) {
         tokenFrom = swapProviderState.tokenFrom
         tokenTo = swapProviderState.tokenTo
-        amountType = swapProviderState.amountType
+        amountType = AmountType.ExactFrom
 
-        when (swapProviderState.amountType) {
-            AmountType.ExactFrom -> {
-                amountFrom = swapProviderState.amountFrom
-                amountTo = null
-            }
-            AmountType.ExactTo -> {
-                amountTo = swapProviderState.amountTo
-                amountFrom = null
-            }
-        }
+        amountFrom = swapProviderState.amountFrom
+        amountTo = null
 
         syncQuote()
     }
 
     fun start() {
+        sync()
         lastBlockDisposable = evmKit.lastBlockHeightFlowable
             .subscribeOn(Schedulers.io())
             .subscribe {
-                syncQuote()
+                sync()
             }
     }
 
@@ -176,8 +178,41 @@ class OneInchTradeService(
 
     fun onCleared() {
         clearDisposables()
+        stopTimer()
     }
     //endregion
+
+    private fun sync() {
+        syncQuote()
+        resetTimer()
+    }
+
+    private fun startTimer() {
+        timeoutProgressSubject.onNext(1f)
+
+        timer = Timer().apply {
+            schedule(0, 500) {
+                onFireTimer()
+            }
+        }
+    }
+
+    private fun stopTimer() {
+        timer?.cancel()
+        timer = null
+    }
+
+    private fun resetTimer() {
+        stopTimer()
+        startTimer()
+    }
+
+    private fun onFireTimer() {
+        val currentTimeoutProgress = timeoutProgressSubject.value ?: return
+        val newTimeoutProgress = currentTimeoutProgress - timeoutProgressStep
+
+        timeoutProgressSubject.onNext(newTimeoutProgress.coerceAtLeast(0f))
+    }
 
     private fun clearDisposables() {
         lastBlockDisposable?.dispose()
@@ -211,9 +246,7 @@ class OneInchTradeService(
     }
 
     private fun handle(quote: Quote, tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal) {
-        val amountToBigDecimal =
-            quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals)
-                .stripTrailingZeros()
+        val amountToBigDecimal = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
 
         amountTo = amountToBigDecimal
 

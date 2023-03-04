@@ -51,6 +51,7 @@ class MarketFavoritesViewModel(
                     is DataState.Error -> {
                         viewStateLiveData.postValue(ViewState.Error(state.error))
                     }
+                    DataState.Loading -> {}
                 }
             }.let { disposables.add(it) }
 

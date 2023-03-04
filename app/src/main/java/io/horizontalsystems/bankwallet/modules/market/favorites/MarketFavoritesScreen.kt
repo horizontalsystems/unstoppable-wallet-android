@@ -16,12 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -42,7 +41,7 @@ fun MarketFavoritesScreen(
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        refreshing = isRefreshing,
         onRefresh = {
             viewModel.refresh()
         }
@@ -52,7 +51,7 @@ fun MarketFavoritesScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) { viewState ->
             when (viewState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 is ViewState.Error -> {
@@ -92,6 +91,7 @@ fun MarketFavoritesScreen(
                         }
                     }
                 }
+                null -> {}
             }
         }
     }
@@ -108,6 +108,8 @@ fun MarketFavoritesScreen(
                 { viewModel.onSortingFieldDialogDismiss() }
             )
         }
+        MarketFavoritesModule.SelectorDialogState.Closed,
+        null -> {}
     }
 }
 

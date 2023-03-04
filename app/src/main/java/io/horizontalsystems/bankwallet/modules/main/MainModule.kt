@@ -13,7 +13,7 @@ import kotlinx.parcelize.Parcelize
 
 object MainModule {
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val wcDeepLink: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MainService(RootUtil, App.localStorage)
@@ -25,14 +25,11 @@ object MainModule {
                 App.accountManager,
                 App.releaseNotesManager,
                 service,
+                App.torKitManager,
+                App.wc2SessionManager,
+                App.wc1Manager,
+                wcDeepLink
             ) as T
-        }
-    }
-
-    class FactoryForActivityViewModel : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainActivityViewModel(App.wc2SessionManager) as T
         }
     }
 
@@ -48,6 +45,11 @@ object MainModule {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
         context.overridePendingTransition(0, 0)
+    }
+
+    sealed class BadgeType {
+        object BadgeDot : BadgeType()
+        class BadgeNumber(val number: Int) : BadgeType()
     }
 
     @Parcelize

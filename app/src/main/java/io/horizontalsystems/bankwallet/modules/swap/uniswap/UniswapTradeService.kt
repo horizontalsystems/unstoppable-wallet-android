@@ -7,15 +7,19 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOp
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 class UniswapTradeService(
@@ -26,6 +30,9 @@ class UniswapTradeService(
     private var swapDataDisposable: Disposable? = null
     private var lastBlockDisposable: Disposable? = null
     private var swapData: SwapData? = null
+    private var timer: Timer? = null
+    private val timeoutPeriodSeconds = evmKit.chain.syncInterval
+    private val timeoutProgressStep = 1f / (timeoutPeriodSeconds * 2)
 
     //region internal subjects
     private val amountTypeSubject = PublishSubject.create<AmountType>()
@@ -34,7 +41,7 @@ class UniswapTradeService(
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
-    private val tradeOptionsSubject = PublishSubject.create<SwapTradeOptions>()
+    private val timeoutProgressSubject = BehaviorSubject.create<Float>()
     //endregion
 
     //region outputs
@@ -73,6 +80,9 @@ class UniswapTradeService(
         }
     override val amountTypeObservable: Observable<AmountType> = amountTypeSubject
 
+    override val timeoutProgressObservable: Observable<Float>
+        get() = timeoutProgressSubject
+
     var state: State = State.NotReady()
         private set(value) {
             field = value
@@ -83,11 +93,8 @@ class UniswapTradeService(
     var tradeOptions: SwapTradeOptions = SwapTradeOptions()
         set(value) {
             field = value
-            tradeOptionsSubject.onNext(value)
             syncTradeData()
         }
-
-    val tradeOptionsObservable: Observable<SwapTradeOptions> = tradeOptionsSubject
 
     @Throws
     fun transactionData(tradeData: TradeData): TransactionData {
@@ -177,12 +184,41 @@ class UniswapTradeService(
         enterTokenFrom(swapCoin)
     }
 
+    private fun startTimer() {
+        timer = Timer().apply {
+            schedule(0, 500) {
+                onFireTimer()
+            }
+        }
+    }
+
+    private fun stopTimer() {
+        timer?.cancel()
+        timer = null
+    }
+
+    private fun resetTimer() {
+        stopTimer()
+        startTimer()
+    }
+
+    private fun onFireTimer() {
+        val currentTimeoutProgress = timeoutProgressSubject.value ?: return
+        val newTimeoutProgress = currentTimeoutProgress - timeoutProgressStep
+
+        timeoutProgressSubject.onNext(newTimeoutProgress.coerceAtLeast(0f))
+    }
+
     fun start() {
+        sync()
         lastBlockDisposable = evmKit.lastBlockHeightFlowable
             .subscribeOn(Schedulers.io())
-            .subscribe {
-                syncSwapData()
-            }
+            .subscribe { sync() }
+    }
+
+    private fun sync() {
+        syncSwapData()
+        resetTimer()
     }
 
     fun stop() {
@@ -191,6 +227,7 @@ class UniswapTradeService(
 
     fun onCleared() {
         clearDisposables()
+        stopTimer()
     }
     //endregion
 
@@ -211,9 +248,7 @@ class UniswapTradeService(
             return
         }
 
-        if (swapData == null) {
-            state = State.Loading
-        }
+        state = State.Loading
 
         swapDataDisposable?.dispose()
         swapDataDisposable = null
@@ -223,6 +258,7 @@ class UniswapTradeService(
             .subscribe({
                 swapData = it
                 syncTradeData()
+                timeoutProgressSubject.onNext(1f)
             }, { error ->
                 state = State.NotReady(listOf(error))
             })
@@ -243,13 +279,30 @@ class UniswapTradeService(
                 AmountType.ExactFrom -> TradeType.ExactIn
                 AmountType.ExactTo -> TradeType.ExactOut
             }
-            val tradeData =
-                uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
+            val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             handle(tradeData)
         } catch (e: Throwable) {
-            state = State.NotReady(listOf(e))
+            val error = when {
+                e is TradeError.TradeNotFound && isEthWrapping(tokenFrom, tokenTo) -> TradeServiceError.WrapUnwrapNotAllowed
+                else -> e
+            }
+            state = State.NotReady(listOf(error))
         }
     }
+
+    private val wethAddressHex = uniswapProvider.wethAddress.hex
+    private val Token.isWeth: Boolean
+        get() = (type as? TokenType.Eip20)?.address?.equals(wethAddressHex, ignoreCase = true) ?: false
+    private val Token.isNative: Boolean
+        get() = type == TokenType.Native
+
+    private fun isEthWrapping(tokenFrom: Token?, tokenTo: Token?) =
+        when {
+            tokenFrom == null || tokenTo == null -> false
+            else -> {
+                tokenFrom.isNative && tokenTo.isWeth || tokenTo.isNative && tokenFrom.isWeth
+            }
+        }
 
     private fun handle(tradeData: TradeData) {
         when (tradeData.type) {
@@ -272,6 +325,10 @@ class UniswapTradeService(
         object Loading : State()
         class Ready(val trade: Trade) : State()
         class NotReady(val errors: List<Throwable> = listOf()) : State()
+    }
+
+    sealed class TradeServiceError : Throwable() {
+        object WrapUnwrapNotAllowed : TradeServiceError()
     }
 
     enum class PriceImpactLevel {

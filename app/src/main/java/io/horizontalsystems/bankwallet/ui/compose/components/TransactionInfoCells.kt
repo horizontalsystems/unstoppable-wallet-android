@@ -4,10 +4,12 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -20,8 +22,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
@@ -33,6 +37,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
 fun SectionTitleCell(
@@ -40,11 +45,8 @@ fun SectionTitleCell(
     value: String,
     iconResId: Int?
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         iconResId?.let {
             Icon(
@@ -70,22 +72,64 @@ fun SectionTitleCell(
 }
 
 @Composable
+fun TransactionNftAmountCell(
+    amount: ColoredValue,
+    iconUrl: String?,
+    iconPlaceholder: Int?,
+    nftUid: NftUid,
+    providerCollectionUid: String?,
+    navController: NavController
+) {
+    var modifier = Modifier.padding(horizontal = 16.dp)
+
+    if (nftUid.blockchainType !is BlockchainType.Solana) {
+        modifier = modifier.clickable {
+            navController.slideFromBottom(
+                    R.id.nftAssetFragment,
+                    NftAssetModule.prepareParams(
+                            providerCollectionUid,
+                            nftUid
+                    )
+            )
+        }
+    }
+
+    RowUniversal(
+        modifier = modifier,
+    ) {
+        CoinImage(
+            iconUrl = iconUrl,
+            placeholder = iconPlaceholder,
+            modifier = Modifier
+                .size(32.dp)
+                .clip(RoundedCornerShape(CornerSize(4.dp)))
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        SubHead1ColoredValue(value = amount)
+        Spacer(Modifier.weight(1f))
+        Icon(
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(R.drawable.ic_info_20),
+            tint = ComposeAppTheme.colors.grey,
+            contentDescription = null
+        )
+    }
+}
+
+@Composable
 fun TransactionAmountCell(
     fiatAmount: ColoredValue?,
     coinAmount: ColoredValue,
     coinIconUrl: String?,
     coinIconPlaceholder: Int?
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
             placeholder = coinIconPlaceholder,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(32.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
         SubHead1ColoredValue(value = coinAmount)
@@ -99,11 +143,8 @@ fun TitleAndValueCell(
     title: String,
     value: String
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
         Spacer(Modifier.weight(1f))
@@ -114,20 +155,21 @@ fun TitleAndValueCell(
 @Composable
 fun TransactionInfoAddressCell(
     title: String,
-    value: String,
-    valueTitle: String
+    value: String
 ) {
     val view = LocalView.current
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
-        Spacer(Modifier.weight(1f))
-        ButtonSecondaryDefault(
-            title = valueTitle,
+        subhead1_leah(
+            modifier = Modifier.weight(1f),
+            text = value,
+            textAlign = TextAlign.Right
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        ButtonSecondaryCircle(
+            icon = R.drawable.ic_copy_20,
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -141,11 +183,8 @@ fun TransactionInfoStatusCell(
     status: TransactionStatus,
     navController: NavController
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         if (status !is TransactionStatus.Completed) {
             HsIconButton(
@@ -202,11 +241,8 @@ fun TransactionInfoSpeedUpCancelCell(
     transactionHash: String,
     navController: NavController
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(
             text = stringResource(R.string.TransactionInfo_Options),
@@ -214,16 +250,27 @@ fun TransactionInfoSpeedUpCancelCell(
         )
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
-            modifier = Modifier.padding(end = 8.dp),
+            modifier = Modifier
+                .height(28.dp)
+                .padding(end = 8.dp),
             title = stringResource(R.string.TransactionInfo_SpeedUp),
             onClick = {
-                openTransactionOptionsModule(TransactionInfoOptionsModule.Type.SpeedUp, transactionHash, navController)
+                openTransactionOptionsModule(
+                    TransactionInfoOptionsModule.Type.SpeedUp,
+                    transactionHash,
+                    navController
+                )
             }
         )
         ButtonSecondaryDefault(
+            modifier = Modifier.height(28.dp),
             title = stringResource(R.string.TransactionInfo_Cancel),
             onClick = {
-                openTransactionOptionsModule(TransactionInfoOptionsModule.Type.Cancel, transactionHash, navController)
+                openTransactionOptionsModule(
+                    TransactionInfoOptionsModule.Type.Cancel,
+                    transactionHash,
+                    navController
+                )
             }
         )
     }
@@ -235,15 +282,16 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
     val view = LocalView.current
     val context = LocalContext.current
 
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
-        subhead2_grey(text = stringResource(R.string.TransactionInfo_Id), modifier = Modifier.padding(end = 16.dp))
+        subhead2_grey(
+            text = stringResource(R.string.TransactionInfo_Id),
+            modifier = Modifier.padding(end = 16.dp)
+        )
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
+            modifier = Modifier.height(28.dp),
             title = transactionHash.shorten(),
             onClick = {
                 TextHelper.copyText(transactionHash)
@@ -270,13 +318,9 @@ fun TransactionInfoExplorerCell(
     url: String
 ) {
     val context = LocalContext.current
-
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = { LinkHelper.openLinkInAppBrowser(context, url) })
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = { LinkHelper.openLinkInAppBrowser(context, url) }
     ) {
         Image(
             modifier = Modifier.size(20.dp),
@@ -300,13 +344,13 @@ fun TransactionInfoExplorerCell(
 @Composable
 fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
     val view = LocalView.current
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
-        subhead2_grey(text = stringResource(R.string.TransactionInfo_RawTransaction), modifier = Modifier.padding(end = 16.dp))
+        subhead2_grey(
+            text = stringResource(R.string.TransactionInfo_RawTransaction),
+            modifier = Modifier.padding(end = 16.dp)
+        )
         Spacer(Modifier.weight(1f))
         ButtonSecondaryCircle(
             icon = R.drawable.ic_copy_20,
@@ -325,11 +369,8 @@ fun TransactionInfoBtcLockCell(
     lockState: TransactionInfoViewItem.LockState,
     navController: NavController
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         Icon(
             modifier = Modifier.padding(end = 16.dp),
@@ -368,11 +409,8 @@ fun TransactionInfoDoubleSpendCell(
     conflictingHash: String,
     navController: NavController
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         Icon(
             modifier = Modifier.padding(end = 16.dp),
@@ -380,7 +418,10 @@ fun TransactionInfoDoubleSpendCell(
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,
         )
-        subhead2_grey(text = stringResource(R.string.TransactionInfo_DoubleSpendNote), modifier = Modifier.padding(end = 16.dp))
+        subhead2_grey(
+            text = stringResource(R.string.TransactionInfo_DoubleSpendNote),
+            modifier = Modifier.padding(end = 16.dp)
+        )
         Spacer(modifier = Modifier.weight(1f))
         HsIconButton(
             modifier = Modifier.size(20.dp),
@@ -407,11 +448,10 @@ fun TransactionInfoDoubleSpendCell(
 
 @Composable
 fun TransactionInfoSentToSelfCell() {
-    Row(
+    RowUniversal(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             modifier = Modifier.padding(end = 16.dp),

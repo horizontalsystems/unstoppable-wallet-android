@@ -10,28 +10,34 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.ByMenu
+import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.delay
 
 class WatchAddressFragment : BaseFragment() {
 
@@ -46,7 +52,9 @@ class WatchAddressFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    WatchAddressScreen(findNavController())
+                    val popUpToInclusiveId =
+                        arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.watchAddressFragment) ?: R.id.watchAddressFragment
+                    WatchAddressScreen(findNavController(), popUpToInclusiveId)
                 }
             }
         }
@@ -54,17 +62,47 @@ class WatchAddressFragment : BaseFragment() {
 }
 
 @Composable
-fun WatchAddressScreen(navController: NavController) {
-    val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
+fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
+    val view = LocalView.current
 
-    if (viewModel.accountCreated) {
-        navController.popBackStack()
+    val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
+    val uiState = viewModel.uiState
+    val accountCreated = uiState.accountCreated
+    val submitType = uiState.submitButtonType
+    val accountType = uiState.accountType
+    val accountName = uiState.accountName
+    val type = uiState.type
+
+    LaunchedEffect(accountCreated) {
+        if (accountCreated) {
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_AddressAdded,
+                icon = R.drawable.icon_binocule_24,
+                iconTint = R.color.white
+            )
+            delay(300)
+            navController.popBackStack(popUpToInclusiveId, true)
+        }
+    }
+
+    if (accountType != null) {
+        viewModel.blockchainSelectionOpened()
+
+        navController.slideFromRight(
+            R.id.selectBlockchainsFragment,
+            bundleOf(
+                SelectBlockchainsModule.accountTypeKey to accountType,
+                SelectBlockchainsModule.accountNameKey to accountName,
+                ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+            )
+        )
     }
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Watch_Address_Title),
+                title = TranslatableString.ResString(R.string.ManageAccounts_WatchAddress),
                 navigationIcon = {
                     HsIconButton(
                         onClick = {
@@ -78,55 +116,94 @@ fun WatchAddressScreen(navController: NavController) {
                         )
                     }
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Watch_Address_Watch),
-                        onClick = {
-                            viewModel.onClickWatch()
-                        },
-                        enabled = viewModel.submitEnabled
-                    )
-                )
+                menuItems = buildList {
+                    when (submitType) {
+                        is SubmitButtonType.Watch -> {
+                            add(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Watch_Address_Watch),
+                                    onClick = viewModel::onClickWatch,
+                                    enabled = submitType.enabled
+                                )
+                            )
+                        }
+                        is SubmitButtonType.Next -> {
+                            add(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Button_Next),
+                                    onClick = viewModel::onClickNext,
+                                    enabled = submitType.enabled
+                                )
+                            )
+                        }
+                    }
+                }
             )
-
-            val focusRequester = remember { FocusRequester() }
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
-                HeaderText(text = stringResource(R.string.Watch_Address_Title))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                HSAddressInput(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .focusRequester(focusRequester),
-                    tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-                    coinCode = "ETH",
-                    onValueChange = viewModel::onEnterAddress
-                )
-                InfoText(text = stringResource(R.string.Watch_Address_Description))
-
-                Spacer(Modifier.height(24.dp))
-
-                HeaderText(text = stringResource(R.string.Restore_Name))
-
+                HeaderText(stringResource(id = R.string.ManageAccount_Name))
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.nameState,
-                    hint = viewModel.defaultName,
+                    initial = viewModel.accountName,
                     pasteEnabled = false,
-                    onValueChange = {
-                        viewModel.onNameChange(it)
+                    hint = viewModel.defaultAccountName,
+                    onValueChange = viewModel::onEnterAccountName
+                )
+                Spacer(Modifier.height(32.dp))
+
+                ByMenu(
+                    menuTitle = stringResource(R.string.Watch_By),
+                    menuValue = stringResource(type.titleResId),
+                    selectorDialogTitle = stringResource(R.string.Watch_WatchBy),
+                    selectorItems = WatchAddressViewModel.Type.values().map {
+                        TabItem(stringResource(it.titleResId), it == type, it)
+                    },
+                    onSelectItem = {
+                        viewModel.onSetType(it)
                     }
                 )
 
-                Spacer(Modifier.height(32.dp))
-            }
+                Spacer(modifier = Modifier.height(32.dp))
+                when (type) {
+                    WatchAddressViewModel.Type.EvmAddress -> {
+                        HSAddressInput(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+                            coinCode = "ETH",
+                            onValueChange = viewModel::onEnterAddress
+                        )
+                    }
+                    WatchAddressViewModel.Type.SolanaAddress -> {
+                        HSAddressInput(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            tokenQuery = TokenQuery(BlockchainType.Solana, TokenType.Native),
+                            coinCode = "SOL",
+                            onValueChange = viewModel::onEnterAddress
+                        )
+                    }
+                    WatchAddressViewModel.Type.XPubKey -> {
+                        FormsInputMultiline(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            hint = stringResource(id = R.string.Watch_XPubKey_Hint),
+                            qrScannerEnabled = true,
+                            state = if (uiState.invalidXPubKey)
+                                DataState.Error(Exception(stringResource(id = R.string.Watch_Error_InvalidXPubKey)))
+                            else
+                               null
+                        ) {
+                            viewModel.onEnterXPubKey(it)
+                        }
+                    }
+                }
 
-            SideEffect {
-                focusRequester.requestFocus()
+                Spacer(Modifier.height(32.dp))
             }
         }
     }

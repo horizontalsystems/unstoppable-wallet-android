@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lock_screen_graph"
-    app:startDestination="@id/lockScreenFragment">
+    app:startDestination="@id/lockScreenFragment"
+    >
 
     <fragment
         android:id="@+id/lockScreenFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenFragment"
-        tools:layout="@layout/fragment_lockscreen"/>
+        android:name="io.horizontalsystems.bankwallet.modules.pin.PinFragment"
+        >
+        <argument
+            android:name="attached_to_lock_screen"
+            android:defaultValue="true"
+            app:argType="boolean"
+            />
+    </fragment>
 </navigation>

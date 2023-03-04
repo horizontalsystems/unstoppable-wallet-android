@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.version2
 
-import android.util.Log
-import com.walletconnect.walletconnectv2.client.WalletConnect
+import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -11,6 +10,9 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class WC2SessionManager(
     private val accountManager: IAccountManager,
@@ -21,28 +23,26 @@ class WC2SessionManager(
 
     private val TAG = "WC2SessionManager"
 
-    var pendingRequestDataToOpen = mutableMapOf<Long, RequestData>()
-
     private val disposable = CompositeDisposable()
-    private val sessionsSubject = PublishSubject.create<List<WalletConnect.Model.SettledSession>>()
-    val sessionsObservable: Flowable<List<WalletConnect.Model.SettledSession>>
+    private val sessionsSubject = PublishSubject.create<List<Sign.Model.Session>>()
+    val sessionsObservable: Flowable<List<Sign.Model.Session>>
         get() = sessionsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val pendingRequestCountSubject = PublishSubject.create<Int>()
-    val pendingRequestCountObservable: Flowable<Int>
-        get() = pendingRequestCountSubject.toFlowable(BackpressureStrategy.BUFFER)
+    private val _pendingRequestCountFlow = MutableStateFlow(0)
+    val pendingRequestCountFlow: StateFlow<Int>
+        get() = _pendingRequestCountFlow
 
-    private val pendingRequestSubject = PublishSubject.create<WC2Request>()
-    val pendingRequestObservable: Flowable<WC2Request>
+    private val pendingRequestSubject = PublishSubject.create<Long>()
+    val pendingRequestObservable: Flowable<Long>
         get() = pendingRequestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    val sessions: List<WalletConnect.Model.SettledSession>
+    val sessions: List<Sign.Model.Session>
         get() {
             val accountId = accountManager.activeAccount?.id ?: return emptyList()
             return getSessions(accountId)
         }
 
-    val allSessions: List<WalletConnect.Model.SettledSession>
+    val allSessions: List<Sign.Model.Session>
         get() = service.activeSessions
 
     init {
@@ -80,11 +80,7 @@ class WC2SessionManager(
             .let { disposable.add(it) }
     }
 
-    fun pendingRequests(accountId: String? = null): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry> {
-        return requests(accountId)
-    }
-
-    fun sessionByTopic(topic: String): WalletConnect.Model.SettledSession? {
+    fun sessionByTopic(topic: String): Sign.Model.Session? {
         return allSessions.firstOrNull { it.topic == topic }
     }
 
@@ -92,21 +88,20 @@ class WC2SessionManager(
         service.disconnect(sessionId)
     }
 
-    fun prepareRequestToOpen(requestId: Long) {
+    fun createRequestData(requestId: Long): RequestData {
         val account = accountManager.activeAccount ?: throw RequestDataError.NoSuitableAccount
         val request = requests(account.id)
             .firstOrNull { it.requestId == requestId }
             ?: throw RequestDataError.RequestNotFoundError
-        val chainId =
-            WC2Parser.getChainIdFromBody(request.body) ?: throw RequestDataError.UnsupportedChainId
+        val chainId = request.chainId?.split(":")?.last()?.toInt() ?: throw RequestDataError.UnsupportedChainId
         val evmKitWrapper =
             wcManager.getEvmKitWrapper(chainId, account) ?: throw RequestDataError.NoSuitableEvmKit
-        val dAppName = sessionByTopic(request.topic)?.peerAppMetaData?.name ?: ""
+        val dAppName = sessionByTopic(request.topic)?.metaData?.name ?: ""
         val receiveAddress = evmKitWrapper.evmKit.receiveAddress.eip55
         val transactionRequest =
             WC2Parser.parseTransactionRequest(request, receiveAddress, dAppName)
-                ?: throw RequestDataError.DataParsingError
-        pendingRequestDataToOpen[requestId] = RequestData(transactionRequest, evmKitWrapper)
+
+        return RequestData(transactionRequest, evmKitWrapper)
     }
 
     private fun syncSessions() {
@@ -129,19 +124,13 @@ class WC2SessionManager(
         syncPendingRequest()
     }
 
-    private fun handleSessionRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
-        try {
-            prepareRequestToOpen(sessionRequest.request.id)
-        } catch (error: Throwable) {
-            Log.e(TAG, "handleSessionRequest error: ", error)
-        }
-
-        pendingRequestDataToOpen[sessionRequest.request.id]?.let {
-            pendingRequestSubject.onNext(it.pendingRequest)
+    private fun handleSessionRequest(sessionRequest: Sign.Model.SessionRequest) {
+        if (sessions.any { it.topic == sessionRequest.topic }) {
+            pendingRequestSubject.onNext(sessionRequest.request.id)
         }
     }
 
-    private fun getSessions(accountId: String): List<WalletConnect.Model.SettledSession> {
+    private fun getSessions(accountId: String): List<Sign.Model.Session> {
         val sessions = service.activeSessions
         val dbSessions = storage.getSessionsByAccountId(accountId)
 
@@ -153,12 +142,13 @@ class WC2SessionManager(
     }
 
     private fun syncPendingRequest() {
-        pendingRequestCountSubject.onNext(requests().size)
+        val requestsCount = accountManager.activeAccount?.let { requests(it.id).size } ?: 0
+        _pendingRequestCountFlow.update { requestsCount }
     }
 
-    private fun requests(accountId: String? = null): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry> {
-        val sessions = accountId?.let { getSessions(it) } ?: allSessions
-        val pendingRequests = mutableListOf<WalletConnect.Model.JsonRpcHistory.HistoryEntry>()
+    private fun requests(accountId: String): List<Sign.Model.PendingRequest> {
+        val sessions = getSessions(accountId)
+        val pendingRequests = mutableListOf<Sign.Model.PendingRequest>()
         sessions.forEach { session ->
             pendingRequests.addAll(service.pendingRequests(session.topic))
         }
@@ -181,7 +171,6 @@ class WC2SessionManager(
         object UnsupportedChainId : RequestDataError()
         object NoSuitableAccount : RequestDataError()
         object NoSuitableEvmKit : RequestDataError()
-        object DataParsingError : RequestDataError()
         object RequestNotFoundError : RequestDataError()
     }
 

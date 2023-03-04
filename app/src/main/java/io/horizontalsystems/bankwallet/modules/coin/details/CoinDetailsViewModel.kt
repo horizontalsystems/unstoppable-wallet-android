@@ -3,12 +3,11 @@ package io.horizontalsystems.bankwallet.modules.coin.details
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.chart.ChartCoinValueFormatterShortened
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartNumberFormatterShortened
@@ -23,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -34,10 +34,11 @@ class CoinDetailsViewModel(
 
     private val numberFormatter = ChartNumberFormatterShortened()
     private val currencyValueFormatter = ChartCurrencyValueFormatterShortened()
+    private val coinValueFormatter = ChartCoinValueFormatterShortened(service.fullCoin)
     private val disposables = CompositeDisposable()
 
     val coin: Coin
-        get() = service.coin
+        get() = service.fullCoin.coin
 
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
@@ -82,11 +83,10 @@ class CoinDetailsViewModel(
 
     private fun viewItem(item: CoinDetailsService.Item): ViewItem {
         return ViewItem(
-            item.proCharts.activated,
-            getTokenLiquidityViewItem(item.proCharts),
-            getTokenDistributionViewItem(item.proCharts, service.hasMajorHolders),
-            volumeChart = chart(values = item.totalVolumes, badge = service.coin.marketCapRank?.let { "#$it" }, currencyValueFormatter),
-            tvlChart = chart(item.tvls, valueFormatter = numberFormatter),
+            proChartsActivated = item.proCharts.activated,
+            tokenLiquidityViewItem = getTokenLiquidityViewItem(item.proCharts),
+            tokenDistributionViewItem = getTokenDistributionViewItem(item.proCharts, service.hasMajorHolders),
+            tvlChart = chart(item.tvls, currencyValueFormatter, isMovementChart = true),
             tvlRank = item.marketInfoDetails.tvlRank?.let { "#$it" },
             tvlRatio = item.marketInfoDetails.tvlRatio?.let { App.numberFormatter.format(it, 2, 2) },
             treasuries = item.marketInfoDetails.totalTreasuries?.let {
@@ -102,64 +102,62 @@ class CoinDetailsViewModel(
     }
 
     private fun getTokenLiquidityViewItem(proCharts: CoinDetailsService.ProCharts): CoinDetailsModule.TokenLiquidityViewItem? {
-        val volume = chart(proCharts.dexVolumes, currencyValueFormatter)
-        val liquidity = chart(proCharts.dexLiquidity, currencyValueFormatter)
+        val volume = chart(proCharts.dexVolumes, currencyValueFormatter, isMovementChart = false)
+        val liquidity = chart(proCharts.dexLiquidity, currencyValueFormatter, isMovementChart = true)
 
         if (volume == null && liquidity == null) return null
 
         return CoinDetailsModule.TokenLiquidityViewItem(volume, liquidity)
     }
 
-    private fun getTokenDistributionViewItem(proCharts: CoinDetailsService.ProCharts, hasMajorHolders: Boolean): CoinDetailsModule.TokenDistributionViewItem? {
-        val txCount = chart(proCharts.txCount, numberFormatter)
-        val txVolume = chart(proCharts.txVolume, currencyValueFormatter)
-        val activeAddresses = chart(proCharts.activeAddresses, numberFormatter)
+    private fun getTokenDistributionViewItem(
+        proCharts: CoinDetailsService.ProCharts,
+        hasMajorHolders: Boolean
+    ): CoinDetailsModule.TokenDistributionViewItem? {
+        val txCount = chart(proCharts.txCount, numberFormatter, isMovementChart = false)
+        val txVolume = chart(proCharts.txVolume, coinValueFormatter, isMovementChart = false)
+        val activeAddresses = chart(proCharts.activeAddresses, numberFormatter, isMovementChart = true)
 
         if (txCount == null && txVolume == null && activeAddresses == null && !hasMajorHolders) return null
 
         return CoinDetailsModule.TokenDistributionViewItem(txCount, txVolume, activeAddresses, hasMajorHolders)
     }
 
-    private fun chart(values: List<ChartPoint>?, badge: String? = null, valueFormatter: ChartModule.ChartNumberFormatter): CoinDetailsModule.ChartViewItem? {
+    private fun chart(
+        values: List<ChartPoint>?,
+        valueFormatter: ChartModule.ChartNumberFormatter,
+        isMovementChart: Boolean,
+        timePeriod: HsTimePeriod? = null
+    ): CoinDetailsModule.ChartViewItem? {
         if (values.isNullOrEmpty()) return null
-
-        val first = values.first()
-        val last = values.last()
 
         val points = values.map {
             io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
-        val lastItemValue = last.value
-        val firstItemValue = first.value
+        val chartData = ChartDataBuilder.buildFromPoints(points, isMovementChart = isMovementChart)
 
-        val diff = (lastItemValue - firstItemValue) / firstItemValue * 100.toBigDecimal()
-        val chartData = ChartDataBuilder.buildFromPoints(points)
-        val value = valueFormatter.formatValue(service.currency, lastItemValue)
+        val headerView = if (isMovementChart) {
+            val lastItemValue = values.last().value
+            val value = valueFormatter.formatValue(service.currency, lastItemValue)
+            CoinDetailsModule.ChartHeaderView.Latest(value, Value.Percent(chartData.diff()))
+        } else {
+            val sum = valueFormatter.formatValue(service.currency, chartData.sum())
+            CoinDetailsModule.ChartHeaderView.Sum(sum)
+        }
 
-        val percentDiff = Value.Percent(diff)
-
-        return CoinDetailsModule.ChartViewItem(
-            badge = badge,
-            value = value,
-            diff = App.numberFormatter.formatValueAsDiff(percentDiff),
-            chartData = chartData,
-            if (percentDiff.raw().signum() >= 0) CoinDetailsModule.ChartMovementTrend.Up else CoinDetailsModule.ChartMovementTrend.Down
-        )
+        return CoinDetailsModule.ChartViewItem(headerView, chartData, timePeriod)
     }
 
-    private fun chart(proData: CoinDetailsService.ProData, valueFormatter: ChartModule.ChartNumberFormatter): CoinDetailsModule.ChartViewItem? =
+    private fun chart(
+        proData: CoinDetailsService.ProData,
+        valueFormatter: ChartModule.ChartNumberFormatter,
+        isMovementChart: Boolean
+    ): CoinDetailsModule.ChartViewItem? =
         when (proData) {
-            is CoinDetailsService.ProData.Empty -> null
-            is CoinDetailsService.ProData.Forbidden -> CoinDetailsModule.ChartViewItem(
-                "***",
-                Translator.getString(R.string.CoinPage_Chart_Locked),
-                "***",
-                ChartDataBuilder.placeholder,
-                CoinDetailsModule.ChartMovementTrend.Neutral
-            )
-
-            is CoinDetailsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter = valueFormatter)
+            is CoinDetailsService.ProData.Empty,
+            is CoinDetailsService.ProData.Forbidden -> null
+            is CoinDetailsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter, isMovementChart, proData.timePeriod)
         }
 
     private fun securityViewItems(marketInfoDetails: MarketInfoDetails): List<SecurityViewItem> {

@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
 import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
+import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.marketkit.models.*
 
 class AddBep2TokenBlockchainService(
-    private val blockchainType: BlockchainType,
+    private val blockchain: Blockchain,
     private val networkManager: INetworkManager
 ) : IAddTokenBlockchainService {
 
@@ -22,9 +20,16 @@ class AddBep2TokenBlockchainService(
         return TokenQuery(BlockchainType.BinanceChain, TokenType.Bep2(reference))
     }
 
-    override suspend fun customCoin(reference: String): CustomCoin {
-        val tokenInfo = networkManager.getBep2TokeInfo(blockchainType.uid, reference)
-        return CustomCoin(TokenQuery(BlockchainType.BinanceChain, TokenType.Bep2(reference)), tokenInfo.name, tokenInfo.originalSymbol, tokenInfo.decimals)
+    override suspend fun token(reference: String): Token {
+        val bep2Tokens = networkManager.getBep2Tokens()
+        val tokenInfo = bep2Tokens.firstOrNull { it.symbol == reference }
+            ?: throw AddTokenService.TokenError.NotFound
+        val tokenQuery = tokenQuery(reference)
+        return Token(
+            coin = Coin(tokenQuery.customCoinUid, tokenInfo.name, tokenInfo.original_symbol),
+            blockchain = blockchain,
+            type = tokenQuery.tokenType,
+            decimals = 0
+        )
     }
-
 }

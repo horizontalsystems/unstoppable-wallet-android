@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.version1
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionStorage
 import io.reactivex.BackpressureStrategy
@@ -36,7 +35,7 @@ class WC1SessionManager(
 
         accountManager.activeAccountObservable
                 .subscribeIO {
-                    handleActiveAccount(it.orElse(null))
+                    handleActiveAccount()
                 }
                 .let {
                     disposable.add(it)
@@ -51,7 +50,7 @@ class WC1SessionManager(
             }
     }
 
-    private fun handleActiveAccount(account: Account?) {
+    private fun handleActiveAccount() {
         syncSessions()
     }
 

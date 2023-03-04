@@ -5,25 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.backupalert.BackupAlert
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
@@ -52,13 +55,15 @@ class ManageAccountsFragment : BaseFragment() {
 
 @Composable
 fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
+    BackupAlert(navController)
+
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
 
-    val viewItems by viewModel.viewItemsLiveData.observeAsState()
-    val finish by viewModel.finishLiveEvent.observeAsState()
+    val viewItems = viewModel.viewItems
+    val finish = viewModel.finish
     val isCloseButtonVisible = viewModel.isCloseButtonVisible
 
-    if (finish != null) {
+    if (finish) {
         navController.popBackStack()
     }
 
@@ -106,23 +111,31 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         }
                     }
 
+                    val args = when (mode) {
+                        ManageAccountsModule.Mode.Manage -> null
+                        ManageAccountsModule.Mode.Switcher -> {
+                            ManageAccountsModule.prepareParams(R.id.manageAccountsFragment)
+                        }
+                    }
+
                     val actions = listOf(
                         ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
-                            navController.slideFromRight(R.id.createAccountFragment)
+                            navController.navigateWithTermsAccepted {
+                                navController.slideFromRight(R.id.createAccountFragment, args)
+                            }
                         },
                         ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                            navController.slideFromRight(R.id.restoreMnemonicFragment)
+                            navController.navigateWithTermsAccepted {
+                                navController.slideFromRight(R.id.restoreAccountFragment, args)
+                            }
                         },
-                        ActionViewItem(R.drawable.ic_eye_2_20, R.string.ManageAccounts_WatchAddress) {
-                            navController.slideFromRight(R.id.watchAddressFragment)
+                        ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
+                            navController.slideFromRight(R.id.watchAddressFragment, args)
                         }
                     )
-                    CellSingleLineLawrenceSection(actions) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable(onClick = it.callback),
-                            verticalAlignment = Alignment.CenterVertically
+                    CellUniversalLawrenceSection(actions) {
+                        RowUniversal(
+                            onClick = it.callback
                         ) {
                             Icon(
                                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -134,10 +147,6 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         }
                     }
 
-                    InfoText(
-                        text = stringResource(id = R.string.ManageAccounts_Hint),
-                    )
-
                     Spacer(modifier = Modifier.height(32.dp))
                 }
             }
@@ -147,14 +156,9 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 
 @Composable
 private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAccountsViewModel, navController: NavController) {
-    CellMultilineLawrenceSection(items = accounts) { accountViewItem ->
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    viewModel.onSelect(accountViewItem)
-                },
-            verticalAlignment = Alignment.CenterVertically
+    CellUniversalLawrenceSection(items = accounts) { accountViewItem ->
+        RowUniversal(
+            onClick = { viewModel.onSelect(accountViewItem) }
         ) {
             if (accountViewItem.selected) {
                 Icon(
@@ -173,39 +177,50 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             }
             Column(modifier = Modifier.weight(1f)) {
                 body_leah(text = accountViewItem.title)
-                subhead2_grey(text = accountViewItem.subtitle)
-            }
-            if (accountViewItem.alert) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_attention_20),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.lucian
-                )
-            }
-            if (accountViewItem.alert && accountViewItem.isWatchAccount) {
-                Spacer(modifier = Modifier.width(12.dp))
+                if (accountViewItem.backupRequired) {
+                    subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
+                } else if (accountViewItem.migrationRequired) {
+                    subhead2_lucian(text = stringResource(id = R.string.ManageAccount_MigrationRequired_Title))
+                } else {
+                    subhead2_grey(
+                        text = accountViewItem.subtitle,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
             }
             if (accountViewItem.isWatchAccount) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_eye_20),
+                    painter = painterResource(id = R.drawable.icon_binocule_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )
             }
-            Icon(
-                modifier = Modifier
-                    .clickable {
-                        navController.slideFromRight(
-                            R.id.manageAccountFragment,
-                            ManageAccountModule.prepareParams(accountViewItem.accountId)
-                        )
-                    }
-                    .padding(12.dp),
-                painter = painterResource(id = R.drawable.ic_more2_20),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
-            )
-            Spacer(modifier = Modifier.width(4.dp))
+
+            val icon: Int
+            val iconTint: Color
+            if (
+                accountViewItem.backupRequired
+                || accountViewItem.migrationRequired
+                || accountViewItem.migrationRecommended
+            ) {
+                icon = R.drawable.icon_warning_2_20
+                iconTint = ComposeAppTheme.colors.lucian
+            } else {
+                icon = R.drawable.ic_more2_20
+                iconTint = ComposeAppTheme.colors.leah
+            }
+
+            ButtonSecondaryCircle(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                icon = icon,
+                tint = iconTint
+            ) {
+                navController.slideFromRight(
+                    R.id.manageAccountFragment,
+                    ManageAccountModule.prepareParams(accountViewItem.accountId)
+                )
+            }
         }
     }
 }

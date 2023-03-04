@@ -62,7 +62,7 @@ fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
             modifier = Modifier
                 .padding(vertical = 20.dp, horizontal = 24.dp)
                 .fillMaxWidth(),
-            title = stringResource(R.string.Button_Understand),
+            title = stringResource(R.string.Button_Close),
             onClick = onCloseClick
         )
         Spacer(Modifier.height(12.dp))

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 
 @Composable
@@ -35,10 +35,10 @@ fun MarkdownContent(
                         onRetryClick()
                     }
                 }
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
-                is ViewState.Success -> {
+                ViewState.Success -> {
                     AndroidView(
                         modifier = Modifier.weight(1f),
                         factory = { context ->
@@ -71,6 +71,7 @@ fun MarkdownContent(
                         }
                     )
                 }
+                null -> {}
             }
         }
     }

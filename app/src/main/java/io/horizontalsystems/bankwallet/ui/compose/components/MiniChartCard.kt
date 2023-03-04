@@ -9,9 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartMinimal
@@ -30,44 +32,35 @@ fun MiniChartCard(
             .clip(RoundedCornerShape(12.dp))
             .clickable { onClick() }
             .background(ComposeAppTheme.colors.lawrence)
+            .height(105.dp)
             .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            caption_grey(
-                modifier = Modifier.weight(1f),
-                text = title,
-            )
-            chartViewItem.badge?.let {
-                Badge(text = it)
+        caption_grey(text = title)
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = chartViewItem.headerView.value,
+            style = ComposeAppTheme.typography.headline1,
+            color = ComposeAppTheme.colors.bran,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Row(verticalAlignment = Alignment.Bottom) {
+            (chartViewItem.headerView as? CoinDetailsModule.ChartHeaderView.Latest)?.let { latest ->
+                Text(
+                    text = App.numberFormatter.formatValueAsDiff(latest.diff),
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = diffColor(latest.diff.percent),
+                )
+                Spacer(modifier = Modifier.width(12.dp))
             }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = chartViewItem.value,
-                style = ComposeAppTheme.typography.subhead1,
-                color = ComposeAppTheme.colors.bran
-            )
-            Text(
-                text = chartViewItem.diff,
-                style = ComposeAppTheme.typography.subhead1,
-                color = diffColor(chartViewItem.movementTrend)
-            )
-        }
-        Row {
             AndroidView(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(32.dp),
-                factory = { context ->
-                    ChartMinimal(context)
+                    .weight(1f)
+                    .padding(top = 3.dp, bottom = 6.dp)
+                    .height(24.dp),
+                factory = {
+                    ChartMinimal(it)
                 },
                 update = { view ->
                     view.doOnLayout {
@@ -76,6 +69,6 @@ fun MiniChartCard(
                 }
             )
         }
-
+        Spacer(modifier = Modifier.height(4.dp))
     }
 }

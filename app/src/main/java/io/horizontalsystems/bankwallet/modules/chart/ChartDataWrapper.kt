@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 
 data class ChartDataWrapper(
-    val currentValue: String,
-    val currentValueDiff: Value.Percent,
+    val chartHeaderView: CoinDetailsModule.ChartHeaderView,
     val chartInfoData: ChartInfoData
 )

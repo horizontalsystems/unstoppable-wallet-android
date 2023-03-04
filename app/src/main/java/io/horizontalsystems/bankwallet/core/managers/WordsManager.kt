@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IWordsManager
+import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class WordsManager(
@@ -10,6 +11,11 @@ class WordsManager(
     @Throws
     override fun validateChecksum(words: List<String>) {
         mnemonic.validate(words)
+    }
+
+    @Throws
+    override fun validateChecksumStrict(words: List<String>) {
+        mnemonic.validateStrict(words)
     }
 
     override fun isWordValid(word: String): Boolean {
@@ -22,6 +28,6 @@ class WordsManager(
 
     override fun generateWords(count: Int): List<String> {
         val strength = Mnemonic.EntropyStrength.fromWordCount(count)
-        return mnemonic.generate(strength)
+        return mnemonic.generate(strength, Language.English)
     }
 }

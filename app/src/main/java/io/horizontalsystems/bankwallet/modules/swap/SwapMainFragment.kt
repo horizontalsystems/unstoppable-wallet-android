@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.databinding.FragmentSwapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSwapProviderSelectDialog
 import io.horizontalsystems.core.findNavController
@@ -35,8 +36,7 @@ class SwapMainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSwapBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -59,9 +59,9 @@ class SwapMainFragment : BaseFragment() {
 
         setProviderView(mainViewModel.provider)
 
-        mainViewModel.providerLiveData.observe(viewLifecycleOwner, { provider ->
+        mainViewModel.providerLiveData.observe(viewLifecycleOwner) { provider ->
             setProviderView(provider)
-        })
+        }
 
         binding.topMenuCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -88,17 +88,27 @@ class SwapMainFragment : BaseFragment() {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ButtonSecondaryTransparent(
-                        title = provider.title,
-                        iconRight = R.drawable.ic_down_arrow_20,
-                        onClick = {
-                            showSwapProviderSelectorDialog()
-                        }
+                    Row(modifier = Modifier.weight(1f)) {
+                        ButtonSecondaryTransparent(
+                            title = provider.title,
+                            iconRight = R.drawable.ic_down_arrow_20,
+                            onClick = {
+                                showSwapProviderSelectorDialog()
+                            }
+                        )
+                    }
+                    ButtonSecondaryToggle(
+                        modifier = Modifier.padding(end = 16.dp),
+                        select = mainViewModel.amountTypeSelect,
+                        onSelect = {
+                            mainViewModel.onToggleAmountType()
+                        },
+                        enabled = mainViewModel.amountTypeSelectEnabled
                     )
                     ButtonSecondaryCircle(
                         icon = R.drawable.ic_manage_2,
                         onClick = {
-                            val destination = when(mainViewModel.provider){
+                            val destination = when (mainViewModel.provider) {
                                 SwapMainModule.OneInchProvider -> R.id.oneinchSettingsFragment
                                 else -> R.id.uniswapSettingsFragment
                             }

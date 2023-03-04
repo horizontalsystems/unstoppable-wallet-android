@@ -1,22 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.backupconfirmkey
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -25,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Account
@@ -33,6 +32,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.delay
 
 class BackupConfirmKeyFragment : BaseFragment() {
 
@@ -48,111 +48,109 @@ class BackupConfirmKeyFragment : BaseFragment() {
             )
 
             setContent {
-                ComposeAppTheme {
-                    BackupConfirmScreen(
-                        arguments?.getParcelable(BackupConfirmKeyModule.ACCOUNT)!!,
-                        findNavController(),
-                    )
-                }
+                RecoveryPhraseVerifyScreen(
+                    findNavController(),
+                    arguments?.getParcelable(BackupConfirmKeyModule.ACCOUNT)!!,
+                )
             }
         }
     }
 }
 
 @Composable
-private fun BackupConfirmScreen(
-    account: Account,
-    navController: NavController,
-    viewModel: BackupConfirmKeyViewModel = viewModel(
-        factory = BackupConfirmKeyModule.Factory(account)
-    )
-) {
-    viewModel.successMessage?.let {
-        HudHelper.showSuccessMessage(LocalView.current, it)
-        viewModel.onSuccessMessageShown()
+fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
+    val viewModel = viewModel<BackupConfirmKeyViewModel>(factory = BackupConfirmKeyModule.Factory(account))
+    val uiState = viewModel.uiState
+    val contenView = LocalView.current
 
-        Handler(Looper.getMainLooper()).postDelayed({
+    LaunchedEffect(uiState.confirmed) {
+        if (uiState.confirmed) {
+            HudHelper.showSuccessMessage(
+                contenView = contenView,
+                resId = R.string.Hud_Text_Verified,
+                icon = R.drawable.icon_check_1_24,
+                iconTint = R.color.white
+            )
+            delay(300)
             navController.popBackStack(R.id.backupKeyFragment, true)
-        }, 1200)
+        }
     }
 
-    val focusRequester = remember { FocusRequester() }
+    uiState.error?.message?.let {
+        HudHelper.showErrorMessage(contenView, it)
+        viewModel.onErrorShown()
+    }
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            AppBar(
-                title = TranslatableString.ResString(R.string.Backup_Confirmation_CheckTitle),
-                navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Done),
-                        icon = R.drawable.icon_24_check_1_jacob,
-                        onClick = { viewModel.onClickDone() },
-                    )
-                )
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                FormsInput(
-                    modifier = Modifier.focusRequester(focusRequester),
-                    hint = "",
-                    onValueChange = {
-                        viewModel.onChangeFirstWord(it)
-                    },
-                    pasteEnabled = false,
-                    prefix = viewModel.firstInputPrefix,
-                    state = viewModel.firstInputErrorState
-                )
-
-                Spacer(Modifier.height(16.dp))
-                FormsInput(
-                    hint = "",
-                    onValueChange = {
-                        viewModel.onChangeSecondWord(it)
-                    },
-                    pasteEnabled = false,
-                    prefix = viewModel.secondInputPrefix,
-                    state = viewModel.secondInputErrorState
-                )
-                Spacer(Modifier.height(12.dp))
-                subhead2_grey(
-                    modifier = Modifier.padding(start = 8.dp),
-                    text = stringResource(R.string.BackupConfirmKey_Description)
-                )
-                if (viewModel.passphraseVisible) {
-                    Spacer(Modifier.height(36.dp))
-                    FormsInput(
-                        hint = stringResource(R.string.Passphrase),
-                        pasteEnabled = false,
-                        state = viewModel.passphraseErrorState,
-                        onValueChange = { value ->
-                            viewModel.onChangePassphrase(value)
+    ComposeAppTheme {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = TranslatableString.ResString(R.string.RecoveryPhraseVerify_Title),
+                    navigationIcon = {
+                        HsIconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_back),
+                                contentDescription = "back button",
+                                tint = ComposeAppTheme.colors.jacob
+                            )
                         }
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    subhead2_grey(
-                        modifier = Modifier.padding(start = 8.dp),
-                        text = stringResource(R.string.EnterPassphrase)
-                    )
+                    }
+                )
+            }
+        ) {
+            Column(modifier = Modifier.padding(it)) {
+                InfoText(text = stringResource(R.string.RecoveryPhraseVerify_Description))
+                Spacer(Modifier.height(12.dp))
+
+                uiState.hiddenWordItems.forEachIndexed { index, it ->
+                    if (index != 0) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    val borderColor = if (uiState.currentHiddenWordItemIndex == index) {
+                        ComposeAppTheme.colors.yellow50
+                    } else {
+                        ComposeAppTheme.colors.steel20
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(44.dp)
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        body_leah(text = it.toString())
+                    }
+                }
+
+                Spacer(Modifier.height(24.dp))
+
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 24.dp),
+                    mainAxisAlignment = FlowMainAxisAlignment.Center,
+                    crossAxisSpacing = 16.dp
+                ) {
+                    uiState.wordOptions.forEach { wordOption ->
+                        Box(modifier = Modifier.height(28.dp)) {
+                            ButtonSecondaryDefault(
+                                title = wordOption.word,
+                                enabled = wordOption.enabled,
+                                onClick = {
+                                    viewModel.onSelectWord(wordOption)
+                                }
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                 }
             }
         }
-    }
-    SideEffect {
-        focusRequester.requestFocus()
     }
 }

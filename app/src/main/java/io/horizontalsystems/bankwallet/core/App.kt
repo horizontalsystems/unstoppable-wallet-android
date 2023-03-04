@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
@@ -11,15 +12,21 @@ import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
-import com.walletconnect.walletconnectv2.client.WalletConnect
-import com.walletconnect.walletconnectv2.client.WalletConnectClient
+import com.walletconnect.android.Core
+import com.walletconnect.android.CoreClient
+import com.walletconnect.android.relay.ConnectionType
+import com.walletconnect.sign.client.Sign
+import com.walletconnect.sign.client.SignClient
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.core.providers.*
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
+import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
+import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
@@ -29,7 +36,7 @@ import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesM
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
-import io.horizontalsystems.bankwallet.modules.nft.NftManager
+import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
@@ -44,6 +51,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -51,8 +59,6 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -62,14 +68,17 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     companion object : ICoreApp by CoreApp {
 
+        lateinit var preferences: SharedPreferences
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
         lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
-        lateinit var chartTypeStorage: IChartTypeStorage
         lateinit var restoreSettingsStorage: IRestoreSettingsStorage
+        lateinit var currencyManager: CurrencyManager
+        lateinit var languageManager: LanguageManager
 
         lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
+        lateinit var evmSyncSourceStorage: EvmSyncSourceStorage
         lateinit var btcBlockchainManager: BtcBlockchainManager
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
@@ -91,6 +100,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var binanceKitManager: BinanceKitManager
+        lateinit var solanaKitManager: SolanaKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeTokenProvider
@@ -106,19 +116,22 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var wc2Manager: WC2Manager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
-        lateinit var marketKit: MarketKit
+        lateinit var marketKit: MarketKitWrapper
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
-        lateinit var nftManager: NftManager
+        lateinit var evmTestnetManager: EvmTestnetManager
+        lateinit var solanaRpcSourceManager: SolanaRpcSourceManager
+        lateinit var nftMetadataManager: NftMetadataManager
+        lateinit var nftAdapterManager: NftAdapterManager
+        lateinit var nftMetadataSyncer: NftMetadataSyncer
         lateinit var evmLabelManager: EvmLabelManager
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
         lateinit var balanceHiddenManager: BalanceHiddenManager
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
-        lateinit var watchAddressBlockchainManager: WatchAddressBlockchainManager
     }
 
     override val testMode = BuildConfig.testMode
@@ -143,10 +156,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
 
-        marketKit = MarketKit.getInstance(
-            this,
-            appConfig.marketApiBaseUrl,
-            appConfig.marketApiKey,
+        marketKit = MarketKitWrapper(
+            context = this,
+            hsApiBaseUrl = appConfig.marketApiBaseUrl,
+            hsApiKey = appConfig.marketApiKey,
             cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
             defiYieldApiKey = appConfig.defiyieldProviderApiKey
         )
@@ -158,7 +171,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         appDatabase = AppDatabase.getInstance(this)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage)
+        evmSyncSourceStorage = EvmSyncSourceStorage(appDatabase)
+        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
 
         btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 
@@ -175,21 +189,25 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
-        enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
-
-        walletManager = WalletManager(accountManager, walletStorage)
-        coinManager = CoinManager(marketKit, walletManager)
-
-        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-
         LocalStorageManager(preferences).apply {
             localStorage = this
-            chartTypeStorage = this
             pinStorage = this
             thirdKeyboardStorage = this
             marketStorage = this
         }
+
+        evmTestnetManager = EvmTestnetManager(localStorage)
+        enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
+        walletStorage = WalletStorage(marketKit, enabledWalletsStorage, evmTestnetManager)
+
+        walletManager = WalletManager(accountManager, walletStorage, evmTestnetManager)
+        coinManager = CoinManager(marketKit, walletManager)
+
+        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
+        val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
+        solanaKitManager = SolanaKitManager(solanaRpcSourceManager, solanaWalletManager, backgroundManager)
+
+        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
 
         torKitManager = TorManager(instance, localStorage)
 
@@ -212,18 +230,18 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         walletActivator = WalletActivator(walletManager, marketKit)
 
-        val tokenBalanceProvider = TokenBalanceProvider()
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
-            tokenBalanceProvider,
-            walletActivator,
+            walletManager,
+            marketKit,
             appDatabase.evmAccountStateDao()
         )
         evmBlockchainManager = EvmBlockchainManager(
             backgroundManager,
             evmSyncSourceManager,
             marketKit,
-            evmAccountManagerFactory
+            evmAccountManagerFactory,
+            evmTestnetManager
         )
 
         systemInfoManager = SystemInfoManager()
@@ -244,8 +262,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             appDatabase.syncerStateDao()
         )
 
-        val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager, evmLabelManager)
-        adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
+        val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, solanaKitManager, backgroundManager, restoreSettingsManager, coinManager, evmLabelManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager, solanaKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         feeCoinProvider = FeeTokenProvider(marketKit)
@@ -296,9 +314,12 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
-        startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao(), marketKit)
+
+        val nftStorage = NftStorage(appDatabase.nftDao(), marketKit)
+        nftMetadataManager = NftMetadataManager(marketKit, appConfigProvider, nftStorage)
+        nftAdapterManager = NftAdapterManager(walletManager, evmBlockchainManager)
+        nftMetadataSyncer = NftMetadataSyncer(nftAdapterManager, nftMetadataManager, nftStorage)
 
         initializeWalletConnectV2(appConfig)
 
@@ -308,12 +329,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
         balanceHiddenManager = BalanceHiddenManager(localStorage)
-        watchAddressBlockchainManager = WatchAddressBlockchainManager(
-            accountManager,
-            walletManager,
-            evmBlockchainManager,
-            walletActivator
-        )
+
+        startTasks()
     }
 
     override fun newImageLoader(): ImageLoader {
@@ -331,19 +348,31 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     }
 
     private fun initializeWalletConnectV2(appConfig: AppConfigProvider) {
-        val initWallet = WalletConnect.Params.Init(
-            application = this,
-            relayServerUrl = "wss://${appConfig.walletConnectUrl}?projectId=${appConfig.walletConnectProjectId}",
-            isController = true,
-            metadata = WalletConnect.Model.AppMetaData(
-                name = "Unstoppable Wallet",
-                description = "Wallet description",
-                url = "example.wallet",
-                icons = listOf("https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media")
-            )
+        val projectId = appConfig.walletConnectProjectId
+        val serverUrl = "wss://${appConfig.walletConnectUrl}?projectId=$projectId"
+        val connectionType = ConnectionType.AUTOMATIC
+        val appMetaData = Core.Model.AppMetaData(
+            name = "Unstoppable",
+            description = "",
+            url = "unstoppable.money",
+            icons = listOf("https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png"),
+            redirect = null,
         )
 
-        WalletConnectClient.initialize(initWallet)
+        CoreClient.initialize(
+            metaData = appMetaData,
+            relayServerUrl = serverUrl,
+            connectionType = connectionType,
+            application = this,
+            onError = { error ->
+                Log.w("AAA", "error", error.throwable)
+            },
+        )
+
+        val init = Sign.Params.Init(core = CoreClient)
+        SignClient.initialize(init) { error ->
+            Log.w("AAA", "error", error.throwable)
+        }
     }
 
     private fun setAppTheme() {
@@ -358,17 +387,16 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         }
     }
 
-    override fun getWorkManagerConfiguration() =
-        WorkConfiguration.Builder()
-            .setMinimumLoggingLevel(Log.VERBOSE)
-            .build()
-
-    override fun onTrimMemory(level: Int) {
-        if (level >= TRIM_MEMORY_COMPLETE) {
-            val logger = AppLogger("low memory")
-            logger.info("onTrimMemory level: $level")
+    override fun getWorkManagerConfiguration(): WorkConfiguration {
+        return if (BuildConfig.DEBUG) {
+            WorkConfiguration.Builder()
+                .setMinimumLoggingLevel(Log.DEBUG)
+                .build()
+        } else {
+            WorkConfiguration.Builder()
+                .setMinimumLoggingLevel(Log.ERROR)
+                .build()
         }
-        super.onTrimMemory(level)
     }
 
     override fun localizedContext(): Context {
@@ -387,6 +415,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         Thread {
             rateAppManager.onAppLaunch()
+            nftMetadataSyncer.start()
             accountManager.loadAccounts()
             walletManager.loadWallets()
             adapterManager.preloadAdapters()
@@ -394,14 +423,11 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
-//            if (!localStorage.favoriteCoinIdsMigrated) {
-//                val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
-//                WorkManager.getInstance(instance).enqueue(request)
-//            }
-//            if (!localStorage.fillWalletInfoDone) {
-//                val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
-//                WorkManager.getInstance(instance).enqueue(request)
-//            }
+            if (MarketWidgetWorker.hasEnabledWidgets(instance)) {
+                MarketWidgetWorker.enqueueWork(instance)
+            } else {
+                MarketWidgetWorker.cancel(instance)
+            }
 
             evmLabelManager.sync()
 

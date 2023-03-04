@@ -6,27 +6,25 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import org.kethereum.eip137.model.ENSName
-import org.kethereum.ens.ENS
-import org.kethereum.ens.isPotentialENSDomain
-import org.kethereum.rpc.min3.getMin3RPC
+import org.web3j.ens.EnsResolver
 
 interface IAddressHandler {
     fun isSupported(value: String): Boolean
     fun parseAddress(value: String): Address
 }
 
-class AddressHandlerEns : IAddressHandler {
-    private val ens = ENS(getMin3RPC())
-
+class AddressHandlerEns(private val ensResolver: EnsResolver) : IAddressHandler {
     private val cache = mutableMapOf<String, Address>()
 
     override fun isSupported(value: String): Boolean {
-        if (!ENSName(value).isPotentialENSDomain()) return false
-        val address = ens.getAddress(ENSName(value)) ?: return false
+        if (!EnsResolver.isValidEnsName(value)) return false
 
-        cache[value] = Address(address.hex, value)
-        return true
+        try {
+            cache[value] = Address(ensResolver.resolve(value), value)
+            return true
+        } catch (e: Exception) {
+            return false
+        }
     }
 
     override fun parseAddress(value: String): Address {
@@ -59,14 +57,14 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
             chainCoinCode?.let { resolution.getAddress(value, it) }
         }
 
-        var lastError: Exception? = null
+        var lastError: Throwable? = null
         for (fetcher in fetchers) {
             try {
                 fetcher.invoke()?.let { resolvedAddress ->
                     return resolvedAddress
                 }
-            } catch (e: Exception) {
-                lastError = e
+            } catch (t: Throwable) {
+                lastError = t
             }
         }
 
@@ -90,12 +88,13 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
                 else -> null
             }
             is TokenType.Eip20 -> when (tokenQuery.blockchainType) {
-                BlockchainType.Ethereum -> "ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Polygon -> "MATIC"
                 BlockchainType.Avalanche -> "AVAX"
-                BlockchainType.Optimism -> "ERC20"
-                BlockchainType.ArbitrumOne -> "ERC20"
+                BlockchainType.Ethereum,
+                BlockchainType.Optimism,
+                BlockchainType.ArbitrumOne,
+                BlockchainType.Gnosis -> "ERC20"
                 else -> null
             }
             else -> null
@@ -115,6 +114,22 @@ class AddressHandlerEvm : IAddressHandler {
     override fun parseAddress(value: String): Address {
         val evmAddress = io.horizontalsystems.ethereumkit.models.Address(value)
         return Address(evmAddress.hex)
+    }
+
+}
+
+class AddressHandlerSolana : IAddressHandler {
+    override fun isSupported(value: String) = true
+
+    override fun parseAddress(value: String): Address {
+        try {
+            //simulate steps in Solana kit init
+            io.horizontalsystems.solanakit.models.Address(value)
+        } catch (e: Throwable) {
+            throw AddressValidator.AddressValidationException(e.message ?: "")
+        }
+
+        return Address(value)
     }
 
 }

@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -30,7 +29,7 @@ import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.Se
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
@@ -58,12 +57,12 @@ fun CoinDetailsScreen(
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        refreshing = isRefreshing,
         onRefresh = { viewModel.refresh() },
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 ViewState.Success -> {
@@ -107,10 +106,6 @@ fun CoinDetailsScreen(
                             }
                         }
 
-                        if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
-                            detailBlocks.add { borderTop -> InvestorData(fullCoin.coin, viewItem, borderTop, navController) }
-                        }
-
                         if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
                             detailBlocks.add { borderTop ->
                                 TokenTvl(viewItem, borderTop, navController) {
@@ -123,13 +118,17 @@ fun CoinDetailsScreen(
                             }
                         }
 
+                        if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
+                            detailBlocks.add { borderTop -> InvestorData(fullCoin.coin, viewItem, borderTop, navController) }
+                        }
+
                         if (viewItem.securityViewItems.isNotEmpty() || viewItem.auditAddresses.isNotEmpty()) {
                             detailBlocks.add { borderTop -> SecurityParameters(viewItem, borderTop, navController) }
                         }
                     }
 
                     if (detailBlocks.size > 0) {
-                        LazyColumn {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
                             items(detailBlocks.size) { index ->
                                 detailBlocks[index].invoke(index != 0)
                             }
@@ -142,6 +141,7 @@ fun CoinDetailsScreen(
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                 }
+                null -> {}
             }
         }
     }
@@ -309,11 +309,12 @@ private fun TokenLiquidity(
                 halfWidth = tokenLiquidityViewItem.liquidity != null,
                 proChartsActivated = viewItem.proChartsActivated,
                 chartViewItem = it,
-                title = stringResource(id = R.string.CoinPage_DetailsDexVolume),
+                title = stringResource(R.string.CoinPage_DetailsDexVolume),
                 description = stringResource(id = R.string.CoinPage_DetailsDexVolume_Description),
                 fragmentManager = fragmentManager,
                 coinUid = coinUid,
-                onBannerClick = onBannerClick
+                onBannerClick = onBannerClick,
+                timePeriodSuffix = it.timePeriodString
             )
         }
 
@@ -327,7 +328,8 @@ private fun TokenLiquidity(
                 description = stringResource(id = R.string.CoinPage_DetailsDexLiquidity_Description),
                 fragmentManager = fragmentManager,
                 coinUid = coinUid,
-                onBannerClick = onBannerClick
+                onBannerClick = onBannerClick,
+                timePeriodSuffix = null
             )
         }
     }
@@ -381,25 +383,27 @@ private fun TokenDistribution(
                     halfWidth = tokenDistributionViewItem.txVolume != null,
                     proChartsActivated = viewItem.proChartsActivated,
                     chartViewItem = it,
-                    title = stringResource(id = R.string.CoinPage_DetailsTxCount),
+                    title = stringResource(R.string.CoinPage_DetailsTxCount),
                     description = stringResource(id = R.string.CoinPage_DetailsTxCount_Description),
                     fragmentManager = fragmentManager,
                     coinUid = coinUid,
-                    onBannerClick = onBannerClick
+                    onBannerClick = onBannerClick,
+                    timePeriodSuffix = it.timePeriodString
                 )
             }
 
             tokenDistributionViewItem.txVolume?.let {
                 MiniProChartCard(
-                    ProChartModule.ChartType.TxVolume,
-                    false,
-                    viewItem.proChartsActivated,
-                    it,
-                    stringResource(id = R.string.CoinPage_DetailsTxVolume),
-                    stringResource(id = R.string.CoinPage_DetailsTxVolume_Description),
+                    chartType = ProChartModule.ChartType.TxVolume,
+                    halfWidth = false,
+                    proChartsActivated = viewItem.proChartsActivated,
+                    chartViewItem = it,
+                    title = stringResource(R.string.CoinPage_DetailsTxVolume),
+                    description = stringResource(id = R.string.CoinPage_DetailsTxVolume_Description),
                     fragmentManager = fragmentManager,
                     coinUid = coinUid,
-                    onBannerClick = onBannerClick
+                    onBannerClick = onBannerClick,
+                    timePeriodSuffix = it.timePeriodString
                 )
             }
         }
@@ -422,7 +426,8 @@ private fun TokenDistribution(
                 description = stringResource(id = R.string.CoinPage_DetailsActiveAddresses_Description),
                 fragmentManager = fragmentManager,
                 coinUid = coinUid,
-                onBannerClick = onBannerClick
+                onBannerClick = onBannerClick,
+                timePeriodSuffix = null
             )
         }
     }
@@ -565,6 +570,7 @@ private fun MiniProChartCard(
     description: String,
     fragmentManager: FragmentManager,
     coinUid: String,
+    timePeriodSuffix: Int?,
     onBannerClick: () -> Unit
 ) {
     Box(
@@ -572,7 +578,7 @@ private fun MiniProChartCard(
             .fillMaxWidth(if (halfWidth) 0.5F else 1F)
     ) {
         MiniChartCard(
-            title = title,
+            title = "$title${timePeriodSuffix?.let { " (${stringResource(id = it)})" } ?: ""}",
             chartViewItem = chartViewItem,
             paddingValues = PaddingValues(start = 4.dp, end = 4.dp),
             onClick = {

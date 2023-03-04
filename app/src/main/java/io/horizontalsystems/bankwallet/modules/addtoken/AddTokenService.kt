@@ -1,103 +1,76 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.customCoinUid
+import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
-import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class AddTokenService(
     private val coinManager: ICoinManager,
-    private val blockchainServices: List<IAddTokenBlockchainService>,
     private val walletManager: IWalletManager,
     private val accountManager: IAccountManager,
-    private val marketKit: MarketKit
+    marketKit: MarketKitWrapper,
 ) {
 
-    suspend fun getTokens(reference: String): List<TokenInfo> {
-        if (reference.isEmpty()) return listOf()
+    private val blockchainTypes = listOf(
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.BinanceChain,
+        BlockchainType.Gnosis,
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Optimism,
+    )
 
-        val validServices = blockchainServices.filter { it.isValid(reference) }
+    val blockchains = marketKit
+        .blockchains(blockchainTypes.map { it.uid })
+        .sortedBy { it.type.order }
 
-        if (validServices.isEmpty()) throw TokenError.InvalidReference
+    val accountType = accountManager.activeAccount?.type
 
-        val tokenInfos = mutableListOf<TokenInfo>()
-        val activeWallets = walletManager.activeWallets
-        validServices.forEach { service ->
-            val token = coinManager.getToken(service.tokenQuery(reference))
+    suspend fun tokenInfo(blockchain: Blockchain, reference: String): TokenInfo? {
+        if (reference.isEmpty()) return null
 
-            if (token != null) {
-                val inWallet = activeWallets.any { it.token == token }
-                tokenInfos.add(TokenInfo.Local(token, inWallet))
-            } else {
-                try {
-                    val customCoin = service.customCoin(reference)
-                    tokenInfos.add(TokenInfo.Remote(customCoin))
-                } catch (e: Exception) {
-                }
-            }
+        val blockchainService = when (blockchain.type) {
+            BlockchainType.BinanceChain -> AddBep2TokenBlockchainService(
+                blockchain,
+                App.networkManager
+            )
+            else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }
 
-        if (tokenInfos.isEmpty()) throw TokenError.NotFound
+        if (!blockchainService.isValid(reference)) throw TokenError.InvalidReference
 
-        return tokenInfos
+        val token = coinManager.getToken(blockchainService.tokenQuery(reference))
+        if (token != null && token.type !is TokenType.Unsupported) {
+            return TokenInfo(token, true)
+        }
+
+        try {
+            val customToken = blockchainService.token(reference)
+            return TokenInfo(customToken, false)
+        } catch (e: Throwable) {
+            throw TokenError.NotFound
+        }
     }
 
-    fun addTokens(tokens: List<TokenInfo>) {
+    fun addToken(token: TokenInfo) {
         val account = accountManager.activeAccount ?: return
-        val platformCoins = tokens.mapNotNull { tokenInfo ->
-            when (tokenInfo) {
-                is TokenInfo.Local -> {
-                    tokenInfo.token
-                }
-                is TokenInfo.Remote -> {
-                    val tokenQuery = tokenInfo.tokenQuery
-                    marketKit.blockchain(tokenQuery.blockchainType.uid)?.let { blockchain ->
-                        val coinUid = tokenQuery.customCoinUid
-                        Token(
-                            coin = io.horizontalsystems.marketkit.models.Coin(coinUid, tokenInfo.coinName, tokenInfo.coinCode),
-                            blockchain = blockchain,
-                            type = tokenQuery.tokenType,
-                            decimals = tokenInfo.decimals
-                        )
-                    }
-                }
-            }
-        }
-
-        val wallets = platformCoins.map { Wallet(it, account) }
-        walletManager.save(wallets)
+        val wallet = Wallet(token.token, account)
+        walletManager.save(listOf(wallet))
     }
 
     sealed class TokenError : Exception() {
         object InvalidReference : TokenError()
         object NotFound : TokenError()
     }
-}
 
-sealed class TokenInfo {
-    abstract val coinName: String
-    abstract val coinCode: String
-    abstract val decimals: Int
-    abstract val tokenQuery: TokenQuery
-    abstract val inWallet: Boolean
-
-    data class Local(val token: Token, override val inWallet: Boolean) : TokenInfo() {
-        override val coinName = token.coin.name
-        override val coinCode = token.coin.code
-        override val decimals = token.decimals
-        override val tokenQuery = token.tokenQuery
-    }
-
-    data class Remote(val customCoin: AddTokenModule.CustomCoin) : TokenInfo() {
-        override val inWallet = false
-        override val coinName = customCoin.name
-        override val coinCode = customCoin.code
-        override val decimals = customCoin.decimals
-        override val tokenQuery = customCoin.tokenQuery
-    }
+    data class TokenInfo(
+        val token: Token,
+        val inCoinList: Boolean,
+    )
 }

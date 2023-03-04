@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
@@ -13,7 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 class MarketFavoritesService(
     private val repository: MarketFavoritesRepository,
     private val menuService: MarketFavoritesMenuService,
-    private val currencyManager: ICurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val backgroundManager: BackgroundManager
 ) : BackgroundManager.Listener {
     private var favoritesDisposable: Disposable? = null

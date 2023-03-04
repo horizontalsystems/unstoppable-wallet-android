@@ -7,6 +7,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 @Immutable
@@ -135,12 +136,13 @@ class Typography internal constructor(
 
 }
 
-fun ColoredTextStyle(textStyle: TextStyle, color: Color): TextStyle {
+fun ColoredTextStyle(textStyle: TextStyle, color: Color, textAlign: TextAlign? = null): TextStyle {
     return TextStyle(
         color = color,
         fontWeight = textStyle.fontWeight,
         fontSize = textStyle.fontSize,
-        fontStyle = textStyle.fontStyle
+        fontStyle = textStyle.fontStyle,
+        textAlign = textAlign
     )
 }
 

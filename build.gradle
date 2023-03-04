@@ -2,20 +2,21 @@
 
 buildscript {
     ext {
-        compile_sdk_version = 32
-        min_sdk_version = 26
-        lifecycle_version = '2.4.1'
+        compile_sdk_version = 33
+        min_sdk_version = 27
+        lifecycle_version = '2.5.1'
 
-        kotlin_version = '1.6.21'
-        material_version = "1.6.0"
-        appcompat_version = "1.4.1"
+        kotlin_version = '1.7.20'
+        material_version = "1.7.0"
+        appcompat_version = "1.6.0-rc01"
         constraint_version = "2.1.4"
-        core_ktx_version = "1.7.0"
-        fragment_ktx_version = "1.4.1"
-        navigation_ktx_version = "2.3.5" //increasing to version 2.4.2 breaks deeplink to WalletConnect
+        core_ktx_version = "1.9.0"
+        fragment_ktx_version = "1.5.5"
+        navigation_ktx_version = "2.5.3"
         rxjava_version = "2.2.19"
         biometric_version = "1.1.0"
         junit_version = "4.13.2"
+        accompanist_version = "0.28.0"
     }
 
     repositories {
@@ -23,7 +24,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath 'com.android.tools.build:gradle:7.4.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -35,6 +36,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
         maven { url "https://jitpack.io" }
     }
 }

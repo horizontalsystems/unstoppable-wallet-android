@@ -5,12 +5,11 @@ import io.horizontalsystems.bankwallet.core.defaultSettingsArray
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletActivator(
     private val walletManager: IWalletManager,
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
 ) {
 
     fun activateWallets(account: Account, tokenQueries: List<TokenQuery>) {
@@ -19,7 +18,7 @@ class WalletActivator(
         for (tokenQuery in tokenQueries) {
             val token = marketKit.token(tokenQuery) ?: continue
 
-            val defaultSettingsArray = token.blockchainType.defaultSettingsArray
+            val defaultSettingsArray = token.blockchainType.defaultSettingsArray(account.type)
 
             if (defaultSettingsArray.isEmpty()) {
                 wallets.add(Wallet(token, account))
@@ -29,6 +28,16 @@ class WalletActivator(
                     wallets.add(Wallet(configuredToken, account))
                 }
             }
+        }
+
+        walletManager.save(wallets)
+    }
+
+    fun activateConfiguredTokens(account: Account, configuredTokens: List<ConfiguredToken>) {
+        val wallets = mutableListOf<Wallet>()
+
+        for (configuredToken in configuredTokens) {
+            wallets.add(Wallet(configuredToken, account))
         }
 
         walletManager.save(wallets)

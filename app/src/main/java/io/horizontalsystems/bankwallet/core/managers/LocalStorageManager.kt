@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -21,12 +21,14 @@ import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
-import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-class LocalStorageManager(private val preferences: SharedPreferences) : ILocalStorage, IPinStorage, IChartTypeStorage,
-    IThirdKeyboard, IMarketStorage {
+class LocalStorageManager(
+    private val preferences: SharedPreferences
+) : ILocalStorage, IPinStorage, IThirdKeyboard, IMarketStorage {
 
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
@@ -41,7 +43,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val BASE_ZCASH_PROVIDER = "base_zcash_provider"
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
-    private val CHART_INTERVAL = "prev_chart_interval"
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
@@ -51,7 +52,7 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val APP_LAUNCH_COUNT = "app_launch_count"
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
     private val BALANCE_HIDDEN = "balance_hidden"
-    private val CHECKED_TERMS = "checked_terms"
+    private val TERMS_AGREED = "terms_agreed"
     private val MARKET_CURRENT_TAB = "market_current_tab"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
@@ -65,11 +66,12 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val LAUNCH_PAGE = "launch_page"
     private val APP_ICON = "app_icon"
     private val MAIN_TAB = "main_tab"
-    private val FAVORITE_COIN_IDS_MIGRATED = "favorite_coins_ids_migrated"
-    private val FILL_WALLET_INFO_DONE = "fill_wallet_info_done"
     private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
+    private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
+    private val TESTNET_ENABLED = "testnet_enabled"
+    private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
 
     private val gson by lazy { Gson() }
 
@@ -276,14 +278,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
 
     //  IChartTypeStorage
 
-    override var chartInterval: HsTimePeriod
-        get() = HsTimePeriod.values().firstOrNull {
-            preferences.getString(CHART_INTERVAL, null) == it.value
-        } ?: HsTimePeriod.Day1
-        set(interval) {
-            preferences.edit().putString(CHART_INTERVAL, interval.value).apply()
-        }
-
     override var torEnabled: Boolean
         get() = preferences.getBoolean(TOR_ENABLED, false)
         @SuppressLint("ApplySharedPref")
@@ -316,15 +310,10 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
             preferences.edit().putString("balanceTotalCoinUid", value).apply()
         }
 
-    override var checkedTerms: List<Term>
-        get() {
-            val termsString = preferences.getString(CHECKED_TERMS, null) ?: return listOf()
-            val type = object : TypeToken<ArrayList<Term>>() {}.type
-            return gson.fromJson(termsString, type)
-        }
+    override var termsAccepted: Boolean
+        get() = preferences.getBoolean(TERMS_AGREED, false)
         set(value) {
-            val termsString = gson.toJson(value)
-            preferences.edit().putString(CHECKED_TERMS, termsString).apply()
+            preferences.edit().putBoolean(TERMS_AGREED, value).apply()
         }
 
     override var currentMarketTab: MarketModule.Tab?
@@ -389,18 +378,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
             preferences.edit().putString(MAIN_TAB, value?.name).apply()
         }
 
-    override var favoriteCoinIdsMigrated: Boolean
-        get() = preferences.getBoolean(FAVORITE_COIN_IDS_MIGRATED, false)
-        set(value) {
-            preferences.edit().putBoolean(FAVORITE_COIN_IDS_MIGRATED, value).apply()
-        }
-
-    override var fillWalletInfoDone: Boolean
-        get() = preferences.getBoolean(FILL_WALLET_INFO_DONE, false)
-        set(value) {
-            preferences.edit().putBoolean(FILL_WALLET_INFO_DONE, value).apply()
-        }
-
     override var marketFavoritesSortingField: SortingField?
         get() = preferences.getString(MARKET_FAVORITES_SORTING_FIELD, null)?.let {
             SortingField.fromString(it)
@@ -421,6 +398,30 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         get() = preferences.getBoolean(RELAUNCH_BY_SETTING_CHANGE, false)
         set(value) {
             preferences.edit().putBoolean(RELAUNCH_BY_SETTING_CHANGE, value).commit()
+        }
+
+    override var marketsTabEnabled: Boolean
+        get() = preferences.getBoolean(MARKETS_TAB_ENABLED, true)
+        set(value) {
+            preferences.edit().putBoolean(MARKETS_TAB_ENABLED, value).commit()
+            _marketsTabEnabledFlow.update {
+                value
+            }
+        }
+
+    private val _marketsTabEnabledFlow = MutableStateFlow(marketsTabEnabled)
+    override val marketsTabEnabledFlow = _marketsTabEnabledFlow.asStateFlow()
+
+    override var testnetEnabled: Boolean
+        get() = preferences.getBoolean(TESTNET_ENABLED, false)
+        set(enabled) {
+            preferences.edit().putBoolean(TESTNET_ENABLED, enabled).apply()
+        }
+
+    override var nonRecommendedAccountAlertDismissedAccounts: Set<String>
+        get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf()) ?: setOf()
+        set(value) {
+            preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value).apply()
         }
 
     override fun getSwapProviderId(blockchainType: BlockchainType): String? {

@@ -26,11 +26,11 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WCSessionError
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.CONNECTION_LINK_KEY
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -42,10 +42,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 class WC2SessionFragment : BaseFragment() {
 
     private val viewModel by viewModels<WC2SessionViewModel> {
-        WC2SessionModule.Factory(
-            arguments?.getString(SESSION_TOPIC_KEY),
-            arguments?.getString(CONNECTION_LINK_KEY),
-        )
+        WC2SessionModule.Factory(arguments?.getString(SESSION_TOPIC_KEY))
     }
 
     override fun onCreateView(
@@ -87,42 +84,39 @@ fun WCSessionPage(
     navController: NavController,
     viewModel: WC2SessionViewModel,
 ) {
+    val uiState = viewModel.uiState
+
     ComposeAppTheme {
         Column(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
                 TranslatableString.ResString(R.string.WalletConnect_Title),
-                showSpinner = viewModel.connecting,
+                showSpinner = uiState.connecting,
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = { navController.popBackStack() },
-                        enabled = viewModel.closeEnabled,
-                        tint = if (viewModel.closeEnabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey50
+                        enabled = uiState.closeEnabled,
+                        tint = if (uiState.closeEnabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey50
                     )
                 )
             )
-            if (viewModel.invalidUrlError) {
-                WCSessionError(
-                    stringResource(R.string.WalletConnect_Error_InvalidUrl),
-                    navController
-                )
-            } else {
-                WCSessionListContent(viewModel)
-            }
+            WCSessionListContent(navController, viewModel)
         }
     }
 }
 
 @Composable
 private fun ColumnScope.WCSessionListContent(
+    navController: NavController,
     viewModel: WC2SessionViewModel
 ) {
+    val uiState = viewModel.uiState
 
     val view = LocalView.current
-    viewModel.showError?.let { HudHelper.showErrorMessage(view, it) }
+    uiState.showError?.let { HudHelper.showErrorMessage(view, it) }
 
     Column(
         modifier = Modifier
@@ -132,7 +126,7 @@ private fun ColumnScope.WCSessionListContent(
     ) {
         Row(
             modifier = Modifier.padding(
-                top = 16.dp,
+                top = 12.dp,
                 start = 24.dp,
                 end = 24.dp,
                 bottom = 24.dp
@@ -144,39 +138,53 @@ private fun ColumnScope.WCSessionListContent(
                     .size(72.dp)
                     .clip(RoundedCornerShape(15.dp)),
                 painter = rememberAsyncImagePainter(
-                    model = viewModel.peerMeta?.icon,
-                    error = painterResource(R.drawable.coin_placeholder)
+                    model = uiState.peerMeta?.icon,
+                    error = painterResource(R.drawable.ic_platform_placeholder_24)
                 ),
                 contentDescription = null,
             )
             Text(
                 modifier = Modifier.padding(start = 16.dp),
-                text = viewModel.peerMeta?.name ?: "",
+                text = uiState.peerMeta?.name ?: "",
                 style = ComposeAppTheme.typography.headline1,
                 color = ComposeAppTheme.colors.leah
             )
         }
         val composableItems = mutableListOf<@Composable () -> Unit>().apply {
-            add { StatusCell(viewModel.status) }
+            add { StatusCell(uiState.status) }
             add {
-                val url = viewModel.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: ""
+                val url = uiState.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: ""
                 TitleValueCell(stringResource(R.string.WalletConnect_Url), url)
             }
             add {
                 TitleValueCell(
                     stringResource(R.string.WalletConnect_ActiveWallet),
-                    viewModel.peerMeta?.accountName ?: ""
+                    uiState.peerMeta?.accountName ?: ""
                 )
             }
-            viewModel.blockchains.forEach {
-                add { BlockchainCell(it.name, it.address, it.selected, it.showCheckbox) { viewModel.toggle(it.chainId) } }
+            uiState.blockchains.forEach {
+                add { BlockchainCell(it.name, it.address) }
             }
         }
 
-        CellSingleLineLawrenceSection(
+        val pendingRequests = uiState.pendingRequests
+        if (pendingRequests.isNotEmpty()) {
+            HeaderText(text = stringResource(R.string.WalletConnect_PendingRequests))
+            CellUniversalLawrenceSection(pendingRequests) { request ->
+                RequestCell(viewItem = request) {
+                    navController.slideFromBottom(
+                        R.id.wc2RequestFragment,
+                        WC2RequestFragment.prepareParams(it.requestId)
+                    )
+                }
+            }
+            Spacer(Modifier.height(32.dp))
+        }
+
+        CellUniversalLawrenceSection(
             composableItems
         )
-        viewModel.hint?.let {
+        uiState.hint?.let {
             Spacer(Modifier.height(12.dp))
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -185,7 +193,7 @@ private fun ColumnScope.WCSessionListContent(
         }
         Spacer(Modifier.height(24.dp))
     }
-    viewModel.buttonStates?.let { ActionButtons(viewModel, it) }
+    uiState.buttonStates?.let { ActionButtons(viewModel, it) }
 }
 
 @Composable
@@ -200,15 +208,6 @@ private fun ActionButtons(
                 title = stringResource(R.string.Button_Connect),
                 enabled = buttonsStates.connect.enabled,
                 onClick = { viewModel.connect() }
-            )
-        }
-        if (buttonsStates.reconnect.visible) {
-            Spacer(Modifier.height(16.dp))
-            ButtonPrimaryYellow(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Button_Reconnect),
-                enabled = buttonsStates.reconnect.enabled,
-                onClick = { viewModel.reconnect() }
             )
         }
         if (buttonsStates.disconnect.visible) {

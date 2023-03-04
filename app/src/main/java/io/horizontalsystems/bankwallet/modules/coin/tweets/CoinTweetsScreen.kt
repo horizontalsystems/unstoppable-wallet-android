@@ -13,10 +13,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -34,7 +33,7 @@ fun CoinTweetsScreen(
     val context = LocalContext.current
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
+        refreshing = isRefreshing,
         onRefresh = { viewModel.refresh() },
     ) {
         Crossfade(viewState) { viewState ->
@@ -50,7 +49,9 @@ fun CoinTweetsScreen(
                         )
                     } else {
                         LazyColumn(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxSize(),
                         ) {
                             items(items) { tweet: TweetViewItem ->
                                 Spacer(modifier = Modifier.height(12.dp))
@@ -89,6 +90,7 @@ fun CoinTweetsScreen(
                         ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                     }
                 }
+                null -> {}
             }
         }
     }

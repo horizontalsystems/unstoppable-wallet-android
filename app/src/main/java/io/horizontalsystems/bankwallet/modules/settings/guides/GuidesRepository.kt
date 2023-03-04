@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.settings.guides
 
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
+import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.entities.GuideCategoryMultiLang
-import io.horizontalsystems.core.ILanguageManager
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit
 class GuidesRepository(
         private val guidesManager: GuidesManager,
         private val connectivityManager: ConnectivityManager,
-        private val languageManager: ILanguageManager) {
+        private val languageManager: LanguageManager
+        ) {
 
     val guideCategories: Observable<DataState<List<GuideCategory>>>
         get() = guideCategoriesSubject

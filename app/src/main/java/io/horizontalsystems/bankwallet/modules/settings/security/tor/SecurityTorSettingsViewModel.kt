@@ -18,9 +18,6 @@ class SecurityTorSettingsViewModel(
     var torCheckEnabled by mutableStateOf(service.torEnabled)
         private set
 
-    var showTorNotificationNotEnabledAlert by mutableStateOf(false)
-        private set
-
     var showRestartAlert by mutableStateOf(false)
         private set
 
@@ -52,12 +49,8 @@ class SecurityTorSettingsViewModel(
     }
 
     fun setTorEnabledWithChecks(enabled: Boolean) {
-        if (enabled && !service.isTorNotificationEnabled) {
-            showTorNotificationNotEnabledAlert = true
-        } else {
-            torCheckEnabled = enabled
-            showRestartAlert = true
-        }
+        torCheckEnabled = enabled
+        showRestartAlert = true
     }
 
     fun setTorEnabled(enabled: Boolean) {
@@ -66,10 +59,6 @@ class SecurityTorSettingsViewModel(
         } else {
             service.disableTor()
         }
-    }
-
-    fun torNotificationNotEnabledAlertShown() {
-        showTorNotificationNotEnabledAlert = false
     }
 
     fun restartAppAlertShown() {

@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -29,7 +29,6 @@ data class BalanceViewItem(
     val fiatValueLocked: DeemedValue<String>,
     val expanded: Boolean,
     val sendEnabled: Boolean = false,
-    val receiveEnabled: Boolean = false,
     val syncingProgress: SyncingProgress,
     val syncingTextValue: DeemedValue<String?>,
     val syncedUntilTextValue: DeemedValue<String?>,
@@ -110,12 +109,16 @@ class BalanceViewItemFactory {
         BlockchainType.Dash,
         BlockchainType.Zcash -> 10
         BlockchainType.Ethereum,
+        BlockchainType.EthereumGoerli,
         BlockchainType.BinanceSmartChain,
         BlockchainType.BinanceChain,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
+        BlockchainType.Solana,
+        BlockchainType.Gnosis,
         BlockchainType.ArbitrumOne -> 50
+        BlockchainType.Solana -> 50
         is BlockchainType.Unsupported -> 0
     }
 
@@ -168,13 +171,19 @@ class BalanceViewItemFactory {
             is AdapterState.Zcash -> {
                 when (val zcash = state.zcashState) {
                     is ZcashAdapter.ZcashState.DownloadingBlocks -> {
-                        if (zcash.blockProgress != null) {
+                        if (zcash.blockProgress.current != null && zcash.blockProgress.total != null) {
                             "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
                         } else {
                             ""
                         }
                     }
-                    is ZcashAdapter.ZcashState.ScanningBlocks -> "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
+                    is ZcashAdapter.ZcashState.ScanningBlocks -> {
+                        if (zcash.blockProgress.current != null && zcash.blockProgress.total != null) {
+                            "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
+                        } else {
+                            ""
+                        }
+                    }
                 }
             }
             else -> null
@@ -272,7 +281,6 @@ class BalanceViewItemFactory {
                 diff = item.coinPrice?.diff,
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,
-                receiveEnabled = state != null,
                 syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
                 syncingTextValue = getSyncingText(state, expanded),
                 syncedUntilTextValue = getSyncedUntilText(state, expanded),

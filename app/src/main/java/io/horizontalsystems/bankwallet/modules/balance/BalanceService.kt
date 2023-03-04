@@ -1,9 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,11 +41,16 @@ class BalanceService(
     var isWatchAccount = false
         private set
 
+    val account: Account?
+        get() = accountManager.activeAccount
+
+    private var hideZeroBalances = false
+
     private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
 
     /* getBalanceItems should return new immutable list */
-    private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (isWatchAccount) {
-        allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
+    private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (hideZeroBalances) {
+        allBalanceItems.filter { it.wallet.token.type == TokenType.Native || it.balanceData.total > BigDecimal.ZERO }
     } else {
         allBalanceItems.toList()
     }
@@ -100,6 +110,7 @@ class BalanceService(
             val balanceItem = allBalanceItems[i]
 
             allBalanceItems[i] = balanceItem.copy(
+                mainNet = adapterRepository.isMainNet(balanceItem.wallet),
                 balanceData = adapterRepository.balanceData(balanceItem.wallet),
                 state = adapterRepository.state(balanceItem.wallet)
             )
@@ -139,9 +150,10 @@ class BalanceService(
     @Synchronized
     private fun handleWalletsUpdate(wallets: List<Wallet>) {
         isWatchAccount = accountManager.activeAccount?.isWatchAccount == true
+        hideZeroBalances = accountManager.activeAccount?.type?.hideZeroBalances == true
 
         adapterRepository.setWallet(wallets)
-        xRateRepository.setCoinUids(wallets.mapNotNull { if (it.token.isCustom) null else it.coin.uid })
+        xRateRepository.setCoinUids(wallets.map { it.coin.uid })
         val latestRates = xRateRepository.getLatestRates()
 
         val balanceItems = wallets.map { wallet ->

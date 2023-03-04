@@ -5,18 +5,33 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionService.State.*
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService.State
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionServiceState.*
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.*
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager.RequestDataError.*
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
-class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() {
+class WC2SessionViewModel(
+    private val wc2service: WC2Service,
+    private val wcManager: WC2Manager,
+    private val sessionManager: WC2SessionManager,
+    private val accountManager: IAccountManager,
+    private val connectivityManager: ConnectivityManager,
+    private val evmBlockchainManager: EvmBlockchainManager,
+    private val topic: String?,
+) : ViewModel() {
 
     private val TAG = "WC2SessionViewModel"
 
@@ -25,159 +40,274 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
 
     private val disposables = CompositeDisposable()
 
-    var peerMeta by mutableStateOf<WCSessionModule.PeerMetaItem?>(null)
+    private var peerMeta: WCSessionModule.PeerMetaItem? = null
+    private var closeEnabled = false
+    private var connecting = false
+    private var buttonStates: WCSessionButtonStates? = null
+    private var hint: Int? = null
+    private var showError: String? = null
+    private var blockchains = listOf<WC2SessionModule.BlockchainViewItem>()
+    private var status: WCSessionViewModel.Status? = null
+    private var pendingRequests = listOf<WC2RequestViewItem>()
+
+    var uiState by mutableStateOf(WC2SessionUiState(
+        peerMeta = peerMeta,
+        closeEnabled = closeEnabled,
+        connecting = connecting,
+        buttonStates = buttonStates,
+        hint = hint,
+        showError = showError,
+        blockchains = blockchains,
+        status = status,
+        pendingRequests = pendingRequests,
+    ))
         private set
 
-    var invalidUrlError by mutableStateOf(false)
-        private set
+    private var sessionServiceState: WC2SessionServiceState = WC2SessionServiceState.Idle
+        set(value) {
+            field = value
 
-    var closeEnabled by mutableStateOf(false)
-        private set
+            sync(state = value, connection = wc2service.connectionAvailableStateFlow.value)
+        }
 
-    var connecting by mutableStateOf(false)
-        private set
+    private var proposal: Sign.Model.SessionProposal? = null
+    private var session: Sign.Model.Session? = null
 
-    var buttonStates by mutableStateOf<WCSessionButtonStates?>(null)
-        private set
-
-    var hint by mutableStateOf<Int?>(null)
-        private set
-
-    var showError by mutableStateOf<String?>(null)
-        private set
-
-    var blockchains by mutableStateOf<List<WC2SessionModule.BlockchainViewItem>>(listOf())
-        private set
-
-    var status by mutableStateOf<WCSessionViewModel.Status?>(null)
-        private set
+    private var wcBlockchains = listOf<WCBlockchain>()
 
     init {
-        service.connectionStateObservable
-            .subscribeIO {
-                Log.e(TAG, "sync from connection change: $it")
-                sync(connectionState = it)
+        viewModelScope.launch {
+            wc2service.connectionAvailableStateFlow
+                .collect {
+                    sync(state = sessionServiceState, connection = it)
+                }
+        }
+
+        viewModelScope.launch {
+            wc2service.pendingRequestUpdatedObservable.asFlow()
+                .collect {
+                    refreshPendingRequests()
+                    emitState()
+                }
+        }
+
+        val topic1 = topic
+        if (topic1 != null) {
+            val existingSession =
+                sessionManager.sessions.firstOrNull { it.topic == topic1 }
+            if (existingSession != null) {
+                peerMeta = existingSession.metaData?.let {
+                    WCSessionModule.PeerMetaItem(
+                        it.name,
+                        it.url,
+                        it.description,
+                        it.icons.lastOrNull()?.toString(),
+                        accountManager.activeAccount?.name,
+                    )
+                }
+
+                session = existingSession
+                refreshPendingRequests()
+                wcBlockchains = getBlockchainsBySession(existingSession)
+                sessionServiceState = WC2SessionServiceState.Ready
+            }
+        } else {
+            wc2service.getNextSessionProposal()?.let { sessionProposal ->
+                peerMeta = WCSessionModule.PeerMetaItem(
+                    sessionProposal.name,
+                    sessionProposal.url,
+                    sessionProposal.description,
+                    sessionProposal.icons.lastOrNull()?.toString(),
+                    accountManager.activeAccount?.name,
+                )
+
+                proposal = sessionProposal
+
+                try {
+                    wcBlockchains = getBlockchainsByProposal(sessionProposal)
+
+                    sessionServiceState = WC2SessionServiceState.WaitingForApproveSession
+                } catch (e: WC2SessionManager.RequestDataError) {
+                    sessionServiceState = Invalid(e)
+                }
+            }
+        }
+
+        wc2service.eventObservable
+            .subscribe { event ->
+                when (event) {
+                    is WC2Service.Event.WaitingForApproveSession -> {
+                    }
+                    is WC2Service.Event.SessionDeleted -> {
+                        val deletedSession = event.deletedSession
+                        if (deletedSession is Sign.Model.DeletedSession.Success) {
+                            session?.topic?.let { topic ->
+                                if (topic == deletedSession.topic) {
+                                    sessionServiceState = Killed
+                                }
+                            }
+                        }
+                    }
+                    is WC2Service.Event.SessionSettled -> {
+                        val session = event.session
+                        peerMeta = session.metaData?.let {
+                            WCSessionModule.PeerMetaItem(
+                                it.name,
+                                it.url,
+                                it.description,
+                                it.icons.lastOrNull()?.toString(),
+                                accountManager.activeAccount?.name,
+                            )
+                        }
+
+                        this.session = session
+                        wcBlockchains = getBlockchainsBySession(session)
+                        sessionServiceState = WC2SessionServiceState.Ready
+                    }
+                    is WC2Service.Event.Error -> {
+                        sessionServiceState = Invalid(event.error)
+                    }
+                    WC2Service.Event.Default -> {
+                    }
+                }
             }
             .let {
                 disposables.add(it)
             }
-
-        service.stateObservable
-            .subscribeIO {
-                Log.e(TAG, "sync from state change: $it")
-                sync(sessionState = it)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        service.allowedBlockchainsObservable
-            .subscribeIO {
-                sync(allowedBlockchainList = it)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        service.networkConnectionErrorObservable
-            .subscribeIO {
-                showErrorLiveEvent.postValue(Unit)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        service.start()
     }
 
+    private fun refreshPendingRequests() {
+        pendingRequests = session?.let { existingSession ->
+            wc2service.pendingRequests(existingSession.topic).map {
+                WC2RequestViewItem(
+                    requestId = it.requestId,
+                    title = title(it.method),
+                    subtitle = it.chainId?.let {
+                        WC2Parser.getAccountData(it)
+                    }?.chain?.name ?: "",
+                )
+            }
+        } ?: listOf()
+    }
+
+    private fun title(method: String?): String = when (method) {
+        "personal_sign" -> "Personal Sign Request"
+        "eth_sign" -> "Standard Sign Request"
+        "eth_signTypedData" -> "Typed Sign Request"
+        "eth_sendTransaction" -> "Approve Transaction"
+        else -> "Unsupported"
+    }
     override fun onCleared() {
-        service.stop()
         disposables.clear()
     }
 
     private fun sync(
-        sessionState: WC2SessionService.State? = null,
-        connectionState: State? = null,
-        allowedBlockchainList: List<WCBlockchain>? = null
+        state: WC2SessionServiceState,
+        connection: Boolean?
     ) {
-        val state = sessionState ?: service.state
-        val connection = connectionState ?: service.connectionState
-        val allowedBlockchains = allowedBlockchainList ?: service.allowedBlockchains
+        val allowedBlockchains = wcBlockchains.sortedBy { it.chainId }
 
         if (state == Killed) {
             closeLiveEvent.postValue(Unit)
             return
         }
 
-        peerMeta = service.appMetaItem
-        blockchains = getBlockchainViewItems(allowedBlockchains, peerMeta?.editable ?: false)
-        connecting = connection == State.Connecting
+        blockchains = getBlockchainViewItems(allowedBlockchains)
+        connecting = connection == null
         closeEnabled = state == Ready
         status = getStatus(connection)
         hint = getHint(connection, state)
 
         setButtons(state, connection)
         setError(state)
+
+        emitState()
+    }
+
+    private fun emitState() {
+        uiState = WC2SessionUiState(
+            peerMeta = peerMeta,
+            closeEnabled = closeEnabled,
+            connecting = connecting,
+            buttonStates = buttonStates,
+            hint = hint,
+            showError = showError,
+            blockchains = blockchains,
+            status = status,
+            pendingRequests = pendingRequests,
+        )
     }
 
     fun cancel() {
-        service.reject()
+        val proposal = proposal ?: return
+
+        if (!connectivityManager.isConnected) {
+            showErrorLiveEvent.postValue(Unit)
+            return
+        }
+
+        wc2service.reject(proposal)
+        sessionServiceState = Killed
     }
 
     fun connect() {
-        service.approve()
+        val proposal = proposal ?: return
+
+        if (!connectivityManager.isConnected) {
+            showErrorLiveEvent.postValue(Unit)
+            return
+        }
+
+        if (accountManager.activeAccount == null) {
+            sessionServiceState = Invalid(NoSuitableAccount)
+            return
+        }
+
+        wc2service.approve(proposal, wcBlockchains)
     }
 
     fun disconnect() {
-        service.disconnect()
-    }
-
-    fun reconnect() {
-        service.reconnect()
-    }
-
-    fun toggle(chainId: Int) {
-        service.toggle(chainId)
-    }
-
-    private fun getBlockchainViewItems(
-        blockchains: List<WCBlockchain>,
-        editable: Boolean
-    ): List<WC2SessionModule.BlockchainViewItem> {
-        return blockchains.map {
-            WC2SessionModule.BlockchainViewItem(
-                it.chainId,
-                it.name,
-                it.address.shorten(),
-                it.selected,
-                showCheckbox = editable
-            )
+        if (!connectivityManager.isConnected) {
+            showErrorLiveEvent.postValue(Unit)
+            return
         }
+
+        val sessionNonNull = session ?: return
+
+        sessionServiceState = Killed
+        wc2service.disconnect(sessionNonNull.topic)
     }
 
-    private fun getStatus(connectionState: State): WCSessionViewModel.Status? {
+    private fun getBlockchainViewItems(blockchains: List<WCBlockchain>) = blockchains.map {
+        WC2SessionModule.BlockchainViewItem(
+            it.chainId,
+            it.name,
+            it.address.shorten(),
+        )
+    }
+
+    private fun getStatus(connectionState: Boolean?): WCSessionViewModel.Status? {
         return when (connectionState) {
-            State.Connecting -> WCSessionViewModel.Status.CONNECTING
-            State.Connected -> WCSessionViewModel.Status.ONLINE
-            is State.Disconnected -> WCSessionViewModel.Status.OFFLINE
+            null -> WCSessionViewModel.Status.CONNECTING
+            true -> WCSessionViewModel.Status.ONLINE
+            false -> WCSessionViewModel.Status.OFFLINE
         }
     }
 
     private fun setButtons(
-        state: WC2SessionService.State,
-        connection: State
+        state: WC2SessionServiceState,
+        connection: Boolean?
     ) {
         Log.e(TAG, "setButtons: ${state}, ${connection}")
         buttonStates = WCSessionButtonStates(
             connect = getConnectButtonState(state, connection),
             disconnect = getDisconnectButtonState(state, connection),
             cancel = getCancelButtonState(state),
-            reconnect = getReconnectButtonState(state, connection),
             remove = getRemoveButtonState(state, connection),
         )
     }
 
-    private fun getCancelButtonState(state: WC2SessionService.State): WCButtonState {
+    private fun getCancelButtonState(state: WC2SessionServiceState): WCButtonState {
         return if (state != Ready) {
             WCButtonState.Enabled
         } else {
@@ -186,50 +316,38 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
     }
 
     private fun getConnectButtonState(
-        state: WC2SessionService.State,
-        connectionState: State
+        state: WC2SessionServiceState,
+        connectionState: Boolean?
     ): WCButtonState {
         return when {
-            state == WaitingForApproveSession && connectionState == State.Connected -> WCButtonState.Enabled
+            state == WaitingForApproveSession && connectionState == true -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
         }
     }
 
     private fun getDisconnectButtonState(
-        state: WC2SessionService.State,
-        connectionState: State
+        state: WC2SessionServiceState,
+        connectionState: Boolean?
     ): WCButtonState {
         return when {
-            state == Ready && connectionState == State.Connected -> WCButtonState.Enabled
-            else -> WCButtonState.Hidden
-        }
-    }
-
-    private fun getReconnectButtonState(
-        state: WC2SessionService.State,
-        connectionState: State
-    ): WCButtonState {
-        return when {
-            state is Invalid -> WCButtonState.Hidden
-            connectionState is State.Disconnected -> WCButtonState.Enabled
-            connectionState is State.Connecting -> WCButtonState.Disabled
+            state == Ready && connectionState == true -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
         }
     }
 
     private fun getRemoveButtonState(
-        state: WC2SessionService.State,
-        connectionState: State
+        state: WC2SessionServiceState,
+        connectionState: Boolean?
     ): WCButtonState {
         return when {
             state is Invalid -> WCButtonState.Hidden
-            connectionState is State.Disconnected && state is Ready -> WCButtonState.Enabled
+            connectionState == false && state is Ready -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
         }
     }
 
     private fun setError(
-        state: WC2SessionService.State
+        state: WC2SessionServiceState
     ) {
         val error: String? = when (state) {
             is Invalid -> state.error.message ?: state.error::class.java.simpleName
@@ -239,13 +357,13 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
         showError = error
     }
 
-    private fun getHint(connection: State, state: WC2SessionService.State): Int? {
+    private fun getHint(connection: Boolean?, state: WC2SessionServiceState): Int? {
         when {
-            connection is State.Disconnected
-                    && (state == WaitingForApproveSession || state is Ready) -> {
+            connection == false
+                && (state == WaitingForApproveSession || state is Ready) -> {
                 return R.string.WalletConnect_Reconnect_Hint
             }
-            connection == State.Connecting -> return null
+            connection == null -> return null
             state is Invalid -> return getErrorMessage(state.error)
             state == WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
         }
@@ -257,9 +375,53 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
             is UnsupportedChainId -> R.string.WalletConnect_Error_UnsupportedChainId
             is NoSuitableAccount -> R.string.WalletConnect_Error_NoSuitableAccount
             is NoSuitableEvmKit -> R.string.WalletConnect_Error_NoSuitableEvmKit
-            is DataParsingError -> R.string.WalletConnect_Error_DataParsingError
             is RequestNotFoundError -> R.string.WalletConnect_Error_RequestNotFoundError
             else -> null
         }
     }
+
+
+//  session service
+
+    private fun getBlockchainsByProposal(proposal: Sign.Model.SessionProposal): List<WCBlockchain> {
+        val account = accountManager.activeAccount
+            ?: throw NoSuitableAccount
+        val chains = proposal.requiredNamespaces.values.map { it.chains }.flatten()
+        val blockchains = getBlockchains(chains, account)
+        if (blockchains.size < chains.size) {
+            throw UnsupportedChainId
+        }
+        return blockchains
+    }
+
+    private fun getBlockchainsBySession(session: Sign.Model.Session): List<WCBlockchain> {
+        val account = accountManager.activeAccount ?: return emptyList()
+        val accounts = session.namespaces.map { it.value.accounts }.flatten()
+        return getBlockchains(accounts, account)
+    }
+
+    private fun getBlockchains(accounts: List<String>, account: Account): List<WCBlockchain> {
+        val sessionAccountData = accounts.mapNotNull { WC2Parser.getAccountData(it) }
+        return sessionAccountData.mapNotNull { data ->
+            wcManager.getEvmKitWrapper(data.chain.id, account)?.let { evmKitWrapper ->
+                val address = evmKitWrapper.evmKit.receiveAddress.eip55
+                val chainName =
+                    evmBlockchainManager.getBlockchain(data.chain.id)?.name ?: data.chain.name
+                WCBlockchain(data.chain.id, chainName, address)
+            }
+        }
+    }
+
 }
+
+data class WC2SessionUiState(
+    val peerMeta: WCSessionModule.PeerMetaItem?,
+    val closeEnabled: Boolean,
+    val connecting: Boolean,
+    val buttonStates: WCSessionButtonStates?,
+    val hint: Int?,
+    val showError: String?,
+    val blockchains: List<WC2SessionModule.BlockchainViewItem>,
+    val status: WCSessionViewModel.Status?,
+    val pendingRequests: List<WC2RequestViewItem>
+)

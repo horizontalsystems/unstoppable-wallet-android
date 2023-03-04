@@ -45,7 +45,9 @@ open class EvmTransactionRecord(transaction: Transaction, baseToken: Token, sour
             value is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue ->
                 value.token == value2.token
             value is TransactionValue.TokenValue && value2 is TransactionValue.TokenValue ->
-                value.tokenName == value.tokenName && value.tokenCode == value2.tokenCode && value.tokenDecimals == value2.tokenDecimals
+                value.tokenName == value2.tokenName && value.tokenCode == value2.tokenCode && value.tokenDecimals == value2.tokenDecimals
+            value is TransactionValue.NftValue && value2 is TransactionValue.NftValue ->
+                value.nftUid == value2.nftUid
             else ->
                 false
         }
@@ -71,6 +73,7 @@ open class EvmTransactionRecord(transaction: Transaction, baseToken: Token, sour
                         value = totalValue
                 )
                 is TransactionValue.RawValue -> value
+                is TransactionValue.NftValue -> value.copy(value = totalValue)
             }
 
             if (totalValue > BigDecimal.ZERO) {

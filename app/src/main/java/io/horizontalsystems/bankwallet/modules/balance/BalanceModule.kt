@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
+import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 
@@ -29,12 +30,20 @@ object BalanceModule {
                 App.accountManager
             )
 
+            val totalService = TotalService(
+                App.currencyManager,
+                App.marketKit,
+                App.baseTokenManager,
+                App.balanceHiddenManager
+            )
             return BalanceViewModel(
                 balanceService,
                 BalanceViewItemFactory(),
-                TotalService(App.currencyManager, App.marketKit, App.baseTokenManager, App.balanceHiddenManager),
                 App.balanceViewTypeManager,
-                App.balanceHiddenManager
+                TotalBalance(totalService, App.balanceHiddenManager),
+                App.localStorage,
+                App.languageManager,
+                FaqManager
             ) as T
         }
     }

@@ -3,12 +3,7 @@ package io.horizontalsystems.bankwallet.modules.intro
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.Crossfade
@@ -20,6 +15,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,7 +25,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
 import com.google.accompanist.pager.*
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import io.horizontalsystems.bankwallet.R
@@ -40,6 +35,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
+import kotlinx.coroutines.launch
 
 class IntroActivity : BaseActivity() {
 
@@ -60,21 +56,6 @@ class IntroActivity : BaseActivity() {
         setStatusBarTransparent()
     }
 
-    private fun setStatusBarTransparent() {
-        if (Build.VERSION.SDK_INT in 26..29) {
-            window.statusBarColor = Color.TRANSPARENT
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.decorView.systemUiVisibility =
-                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_STABLE
-
-        } else if (Build.VERSION.SDK_INT >= 30) {
-            window.statusBarColor = Color.TRANSPARENT
-            // Making status bar overlaps with the activity
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-        }
-    }
-
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, IntroActivity::class.java)
@@ -89,7 +70,7 @@ class IntroActivity : BaseActivity() {
 private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActivity: () -> Unit) {
     val pagerState = rememberPagerState(initialPage = 0)
     ComposeAppTheme {
-        Box() {
+        Box {
             Image(
                 painter = painterResource(if (nightMode) R.drawable.ic_intro_background else R.drawable.ic_intro_background_light),
                 contentDescription = null,
@@ -122,6 +103,8 @@ private fun StaticContent(
     closeActivity: () -> Unit
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -135,36 +118,47 @@ private fun StaticContent(
             modifier = Modifier
                 .height(120.dp)
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val title = viewModel.slides[pagerState.currentPage].title
-            Crossfade(title) {
+            Crossfade(targetState = title) { titleRes ->
                 title3_leah(
-                    modifier = Modifier.padding(horizontal = 24.dp),
-                    text = stringResource(title),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    text = stringResource(titleRes),
                     textAlign = TextAlign.Center
                 )
             }
             Spacer(Modifier.height(16.dp))
             val subtitle = viewModel.slides[pagerState.currentPage].subtitle
-            Crossfade(subtitle) {
+            Crossfade(targetState = subtitle) { subtitleRes ->
                 body_grey(
-                    text = stringResource(subtitle),
-                    modifier = Modifier.padding(horizontal = 48.dp),
+                    text = stringResource(subtitleRes),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 48.dp),
                     textAlign = TextAlign.Center
                 )
             }
         }
         Spacer(Modifier.weight(2f))
         ButtonPrimaryYellow(
-            modifier = Modifier.padding(horizontal = 24.dp).fillMaxWidth(),
-            title = stringResource(R.string.Intro_Wallet_Screen1Description),
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth(),
+            title = stringResource(R.string.Button_Next),
             onClick = {
-                viewModel.onStartClicked()
-                MainModule.start(context)
-                closeActivity()
-            }
-        )
+                if (pagerState.currentPage + 1 < pagerState.pageCount) {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
+                } else {
+                    viewModel.onStartClicked()
+                    MainModule.start(context)
+                    closeActivity()
+
+                }
+            })
         Spacer(Modifier.height(60.dp))
     }
 }

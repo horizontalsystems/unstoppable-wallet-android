@@ -1,36 +1,40 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.core.ILanguageManager
 import java.util.*
 
-class LanguageManager : ILanguageManager {
+class LanguageManager {
 
-    override var fallbackLocale: Locale = Locale.ENGLISH
+    var fallbackLocale: Locale = Locale.ENGLISH
 
-    override var currentLocale: Locale = App.instance.getLocale()
+    var currentLocale: Locale = App.instance.getLocale()
         set(value) {
             field = value
 
             App.instance.setLocale(currentLocale)
         }
 
-    override var currentLanguage: String
-        get() = currentLocale.language
+    var currentLocaleTag: String
+        get() = currentLocale.toLanguageTag()
         set(value) {
-            currentLocale = Locale(value)
+            currentLocale = Locale.forLanguageTag(value)
         }
 
-    override val currentLanguageName: String
-        get() = currentLocale.displayLanguage.capitalize()
+    val currentLanguageName: String
+        get() = getName(currentLocaleTag)
 
-    override fun getName(language: String): String {
-        return Locale(language).displayLanguage.capitalize()
+    val currentLanguage: String
+        get() = currentLocale.language
+
+    fun getName(tag: String): String {
+        return Locale.forLanguageTag(tag)
+            .getDisplayName(currentLocale)
+            .replaceFirstChar(Char::uppercase)
     }
 
-    override fun getNativeName(language: String): String {
-        val locale = Locale(language)
-        return locale.getDisplayLanguage(locale).capitalize()
+    fun getNativeName(tag: String): String {
+        val locale = Locale.forLanguageTag(tag)
+        return locale.getDisplayName(locale).replaceFirstChar(Char::uppercase)
     }
 
 }

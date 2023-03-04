@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.coin.reports
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinReport
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -10,7 +10,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class CoinReportsService(
     private val coinUid: String,
-    private val marketKit: MarketKit
+    private val marketKit: MarketKitWrapper
 ) {
     private var disposable: Disposable? = null
 

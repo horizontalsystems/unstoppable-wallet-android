@@ -6,13 +6,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Session
 import io.horizontalsystems.core.toHexString
 
 class WC2SendEthereumTransactionRequestService(
-    private val requestId: Long,
+    private val requestData: WC2SessionManager.RequestData,
     private val sessionManager: WC2SessionManager,
 ) : WCRequestModule.RequestAction {
-
-    private val requestData by lazy {
-        sessionManager.pendingRequestDataToOpen[requestId]!!
-    }
 
     val evmKitWrapper by lazy {
         requestData.evmKitWrapper
@@ -20,10 +16,6 @@ class WC2SendEthereumTransactionRequestService(
 
     val transactionRequest by lazy {
         (requestData.pendingRequest as WC2SendEthereumTransactionRequest)
-    }
-
-    override fun stop() {
-        sessionManager.pendingRequestDataToOpen.remove(requestId)
     }
 
     override fun approve(transactionHash: ByteArray) {

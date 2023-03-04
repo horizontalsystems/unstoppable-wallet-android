@@ -6,30 +6,28 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.icon24
-import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewModel() {
 
     private var loading = false
     private var finished = false
-    private var coinName: String? = null
-    private var coinCode: String? = null
-    private var decimals: Int? = null
-    private var tokens: List<TokenInfoUiState> = listOf()
+    private var addButtonEnabled = false
+    private var tokenInfo: AddTokenService.TokenInfo? = null
     private var caution: Caution? = null
+    private var enteredText = ""
 
     var uiState by mutableStateOf(
         AddTokenUiState(
-            coinName = coinName,
-            coinCode = coinCode,
-            decimals = decimals,
-            tokens = tokens,
-            addEnabled = false,
+            tokenInfo = tokenInfo,
+            addButtonEnabled = addButtonEnabled,
             loading = loading,
             finished = finished,
             caution = caution
@@ -37,49 +35,49 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     )
         private set
 
+    val blockchains by addTokenService::blockchains
+
+    var selectedBlockchain by mutableStateOf(blockchains.first { it.type == BlockchainType.Ethereum })
+        private set
+
     private var fetchCustomCoinsJob: Job? = null
 
-    private fun emitState() {
-        uiState = AddTokenUiState(
-            coinName = coinName,
-            coinCode = coinCode,
-            decimals = decimals,
-            tokens = tokens,
-            addEnabled = tokens.any { it.enabled && it.checked },
-            loading = loading,
-            finished = finished,
-            caution = caution,
-        )
+    fun onBlockchainSelect(blockchain: Blockchain) {
+        selectedBlockchain = blockchain
+        if (enteredText.isNotBlank()) {
+            updateTokenInfo(blockchain, enteredText)
+        }
     }
 
     fun onEnterText(text: String) {
+        enteredText = text
+        updateTokenInfo(selectedBlockchain, text)
+    }
+
+    private fun updateTokenInfo(blockchain: Blockchain, text: String) {
         fetchCustomCoinsJob?.cancel()
+        tokenInfo = null
+        addButtonEnabled = false
+        caution = null
+        loading = true
+
+        emitState()
+
         fetchCustomCoinsJob = viewModelScope.launch {
-            loading = true
-            coinName = null
-            coinCode = null
-            decimals = null
-            caution = null
-
-            emitState()
-
             try {
-                val tokens = addTokenService.getTokens(text)
-
-                this@AddTokenViewModel.tokens = tokens.map {
-                    TokenInfoUiState(
-                        tokenInfo = it,
-                        title = it.tokenQuery.protocolType ?: "",
-                        image = it.tokenQuery.blockchainType.icon24,
-                        checked = it.inWallet,
-                        enabled = !it.inWallet
-                    )
+                tokenInfo = withContext(Dispatchers.IO) {
+                    addTokenService.tokenInfo(blockchain, text.trim())
                 }
-
-                val tokenInfo = tokens.firstOrNull()
-                coinName = tokenInfo?.coinName
-                coinCode = tokenInfo?.coinCode
-                decimals = tokenInfo?.decimals
+                tokenInfo?.let {
+                    if (it.inCoinList) {
+                        caution = Caution(
+                            Translator.getString(R.string.AddToken_CoinAlreadyInListWarning),
+                            Caution.Type.Warning
+                        )
+                    } else {
+                        addButtonEnabled = true
+                    }
+                }
             } catch (e: Exception) {
                 caution = Caution(getErrorText(e), Caution.Type.Error)
             }
@@ -91,53 +89,49 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
     fun onAddClick() {
         viewModelScope.launch {
-            val tokens = tokens.filter { it.enabled && it.checked }.map { it.tokenInfo }
-            addTokenService.addTokens(tokens)
-
-            finished = true
-            emitState()
-        }
-    }
-
-    fun onToggleToken(tokenInfoUiState: TokenInfoUiState) {
-        val tmpList = tokens.toMutableList()
-        val indexOf = tmpList.indexOf(tokenInfoUiState)
-        if (indexOf != -1) {
-            val token = tmpList[indexOf]
-            tmpList[indexOf] = token.copy(checked = !token.checked)
-
-            tokens = tmpList
+            tokenInfo?.let {
+                addTokenService.addToken(it)
+                finished = true
+            }
 
             emitState()
         }
     }
 
-    private fun getErrorText(error: Throwable): String {
-        val errorKey = when (error) {
-            is AddTokenService.TokenError.NotFound -> R.string.AddEvmToken_TokenNotFound
-            is AddTokenService.TokenError.InvalidReference -> R.string.AddToken_InvalidAddressError
-            else -> R.string.Error
-        }
+    private fun emitState() {
+        uiState = AddTokenUiState(
+            tokenInfo = tokenInfo,
+            addButtonEnabled = addButtonEnabled,
+            loading = loading,
+            finished = finished,
+            caution = caution,
+        )
+    }
 
-        return Translator.getString(errorKey)
+    private fun getErrorText(error: Throwable): String = when (error) {
+        is AddTokenService.TokenError.NotFound -> {
+            if (selectedBlockchain.type == BlockchainType.BinanceChain)
+                Translator.getString(R.string.AddEvmToken_Bep2NotFound)
+            else
+                Translator.getString(
+                    R.string.AddEvmToken_ContractAddressNotFoundInBlockchain,
+                    selectedBlockchain.name
+                )
+        }
+        is AddTokenService.TokenError.InvalidReference -> {
+            if (selectedBlockchain.type == BlockchainType.BinanceChain)
+                Translator.getString(R.string.AddToken_InvalidBep2Symbol)
+            else
+                Translator.getString(R.string.AddToken_InvalidContractAddress)
+        }
+        else -> Translator.getString(R.string.Error)
     }
 }
 
 data class AddTokenUiState(
-    val coinName: String?,
-    val coinCode: String?,
-    val decimals: Int?,
-    val tokens: List<TokenInfoUiState>,
-    val addEnabled: Boolean,
+    val tokenInfo: AddTokenService.TokenInfo?,
+    val addButtonEnabled: Boolean,
     val loading: Boolean,
     val finished: Boolean,
     val caution: Caution?,
-)
-
-data class TokenInfoUiState(
-    val tokenInfo: TokenInfo,
-    val title: String,
-    val image: Int,
-    val checked: Boolean,
-    val enabled: Boolean
 )

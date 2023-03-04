@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -19,8 +19,6 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 
 object SwapApproveConfirmationModule {
 
@@ -29,7 +27,7 @@ object SwapApproveConfirmationModule {
         private val blockchainType: BlockchainType
     ) : ViewModelProvider.Factory {
 
-        private val token by lazy { App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!! }
+        private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
         private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
@@ -49,7 +47,9 @@ object SwapApproveConfirmationModule {
             EvmCoinServiceFactory(
                 token,
                 App.marketKit,
-                App.currencyManager
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
@@ -76,9 +76,11 @@ object SwapApproveConfirmationModule {
         }
     }
 
-    fun prepareParams(sendEvmData: SendEvmData) = bundleOf(
+    fun prepareParams(sendEvmData: SendEvmData, blockchainType: BlockchainType, backButton: Boolean = true) = bundleOf(
         SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
-        SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo
+        SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo,
+        SendEvmModule.blockchainTypeKey to blockchainType,
+        SendEvmModule.backButtonKey to backButton,
     )
 
 }

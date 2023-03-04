@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransac
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
@@ -29,8 +30,6 @@ import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigInteger
 
 object WCRequestModule {
@@ -56,7 +55,13 @@ object WCRequestModule {
         }
 
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(token, App.marketKit, App.currencyManager)
+            EvmCoinServiceFactory(
+                token,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
         }
         private val feeService by lazy {
             val gasDataService = EvmCommonGasDataService(evmKitWrapper.evmKit, 10)
@@ -99,9 +104,9 @@ object WCRequestModule {
         }
     }
 
-    class FactoryV2(private val requestId: Long) : ViewModelProvider.Factory {
+    class FactoryV2(private val requestData: WC2SessionManager.RequestData) : ViewModelProvider.Factory {
         private val service by lazy {
-            WC2SendEthereumTransactionRequestService(requestId, App.wc2SessionManager)
+            WC2SendEthereumTransactionRequestService(requestData, App.wc2SessionManager)
         }
         private val token by lazy { getToken(service.evmKitWrapper.evmKit.chain) }
         private val transaction = service.transactionRequest.transaction
@@ -115,7 +120,13 @@ object WCRequestModule {
         }
 
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(token, App.marketKit, App.currencyManager)
+            EvmCoinServiceFactory(
+                token,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
         }
         private val feeService by lazy {
             val evmKitWrapper = service.evmKitWrapper
@@ -167,9 +178,11 @@ object WCRequestModule {
             Chain.Avalanche -> BlockchainType.Avalanche
             Chain.Optimism -> BlockchainType.Optimism
             Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+            Chain.Gnosis -> BlockchainType.Gnosis
+            Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
             else -> BlockchainType.Ethereum
         }
-        return App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!!
+        return App.evmBlockchainManager.getBaseToken(blockchainType)!!
     }
 
     private fun getGasPrice(transaction: WalletConnectTransaction): GasPrice? = when {
@@ -204,7 +217,6 @@ object WCRequestModule {
     interface RequestAction {
         fun approve(transactionHash: ByteArray)
         fun reject()
-        fun stop()
     }
 
 }

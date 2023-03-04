@@ -4,7 +4,6 @@ import android.util.Range
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.ChartPointF
-import java.lang.Exception
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -13,8 +12,9 @@ data class ChartData(
     val items: List<ChartDataItemImmutable>,
     val startTimestamp: Long,
     val endTimestamp: Long,
-    val isExpired: Boolean = false,
-    val valueRange: Range<Float>
+    val isExpired: Boolean,
+    val valueRange: Range<Float>,
+    val isMovementChart: Boolean
 ) {
 
     fun values(name: Indicator): List<ChartDataValueImmutable> {
@@ -49,6 +49,12 @@ data class ChartData(
             BigDecimal.ZERO
         }
     }
+
+    fun sum(): BigDecimal {
+        val values = items.mapNotNull { it.values[Indicator.Candle]?.value }
+
+        return values.sum().toBigDecimal()
+    }
 }
 
 @Immutable
@@ -64,7 +70,8 @@ class ChartDataBuilder private constructor(
     points: List<ChartPoint>,
     start: Long?,
     end: Long?,
-    private val isExpired: Boolean = false
+    private val isExpired: Boolean = false,
+    private val isMovementChart: Boolean
 ) {
 
     companion object {
@@ -79,20 +86,23 @@ class ChartDataBuilder private constructor(
             ),
             100,
             600,
-            true
+            true,
+            false
         ).build()
 
         fun buildFromPoints(
             points: List<ChartPoint>,
             startTimestamp: Long? = null,
             endTimestamp: Long? = null,
-            isExpired: Boolean = false
+            isExpired: Boolean = false,
+            isMovementChart: Boolean = true
         ): ChartData {
             return ChartDataBuilder(
                 points,
                 startTimestamp,
                 endTimestamp,
-                isExpired
+                isExpired,
+                isMovementChart
             ).build()
         }
     }
@@ -220,6 +230,6 @@ class ChartDataBuilder private constructor(
     }
 
     fun build(): ChartData {
-        return ChartData(immutableItems, startTimestamp, endTimestamp, isExpired, valueRange)
+        return ChartData(immutableItems, startTimestamp, endTimestamp, isExpired, valueRange, isMovementChart)
     }
 }

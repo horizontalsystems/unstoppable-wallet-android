@@ -23,12 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
@@ -37,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class TopNftCollectionsFragment : BaseFragment() {
 
@@ -64,8 +64,8 @@ class TopNftCollectionsFragment : BaseFragment() {
                     TopNftCollectionsScreen(
                         viewModel,
                         { findNavController().popBackStack() },
-                        { collectionUid ->
-                            val args = NftCollectionFragment.prepareParams(collectionUid)
+                        { blockchainType, collectionUid ->
+                            val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
                             findNavController().slideFromBottom(R.id.nftCollectionFragment, args)
                         }
                     )
@@ -95,7 +95,7 @@ class TopNftCollectionsFragment : BaseFragment() {
 fun TopNftCollectionsScreen(
     viewModel: TopNftCollectionsViewModel,
     onCloseButtonClick: () -> Unit,
-    onClickCollection: (String) -> Unit,
+    onClickCollection: (BlockchainType, String) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val menu = viewModel.menu
@@ -106,14 +106,14 @@ fun TopNftCollectionsScreen(
             TopCloseButton(interactionSource, onCloseButtonClick)
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(viewModel.isRefreshing),
+                refreshing = viewModel.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                 }
             ) {
                 Crossfade(viewModel.viewState) { state ->
                     when (state) {
-                        is ViewState.Loading -> {
+                        ViewState.Loading -> {
                             Loading()
                         }
                         is ViewState.Error -> {
@@ -122,36 +122,38 @@ fun TopNftCollectionsScreen(
                                 viewModel::onErrorClick
                             )
                         }
-                        is ViewState.Success -> {
-                            Column {
-                                TopNftCollectionsList(
-                                    collections = viewModel.viewItems,
-                                    sortingField = viewModel.sortingField,
-                                    timeDuration = viewModel.timeDuration,
-                                    onClickCollection = onClickCollection,
-                                    preItems = {
-                                        item {
-                                            DescriptionCard(header.title, header.description, header.icon)
-                                        }
+                        ViewState.Success -> {
+                            TopNftCollectionsList(
+                                collections = viewModel.viewItems,
+                                sortingField = viewModel.sortingField,
+                                timeDuration = viewModel.timeDuration,
+                                onClickCollection = onClickCollection,
+                                preItems = {
+                                    item {
+                                        DescriptionCard(
+                                            header.title,
+                                            header.description,
+                                            header.icon
+                                        )
+                                    }
 
-                                        stickyHeader {
-                                            HeaderSorting(borderTop = true, borderBottom = true) {
-                                                SortMenu(menu.sortingFieldSelect.selected.title) {
-                                                    viewModel.onClickSortingFieldMenu()
-                                                }
-                                                Spacer(modifier = Modifier.weight(1f))
-                                                ButtonSecondaryToggle(
-                                                    select = menu.timeDurationSelect,
-                                                    onSelect = { timeDuration ->
-                                                        viewModel.onSelectTimeDuration(timeDuration)
-                                                    }
-                                                )
-                                                Spacer(modifier = Modifier.width(16.dp))
+                                    stickyHeader {
+                                        HeaderSorting(borderTop = true, borderBottom = true) {
+                                            SortMenu(menu.sortingFieldSelect.selected.title) {
+                                                viewModel.onClickSortingFieldMenu()
                                             }
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            ButtonSecondaryToggle(
+                                                select = menu.timeDurationSelect,
+                                                onSelect = { timeDuration ->
+                                                    viewModel.onSelectTimeDuration(timeDuration)
+                                                }
+                                            )
+                                            Spacer(modifier = Modifier.width(16.dp))
                                         }
                                     }
-                                )
-                            }
+                                }
+                            )
                         }
                     }
                 }
@@ -174,26 +176,27 @@ private fun TopNftCollectionsList(
     collections: List<TopNftCollectionViewItem>,
     sortingField: SortingField,
     timeDuration: TimeDuration,
-    onClickCollection: (String) -> Unit,
+    onClickCollection: (BlockchainType, String) -> Unit,
     preItems: LazyListScope.() -> Unit
 ) {
     val state = rememberSaveable(sortingField, timeDuration, saver = LazyListState.Saver) {
         LazyListState(0, 0)
     }
 
-    LazyColumn(state = state) {
+    LazyColumn(
+        state = state,
+        modifier = Modifier.fillMaxSize()
+    ) {
         preItems.invoke(this)
         items(collections) { collection ->
-            MultilineClear(
-                onClick = { onClickCollection(collection.uid) },
+            SectionItemBorderedRowUniversalClear(
+                onClick = { onClickCollection(collection.blockchainType, collection.uid) },
                 borderBottom = true
             ) {
                 NftIcon(
                     iconUrl = collection.imageUrl ?: "",
                     placeholder = R.drawable.coin_placeholder,
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(24.dp)
+                    modifier = Modifier.padding(end = 16.dp)
                 )
                 Column(modifier = Modifier.fillMaxWidth()) {
                     MarketCoinFirstRow(collection.name, collection.volume)

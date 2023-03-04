@@ -4,44 +4,45 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.reactivex.disposables.CompositeDisposable
+import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 
-class BalanceAccountsViewModel(private val accountManager: IAccountManager) : ViewModel() {
-    private val disposables = CompositeDisposable()
+class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
-    var accountViewItem by mutableStateOf<AccountViewItem?>(null)
+    var balanceScreenState by mutableStateOf<BalanceScreenState?>(null)
         private set
 
     init {
-        handleAccount(accountManager.activeAccount)
-        accountManager.activeAccountObservable
-            .subscribeIO {
-                handleAccount(it.orElse(null))
-            }
-            .let {
-                disposables.add(it)
+        accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
+                handleAccount(it)
             }
     }
 
-    private fun handleAccount(activeAccount: Account?) {
-        accountViewItem = activeAccount?.let { account ->
-
-            val address = when (account.type) {
-                is AccountType.Address -> account.type.address
-                else -> null
+    private fun handleAccount(activeAccountState: ActiveAccountState) {
+        when(activeAccountState) {
+            ActiveAccountState.NotLoaded -> { }
+            is ActiveAccountState.ActiveAccount -> {
+                balanceScreenState = if (activeAccountState.account != null) {
+                    BalanceScreenState.HasAccount(
+                        AccountViewItem(
+                            activeAccountState.account.isWatchAccount,
+                            activeAccountState.account.name,
+                            activeAccountState.account.id
+                        )
+                    )
+                } else {
+                    BalanceScreenState.NoAccount
+                }
             }
-
-            AccountViewItem(address, account.type !is AccountType.Address, account.type is AccountType.Address, account.name, account.id)
         }
-    }
-
-    override fun onCleared() {
-        disposables.clear()
     }
 }
 
-data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean, val name: String = "", val id: String)
+data class AccountViewItem(val isWatchAccount: Boolean, val name: String = "", val id: String)
+
+sealed class BalanceScreenState() {
+    class HasAccount(val accountViewItem: AccountViewItem) : BalanceScreenState()
+    object NoAccount : BalanceScreenState()
+}

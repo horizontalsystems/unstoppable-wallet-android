@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -24,8 +24,6 @@ import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
 
@@ -57,9 +55,11 @@ object TransactionInfoOptionsModule {
                 Chain.Avalanche -> BlockchainType.Avalanche
                 Chain.Optimism -> BlockchainType.Optimism
                 Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+                Chain.Gnosis -> BlockchainType.Gnosis
+                Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
                 else -> BlockchainType.Ethereum
             }
-            App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!!
+            App.evmBlockchainManager.getBaseToken(blockchainType)!!
         }
 
         private val fullTransaction by lazy {
@@ -105,7 +105,15 @@ object TransactionInfoOptionsModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
 
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseToken, App.marketKit, App.currencyManager) }
+        private val coinServiceFactory by lazy {
+            EvmCoinServiceFactory(
+                baseToken,
+                App.marketKit,
+                App.currencyManager,
+                App.evmTestnetManager,
+                App.coinManager
+            )
+        }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
 
         private val sendService by lazy {

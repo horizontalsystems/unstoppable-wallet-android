@@ -6,8 +6,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListService
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListService
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 
 object WalletConnectListModule {
 
@@ -16,23 +14,18 @@ object WalletConnectListModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = WalletConnectListService(App.wc1SessionManager, App.evmBlockchainManager)
 
-            return WalletConnectListViewModel(service) as T
-        }
-    }
-
-    class FactoryWC2 : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = WC2ListService(App.wc2SessionManager)
-
-            return WC2ListViewModel(service, App.evmBlockchainManager) as T
+            return WalletConnectListViewModel(
+                service,
+                App.wc2SessionManager,
+                App.evmBlockchainManager,
+                App.wc2Service
+            ) as T
         }
     }
 
     data class Section(
         val version: Version,
         val sessions: List<SessionViewItem>,
-        val pendingRequests: Int? = null
     )
 
     data class SessionViewItem(
@@ -41,6 +34,7 @@ object WalletConnectListModule {
         val subtitle: String,
         val url: String,
         val imageUrl: String?,
+        val pendingRequestsCount: Int = 0,
     )
 
     enum class Version(val value: Int) {

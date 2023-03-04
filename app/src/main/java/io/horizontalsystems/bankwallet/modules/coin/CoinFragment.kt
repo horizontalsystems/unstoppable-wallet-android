@@ -29,24 +29,24 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsScreen
-import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewScreen
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
 import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsScreen
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationModule
-import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationService
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationViewModel
+import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
-import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.CustomSnackbar
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.snackbar.CustomSnackbar
-import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.coroutines.launch
 
 class CoinFragment : BaseFragment() {
@@ -69,7 +69,12 @@ class CoinFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val uid = activity?.intent?.data?.getQueryParameter("uid")
+                val uid = try {
+                    activity?.intent?.data?.getQueryParameter("uid")
+                } catch (e: UnsupportedOperationException) {
+                    null
+                }
+
                 val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
                 if (uid != null) {
                     activity?.intent?.data = null
@@ -97,41 +102,41 @@ class CoinFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authorizationViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                YakAuthorizationService.State.Idle ->
-                    snackbarInProcess?.dismiss()
-
-                YakAuthorizationService.State.Authenticating ->
-                    snackbarInProcess = HudHelper.showInProcessMessage(
-                        requireView(),
-                        R.string.ProUsersInfo_Features_Authenticating,
-                        SnackbarDuration.INDEFINITE
-                    )
-
-                YakAuthorizationService.State.NoYakNft -> {
-                    snackbarInProcess?.dismiss()
-                    findNavController().slideFromBottom(
-                        R.id.proUsersInfoDialog
-                    )
-                }
-
-                YakAuthorizationService.State.Authenticated -> {}
-
-                is YakAuthorizationService.State.SignMessageReceived -> {
-                    snackbarInProcess?.dismiss()
-                    findNavController().slideFromBottom(
-                        R.id.proUsersActivateDialog
-                    )
-                }
-
-                is YakAuthorizationService.State.Failed ->
-                    snackbarInProcess = HudHelper.showErrorMessage(
-                        requireView(),
-                        state.exception.toString()
-                    )
-            }
-        }
+//        authorizationViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
+//            when (state) {
+//                YakAuthorizationService.State.Idle ->
+//                    snackbarInProcess?.dismiss()
+//
+//                YakAuthorizationService.State.Authenticating ->
+//                    snackbarInProcess = HudHelper.showInProcessMessage(
+//                        requireView(),
+//                        R.string.ProUsersInfo_Features_Authenticating,
+//                        SnackbarDuration.INDEFINITE
+//                    )
+//
+//                YakAuthorizationService.State.NoYakNft -> {
+//                    snackbarInProcess?.dismiss()
+//                    findNavController().slideFromBottom(
+//                        R.id.proUsersInfoDialog
+//                    )
+//                }
+//
+//                YakAuthorizationService.State.Authenticated -> {}
+//
+//                is YakAuthorizationService.State.SignMessageReceived -> {
+//                    snackbarInProcess?.dismiss()
+//                    findNavController().slideFromBottom(
+//                        R.id.proUsersActivateDialog
+//                    )
+//                }
+//
+//                is YakAuthorizationService.State.Failed ->
+//                    snackbarInProcess = HudHelper.showErrorMessage(
+//                        requireView(),
+//                        state.exception.toString()
+//                    )
+//            }
+//        }
 
         coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
             hideKeyboard()
@@ -197,13 +202,31 @@ fun CoinScreen(
     fragmentManager: FragmentManager,
     restoreSettingsViewModel: RestoreSettingsViewModel
 ) {
+    if (restoreSettingsViewModel.openZcashConfigure != null) {
+        restoreSettingsViewModel.zcashConfigureOpened()
+
+        navController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
+            val requestResult = bundle.getInt(ZcashConfigure.requestResultKey)
+
+            if (requestResult == ZcashConfigure.RESULT_OK) {
+                val zcashConfig = bundle.getParcelable<ZCashConfig>(ZcashConfigure.zcashConfigKey)
+                zcashConfig?.let { config ->
+                    restoreSettingsViewModel.onEnter(config)
+                }
+            } else {
+                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+            }
+        }
+
+        navController.slideFromBottom(R.id.zcashConfigure)
+    }
+
     ComposeAppTheme {
         if (coinViewModel != null) {
             CoinTabs(coinViewModel, authorizationViewModel, manageWalletsViewModel, navController, fragmentManager)
         } else {
             CoinNotFound(coinUid, navController)
         }
-        ZCashBirthdayHeightDialogWrapper(restoreSettingsViewModel)
     }
 }
 
@@ -259,23 +282,25 @@ fun CoinTabs(
                         )
                     }
                 }
-                if (viewModel.isFavorite) {
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
-                            icon = R.drawable.ic_filled_star_24,
-                            tint = ComposeAppTheme.colors.jacob,
-                            onClick = { viewModel.onUnfavoriteClick() }
+                if (viewModel.isWatchlistEnabled) {
+                    if (viewModel.isFavorite) {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
+                                icon = R.drawable.ic_filled_star_24,
+                                tint = ComposeAppTheme.colors.jacob,
+                                onClick = { viewModel.onUnfavoriteClick() }
+                            )
                         )
-                    )
-                } else {
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.CoinPage_Favorite),
-                            icon = R.drawable.ic_star_24,
-                            onClick = { viewModel.onFavoriteClick() }
+                    } else {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.CoinPage_Favorite),
+                                icon = R.drawable.ic_star_24,
+                                onClick = { viewModel.onFavoriteClick() }
+                            )
                         )
-                    )
+                    }
                 }
             }
         )
