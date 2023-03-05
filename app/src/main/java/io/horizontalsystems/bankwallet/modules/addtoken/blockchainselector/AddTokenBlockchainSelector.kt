@@ -68,7 +68,7 @@ fun AddTokenBlockchainSelectorScreen(
 }
 
 @Composable
-private fun BlockchainCell(
+fun BlockchainCell(
     item: Blockchain,
     selected: Boolean,
     onCheck: (Blockchain) -> Unit,
