@@ -8,18 +8,25 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navArgument
+import androidx.navigation.*
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.modules.contacts.screen.AddAddressScreen
+import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
+import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
+import io.horizontalsystems.bankwallet.modules.contacts.screen.AddressScreen
+import io.horizontalsystems.bankwallet.modules.contacts.screen.BlockchainSelectorScreen
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactScreen
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactsScreen
+import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
+import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
+import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
+import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.setNavigationResult
 
 class ContactsFragment : BaseFragment() {
 
@@ -52,32 +59,109 @@ fun ContactsNavHost(navController: NavController) {
         composable("contacts") {
             val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(repository))
             ContactsScreen(
-                viewModel,
+                viewModel = viewModel,
                 onNavigateToBack = { navController.popBackStack() },
                 onNavigateToCreateContact = { navHostController.navigate("contact") },
-                onNavigateToContact = { contactId -> navHostController.navigate("contact?contactId=$contactId") }
+                onNavigateToContact = { contactId -> navHostController.navigate("contact?id=$contactId") }
             )
         }
         composablePage(
-            route = "contact?contactId={contactId}",
+            route = "contact?id={contactId}",
             arguments = listOf(navArgument("contactId") { nullable = true })
-        ) { backstackEntry ->
-            val contactId = backstackEntry.arguments?.getString("contactId")
+        ) { backStackEntry ->
+            val contactId = backStackEntry.arguments?.getString("contactId")
             val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(repository, contactId))
 
             ContactScreen(
-                viewModel,
+                viewModel = viewModel,
                 onNavigateToBack = {
                     navHostController.popBackStack()
                 },
-                onNavigateToAddAddress = {
-                    navHostController.navigate("addAddress")
+                onNavigateToAddress = { address ->
+
+                    navHostController.getNavigationResult("contacts_address_result") { bundle ->
+                        val editedAddress = bundle.getParcelable<ContactAddress>("contact_address")
+                        viewModel.setAddress(editedAddress)
+                    }
+
+                    backStackEntry.savedStateHandle["address"] = address
+                    backStackEntry.savedStateHandle["defined_addresses"] = viewModel.uiState.addresses
+
+                    backStackEntry.savedStateHandle["test"] = Contact("", "", listOf())
+
+                    navHostController.navigate("address")
                 }
             )
         }
-        composablePage("addAddress") {
-            AddAddressScreen(
-                navHostController
+        composablePage(
+            route = "address"
+        ) {
+            //TODO this place is called 6 times
+            val address = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("address")
+            val definedAddresses = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<ContactAddress>>("defined_addresses")
+
+            val viewModel = viewModel<AddressViewModel>(
+                factory = ContactsModule.AddressViewModelFactory(
+                    contactAddress = address,
+                    definedAddresses = definedAddresses
+                )
+            )
+
+            AddressNavHost(
+                viewModel = viewModel,
+                onDone = { contactAddress ->
+                    navHostController.setNavigationResult(
+                        "contacts_address_result",
+                        bundleOf("contact_address" to contactAddress)
+                    )
+                },
+                onCloseNavHost = { navHostController.popBackStack() }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun AddressNavHost(
+    viewModel: AddressViewModel,
+    onDone: (ContactAddress) -> Unit,
+    onCloseNavHost: () -> Unit
+) {
+    val navHostController = rememberAnimatedNavController()
+
+    AnimatedNavHost(
+        navController = navHostController,
+        startDestination = "address",
+    ) {
+        composablePage(route = "address") {
+            AddressScreen(
+                viewModel = viewModel,
+                onNavigateToBlockchainSelector = {
+                    navHostController.navigate("blockchainSelector")
+                },
+                onDone = { contactAddress ->
+                    onDone(contactAddress)
+
+                    onCloseNavHost()
+                },
+                onNavigateToBack = {
+                    onCloseNavHost()
+                }
+            )
+        }
+        composablePage(route = "blockchainSelector") {
+            BlockchainSelectorScreen(
+                blockchains = viewModel.uiState.availableBlockchains,
+                selectedBlockchain = viewModel.uiState.blockchain,
+                onSelectBlockchain = { blockchain ->
+                    viewModel.onEnterBlockchain(blockchain)
+
+                    navHostController.popBackStack()
+                },
+                onNavigateToBack = {
+                    navHostController.popBackStack()
+                }
             )
         }
     }

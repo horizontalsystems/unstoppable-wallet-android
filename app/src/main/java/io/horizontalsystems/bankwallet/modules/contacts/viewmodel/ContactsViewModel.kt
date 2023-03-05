@@ -1,10 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.contacts
+package io.horizontalsystems.bankwallet.modules.contacts.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import kotlinx.coroutines.launch
 
