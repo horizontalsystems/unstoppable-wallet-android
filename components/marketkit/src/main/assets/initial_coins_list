@@ -6391,7 +6391,7 @@ INSERT INTO Coin VALUES('polkally','Polkally','KALLY',2659,'polkally',100);
 INSERT INTO Coin VALUES('professional-fighters-league-fan-token','Professional Fighters League Fan Token','PFL',2702,'professional-fighters-league-fan-token',100);
 INSERT INTO Coin VALUES('pinkmoon','PinkMoon','PINKM',2754,'pinkmoon',100);
 INSERT INTO Coin VALUES('piratecash','PirateCash','PIRATE',2459,'piratecash',2);
-INSERT INTO Coin VALUES('cosanta','Cosanta','COSA',null,null,1);
+INSERT INTO Coin VALUES('cosanta','Cosanta','COSA',null,'cosanta',1);
 INSERT INTO Coin VALUES('piedao-btc','PieDAO BTC++','BTC++',2683,'piedao-btc',100);
 INSERT INTO Coin VALUES('pundi-x-nem','Pundi X NEM','NPXSXEM',3209,'pundi-x-nem',100);
 INSERT INTO Coin VALUES('pink-panther','PINK PANTHER','PINK',3249,NULL,100);
