@@ -16,14 +16,15 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.modules.contacts.ContactViewModel
 import cash.p.terminal.modules.contacts.model.ContactAddress
+import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -31,7 +32,7 @@ import kotlinx.coroutines.launch
 fun ContactScreen(
     viewModel: ContactViewModel,
     onNavigateToBack: () -> Unit,
-    onNavigateToAddAddress: () -> Unit
+    onNavigateToAddress: (ContactAddress?) -> Unit
 ) {
     val uiState = viewModel.uiState
     val view = LocalView.current
@@ -81,13 +82,22 @@ fun ContactScreen(
                     onValueChange = viewModel::onNameChange
                 )
 
-                Addresses(uiState.addresses)
+                Addresses(
+                    addresses = uiState.addresses,
+                    onClickAddress = onNavigateToAddress
+                )
 
-                ActionButtons(onNavigateToAddAddress, uiState.showDelete) {
-                    coroutineScope.launch {
-                        modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                ActionButtons(
+                    onAddAddress = {
+                        onNavigateToAddress(null)
+                    },
+                    showDelete = uiState.showDelete,
+                    onDeleteContact = {
+                        coroutineScope.launch {
+                            modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                        }
                     }
-                }
+                )
 
                 LaunchedEffect(uiState.closeWithSuccess) {
                     if (uiState.closeWithSuccess) {
@@ -98,7 +108,6 @@ fun ContactScreen(
                     }
                 }
             }
-
         }
     }
 }
@@ -199,12 +208,15 @@ private fun AddAddressButton(onClick: () -> Unit) {
 }
 
 @Composable
-private fun Addresses(addresses: List<ContactAddress>) {
+private fun Addresses(
+    addresses: List<ContactAddress>,
+    onClickAddress: (ContactAddress) -> Unit
+) {
     if (addresses.isNotEmpty()) {
         Spacer(Modifier.height(32.dp))
         CellUniversalLawrenceSection(addresses) { address ->
-            ContactAddress(address) {
-                //TODO navigate to address edit
+            ContactAddress(address.blockchain, address.address) {
+                onClickAddress(address)
             }
         }
     }
@@ -212,7 +224,8 @@ private fun Addresses(addresses: List<ContactAddress>) {
 
 @Composable
 private fun ContactAddress(
-    address: ContactAddress,
+    blockchain: Blockchain,
+    address: String,
     onClickEdit: () -> Unit
 ) {
     RowUniversal(
@@ -224,14 +237,14 @@ private fun ContactAddress(
                 .padding(end = 16.dp)
                 .size(32.dp),
             painter = rememberAsyncImagePainter(
-                model = address.blockchain.type.imageUrl,
+                model = blockchain.type.imageUrl,
                 error = painterResource(R.drawable.ic_platform_placeholder_32)
             ),
             contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
-            body_leah(text = address.blockchain.name)
-            subhead2_grey(text = address.address)
+            body_leah(text = blockchain.name)
+            subhead2_grey(text = address)
         }
         Spacer(Modifier.width(9.dp))
         Icon(

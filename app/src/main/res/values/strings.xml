@@ -1585,5 +1585,7 @@
     <string name="Contacts_AddAddress">Add Address</string>
     <string name="Contacts_DeleteContact">Delete Contact</string>
     <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
+    <string name="Contacts_DeleteAddress">Delete Address</string>
+    <string name="Contacts_DeleteAddress_Warning">Are you sure you want to delete this address?</string>
 
 </resources>

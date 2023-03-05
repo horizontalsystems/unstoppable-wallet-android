@@ -1,10 +1,11 @@
-package cash.p.terminal.modules.contacts
+package cash.p.terminal.modules.contacts.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import kotlinx.coroutines.launch
 
