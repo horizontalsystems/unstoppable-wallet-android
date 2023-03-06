@@ -32,7 +32,7 @@
         android:name="cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
     <fragment
         android:id="@+id/sendEvmSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment" />
+        android:name="cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment" />
     <fragment
         android:id="@+id/filterCoinFragment"
         android:name="cash.p.terminal.modules.transactions.FilterCoinFragment" />
@@ -146,7 +146,7 @@
     </fragment>
     <fragment
         android:id="@+id/coinAnalyticsInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment" />
+        android:name="cash.p.terminal.modules.info.CoinAnalyticsInfoFragment" />
     <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment" />
@@ -302,10 +302,10 @@
         android:name="cash.p.terminal.modules.info.FeePriorityInfoFragment" />
     <fragment
         android:id="@+id/contactsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment"/>
+        android:name="cash.p.terminal.modules.contacts.ContactsFragment"/>
     <fragment
         android:id="@+id/chooseContact"
-        android:name="io.horizontalsystems.bankwallet.modules.contacts.ChooseContactFragment"/>
+        android:name="cash.p.terminal.modules.contacts.ChooseContactFragment"/>
     <fragment
         android:id="@+id/statusInfoDialog"
         android:name="cash.p.terminal.modules.info.TransactionStatusInfoFragment" />

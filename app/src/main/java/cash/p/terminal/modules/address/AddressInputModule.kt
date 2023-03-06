@@ -2,7 +2,7 @@ package cash.p.terminal.modules.address
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.contacts.ContactsRepository
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 
