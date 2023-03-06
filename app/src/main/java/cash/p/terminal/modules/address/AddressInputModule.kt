@@ -10,7 +10,7 @@ object AddressInputModule {
     class FactoryToken(private val tokenQuery: TokenQuery, private val coinCode: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val addressViewModel = AddressViewModel()
+            val addressViewModel = AddressViewModel(tokenQuery.blockchainType)
 
             addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
             addressViewModel.addAddressHandler(AddressHandlerUdn(tokenQuery, coinCode))
@@ -47,7 +47,7 @@ object AddressInputModule {
     class FactoryNft(private val blockchainType: BlockchainType) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val addressViewModel = AddressViewModel()
+            val addressViewModel = AddressViewModel(blockchainType)
 
             addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
 

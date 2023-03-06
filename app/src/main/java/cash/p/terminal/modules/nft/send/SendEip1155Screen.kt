@@ -99,6 +99,7 @@ fun SendEip1155Screen(
                         viewModel = addressViewModel,
                         error = viewModel.uiState.addressError,
                         textPreprocessor = addressParserViewModel,
+                        navController = navController,
                     ) { address ->
                         viewModel.onEnterAddress(address)
                     }

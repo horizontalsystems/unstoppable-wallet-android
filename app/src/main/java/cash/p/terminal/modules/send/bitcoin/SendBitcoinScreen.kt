@@ -166,7 +166,8 @@ fun SendBitcoinScreen(
                     tokenQuery = wallet.token.tokenQuery,
                     coinCode = wallet.coin.code,
                     error = addressError,
-                    textPreprocessor = paymentAddressViewModel
+                    textPreprocessor = paymentAddressViewModel,
+                    navController = fragmentNavController
                 ) {
                     viewModel.onEnterAddress(it)
                 }

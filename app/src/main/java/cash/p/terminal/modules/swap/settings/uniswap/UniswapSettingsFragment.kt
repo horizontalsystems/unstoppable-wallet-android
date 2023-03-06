@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -66,6 +67,7 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
                         },
                         dex = dex,
                         factory = vmFactory,
+                        navController = findNavController()
                     )
                 }
             }
@@ -83,6 +85,7 @@ private fun UniswapSettingsScreen(
     deadlineViewModel: SwapDeadlineViewModel = viewModel(factory = factory),
     recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
     slippageViewModel: SwapSlippageViewModel = viewModel(factory = factory),
+    navController: NavController,
 ) {
     val (buttonTitle, buttonEnabled) = uniswapSettingsViewModel.buttonState
     val view = LocalView.current
@@ -107,7 +110,7 @@ private fun UniswapSettingsScreen(
             ) {
                 Column {
                     Spacer(modifier = Modifier.height(12.dp))
-                    RecipientAddress(dex.blockchainType, recipientAddressViewModel)
+                    RecipientAddress(dex.blockchainType, recipientAddressViewModel, navController)
 
                     Spacer(modifier = Modifier.height(24.dp))
                     SlippageAmount(slippageViewModel)

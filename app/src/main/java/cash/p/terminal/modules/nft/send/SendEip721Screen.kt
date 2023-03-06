@@ -80,6 +80,7 @@ fun SendEip721Screen(
                         viewModel = addressViewModel,
                         error = viewModel.uiState.addressError,
                         textPreprocessor = addressParserViewModel,
+                        navController = navController,
                     ) { address ->
                         viewModel.onEnterAddress(address)
                     }

@@ -2,10 +2,11 @@ package cash.p.terminal.modules.address
 
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.entities.Address
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class AddressViewModel : ViewModel() {
+class AddressViewModel(val blockchainType: BlockchainType) : ViewModel() {
 
     private val addressHandlers = mutableListOf<IAddressHandler>()
 
