@@ -8,10 +8,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
 import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
 import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessorImpl
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -27,6 +28,7 @@ fun HSAddressInput(
     coinCode: String,
     error: Throwable? = null,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
+    navController: NavController,
     onStateChange: ((DataState<Address>?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null
 ) {
@@ -41,6 +43,7 @@ fun HSAddressInput(
         initial = initial,
         error = error,
         textPreprocessor = textPreprocessor,
+        navController = navController,
         onStateChange = onStateChange,
         onValueChange = onValueChange
     )
@@ -83,6 +86,7 @@ fun HSAddressInput(
     initial: Address? = null,
     error: Throwable? = null,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
+    navController: NavController,
     onStateChange: ((DataState<Address>?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null
 ) {
@@ -104,16 +108,17 @@ fun HSAddressInput(
         else -> addressStateMergedWithError
     }
 
-    FormsInput(
+    FormsInputAddress(
         modifier = modifier,
         initial = initial?.title,
         hint = stringResource(id = R.string.Watch_Address_Hint),
         state = inputState,
-        qrScannerEnabled = true,
         textPreprocessor = textPreprocessor,
         onChangeFocus = {
             isFocused = it
-        }
+        },
+        navController = navController,
+        blockchainType = viewModel.blockchainType,
     ) {
         parseAddressJob?.cancel()
         parseAddressJob = scope.launch {

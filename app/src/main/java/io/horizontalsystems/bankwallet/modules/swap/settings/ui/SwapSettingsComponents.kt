@@ -19,6 +19,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -76,7 +77,8 @@ fun TransactionDeadlineInput(deadlineViewModel: SwapDeadlineViewModel) {
 @Composable
 fun RecipientAddress(
     blockchainType: BlockchainType,
-    recipientAddressViewModel: RecipientAddressViewModel
+    recipientAddressViewModel: RecipientAddressViewModel,
+    navController: NavController,
 ) {
     val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
     App.marketKit.token(tokenQuery)?.let { token ->
@@ -88,6 +90,7 @@ fun RecipientAddress(
             initial = recipientAddressViewModel.initialAddress,
             tokenQuery = token.tokenQuery,
             coinCode = token.coin.code,
+            navController = navController,
             onStateChange = {
                 recipientAddressViewModel.setAddressWithError(
                     it?.dataOrNull,

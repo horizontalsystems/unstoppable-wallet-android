@@ -165,6 +165,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                             modifier = Modifier.padding(horizontal = 16.dp),
                             tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
                             coinCode = "ETH",
+                            navController = navController,
                             onValueChange = viewModel::onEnterAddress
                         )
                     }
@@ -173,6 +174,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                             modifier = Modifier.padding(horizontal = 16.dp),
                             tokenQuery = TokenQuery(BlockchainType.Solana, TokenType.Native),
                             coinCode = "SOL",
+                            navController = navController,
                             onValueChange = viewModel::onEnterAddress
                         )
                     }
