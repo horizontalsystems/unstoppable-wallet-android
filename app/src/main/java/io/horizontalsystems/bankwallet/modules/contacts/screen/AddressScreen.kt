@@ -6,7 +6,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,6 @@ fun AddressScreen(
     onNavigateToBack: () -> Unit
 ) {
     val uiState = viewModel.uiState
-    val view = LocalView.current
 
     ComposeAppTheme {
         val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -60,7 +58,9 @@ fun AddressScreen(
                             title = TranslatableString.ResString(R.string.Button_Done),
                             enabled = uiState.doneEnabled,
                             onClick = {
-                                onDone(ContactAddress(uiState.blockchain, "${uiState.blockchain.name}-address"))
+                                uiState.addressState?.dataOrNull?.let {
+                                    onDone(ContactAddress(uiState.blockchain, it.hex))
+                                }
                             }
                         )
                     )
@@ -94,6 +94,18 @@ fun AddressScreen(
                         }
                     }
                 )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                FormsInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = uiState.address,
+                    hint = stringResource(R.string.Contacts_AddressHint),
+                    state = uiState.addressState,
+                    qrScannerEnabled = true,
+                ) {
+                    viewModel.onEnterAddress(it)
+                }
             }
         }
     }
