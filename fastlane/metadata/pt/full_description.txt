@@ -46,4 +46,4 @@ CARACTERÍSTICAS DA CARTEIRA:
 
 — Totalmente Open Source >> Talvez o aplicativo de carteira mais transparente construído até agora. O processo de produção de 4 anos do aplicativo está abertamente acessível on-line, com 100% do código para qualquer pessoa avaliar ou reutilizar em outros projetos. Verificado e auditado por terceiros.
 
-Seja Unstoppable!  😎🇧🇷
+Seja Unstoppable!  😎
