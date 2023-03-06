@@ -118,6 +118,7 @@ fun HSAddressInput(
             isFocused = it
         },
         navController = navController,
+        chooseContactEnable = viewModel.hasContacts(),
         blockchainType = viewModel.blockchainType,
     ) {
         parseAddressJob?.cancel()
