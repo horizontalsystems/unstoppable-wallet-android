@@ -127,7 +127,7 @@
     <string name="Backup_Confirmation_CheckTitle">Verificar…</string>
     <!--Market-->
     <string name="Market_Field_MarketCap">Cap. de mercado</string>
-    <string name="Market_Field_Volume">Volume</string>
+    <string name="Market_Field_Volume">Vol</string>
     <string name="Market_Field_PriceDiff">Preço</string>
     <string name="Market_Title">Mercados</string>
     <string name="Market_Search">Buscar</string>
@@ -339,9 +339,9 @@
     <string name="Send_Error_FetchFeeRateFailed">Erro ao buscar a taxa de tarifa</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avançado</string>
-    <string name="SendEvmSettings_Nonce">Momento dessa transação</string>
+    <string name="SendEvmSettings_Nonce">Nonce de Transação</string>
     <string name="SendEvmSettings_Nonce_Info">O nonce é um valor inteiro exclusivo para uma transação dentro da carteira do usuário. Ele normalmente aumenta com cada transação enviada e não precisa ser alterado. Os usuários avançados podem defini-lo igual a um nonce de uma transação pendente para cancelar e substituir essa transação, desde que a nova transação tenha uma taxa suficientemente alta para evitar que a antiga seja confirmada (por exemplo, eles podem querer acelerar sua confirmação, ou alterar totalmente os parâmetros da transação). Quando várias transações pendentes têm o mesmo nonce, apenas uma é confirmada, geralmente aquela com a taxa mais alta.</string>
-    <string name="SendEvmSettings_Error_NonceUsed_Title">Este momento usado</string>
+    <string name="SendEvmSettings_Error_NonceUsed_Title">Usado Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Já existe uma transação executada agora.</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Configurações de taxa</string>
@@ -1077,7 +1077,7 @@
     <string name="CoinPage_MarketCap_Quadrillion">Q</string>
     <string name="CoinPage_MarketCap_TvlRation">Proporção de Capital de M. / TVL</string>
     <string name="CoinPage_MarketCap_TvlRation_Description">A proporção do limite de mercado do token do projeto sobre sua TVL.</string>
-    <string name="CoinPage_Volume">Volume</string>
+    <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">Sem dados</string>
     <string name="CoinPage_NoDataAvailable">Não há dados disponíveis</string>
     <string name="CoinPage_AddToWallet">Adicionar à Carteira</string>
