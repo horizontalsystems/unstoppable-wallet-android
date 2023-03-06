@@ -53,6 +53,7 @@ fun FormsInputAddress(
     onChangeFocus: (Boolean) -> Unit,
     navController: NavController,
     blockchainType: BlockchainType,
+    chooseContactEnable: Boolean,
     onValueChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -166,25 +167,28 @@ fun FormsInputAddress(
                     }
                 )
             } else {
-                ButtonSecondaryCircle(
-                    modifier = Modifier.padding(end = 8.dp),
-                    icon = R.drawable.ic_user_20,
-                    onClick = {
-                        navController.getNavigationResult(ChooseContactFragment.resultKey) {
-                            val chosenAddress = it.getString("contact") ?: ""
+                if (chooseContactEnable) {
+                    ButtonSecondaryCircle(
+                        modifier = Modifier.padding(end = 8.dp),
+                        icon = R.drawable.ic_user_20,
+                        onClick = {
+                            navController.getNavigationResult(ChooseContactFragment.resultKey) {
+                                val chosenAddress = it.getString("contact") ?: ""
 
-                            val textProcessed = textPreprocessor.process(chosenAddress)
-                            textState = textState.copy(
-                                text = textProcessed,
-                                selection = TextRange(textProcessed.length)
+                                val textProcessed = textPreprocessor.process(chosenAddress)
+                                textState = textState.copy(
+                                    text = textProcessed,
+                                    selection = TextRange(textProcessed.length)
+                                )
+                                onValueChange.invoke(textProcessed)
+                            }
+                            navController.slideFromRight(
+                                R.id.chooseContact, ChooseContactFragment.prepareParams(blockchainType)
                             )
-                            onValueChange.invoke(textProcessed)
                         }
-                        navController.slideFromRight(
-                            R.id.chooseContact, ChooseContactFragment.prepareParams(blockchainType)
-                        )
-                    }
-                )
+                    )
+                }
+
                 val qrScannerLauncher =
                     rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                         if (result.resultCode == Activity.RESULT_OK) {

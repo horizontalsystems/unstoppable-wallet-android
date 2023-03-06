@@ -2,6 +2,7 @@ package cash.p.terminal.modules.address
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 
@@ -10,7 +11,7 @@ object AddressInputModule {
     class FactoryToken(private val tokenQuery: TokenQuery, private val coinCode: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val addressViewModel = AddressViewModel(tokenQuery.blockchainType)
+            val addressViewModel = AddressViewModel(tokenQuery.blockchainType, ContactsRepository())
 
             addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
             addressViewModel.addAddressHandler(AddressHandlerUdn(tokenQuery, coinCode))
@@ -47,7 +48,7 @@ object AddressInputModule {
     class FactoryNft(private val blockchainType: BlockchainType) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val addressViewModel = AddressViewModel(blockchainType)
+            val addressViewModel = AddressViewModel(blockchainType, ContactsRepository())
 
             addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
 
