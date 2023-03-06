@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
-    <string name="Alert_Close">Fechar or Encerrar</string>
+    <string name="Alert_Close">Fechar</string>
     <string name="Alert_Loading">Carregando...</string>
     <string name="Alert_Restart">Reiniciar</string>
     <string name="Action_Undo">DESFAZER</string>
@@ -819,7 +819,7 @@
     <string name="Watch_WatchBy">Assistir Por</string>
     <string name="Watch_TypeEvmAddress">Endereço EVM</string>
     <string name="Watch_TypeSolanaAddress">Endereço Solana</string>
-    <string name="Watch_TypeXPubKey">Conta xPubKey</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">xPubKey Inválida</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nome</string>
@@ -883,23 +883,23 @@
     <string name="ExtendedKey_Purpose">Propósito</string>
     <string name="ExtendedKey_Account">Conta</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Toque para mostrar a chave privada</string>
-    <string name="AccountExtendedPrivateKey">Chave Privada Estendida</string>
-    <string name="AccountExtendedPublicKey">Chave Privada Estendida</string>
-    <string name="AccountExtendedPrivateKey_Short">Conta xPrivKey</string>
-    <string name="AccountExtendedPublicKey_Short">Conta xPubKey</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Chave Privada</string>
     <string name="PrivateKeys_EvmPrivateKey">Chave Privada EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Concede controle total sobre cripto baseado em EVM i.e Ethereum, Binance Smart Chain, etc. dentro da respectiva carteira.</string>
     <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Concede controle total sobre os ativos da respectiva carteira.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Chave Privada Estendida</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Concede controle total sobre Bitcoin e outras criptomoedas baseadas em UTXO, ou seja, Litecoin, Bitcoin Cash, Dash etc. dentro da respectiva carteira.</string>
     <string name="PrivateKeys_NeverShareWarning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe Unstoppable nunca pedirá a sua frase de recuperação.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Chaves públicas</string>
     <string name="PublicKeys_EvmAddress">Endereço EVM</string>
-    <string name="PublicKeys_AccountExtendedPublicKey">Chave Privada Estendida</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="PublicKeys_EvmAddress_Description">Permite o monitoramento somente leitura de carteiras mantendo ativos na Ethereum, na Binance Smart Chain e em outras blockchains baseadas em EVM.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Permite monitoramento somente leitura das carteiras segurando Bitcoin e outras cripto baseadas em UTXO (ou seja, Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
@@ -977,7 +977,7 @@
     <string name="Tor_Status_Error">Erro ao iniciar o Tor!</string>
     <string name="TorPage_Connecting">Conectando Tor…</string>
     <string name="TorPage_Connected">Conectado</string>
-    <string name="TorPage_Failed">Falha ao conectar</string>
+    <string name="TorPage_Failed">Falha ao conectar Tor</string>
     <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="Tor_TorIsActive">Tor está ativo</string>
     <string name="Tor_PrerequisitesAlert_Content">Ativando TOR irá redefinir a conexão blockchain do Ethereum de volta para o Infura.</string>
