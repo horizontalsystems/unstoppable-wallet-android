@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -65,6 +66,7 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
                         },
                         dex = dex,
                         factory = vmFactory,
+                        navController = findNavController()
                     )
                 }
             }
@@ -81,6 +83,7 @@ private fun OneInchSettingsScreen(
     oneInchSettingsViewModel: OneInchSettingsViewModel = viewModel(factory = factory),
     recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
     slippageViewModel: SwapSlippageViewModel = viewModel(factory = factory),
+    navController: NavController,
 ) {
     val (buttonTitle, buttonEnabled) = oneInchSettingsViewModel.buttonState
     val view = LocalView.current
@@ -106,7 +109,7 @@ private fun OneInchSettingsScreen(
 
                 Column {
                     Spacer(modifier = Modifier.height(12.dp))
-                    RecipientAddress(dex.blockchainType, recipientAddressViewModel)
+                    RecipientAddress(dex.blockchainType, recipientAddressViewModel, navController)
 
                     Spacer(modifier = Modifier.height(24.dp))
                     SlippageAmount(slippageViewModel)

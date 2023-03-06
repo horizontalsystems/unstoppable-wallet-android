@@ -91,7 +91,8 @@ fun SendEvmScreen(
                 tokenQuery = wallet.token.tokenQuery,
                 coinCode = wallet.coin.code,
                 error = addressError,
-                textPreprocessor = paymentAddressViewModel
+                textPreprocessor = paymentAddressViewModel,
+                navController = navController
             ) {
                 viewModel.onEnterAddress(it)
             }

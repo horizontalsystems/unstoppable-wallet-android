@@ -30,6 +30,12 @@ class ContactsRepository {
     private val _contactsFlow = MutableStateFlow(contacts)
     val contactsFlow: StateFlow<List<Contact>> = _contactsFlow
 
+    fun getContactsByBlockchainType(blockchainType: BlockchainType): List<Contact> {
+        return contacts.filter {
+            it.addresses.isNotEmpty() && it.addresses.any { it.blockchain.type == blockchainType }
+        }
+    }
+
     fun save(contact: Contact) {
         contactsMap[contact.id] = contact
         _contactsFlow.update { contacts }
