@@ -48,8 +48,8 @@
     <string name="AccountRecovery_MigrationRequired">비표준 호환 지갑입니다. 자세한 내용은 아래를 참조하십시오.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
-    <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
-    <string name="Intro_Wallet_Screen2Description">자신을 잠금하지 말고 다른 사람들이 귀하에게 그렇게 하도록 두지 마십시오.</string>
+    <string name="Intro_Wallet_Screen2Title">전령</string>
+    <string name="Intro_Wallet_Screen2Description">제한 없이 자유롭게 채팅하세요(향후 업데이트에서 사용 가능).</string>
     <string name="Intro_Wallet_Screen3Title">무경계로</string>
     <string name="Intro_Wallet_Screen3Description">조건부 장벽을 우회하고 전 세계적으로 시장에 접근.</string>
     <string name="Intro_Wallet_Screen4Title">개인 정보 유지</string>

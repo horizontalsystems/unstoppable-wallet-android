@@ -47,8 +47,8 @@
     <string name="AccountRecovery_MigrationRequired">Esta é uma carteira não padrão. \n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Seja Free</string>
-    <string name="Intro_Wallet_Screen2Title">Libere Recursos</string>
-    <string name="Intro_Wallet_Screen2Description">Não se prenda, e não deixe que te prendam.</string>
+    <string name="Intro_Wallet_Screen2Title">Mensageiro</string>
+    <string name="Intro_Wallet_Screen2Description">Converse livremente e sem restrições (estará disponível em atualizações futuras).</string>
     <string name="Intro_Wallet_Screen3Title">Seja sem fronteiras</string>
     <string name="Intro_Wallet_Screen3Description">Ultrapasse barreiras e acesse mercados globais.</string>
     <string name="Intro_Wallet_Screen4Title">Mantenha sua Privacidade</string>

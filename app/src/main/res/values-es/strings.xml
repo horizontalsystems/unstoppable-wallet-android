@@ -48,8 +48,8 @@
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
-    <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
-    <string name="Intro_Wallet_Screen2Description">No te encierres y no dejes que otros te hagan eso.</string>
+    <string name="Intro_Wallet_Screen2Title">Mensajero</string>
+    <string name="Intro_Wallet_Screen2Description">Chatea libremente y sin restricciones (estará disponible en futuras actualizaciones).</string>
     <string name="Intro_Wallet_Screen3Title">Actúa sin Fronteras</string>
     <string name="Intro_Wallet_Screen3Description">Supere las barreras condicionales y acceda a los mercados a nivel mundial.</string>
     <string name="Intro_Wallet_Screen4Title">Permanezca en privado</string>

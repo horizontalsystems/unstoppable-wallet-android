@@ -48,8 +48,8 @@
     <string name="AccountRecovery_MigrationRequired">This is a non-standard wallet. \n\nCLICK TO GET MORE INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
-    <string name="Intro_Wallet_Screen2Title">آزاد کردن دارایی ها</string>
-    <string name="Intro_Wallet_Screen2Description">خود را قفل نکنید و اجازه نده دیگران این کار را با شما بکنند.</string>
+    <string name="Intro_Wallet_Screen2Title">پیام رسان</string>
+    <string name="Intro_Wallet_Screen2Description">گپ آزادانه و بدون محدودیت (در به روز رسانی های آینده در دسترس خواهد بود)</string>
     <string name="Intro_Wallet_Screen3Title">بدون مرز شوید</string>
     <string name="Intro_Wallet_Screen3Description">موانع مشروط را دور بزنید و به بازارهای جهانی دسترسی پیدا کنید.</string>
     <string name="Intro_Wallet_Screen4Title">محرمانه باقی بمانید</string>

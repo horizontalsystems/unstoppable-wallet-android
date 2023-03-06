@@ -48,8 +48,8 @@
     <string name="AccountRecovery_MigrationRequired">Dies ist eine nicht standardmäßige Wallet. \n\nKLICKEN SIE MEHR INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Sei frei</string>
-    <string name="Intro_Wallet_Screen2Title">Assets lösen</string>
-    <string name="Intro_Wallet_Screen2Description">Sperren Sie sich nicht ein und lassen Sie nicht zu, dass andere das mit Ihnen tun.</string>
+    <string name="Intro_Wallet_Screen2Title">Bote</string>
+    <string name="Intro_Wallet_Screen2Description">Chatten Sie frei und ohne Einschränkungen (wird in zukünftigen Updates verfügbar sein).</string>
     <string name="Intro_Wallet_Screen3Title">Jetzt loslegen</string>
     <string name="Intro_Wallet_Screen3Description">Umgehung der bedingten Schranken und globaler Marktzugang.</string>
     <string name="Intro_Wallet_Screen4Title">Privat bleiben</string>

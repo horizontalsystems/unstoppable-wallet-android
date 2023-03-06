@@ -69,8 +69,8 @@
     <!--Intro-->
 
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
-    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
-    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
+    <string name="Intro_Wallet_Screen2Title">DEX Messenger</string>
+    <string name="Intro_Wallet_Screen2Description">Chat freely and without restrictions (will be available in future updates).</string>
     <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
     <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
     <string name="Intro_Wallet_Screen4Title">Stay Private</string>

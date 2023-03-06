@@ -48,8 +48,8 @@
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
-    <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
-    <string name="Intro_Wallet_Screen2Description">Kendinizi kilitlemeyin ve başkalarının bunu sizin için yapmasına izin vermeyin.</string>
+    <string name="Intro_Wallet_Screen2Title">Haberci</string>
+    <string name="Intro_Wallet_Screen2Description">Özgürce ve kısıtlama olmaksızın sohbet edin (gelecekteki güncellemelerde mevcut olacak).</string>
     <string name="Intro_Wallet_Screen3Title">Sınırları Kaldırın</string>
     <string name="Intro_Wallet_Screen3Description">Şartların getirdiği engelleri atlatın ve dünyanın her piyasasına erişim sağlayın.</string>
     <string name="Intro_Wallet_Screen4Title">Gizli Kalın</string>

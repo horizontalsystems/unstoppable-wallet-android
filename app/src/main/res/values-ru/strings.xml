@@ -49,8 +49,8 @@
     <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Продолжить</string>
-    <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
-    <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
+    <string name="Intro_Wallet_Screen2Title">Мессенджер</string>
+    <string name="Intro_Wallet_Screen2Description">Общайтесь свободно и без ограничений (будет доступно в следующих обновлениях).</string>
     <string name="Intro_Wallet_Screen3Title">Избавьтесь от Границ</string>
     <string name="Intro_Wallet_Screen3Description">Преодолейте барьеры и получите доступ к рынкам.</string>
     <string name="Intro_Wallet_Screen4Title">Сохраняйте Конфиденциальность</string>

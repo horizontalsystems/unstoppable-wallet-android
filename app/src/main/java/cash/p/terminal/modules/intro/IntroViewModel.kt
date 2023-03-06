@@ -12,7 +12,7 @@ class IntroViewModel(
         IntroModule.IntroSliderData(
             R.string.Intro_Wallet_Screen2Title,
             R.string.Intro_Wallet_Screen2Description,
-            R.drawable.ic_independence,
+            R.drawable.ic_independence_light,
             R.drawable.ic_independence
         ),
         IntroModule.IntroSliderData(

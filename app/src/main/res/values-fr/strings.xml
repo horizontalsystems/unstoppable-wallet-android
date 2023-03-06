@@ -48,8 +48,8 @@
     <string name="AccountRecovery_MigrationRequired">Ce portefeuille n\'est pas conforme aux normes.\n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Free</string>
-    <string name="Intro_Wallet_Screen2Title">Désenchaînez les actifs</string>
-    <string name="Intro_Wallet_Screen2Description">Ne vous enfermez pas et ne laissez pas les autres vous le faire.</string>
+    <string name="Intro_Wallet_Screen2Title">Messager</string>
+    <string name="Intro_Wallet_Screen2Description">Discutez librement et sans restrictions (sera disponible dans les futures mises à jour).</string>
     <string name="Intro_Wallet_Screen3Title">Sans frontières</string>
     <string name="Intro_Wallet_Screen3Description">Contournement des barrières conditionnelles et accès aux marchés à l\'échelle mondiale.</string>
     <string name="Intro_Wallet_Screen4Title">Gardez votre confidentialité</string>

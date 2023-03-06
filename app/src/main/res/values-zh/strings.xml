@@ -48,8 +48,8 @@
     <string name="AccountRecovery_MigrationRequired">这是一个不符合标准的钱包。 详情请阅读下文。\n\n点击获取更多信息</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
-    <string name="Intro_Wallet_Screen2Title">资产解绑</string>
-    <string name="Intro_Wallet_Screen2Description">请勿绑定您自己，也不要让别人对您这样做.</string>
+    <string name="Intro_Wallet_Screen2Title">信使</string>
+    <string name="Intro_Wallet_Screen2Description">自由聊天，不受限制（將在未來的更新中提供).</string>
     <string name="Intro_Wallet_Screen3Title">进入无国界</string>
     <string name="Intro_Wallet_Screen3Description">避开有条件障碍，进入全球市场.</string>
     <string name="Intro_Wallet_Screen4Title">保持私密状态</string>
