@@ -3,10 +3,8 @@ package io.horizontalsystems.core
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
@@ -73,7 +71,3 @@ fun ByteArray.toHexString(): String {
 fun Intent.putParcelableExtra(key: String, value: Parcelable) {
     putExtra(key, value)
 }
-
-inline val Int.dp: Int
-    get() = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
