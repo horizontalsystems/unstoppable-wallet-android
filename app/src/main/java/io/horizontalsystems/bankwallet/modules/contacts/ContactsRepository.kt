@@ -21,7 +21,9 @@ class ContactsRepository {
             )
         ),
         "2" to Contact("2", "Bob", listOf()),
-        "3" to Contact("3", "John", listOf()),
+        "3" to Contact("3", "John", listOf(
+            ContactAddress(Blockchain(BlockchainType.Ethereum, "Ethereum", null), "0xae090025857b9c7b24387741f120538e928a3a12")
+        )),
     )
 
     val contacts: List<Contact>
@@ -30,10 +32,19 @@ class ContactsRepository {
     private val _contactsFlow = MutableStateFlow(contacts)
     val contactsFlow: StateFlow<List<Contact>> = _contactsFlow
 
-    fun getContactsByBlockchainType(blockchainType: BlockchainType): List<Contact> {
-        return contacts.filter {
-            it.addresses.isNotEmpty() && it.addresses.any { it.blockchain.type == blockchainType }
+    fun getContactsFiltered(blockchainType: BlockchainType, query: String): List<Contact> {
+        val predicate: (Contact) -> Boolean = {
+            if (query.isNotEmpty()) {
+                it.name.contains(
+                    query,
+                    true
+                ) && it.addresses.isNotEmpty() && it.addresses.any { it.blockchain.type == blockchainType }
+            } else {
+                it.addresses.isNotEmpty() && it.addresses.any { it.blockchain.type == blockchainType }
+            }
         }
+
+        return contacts.filter(predicate)
     }
 
     fun save(contact: Contact) {
