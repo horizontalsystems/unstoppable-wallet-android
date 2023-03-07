@@ -102,7 +102,8 @@ class AddressViewModel(
     }
 
     private fun addressParser(blockchain: Blockchain): ContactAddressParser {
-        val handlers = mutableListOf<IAddressHandler>()
+        val udnHandler = AddressHandlerUdn(TokenQuery(blockchain.type, TokenType.Native), "")
+        val handlers = mutableListOf<IAddressHandler>(udnHandler)
 
         when (blockchain.type) {
             BlockchainType.Bitcoin,
@@ -111,7 +112,7 @@ class AddressViewModel(
             BlockchainType.Dash,
             BlockchainType.Zcash,
             BlockchainType.BinanceChain -> {
-                handlers.add(AddressHandlerPure())
+                // TODO add validators
             }
             BlockchainType.Ethereum,
             BlockchainType.EthereumGoerli,
@@ -122,9 +123,7 @@ class AddressViewModel(
             BlockchainType.Gnosis,
             BlockchainType.ArbitrumOne -> {
                 val ensHandler = AddressHandlerEns(EnsResolverHolder.resolver)
-                val udnHandler = AddressHandlerUdn(TokenQuery(blockchain.type, TokenType.Native), "" /*TODO coinCode*/)
-
-                handlers.addAll(listOf(ensHandler, udnHandler, AddressHandlerEvm()))
+                handlers.addAll(listOf(ensHandler, AddressHandlerEvm()))
             }
             BlockchainType.Solana -> {
                 handlers.add(AddressHandlerSolana())

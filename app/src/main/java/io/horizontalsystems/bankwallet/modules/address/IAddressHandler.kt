@@ -32,7 +32,14 @@ class AddressHandlerEns(private val ensResolver: EnsResolver) : IAddressHandler 
     }
 }
 
-class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode: String) : IAddressHandler {
+class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode: String?) : IAddressHandler {
+//    private val infuraUrl = RpcSource.ethereumInfuraHttp(App.appConfigProvider.infuraProjectId, App.appConfigProvider.infuraProjectSecret).urls.first()
+//    private val polygonUrl = RpcSource.polygonRpcHttp().urls.first()
+//    private var resolution: DomainResolution = Resolution.builder()
+//        .unsProviderUrl(UNSLocation.Layer1, infuraUrl.toString())
+//        .unsProviderUrl(UNSLocation.Layer2, polygonUrl.toString())
+//        .build()
+
     private val resolution = Resolution()
     private val chain by lazy { chain(tokenQuery) }
     private val chainCoinCode by lazy { chainCoinCode(tokenQuery.blockchainType) }
@@ -47,14 +54,20 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
 
     private fun resolveAddress(value: String): String {
         val fetchers = mutableListOf<() -> String?>()
-        fetchers.add {
-            chain?.let { resolution.getMultiChainAddress(value, coinCode, it) }
+        chain?.let { chain ->
+            coinCode?.let { coinCode ->
+                fetchers.add {
+                    resolution.getMultiChainAddress(value, coinCode, chain)
+                }
+            }
+        }
+        coinCode?.let { coinCode ->
+            fetchers.add {
+                resolution.getAddress(value, coinCode)
+            }
         }
         fetchers.add {
-            resolution.getAddress(value, coinCode)
-        }
-        fetchers.add {
-            chainCoinCode?.let { resolution.getAddress(value, it) }
+            resolution.getAddress(value, chainCoinCode)
         }
 
         var lastError: Throwable? = null
@@ -74,12 +87,21 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
     companion object {
         private fun chainCoinCode(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
+            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
+            BlockchainType.BinanceChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,
             BlockchainType.Avalanche,
+            BlockchainType.Gnosis,
             BlockchainType.ArbitrumOne -> "ETH"
-            else -> null
+            BlockchainType.Bitcoin -> "BTC"
+            BlockchainType.BitcoinCash -> "BCH"
+            BlockchainType.Litecoin -> "LTC"
+            BlockchainType.Dash -> "DASH"
+            BlockchainType.Zcash -> "ZEC"
+            BlockchainType.Solana -> "SOL"
+            is BlockchainType.Unsupported -> blockchainType.uid
         }
 
         private fun chain(tokenQuery: TokenQuery) = when (tokenQuery.tokenType) {

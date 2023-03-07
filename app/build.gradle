@@ -259,6 +259,7 @@ dependencies {
 
     // Unstoppable Domains
     implementation 'com.unstoppabledomains:resolution:5.0.0'
+//    implementation 'com.github.unstoppabledomains:resolution-java:v6.2.2'
 
     // Ethereum Name Service
     implementation "org.web3j:core:4.9.0"
