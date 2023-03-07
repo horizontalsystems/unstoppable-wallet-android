@@ -1,49 +1,49 @@
-Unstoppable wallet is purposely built as a decentralized management tool for cryptocurrencies.
+Carteira Unstoppable é construída propositalmente como uma ferramenta de gerenciamento descentralizada para criptomoedas.
 
-It is engineered to serve privacy-conscious individuals looking to manage and invest in cryptocurrencies in a sovereign and professional manner.
+Ele é projetado para servir indivíduos conscientes de privacidade, buscando gerenciar e investir em criptomoedas de forma soberana e profissional.
 
-Unstoppable is built with the following in mind:
+Unstoppable construída com o seguinte em mente:
 
 — O capital deve ser gratuito >> Criado para fornecer aos usuários um controle genuinamente independente sobre o seu capital.
 
-- Capital Should Be Borderless >> It works outside the traditional finance layer and acts as a Swiss knife to the world of decentralized finances (DeFi).
+— O Capital deve ser sem fronteiras >> Funciona fora da camada financeira tradicional e atua como uma faca suíça para o mundo das finanças descentralizadas (DeFi).
 
-- Capital Should Be Private >> It doesn’t leak private data, it has no means to track users, and takes extra measures to ensure privacy on multiple layers.
+- O capital deve ser privado >> Não vaza dados privados, não tem meios de rastrear os usuários e tomar medidas adicionais para garantir a privacidade em várias camadas.
 
 Se as frases acima combinam com você, a Unstoppable será para você! E estamos aqui para nos concentrar em suas necessidades exclusivas e atendê-lo da melhor maneira possível.
 
-If you're merely looking for a plain way to store Bitcoin or Ethereum this app might not be for you.
+Se você está procurando uma maneira simples de armazenar Bitcoin ou alguma cripto que esse aplicativo pode não ser para você.
 
 CARACTERÍSTICAS DA CARTEIRA:
 
-- Non-Custodial Multi-wallet >> Manage any number of cryptocurrencies across multiple portfolio-style wallets in a non-custodial manner. Esta carteira é como o seu próprio banco onde você é o único cliente e o único responsável. Ela é projetada para manter os ativos seguros e fáceis de restaurar, mesmo se o telefone for roubado e adulterado.
+— Multi-carteira sem custódia>> Gerencie qualquer número de criptomoedas através de múltiplas carteiras de portifólio de forma sem custódia. Esta carteira é como o seu próprio banco onde você é o único cliente e o único responsável. Ela é projetada para manter os ativos seguros e fáceis de restaurar, mesmo se o telefone for roubado e adulterado.
 
-- Investment Oriented Wallet >> Unstoppable brings unmatched cryptocurrency market analytics to your device: advanced sorting, curated categorization, extensive search filtering, and event-based alerting features.
+- Carteira orientada para o investimento >> Unstoppable traz análises de mercado de criptomoedas inigualáveis para o seu dispositivo: classificação avançada, categorização com curadoria, filtragem de pesquisa abrangente e recursos de alerta baseados em eventos.
 
-- Universal Wallet >> It supports all mainstream blockchains and is built in a standard compliant manner enabling users to use just one wallet app for everything crypto.
+- Universal Wallet >> Ele suporta todos os blockchains convencionais e é construído de maneira compatível com o padrão, permitindo que os usuários usem apenas um aplicativo de carteira para todas as criptomoedas.
 
 — Uma carteira de Bitcoin >> A carteira carrega alguns dos recursos mais avançados de Bitcoin disponíveis: SPV ativado, BIP 44/49/84/69 bloqueios de tempo compatíveis com o Bitcoin, taxas de transação personalizadas e muito mais.
 
-- A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. Also, the ability to interact with any smart contract-powered service on the blockchain via the WalletConnect protocol.
+- Uma Carteira de DeFi >> Suporte total para troca de token descentralizado na Ethereum, Binance Smart Chain, Avalanche, Solana, e muito mais. Além disso, a capacidade de interagir com qualquer serviço inteligente baseado em contratos na blockchain através do protocolo WalletConnect.
 
-- Ethereum Wallet >> Full support for Ethereum blockchain, its growing ecosystem of tokens (ERC20, NFT tokens, etc.), and other decentralized services such as ENS (Ethereum Name Service).
+- Ethereum Wallet >> Suporte completo para a blockchain Ethereum, o seu ecossistema crescente de tokens (ERC20, tokens NFT, etc., e outros serviços descentralizados como ENS (Serviço de Nome (Ethereum).
 
-- Ethereum L2 Wallet >> Artbitrum, Optimism, Polygon support.
+- Ethereum L2 Wallet >> Artbitrum, Optimizm, suporte Polygon.
 
-- Avalanche Wallet >> Full support for Avalanche C-Chain blockchain.
+- Carteira Avalanche >> Suporte completo para a blockchain Avalanche C-Chain.
 
-- Binance Wallet >> Full support for original Binance Chain (incl. BEP2) and Binance Smart Chain.
+- Carteira Binance >> Suporte total para Corrente Binance original (incl. BEP2) e Binance Smart Chain.
 
-- NFT Wallet >> Full support for Non Fungible tokens (NFTs).
+- Carteira NFT >> Suporte total para tokens não fungíveis (NFTs).
 
-- Crypto Academy >> The app includes two courses meant to onboard newcomers into the world of cryptocurrencies and the DeFi ecosystem in an easy-to-digest manner covering essential aspects of cryptocurrency security, storage, privacy, transacting, and exchanging.
+— Crypto Academy >> O aplicativo inclui dois cursos destinados a integrar o novo mundo das criptomoedas e do ecossistema DeFi de forma fácil de compreender, cobrindo aspectos essenciais da segurança das criptomoedas, armazenamento, privacidade, transação, troca e muito mais.
 
-— Carteira para Moedas de Privacidade >> Suporta totalmente as principais moedas de privacidade (ZCash, DASH) de forma SPV. One of the very few wallets capable of supporting fully shielded Zcash transactions as well as the ability to privatize Bitcoin transactions.
+— Carteira para Moedas de Privacidade >> Suporta totalmente as principais moedas de privacidade (ZCash, DASH) de forma SPV. Uma das muito poucas carteiras capazes de apoiar transações Zcash totalmente protegidas, bem como a capacidade de privatizar transações em Bitcoin.
 
-- Decentralized Wallet >> Designed to work with most major blockchains in a decentralized manner where an app doesn't depend on some server of a wallet provider to send/receive transactions but interacts with blockchain networks directly.
+— Carteira descentralizada >> Projetada para trabalhar com as principais blockchains de forma descentralizada onde um aplicativo não depende de nenhum servidor de um provedor de carteiras para enviar/receber transações, mas interage com as redes blockchain diretamente.
 
-- Privacy Focused >> Designed to allow for privacy even in the most privacy-breaching scenarios. There are no user accounts keeping your records, no identity checks that risk exposing your financials to the world, and no interaction with traditional finance layers. The app is partially TOR enabled and VPN support is coming soon.
+— Focada em Privacidade>> Projetado para permitir a privacidade, mesmo nos cenários mais violadores de privacidade. Não há contas de usuário mantendo seus registros, nenhuma verificação de identidade que arrisque expor suas finanças para o mundo e nenhuma interação com as camadas financeiras tradicionais. O aplicativo é parcialmente ativado via TOR e o suportará VPN em breve.
 
-- Fully Open Source >> The most transparent wallet application built to date. The entire 4-year production process of the app is openly accessible online along with 100% of its code for anyone to evaluate or reuse in other projects. Verificado e auditado por terceiros.
+— Totalmente Open Source >> Talvez o aplicativo de carteira mais transparente construído até agora. O processo de produção de 4 anos do aplicativo está abertamente acessível on-line, com 100% do código para qualquer pessoa avaliar ou reutilizar em outros projetos. Verificado e auditado por terceiros.
 
 Seja Unstoppable!  😎
