@@ -37,6 +37,11 @@
     <string name="Button_IAgree">Acepto</string>
     <string name="Button_Continue">Continuar</string>
     <string name="Button_Send">Enviar</string>
+    <string name="Button_Search">Buscar</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">Copiar</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">Eliminar</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Cualquier</string>
@@ -44,7 +49,7 @@
     <string name="PercentTitle">Percent</string>
     <string name="Keyboard">Teclado</string>
     <string name="AccountRecovery_Note">Nota</string>
-    <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
@@ -60,7 +65,7 @@
     <string name="Welcome_PrivacySettings">Ajustes de privacidad</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Avanzado</string>
-    <string name="CreateWallet_Mnemonic">Mnemotécnica</string>
+    <string name="CreateWallet_Mnemonic">Frase de Recuperación</string>
     <string name="CreateWallet_Wordlist">Lista de palabras</string>
     <string name="Passphrase">Frase de contraseña</string>
     <string name="ConfirmPassphrase">Confirmar</string>
@@ -70,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor usa solo símbolos compatibles: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmación de la frase de contraseña no coincide</string>
-    <string name="CreateWallet_PassphraseDescription">Las contraseñas añaden una capa de seguridad adicional para las carteras. Para restaurar dicha cartera, un usuario requiere tanto mnemonic como una contraseña.\n\nPassphrases también facilita a los usuarios tener muchos monederos multi-moneda usando un solo mnemónico pero diferente contraseña.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">Inglés</string>
     <string name="Language_Japanese">Japonés</string>
@@ -94,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">Número de palabras erróneas. Debe tener entre 12 y 24 palabras. Has ingresado: %d</string>
     <string name="Restore_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
     <string name="Restore_InvalidChecksum">Suma de verificación inválida</string>
-    <string name="Restore_PassphraseDescription">Introduzca su frase de contraseña que utilizó al crear esta frase mnemotécnica.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">Elegir Blockchain</string>
     <string name="Restore_Key">Clave</string>
     <string name="Restore_By">Por</string>
@@ -104,19 +109,19 @@
     <string name="Restore_PrivateKeyHint">Introduzca la clave privada EVM, BIP32 Root Key o Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Introduzca 12, 15, 18, 21 o 24 palabras</string>
     <string name="Restore_NonStandardRestore">Restauración no estándar</string>
-    <string name="Restore_NonStandard_Description">Esta página proporciona un mecanismo especial de restauración de monedero para usuarios de P.CASH que tienen un monedero no estándar. Por lo general, dichos monederos se podrían haber creado en la versión 0.27 - 0.28 de P.CASH utilizando una lista de palabras mnemotécnicas que no están en inglés y/o un carácter especial en la frase de contraseña del monedero (es decir, un símbolo diacrítico).\n\nSi es un usuario afectado, el saldo de su billetera se mostrará en 0 después de restaurar dicha billetera en la versión 0.29 o superior. Esta página te permitirá restaurar el acceso a tu monedero no estándar. Una vez restaurado, se recomienda crear un nuevo monedero (que cumplirá con los estándares) y mover todos los fondos allí.</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to P.CASH users who have a non-standard wallet. Such wallets might have been created in P.CASH version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">Clave no válida</string>
     <string name="Select_Coins">Elegir monedas</string>
     <string name="Restore_BirthdayHeight">Altura de Cumpleaños</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Altura Zcash cumpleaños</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Si conoces la altura de tu cumpleaños de la billetera introdúzcala para una rápida sincronización.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restaurar como nuevo</string>
     <string name="Restore_ZCash_NewWallet">Nuevo monedero</string>
-    <string name="Restore_ZCash_NewWallet_Description">No tienes ninguna transacción antes</string>
-    <string name="Restore_ZCash_OldWallet">Monedero antiguo</string>
-    <string name="Restore_ZCash_OldWallet_Description">Usado antes y tiene transacciones</string>
+    <string name="Restore_ZCash_NewWallet_Description">Doesn\'t have any transactions</string>
+    <string name="Restore_ZCash_OldWallet">Existing Wallet</string>
+    <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
     <string name="Restore_ZCash_SlowSyncWarningText">La sincronización inicial con el blockchain puede consumir mucho tráfico de Internet.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
@@ -284,8 +289,11 @@
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dominio o dirección</string>
     <string name="Send_Fee">Comisión</string>
+    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_Max">Máx.</string>
+    <string name="Send_Advanced">Avanzado</string>
+    <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_Domain">Dominio</string>
     <string name="Send_Confirmation_YouSend">Usted envía</string>
@@ -302,7 +310,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">Se ha denegado el acceso a tu cámara para esta aplicación, puedes ir a ajustes y permitir el acceso</string>
     <string name="ScanQr_GoToSettings">Ir a Ajustes</string>
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
-    <string name="Send_Error_UnsupportedAddress">El bloqueo del tiempo solo funciona con direcciones P2PKH (a partir de 1)</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_BalanceAmount">Saldo %s</string>
     <string name="Send_Error_MinimumAmount">Monto mínimo %s</string>
     <string name="Send_Error_MaximumAmount">Monto máximo %s</string>
@@ -329,26 +337,43 @@
     <string name="Send_Warning_LowFee">¡Advertencia! Riesgo de atascarse</string>
     <string name="Send_Warning_LowFee_Description">La transacción puede quedarse atascada o fallar</string>
     <string name="Send_Error_FetchFeeRateFailed">Error al obtener la tasa de comisión</string>
+    <!-- Send Evm Settings -->
+    <string name="SendEvmSettings_Title">Avanzado</string>
+    <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
+    <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
+    <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
+    <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Configuración de tarifas</string>
     <string name="FeeSettings_Reset">Reiniciar</string>
-    <string name="FeeSettings_MaxFee">Comisión Máx.</string>
-    <string name="FeeSettings_MaxFee_Info">La tarifa máxima total esperada para la transacción dada. Por lo general, la tarifa real de transacción va a ser menor.</string>
-    <string name="FeeSettings_Fee">Comisión</string>
+    <string name="FeeSettings_FeeLegacy">Max Fee</string>
+    <string name="FeeSettings_FeeLegacy_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
+    <string name="FeeSettings_Fee">Max Fee</string>
+    <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasLimit_Info">El límite de gas es la cantidad máxima de unidades de gas que un usuario está dispuesto a gastar al enviar una transacción determinada. Las transacciones complejas requieren más unidades de gas que las más simples. El límite de gas se calcula y se establece automáticamente para cada transacción.</string>
-    <string name="FeeSettings_GasPrice">Gas Price</string>
+    <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
+    <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">La tarifa por transacción en la red se mide en unidades de gas. El precio del gas es la cantidad que un usuario está dispuesto a gastar por unidad de gas. Cuando la red se encuentra ocupada, los precios del gas son altos y bajos cuando está inactiva. Un precio insuficiente del gas es a menudo una razón para que una transacción permanezca pendiente durante un período prolongado.</string>
-    <string name="FeeSettings_CurrentBaseFee">Tarifa Base actual</string>
-    <string name="FeeSettings_MaxBaseFee">Tarifa Base Máx.</string>
-    <string name="FeeSettings_MaxBaseFee_Info">Cada transacción en Ethereum requiere que el usuario gaste una cierta cantidad de unidades de gas para procesar esa transacción. El precio de una unidad de gas única cambia en tiempo real con condiciones de red y no está controlado por ninguna entidad única. La tasa de tarifa base máxima, combinado con sugerencia opcional de minero (ver más abajo), refiere al precio más alto por una unidad de gas que un usuario está dispuesto a pagar por enviar la transacción.</string>
-    <string name="FeeSettings_MaxMinerTips">Tips de los mejores mineros</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Las tarifas de los mineros (también conocido como consejo de mineros) se refieren a las tarifas opcionales que los usuarios pueden incluir a los participantes de la red para priorizar sus transacciones.</string>
+    <string name="FeeSettings_BaseFee">Base Fee</string>
+    <string name="FeeSettings_BaseFee_Info">The network protocol determines the base price per gas for each block, called base fee rate. It varies according to the network utilization level from block to block. It can increase or decrease by no more than 12.5% in the next block, making fees more predictable. The value shown here is the current block\'s base fee rate.</string>
+    <string name="FeeSettings_MaxFee">Max Fee Rate (Gwei)</string>
+    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
+    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Arriesgado</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">The transaction may remain pending for a while or fail entirely.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Arriesgado</string>
-    <string name="FeeSettings_RiskOfGettingStuck">La transacción puede permanecer pendiente por un tiempo o fallar por completo.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">Cuota demasiado alta</string>
     <string name="FeeSettings_Overpricing">La tarifa de transacción establecida es mayor de lo necesario para procesar esta transacción ahora.</string>
     <string name="FeeSettings_Info_IUnderstand">Entiendo</string>
+    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
+    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
+        \n\nThe P.CASH wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
+        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
+        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
+        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Velocidad de transacción</string>
     <string name="FeeInfo_Description">Las blockchain de Bitcoin como las de Ethereum requieren que los usuarios paguen comisiones de red al enviar transacciones. Las comisiones son más altas cuando muchas transacciones están teniendo lugar en la red y más bajas cuando el blockchain está menos ocupado.</string>
@@ -661,7 +686,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Auth Básica (opcional)</string>
     <string name="AddEvmSyncSource_RpcSource">Fuente RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">La fuente RPC con esta url ya existe</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">La url introducida no es válida. La url válida debe tener uno de los siguientes esquemas: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Después de cambiar Restaurar Fuente, el monedero tendrá que resinc sí mismo con el blockchain de Bitcoin.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Restaurar Fuente</string>
@@ -670,6 +695,8 @@
 \n\nAt this point, there are two potential ways for a mobile wallet like P.CASH to do this:
 \n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
 \n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Haga que sus transacciones BTC, LTC, BCH sean más difíciles de rastrear cambiando la forma en que las transacciones están estructuradas.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.\n\nThe P.CASH wallet implements measures to make it harder for someone to figure out which output goes where.\n\nThere are two options available to P.CASH users:\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
@@ -687,6 +714,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Las notificaciones para la aplicación del Monedero P.CASH están desactivadas. Necesita activarlas para poder recibir alertas de cambio de precios.</string>
     <string name="SettingsSecurity_SortingShuffle">Aleatoriamente</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexación aleatoria</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Bip69 determinista</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexación Lexicográfica</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Recomendado</string>
@@ -761,6 +789,20 @@
     <string name="ManageCoins_Search">Nombre, código o dirección del contrato</string>
     <string name="ManageCoins_AddToken">Añadir Token</string>
     <string name="ManageCoins_NoResults">No se han encontrado resultados. Intente añadir un token manualmente si conoce su dirección de contrato inteligente.</string>
+    <string name="ManageCoins_BipsDescription">There are 3 common address formats %s wallets can use to receive incoming payments:
+\n
+\n- BIP-44 (older)
+\n- BIP-49 (newer)
+\n- BIP-84 (newest)
+\n
+\nWhile P.CASH wallet supports all 3 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
+    <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
+\n
+\n- TYPE0 (older)
+\n- TYPE145 (newer)
+\n
+\nWhile P.CASH wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
+    <string name="ManageCoins_ContractAddress">CONTRACT ADDRESS</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Las siguientes características son experimentales y deben utilizarse con precaución. Aunque hemos probado a fondo estas características usando nuestros propios fondos criptográficos, no podemos garantizar que funcionen como se espera en todos los casos posibles.</string>
@@ -835,7 +877,6 @@
     <string name="RecoveryPhrase_Description">Escriba estas palabras en el orden correcto y guárdelas en un lugar seguro</string>
     <string name="RecoveryPhrase_ShowPhrase">Toca para mostrar la frase de recuperación</string>
     <string name="RecoveryPhrase_Verify">Verificar</string>
-    <string name="RecoveryPhrase_Warning">Nunca comparta su frase de recuperación con nadie. El equipo imparable nunca pedirá su frase de recuperación.</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Riesgo de Copia</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">Clave Privada EVM</string>
@@ -848,13 +889,25 @@
     <string name="ExtendedKey_Purpose">Propósito</string>
     <string name="ExtendedKey_Account">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Toca para mostrar la clave privada</string>
-    <string name="ExtendedKey_TapToShowPublicKey">Pulse para mostrar la clave pública</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_EvmPrivateKey">Clave Privada EVM</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
+    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. P.CASH Wallet support team will never ask for it.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Claves públicas</string>
+    <string name="PublicKeys_EvmAddress">Dirección EVM</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">Verificar</string>
     <string name="RecoveryPhraseVerify_Description">Seleccione dos palabras solicitadas de su frase de recuperación de cartera</string>
@@ -928,9 +981,9 @@
     <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Iniciando Tor...</string>
     <string name="Tor_Status_Error">¡Error iniciando Tor!</string>
-    <string name="TorPage_Connecting">Conectando…</string>
+    <string name="TorPage_Connecting">Connecting Tor…</string>
     <string name="TorPage_Connected">Conectado</string>
-    <string name="TorPage_Failed">Falló</string>
+    <string name="TorPage_Failed">Failed to Connect Tor</string>
     <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="Tor_TorIsActive">Tor está activo</string>
     <string name="Tor_PrerequisitesAlert_Content">Activar TOR restablecerá la conexión del Blockchain de Ethereum de vuelta a Infura.</string>
@@ -939,6 +992,7 @@
     <string name="CoinOption_bip49_Title">Bueno</string>
     <string name="CoinOption_bip84_Title">Mejor</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Precio</string>
     <string name="Coin_Tab_Market">Mercados</string>
     <string name="Coin_Tab_Details">Estadísticas</string>
@@ -1005,6 +1059,9 @@
     <string name="CoinPage_Category">Categoría</string>
     <string name="CoinPage_Categories">Categorías</string>
     <string name="CoinPage_Contracts">Contratos</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Coin Types</string>
     <string name="CoinPage_Links">Enlaces</string>
     <string name="CoinPage_Guide">Instructivos</string>
     <string name="CoinPage_Website">Sitio Web</string>
@@ -1037,6 +1094,8 @@
     <string name="CoinPage_Performance_Month">1 Mes</string>
     <string name="CoinPage_ReadMore">Leer más</string>
     <string name="CoinPage_ReadLess">Leer menos</string>
+    <string name="CoinPage_ShowMore">Show More</string>
+    <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Fecha de inicio</string>
     <string name="CoinPage_Tvl">Valor total bloqueado</string>
     <string name="CoinPage_TvlRank">Rango TVL</string>
@@ -1147,7 +1206,7 @@
     <string name="ReleaseNotes_FollowUs">Síguenos</string>
     <string name="CoinPage_Chart_Locked">Bloqueado</string>
     <string name="ProUsersInfo_Title">Usuario Pro</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ProUsersInfo_UnstoppablePass">P.CASH Pass</string>
     <string name="ProUsersInfo_SubTitle">Información adicional del token</string>
     <string name="ProUsersInfo_Description">Para activar estos datos, debes obtener NFT de bronce de nivel \"Coin Info+\"\n\nTambién obtendrás acceso a los datos a continuación:</string>
     <string name="ProUsersInfo_Features_DexVolume">Volumen y Rango DEX</string>

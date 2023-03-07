@@ -37,6 +37,11 @@
     <string name="Button_IAgree">موافقم</string>
     <string name="Button_Continue">ادامه</string>
     <string name="Button_Send">ارسال</string>
+    <string name="Button_Search">Search</string>
+    <string name="Button_Back">Back</string>
+    <string name="Button_Copy">رونوشت</string>
+    <string name="Button_Browser">Browser</string>
+    <string name="Button_Delete">Delete</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
@@ -44,7 +49,7 @@
     <string name="PercentTitle">درصد</string>
     <string name="Keyboard">صفحه کلید</string>
     <string name="AccountRecovery_Note">یادداشت</string>
-    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <string name="AccountRecovery_MigrationRequired">This is a non-standard wallet. \n\nCLICK TO GET MORE INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
@@ -60,7 +65,7 @@
     <string name="Welcome_PrivacySettings">تنظیمات حریم خصوصی</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Advanced</string>
-    <string name="CreateWallet_Mnemonic">وابسته</string>
+    <string name="CreateWallet_Mnemonic">Recovery Phrase</string>
     <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">عبارت عبور</string>
     <string name="ConfirmPassphrase">تاييد</string>
@@ -70,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">تأیید عبارت عبور مطابقت ندارد</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both mnemonic as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
     <!--Languages-->
     <string name="Language_English">انگلیسی</string>
     <string name="Language_Japanese">ژاپنی</string>
@@ -94,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">تعداد کلمات اشتباه. باید بین ۱۲ تا ۱۴ کلمه باشد. شما وارد کردید: %d</string>
     <string name="Restore_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">انتخاب زنجیره های بلوکی</string>
     <string name="Restore_Key">کلید</string>
     <string name="Restore_By">By</string>
@@ -104,19 +109,19 @@
     <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
     <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to P.CASH users who have a non-standard wallet. Such wallets might have been created in P.CASH version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to P.CASH users who have a non-standard wallet. Such wallets might have been created in P.CASH version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">Invalid Key</string>
     <string name="Select_Coins">سکه ها را انتخاب کنید</string>
     <string name="Restore_BirthdayHeight">قد تولد</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">اگر ارتفاع تولد کیف پول خود را می دانید برای همگام سازی سریع آن را وارد کنید.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
     <string name="Restore_ZCash_NewWallet">کیف پول جدید</string>
-    <string name="Restore_ZCash_NewWallet_Description">Don\'t have any transaction before</string>
-    <string name="Restore_ZCash_OldWallet">اضافه کردن کیف پول</string>
-    <string name="Restore_ZCash_OldWallet_Description">Used before and has transactions</string>
+    <string name="Restore_ZCash_NewWallet_Description">Doesn\'t have any transactions</string>
+    <string name="Restore_ZCash_OldWallet">Existing Wallet</string>
+    <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
     <string name="Restore_ZCash_SlowSyncWarningText">The initial synchronization with the blockchain can consume a lot of internet traffic.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
@@ -284,8 +289,11 @@
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس یا دامنه</string>
     <string name="Send_Fee">هزينه</string>
+    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
     <string name="Send_Button_Paste">چسباندن</string>
     <string name="Send_Button_Max">حداکثر</string>
+    <string name="Send_Advanced">Advanced</string>
+    <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
     <string name="Send_Confirmation_Title">تایید</string>
     <string name="Send_Confirmation_Domain">دامنه</string>
     <string name="Send_Confirmation_YouSend">شما فرستادید</string>
@@ -302,7 +310,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">Access to your camera for this app was denied, you can go to settings and allow access</string>
     <string name="ScanQr_GoToSettings">برو به تنظیمات</string>
     <string name="Send_Error_IncorrectAddress">آدرس اشتباه</string>
-    <string name="Send_Error_UnsupportedAddress">قفل کردن زمان فقط با آدرس های P2PKH کار می کند (شروع از ۱)</string>
+    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_BalanceAmount">مانده حساب %s</string>
     <string name="Send_Error_MinimumAmount">حداقل مقدار %s</string>
     <string name="Send_Error_MaximumAmount">حداقل مقدار %s</string>
@@ -329,26 +337,43 @@
     <string name="Send_Warning_LowFee">هشدار! خطر گیر افتادن</string>
     <string name="Send_Warning_LowFee_Description">تراکنش ممکن است گیر کند یا موفقیت آمیز نباشد</string>
     <string name="Send_Error_FetchFeeRateFailed">Error while fetching fee rate</string>
+    <!-- Send Evm Settings -->
+    <string name="SendEvmSettings_Title">Advanced</string>
+    <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
+    <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
+    <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
+    <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">تنظیمات قیمت</string>
     <string name="FeeSettings_Reset">تنظیم مجدد</string>
-    <string name="FeeSettings_MaxFee">حداکثر هزینه</string>
-    <string name="FeeSettings_MaxFee_Info">حداکثر کارمزد کل مورد انتظار برای معامله در نظر گرفته شده. به طور معمول، کارمزد واقعی تراکنش کمتر خواهد بود.</string>
-    <string name="FeeSettings_Fee">هزينه</string>
+    <string name="FeeSettings_FeeLegacy">Max Fee</string>
+    <string name="FeeSettings_FeeLegacy_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
+    <string name="FeeSettings_Fee">Max Fee</string>
+    <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
     <string name="FeeSettings_GasLimit">محدودیت گاز</string>
-    <string name="FeeSettings_GasLimit_Info">حد گاز حداکثر مقدار واحدهای گازی است که کاربر مایل است در هنگام ارسال یک تراکنش معین خرج کند. معاملات پیچیده به واحدهای گاز بیشتری نسبت به واحدهای ساده تر نیاز دارند. حد گاز برای هر تراکنش به طور خودکار تخمین زده و تنظیم می شود.</string>
-    <string name="FeeSettings_GasPrice">قیمت گاز</string>
+    <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
+    <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">کارمزد تراکنش در شبکه بر حسب واحد گاز سنجیده می شود. قیمت گاز مبلغی است که کاربر مایل است برای هر واحد گاز هزینه کند. وقتی شبکه شلوغ است، قیمت گاز بالاست و وقتی خلوت است پایین. قیمت ناکافی گاز اغلب دلیلی برای معلق ماندن یک معامله برای مدت طولانی است.</string>
-    <string name="FeeSettings_CurrentBaseFee">کارمزد پایه‌ی فعلی</string>
-    <string name="FeeSettings_MaxBaseFee">حداکثر قیمت پایه</string>
-    <string name="FeeSettings_MaxBaseFee_Info">هر تراکنش در اتریوم به کاربر نیاز دارد که مقدار مشخصی از واحدهای گاز را برای پردازش آن تراکنش خرج کند. قیمت یک واحد گاز در زمان واقعی با شرایط شبکه تغییر می کند و توسط هیچ نهاد واحدی کنترل نمی شود. حداکثر نرخ کارمزد پایه در ترکیب با نوک ماینر اختیاری (به زیر مراجعه کنید) به بالاترین قیمت برای یک واحد گاز اشاره دارد که کاربر مایل است برای ارسال تراکنش بپردازد.</string>
-    <string name="FeeSettings_MaxMinerTips">نکات حداکثر ماینر</string>
-    <string name="FeeSettings_MaxMinerTips_Info">هزینه‌های ماینر (معروف به نکته ماینر) به کارمزدهای اختیاری اشاره می کند که کاربران ممکن است برای تشویق مشارکت‌کنندگان شبکه برای اولویت‌بندی تراکنش‌های خود لحاظ کنند.</string>
+    <string name="FeeSettings_BaseFee">Base Fee</string>
+    <string name="FeeSettings_BaseFee_Info">The network protocol determines the base price per gas for each block, called base fee rate. It varies according to the network utilization level from block to block. It can increase or decrease by no more than 12.5% in the next block, making fees more predictable. The value shown here is the current block\'s base fee rate.</string>
+    <string name="FeeSettings_MaxFee">Max Fee Rate (Gwei)</string>
+    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
+    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">پرمخاطره</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">The transaction may remain pending for a while or fail entirely.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">پرمخاطره</string>
-    <string name="FeeSettings_RiskOfGettingStuck">تراکنش ممکن است شکست بخورد یا برای مدتی معلق بماند یا به طور کامل ناموفق باشد.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">هزینه خیلی بالا</string>
     <string name="FeeSettings_Overpricing">کارمزد تراکنش تعیین‌شده در حال حاضر بیشتر از نیاز برای پردازش این تراکنش است.</string>
     <string name="FeeSettings_Info_IUnderstand">می فهمم</string>
+    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
+    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
+        \n\nThe P.CASH wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
+        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
+        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
+        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">سرعت تراکنش</string>
     <string name="FeeInfo_Description">هر دو بلاک چین بیت کوین و اتریوم کاربران را ملزم به پرداخت هزینه های شبکه هنگام ارسال تراکنش ها می کنند. زمانی که تراکنش‌های زیادی در شبکه انجام می‌شود، کارمزدها بیشتر و زمانی که بلاک چین شلوغ‌تر است، کمتر است.</string>
@@ -661,7 +686,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing Restore Source the wallet will have to resync itself with the Bitcoin blockchain.</string>
     <string name="BtcBlockchainSettings_RestoreSource">بازیابی منبع</string>
@@ -670,6 +695,8 @@
 \n\nAt this point, there are two potential ways for a mobile wallet like P.CASH to do this:
 \n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
 \n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">با تغییر در نحوه ساخت تراکنش ها، ردیابی تراکنش های BTC, LTC, BCH را دشوارتر کنید.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
@@ -691,6 +718,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for the P.CASH Wallet app are disabled. You need to turn on Notifications and allow background app refresh in order to be able to receive price change alerts.</string>
     <string name="SettingsSecurity_SortingShuffle">مخلوط کردن</string>
     <string name="SettingsSecurity_SortingShuffleDescription">فهرست بندی تصادفی</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69 قطعی</string>
     <string name="SettingsSecurity_SortingBip69Description">فهرست بندی فهرستشناختی</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">توصیه شده</string>
@@ -762,6 +790,20 @@
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
     <string name="ManageCoins_NoResults">نتیجه ای پیدا نشد. اگر آدرس قرارداد هوشمند آن را می‌دانید، سعی کنید توکن را به صورت دستی اضافه کنید.</string>
+    <string name="ManageCoins_BipsDescription">There are 3 common address formats %s wallets can use to receive incoming payments:
+\n
+\n- BIP-44 (older)
+\n- BIP-49 (newer)
+\n- BIP-84 (newest)
+\n
+\nWhile P.CASH wallet supports all 3 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
+    <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
+\n
+\n- TYPE0 (older)
+\n- TYPE145 (newer)
+\n
+\nWhile P.CASH wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
+    <string name="ManageCoins_ContractAddress">CONTRACT ADDRESS</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">تجربی</string>
     <string name="ExperimentalFeatures_Description">ویژگی های زیر تجربی است و باید با احتیاط استفاده شود. در حالی که ما این ویژگی ها را با استفاده از وجوه رمزنگاری شده خودمان به طور آزمایشی آزمایش کرده ایم ، اما نمی توانیم تضمین کنیم که آنها مطابق آنچه انتظار می رود عمل کنند.</string>
@@ -836,7 +878,6 @@
     <string name="RecoveryPhrase_Description">Write these words down in the correct order and keep them in a safe place</string>
     <string name="RecoveryPhrase_ShowPhrase">Tap to show recovery phrase</string>
     <string name="RecoveryPhrase_Verify">تایید</string>
-    <string name="RecoveryPhrase_Warning">Never share your recovery phrase with anyone.  P.CASH Wallet team will never ask for your recovery phrase.</string>
     <string name="RecoveryPhrase_CopyWarning_Title">Risk of Copying</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM Private Key</string>
@@ -849,13 +890,25 @@
     <string name="ExtendedKey_Purpose">Purpose</string>
     <string name="ExtendedKey_Account">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
-    <string name="ExtendedKey_TapToShowPublicKey">Tap to show public key</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_EvmPrivateKey">EVM Private Key</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
+    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. P.CASH Wallet support team will never ask for it.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">کلیدهای عمومی</string>
+    <string name="PublicKeys_EvmAddress">EVM Address</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">تایید</string>
     <string name="RecoveryPhraseVerify_Description">کلمات درخواستی را از عبارت بازیابی کیف پول خود انتخاب کنید</string>
@@ -929,9 +982,9 @@
     <string name="Tor_Alert_Title">اینترنت</string>
     <string name="Tor_Status_Starting">درحال راه اندازی Tor...</string>
     <string name="Tor_Status_Error">خطا در راه اندازی Tor!</string>
-    <string name="TorPage_Connecting">در حال اتصال…</string>
+    <string name="TorPage_Connecting">Connecting Tor…</string>
     <string name="TorPage_Connected">ارتباط برقرار شد</string>
-    <string name="TorPage_Failed">ناموفق</string>
+    <string name="TorPage_Failed">Failed to Connect Tor</string>
     <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">با فعال کردن TOR، اتصال Ethereum زنجیره بلوکی به Infura بازمی گردد.</string>
@@ -940,6 +993,7 @@
     <string name="CoinOption_bip49_Title">Good</string>
     <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">قیمت</string>
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>
@@ -1006,6 +1060,9 @@
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Categories">Categories</string>
     <string name="CoinPage_Contracts">Contracts</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Coin Types</string>
     <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">وب سایت پروژه</string>
@@ -1038,6 +1095,8 @@
     <string name="CoinPage_Performance_Month"> 1Month </string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
+    <string name="CoinPage_ShowMore">Show More</string>
+    <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Inception Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
