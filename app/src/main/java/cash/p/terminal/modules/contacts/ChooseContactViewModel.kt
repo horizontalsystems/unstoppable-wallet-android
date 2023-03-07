@@ -1,5 +1,8 @@
 package cash.p.terminal.modules.contacts
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -9,12 +12,28 @@ class ChooseContactViewModel(
     private val blockchainType: BlockchainType
 ) : ViewModel() {
 
-    val items: List<ContactViewItem>
+    var items: List<ContactViewItem> by mutableStateOf(listOf())
+        private set
+
+    private var query = ""
 
     init {
-        items = repository.getContactsByBlockchainType(blockchainType)
+        rebuildItems()
+    }
+
+    fun onEnterQuery(query: String) {
+        this.query = query
+
+        rebuildItems()
+    }
+
+    private fun rebuildItems() {
+        items = repository.getContactsFiltered(blockchainType, query)
             .map {
-                ContactViewItem(it.name, it.addresses.first { it.blockchain.type == blockchainType }.address)
+                ContactViewItem(
+                    it.name,
+                    it.addresses.first { it.blockchain.type == blockchainType }.address
+                )
             }
     }
 

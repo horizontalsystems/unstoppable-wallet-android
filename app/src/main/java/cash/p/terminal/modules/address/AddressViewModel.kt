@@ -19,7 +19,7 @@ class AddressViewModel(
     }
 
     fun hasContacts() =
-        contactsRepository.getContactsByBlockchainType(blockchainType).isNotEmpty()
+        contactsRepository.getContactsFiltered(blockchainType, "").isNotEmpty()
 
     @Throws(AddressValidationException::class)
     suspend fun parseAddress(value: String): Address = withContext(Dispatchers.IO) {
