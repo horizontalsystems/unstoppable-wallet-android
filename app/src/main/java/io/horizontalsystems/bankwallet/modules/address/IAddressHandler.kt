@@ -2,6 +2,11 @@ package io.horizontalsystems.bankwallet.modules.address
 
 import com.unstoppabledomains.resolution.Resolution
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.binancechainkit.helpers.Crypto
+import io.horizontalsystems.bitcoincore.network.Network
+import io.horizontalsystems.bitcoincore.utils.Base58AddressConverter
+import io.horizontalsystems.bitcoincore.utils.CashAddressConverter
+import io.horizontalsystems.bitcoincore.utils.SegwitAddressConverter
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -138,6 +143,65 @@ class AddressHandlerEvm : IAddressHandler {
         return Address(evmAddress.hex)
     }
 
+}
+
+class AddressHandlerBase58(network: Network) : IAddressHandler {
+    private val converter = Base58AddressConverter(network.addressVersion, network.addressScriptVersion)
+
+    override fun isSupported(value: String) = try {
+        converter.convert(value)
+        true
+    } catch (e: Throwable) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        return Address(converter.convert(value).string)
+    }
+}
+
+class AddressHandlerBech32(network: Network) : IAddressHandler {
+    private val converter = SegwitAddressConverter(network.addressSegwitHrp)
+
+    override fun isSupported(value: String) = try {
+        converter.convert(value)
+        true
+    } catch (e: Throwable) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        return Address(converter.convert(value).string)
+    }
+}
+
+class AddressHandlerBitcoinCash(network: Network) : IAddressHandler {
+    private val converter = CashAddressConverter(network.addressSegwitHrp)
+
+    override fun isSupported(value: String) = try {
+        converter.convert(value)
+        true
+    } catch (e: Throwable) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        return Address(converter.convert(value).string)
+    }
+}
+
+class AddressHandlerBinanceChain : IAddressHandler {
+    override fun isSupported(value: String) = try {
+        Crypto.decodeAddress(value)
+        true
+    } catch (e: Throwable) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        Crypto.decodeAddress(value)
+        return Address(value)
+    }
 }
 
 class AddressHandlerSolana : IAddressHandler {
