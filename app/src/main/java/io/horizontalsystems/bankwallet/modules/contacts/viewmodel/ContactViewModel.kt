@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.contacts.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,25 +15,30 @@ import java.util.*
 
 class ContactViewModel(
     private val repository: ContactsRepository,
-    contactId: String? = null,
+    existingContact: Contact?,
+    newAddress: ContactAddress?
 ) : ViewModel() {
 
-    private val contact = contactId?.let { repository.get(it) } ?: Contact(UUID.randomUUID().toString(), "", listOf())
-    private val title = if (contactId == null)
+    private val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf())
+    private val title = if (existingContact == null)
         TranslatableString.ResString(R.string.Contacts_NewContact)
     else
-        TranslatableString.PlainString(contact.name)
+        TranslatableString.PlainString(existingContact.name)
 
     private var contactName = contact.name
     private var addresses: MutableMap<Blockchain, ContactAddress> = contact.addresses.associateBy { it.blockchain }.toMutableMap()
-
-    private var saveEnabled = false
-    private var showDelete = contactId != null
-
+    private var addressViewItems: List<AddressViewItem> = addressViewItems()
+    private val showDelete = existingContact != null
     private var closeAfterSave = false
 
     var uiState by mutableStateOf(uiState())
         private set
+
+    init {
+        newAddress?.let {
+            setAddress(it)
+        }
+    }
 
     fun onNameChange(name: String) {
         contactName = name
@@ -43,7 +47,7 @@ class ContactViewModel(
     }
 
     fun onSave() {
-        val editedContact = contact.copy(name = uiState.contactName, addresses = uiState.addresses)
+        val editedContact = contact.copy(name = uiState.contactName, addresses = uiState.addressViewItems.map { it.contactAddress })
         repository.save(editedContact)
 
         closeAfterSave = true
@@ -62,16 +66,7 @@ class ContactViewModel(
     private fun isSaveEnabled(): Boolean {
         val savedAddresses = contact.addresses.toSet()
         val newAddresses = addresses.values.toSet()
-
         val addressesChanged = (savedAddresses.toMutableSet() + newAddresses) != savedAddresses
-
-        Log.e("e", "addressesChanged = $addressesChanged")
-
-        /*addresses.size != contact.addresses.size ||
-
-            addresses.values.any { editedAddress ->
-        contact.addresses.any { address -> address.blockchain == editedAddress.blockchain && address.address != editedAddress.address }
-    }*/
 
         return contactName != contact.name || addressesChanged
     }
@@ -80,36 +75,43 @@ class ContactViewModel(
         uiState = uiState()
     }
 
-    private fun uiState(): UiState {
-        val addresses1 = this.addresses.values.sortedBy { it.blockchain.type.order }
-
-        Log.e("e", "uiState() ${Integer.toHexString(System.identityHashCode(addresses1))} = " + addresses1.joinToString { it.address })
-
-        return UiState(
-            headerTitle = this.title,
-            contactName = this.contactName,
-            addresses = addresses1,
-            saveEnabled = isSaveEnabled(),
-            showDelete = this.showDelete,
-            closeWithSuccess = this.closeAfterSave
-        )
+    private fun addressViewItems(): List<AddressViewItem> {
+        val sortedAddresses = addresses.values.sortedBy { it.blockchain.type.order }
+        val savedAddresses = contact.addresses.associateBy { it.blockchain }
+        return sortedAddresses.map { AddressViewItem(it, edited = it != savedAddresses[it.blockchain]) }
     }
 
-    fun setAddress(address: ContactAddress?) {
-        address?.let {
-            addresses[address.blockchain] = address
+    private fun uiState() = UiState(
+        headerTitle = this.title,
+        contactName = this.contactName,
+        addressViewItems = addressViewItems,
+        saveEnabled = isSaveEnabled(),
+        showDelete = this.showDelete,
+        closeWithSuccess = this.closeAfterSave
+    )
 
-            emitUiState()
-        }
+    fun setAddress(address: ContactAddress) {
+        addresses[address.blockchain] = address
+        addressViewItems = addressViewItems()
+
+        emitUiState()
     }
 
     data class UiState(
         val headerTitle: TranslatableString,
         val contactName: String,
-        val addresses: List<ContactAddress>,
+        val addressViewItems: List<AddressViewItem>,
         val saveEnabled: Boolean,
         val showDelete: Boolean,
         val closeWithSuccess: Boolean
     )
+
+    data class AddressViewItem(
+        val contactAddress: ContactAddress,
+        val edited: Boolean
+    ) {
+        val blockchain: Blockchain
+            get() = contactAddress.blockchain
+    }
 
 }
