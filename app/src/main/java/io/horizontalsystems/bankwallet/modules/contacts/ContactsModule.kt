@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.contacts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
@@ -22,11 +23,12 @@ object ContactsModule {
 
     class ContactViewModelFactory(
         private val repository: ContactsRepository,
-        private val contactId: String?
+        private val contact: Contact?,
+        private val newAddress: ContactAddress?
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ContactViewModel(repository, contactId) as T
+            return ContactViewModel(repository, contact, newAddress) as T
         }
     }
 
