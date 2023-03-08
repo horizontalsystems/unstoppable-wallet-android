@@ -22,7 +22,7 @@ fun ContactsScreen(
     viewModel: ContactsViewModel,
     onNavigateToBack: () -> Unit,
     onNavigateToCreateContact: () -> Unit,
-    onNavigateToContact: (String) -> Unit
+    onNavigateToContact: (Contact) -> Unit
 ) {
     val uiState = viewModel.uiState
 
@@ -60,7 +60,7 @@ fun ContactsScreen(
                 Spacer(Modifier.height(12.dp))
                 CellUniversalLawrenceSection(uiState.contacts) { contact ->
                     Contact(contact) {
-                        onNavigateToContact(contact.id)
+                        onNavigateToContact(contact)
                     }
                 }
             }

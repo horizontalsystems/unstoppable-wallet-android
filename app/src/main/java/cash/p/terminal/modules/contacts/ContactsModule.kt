@@ -3,6 +3,7 @@ package cash.p.terminal.modules.contacts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
@@ -22,11 +23,12 @@ object ContactsModule {
 
     class ContactViewModelFactory(
         private val repository: ContactsRepository,
-        private val contactId: String?
+        private val contact: Contact?,
+        private val newAddress: ContactAddress?
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ContactViewModel(repository, contactId) as T
+            return ContactViewModel(repository, contact, newAddress) as T
         }
     }
 

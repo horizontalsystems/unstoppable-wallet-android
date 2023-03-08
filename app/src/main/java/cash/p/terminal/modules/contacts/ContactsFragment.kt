@@ -56,21 +56,25 @@ fun ContactsNavHost(navController: NavController) {
         navController = navHostController,
         startDestination = "contacts",
     ) {
-        composable("contacts") {
+        composable("contacts") { backStackEntry ->
             val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(repository))
             ContactsScreen(
                 viewModel = viewModel,
                 onNavigateToBack = { navController.popBackStack() },
                 onNavigateToCreateContact = { navHostController.navigate("contact") },
-                onNavigateToContact = { contactId -> navHostController.navigate("contact?id=$contactId") }
+                onNavigateToContact = { contact ->
+                    backStackEntry.savedStateHandle["contact"] = contact
+                    backStackEntry.savedStateHandle["new_address"] = null
+
+                    navHostController.navigate("contact")
+                }
             )
         }
-        composablePage(
-            route = "contact?id={contactId}",
-            arguments = listOf(navArgument("contactId") { nullable = true })
-        ) { backStackEntry ->
-            val contactId = backStackEntry.arguments?.getString("contactId")
-            val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(repository, contactId))
+        composablePage(route = "contact") { backStackEntry ->
+            val contact = navHostController.previousBackStackEntry?.savedStateHandle?.get<Contact>("contact")
+            val newAddress = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("new_address")
+
+            val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(repository, contact, newAddress))
 
             ContactScreen(
                 viewModel = viewModel,
@@ -80,14 +84,13 @@ fun ContactsNavHost(navController: NavController) {
                 onNavigateToAddress = { address ->
 
                     navHostController.getNavigationResult("contacts_address_result") { bundle ->
-                        val editedAddress = bundle.getParcelable<ContactAddress>("contact_address")
-                        viewModel.setAddress(editedAddress)
+                        bundle.getParcelable<ContactAddress>("contact_address")?.let { editedAddress ->
+                            viewModel.setAddress(editedAddress)
+                        }
                     }
 
                     backStackEntry.savedStateHandle["address"] = address
-                    backStackEntry.savedStateHandle["defined_addresses"] = viewModel.uiState.addresses
-
-                    backStackEntry.savedStateHandle["test"] = Contact("", "", listOf())
+                    backStackEntry.savedStateHandle["defined_addresses"] = viewModel.uiState.addressViewItems.map { it.contactAddress }
 
                     navHostController.navigate("address")
                 }
@@ -101,10 +104,7 @@ fun ContactsNavHost(navController: NavController) {
             val definedAddresses = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<ContactAddress>>("defined_addresses")
 
             val viewModel = viewModel<AddressViewModel>(
-                factory = ContactsModule.AddressViewModelFactory(
-                    contactAddress = address,
-                    definedAddresses = definedAddresses
-                )
+                factory = ContactsModule.AddressViewModelFactory(contactAddress = address, definedAddresses = definedAddresses)
             )
 
             AddressNavHost(

@@ -18,13 +18,13 @@ import cash.p.terminal.R
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
+import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel.AddressViewItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -83,7 +83,7 @@ fun ContactScreen(
                 )
 
                 Addresses(
-                    addresses = uiState.addresses,
+                    addressViewItems = uiState.addressViewItems,
                     onClickAddress = onNavigateToAddress
                 )
 
@@ -209,14 +209,14 @@ private fun AddAddressButton(onClick: () -> Unit) {
 
 @Composable
 private fun Addresses(
-    addresses: List<ContactAddress>,
+    addressViewItems: List<AddressViewItem>,
     onClickAddress: (ContactAddress) -> Unit
 ) {
-    if (addresses.isNotEmpty()) {
+    if (addressViewItems.isNotEmpty()) {
         Spacer(Modifier.height(32.dp))
-        CellUniversalLawrenceSection(addresses) { address ->
-            ContactAddress(address.blockchain, address.address) {
-                onClickAddress(address)
+        CellUniversalLawrenceSection(addressViewItems) { addressViewItem ->
+            ContactAddress(addressViewItem) {
+                onClickAddress(addressViewItem.contactAddress)
             }
         }
     }
@@ -224,8 +224,7 @@ private fun Addresses(
 
 @Composable
 private fun ContactAddress(
-    blockchain: Blockchain,
-    address: String,
+    addressViewItem: AddressViewItem,
     onClickEdit: () -> Unit
 ) {
     RowUniversal(
@@ -237,20 +236,20 @@ private fun ContactAddress(
                 .padding(end = 16.dp)
                 .size(32.dp),
             painter = rememberAsyncImagePainter(
-                model = blockchain.type.imageUrl,
+                model = addressViewItem.blockchain.type.imageUrl,
                 error = painterResource(R.drawable.ic_platform_placeholder_32)
             ),
             contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
-            body_leah(text = blockchain.name)
-            subhead2_grey(text = address)
+            body_leah(text = addressViewItem.blockchain.name)
+            subhead2_grey(text = addressViewItem.contactAddress.address)
         }
         Spacer(Modifier.width(9.dp))
         Icon(
             painter = painterResource(id = R.drawable.ic_edit_20),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = if (addressViewItem.edited) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
         )
     }
 }
