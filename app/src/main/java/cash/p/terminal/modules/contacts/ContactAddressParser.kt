@@ -7,9 +7,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class ContactAddressParser(
-    private val handlers: List<IAddressHandler>
+    private val domainAddressHandlers: List<IAddressHandler>,
+    private val rawAddressHandlers: List<IAddressHandler>
 ) {
     suspend fun parseAddress(value: String): Address = withContext(Dispatchers.IO) {
+        try {
+            val resolvedAddress = parse(value, domainAddressHandlers)
+            parse(resolvedAddress.hex, rawAddressHandlers)
+        } catch (error: Throwable) {
+            parse(value, rawAddressHandlers)
+        }
+    }
+
+    private fun parse(value: String, handlers: List<IAddressHandler>): Address {
         if (value.isBlank()) throw AddressValidationException.Blank()
 
         val vTrimmed = value.trim()
@@ -23,7 +33,7 @@ class ContactAddressParser(
         } ?: throw AddressValidationException.Unsupported()
 
         try {
-            handler.parseAddress(vTrimmed)
+            return handler.parseAddress(vTrimmed)
         } catch (t: Throwable) {
             throw AddressValidationException.Invalid(t)
         }
