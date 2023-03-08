@@ -84,6 +84,7 @@ class ZcashAdapter(
         synchronizer = Synchronizer.newBlocking(
             context = context,
             zcashNetwork = network,
+            alias = getValidAliasFromAccountId(wallet.account.id),
             lightWalletEndpoint = lightWalletEndpoint,
             seed = seed,
             birthday = birthday
