@@ -32,19 +32,40 @@ class ContactsRepository {
     private val _contactsFlow = MutableStateFlow(contacts)
     val contactsFlow: StateFlow<List<Contact>> = _contactsFlow
 
-    fun getContactsFiltered(blockchainType: BlockchainType, query: String): List<Contact> {
-        val predicate: (Contact) -> Boolean = {
-            if (query.isNotEmpty()) {
-                it.name.contains(
-                    query,
-                    true
-                ) && it.addresses.isNotEmpty() && it.addresses.any { it.blockchain.type == blockchainType }
-            } else {
-                it.addresses.isNotEmpty() && it.addresses.any { it.blockchain.type == blockchainType }
+    fun getContactsFiltered(
+        blockchainType: BlockchainType,
+        nameQuery: String? = null,
+        addressQuery: String? = null,
+    ): List<Contact> {
+        val criteria = mutableListOf<(Contact) -> Boolean>()
+
+        nameQuery?.let {
+            criteria.add {
+                it.name.contains(nameQuery, true)
             }
         }
 
-        return contacts.filter(predicate)
+        criteria.add {
+            it.addresses.isNotEmpty()
+        }
+
+        if (addressQuery != null) {
+            criteria.add {
+                it.addresses.any {
+                    it.blockchain.type == blockchainType && it.address.equals(addressQuery, true)
+                }
+            }
+        } else {
+            criteria.add {
+                it.addresses.any { it.blockchain.type == blockchainType }
+            }
+        }
+
+        return contacts.filter { contact ->
+            criteria.all {
+                it.invoke(contact)
+            }
+        }
     }
 
     fun save(contact: Contact) {

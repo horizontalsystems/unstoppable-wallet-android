@@ -164,27 +164,50 @@ fun TitleAndValueCell(
 }
 
 @Composable
-fun TransactionInfoAddressCell(
-    title: String,
-    value: String
-) {
+fun TransactionInfoAddressCell(title: String, value: String) {
     val view = LocalView.current
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
-        subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
+        subhead2_grey(text = title)
+
+        HSpacer(16.dp)
         subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value,
             textAlign = TextAlign.Right
         )
-        Spacer(modifier = Modifier.width(8.dp))
+
+        HSpacer(16.dp)
+        ButtonSecondaryCircle(
+            icon = R.drawable.icon_20_user_plus,
+            onClick = {
+
+            }
+        )
+
+        HSpacer(16.dp)
         ButtonSecondaryCircle(
             icon = R.drawable.ic_copy_20,
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
             }
+        )
+    }
+}
+
+@Composable
+fun TransactionInfoContactCell(name: String) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
+        subhead2_grey(text = stringResource(R.string.TransactionInfo_ContactName))
+        HSpacer(16.dp)
+        subhead2_leah(
+            modifier = Modifier.weight(1f),
+            text = name,
+            textAlign = TextAlign.Right
         )
     }
 }

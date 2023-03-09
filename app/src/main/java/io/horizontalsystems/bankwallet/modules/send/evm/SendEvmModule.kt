@@ -54,7 +54,6 @@ data class SendEvmData(
 
     @Parcelize
     data class SendInfo(
-        val domain: String?,
         val nftShortMeta: NftShortMeta? = null
     ) : Parcelable
 
