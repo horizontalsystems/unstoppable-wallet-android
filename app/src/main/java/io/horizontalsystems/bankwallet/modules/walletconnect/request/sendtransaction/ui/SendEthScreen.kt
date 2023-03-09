@@ -90,7 +90,8 @@ fun SendEthRequestScreen(
                                 )
                                 is ViewItem.Address -> TransactionInfoAddressCell(
                                     item.title,
-                                    item.value
+                                    item.value,
+                                    item.showAdd,
                                 )
                                 is ViewItem.ContactItem -> TransactionInfoContactCell(
                                     item.contact.name
