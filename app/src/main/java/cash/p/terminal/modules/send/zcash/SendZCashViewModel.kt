@@ -11,6 +11,7 @@ import cash.p.terminal.core.*
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.SendAmountService
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
@@ -27,7 +28,8 @@ class SendZCashViewModel(
     private val xRateService: XRateService,
     private val amountService: SendAmountService,
     private val addressService: SendZCashAddressService,
-    private val memoService: SendZCashMemoService
+    private val memoService: SendZCashMemoService,
+    private val contactsRepo: ContactsRepository = ContactsRepository(),
 ) : ViewModel() {
 
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -119,10 +121,16 @@ class SendZCashViewModel(
     }
 
     fun getConfirmationData(): SendConfirmationData {
+        val address = addressState.address!!
+        val contact = contactsRepo.getContactsFiltered(
+            wallet.token.blockchainType,
+            addressQuery = address.hex
+        ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
             fee = fee,
-            address = addressState.address!!,
+            address = address,
+            contact = contact,
             coin = wallet.coin,
             feeCoin = wallet.coin,
             memo = memoState.memo

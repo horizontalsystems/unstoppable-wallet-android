@@ -8,20 +8,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.iconUrl
-import cash.p.terminal.core.shorten
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
+import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.fee.HSFeeInputRaw
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -48,6 +46,7 @@ fun SendConfirmationScreen(
     feeCoin: Coin,
     amount: BigDecimal,
     address: Address,
+    contact: Contact?,
     fee: BigDecimal,
     lockTimeInterval: LockTimeInterval?,
     memo: String?,
@@ -131,7 +130,12 @@ fun SendConfirmationScreen(
                             ConfirmAmountCell(currencyAmount, coinAmount, coin)
                         }
                         add {
-                            AddressCell(address.hex)
+                            TransactionInfoAddressCell(stringResource(R.string.Send_Confirmation_To), address.hex, contact == null)
+                        }
+                        contact?.let {
+                            add {
+                                TransactionInfoContactCell(name = contact.name)
+                            }
                         }
                         if (lockTimeInterval != null) {
                             add {
@@ -227,29 +231,6 @@ fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
         )
         Spacer(Modifier.weight(1f))
         subhead1_grey(text = fiatAmount ?: "")
-    }
-}
-
-@Composable
-fun AddressCell(address: String) {
-    val clipboardManager = LocalClipboardManager.current
-    val view = LocalView.current
-
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-    ) {
-        subhead2_grey(text = stringResource(R.string.Send_Confirmation_To))
-        Spacer(Modifier.weight(1f))
-        ButtonSecondaryDefault(
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .height(28.dp),
-            title = address.shorten(),
-            onClick = {
-                clipboardManager.setText(AnnotatedString(address))
-                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-            }
-        )
     }
 }
 

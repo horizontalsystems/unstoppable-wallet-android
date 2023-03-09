@@ -11,6 +11,7 @@ import cash.p.terminal.core.*
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
@@ -31,7 +32,8 @@ class SendBitcoinViewModel(
     private val addressService: SendBitcoinAddressService,
     private val pluginService: SendBitcoinPluginService,
     private val xRateService: XRateService,
-    private val btcBlockchainManager: BtcBlockchainManager
+    private val btcBlockchainManager: BtcBlockchainManager,
+    private val contactsRepo: ContactsRepository = ContactsRepository(),
 ) : ViewModel() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -193,10 +195,16 @@ class SendBitcoinViewModel(
     }
 
     fun getConfirmationData(): SendConfirmationData {
+        val address = addressState.validAddress!!
+        val contact = contactsRepo.getContactsFiltered(
+            wallet.token.blockchainType,
+            addressQuery = address.hex
+        ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
             fee = fee!!,
-            address = addressState.validAddress!!,
+            address = address,
+            contact = contact,
             coin = wallet.token.coin,
             feeCoin = wallet.token.coin,
             lockTimeInterval = pluginState.lockTimeInterval
