@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -31,7 +32,8 @@ class SendBitcoinViewModel(
     private val addressService: SendBitcoinAddressService,
     private val pluginService: SendBitcoinPluginService,
     private val xRateService: XRateService,
-    private val btcBlockchainManager: BtcBlockchainManager
+    private val btcBlockchainManager: BtcBlockchainManager,
+    private val contactsRepo: ContactsRepository = ContactsRepository(),
 ) : ViewModel() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -193,10 +195,16 @@ class SendBitcoinViewModel(
     }
 
     fun getConfirmationData(): SendConfirmationData {
+        val address = addressState.validAddress!!
+        val contact = contactsRepo.getContactsFiltered(
+            wallet.token.blockchainType,
+            addressQuery = address.hex
+        ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
             fee = fee!!,
-            address = addressState.validAddress!!,
+            address = address,
+            contact = contact,
             coin = wallet.token.coin,
             feeCoin = wallet.token.coin,
             lockTimeInterval = pluginState.lockTimeInterval
