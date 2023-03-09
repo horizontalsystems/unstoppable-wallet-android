@@ -164,7 +164,7 @@ fun TitleAndValueCell(
 }
 
 @Composable
-fun TransactionInfoAddressCell(title: String, value: String) {
+fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean = false) {
     val view = LocalView.current
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -178,13 +178,15 @@ fun TransactionInfoAddressCell(title: String, value: String) {
             textAlign = TextAlign.Right
         )
 
-        HSpacer(16.dp)
-        ButtonSecondaryCircle(
-            icon = R.drawable.icon_20_user_plus,
-            onClick = {
+        if (showAdd) {
+            HSpacer(16.dp)
+            ButtonSecondaryCircle(
+                icon = R.drawable.icon_20_user_plus,
+                onClick = {
 
-            }
-        )
+                }
+            )
+        }
 
         HSpacer(16.dp)
         ButtonSecondaryCircle(

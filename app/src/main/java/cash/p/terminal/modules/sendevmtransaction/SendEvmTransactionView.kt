@@ -114,7 +114,7 @@ private fun SectionView(viewItems: List<ViewItem>) {
             is ViewItem.AmountMulti -> AmountMulti(item)
             is ViewItem.Amount -> Amount(item)
             is ViewItem.NftAmount -> NftAmount(item)
-            is ViewItem.Address -> TransactionInfoAddressCell(item.title, item.value)
+            is ViewItem.Address -> TransactionInfoAddressCell(item.title, item.value, item.showAdd)
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
             is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
             is ViewItem.TokenItem -> Token(item)

@@ -209,26 +209,37 @@ class SendEvmTransactionViewModel(
         val sections = mutableListOf<SectionViewItem>()
         val addressValue = recipient.eip55
 
-        val viewItems = mutableListOf(
-            ViewItem.Subhead(
-                Translator.getString(R.string.Send_Confirmation_YouSend),
-                sendInfo?.nftShortMeta?.nftName ?: tokenId.toString(),
-                R.drawable.ic_arrow_up_right_12
-            ),
-            getNftAmount(
-                value,
-                sendInfo?.nftShortMeta?.previewImageUrl
-            ),
-            ViewItem.Address(
-                Translator.getString(R.string.Send_Confirmation_To),
-                addressValue
+        val viewItems = buildList {
+            add(
+                ViewItem.Subhead(
+                    Translator.getString(R.string.Send_Confirmation_YouSend),
+                    sendInfo?.nftShortMeta?.nftName ?: tokenId.toString(),
+                    R.drawable.ic_arrow_up_right_12
+                )
             )
-        )
 
-        getContact(addressValue)?.let {
-            viewItems.add(
-                ViewItem.ContactItem(it)
+            add(
+                getNftAmount(
+                    value,
+                    sendInfo?.nftShortMeta?.previewImageUrl
+                )
             )
+
+            val contact = getContact(addressValue)
+
+            add(
+                ViewItem.Address(
+                    Translator.getString(R.string.Send_Confirmation_To),
+                    addressValue,
+                    contact == null
+                )
+            )
+
+            contact?.let {
+                add(
+                    ViewItem.ContactItem(it)
+                )
+            }
         }
 
         sections.add(SectionViewItem(viewItems))
@@ -273,13 +284,15 @@ class SendEvmTransactionViewModel(
         }
         if (recipient != null) {
             val addressValue = recipient.eip55
+            val contact = getContact(addressValue)
             otherViewItems.add(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
-                    addressValue
+                    addressValue,
+                    contact == null
                 )
             )
-            getContact(addressValue)?.let {
+            contact?.let {
                 otherViewItems.add(
                     ViewItem.ContactItem(it)
                 )
@@ -492,13 +505,15 @@ class SendEvmTransactionViewModel(
 
         if (recipient != null) {
             val addressValue = recipient.eip55
+            val contact = getContact(addressValue)
             viewItems.add(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
-                    addressValue
+                    addressValue,
+                    contact == null
                 )
             )
-            getContact(addressValue)?.let {
+            contact?.let {
                 viewItems.add(
                     ViewItem.ContactItem(it)
                 )
@@ -599,13 +614,15 @@ class SendEvmTransactionViewModel(
             )
         )
         val addressValue = to.eip55
+        val contact = getContact(addressValue)
         viewItems.add(
             ViewItem.Address(
                 Translator.getString(R.string.Send_Confirmation_To),
-                addressValue
+                addressValue,
+                contact == null
             )
         )
-        getContact(addressValue)?.let {
+        contact?.let {
             viewItems.add(
                 ViewItem.ContactItem(it)
             )
@@ -625,49 +642,42 @@ class SendEvmTransactionViewModel(
     ): List<SectionViewItem>? {
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
-        val addressValue = spender.eip55
-
-        val viewItems = mutableListOf<ViewItem>()
-
-        if (value.compareTo(BigInteger.ZERO) == 0) {
-            viewItems.addAll(
-                listOf(
+        val viewItems = buildList {
+            if (value.compareTo(BigInteger.ZERO) == 0) {
+                add(
                     ViewItem.Subhead(
                         Translator.getString(R.string.Approve_YouRevoke),
                         coinService.token.coin.name,
-                    ),
-                    ViewItem.TokenItem(coinService.token),
-                    ViewItem.Address(
-                        Translator.getString(R.string.Approve_Spender),
-                        addressValue
                     )
                 )
-            )
-            getContact(addressValue)?.let {
-                viewItems.add(
-                    ViewItem.ContactItem(it)
-                )
-            }
-        } else {
-            viewItems.addAll(
-                listOf(
+                add(ViewItem.TokenItem(coinService.token))
+            } else {
+                add(
                     ViewItem.Subhead(
                         Translator.getString(R.string.Approve_YouApprove),
                         coinService.token.coin.name,
-                    ),
+                    )
+                )
+                add(
                     getAmount(
                         coinService.amountData(value),
                         ValueType.Regular,
                         coinService.token
-                    ),
-                    ViewItem.Address(
-                        Translator.getString(R.string.Approve_Spender),
-                        addressValue
                     )
                 )
+            }
+
+            val addressValue = spender.eip55
+            val contact = getContact(addressValue)
+            add(
+                ViewItem.Address(
+                    Translator.getString(R.string.Approve_Spender),
+                    addressValue,
+                    contact == null
+                )
             )
-            getContact(addressValue)?.let {
-                viewItems.add(
+            contact?.let {
+                add(
                     ViewItem.ContactItem(it)
                 )
             }
@@ -681,40 +691,44 @@ class SendEvmTransactionViewModel(
         methodName: String?,
         dAppName: String?
     ): List<SectionViewItem> {
-        val toValue = transactionData.to.eip55
-
-        val viewItems = mutableListOf(
-            getAmount(
-                coinServiceFactory.baseCoinService.amountData(transactionData.value),
-                ValueType.Outgoing,
-                coinServiceFactory.baseCoinService.token
-            ),
-            ViewItem.Address(
-                Translator.getString(R.string.Send_Confirmation_To),
-                toValue
-            )
-        )
-        getContact(toValue)?.let {
-            viewItems.add(
-                ViewItem.ContactItem(it)
-            )
-        }
-
-
-        methodName?.let {
-            viewItems.add(ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
-        }
-
-        viewItems.add(ViewItem.Input(transactionData.input.toHexString()))
-
-        dAppName?.let {
-            viewItems.add(
-                ViewItem.Value(
-                    Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
-                    it,
-                    ValueType.Regular
+        val viewItems = buildList {
+            add(
+                getAmount(
+                    coinServiceFactory.baseCoinService.amountData(transactionData.value),
+                    ValueType.Outgoing,
+                    coinServiceFactory.baseCoinService.token
                 )
             )
+            val toValue = transactionData.to.eip55
+            val contact = getContact(toValue)
+            add(
+                ViewItem.Address(
+                    Translator.getString(R.string.Send_Confirmation_To),
+                    toValue,
+                    contact == null
+                )
+            )
+            contact?.let {
+                add(
+                    ViewItem.ContactItem(it)
+                )
+            }
+
+            methodName?.let {
+                add(ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
+            }
+
+            add(ViewItem.Input(transactionData.input.toHexString()))
+
+            dAppName?.let {
+                add(
+                    ViewItem.Value(
+                        Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
+                        it,
+                        ValueType.Regular
+                    )
+                )
+            }
         }
 
         return listOf(SectionViewItem(viewItems))
@@ -724,27 +738,34 @@ class SendEvmTransactionViewModel(
         val toValue = to.eip55
         val baseCoinService = coinServiceFactory.baseCoinService
 
-        val viewItems = mutableListOf(
-            ViewItem.Subhead(
-                Translator.getString(R.string.Send_Confirmation_YouSend),
-                baseCoinService.token.coin.name,
-                R.drawable.ic_arrow_up_right_12
-            ),
-            getAmount(
-                baseCoinService.amountData(value),
-                ValueType.Outgoing,
-                baseCoinService.token
-            ),
-            ViewItem.Address(
-                Translator.getString(R.string.Send_Confirmation_To),
-                toValue
+        val viewItems = buildList {
+            add(
+                ViewItem.Subhead(
+                    Translator.getString(R.string.Send_Confirmation_YouSend),
+                    baseCoinService.token.coin.name,
+                    R.drawable.ic_arrow_up_right_12
+                )
             )
-        )
-
-        getContact(toValue)?.let {
-            viewItems.add(
-                ViewItem.ContactItem(it)
+            add(
+                getAmount(
+                    baseCoinService.amountData(value),
+                    ValueType.Outgoing,
+                    baseCoinService.token
+                )
             )
+            val contact = getContact(toValue)
+            add(
+                ViewItem.Address(
+                    Translator.getString(R.string.Send_Confirmation_To),
+                    toValue,
+                    contact == null
+                )
+            )
+            contact?.let {
+                add(
+                    ViewItem.ContactItem(it)
+                )
+            }
         }
 
         return listOf(
@@ -868,7 +889,7 @@ sealed class ViewItem {
         val type: ValueType,
     ) : ViewItem()
 
-    class Address(val title: String, val value: String) : ViewItem()
+    class Address(val title: String, val value: String, val showAdd: Boolean) : ViewItem()
     class Input(val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()
     class ContactItem(val contact: Contact) : ViewItem()
