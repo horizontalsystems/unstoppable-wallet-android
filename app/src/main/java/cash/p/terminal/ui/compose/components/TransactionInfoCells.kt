@@ -164,7 +164,7 @@ fun TitleAndValueCell(
 }
 
 @Composable
-fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean = false) {
+fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean) {
     val view = LocalView.current
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),

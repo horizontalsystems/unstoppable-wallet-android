@@ -11,6 +11,7 @@ import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionItem
 import io.horizontalsystems.core.helpers.DateHelper
@@ -36,7 +37,9 @@ object TransactionInfoModule {
                 Translator,
                 DateHelper,
                 App.evmLabelManager,
-                transactionSource.blockchain.type.resendable
+                transactionSource.blockchain.type.resendable,
+                ContactsRepository(),
+                transactionSource.blockchain.type
             )
 
             return TransactionInfoViewModel(service, factory) as T

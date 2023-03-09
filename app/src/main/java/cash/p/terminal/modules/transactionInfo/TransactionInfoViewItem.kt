@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactionInfo
 
 import androidx.compose.runtime.Composable
 import cash.p.terminal.entities.nft.NftUid
+import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import java.util.*
@@ -15,7 +16,9 @@ sealed class TransactionInfoViewItem {
 
     class Value(val title: String, val value: String) : TransactionInfoViewItem()
 
-    class Address(val title: String, val value: String) : TransactionInfoViewItem()
+    class Address(val title: String, val value: String, val showAdd: Boolean) : TransactionInfoViewItem()
+
+    class ContactItem(val contact: Contact) : TransactionInfoViewItem()
 
     class TransactionHash(val transactionHash: String) : TransactionInfoViewItem()
 

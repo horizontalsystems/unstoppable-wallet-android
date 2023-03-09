@@ -21,10 +21,13 @@ import cash.p.terminal.entities.transactionrecords.evm.*
 import cash.p.terminal.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
+import cash.p.terminal.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.*
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -35,7 +38,9 @@ class TransactionInfoViewItemFactory(
     private val translator: Translator,
     private val dateHelper: DateHelper,
     private val evmLabelManager: EvmLabelManager,
-    private val resendEnabled: Boolean
+    private val resendEnabled: Boolean,
+    private val contactsRepo: ContactsRepository,
+    private val blockchainType: BlockchainType
 ) {
     private val zeroAddress = "0x0000000000000000000000000000000000000000"
 
@@ -92,10 +97,19 @@ class TransactionInfoViewItemFactory(
                         true
                     ).toMutableList()
 
-                    if (transaction.recipient != null) {
+                    val recipient = transaction.recipient
+                    if (recipient != null) {
+                        val contact = getContact(recipient)
+
                         youGetSectionItems.add(
-                            Address(getString(R.string.TransactionInfo_RecipientHash), transaction.recipient)
+                            Address(getString(R.string.TransactionInfo_RecipientHash), recipient, contact == null)
                         )
+
+                        contact?.let {
+                            youGetSectionItems.add(
+                                ContactItem(it)
+                            )
+                        }
                     }
 
                     itemSections.add(youGetSectionItems)
@@ -231,6 +245,10 @@ class TransactionInfoViewItemFactory(
         return itemSections
     }
 
+    private fun getContact(address: String?): Contact? {
+        return contactsRepo.getContactsFiltered(blockchainType, addressQuery = address).firstOrNull()
+    }
+
     private fun addMemoItem(
         memo: String?,
         miscItemsSection: MutableList<TransactionInfoViewItem>
@@ -274,9 +292,15 @@ class TransactionInfoViewItemFactory(
         )
 
         if (!mint && fromAddress != null) {
+            val contact = getContact(fromAddress)
             items.add(
-                Address(getString(R.string.TransactionInfo_From), fromAddress)
+                Address(getString(R.string.TransactionInfo_From), fromAddress, contact == null)
             )
+            contact?.let {
+                items.add(
+                    ContactItem(it)
+                )
+            }
         }
 
         rate?.let { items.add(it) }
@@ -333,9 +357,14 @@ class TransactionInfoViewItemFactory(
         )
 
         if (!burn && toAddress != null) {
+            val contact = getContact(toAddress)
             items.add(
-                Address(getString(R.string.TransactionInfo_To), toAddress)
+                Address(getString(R.string.TransactionInfo_To), toAddress, contact == null)
             )
+
+            contact?.let {
+                items.add(ContactItem(it))
+            }
         }
 
         rate?.let { items.add(it) }
@@ -450,11 +479,29 @@ class TransactionInfoViewItemFactory(
             ColorName.Grey
         )
 
-        return listOf(
-            Transaction(getString(R.string.Transactions_Approve), value.fullName, R.drawable.ic_checkmark_24),
-            Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coinIconUrl, value.coinIconPlaceholder, value.coin?.uid),
-            Address(getString(R.string.TransactionInfo_Spender), spenderAddress)
+        val contact = getContact(spenderAddress)
+
+        val items = mutableListOf(
+            Transaction(
+                getString(R.string.Transactions_Approve),
+                value.fullName,
+                R.drawable.ic_checkmark_24
+            ),
+            Amount(
+                coinAmountColoredValue,
+                fiatAmountColoredValue,
+                value.coinIconUrl,
+                value.coinIconPlaceholder,
+                value.coin?.uid
+            ),
+            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, contact == null)
         )
+
+        contact?.let {
+            items.add(ContactItem(it))
+        }
+
+        return items
     }
 
     private fun getContractMethodSectionItems(transaction: ContractCallTransactionRecord) =

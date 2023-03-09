@@ -132,7 +132,12 @@ fun TransactionInfoSection(
                     }
                     is TransactionInfoViewItem.Address -> {
                         add {
-                            TransactionInfoAddressCell(title = viewItem.title, value = viewItem.value)
+                            TransactionInfoAddressCell(title = viewItem.title, value = viewItem.value, showAdd = viewItem.showAdd)
+                        }
+                    }
+                    is TransactionInfoViewItem.ContactItem -> {
+                        add {
+                            TransactionInfoContactCell(viewItem.contact.name)
                         }
                     }
                     is TransactionInfoViewItem.Status -> {
