@@ -42,7 +42,18 @@ object WCRequestModule {
         dAppName: String?
     ) : ViewModelProvider.Factory {
         private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
-        private val token by lazy { getToken(evmKitWrapper.evmKit.chain) }
+        private val blockchainType = when (evmKitWrapper.evmKit.chain) {
+            Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
+            Chain.Polygon -> BlockchainType.Polygon
+            Chain.Avalanche -> BlockchainType.Avalanche
+            Chain.Optimism -> BlockchainType.Optimism
+            Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+            Chain.Gnosis -> BlockchainType.Gnosis
+            else -> BlockchainType.Ethereum
+        }
+        private val token by lazy {
+            getToken(blockchainType)
+        }
         private val transaction = request.transaction
         private val transactionData =
             TransactionData(transaction.to, transaction.value, transaction.data)
@@ -98,7 +109,7 @@ object WCRequestModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        App.evmLabelManager
+                        blockchainType = blockchainType
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
@@ -110,7 +121,18 @@ object WCRequestModule {
         private val service by lazy {
             WC2SendEthereumTransactionRequestService(requestData, App.wc2SessionManager)
         }
-        private val token by lazy { getToken(service.evmKitWrapper.evmKit.chain) }
+        private val blockchainType = when (service.evmKitWrapper.evmKit.chain) {
+            Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
+            Chain.Polygon -> BlockchainType.Polygon
+            Chain.Avalanche -> BlockchainType.Avalanche
+            Chain.Optimism -> BlockchainType.Optimism
+            Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+            Chain.Gnosis -> BlockchainType.Gnosis
+            else -> BlockchainType.Ethereum
+        }
+        private val token by lazy {
+            getToken(blockchainType)
+        }
         private val transaction = service.transactionRequest.transaction
         private val transactionData =
             TransactionData(transaction.to, transaction.value, transaction.data)
@@ -165,7 +187,7 @@ object WCRequestModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        App.evmLabelManager
+                        blockchainType = blockchainType
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
@@ -173,16 +195,7 @@ object WCRequestModule {
         }
     }
 
-    private fun getToken(chain: Chain): Token {
-        val blockchainType = when (chain) {
-            Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
-            Chain.Polygon -> BlockchainType.Polygon
-            Chain.Avalanche -> BlockchainType.Avalanche
-            Chain.Optimism -> BlockchainType.Optimism
-            Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
-            Chain.Gnosis -> BlockchainType.Gnosis
-            else -> BlockchainType.Ethereum
-        }
+    private fun getToken(blockchainType: BlockchainType): Token {
         return App.evmBlockchainManager.getBaseToken(blockchainType)!!
     }
 

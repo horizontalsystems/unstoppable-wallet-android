@@ -32,17 +32,18 @@ object SendEvmConfirmationModule {
         private val sendEvmData: SendEvmData
     ) : ViewModelProvider.Factory {
 
+        private val blockchainType = when (evmKitWrapper.evmKit.chain) {
+            Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
+            Chain.Polygon -> BlockchainType.Polygon
+            Chain.Avalanche -> BlockchainType.Avalanche
+            Chain.Optimism -> BlockchainType.Optimism
+            Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+            Chain.Gnosis -> BlockchainType.Gnosis
+            Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
+            else -> BlockchainType.Ethereum
+        }
+
         private val feeToken by lazy {
-            val blockchainType = when (evmKitWrapper.evmKit.chain) {
-                Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
-                Chain.Polygon -> BlockchainType.Polygon
-                Chain.Avalanche -> BlockchainType.Avalanche
-                Chain.Optimism -> BlockchainType.Optimism
-                Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
-                Chain.Gnosis -> BlockchainType.Gnosis
-                Chain.EthereumGoerli -> BlockchainType.EthereumGoerli
-                else -> BlockchainType.Ethereum
-            }
             App.evmBlockchainManager.getBaseToken(blockchainType)!!
         }
         private val gasPriceService: IEvmGasPriceService by lazy {
@@ -79,7 +80,12 @@ object SendEvmConfirmationModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory, App.evmLabelManager) as T
+                    SendEvmTransactionViewModel(
+                        sendService,
+                        coinServiceFactory,
+                        cautionViewItemFactory,
+                        blockchainType = blockchainType
+                    ) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
                     EvmFeeCellViewModel(feeService, gasPriceService, coinServiceFactory.baseCoinService) as T

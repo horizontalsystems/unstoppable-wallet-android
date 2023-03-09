@@ -63,7 +63,6 @@ class SendEip1155ViewModel(
 
     fun getSendData(): SendEvmData? {
         val evmAddress = addressState.evmAddress ?: return null
-        val domain = addressState.address?.domain
         val amount = amountState?.dataOrNull?.toBigInteger() ?: return null
         if (amount <= BigInteger.ZERO) {
             return null
@@ -81,7 +80,7 @@ class SendEip1155ViewModel(
         }
 
         val additionalInfo =
-            SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(domain, nftShortMeta))
+            SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(nftShortMeta))
 
         return SendEvmData(transactionData, additionalInfo)
     }

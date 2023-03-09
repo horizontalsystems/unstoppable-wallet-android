@@ -88,10 +88,12 @@ fun SendEthRequestScreen(
                                     item.value,
                                     item.type
                                 )
-                                is ViewItem.Address -> TitleHexValueCell(
+                                is ViewItem.Address -> TransactionInfoAddressCell(
                                     item.title,
-                                    item.valueTitle,
                                     item.value
+                                )
+                                is ViewItem.ContactItem -> TransactionInfoContactCell(
+                                    item.contact.name
                                 )
                                 is ViewItem.Input -> TitleHexValueCell(
                                     Translator.getString(R.string.WalletConnect_Input),

@@ -46,7 +46,6 @@ class SendEip721ViewModel(
 
     fun getSendData(): SendEvmData? {
         val evmAddress = addressState.evmAddress ?: return null
-        val domain = addressState.address?.domain
 
         val transactionData = adapter.transferEip721TransactionData(
             nftUid.contractAddress,
@@ -58,7 +57,7 @@ class SendEip721ViewModel(
             SendEvmData.NftShortMeta(it.displayName, it.previewImageUrl)
         }
 
-        val additionalInfo = SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(domain, nftShortMeta))
+        val additionalInfo = SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(nftShortMeta))
 
         return SendEvmData(transactionData, additionalInfo)
     }

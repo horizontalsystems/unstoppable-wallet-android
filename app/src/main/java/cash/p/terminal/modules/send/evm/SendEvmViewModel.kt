@@ -87,11 +87,9 @@ class SendEvmViewModel(
     fun getSendData(): SendEvmData? {
         val tmpEvmAmount = amountState.evmAmount ?: return null
         val evmAddress = addressState.evmAddress ?: return null
-        val domain = addressState.address?.domain
 
         val transactionData = adapter.getTransactionData(tmpEvmAmount, evmAddress)
-        val additionalInfo = SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(domain))
 
-        return SendEvmData(transactionData, additionalInfo)
+        return SendEvmData(transactionData)
     }
 }

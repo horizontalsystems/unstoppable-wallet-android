@@ -11,9 +11,10 @@ import cash.p.terminal.core.convertedError
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.ethereum.CautionViewItemFactory
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
-import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.swap.oneinch.scaleUp
@@ -26,6 +27,7 @@ import io.horizontalsystems.ethereumkit.decorations.OutgoingDecoration
 import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.nftkit.decorations.OutgoingEip1155Decoration
 import io.horizontalsystems.nftkit.decorations.OutgoingEip721Decoration
@@ -42,7 +44,8 @@ class SendEvmTransactionViewModel(
     val service: ISendEvmTransactionService,
     private val coinServiceFactory: EvmCoinServiceFactory,
     private val cautionViewItemFactory: CautionViewItemFactory,
-    private val evmLabelManager: EvmLabelManager
+    private val contactsRepo: ContactsRepository = ContactsRepository(),
+    private val blockchainType: BlockchainType
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
@@ -136,15 +139,13 @@ class SendEvmTransactionViewModel(
         when (decoration) {
             is OutgoingDecoration -> getSendBaseCoinItems(
                 decoration.to,
-                decoration.value,
-                additionalInfo?.sendInfo
+                decoration.value
             )
 
             is OutgoingEip20Decoration -> getEip20TransferViewItems(
                 decoration.to,
                 decoration.value,
-                decoration.contractAddress,
-                additionalInfo?.sendInfo
+                decoration.contractAddress
             )
 
             is ApproveEip20Decoration -> getEip20ApproveViewItems(
@@ -207,28 +208,30 @@ class SendEvmTransactionViewModel(
 
         val sections = mutableListOf<SectionViewItem>()
         val addressValue = recipient.eip55
-        val addressTitle = sendInfo?.domain ?: evmLabelManager.mapped(addressValue)
 
-        sections.add(
-            SectionViewItem(
-                listOf(
-                    ViewItem.Subhead(
-                        Translator.getString(R.string.Send_Confirmation_YouSend),
-                        sendInfo?.nftShortMeta?.nftName ?: tokenId.toString(),
-                        R.drawable.ic_arrow_up_right_12
-                    ),
-                    getNftAmount(
-                        value,
-                        sendInfo?.nftShortMeta?.previewImageUrl
-                    ),
-                    ViewItem.Address(
-                        Translator.getString(R.string.Send_Confirmation_To),
-                        addressTitle,
-                        addressValue
-                    )
-                )
+        val viewItems = mutableListOf(
+            ViewItem.Subhead(
+                Translator.getString(R.string.Send_Confirmation_YouSend),
+                sendInfo?.nftShortMeta?.nftName ?: tokenId.toString(),
+                R.drawable.ic_arrow_up_right_12
+            ),
+            getNftAmount(
+                value,
+                sendInfo?.nftShortMeta?.previewImageUrl
+            ),
+            ViewItem.Address(
+                Translator.getString(R.string.Send_Confirmation_To),
+                addressValue
             )
         )
+
+        getContact(addressValue)?.let {
+            viewItems.add(
+                ViewItem.ContactItem(it)
+            )
+        }
+
+        sections.add(SectionViewItem(viewItems))
 
         return sections
     }
@@ -270,14 +273,17 @@ class SendEvmTransactionViewModel(
         }
         if (recipient != null) {
             val addressValue = recipient.eip55
-            val addressTitle = uniswapInfo?.recipientDomain ?: evmLabelManager.mapped(addressValue)
             otherViewItems.add(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
-                    addressTitle,
                     addressValue
                 )
             )
+            getContact(addressValue)?.let {
+                otherViewItems.add(
+                    ViewItem.ContactItem(it)
+                )
+            }
         }
         uniswapInfo?.price?.let {
             otherViewItems.add(
@@ -486,15 +492,17 @@ class SendEvmTransactionViewModel(
 
         if (recipient != null) {
             val addressValue = recipient.eip55
-            val addressTitle =
-                oneInchSwapInfo.recipient?.domain ?: evmLabelManager.mapped(addressValue)
             viewItems.add(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
-                    addressTitle,
                     addressValue
                 )
             )
+            getContact(addressValue)?.let {
+                viewItems.add(
+                    ViewItem.ContactItem(it)
+                )
+            }
         }
         return viewItems
     }
@@ -574,8 +582,7 @@ class SendEvmTransactionViewModel(
     private fun getEip20TransferViewItems(
         to: Address,
         value: BigInteger,
-        contractAddress: Address,
-        sendInfo: SendEvmData.SendInfo?
+        contractAddress: Address
     ): List<SectionViewItem>? {
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
@@ -592,16 +599,23 @@ class SendEvmTransactionViewModel(
             )
         )
         val addressValue = to.eip55
-        val addressTitle =
-            sendInfo?.domain ?: evmLabelManager.mapped(addressValue)
         viewItems.add(
             ViewItem.Address(
                 Translator.getString(R.string.Send_Confirmation_To),
-                addressTitle,
-                value = addressValue
+                addressValue
             )
         )
+        getContact(addressValue)?.let {
+            viewItems.add(
+                ViewItem.ContactItem(it)
+            )
+        }
+
         return listOf(SectionViewItem(viewItems))
+    }
+
+    private fun getContact(addressValue: String): Contact? {
+        return contactsRepo.getContactsFiltered(blockchainType, addressQuery = addressValue).firstOrNull()
     }
 
     private fun getEip20ApproveViewItems(
@@ -612,7 +626,6 @@ class SendEvmTransactionViewModel(
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
         val addressValue = spender.eip55
-        val addressTitle = evmLabelManager.mapped(addressValue)
 
         val viewItems = mutableListOf<ViewItem>()
 
@@ -626,11 +639,15 @@ class SendEvmTransactionViewModel(
                     ViewItem.TokenItem(coinService.token),
                     ViewItem.Address(
                         Translator.getString(R.string.Approve_Spender),
-                        addressTitle,
                         addressValue
                     )
                 )
             )
+            getContact(addressValue)?.let {
+                viewItems.add(
+                    ViewItem.ContactItem(it)
+                )
+            }
         } else {
             viewItems.addAll(
                 listOf(
@@ -645,11 +662,15 @@ class SendEvmTransactionViewModel(
                     ),
                     ViewItem.Address(
                         Translator.getString(R.string.Approve_Spender),
-                        addressTitle,
                         addressValue
                     )
                 )
             )
+            getContact(addressValue)?.let {
+                viewItems.add(
+                    ViewItem.ContactItem(it)
+                )
+            }
         }
 
         return listOf(SectionViewItem(viewItems))
@@ -670,10 +691,15 @@ class SendEvmTransactionViewModel(
             ),
             ViewItem.Address(
                 Translator.getString(R.string.Send_Confirmation_To),
-                evmLabelManager.mapped(toValue),
                 toValue
             )
         )
+        getContact(toValue)?.let {
+            viewItems.add(
+                ViewItem.ContactItem(it)
+            )
+        }
+
 
         methodName?.let {
             viewItems.add(ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
@@ -694,29 +720,36 @@ class SendEvmTransactionViewModel(
         return listOf(SectionViewItem(viewItems))
     }
 
-    private fun getSendBaseCoinItems(to: Address, value: BigInteger, sendInfo: SendEvmData.SendInfo?): List<SectionViewItem> {
+    private fun getSendBaseCoinItems(to: Address, value: BigInteger): List<SectionViewItem> {
         val toValue = to.eip55
         val baseCoinService = coinServiceFactory.baseCoinService
 
+        val viewItems = mutableListOf(
+            ViewItem.Subhead(
+                Translator.getString(R.string.Send_Confirmation_YouSend),
+                baseCoinService.token.coin.name,
+                R.drawable.ic_arrow_up_right_12
+            ),
+            getAmount(
+                baseCoinService.amountData(value),
+                ValueType.Outgoing,
+                baseCoinService.token
+            ),
+            ViewItem.Address(
+                Translator.getString(R.string.Send_Confirmation_To),
+                toValue
+            )
+        )
+
+        getContact(toValue)?.let {
+            viewItems.add(
+                ViewItem.ContactItem(it)
+            )
+        }
+
         return listOf(
             SectionViewItem(
-                listOf(
-                    ViewItem.Subhead(
-                        Translator.getString(R.string.Send_Confirmation_YouSend),
-                        baseCoinService.token.coin.name,
-                        R.drawable.ic_arrow_up_right_12
-                    ),
-                    getAmount(
-                        baseCoinService.amountData(value),
-                        ValueType.Outgoing,
-                        baseCoinService.token
-                    ),
-                    ViewItem.Address(
-                        Translator.getString(R.string.Send_Confirmation_To),
-                        sendInfo?.domain ?: evmLabelManager.mapped(toValue),
-                        toValue
-                    )
-                )
+                viewItems
             )
         )
     }
@@ -835,9 +868,10 @@ sealed class ViewItem {
         val type: ValueType,
     ) : ViewItem()
 
-    class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
+    class Address(val title: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()
+    class ContactItem(val contact: Contact) : ViewItem()
 }
 
 data class AmountValues(val coinAmount: String, val fiatAmount: String?)
