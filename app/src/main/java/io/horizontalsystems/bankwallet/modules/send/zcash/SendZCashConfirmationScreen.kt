@@ -26,6 +26,7 @@ fun SendZCashConfirmationScreen(
         feeCoin = confirmationData.feeCoin,
         amount = confirmationData.amount,
         address = confirmationData.address,
+        contact = confirmationData.contact,
         fee = confirmationData.fee,
         lockTimeInterval = confirmationData.lockTimeInterval,
         memo = confirmationData.memo,

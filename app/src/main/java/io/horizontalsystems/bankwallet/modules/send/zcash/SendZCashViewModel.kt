@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -27,7 +28,8 @@ class SendZCashViewModel(
     private val xRateService: XRateService,
     private val amountService: SendAmountService,
     private val addressService: SendZCashAddressService,
-    private val memoService: SendZCashMemoService
+    private val memoService: SendZCashMemoService,
+    private val contactsRepo: ContactsRepository = ContactsRepository(),
 ) : ViewModel() {
 
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -119,10 +121,16 @@ class SendZCashViewModel(
     }
 
     fun getConfirmationData(): SendConfirmationData {
+        val address = addressState.address!!
+        val contact = contactsRepo.getContactsFiltered(
+            wallet.token.blockchainType,
+            addressQuery = address.hex
+        ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
             fee = fee,
-            address = addressState.address!!,
+            address = address,
+            contact = contact,
             coin = wallet.coin,
             feeCoin = wallet.coin,
             memo = memoState.memo

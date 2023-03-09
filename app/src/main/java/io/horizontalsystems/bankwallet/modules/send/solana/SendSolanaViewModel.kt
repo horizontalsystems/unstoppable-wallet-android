@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendAmountAdvancedService
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
@@ -28,14 +29,15 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendSolanaViewModel(
-        val wallet: Wallet,
-        val sendToken: Token,
-        val feeToken: Token,
-        val adapter: ISendSolanaAdapter,
-        private val xRateService: XRateService,
-        private val amountService: SendAmountAdvancedService,
-        private val addressService: SendSolanaAddressService,
-        val coinMaxAllowedDecimals: Int
+    val wallet: Wallet,
+    val sendToken: Token,
+    val feeToken: Token,
+    val adapter: ISendSolanaAdapter,
+    private val xRateService: XRateService,
+    private val amountService: SendAmountAdvancedService,
+    private val addressService: SendSolanaAddressService,
+    val coinMaxAllowedDecimals: Int,
+    private val contactsRepo: ContactsRepository = ContactsRepository(),
 ) : ViewModel() {
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -86,12 +88,18 @@ class SendSolanaViewModel(
     }
 
     fun getConfirmationData(): SendConfirmationData {
+        val address = addressState.address!!
+        val contact = contactsRepo.getContactsFiltered(
+            wallet.token.blockchainType,
+            addressQuery = address.hex
+        ).firstOrNull()
         return SendConfirmationData(
-                amount = decimalAmount,
-                fee = SolanaKit.fee,
-                address = addressState.address!!,
-                coin = wallet.coin,
-                feeCoin = feeToken.coin
+            amount = decimalAmount,
+            fee = SolanaKit.fee,
+            address = address,
+            contact = contact,
+            coin = wallet.coin,
+            feeCoin = feeToken.coin
         )
     }
 
