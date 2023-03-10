@@ -1044,8 +1044,8 @@
     <string name="CoinPage_SecurityParams_ConfiscationResistance">Confiscation-resistance</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance">Censorship-resistance</string>
     <string name="CoinPage_SecurityParams_Audits">Audits</string>
-    <string name="CoinPage_SecurityParams_Yes">Yes</string>
-    <string name="CoinPage_SecurityParams_No">No</string>
+    <string name="CoinPage_SecurityParams_Yes">Ja</string>
+    <string name="CoinPage_SecurityParams_No">Nein</string>
     <string name="CoinPage_SecurityParams_Privacy_Low">LOW:\nTransactions with this token are fully public allowing 3rd party services to link different transactions to the same entity, see amounts transacted and view user balances.</string>
     <string name="CoinPage_SecurityParams_Privacy_Medium">MEDIUM:\nTransactions with this token are semi-anonymous. A 3rd party service is able to see the amounts transacted and partially link different transactions to the same entity.</string>
     <string name="CoinPage_SecurityParams_Privacy_High">HIGH:\nTransactions with this token are anonymous by default or provide such capabilities. No entity is able to link different transactions to the same individual or see the amounts transacted.</string>
@@ -1065,7 +1065,7 @@
     <string name="CoinPage_Contracts">Contracts</string>
     <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Bips">BIPs</string>
-    <string name="CoinPage_CoinTypes">Coin Types</string>
+    <string name="CoinPage_CoinTypes">Coin Type</string>
     <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">Webseite</string>
