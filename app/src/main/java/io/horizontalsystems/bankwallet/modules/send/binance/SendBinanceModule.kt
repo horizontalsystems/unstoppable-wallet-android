@@ -29,7 +29,8 @@ object SendBinanceModule {
                 amountService,
                 addressService,
                 feeService,
-                xRateService
+                xRateService,
+                App.contactsRepository
             ) as T
         }
 

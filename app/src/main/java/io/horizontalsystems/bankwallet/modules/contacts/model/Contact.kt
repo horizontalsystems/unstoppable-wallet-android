@@ -6,10 +6,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Contact(
-    val id: String,
+    val uid: String,
     val name: String,
-    val addresses: List<ContactAddress>
-): Parcelable
+    val addresses: List<ContactAddress>,
+    val modifiedTimestamp: Long
+) : Parcelable
 
 @Parcelize
 data class ContactAddress(

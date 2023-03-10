@@ -29,7 +29,7 @@ class SendZCashViewModel(
     private val amountService: SendAmountService,
     private val addressService: SendZCashAddressService,
     private val memoService: SendZCashMemoService,
-    private val contactsRepo: ContactsRepository = ContactsRepository(),
+    private val contactsRepo: ContactsRepository
 ) : ViewModel() {
 
     val coinMaxAllowedDecimals = wallet.token.decimals

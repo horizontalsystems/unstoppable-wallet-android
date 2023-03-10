@@ -33,7 +33,7 @@ class SendBitcoinViewModel(
     private val pluginService: SendBitcoinPluginService,
     private val xRateService: XRateService,
     private val btcBlockchainManager: BtcBlockchainManager,
-    private val contactsRepo: ContactsRepository = ContactsRepository(),
+    private val contactsRepo: ContactsRepository
 ) : ViewModel() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal

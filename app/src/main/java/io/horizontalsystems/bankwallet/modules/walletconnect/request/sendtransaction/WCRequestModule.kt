@@ -109,7 +109,8 @@ object WCRequestModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = blockchainType
+                        blockchainType = blockchainType,
+                        contactsRepo = App.contactsRepository
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
@@ -187,7 +188,8 @@ object WCRequestModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = blockchainType
+                        blockchainType = blockchainType,
+                        contactsRepo = App.contactsRepository
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

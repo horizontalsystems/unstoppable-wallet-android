@@ -139,7 +139,8 @@ object TransactionInfoOptionsModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = source.blockchain.type
+                        blockchainType = source.blockchain.type,
+                        contactsRepo = App.contactsRepository
                     ) as T
                 }
                 EvmFeeCellViewModel::class.java -> {

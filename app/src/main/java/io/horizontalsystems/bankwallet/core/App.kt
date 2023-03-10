@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
@@ -130,6 +131,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var balanceHiddenManager: BalanceHiddenManager
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
+        lateinit var contactsRepository: ContactsRepository
     }
 
     override fun onCreate() {
@@ -319,6 +321,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
         balanceHiddenManager = BalanceHiddenManager(localStorage)
 
+        contactsRepository = ContactsRepository(marketKit)
+
         startTasks()
     }
 
@@ -419,6 +423,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             }
 
             evmLabelManager.sync()
+            contactsRepository.initialize()
 
         }.start()
     }

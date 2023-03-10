@@ -37,7 +37,7 @@ class SendSolanaViewModel(
     private val amountService: SendAmountAdvancedService,
     private val addressService: SendSolanaAddressService,
     val coinMaxAllowedDecimals: Int,
-    private val contactsRepo: ContactsRepository = ContactsRepository(),
+    private val contactsRepo: ContactsRepository,
 ) : ViewModel() {
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
