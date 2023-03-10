@@ -29,7 +29,7 @@ class SendBinanceViewModel(
     private val addressService: SendBinanceAddressService,
     private val feeService: SendBinanceFeeService,
     private val xRateService: XRateService,
-    private val contactsRepo: ContactsRepository = ContactsRepository(),
+    private val contactsRepo: ContactsRepository,
 ) : ViewModel() {
     val feeToken by feeService::feeToken
     val feeTokenMaxAllowedDecimals = feeToken.decimals

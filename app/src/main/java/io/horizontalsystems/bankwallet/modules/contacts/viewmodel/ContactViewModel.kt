@@ -19,7 +19,7 @@ class ContactViewModel(
     newAddress: ContactAddress?
 ) : ViewModel() {
 
-    private val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf())
+    private val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf(), -1)
     private val title = if (existingContact == null)
         TranslatableString.ResString(R.string.Contacts_NewContact)
     else
@@ -28,7 +28,7 @@ class ContactViewModel(
     private var contactName = contact.name
     private var addresses: MutableMap<Blockchain, ContactAddress> = contact.addresses.associateBy { it.blockchain }.toMutableMap()
     private var addressViewItems: List<AddressViewItem> = addressViewItems()
-    private val showDelete = existingContact != null
+    private val newContact = existingContact == null
     private var closeAfterSave = false
 
     var uiState by mutableStateOf(uiState())
@@ -47,7 +47,11 @@ class ContactViewModel(
     }
 
     fun onSave() {
-        val editedContact = contact.copy(name = uiState.contactName, addresses = uiState.addressViewItems.map { it.contactAddress })
+        val editedContact = contact.copy(
+            name = uiState.contactName,
+            addresses = uiState.addressViewItems.map { it.contactAddress },
+            modifiedTimestamp = System.currentTimeMillis() / 1000
+        )
         repository.save(editedContact)
 
         closeAfterSave = true
@@ -56,7 +60,7 @@ class ContactViewModel(
     }
 
     fun onDelete() {
-        repository.delete(contact.id)
+        repository.delete(contact.uid)
 
         closeAfterSave = true
 
@@ -68,7 +72,7 @@ class ContactViewModel(
         val newAddresses = addresses.values.toSet()
         val addressesChanged = (savedAddresses.toMutableSet() + newAddresses) != savedAddresses
 
-        return contactName != contact.name || addressesChanged
+        return contactName.isNotBlank() && (contactName != contact.name || addressesChanged)
     }
 
     private fun emitUiState() {
@@ -82,12 +86,12 @@ class ContactViewModel(
     }
 
     private fun uiState() = UiState(
-        headerTitle = this.title,
-        contactName = this.contactName,
+        headerTitle = title,
+        contactName = contactName,
         addressViewItems = addressViewItems,
         saveEnabled = isSaveEnabled(),
-        showDelete = this.showDelete,
-        closeWithSuccess = this.closeAfterSave
+        showDelete = !newContact,
+        closeWithSuccess = closeAfterSave
     )
 
     fun setAddress(address: ContactAddress) {

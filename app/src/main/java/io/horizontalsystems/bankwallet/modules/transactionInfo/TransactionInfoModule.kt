@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.core.helpers.DateHelper
@@ -38,7 +37,7 @@ object TransactionInfoModule {
                 DateHelper,
                 App.evmLabelManager,
                 transactionSource.blockchain.type.resendable,
-                ContactsRepository(),
+                App.contactsRepository,
                 transactionSource.blockchain.type
             )
 

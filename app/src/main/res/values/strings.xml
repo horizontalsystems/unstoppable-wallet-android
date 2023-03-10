@@ -1579,6 +1579,7 @@
     <string name="Contacts_Export">Export Contacts</string>
     <string name="Contacts_AddressesCount">Addresses: %s</string>
     <string name="Contacts_NewContact">New Contact</string>
+    <string name="Contacts_AddNewContact">Add New Contact</string>
     <string name="Contacts_NameHint">Name</string>
     <string name="Contacts_AddAddress">Add Address</string>
     <string name="Contacts_AddressHint">Address or Domain</string>
@@ -1586,5 +1587,6 @@
     <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
     <string name="Contacts_DeleteAddress">Delete Address</string>
     <string name="Contacts_DeleteAddress_Warning">Are you sure you want to delete this address?</string>
+    <string name="Contacts_NoContacts">You do not have an added contact</string>
 
 </resources>
