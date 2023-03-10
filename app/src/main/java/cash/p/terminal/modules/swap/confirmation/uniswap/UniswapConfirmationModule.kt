@@ -69,7 +69,8 @@ object UniswapConfirmationModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = blockchainType
+                        blockchainType = blockchainType,
+                        contactsRepo = App.contactsRepository
                     ) as T
                 }
                 EvmFeeCellViewModel::class.java -> {

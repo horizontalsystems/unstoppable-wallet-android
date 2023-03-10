@@ -50,14 +50,13 @@ class ContactsFragment : BaseFragment() {
 @Composable
 fun ContactsNavHost(navController: NavController) {
     val navHostController = rememberAnimatedNavController()
-    val repository = ContactsRepository()
 
     AnimatedNavHost(
         navController = navHostController,
         startDestination = "contacts",
     ) {
         composable("contacts") { backStackEntry ->
-            val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(repository))
+            val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory())
             ContactsScreen(
                 viewModel = viewModel,
                 onNavigateToBack = { navController.popBackStack() },
@@ -74,7 +73,10 @@ fun ContactsNavHost(navController: NavController) {
             val contact = navHostController.previousBackStackEntry?.savedStateHandle?.get<Contact>("contact")
             val newAddress = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("new_address")
 
-            val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(repository, contact, newAddress))
+            navHostController.previousBackStackEntry?.savedStateHandle?.set("contact", null)
+            navHostController.previousBackStackEntry?.savedStateHandle?.set("new_address", null)
+
+            val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(contact, newAddress))
 
             ContactScreen(
                 viewModel = viewModel,

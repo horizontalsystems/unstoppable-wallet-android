@@ -37,14 +37,15 @@ object SendSolanaModule {
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
 
                     SendSolanaViewModel(
-                            wallet,
-                            wallet.token,
-                            feeToken,
-                            adapter,
-                            xRateService,
-                            amountService,
-                            addressService,
-                            coinMaxAllowedDecimals
+                        wallet,
+                        wallet.token,
+                        feeToken,
+                        adapter,
+                        xRateService,
+                        amountService,
+                        addressService,
+                        coinMaxAllowedDecimals,
+                        App.contactsRepository
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

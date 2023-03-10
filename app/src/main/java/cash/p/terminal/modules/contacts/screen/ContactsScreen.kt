@@ -52,16 +52,31 @@ fun ContactsScreen(
                     )
                 )
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                CellUniversalLawrenceSection(uiState.contacts) { contact ->
-                    Contact(contact) {
-                        onNavigateToContact(contact)
+            if (uiState.contacts.isNotEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Spacer(Modifier.height(12.dp))
+                    CellUniversalLawrenceSection(uiState.contacts) { contact ->
+                        Contact(contact) {
+                            onNavigateToContact(contact)
+                        }
                     }
+                }
+            } else {
+                ScreenMessageWithAction(
+                    text = stringResource(R.string.Contacts_NoContacts),
+                    icon = R.drawable.icon_user_plus
+                ) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .padding(horizontal = 48.dp)
+                            .fillMaxWidth(),
+                        title = stringResource(R.string.Contacts_AddNewContact),
+                        onClick = onNavigateToCreateContact
+                    )
                 }
             }
         }

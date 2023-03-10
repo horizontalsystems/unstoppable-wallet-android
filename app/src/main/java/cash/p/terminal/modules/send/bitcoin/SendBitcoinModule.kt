@@ -31,7 +31,8 @@ object SendBitcoinModule {
                 addressService,
                 pluginService,
                 XRateService(App.marketKit, App.currencyManager.baseCurrency),
-                App.btcBlockchainManager
+                App.btcBlockchainManager,
+                App.contactsRepository
             )  as T
         }
     }

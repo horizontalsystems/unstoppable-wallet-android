@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cash.p.terminal.core.App
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class ChooseContactViewModel(
@@ -41,7 +42,7 @@ class ChooseContactViewModel(
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ChooseContactViewModel(ContactsRepository(), blockchainType) as T
+            return ChooseContactViewModel(App.contactsRepository, blockchainType) as T
         }
     }
 }

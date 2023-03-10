@@ -24,7 +24,7 @@ object SendZCashModule {
             val addressService = SendZCashAddressService(adapter)
             val memoService = SendZCashMemoService()
 
-            return SendZCashViewModel(adapter, wallet, xRateService, amountService, addressService, memoService) as T
+            return SendZCashViewModel(adapter, wallet, xRateService, amountService, addressService, memoService, App.contactsRepository) as T
         }
     }
 }

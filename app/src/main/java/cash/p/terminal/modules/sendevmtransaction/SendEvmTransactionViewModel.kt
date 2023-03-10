@@ -44,7 +44,7 @@ class SendEvmTransactionViewModel(
     val service: ISendEvmTransactionService,
     private val coinServiceFactory: EvmCoinServiceFactory,
     private val cautionViewItemFactory: CautionViewItemFactory,
-    private val contactsRepo: ContactsRepository = ContactsRepository(),
+    private val contactsRepo: ContactsRepository,
     private val blockchainType: BlockchainType
 ) : ViewModel() {
     private val disposable = CompositeDisposable()

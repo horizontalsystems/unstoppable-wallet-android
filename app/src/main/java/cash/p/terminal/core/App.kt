@@ -29,6 +29,7 @@ import cash.p.terminal.core.providers.FeeRateProvider
 import cash.p.terminal.core.providers.FeeTokenProvider
 import cash.p.terminal.core.storage.*
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.keystore.KeyStoreActivity
 import cash.p.terminal.modules.launcher.LauncherActivity
 import cash.p.terminal.modules.lockscreen.LockScreenActivity
@@ -130,6 +131,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var balanceHiddenManager: BalanceHiddenManager
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
+        lateinit var contactsRepository: ContactsRepository
     }
 
     override fun onCreate() {
@@ -319,6 +321,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
         balanceHiddenManager = BalanceHiddenManager(localStorage)
 
+        contactsRepository = ContactsRepository(marketKit)
+
         startTasks()
     }
 
@@ -419,6 +423,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             }
 
             evmLabelManager.sync()
+            contactsRepository.initialize()
 
         }.start()
     }
