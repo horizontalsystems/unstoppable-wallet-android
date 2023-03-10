@@ -1102,7 +1102,7 @@
     <string name="CoinPage_TvlRank_Description">The ranking among other protocols is based on the TVL value in USD terms.</string>
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
     <string name="CoinPage_TvlMCapRatio_Description">The ratio of the project token\'s market cap over its TVL.</string>
-    <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
+    <string name="CoinPage_TvlDescription">Capital is deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
