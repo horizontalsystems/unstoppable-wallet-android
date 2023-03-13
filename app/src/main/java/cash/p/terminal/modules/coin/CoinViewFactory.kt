@@ -13,7 +13,7 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.LinkType
 import io.horizontalsystems.marketkit.models.MarketInfoOverview
-import io.horizontalsystems.marketkit.models.TokenHolder
+import io.horizontalsystems.marketkit.models.TokenHolders
 import java.math.BigDecimal
 import java.net.URI
 
@@ -67,7 +67,7 @@ data class CoinDataItem(
 class MajorHolderItem(
     val index: Int,
     val address: String,
-    val share: BigDecimal,
+    val balance: String,
     val sharePercent: String
 )
 
@@ -110,21 +110,26 @@ class CoinViewFactory(
         )
     }
 
-    fun getCoinMajorHolders(topTokenHolders: List<TokenHolder>): List<MajorHolderItem> {
+    fun getTop10Share(number: BigDecimal) : String = numberFormatter.format(number, 0, 2, suffix = "%",)
+
+    fun getHoldersCount(number: BigDecimal) : String = numberFormatter.formatNumberShort(number, 2)
+
+    fun getCoinMajorHolders(tokenHolders: TokenHolders): List<MajorHolderItem> {
         val list = mutableListOf<MajorHolderItem>()
-        if (topTokenHolders.isEmpty()) {
+        if (tokenHolders.topHolders.isEmpty()) {
             return list
         }
 
-        topTokenHolders
-            .sortedByDescending { it.share }
+        tokenHolders.topHolders
+            .sortedByDescending { it.percentage }
             .forEachIndexed { index, holder ->
-                val shareFormatted = numberFormatter.format(holder.share, 0, 2, suffix = "%")
+                val shareFormatted = numberFormatter.format(holder.percentage, 0, 2, suffix = "%")
+                val balanceFormatted = numberFormatter.formatNumberShort(holder.balance, 2)
                 list.add(
                     MajorHolderItem(
                         index + 1,
                         holder.address,
-                        holder.share,
+                        balanceFormatted,
                         shareFormatted
                     )
                 )

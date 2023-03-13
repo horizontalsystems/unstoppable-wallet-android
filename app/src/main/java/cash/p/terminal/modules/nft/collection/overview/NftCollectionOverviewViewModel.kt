@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
 import cash.p.terminal.core.IAppNumberFormatter
+import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.CurrencyValue
@@ -139,7 +140,7 @@ class NftCollectionOverviewViewModel(
             ContractInfo(
                 it.address,
                 service.blockchainType.imageUrl,
-                service.blockchain?.explorerUrl?.replace("\$ref", it.address),
+                service.blockchain?.eip20TokenUrl(it.address),
                 it.name,
                 it.schemaName
             )

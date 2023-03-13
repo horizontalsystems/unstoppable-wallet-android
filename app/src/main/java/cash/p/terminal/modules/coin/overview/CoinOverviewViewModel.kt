@@ -12,7 +12,6 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.*
 import cash.p.terminal.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 
@@ -121,7 +120,7 @@ class CoinOverviewViewModel(
                             value = tokenType.address.shorten(),
                             copyValue = tokenType.address,
                             imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = explorerUrl(token, tokenType.address),
+                            explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
                             name = token.blockchain.name,
                             configuredToken = configuredToken,
                             canAddToWallet = canAddToWallet,
@@ -138,7 +137,7 @@ class CoinOverviewViewModel(
                             value = tokenType.symbol,
                             copyValue = tokenType.symbol,
                             imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = explorerUrl(token, tokenType.symbol),
+                            explorerUrl = token.blockchain.bep2TokenUrl(tokenType.symbol),
                             name = token.blockchain.name,
                             configuredToken = configuredToken,
                             canAddToWallet = canAddToWallet,
@@ -155,7 +154,7 @@ class CoinOverviewViewModel(
                             value = tokenType.address.shorten(),
                             copyValue = tokenType.address,
                             imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = explorerUrl(token, tokenType.address),
+                            explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
                             name = token.blockchain.name,
                             configuredToken = configuredToken,
                             canAddToWallet = canAddToWallet,
@@ -236,10 +235,6 @@ class CoinOverviewViewModel(
             items.isNotEmpty() -> TokenVariants(items, type)
             else -> null
         }
-    }
-
-    private fun explorerUrl(token: Token, reference: String) : String? {
-        return token.blockchain.explorerUrl?.replace("\$ref", reference)
     }
 
 }

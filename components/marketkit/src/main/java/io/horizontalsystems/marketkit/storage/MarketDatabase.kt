@@ -26,7 +26,7 @@ import io.horizontalsystems.marketkit.storage.migrations.*
         Exchange::class,
         SyncerState::class,
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(DatabaseTypeConverters::class)

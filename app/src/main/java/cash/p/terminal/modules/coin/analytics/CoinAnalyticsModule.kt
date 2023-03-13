@@ -1,17 +1,19 @@
 package cash.p.terminal.modules.coin.analytics
 
-import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.market.Value
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.modules.metricchart.ProChartModule
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.components.StackBarSlice
 import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.ChartDataBuilder
+import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 object CoinAnalyticsModule {
 
@@ -19,148 +21,115 @@ object CoinAnalyticsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinAnalyticsService(fullCoin, App.marketKit, App.currencyManager, App.proFeatureAuthorizationManager)
+            val service = CoinAnalyticsService(fullCoin, App.marketKit, App.currencyManager)
 
             return CoinAnalyticsViewModel(
-                service
+                service,
+                App.numberFormatter,
+                fullCoin.coin.code
             ) as T
         }
     }
 
-    @Immutable
-    data class ViewItem(
-        val proChartsActivated: Boolean,
-        val tokenLiquidityViewItem: TokenLiquidityViewItem?,
-        val tokenDistributionViewItem: TokenDistributionViewItem?,
-        val tvlChart: ChartViewItem?,
-        val tvlRank: String?,
-        val tvlRatio: String?,
-        val treasuries: String?,
-        val fundsInvested: String?,
-        val reportsCount: String?,
-        val securityViewItems: List<SecurityViewItem>,
-        val auditAddresses: List<String>
+    data class BlockViewItem(
+        val title: Int?,
+        val value: String? = null,
+        val valuePeriod: String? = null,
+        val analyticChart: ChartViewItem?,
+        val footerItems: List<FooterItem>,
+        val sectionTitle: Int? = null
     )
 
-    sealed class ChartHeaderView {
-        abstract val value: String
+    data class FooterItem(
+        val title: TranslatableString,
+        val value: String? = null,
+        val image: ImageSource? = null,
+        val action: ActionType? = null
+    )
 
-        data class Latest(override val value: String, val diff: Value.Percent) : ChartHeaderView()
-        data class Sum(override val value: String) : ChartHeaderView()
-
-    }
-
-    @Immutable
     data class ChartViewItem(
-        val headerView: ChartHeaderView,
-        val chartData: ChartData,
-        val timePeriod: HsTimePeriod?
-    ) {
-        val timePeriodString: Int?
-            get() = when (timePeriod) {
-                HsTimePeriod.Month1 -> R.string.CoinPage_DetailsChartPeriod_Month1
-                else -> null
-            }
-    }
-
-    @Immutable
-    data class TokenLiquidityViewItem(
-        val volume: ChartViewItem?,
-        val liquidity: ChartViewItem?
+        val analyticChart: AnalyticChart,
+        val coinUid: String,
+        val chartType: ProChartModule.ChartType? = null
     )
 
-    @Immutable
-    data class TokenDistributionViewItem(
-        val txCount: ChartViewItem?,
-        val txVolume: ChartViewItem?,
-        val activeAddresses: ChartViewItem?,
-        val hasMajorHolders: Boolean
+    sealed class AnalyticChart {
+        class Line(val data: ChartData) : AnalyticChart()
+        class Bars(val data: ChartData) : AnalyticChart()
+        class StackedBars(val data: List<StackBarSlice>) : AnalyticChart()
+    }
+
+    data class PreviewBlockViewItem(
+        val title: Int?,
+        val chartType: PreviewChartType?,
+        val footerItems: List<PreviewFooterItem>,
+        val sectionTitle: Int? = null,
+        val showValueDots: Boolean = true
     )
 
-    @Immutable
-    data class SecurityViewItem(
-        val type: SecurityType,
-        @StringRes
-        val value: Int,
-        val grade: SecurityGrade
+    data class PreviewFooterItem(
+        val title: Int,
+        val clickable: Boolean,
+        val hasValue: Boolean = true,
+        val image: ImageSource? = null
     )
 
-    enum class PrivacyLevel(
-        @StringRes val title: Int,
-        val grade: SecurityGrade,
-    ) {
-        High(
-            R.string.CoinPage_SecurityParams_High,
-            SecurityGrade.High,
-        ),
-        Medium(
-            R.string.CoinPage_SecurityParams_Medium,
-            SecurityGrade.Medium,
-        ),
-        Low(
-            R.string.CoinPage_SecurityParams_Low,
-            SecurityGrade.Low,
-        ),
+    enum class PreviewChartType {
+        Line, Bars, StackedBars
     }
 
-    enum class IssuanceLevel(
-        @StringRes val title: Int,
-        val grade: SecurityGrade,
-    ) {
-        Decentralized(
-            R.string.CoinPage_SecurityParams_Decentralized,
-            SecurityGrade.High,
-        ),
-        Centralized(
-            R.string.CoinPage_SecurityParams_Centralized,
-            SecurityGrade.Low,
-        )
+    data class UiState(
+        val viewState: ViewState,
+        val viewItem: AnalyticsViewItem? = null,
+        val isRefreshing: Boolean = false
+    )
+
+    sealed class AnalyticsViewItem {
+        class Preview(val blocks: List<PreviewBlockViewItem>) : AnalyticsViewItem()
+        class Analytics(val blocks: List<BlockViewItem>) : AnalyticsViewItem()
+        object NoData : AnalyticsViewItem()
     }
 
-    enum class CensorshipResistanceLevel(
-        @StringRes val title: Int,
-        val grade: SecurityGrade,
-    ) {
-        Yes(
-            R.string.CoinPage_SecurityParams_Yes,
-            SecurityGrade.High,
-        ),
-        No(
-            R.string.CoinPage_SecurityParams_No,
-            SecurityGrade.Low,
-        )
+    sealed class ActionType {
+        object OpenTvl : ActionType()
+        object OpenTvlRank : ActionType()
+        class OpenReports(val coinUid: String) : ActionType()
+        class OpenInvestors(val coinUid: String) : ActionType()
+        class OpenTreasuries(val coin: Coin) : ActionType()
+        class OpenAudits(val auditAddresses: List<String>) : ActionType()
+        class OpenTokenHolders(val coin: Coin, val blockchain: Blockchain) : ActionType()
     }
 
+    fun zigzagPlaceholderAnalyticChart(isMovementChart: Boolean): AnalyticChart {
+        val chartItems = mutableListOf<ChartPoint>()
 
-    enum class ConfiscationResistanceLevel(
-        @StringRes val title: Int,
-        val grade: SecurityGrade,
-    ) {
-        Yes(
-            R.string.CoinPage_SecurityParams_Yes,
-            SecurityGrade.High,
-        ),
-        No(
-            R.string.CoinPage_SecurityParams_No,
-            SecurityGrade.Low,
-        )
-    }
+        var lastTimeStamp = 0L
+        for (i in 1..8) {
+            val baseTimeStamp = (i * 100).toLong()
+            val baseValue = i * 2
 
-    enum class SecurityGrade {
-        Low, Medium, High;
+            chartItems.addAll(
+                listOf(
+                    ChartPoint((baseValue + 2).toFloat(), (baseTimeStamp), mapOf()),
+                    ChartPoint((baseValue + 6).toFloat(), (baseTimeStamp + 25), mapOf()),
+                    ChartPoint((baseValue).toFloat(), (baseTimeStamp + 50), mapOf()),
+                    ChartPoint((baseValue + 9).toFloat(), (baseTimeStamp + 75), mapOf()),
+                )
+            )
 
-        @Composable
-        fun securityGradeColor() = when (this) {
-            High -> ComposeAppTheme.colors.remus
-            Medium -> ComposeAppTheme.colors.issykBlue
-            Low -> ComposeAppTheme.colors.lucian
+            lastTimeStamp = baseTimeStamp + (75 + 25)
         }
-    }
 
-    enum class SecurityType(@StringRes val title: Int) {
-        Privacy(R.string.CoinPage_SecurityParams_Privacy),
-        Issuance(R.string.CoinPage_SecurityParams_Issuance),
-        ConfiscationResistance(R.string.CoinPage_SecurityParams_ConfiscationResistance),
-        CensorshipResistance(R.string.CoinPage_SecurityParams_CensorshipResistance)
+        chartItems.add(ChartPoint(16f, lastTimeStamp, mapOf()))
+
+        val chartData = ChartDataBuilder(
+            points = chartItems,
+            start = null,
+            end = null,
+            isMovementChart = isMovementChart,
+            disabled = true
+        ).build()
+
+        return if (isMovementChart) AnalyticChart.Line(chartData) else AnalyticChart.Bars(chartData)
     }
 }

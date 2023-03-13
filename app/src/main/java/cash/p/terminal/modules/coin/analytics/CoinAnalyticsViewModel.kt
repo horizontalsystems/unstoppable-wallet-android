@@ -1,63 +1,77 @@
 package cash.p.terminal.modules.coin.analytics
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.App
+import cash.p.terminal.R
+import cash.p.terminal.core.IAppNumberFormatter
+import cash.p.terminal.core.brandColor
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.chart.ChartCoinValueFormatterShortened
-import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
-import cash.p.terminal.modules.chart.ChartModule
-import cash.p.terminal.modules.chart.ChartNumberFormatterShortened
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.CensorshipResistanceLevel
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ConfiscationResistanceLevel
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.IssuanceLevel
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.PrivacyLevel
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.SecurityType
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.SecurityViewItem
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ViewItem
-import cash.p.terminal.modules.market.Value
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticChart
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.BlockViewItem
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ChartViewItem
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.FooterItem
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.PreviewBlockViewItem
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.PreviewChartType
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.PreviewFooterItem
+import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.modules.metricchart.ProChartModule
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.TranslatableString.ResString
+import cash.p.terminal.ui.compose.components.StackBarSlice
 import io.horizontalsystems.chartview.ChartDataBuilder
+import io.horizontalsystems.marketkit.models.Analytics
+import io.horizontalsystems.marketkit.models.AnalyticsPreview
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class CoinAnalyticsViewModel(
-    private val service: CoinAnalyticsService
+    private val service: CoinAnalyticsService,
+    private val numberFormatter: IAppNumberFormatter,
+    private val code: String
 ) : ViewModel() {
 
-    private val numberFormatter = ChartNumberFormatterShortened()
-    private val currencyValueFormatter = ChartCurrencyValueFormatterShortened()
-    private val coinValueFormatter = ChartCoinValueFormatterShortened(service.fullCoin)
     private val disposables = CompositeDisposable()
 
+    private val currency = service.currency
     val coin: Coin
         get() = service.fullCoin.coin
 
-    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
-    val isRefreshingLiveData = MutableLiveData<Boolean>()
-    val viewItemLiveData = MutableLiveData<ViewItem>()
+    private var viewState: ViewState = ViewState.Loading
+    private var analyticsViewItem: AnalyticsViewItem? = null
+    private var isRefreshing = false
+
+    var uiState by mutableStateOf(CoinAnalyticsModule.UiState(viewState))
+        private set
 
     init {
         service.stateObservable
             .subscribeIO { state ->
                 when (state) {
                     is DataState.Loading -> {
-                        viewStateLiveData.postValue(ViewState.Loading)
+                        viewState = ViewState.Loading
                     }
                     is DataState.Success -> {
-                        viewStateLiveData.postValue(ViewState.Success)
-
-                        viewItemLiveData.postValue(viewItem(state.data))
+                        viewState = ViewState.Success
+                        analyticsViewItem = viewItem(state.data)
+                        syncState()
                     }
                     is DataState.Error -> {
-                        viewStateLiveData.postValue(ViewState.Error(state.error))
+                        viewState = ViewState.Error(state.error)
                     }
                 }
             }
@@ -71,9 +85,11 @@ class CoinAnalyticsViewModel(
     fun refresh() {
         service.refresh()
         viewModelScope.launch {
-            isRefreshingLiveData.postValue(true)
+            isRefreshing = true
+            syncState()
             delay(1000)
-            isRefreshingLiveData.postValue(false)
+            isRefreshing = false
+            syncState()
         }
     }
 
@@ -81,133 +97,392 @@ class CoinAnalyticsViewModel(
         disposables.clear()
     }
 
-    private fun viewItem(item: CoinAnalyticsService.Item): ViewItem {
-        return ViewItem(
-            proChartsActivated = item.proCharts.activated,
-            tokenLiquidityViewItem = getTokenLiquidityViewItem(item.proCharts),
-            tokenDistributionViewItem = getTokenDistributionViewItem(item.proCharts, service.hasMajorHolders),
-            tvlChart = chart(item.tvls, currencyValueFormatter, isMovementChart = true),
-            tvlRank = item.marketInfoDetails.tvlRank?.let { "#$it" },
-            tvlRatio = item.marketInfoDetails.tvlRatio?.let { App.numberFormatter.format(it, 2, 2) },
-            treasuries = item.marketInfoDetails.totalTreasuries?.let {
-                numberFormatter.formatValue(service.currency, it)
-            },
-            fundsInvested = item.marketInfoDetails.totalFundsInvested?.let {
-                numberFormatter.formatValue(service.usdCurrency, it)
-            },
-            reportsCount = if (item.marketInfoDetails.reportsCount == 0) null else item.marketInfoDetails.reportsCount.toString(),
-            securityViewItems = securityViewItems(item.marketInfoDetails),
-            auditAddresses = service.auditAddresses
+    private fun syncState() {
+        uiState = CoinAnalyticsModule.UiState(
+            viewState = viewState,
+            viewItem = analyticsViewItem,
+            isRefreshing = isRefreshing
         )
     }
 
-    private fun getTokenLiquidityViewItem(proCharts: CoinAnalyticsService.ProCharts): CoinAnalyticsModule.TokenLiquidityViewItem? {
-        val volume = chart(proCharts.dexVolumes, currencyValueFormatter, isMovementChart = false)
-        val liquidity = chart(proCharts.dexLiquidity, currencyValueFormatter, isMovementChart = true)
+    private fun viewItem(item: CoinAnalyticsService.AnalyticData): AnalyticsViewItem? {
+        if (item.analyticsPreview != null) {
+            val viewItems = getPreviewViewItems(item.analyticsPreview)
+            if (viewItems.isNotEmpty()) {
+                return AnalyticsViewItem.Preview(viewItems)
+            }
+        } else if (item.analytics != null) {
+            val viewItems = getViewItems(item.analytics)
+            if (viewItems.isNotEmpty()) {
+                return AnalyticsViewItem.Analytics(viewItems)
+            }
+        }
 
-        if (volume == null && liquidity == null) return null
-
-        return CoinAnalyticsModule.TokenLiquidityViewItem(volume, liquidity)
+        return AnalyticsViewItem.NoData
     }
 
-    private fun getTokenDistributionViewItem(
-        proCharts: CoinAnalyticsService.ProCharts,
-        hasMajorHolders: Boolean
-    ): CoinAnalyticsModule.TokenDistributionViewItem? {
-        val txCount = chart(proCharts.txCount, numberFormatter, isMovementChart = false)
-        val txVolume = chart(proCharts.txVolume, coinValueFormatter, isMovementChart = false)
-        val activeAddresses = chart(proCharts.activeAddresses, numberFormatter, isMovementChart = true)
+    private fun getViewItems(analytics: Analytics): List<BlockViewItem> {
+        val blocks = mutableListOf<BlockViewItem>()
+        analytics.cexVolume?.let { data ->
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_CexVolume,
+                    value = getFormattedSum(data.points.map { it.volume }, currency),
+                    valuePeriod = getValuePeriod(false),
+                    analyticChart = getChartViewItem(data.chartPoints(), null, false),
+                    footerItems = listOf(FooterItem(ResString(R.string.Coin_Analytics_30DayRank)))
+                )
+            )
+        }
+        analytics.dexVolume?.let { data ->
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_DexVolume,
+                    value = getFormattedSum(data.points.map { it.volume }, currency),
+                    valuePeriod = getValuePeriod(false),
+                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.DexVolume, false),
+                    footerItems = listOf(FooterItem(ResString(R.string.Coin_Analytics_30DayRank)))
+                )
+            )
+        }
+        analytics.dexLiquidity?.let { data ->
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_DexLiquidity,
+                    value = getFormattedValue(data.points.last().volume, currency),
+                    valuePeriod = getValuePeriod(true),
+                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.DexLiquidity, true),
+                    footerItems = listOf(FooterItem(ResString(R.string.Coin_Analytics_Rank), getRank(data.rank)))
+                )
+            )
+        }
+        analytics.addresses?.let { data ->
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_ActiveAddresses,
+                    value = getFormattedSum(listOf(data.count30d.toBigDecimal())),
+                    valuePeriod = getValuePeriod(false),
+                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.AddressesCount, false),
+                    footerItems = listOf(
+                        FooterItem(ResString(R.string.Coin_Analytics_30DayRank), getRank(data.rank30d)),
+                    )
+                )
+            )
+        }
+        analytics.transactions?.let { data ->
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_TransactionCount,
+                    value = getFormattedSum(data.points.map { it.count }),
+                    valuePeriod = getValuePeriod(false),
+                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.TxVolume, false),
+                    footerItems = listOf(
+                        FooterItem(ResString(R.string.Coin_Analytics_30DayVolume), getVolume(data.volume30d)),
+                        FooterItem(ResString(R.string.Coin_Analytics_30DayRank), getRank(data.rank30d)),
+                    )
+                )
+            )
+        }
+        analytics.holders?.let { data ->
+            val blockchains = service.blockchains(data.map { it.blockchainUid })
+            val total = data.sumOf { it.holdersCount }
+            val footerItems = mutableListOf<FooterItem>()
+            val chartSlices = mutableListOf<StackBarSlice>()
+            data.sortedByDescending { it.holdersCount }.forEach { item ->
+                val blockchain = blockchains.firstOrNull { it.uid == item.blockchainUid }
+                blockchain?.let {
+                    val percent = item.holdersCount.divide(total, 4, RoundingMode.HALF_EVEN).times("100".toBigDecimal())
+                    val percentFormatted = numberFormatter.format(percent, 0, 2, suffix = "%")
+                    chartSlices.add(StackBarSlice(value = percent.toFloat(), color = blockchain.type.brandColor ?: Color(0xFFFFA800)))
+                    footerItems.add(
+                        FooterItem(
+                            title = TranslatableString.PlainString(blockchain.name),
+                            value = percentFormatted,
+                            image = ImageSource.Remote(blockchain.type.imageUrl),
+                            action = CoinAnalyticsModule.ActionType.OpenTokenHolders(coin, blockchain)
+                        )
+                    )
+                }
+            }
+            if (footerItems.isEmpty()) {
+                return@let
+            }
 
-        if (txCount == null && txVolume == null && activeAddresses == null && !hasMajorHolders) return null
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_Holders,
+                    value = getFormattedSum(listOf(total)),
+                    valuePeriod = getValuePeriod(true),
+                    analyticChart = ChartViewItem(AnalyticChart.StackedBars(chartSlices), coin.uid),
+                    footerItems = footerItems
+                )
+            )
+        }
+        analytics.tvl?.let { data ->
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_ProjectTvl,
+                    value = getFormattedValue(data.points.last().tvl, currency),
+                    valuePeriod = getValuePeriod(true),
+                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.TxVolume, true),
+                    footerItems = listOf(
+                        FooterItem(
+                            title = ResString(R.string.Coin_Analytics_Rank), getRank(data.rank),
+                            action = CoinAnalyticsModule.ActionType.OpenTvl
+                        ),
+                        FooterItem(ResString(R.string.CoinAnalytics_TvlRatio), numberFormatter.format(data.ratio, 2, 2)),
+                    )
+                )
+            )
+        }
+        analytics.revenue?.let { data ->
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_ProjectRevenue,
+                    value = getFormattedSum(listOf(data.value30d), currency),
+                    valuePeriod = getValuePeriod(false),
+                    analyticChart = null,
+                    footerItems = listOf(
+                        FooterItem(ResString(R.string.Coin_Analytics_30DayRank), getRank(data.rank30d)),
+                    )
+                )
+            )
+        }
+        if (analytics.reports != null || analytics.fundsInvested != null || analytics.treasuries != null || service.auditAddresses.isNotEmpty()) {
+            val footerItems = mutableListOf<FooterItem>()
+            analytics.reports?.let { reportsCount ->
+                footerItems.add(
+                    FooterItem(
+                        title = ResString(R.string.CoinAnalytics_Reports),
+                        value = reportsCount.toString(),
+                        action = CoinAnalyticsModule.ActionType.OpenReports(coin.uid)
+                    )
+                )
+            }
+            analytics.fundsInvested?.let { invested ->
+                footerItems.add(
+                    FooterItem(
+                        title = ResString(R.string.CoinAnalytics_Funding),
+                        value = getFormattedValue(invested, currency),
+                        action = CoinAnalyticsModule.ActionType.OpenInvestors(coin.uid)
+                    )
+                )
+            }
+            analytics.treasuries?.let { treasuries ->
+                footerItems.add(
+                    FooterItem(
+                        title = ResString(R.string.CoinAnalytics_Treasuries),
+                        value = getFormattedValue(treasuries, currency),
+                        action = CoinAnalyticsModule.ActionType.OpenTreasuries(coin)
+                    )
+                )
+            }
+            if (service.auditAddresses.isNotEmpty()) {
+                footerItems.add(
+                    FooterItem(
+                        title = ResString(R.string.Coin_Analytics_Audits),
+                        action = CoinAnalyticsModule.ActionType.OpenAudits(service.auditAddresses)
+                    )
+                )
+            }
+            blocks.add(
+                BlockViewItem(
+                    title = null,
+                    analyticChart = null,
+                    footerItems = footerItems,
+                    sectionTitle = R.string.CoinAnalytics_OtherData,
+                )
+            )
+        }
 
-        return CoinAnalyticsModule.TokenDistributionViewItem(txCount, txVolume, activeAddresses, hasMajorHolders)
+        return blocks
     }
 
-    private fun chart(
-        values: List<ChartPoint>?,
-        valueFormatter: ChartModule.ChartNumberFormatter,
+    private fun getFormattedSum(values: List<BigDecimal>, currency: Currency? = null): String {
+        return currency?.let { currency ->
+            numberFormatter.formatFiatShort(values.sumOf { it }, currency.symbol, 2)
+        } ?: numberFormatter.formatCoinShort(values.sumOf { it }, null, 0)
+    }
+
+    private fun getFormattedValue(value: BigDecimal, currency: Currency? = null): String {
+        return currency?.let { currency ->
+            numberFormatter.formatFiatShort(value, currency.symbol, 2)
+        } ?: numberFormatter.formatCoinShort(value, null, 0)
+    }
+
+    private fun getVolume(volume30d: BigDecimal): String {
+        val formatted = numberFormatter.formatNumberShort(volume30d, 1)
+        return "$formatted $code"
+    }
+
+    private fun getValuePeriod(isMovement: Boolean): String {
+        return Translator.getString(if (isMovement) R.string.Coin_Analytics_Current else R.string.Coin_Analytics_Last30d)
+    }
+
+    private fun getRank(rank: Int) = "#$rank"
+
+    private fun getPreviewViewItems(analyticsPreview: AnalyticsPreview): List<PreviewBlockViewItem> {
+        val blocks = mutableListOf<PreviewBlockViewItem>()
+        analyticsPreview.cexVolume?.let { cexVolume ->
+            if (cexVolume.points || cexVolume.rank30d) {
+                blocks.add(
+                    PreviewBlockViewItem(
+                        title = R.string.CoinAnalytics_CexVolume,
+                        chartType = if (cexVolume.points) PreviewChartType.Bars else null,
+                        footerItems = if (cexVolume.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
+                    )
+                )
+            }
+        }
+        analyticsPreview.dexVolume?.let { dexVolume ->
+            if (dexVolume.points || dexVolume.rank30d) {
+                blocks.add(
+                    PreviewBlockViewItem(
+                        title = R.string.CoinAnalytics_DexVolume,
+                        chartType = if (dexVolume.points) PreviewChartType.Bars else null,
+                        footerItems = if (dexVolume.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
+                    )
+                )
+            }
+        }
+        analyticsPreview.dexLiquidity?.let { dexLiquidity ->
+            if (dexLiquidity.points || dexLiquidity.rank) {
+                blocks.add(
+                    PreviewBlockViewItem(
+                        title = R.string.CoinAnalytics_DexLiquidity,
+                        chartType = if (dexLiquidity.points) PreviewChartType.Line else null,
+                        footerItems = if (dexLiquidity.rank) listOf(PreviewFooterItem(R.string.Coin_Analytics_Rank, true)) else emptyList()
+                    )
+                )
+            }
+        }
+        analyticsPreview.addresses?.let { addresses ->
+            if (addresses.points || addresses.rank30d) {
+                blocks.add(
+                    PreviewBlockViewItem(
+                        title = R.string.CoinAnalytics_ActiveAddresses,
+                        chartType = if (addresses.points) PreviewChartType.Bars else null,
+                        footerItems = if (addresses.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
+                    )
+                )
+            }
+        }
+        analyticsPreview.transactions?.let { transactionPreview ->
+            if (transactionPreview.points || transactionPreview.rank30d || transactionPreview.volume30d) {
+                val footerItems = mutableListOf<PreviewFooterItem>()
+                if (transactionPreview.rank30d) {
+                    footerItems.add(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true))
+                }
+                if (transactionPreview.volume30d) {
+                    footerItems.add(PreviewFooterItem(R.string.Coin_Analytics_30DayVolume, false))
+                }
+                blocks.add(
+                    PreviewBlockViewItem(
+                        title = R.string.CoinAnalytics_TransactionCount,
+                        chartType = if (transactionPreview.points) PreviewChartType.Bars else null,
+                        footerItems = footerItems
+                    )
+                )
+            }
+        }
+        if (analyticsPreview.holders) {
+            val footerItems = mutableListOf<PreviewFooterItem>(
+                PreviewFooterItem(R.string.Coin_Analytics_Blockchain1, true, image = ImageSource.Local(R.drawable.ic_platform_placeholder_32)),
+                PreviewFooterItem(R.string.Coin_Analytics_Blockchain2, true, image = ImageSource.Local(R.drawable.ic_platform_placeholder_32)),
+                PreviewFooterItem(R.string.Coin_Analytics_Blockchain3, true, image = ImageSource.Local(R.drawable.ic_platform_placeholder_32))
+            )
+            blocks.add(
+                PreviewBlockViewItem(
+                    title = R.string.CoinAnalytics_Holders,
+                    chartType = PreviewChartType.StackedBars,
+                    footerItems = footerItems
+                )
+            )
+        }
+        analyticsPreview.revenue?.let { revenue ->
+            if (revenue.value30d || revenue.rank30d) {
+                blocks.add(
+                    PreviewBlockViewItem(
+                        title = R.string.CoinAnalytics_ProjectRevenue,
+                        chartType = null,
+                        footerItems = if (revenue.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
+                    )
+                )
+            }
+        }
+        analyticsPreview.tvl?.let { tvl ->
+            if (tvl.points || tvl.rank || tvl.ratio) {
+                val footerItems = mutableListOf<PreviewFooterItem>()
+                if (tvl.rank) {
+                    footerItems.add(PreviewFooterItem(R.string.Coin_Analytics_Rank, true))
+                }
+                if (tvl.ratio) {
+                    footerItems.add(PreviewFooterItem(R.string.CoinAnalytics_TvlRatio, false))
+                }
+                blocks.add(
+                    PreviewBlockViewItem(
+                        title = R.string.CoinAnalytics_ActiveAddresses,
+                        chartType = if (tvl.points) PreviewChartType.Line else null,
+                        footerItems = footerItems,
+                    )
+                )
+            }
+        }
+        if (analyticsPreview.reports || analyticsPreview.fundsInvested || analyticsPreview.treasuries || service.auditAddresses.isNotEmpty()) {
+            val footerItems = mutableListOf<PreviewFooterItem>()
+            if (analyticsPreview.reports) {
+                footerItems.add(PreviewFooterItem(R.string.CoinAnalytics_Reports, true))
+            }
+            if (analyticsPreview.fundsInvested) {
+                footerItems.add(PreviewFooterItem(R.string.CoinAnalytics_Funding, true))
+            }
+            if (analyticsPreview.treasuries) {
+                footerItems.add(PreviewFooterItem(R.string.CoinAnalytics_Treasuries, true))
+            }
+            if (service.auditAddresses.isNotEmpty()) {
+                footerItems.add(PreviewFooterItem(R.string.Coin_Analytics_Audits, clickable = true, hasValue = false))
+            }
+            blocks.add(
+                PreviewBlockViewItem(
+                    title = null,
+                    chartType = null,
+                    footerItems = footerItems,
+                    sectionTitle = R.string.CoinAnalytics_OtherData,
+                    showValueDots = false
+                )
+            )
+        }
+
+        return blocks
+    }
+
+    private fun getChartViewItem(
+        values: List<ChartPoint>,
+        chartType: ProChartModule.ChartType?,
         isMovementChart: Boolean,
-        timePeriod: HsTimePeriod? = null
-    ): CoinAnalyticsModule.ChartViewItem? {
-        if (values.isNullOrEmpty()) return null
+    ): ChartViewItem? {
+        if (values.isEmpty()) return null
 
         val points = values.map {
             io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
+        return getAnalyticChart(points, chartType, isMovementChart)
+    }
+
+    private fun getAnalyticChart(
+        points: List<io.horizontalsystems.chartview.models.ChartPoint>,
+        chartType: ProChartModule.ChartType?,
+        isMovementChart: Boolean
+    ): ChartViewItem {
         val chartData = ChartDataBuilder.buildFromPoints(points, isMovementChart = isMovementChart)
 
-        val headerView = if (isMovementChart) {
-            val lastItemValue = values.last().value
-            val value = valueFormatter.formatValue(service.currency, lastItemValue)
-            CoinAnalyticsModule.ChartHeaderView.Latest(value, Value.Percent(chartData.diff()))
-        } else {
-            val sum = valueFormatter.formatValue(service.currency, chartData.sum())
-            CoinAnalyticsModule.ChartHeaderView.Sum(sum)
-        }
+        val analyticChart = if (isMovementChart)
+            AnalyticChart.Line(chartData)
+        else
+            AnalyticChart.Bars(chartData)
 
-        return CoinAnalyticsModule.ChartViewItem(headerView, chartData, timePeriod)
+        return ChartViewItem(analyticChart, coin.uid, chartType)
     }
 
-    private fun chart(
-        proData: CoinAnalyticsService.ProData,
-        valueFormatter: ChartModule.ChartNumberFormatter,
-        isMovementChart: Boolean
-    ): CoinAnalyticsModule.ChartViewItem? =
-        when (proData) {
-            is CoinAnalyticsService.ProData.Empty,
-            is CoinAnalyticsService.ProData.Forbidden -> null
-            is CoinAnalyticsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter, isMovementChart, proData.timePeriod)
-        }
-
-    private fun securityViewItems(marketInfoDetails: MarketInfoDetails): List<SecurityViewItem> {
-        val securityViewItems = mutableListOf<SecurityViewItem>()
-
-        marketInfoDetails.privacy?.let {
-            val privacy = when (it) {
-                MarketInfoDetails.SecurityLevel.Low -> PrivacyLevel.Low
-                MarketInfoDetails.SecurityLevel.Medium -> PrivacyLevel.Medium
-                MarketInfoDetails.SecurityLevel.High -> PrivacyLevel.High
-            }
-            securityViewItems.add(SecurityViewItem(SecurityType.Privacy, privacy.title, privacy.grade))
-        }
-
-        marketInfoDetails.decentralizedIssuance?.let { decentralizedIssuance ->
-            val issuance = when (decentralizedIssuance) {
-                true -> IssuanceLevel.Decentralized
-                false -> IssuanceLevel.Centralized
-            }
-            securityViewItems.add(SecurityViewItem(SecurityType.Issuance, issuance.title, issuance.grade))
-        }
-
-        marketInfoDetails.confiscationResistant?.let { confiscationResistant ->
-            val resistance = when (confiscationResistant) {
-                true -> ConfiscationResistanceLevel.Yes
-                false -> ConfiscationResistanceLevel.No
-            }
-            securityViewItems.add(
-                SecurityViewItem(
-                    SecurityType.ConfiscationResistance,
-                    resistance.title,
-                    resistance.grade
-                )
-            )
-        }
-
-        marketInfoDetails.censorshipResistant?.let { censorshipResistant ->
-            val resistance = when (censorshipResistant) {
-                true -> CensorshipResistanceLevel.Yes
-                false -> CensorshipResistanceLevel.No
-            }
-            securityViewItems.add(
-                SecurityViewItem(
-                    SecurityType.CensorshipResistance,
-                    resistance.title,
-                    resistance.grade
-                )
-            )
-        }
-
-        return securityViewItems
-    }
 }

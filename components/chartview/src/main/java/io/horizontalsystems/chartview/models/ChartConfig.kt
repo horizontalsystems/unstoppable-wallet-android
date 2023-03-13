@@ -39,6 +39,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var curveGradient = trendUpGradient
     var curvePressedColor = context.getColor(R.color.leah)
     var curveOutdatedColor = context.getColor(R.color.grey_50)
+    var curveDisabledColor = context.getColor(R.color.grey)
     var curveVerticalOffset = dp2px(18f)
     var curveMinimalVerticalOffset = dp2px(10f)
     var curveFastColor = Color.parseColor("#801A60FF")
@@ -77,6 +78,10 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     fun setTrendColor(chartData: ChartData) {
         when {
+            chartData.disabled -> {
+                curveColor = curveDisabledColor
+                curveGradient = outdatedGradient
+            }
             chartData.isExpired -> {
                 curveColor = curveOutdatedColor
                 curveGradient = outdatedGradient

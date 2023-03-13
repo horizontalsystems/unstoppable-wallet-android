@@ -8,7 +8,7 @@ import java.util.*
 data class Blockchain(
     val type: BlockchainType,
     val name: String,
-    val explorerUrl: String?
+    val eip3091url: String?
 ) : Parcelable {
 
     val uid: String

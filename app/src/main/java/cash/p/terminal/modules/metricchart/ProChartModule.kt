@@ -2,6 +2,7 @@ package cash.p.terminal.modules.metricchart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.chart.ChartCoinValueFormatterShortened
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
@@ -26,8 +27,12 @@ object ProChartModule {
         }
     }
 
-    enum class ChartType {
-        DexVolume, DexLiquidity, TxCount, TxVolume, AddressesCount
+    enum class ChartType(val titleRes: Int, val descriptionRes: Int) {
+        DexVolume(R.string.CoinPage_DetailsDexVolume, R.string.CoinPage_DetailsDexVolume_Description),
+        DexLiquidity(R.string.CoinPage_DetailsDexLiquidity, R.string.CoinPage_DetailsDexLiquidity_Description),
+        TxCount(R.string.CoinPage_DetailsTxCount, R.string.CoinPage_DetailsTxCount_Description),
+        TxVolume(R.string.CoinPage_DetailsTxVolume, R.string.CoinPage_DetailsTxVolume_Description),
+        AddressesCount(R.string.CoinPage_DetailsActiveAddresses, R.string.CoinPage_DetailsActiveAddresses_Description)
     }
 
 }

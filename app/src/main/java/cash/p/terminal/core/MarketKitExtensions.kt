@@ -1,5 +1,6 @@
 package cash.p.terminal.core
 
+import androidx.compose.ui.graphics.Color
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.core.providers.Translator
@@ -156,6 +157,17 @@ val Blockchain.description: String
         else -> ""
     }
 
+fun Blockchain.eip20TokenUrl(address: String): String? {
+    when (uid) {
+        "ethereum" -> return "https://etherscan.io/token/$address"
+        "binance-smart-chain" -> return "https://bscscan.com/token/$address"
+        else -> {}
+    }
+
+    return eip3091url?.let { "$it/token/$address" }
+}
+
+fun Blockchain.bep2TokenUrl(symbol: String) = "https://explorer.binance.org/asset/$symbol"
 
 val BlockchainType.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
@@ -229,6 +241,17 @@ val BlockchainType.supportedNftTypes: List<NftType>
 //        BlockchainType.Avalanche -> listOf(NftType.Eip721)
 //        BlockchainType.ArbitrumOne -> listOf(NftType.Eip721)
         else -> listOf()
+    }
+
+val BlockchainType.brandColor: Color?
+    get() = when (this) {
+        BlockchainType.Ethereum -> Color(0xFF6B7196)
+        BlockchainType.BinanceSmartChain -> Color(0xFFF3BA2F)
+        BlockchainType.Polygon -> Color(0xFF8247E5)
+        BlockchainType.Avalanche -> Color(0xFFD74F49)
+        BlockchainType.Optimism -> Color(0xFFEB3431)
+        BlockchainType.ArbitrumOne -> Color(0xFF96BEDC)
+        else -> null
     }
 
 val BlockchainType.feePriceScale: FeePriceScale

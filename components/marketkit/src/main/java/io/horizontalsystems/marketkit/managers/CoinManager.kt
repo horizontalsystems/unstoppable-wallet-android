@@ -119,10 +119,6 @@ class CoinManager(
         return hsProvider.marketInfoGlobalTvlSingle(chain, currencyCode, timePeriod)
     }
 
-    fun topHoldersSingle(coinUid: String): Single<List<TokenHolder>> {
-        return hsProvider.topHoldersSingle(coinUid)
-    }
-
     fun treasuriesSingle(coinUid: String, currencyCode: String): Single<List<CoinTreasury>> {
         return hsProvider.coinTreasuriesSingle(coinUid, currencyCode)
     }

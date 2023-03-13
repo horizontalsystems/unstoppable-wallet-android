@@ -181,8 +181,8 @@ class MarketKit(
 
     // Details
 
-    fun topHoldersSingle(coinUid: String): Single<List<TokenHolder>> {
-        return coinManager.topHoldersSingle(coinUid)
+    fun tokenHoldersSingle(coinUid: String, blockchainUid: String): Single<TokenHolders> {
+        return hsProvider.tokenHoldersSingle(coinUid, blockchainUid)
     }
 
     fun treasuriesSingle(coinUid: String, currencyCode: String): Single<List<CoinTreasury>> {
@@ -217,6 +217,14 @@ class MarketKit(
 
     fun activeAddressesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<ActiveAddressesDataResponse> {
         return coinManager.activeAddressesSingle(coinUid, currencyCode, timePeriod, sessionKey)
+    }
+
+    fun analyticsPreviewSingle(coinUid: String): Single<AnalyticsPreview> {
+        return hsProvider.analyticsPreviewSingle(coinUid)
+    }
+
+    fun analyticsSingle(coinUid: String, currencyCode: String): Single<Analytics> {
+        return hsProvider.analyticsSingle(coinUid, currencyCode)
     }
 
     // Overview

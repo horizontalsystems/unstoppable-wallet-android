@@ -18,10 +18,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
 import cash.p.terminal.R
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.chart.SelectedPoint
 import cash.p.terminal.modules.coin.ChartInfoData
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
@@ -31,7 +31,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 @Composable
-fun HsChartLineHeader(chartHeaderView: CoinAnalyticsModule.ChartHeaderView?) {
+fun HsChartLineHeader(chartHeaderView: ChartModule.ChartHeaderView?) {
     TabBalance(borderTop = true) {
         Text(
             modifier = Modifier.padding(end = 8.dp),
@@ -39,7 +39,7 @@ fun HsChartLineHeader(chartHeaderView: CoinAnalyticsModule.ChartHeaderView?) {
             style = ComposeAppTheme.typography.headline1,
             color = ComposeAppTheme.colors.leah
         )
-        (chartHeaderView as? CoinAnalyticsModule.ChartHeaderView.Latest)?.let { latest ->
+        (chartHeaderView as? ChartModule.ChartHeaderView.Latest)?.let { latest ->
             Text(
                 text = formatValueAsDiff(latest.diff),
                 style = ComposeAppTheme.typography.subhead1,

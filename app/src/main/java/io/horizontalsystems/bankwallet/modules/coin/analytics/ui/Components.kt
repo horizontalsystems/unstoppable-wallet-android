@@ -1,0 +1,376 @@
+package cash.p.terminal.modules.coin.analytics.ui
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.doOnLayout
+import cash.p.terminal.R
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
+import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.*
+import io.horizontalsystems.chartview.ChartMinimal
+
+@Composable
+fun AnalyticsBlockHeader(
+    title: String,
+    info: String? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        subhead2_grey(text = title)
+        info?.let {
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+
+                }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun AnalyticsContentNumber(
+    number: String,
+    period: String? = null
+) {
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        headline1_bran(text = number)
+        period?.let {
+            HSpacer(8.dp)
+            subhead1_grey(
+                text = it,
+                modifier = Modifier.padding(bottom = 1.dp),
+            )
+        }
+    }
+}
+
+@Composable
+fun AnalyticsFooterCell(
+    title: String,
+    value: String?,
+    leftIcon: ImageSource? = null,
+    onClick: (() -> Unit)? = null
+) {
+    Divider(
+        thickness = 1.dp,
+        color = ComposeAppTheme.colors.steel10,
+        modifier = Modifier.fillMaxWidth()
+    )
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
+    ) {
+        leftIcon?.let { icon ->
+            Image(
+                painter = icon.painter(),
+                contentDescription = null,
+                modifier = Modifier.size(32.dp),
+            )
+            HSpacer(16.dp)
+        }
+        subhead2_grey(
+            text = title,
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        )
+        value?.let {
+            subhead1_leah(text = it)
+        }
+        onClick?.let {
+            HSpacer(8.dp)
+            Image(
+                painter = painterResource(id = R.drawable.ic_arrow_right),
+                contentDescription = "arrow icon"
+            )
+        }
+    }
+}
+
+@Composable
+fun AnalyticsContainer(
+    sectionTitle: @Composable (RowScope.() -> Unit)? = null,
+    titleRow: @Composable (() -> Unit)? = null,
+    bottomRows: @Composable ColumnScope.() -> Unit = {},
+    content: @Composable () -> Unit,
+) {
+    VSpacer(12.dp)
+    sectionTitle?.let {
+        Divider(
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10,
+            modifier = Modifier.fillMaxWidth()
+        )
+        RowUniversal(content = it)
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+    ) {
+        titleRow?.invoke()
+        content.invoke()
+        Column(
+            content = bottomRows
+        )
+    }
+}
+
+@Composable
+fun AnalyticsChart(
+    analyticChart: CoinAnalyticsModule.AnalyticChart,
+) {
+    when (analyticChart) {
+        is CoinAnalyticsModule.AnalyticChart.StackedBars -> {
+            StackedBarChart(analyticChart.data, modifier = Modifier.padding(horizontal = 16.dp))
+        }
+        is CoinAnalyticsModule.AnalyticChart.Bars -> {
+            ChartBars(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .height(60.dp),
+                chartData = analyticChart.data
+            )
+        }
+        is CoinAnalyticsModule.AnalyticChart.Line -> {
+            AndroidView(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .height(60.dp),
+                factory = {
+                    ChartMinimal(it)
+                },
+                update = { view ->
+                    view.doOnLayout {
+                        view.setData(analyticChart.data)
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun AnalyticsDataLockedBlock() {
+    AnalyticsContainer {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.height(32.dp))
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(
+                        color = ComposeAppTheme.colors.andy,
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    modifier = Modifier.size(48.dp),
+                    painter = painterResource(R.drawable.icon_lock_48),
+                    contentDescription = "lock icon",
+                    tint = ComposeAppTheme.colors.jacob
+                )
+            }
+            VSpacer(32.dp)
+            subhead2_grey(
+                modifier = Modifier.padding(horizontal = 48.dp),
+                text = stringResource(R.string.CoinAnalytics_PageLocked),
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(Modifier.height(32.dp))
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_HoldersBlockLocked() {
+    val slices = listOf(
+        StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
+        StackBarSlice(value = 37.75f, color = Color(0x80808085)),
+        StackBarSlice(value = 11.9f, color = Color(0x40808085)),
+    )
+    AnalyticsContainer(
+        titleRow = {
+            AnalyticsBlockHeader(
+                title = "Holders",
+                info = "Info text"
+            )
+        },
+        bottomRows = {
+            AnalyticsFooterCell(
+                title = "Blockchain 1",
+                value = stringResource(R.string.CoinAnalytics_ThreeDots),
+                leftIcon = ImageSource.Local(R.drawable.ic_platform_placeholder_32),
+                onClick = {}
+            )
+            AnalyticsFooterCell(
+                title = "Blockchain 2",
+                value = stringResource(R.string.CoinAnalytics_ThreeDots),
+                leftIcon = ImageSource.Local(R.drawable.ic_platform_placeholder_32),
+                onClick = {}
+            )
+            AnalyticsFooterCell(
+                title = "Blockchain 3",
+                value = stringResource(R.string.CoinAnalytics_ThreeDots),
+                leftIcon = ImageSource.Local(R.drawable.ic_platform_placeholder_32),
+                onClick = {}
+            )
+        }
+    ) {
+        AnalyticsContentNumber(
+            number = "•••",
+        )
+        VSpacer(12.dp)
+        StackedBarChart(slices, modifier = Modifier.padding(horizontal = 16.dp))
+        VSpacer(16.dp)
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_AnalyticsDataLockedBlock() {
+    ComposeAppTheme {
+        AnalyticsDataLockedBlock()
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_AnalyticsBarChartDisabled() {
+    ComposeAppTheme {
+        AnalyticsContainer(
+            titleRow = {
+                AnalyticsBlockHeader(
+                    title = "Dex Volume",
+                    info = "Info text"
+                )
+            },
+            bottomRows = {
+                AnalyticsFooterCell(
+                    title = "30-Day Rank",
+                    value = "#19",
+                    onClick = {}
+                )
+            }
+        ) {
+            AnalyticsContentNumber(
+                number = "•••",
+            )
+            AnalyticsChart(
+                CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(false),
+            )
+            VSpacer(12.dp)
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_AnalyticsLineChartDisabled() {
+    ComposeAppTheme {
+        AnalyticsContainer(
+            titleRow = {
+                AnalyticsBlockHeader(
+                    title = "Dex Volume",
+                    info = "Info text"
+                )
+            },
+            bottomRows = {
+                AnalyticsFooterCell(
+                    title = "30-Day Rank",
+                    value = "#19",
+                    onClick = {}
+                )
+            }
+        ) {
+            AnalyticsContentNumber(
+                number = "•••",
+            )
+            AnalyticsChart(
+                CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
+            )
+            VSpacer(12.dp)
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_HoldersBlock() {
+    val slices = listOf(
+        StackBarSlice(value = 60f, color = Color(0xFF6B7196)),
+        StackBarSlice(value = 31f, color = Color(0xFFF3BA2F)),
+        StackBarSlice(value = 8f, color = Color(0xFF8247E5)),
+        StackBarSlice(value = 1f, color = Color(0xFFD74F49))
+    )
+    AnalyticsContainer(
+        titleRow = {
+            AnalyticsBlockHeader(
+                title = "Defi Cap",
+                info = "Info text"
+            )
+        },
+        bottomRows = {
+            AnalyticsFooterCell(
+                title = "30-Day Rank",
+                value = "#19",
+                leftIcon = ImageSource.Remote("https://cdn.blocksdecoded.com/blockchain-icons/32px/ethereum@3x.png"),
+                onClick = {}
+            )
+            AnalyticsFooterCell(
+                title = "Tether",
+                value = "0.29%",
+                leftIcon = ImageSource.Remote("https://cdn.blocksdecoded.com/blockchain-icons/32px/solana@3x.png"),
+                onClick = {}
+            )
+        }
+    ) {
+        AnalyticsContentNumber(
+            number = "\$2.46B",
+            period = "last 30d"
+        )
+        VSpacer(12.dp)
+        StackedBarChart(slices, modifier = Modifier.padding(horizontal = 16.dp))
+        VSpacer(16.dp)
+    }
+}
