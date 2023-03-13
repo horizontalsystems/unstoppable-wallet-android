@@ -38,7 +38,7 @@
     <string name="Button_Continue">Weiter</string>
     <string name="Button_Send">Senden</string>
     <string name="Button_Search">Suchen</string>
-    <string name="Button_Back">Back</string>
+    <string name="Button_Back">Zurück</string>
     <string name="Button_Copy">Kopieren</string>
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Löschen</string>
@@ -49,7 +49,7 @@
     <string name="PercentTitle">Prozent</string>
     <string name="Keyboard">Tastatur</string>
     <string name="AccountRecovery_Note">Hinweis</string>
-    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRecommended">Diese Brieftasche scheint ein nicht standardmäßiges Zeichen in ihrer geheimen Wortliste und/oder einer Passphrase zu verwenden. Wenn Sie kein Guthaben oder Transaktionen sehen, lesen Sie bitte unten für Details.\n\nKLICKEN, UM WEITERE INFORMATIONEN ZU ERHALTEN</string>
     <string name="AccountRecovery_MigrationRequired">Dies ist eine nicht standardmäßige Wallet. \n\nKLICKEN SIE MEHR INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Sei unaufhaltsam</string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">Falsche Wortzahl. Sie muss zwischen 12 und 24 Wörtern liegen. Sie haben eingegeben: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
     <string name="Restore_InvalidChecksum">Ungültige Prüfsumme</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">Geben Sie Ihre Passphrase ein, die Sie beim Erstellen dieser Eselsbrücke verwendet haben.</string>
     <string name="Restore_Title">Blockchain auswählen</string>
     <string name="Restore_Key">Schlüssel</string>
     <string name="Restore_By">Von</string>
@@ -686,7 +686,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Einfacher Auth (optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC-Quelle</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC-Quelle mit dieser URL existiert bereits</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Nach dem Ändern der Quelle wiederherstellen muss sich die Wallet mit der %@ Blockchain synchronisieren.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Parameter wiederherstellen</string>
@@ -1145,7 +1145,7 @@
     <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in active address count over 1 year period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">List of all tokens ranked based on the number of active wallets transacting with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info4">Liste aller Tokens basierend auf der Anzahl der aktiven Brieftaschen, die mit dem Token über 24h / 7D / 1M Intervallen.</string>
     <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
@@ -1169,7 +1169,7 @@
     <string name="Nfts_Asset_OnAuction">Auf Auktion</string>
     <string name="Nfts_Asset_OnSaleUntil">bis %s</string>
     <string name="Nfts_Empty">Sie haben keinen NFT in Ihrer Brieftasche</string>
-    <string name="Nfts_PriceMode">Price Mode</string>
+    <string name="Nfts_PriceMode">Preismodus</string>
     <string name="NftAsset_Overview">Übersicht</string>
     <string name="NftAsset_Activity">Aktivität</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
