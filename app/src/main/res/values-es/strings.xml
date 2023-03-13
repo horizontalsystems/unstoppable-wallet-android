@@ -1137,7 +1137,7 @@
     <string name="CoinAnalytics_DexLiquidity_Info2">Chart showing variation in available liquidity for the token on leading decentralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in active address count over 1 year period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
