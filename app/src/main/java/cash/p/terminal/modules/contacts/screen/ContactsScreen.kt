@@ -64,6 +64,7 @@ fun ContactsScreen(
                             onNavigateToContact(contact)
                         }
                     }
+                    Spacer(Modifier.height(32.dp))
                 }
             } else {
                 ScreenMessageWithAction(

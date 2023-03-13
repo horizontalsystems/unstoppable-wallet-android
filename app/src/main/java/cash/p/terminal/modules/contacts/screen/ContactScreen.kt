@@ -1,14 +1,16 @@
 package cash.p.terminal.modules.contacts.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,6 +29,10 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
+enum class BottomSheetType {
+    DeleteConfirmation, DiscardChangesConfirmation
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ContactScreen(
@@ -38,31 +44,83 @@ fun ContactScreen(
     val view = LocalView.current
 
     ComposeAppTheme {
+        var bottomSheetType: BottomSheetType? by remember { mutableStateOf(null) }
         val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val coroutineScope = rememberCoroutineScope()
+
+        LaunchedEffect(uiState.closeWithSuccess) {
+            if (uiState.closeWithSuccess) {
+                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.SHORT)
+
+                onNavigateToBack()
+            }
+        }
 
         ModalBottomSheetLayout(
             sheetState = modalBottomSheetState,
             sheetBackgroundColor = ComposeAppTheme.colors.transparent,
             sheetContent = {
-                DeletionWarningBottomSheet(
-                    title = stringResource(R.string.Contacts_DeleteContact),
-                    text = stringResource(R.string.Contacts_DeleteContact_Warning),
-                    onDelete = {
-                        viewModel.onDelete()
-                    },
-                    onClose = {
-                        coroutineScope.launch { modalBottomSheetState.hide() }
+                var title = ""
+                var text = ""
+                var iconPainter: Painter = painterResource(R.drawable.icon_warning_2_20)
+                var iconTint: ColorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+                var confirmText = ""
+                var cancelText = ""
+                var onConfirm: () -> Unit = {}
+                var onClose: () -> Unit = {}
+
+                when (bottomSheetType) {
+                    null -> Unit
+                    BottomSheetType.DeleteConfirmation -> {
+                        title = stringResource(R.string.Contacts_DeleteContact)
+                        text = stringResource(R.string.Contacts_DeleteContact_Warning)
+                        iconPainter = painterResource(R.drawable.ic_delete_20)
+                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian)
+                        confirmText = stringResource(R.string.Button_Delete)
+                        cancelText = stringResource(R.string.Button_Cancel)
+                        onConfirm = viewModel::onDelete
+                        onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
                     }
-                )
+                    BottomSheetType.DiscardChangesConfirmation -> {
+                        title = stringResource(R.string.Alert_TitleWarning)
+                        text = stringResource(R.string.Contacts_DiscardChanges_Warning)
+                        iconPainter = painterResource(R.drawable.icon_warning_2_20)
+                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+                        confirmText = stringResource(R.string.Contacts_DiscardChanges)
+                        cancelText = stringResource(R.string.Contacts_KeepEditing)
+                        onConfirm = onNavigateToBack
+                        onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
+                    }
+                }
+                ConfirmationBottomSheet(title, text, iconPainter, iconTint, confirmText, cancelText, onConfirm, onClose)
             },
         ) {
+            val confirmNavigateToBack: () -> Unit = {
+                if (uiState.confirmBack) {
+                    bottomSheetType = BottomSheetType.DiscardChangesConfirmation
+                    coroutineScope.launch {
+                        modalBottomSheetState.show()
+                    }
+                } else {
+                    onNavigateToBack()
+                }
+            }
+
+            BackHandler {
+                if (modalBottomSheetState.isVisible) {
+                    coroutineScope.launch { modalBottomSheetState.hide() }
+                } else {
+                    confirmNavigateToBack()
+                }
+            }
+
             Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
                 AppBar(
                     title = uiState.headerTitle,
                     navigationIcon = {
-                        //TODO screen lagging when keyboard is open
-                        HsBackButton(onNavigateToBack)
+                        HsBackButton {
+                            confirmNavigateToBack()
+                        }
                     },
                     menuItems = listOf(
                         MenuItem(
@@ -73,39 +131,38 @@ fun ContactScreen(
                     )
                 )
 
-                Spacer(Modifier.height(12.dp))
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = uiState.contactName,
-                    pasteEnabled = false,
-                    hint = stringResource(R.string.Contacts_NameHint),
-                    onValueChange = viewModel::onNameChange
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = ComposeAppTheme.colors.tyler)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Spacer(Modifier.height(12.dp))
+                    FormsInput(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        initial = uiState.contactName,
+                        pasteEnabled = false,
+                        hint = stringResource(R.string.Contacts_NameHint),
+                        onValueChange = viewModel::onNameChange
+                    )
 
-                Addresses(
-                    addressViewItems = uiState.addressViewItems,
-                    onClickAddress = onNavigateToAddress
-                )
+                    Addresses(
+                        addressViewItems = uiState.addressViewItems,
+                        onClickAddress = onNavigateToAddress
+                    )
 
-                ActionButtons(
-                    onAddAddress = {
-                        onNavigateToAddress(null)
-                    },
-                    showDelete = uiState.showDelete,
-                    onDeleteContact = {
-                        coroutineScope.launch {
-                            modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                    ActionButtons(
+                        onAddAddress = { onNavigateToAddress(null) },
+                        showDelete = uiState.showDelete,
+                        onDeleteContact = {
+                            bottomSheetType = BottomSheetType.DeleteConfirmation
+                            coroutineScope.launch {
+                                modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                            }
                         }
-                    }
-                )
+                    )
 
-                LaunchedEffect(uiState.closeWithSuccess) {
-                    if (uiState.closeWithSuccess) {
-                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.SHORT)
-
-                        //TODO screen lagging when keyboard is open
-                        onNavigateToBack()
-                    }
+                    Spacer(Modifier.height(32.dp))
                 }
             }
         }
@@ -113,15 +170,19 @@ fun ContactScreen(
 }
 
 @Composable
-fun DeletionWarningBottomSheet(
+fun ConfirmationBottomSheet(
     title: String,
     text: String,
-    onDelete: () -> Unit,
+    iconPainter: Painter,
+    iconTint: ColorFilter,
+    confirmText: String,
+    cancelText: String,
+    onConfirm: () -> Unit,
     onClose: () -> Unit
 ) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_delete_20),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+        iconPainter = iconPainter,
+        iconTint = iconTint,
         title = title,
         onCloseClick = onClose
     ) {
@@ -136,10 +197,9 @@ fun DeletionWarningBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            title = stringResource(R.string.Button_Delete),
+            title = confirmText,
             onClick = {
-                onDelete()
-                onClose()
+                onConfirm()
             }
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -147,7 +207,7 @@ fun DeletionWarningBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            title = stringResource(R.string.Button_Cancel),
+            title = cancelText,
             onClick = onClose
         )
         Spacer(Modifier.height(32.dp))

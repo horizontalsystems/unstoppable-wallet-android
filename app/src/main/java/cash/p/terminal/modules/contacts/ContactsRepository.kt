@@ -31,7 +31,7 @@ class ContactsRepository(
     private val logger = AppLogger("contacts")
 
     val contacts: List<Contact>
-        get() = contactsMap.map { it.value }.toList()
+        get() = contactsMap.map { it.value }.sortedBy { it.name }.toList()
 
     private val _contactsFlow = MutableStateFlow(contacts)
     val contactsFlow: StateFlow<List<Contact>> = _contactsFlow

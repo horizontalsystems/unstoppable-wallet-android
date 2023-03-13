@@ -86,8 +86,11 @@ fun ContactsNavHost(navController: NavController) {
                 onNavigateToAddress = { address ->
 
                     navHostController.getNavigationResult("contacts_address_result") { bundle ->
-                        bundle.getParcelable<ContactAddress>("contact_address")?.let { editedAddress ->
+                        bundle.getParcelable<ContactAddress>("added_address")?.let { editedAddress ->
                             viewModel.setAddress(editedAddress)
+                        }
+                        bundle.getParcelable<ContactAddress>("deleted_address")?.let { deletedAddress ->
+                            viewModel.deleteAddress(deletedAddress)
                         }
                     }
 
@@ -101,7 +104,6 @@ fun ContactsNavHost(navController: NavController) {
         composablePage(
             route = "address"
         ) {
-            //TODO this place is called 6 times
             val address = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("address")
             val definedAddresses = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<ContactAddress>>("defined_addresses")
 
@@ -111,10 +113,16 @@ fun ContactsNavHost(navController: NavController) {
 
             AddressNavHost(
                 viewModel = viewModel,
-                onDone = { contactAddress ->
+                onAddAddress = { contactAddress ->
                     navHostController.setNavigationResult(
                         "contacts_address_result",
-                        bundleOf("contact_address" to contactAddress)
+                        bundleOf("added_address" to contactAddress)
+                    )
+                },
+                onDeleteAddress = { contactAddress ->
+                    navHostController.setNavigationResult(
+                        "contacts_address_result",
+                        bundleOf("deleted_address" to contactAddress)
                     )
                 },
                 onCloseNavHost = { navHostController.popBackStack() }
@@ -127,7 +135,8 @@ fun ContactsNavHost(navController: NavController) {
 @Composable
 fun AddressNavHost(
     viewModel: AddressViewModel,
-    onDone: (ContactAddress) -> Unit,
+    onAddAddress: (ContactAddress) -> Unit,
+    onDeleteAddress: (ContactAddress) -> Unit,
     onCloseNavHost: () -> Unit
 ) {
     val navHostController = rememberAnimatedNavController()
@@ -143,7 +152,12 @@ fun AddressNavHost(
                     navHostController.navigate("blockchainSelector")
                 },
                 onDone = { contactAddress ->
-                    onDone(contactAddress)
+                    onAddAddress(contactAddress)
+
+                    onCloseNavHost()
+                },
+                onDelete = { contactAddress ->
+                    onDeleteAddress(contactAddress)
 
                     onCloseNavHost()
                 },
