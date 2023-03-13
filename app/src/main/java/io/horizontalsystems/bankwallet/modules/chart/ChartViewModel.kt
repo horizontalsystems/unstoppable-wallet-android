@@ -17,10 +17,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.Indicator
-import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +29,6 @@ open class ChartViewModel(
     private val valueFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod?>>>()
-    val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
@@ -48,27 +45,6 @@ open class ChartViewModel(
                     TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
                 }
                 tabItemsLiveData.postValue(tabItems)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        Observable
-            .combineLatest(
-                service.indicatorObservable,
-                service.indicatorsEnabledObservable,
-                { selectedIndicator, enabled ->
-                    Pair(selectedIndicator, enabled)
-                }
-            )
-            .subscribeIO { (selectedIndicator, enabled) ->
-                val indicators = service.chartIndicators.map { indicator ->
-                    TabItem(Translator.getString(indicator.stringResId),
-                        indicator == selectedIndicator.orElse(null),
-                        indicator,
-                        enabled = enabled)
-                }
-                indicatorsLiveData.postValue(indicators)
             }
             .let {
                 disposables.add(it)
@@ -98,11 +74,6 @@ open class ChartViewModel(
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
         loadingLiveData.postValue(true)
         service.updateChartInterval(chartInterval)
-    }
-
-    fun onSelectIndicator(chartIndicator: ChartIndicator?) {
-        loadingLiveData.postValue(true)
-        service.updateIndicator(chartIndicator)
     }
 
     fun refresh() {
@@ -137,7 +108,8 @@ open class ChartViewModel(
             chartData,
             chartPointsWrapper.chartInterval,
             maxValue,
-            minValue
+            minValue,
+            chartData.items.any { it.values[Indicator.Volume] != null }
         )
 
         dataWrapperLiveData.postValue(ChartDataWrapper(headerView, chartInfoData))
@@ -183,20 +155,6 @@ open class ChartViewModel(
     }
 
     private fun getItemExtraData(item: ChartDataItemImmutable): SelectedPoint.ExtraData? {
-        if (service.indicator == ChartIndicator.Macd) {
-            val macd = item.values[Indicator.Macd]?.let {
-                App.numberFormatter.format(it.value, 0, 2)
-            }
-            val histogram = item.values[Indicator.MacdHistogram]?.let {
-                App.numberFormatter.format(it.value, 0, 2)
-            }
-            val signal = item.values[Indicator.MacdSignal]?.let {
-                App.numberFormatter.format(it.value, 0, 2)
-            }
-
-            return SelectedPoint.ExtraData.Macd(macd, histogram, signal)
-        }
-
         val dominance = item.values[Indicator.Dominance]
         val volume = item.values[Indicator.Volume]
 
@@ -220,16 +178,8 @@ data class SelectedPoint(
     sealed class ExtraData {
         class Volume(val volume: String) : ExtraData()
         class Dominance(val dominance: String) : ExtraData()
-        class Macd(val macd: String?, val histogram: String?, val signal: String?) : ExtraData()
     }
 }
-
-private val ChartIndicator.stringResId: Int
-    get() = when (this) {
-        ChartIndicator.Ema -> R.string.CoinPage_IndicatorEMA
-        ChartIndicator.Macd -> R.string.CoinPage_IndicatorMACD
-        ChartIndicator.Rsi -> R.string.CoinPage_IndicatorRSI
-    }
 
 val HsTimePeriod.stringResId: Int
     get() = when (this) {
