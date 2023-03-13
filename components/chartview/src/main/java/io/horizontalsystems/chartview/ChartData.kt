@@ -5,7 +5,6 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.ChartPointF
 import java.math.BigDecimal
-import kotlin.math.abs
 
 @Immutable
 data class ChartData(
@@ -130,37 +129,6 @@ class ChartDataBuilder constructor(
         ranges[Indicator.Dominance] ?: Range(0f, 1f)
     }
 
-    val histogramRange by lazy {
-        val histogram = ranges[Indicator.MacdHistogram]
-
-        val max = listOf(histogram?.lower, histogram?.upper)
-            .mapNotNull { it }
-            .map { abs(it) }
-            .maxOrNull() ?: 1f
-
-        Range(-max, max)
-    }
-
-    val macdRange by lazy {
-        val macd = ranges[Indicator.Macd]
-        val signal = ranges[Indicator.MacdSignal]
-        val histogram = ranges[Indicator.MacdHistogram]
-
-        val max = listOf(
-            macd?.lower,
-            macd?.upper,
-            signal?.lower,
-            signal?.upper,
-            histogram?.lower,
-            histogram?.upper
-        )
-            .mapNotNull { it }
-            .map { abs(it) }
-            .maxOrNull() ?: 1f
-
-        Range(-max, max)
-    }
-
     val immutableItems: List<ChartDataItemImmutable>
 
     init {
@@ -203,14 +171,8 @@ class ChartDataBuilder constructor(
 
     fun getRangeForIndicator(indicator: Indicator) = when (indicator) {
         Indicator.Candle -> valueRange
-        Indicator.EmaFast -> valueRange
-        Indicator.EmaSlow -> valueRange
         Indicator.Volume -> volumeRange
         Indicator.Dominance -> dominanceRange
-        Indicator.Rsi -> rsiRange
-        Indicator.Macd -> macdRange
-        Indicator.MacdSignal -> macdRange
-        Indicator.MacdHistogram -> histogramRange
     }
 
     // Ranges

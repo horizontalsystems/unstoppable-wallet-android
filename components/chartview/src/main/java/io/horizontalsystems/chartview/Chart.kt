@@ -12,7 +12,6 @@ import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.GridHelper
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
-import io.horizontalsystems.chartview.models.ChartIndicator
 import java.text.DecimalFormat
 
 class Chart @JvmOverloads constructor(
@@ -120,55 +119,6 @@ class Chart @JvmOverloads constructor(
         binding.chartError.text = null
     }
 
-    private var indicator: ChartIndicator? = null
-
-    fun hideAllIndicators() {
-        indicator?.let {
-            setIndicator(it, false)
-        }
-    }
-
-    fun setIndicator(indicator: ChartIndicator, visible: Boolean) {
-        this.indicator = indicator
-        if (visible) {
-            hideOtherIndicators(indicator)
-        }
-        when (indicator) {
-            ChartIndicator.Ema -> {
-                setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = visible)
-                animatorMain.start()
-            }
-            ChartIndicator.Macd -> setVisible(
-                macdCurve,
-                macdSignal,
-                macdHistogram,
-                macdLabel,
-                isVisible = visible
-            )
-            ChartIndicator.Rsi -> setVisible(rsiCurve, rsiRange, isVisible = visible)
-        }
-
-        setVisible(bottomVolume, mainRange, isVisible = !visible)
-
-        animatorTopBottomRange.start()
-        animatorBottom.start()
-    }
-
-    private fun hideOtherIndicators(indicator: ChartIndicator) {
-        ChartIndicator.values().filter { it != indicator }.forEach {
-            if (it == ChartIndicator.Ema && emaFastCurve.isVisible) {
-                setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = false)
-                animatorMain.start()
-            }
-            if (it == ChartIndicator.Macd && macdCurve.isVisible) {
-                setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = false)
-            }
-            if (it == ChartIndicator.Rsi && rsiCurve.isVisible) {
-                setVisible(rsiCurve, rsiRange, isVisible = false)
-            }
-        }
-    }
-
     fun showChart(visible: Boolean = true) {
         setVisible(
             binding.chartMain,
@@ -204,34 +154,6 @@ class Chart @JvmOverloads constructor(
         )
 
         config.setTrendColor(data)
-
-        val emaFast = PointConverter.curve(
-            data.values(EmaFast),
-            binding.chartMain.shape,
-            config.curveVerticalOffset
-        )
-        val emaSlow = PointConverter.curve(
-            data.values(EmaSlow),
-            binding.chartMain.shape,
-            config.curveVerticalOffset
-        )
-        val rsi = PointConverter.curve(data.values(Rsi), binding.chartBottom.shape, 0f)
-
-        val macd = PointConverter.curve(
-            data.values(Macd),
-            binding.chartBottom.shape,
-            config.macdLineOffset
-        )
-        val signal = PointConverter.curve(
-            data.values(MacdSignal),
-            binding.chartBottom.shape,
-            config.macdLineOffset
-        )
-        val histogram = PointConverter.histogram(
-            data.values(MacdHistogram),
-            binding.chartBottom.shape,
-            config.macdHistogramOffset
-        )
 
         val coordinates =
             PointConverter.coordinates(data, binding.chartMain.shape, config.curveVerticalOffset)
@@ -291,54 +213,6 @@ class Chart @JvmOverloads constructor(
         binding.chartTouch.configure(config, binding.chartTimeline.shape.height())
         binding.chartTouch.setCoordinates(coordinates)
 
-        // EMA
-        emaFastCurve.setShape(binding.chartMain.shape)
-        emaFastCurve.setPoints(emaFast)
-        emaFastCurve.setColor(config.curveFastColor)
-
-        emaSlowCurve.setShape(binding.chartMain.shape)
-        emaSlowCurve.setPoints(emaSlow)
-        emaSlowCurve.setColor(config.curveSlowColor)
-
-        emaLabel.setShape(binding.chartMain.shape)
-        emaLabel.setValues(
-            mapOf(
-                EmaSlow.period.toString() to config.curveSlowColor,
-                EmaFast.period.toString() to config.curveFastColor
-            )
-        )
-
-        // RSI
-        rsiCurve.setShape(binding.chartBottom.shape)
-        rsiCurve.setPoints(rsi)
-        rsiCurve.setColor(config.curveSlowColor)
-
-        rsiRange.setShape(binding.chartBottom.shape)
-        rsiRange.setOffset(binding.chartBottom.shape.height() * 0.3f)
-        rsiRange.setValues(Rsi.max.toString(), Rsi.min.toString(), true)
-
-        // MACD
-        macdCurve.setShape(binding.chartBottom.shape)
-        macdCurve.setPoints(macd)
-        macdCurve.setColor(config.curveFastColor)
-
-        macdSignal.setShape(binding.chartBottom.shape)
-        macdSignal.setPoints(signal)
-        macdSignal.setColor(config.curveSlowColor)
-
-        macdHistogram.setShape(binding.chartBottom.shape)
-        macdHistogram.setPoints(histogram)
-
-        macdLabel.setShape(binding.chartBottom.shape)
-        macdLabel.setOffset(binding.chartBottom.shape.height() * 0.3f)
-        macdLabel.setValues(
-            mapOf(
-                Macd.signalPeriod.toString() to config.gridLabelColor,
-                Macd.slowPeriod.toString() to config.gridLabelColor,
-                Macd.fastPeriod.toString() to config.gridLabelColor
-            )
-        )
-
         // Candles
         mainCurve.setShape(binding.chartMain.shape)
         mainCurve.setCurveAnimator(mainCurveAnimator!!)
@@ -390,10 +264,6 @@ class Chart @JvmOverloads constructor(
         animatorMain.start()
         animatorTopBottomRange.start()
         animatorBottom.start()
-    }
-
-    private fun setVisible(vararg draw: ChartDraw, isVisible: Boolean) {
-        draw.forEach { it.isVisible = isVisible }
     }
 
     private fun setVisible(vararg view: View, isVisible: Boolean) {
