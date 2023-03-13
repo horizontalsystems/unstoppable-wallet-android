@@ -23,24 +23,17 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
+import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
 import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsScreen
-import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationModule
-import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
-import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 class CoinFragment : BaseFragment() {
-    private val authorizationViewModel by navGraphViewModels<YakAuthorizationViewModel>(R.id.coinFragment) { YakAuthorizationModule.Factory() }
-
-    private var snackbarInProcess: CustomSnackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,58 +59,11 @@ class CoinFragment : BaseFragment() {
                 CoinScreen(
                     coinUid,
                     coinViewModel(coinUid),
-                    authorizationViewModel,
                     findNavController(),
                     childFragmentManager
                 )
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        snackbarInProcess?.dismiss()
-        snackbarInProcess = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        authorizationViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
-//            when (state) {
-//                YakAuthorizationService.State.Idle ->
-//                    snackbarInProcess?.dismiss()
-//
-//                YakAuthorizationService.State.Authenticating ->
-//                    snackbarInProcess = HudHelper.showInProcessMessage(
-//                        requireView(),
-//                        R.string.ProUsersInfo_Features_Authenticating,
-//                        SnackbarDuration.INDEFINITE
-//                    )
-//
-//                YakAuthorizationService.State.NoYakNft -> {
-//                    snackbarInProcess?.dismiss()
-//                    findNavController().slideFromBottom(
-//                        R.id.proUsersInfoDialog
-//                    )
-//                }
-//
-//                YakAuthorizationService.State.Authenticated -> {}
-//
-//                is YakAuthorizationService.State.SignMessageReceived -> {
-//                    snackbarInProcess?.dismiss()
-//                    findNavController().slideFromBottom(
-//                        R.id.proUsersActivateDialog
-//                    )
-//                }
-//
-//                is YakAuthorizationService.State.Failed ->
-//                    snackbarInProcess = HudHelper.showErrorMessage(
-//                        requireView(),
-//                        state.exception.toString()
-//                    )
-//            }
-//        }
     }
 
     private fun coinViewModel(coinUid: String): CoinViewModel? = try {
@@ -127,26 +73,6 @@ class CoinFragment : BaseFragment() {
         viewModel
     } catch (e: Exception) {
         null
-    }
-
-    private fun showBottomSelectorDialog(
-        config: BottomSheetSelectorMultipleDialog.Config,
-        onSelect: (indexes: List<Int>) -> Unit,
-        onCancel: () -> Unit
-    ) {
-        BottomSheetSelectorMultipleDialog.show(
-            fragmentManager = childFragmentManager,
-            title = config.title,
-            icon = config.icon,
-            items = config.viewItems,
-            selected = config.selectedIndexes,
-            onItemSelected = { onSelect(it) },
-            onCancelled = { onCancel() },
-            warningTitle = config.descriptionTitle,
-            warning = config.description,
-            notifyUnchanged = true,
-            allowEmpty = config.allowEmpty
-        )
     }
 
     companion object {
@@ -160,13 +86,12 @@ class CoinFragment : BaseFragment() {
 fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
-    authorizationViewModel: YakAuthorizationViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
     ComposeAppTheme {
         if (coinViewModel != null) {
-            CoinTabs(coinViewModel, authorizationViewModel, navController, fragmentManager)
+            CoinTabs(coinViewModel, navController, fragmentManager)
         } else {
             CoinNotFound(coinUid, navController)
         }
@@ -177,7 +102,6 @@ fun CoinScreen(
 @Composable
 fun CoinTabs(
     viewModel: CoinViewModel,
-    authorizationViewModel: YakAuthorizationViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
@@ -244,7 +168,6 @@ fun CoinTabs(
                 CoinModule.Tab.Details -> {
                     CoinAnalyticsScreen(
                         fullCoin = viewModel.fullCoin,
-                        authorizationViewModel = authorizationViewModel,
                         navController = navController,
                         fragmentManager = fragmentManager
                     )

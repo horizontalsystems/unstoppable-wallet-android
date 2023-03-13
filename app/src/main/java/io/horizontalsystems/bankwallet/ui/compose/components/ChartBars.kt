@@ -13,9 +13,9 @@ import io.horizontalsystems.chartview.Indicator
 @Composable
 fun ChartBars(
     modifier: Modifier,
-    chartData: ChartData
+    chartData: ChartData,
 ) {
-    val color = ComposeAppTheme.colors.jacob
+    val color = if (chartData.disabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.jacob
     Canvas(
         modifier = modifier,
         onDraw = {

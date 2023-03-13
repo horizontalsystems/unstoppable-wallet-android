@@ -14,7 +14,8 @@ data class ChartData(
     val endTimestamp: Long,
     val isExpired: Boolean,
     val valueRange: Range<Float>,
-    val isMovementChart: Boolean
+    val isMovementChart: Boolean,
+    val disabled: Boolean = false
 ) {
 
     fun values(name: Indicator): List<ChartDataValueImmutable> {
@@ -66,12 +67,13 @@ data class ChartDataItemImmutable(
     val values: Map<Indicator, ChartDataValueImmutable?>
 )
 
-class ChartDataBuilder private constructor(
+class ChartDataBuilder constructor(
     points: List<ChartPoint>,
     start: Long?,
     end: Long?,
+    private val isMovementChart: Boolean,
     private val isExpired: Boolean = false,
-    private val isMovementChart: Boolean
+    private val disabled: Boolean = false
 ) {
 
     companion object {
@@ -86,23 +88,24 @@ class ChartDataBuilder private constructor(
             ),
             100,
             600,
-            true,
-            false
+            true
         ).build()
 
         fun buildFromPoints(
             points: List<ChartPoint>,
             startTimestamp: Long? = null,
             endTimestamp: Long? = null,
+            isMovementChart: Boolean = true,
             isExpired: Boolean = false,
-            isMovementChart: Boolean = true
+            isDisabled: Boolean = false,
         ): ChartData {
             return ChartDataBuilder(
                 points,
                 startTimestamp,
                 endTimestamp,
+                isMovementChart,
                 isExpired,
-                isMovementChart
+                isDisabled
             ).build()
         }
     }
@@ -230,6 +233,6 @@ class ChartDataBuilder private constructor(
     }
 
     fun build(): ChartData {
-        return ChartData(immutableItems, startTimestamp, endTimestamp, isExpired, valueRange, isMovementChart)
+        return ChartData(immutableItems, startTimestamp, endTimestamp, isExpired, valueRange, isMovementChart, disabled)
     }
 }

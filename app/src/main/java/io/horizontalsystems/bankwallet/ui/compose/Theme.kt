@@ -21,6 +21,7 @@ val lightPalette = Colors(
     jeremy = SteelLight,
     laguna = LagunaL,
     raina = White50,
+    andy = Steel20,
 )
 
 val darkPalette = Colors(
@@ -35,6 +36,7 @@ val darkPalette = Colors(
     jeremy = Steel20,
     laguna = LagunaD,
     raina = Steel10,
+    andy = Black50,
 )
 
 @Composable

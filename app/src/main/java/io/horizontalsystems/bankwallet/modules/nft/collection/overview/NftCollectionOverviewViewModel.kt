@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.eip20TokenUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -139,7 +140,7 @@ class NftCollectionOverviewViewModel(
             ContractInfo(
                 it.address,
                 service.blockchainType.imageUrl,
-                service.blockchain?.explorerUrl?.replace("\$ref", it.address),
+                service.blockchain?.eip20TokenUrl(it.address),
                 it.name,
                 it.schemaName
             )

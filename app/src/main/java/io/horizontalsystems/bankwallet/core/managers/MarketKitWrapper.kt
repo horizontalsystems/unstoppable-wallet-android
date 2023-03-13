@@ -59,6 +59,10 @@ class MarketKitWrapper(
 
     fun marketInfoDetailsSingle(coinUid: String, currencyCode: String) = marketKit.marketInfoDetailsSingle(coinUid, currencyCode)
 
+    fun analyticsSingle(coinUid: String, currencyCode: String) = marketKit.analyticsSingle(coinUid, currencyCode)
+
+    fun analyticsPreviewSingle(coinUid: String) = marketKit.analyticsPreviewSingle(coinUid)
+
     fun marketInfoTvlSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.marketInfoTvlSingle(coinUid, currencyCode, timePeriod)
 
@@ -125,7 +129,7 @@ class MarketKitWrapper(
 
     // Details
 
-    fun topHoldersSingle(coinUid: String) = marketKit.topHoldersSingle(coinUid)
+    fun tokenHoldersSingle(coinUid: String, blockchainUid: String) = marketKit.tokenHoldersSingle(coinUid, blockchainUid)
 
     fun treasuriesSingle(coinUid: String, currencyCode: String) = marketKit.treasuriesSingle(coinUid, currencyCode)
 
