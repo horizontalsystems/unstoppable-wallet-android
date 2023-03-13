@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import io.horizontalsystems.chartview.Indicator.*
 import io.horizontalsystems.chartview.databinding.ViewChartBinding
 import io.horizontalsystems.chartview.helpers.ChartAnimator
-import io.horizontalsystems.chartview.helpers.GridHelper
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
 import java.text.DecimalFormat
@@ -31,7 +30,6 @@ class Chart @JvmOverloads constructor(
     private val config = ChartConfig(context, attrs)
     private val animatorMain = ChartAnimator {
         binding.chartMain.invalidate()
-        binding.chartGrid.invalidate()
     }
     private val animatorBottom = ChartAnimator { binding.chartBottom.invalidate() }
     private val animatorTopBottomRange = ChartAnimator { binding.topLowRange.invalidate() }
@@ -39,23 +37,9 @@ class Chart @JvmOverloads constructor(
     private val mainCurve = ChartCurve2(config)
     private val mainGradient = ChartGradient(animatorMain)
 
-    private val mainGrid = ChartGrid(config)
     private val mainRange = ChartGridRange(config)
 
     private val bottomVolume = ChartVolume(config, animatorBottom)
-    private val timelineGrid = ChartGridTimeline(config)
-
-    private val emaFastCurve = ChartCurve(config, animatorMain)
-    private val emaSlowCurve = ChartCurve(config, animatorMain)
-    private val emaLabel = ChartBottomLabel(config)
-
-    private val macdCurve = ChartCurve(config, animatorBottom)
-    private val macdSignal = ChartCurve(config, animatorBottom)
-    private val macdHistogram = ChartHistogram(config, animatorBottom)
-    private val macdLabel = ChartBottomLabel(config)
-
-    private val rsiCurve = ChartCurve(config, animatorBottom)
-    private val rsiRange = ChartGridRange(config, isVisible = false)
 
     private val dominanceCurve = ChartCurve2(config)
     private val dominanceLabel = ChartBottomLabel(config)
@@ -119,11 +103,10 @@ class Chart @JvmOverloads constructor(
         binding.chartError.text = null
     }
 
-    fun showChart(visible: Boolean = true) {
+    private fun showChart(visible: Boolean = true) {
         setVisible(
             binding.chartMain,
             binding.topLowRange,
-            binding.chartTimeline,
             isVisible = visible
         )
     }
@@ -161,11 +144,6 @@ class Chart @JvmOverloads constructor(
             data.values(Volume),
             binding.chartBottom.shape,
             config.volumeOffset
-        )
-        val timeline = GridHelper.map(
-            data.startTimestamp,
-            data.endTimestamp,
-            binding.chartMain.shape.right
         )
 
         //Dominance
@@ -210,7 +188,7 @@ class Chart @JvmOverloads constructor(
             dominanceLabel.isVisible = true
         }
 
-        binding.chartTouch.configure(config, binding.chartTimeline.shape.height())
+        binding.chartTouch.configure(config, 0f)
         binding.chartTouch.setCoordinates(coordinates)
 
         // Candles
@@ -222,9 +200,6 @@ class Chart @JvmOverloads constructor(
         mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)
 
-        mainGrid.setShape(binding.chartGrid.shape)
-        mainGrid.set(timeline)
-
         mainRange.setShape(binding.chartMain.shape)
         mainRange.setValues(maxValue, minValue)
 
@@ -232,34 +207,19 @@ class Chart @JvmOverloads constructor(
         bottomVolume.setPoints(volumes)
         bottomVolume.setShape(binding.chartBottom.shape)
 
-        // Timeline
-        timelineGrid.setColumns(timeline)
-        timelineGrid.setShape(binding.chartTimeline.shape)
-
         // ---------------------------
         // *********
         // ---------------------------
 
         binding.chartMain.clear()
         binding.chartMain.add(mainCurve, mainGradient)
-        binding.chartMain.add(emaLabel, dominanceLabel)
-        binding.chartMain.add(emaFastCurve, emaSlowCurve)
-        binding.chartMain.add(dominanceCurve)
-
-        binding.chartGrid.clear()
-        binding.chartGrid.add(mainGrid)
+        binding.chartMain.add(dominanceLabel, dominanceCurve)
 
         binding.topLowRange.clear()
         binding.topLowRange.add(mainRange)
 
         binding.chartBottom.clear()
         binding.chartBottom.add(bottomVolume)
-        binding.chartBottom.add(macdHistogram, macdCurve, macdSignal, macdLabel)
-        binding.chartBottom.add(rsiCurve, rsiRange)
-
-        binding.chartTimeline.clear()
-        binding.chartTimeline.add(timelineGrid)
-        binding.chartTimeline.invalidate()
 
         animatorMain.start()
         animatorTopBottomRange.start()
