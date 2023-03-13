@@ -1,599 +1,270 @@
 package io.horizontalsystems.bankwallet.modules.coin.analytics
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.SecurityViewItem
-import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ViewItem
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.*
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
-import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProFeaturesBanner
-import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationViewModel
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
 fun CoinAnalyticsScreen(
     fullCoin: FullCoin,
-    authorizationViewModel: YakAuthorizationViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
     val viewModel = viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
 
-    val viewState by viewModel.viewStateLiveData.observeAsState()
-    val viewItem by viewModel.viewItemLiveData.observeAsState()
-    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
+    val uiState = viewModel.uiState
 
     HSSwipeRefresh(
-        refreshing = isRefreshing,
+        refreshing = uiState.isRefreshing,
         onRefresh = { viewModel.refresh() },
     ) {
-        Crossfade(viewState) { viewState ->
+        Crossfade(uiState.viewState) { viewState ->
             when (viewState) {
                 ViewState.Loading -> {
                     Loading()
                 }
                 ViewState.Success -> {
-                    val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
-
-                    viewItem?.let { viewItem ->
-                        if (!viewItem.proChartsActivated) {
-                            detailBlocks.add {
-                                ProFeaturesBanner(
-                                    stringResource(R.string.CoinPage_NftBannerTitle),
-                                    stringResource(R.string.CoinPage_NftBannerDescription)
-                                ) { authorizationViewModel.onBannerClick() }
-                            }
+                    when (val item = uiState.viewItem) {
+                        AnalyticsViewItem.NoData -> {
+                            ListEmptyView(
+                                text = stringResource(R.string.CoinAnalytics_ProjectNoAnalyticData),
+                                icon = R.drawable.ic_not_available
+                            )
                         }
-
-                        viewItem.tokenLiquidityViewItem?.let {
-                            detailBlocks.add { borderTop ->
-                                TokenLiquidity(
-                                    coinUid = fullCoin.coin.uid,
-                                    viewItem = viewItem,
-                                    tokenLiquidityViewItem = it,
-                                    borderTop = borderTop,
-                                    navController = navController,
-                                    fragmentManager = fragmentManager,
-                                    onBannerClick = { authorizationViewModel.onBannerClick() }
-                                )
-                            }
+                        is AnalyticsViewItem.Preview -> {
+                            AnalyticsDataPreview(item.blocks)
                         }
-
-                        viewItem.tokenDistributionViewItem?.let {
-                            detailBlocks.add { borderTop ->
-                                TokenDistribution(
-                                    coinUid = fullCoin.coin.uid,
-                                    viewItem = viewItem,
-                                    tokenDistributionViewItem = it,
-                                    borderTop = borderTop,
-                                    navController = navController,
-                                    fragmentManager = fragmentManager,
-                                    onBannerClick = { authorizationViewModel.onBannerClick() }
-                                )
-                            }
+                        is AnalyticsViewItem.Analytics -> {
+                            AnalyticsData(item.blocks, navController, fragmentManager)
                         }
+                        null -> {
 
-                        if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
-                            detailBlocks.add { borderTop ->
-                                TokenTvl(viewItem, borderTop, navController) {
-                                    MetricChartTvlFragment.show(
-                                        fragmentManager,
-                                        fullCoin.coin.uid,
-                                        fullCoin.coin.name
-                                    )
-                                }
-                            }
-                        }
-
-                        if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
-                            detailBlocks.add { borderTop -> InvestorData(fullCoin.coin, viewItem, borderTop, navController) }
-                        }
-
-                        if (viewItem.securityViewItems.isNotEmpty() || viewItem.auditAddresses.isNotEmpty()) {
-                            detailBlocks.add { borderTop -> SecurityParameters(viewItem, borderTop, navController) }
-                        }
-                    }
-
-                    if (detailBlocks.size > 0) {
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            items(detailBlocks.size) { index ->
-                                detailBlocks[index].invoke(index != 0)
-                            }
-                            item {
-                                Spacer(modifier = Modifier.height(32.dp))
-                            }
                         }
                     }
                 }
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                 }
-                null -> {}
             }
         }
     }
-
-
 }
 
 @Composable
-private fun TokenTvl(
-    viewItem: ViewItem,
-    borderTop: Boolean,
+private fun AnalyticsData(
+    blocks: List<CoinAnalyticsModule.BlockViewItem>,
     navController: NavController,
-    onClick: () -> Unit
+    fragmentManager: FragmentManager
 ) {
-    CellSingleLineClear(borderTop = borderTop) {
-        Text(
-            text = stringResource(R.string.CoinPage_TokenTvl),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-        Spacer(Modifier.weight(1f))
-        HsIconButton(
-            modifier = Modifier.size(20.dp),
-            onClick = {
-                navController.slideFromBottom(R.id.tokenTvlInfoFragment)
-            }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = "info button",
-                tint = ComposeAppTheme.colors.grey
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(blocks) { block ->
+            AnalyticsBlock(
+                block,
+                navController,
+                fragmentManager
             )
         }
-    }
-
-    viewItem.tvlChart?.let { tvlChart ->
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            MiniChartCard(
-                title = stringResource(id = R.string.CoinPage_DetailsTvl),
-                chartViewItem = tvlChart,
-                onClick = onClick
-            )
+        item {
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
-
-    Spacer(modifier = Modifier.height(12.dp))
-
-    val tokenTvls = mutableListOf<@Composable () -> Unit>()
-
-    viewItem.tvlRank?.let {
-        tokenTvls.add {
-            CoinAnalyticsCell(
-                title = stringResource(R.string.TvlRank_Title),
-                value = it,
-                onClick = {
-                    navController.slideFromBottom(R.id.tvlFragment)
-                }
-            )
-        }
-    }
-
-    viewItem.tvlRatio?.let {
-        tokenTvls.add {
-            CoinAnalyticsCell(title = stringResource(R.string.CoinPage_TvlMCapRatio), value = it)
-        }
-    }
-
-    CellSingleLineLawrenceSection(tokenTvls)
-    Spacer(modifier = Modifier.height(24.dp))
 }
 
 @Composable
-private fun SecurityParameters(
-    viewItem: ViewItem,
-    borderTop: Boolean,
-    navController: NavController
+private fun AnalyticsDataPreview(
+    previewBlocks: List<CoinAnalyticsModule.PreviewBlockViewItem>,
 ) {
-    CellSingleLineClear(borderTop = borderTop) {
-        Text(
-            text = stringResource(R.string.CoinPage_SecurityParams),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-        Spacer(Modifier.weight(1f))
-        HsIconButton(
-            modifier = Modifier.size(20.dp),
-            onClick = {
-                navController.slideFromBottom(R.id.securityParamsInfoFragment)
-            }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = "info button",
-                tint = ComposeAppTheme.colors.grey
-            )
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item {
+            AnalyticsDataLockedBlock()
+        }
+        items(previewBlocks) { block ->
+            AnalyticsPreviewBlock(block)
+        }
+        item {
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
-
-    Spacer(modifier = Modifier.height(12.dp))
-
-    val securityParams = mutableListOf<@Composable () -> Unit>()
-
-    viewItem.securityViewItems.forEach {
-        securityParams.add { SecurityParamsCell(it) }
-    }
-
-    if (viewItem.auditAddresses.isNotEmpty()) {
-        securityParams.add {
-            CoinAnalyticsCell(title = stringResource(R.string.CoinPage_SecurityParams_Audits)) {
-                val arguments = CoinAuditsFragment.prepareParams(viewItem.auditAddresses)
-                navController.slideFromRight(R.id.coinAuditsFragment, arguments)
-            }
-        }
-    }
-
-    CellSingleLineLawrenceSection(securityParams)
-    Spacer(modifier = Modifier.height(24.dp))
 }
 
 @Composable
-private fun TokenLiquidity(
-    coinUid: String,
-    viewItem: ViewItem,
-    tokenLiquidityViewItem: CoinAnalyticsModule.TokenLiquidityViewItem,
-    borderTop: Boolean,
+private fun AnalyticsBlock(
+    block: CoinAnalyticsModule.BlockViewItem,
     navController: NavController,
-    fragmentManager: FragmentManager,
-    onBannerClick: () -> Unit
+    fragmentManager: FragmentManager
 ) {
-    if (tokenLiquidityViewItem.liquidity == null && tokenLiquidityViewItem.volume == null) return
-
-    CellSingleLineClear(borderTop = borderTop) {
-        Text(
-            text = stringResource(R.string.CoinPage_TokenLiquidity),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-        Spacer(Modifier.weight(1f))
-        HsIconButton(
-            modifier = Modifier.size(20.dp),
-            onClick = {
-                navController.slideFromBottom(R.id.tokenLiquidityInfoFragment)
-            }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = "info button",
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
-    }
-
-    Spacer(modifier = Modifier.height(12.dp))
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 12.dp, end = 12.dp)
-    ) {
-        tokenLiquidityViewItem.volume?.let {
-            MiniProChartCard(
-                chartType = ProChartModule.ChartType.DexVolume,
-                halfWidth = tokenLiquidityViewItem.liquidity != null,
-                proChartsActivated = viewItem.proChartsActivated,
-                chartViewItem = it,
-                title = stringResource(R.string.CoinPage_DetailsDexVolume),
-                description = stringResource(id = R.string.CoinPage_DetailsDexVolume_Description),
-                fragmentManager = fragmentManager,
-                coinUid = coinUid,
-                onBannerClick = onBannerClick,
-                timePeriodSuffix = it.timePeriodString
-            )
-        }
-
-        tokenLiquidityViewItem.liquidity?.let {
-            MiniProChartCard(
-                chartType = ProChartModule.ChartType.DexLiquidity,
-                halfWidth = false,
-                proChartsActivated = viewItem.proChartsActivated,
-                chartViewItem = it,
-                title = stringResource(id = R.string.CoinPage_DetailsDexLiquidity),
-                description = stringResource(id = R.string.CoinPage_DetailsDexLiquidity_Description),
-                fragmentManager = fragmentManager,
-                coinUid = coinUid,
-                onBannerClick = onBannerClick,
-                timePeriodSuffix = null
-            )
-        }
-    }
-
-    Spacer(modifier = Modifier.height(24.dp))
-}
-
-@Composable
-private fun TokenDistribution(
-    coinUid: String,
-    viewItem: ViewItem,
-    tokenDistributionViewItem: CoinAnalyticsModule.TokenDistributionViewItem,
-    borderTop: Boolean,
-    navController: NavController,
-    fragmentManager: FragmentManager,
-    onBannerClick: () -> Unit
-) {
-    if (!tokenDistributionViewItem.hasMajorHolders && tokenDistributionViewItem.txCount == null && tokenDistributionViewItem.txVolume == null && tokenDistributionViewItem.activeAddresses == null) return
-
-    CellSingleLineClear(borderTop = borderTop) {
-        Text(
-            text = stringResource(R.string.CoinPage_TokenDistribution),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-        Spacer(Modifier.weight(1f))
-        HsIconButton(
-            modifier = Modifier.size(20.dp),
-            onClick = {
-                navController.slideFromBottom(R.id.tokenDistributionInfoFragment)
-            }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = "info button",
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
-    }
-
-    if (tokenDistributionViewItem.txCount != null || tokenDistributionViewItem.txVolume != null) {
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp)
-        ) {
-            tokenDistributionViewItem.txCount?.let {
-                MiniProChartCard(
-                    chartType = ProChartModule.ChartType.TxCount,
-                    halfWidth = tokenDistributionViewItem.txVolume != null,
-                    proChartsActivated = viewItem.proChartsActivated,
-                    chartViewItem = it,
-                    title = stringResource(R.string.CoinPage_DetailsTxCount),
-                    description = stringResource(id = R.string.CoinPage_DetailsTxCount_Description),
-                    fragmentManager = fragmentManager,
-                    coinUid = coinUid,
-                    onBannerClick = onBannerClick,
-                    timePeriodSuffix = it.timePeriodString
+    AnalyticsContainer(
+        sectionTitle = block.sectionTitle?.let {
+            {
+                body_leah(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = stringResource(it)
                 )
             }
-
-            tokenDistributionViewItem.txVolume?.let {
-                MiniProChartCard(
-                    chartType = ProChartModule.ChartType.TxVolume,
-                    halfWidth = false,
-                    proChartsActivated = viewItem.proChartsActivated,
-                    chartViewItem = it,
-                    title = stringResource(R.string.CoinPage_DetailsTxVolume),
-                    description = stringResource(id = R.string.CoinPage_DetailsTxVolume_Description),
-                    fragmentManager = fragmentManager,
-                    coinUid = coinUid,
-                    onBannerClick = onBannerClick,
-                    timePeriodSuffix = it.timePeriodString
+        },
+        titleRow = {
+            block.title?.let {
+                AnalyticsBlockHeader(
+                    title = stringResource(it),
+                    info = "Info text"
+                )
+            }
+        },
+        bottomRows = {
+            block.footerItems.forEach {
+                AnalyticsFooterCell(
+                    title = it.title.getString(),
+                    value = it.value,
+                    leftIcon = it.image,
+                    onClick = it.action?.let { action ->
+                        {
+                            when (action) {
+                                is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
+                                    val arguments =
+                                        CoinMajorHoldersFragment.prepareParams(action.coin.uid, action.blockchain.uid, action.blockchain.name)
+                                    navController.slideFromBottom(R.id.coinMajorHoldersFragment, arguments)
+                                }
+                                is CoinAnalyticsModule.ActionType.OpenAudits -> {
+                                    val arguments = CoinAuditsFragment.prepareParams(action.auditAddresses)
+                                    navController.slideFromRight(R.id.coinAuditsFragment, arguments)
+                                }
+                                is CoinAnalyticsModule.ActionType.OpenTreasuries -> {
+                                    val arguments = CoinTreasuriesFragment.prepareParams(action.coin)
+                                    navController.slideFromRight(R.id.coinTreasuriesFragment, arguments)
+                                }
+                                is CoinAnalyticsModule.ActionType.OpenReports -> {
+                                    val arguments = CoinReportsFragment.prepareParams(action.coinUid)
+                                    navController.slideFromRight(R.id.coinReportsFragment, arguments)
+                                }
+                                is CoinAnalyticsModule.ActionType.OpenInvestors -> {
+                                    val arguments = CoinInvestmentsFragment.prepareParams(action.coinUid)
+                                    navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
+                                }
+                                CoinAnalyticsModule.ActionType.OpenTvl -> {
+                                    navController.slideFromBottom(R.id.tvlFragment)
+                                }
+                                else -> {}
+                            }
+                        }
+                    }
                 )
             }
         }
-    }
-
-    tokenDistributionViewItem.activeAddresses?.let {
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp)
-        ) {
-            MiniProChartCard(
-                chartType = ProChartModule.ChartType.AddressesCount,
-                halfWidth = false,
-                proChartsActivated = viewItem.proChartsActivated,
-                chartViewItem = it,
-                title = stringResource(id = R.string.CoinPage_DetailsActiveAddresses),
-                description = stringResource(id = R.string.CoinPage_DetailsActiveAddresses_Description),
-                fragmentManager = fragmentManager,
-                coinUid = coinUid,
-                onBannerClick = onBannerClick,
-                timePeriodSuffix = null
-            )
-        }
-    }
-
-    if (tokenDistributionViewItem.hasMajorHolders) {
-        Spacer(modifier = Modifier.height(12.dp))
-
-        CellSingleLineLawrenceSection {
-            CoinAnalyticsCell(
-                title = stringResource(R.string.CoinPage_MajorHolders),
-                value = null,
+    ) {
+        Column(
+            modifier = Modifier.clickable(
+                enabled = block.analyticChart?.chartType != null,
                 onClick = {
-                    val arguments = CoinMajorHoldersFragment.prepareParams(coinUid)
-                    navController.slideFromRight(R.id.coinMajorHoldersFragment, arguments)
+                    val coinUid = block.analyticChart?.coinUid
+                    val chartType = block.analyticChart?.chartType
+                    if (coinUid != null && chartType != null) {
+                        ProChartFragment.show(
+                            fragmentManager,
+                            coinUid,
+                            chartType,
+                            Translator.getString(chartType.titleRes),
+                            Translator.getString(chartType.descriptionRes)
+                        )
+                    }
                 }
             )
+        ) {
+            block.value?.let {
+                AnalyticsContentNumber(number = it, period = block.valuePeriod)
+            }
+            block.analyticChart?.let { chartViewItem ->
+                VSpacer(12.dp)
+                AnalyticsChart(chartViewItem.analyticChart)
+            }
+            if (block.value != null || block.analyticChart != null) {
+                VSpacer(12.dp)
+            }
         }
     }
-
-    Spacer(modifier = Modifier.height(24.dp))
 }
 
 @Composable
-private fun InvestorData(
-    coin: Coin,
-    viewItem: ViewItem,
-    borderTop: Boolean,
-    navController: NavController
-) {
-    CellSingleLineClear(borderTop = borderTop) {
-        Text(
-            text = stringResource(R.string.CoinPage_InvestorData),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-    }
-
-    Spacer(modifier = Modifier.height(12.dp))
-
-    val investorDataList = mutableListOf<@Composable () -> Unit>()
-
-    viewItem.treasuries?.let {
-        investorDataList.add {
-            CoinAnalyticsCell(stringResource(R.string.CoinPage_Treasuries), it) {
-                val arguments = CoinTreasuriesFragment.prepareParams(coin)
-                navController.slideFromRight(R.id.coinTreasuriesFragment, arguments)
+private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewItem) {
+    AnalyticsContainer(
+        sectionTitle = block.sectionTitle?.let {
+            {
+                body_leah(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = stringResource(it)
+                )
+            }
+        },
+        titleRow = {
+            block.title?.let {
+                AnalyticsBlockHeader(
+                    title = stringResource(it),
+                    info = "Info text"
+                )
+            }
+        },
+        bottomRows = {
+            block.footerItems.forEach {
+                AnalyticsFooterCell(
+                    title = stringResource(it.title),
+                    value = if (it.hasValue) stringResource(R.string.CoinAnalytics_ThreeDots) else null,
+                    onClick = if (it.clickable) {
+                        { }
+                    } else {
+                        null
+                    }
+                )
             }
         }
-    }
-    viewItem.fundsInvested?.let {
-        investorDataList.add {
-            CoinAnalyticsCell(stringResource(R.string.CoinPage_FundsInvested), it) {
-                val arguments = CoinInvestmentsFragment.prepareParams(coin.uid)
-                navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
-
-            }
-        }
-    }
-    viewItem.reportsCount?.let {
-        investorDataList.add {
-            CoinAnalyticsCell(stringResource(R.string.CoinPage_Reports), it) {
-                val arguments = CoinReportsFragment.prepareParams(coin.uid)
-                navController.slideFromRight(R.id.coinReportsFragment, arguments)
-            }
-        }
-    }
-
-    CellSingleLineLawrenceSection(investorDataList)
-    Spacer(modifier = Modifier.height(24.dp))
-}
-
-@Composable
-private fun CoinAnalyticsCell(title: String, value: String? = null, onClick: (() -> Unit)? = null) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
-
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
-            text = value ?: "",
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.leah,
-            textAlign = TextAlign.End,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        onClick?.let {
-            Image(painter = painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")
+        if (block.showValueDots) {
+            AnalyticsContentNumber(
+                number = stringResource(R.string.CoinAnalytics_ThreeDots),
+            )
         }
-    }
-}
-
-@Composable
-private fun SecurityParamsCell(viewItem: SecurityViewItem) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(viewItem.type.title),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
-
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
-            text = stringResource(viewItem.value),
-            style = ComposeAppTheme.typography.subhead1,
-            color = viewItem.grade.securityGradeColor(),
-            textAlign = TextAlign.End,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
-@Composable
-private fun MiniProChartCard(
-    chartType: ProChartModule.ChartType,
-    halfWidth: Boolean,
-    proChartsActivated: Boolean,
-    chartViewItem: CoinAnalyticsModule.ChartViewItem,
-    title: String,
-    description: String,
-    fragmentManager: FragmentManager,
-    coinUid: String,
-    timePeriodSuffix: Int?,
-    onBannerClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(if (halfWidth) 0.5F else 1F)
-    ) {
-        MiniChartCard(
-            title = "$title${timePeriodSuffix?.let { " (${stringResource(id = it)})" } ?: ""}",
-            chartViewItem = chartViewItem,
-            paddingValues = PaddingValues(start = 4.dp, end = 4.dp),
-            onClick = {
-                if (proChartsActivated) {
-                    ProChartFragment.show(
-                        fragmentManager,
-                        coinUid,
-                        chartType,
-                        title,
-                        description
-                    )
-                } else {
-                    onBannerClick()
-                }
+        block.chartType?.let { chartType ->
+            VSpacer(12.dp)
+            if (chartType == CoinAnalyticsModule.PreviewChartType.StackedBars) {
+                val lockedSlices = listOf(
+                    StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
+                    StackBarSlice(value = 37.75f, color = Color(0x80808085)),
+                    StackBarSlice(value = 11.9f, color = Color(0x40808085)),
+                )
+                StackedBarChart(lockedSlices, modifier = Modifier.padding(horizontal = 16.dp))
+            } else {
+                AnalyticsChart(
+                    CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(chartType == CoinAnalyticsModule.PreviewChartType.Line),
+                )
             }
-        )
+        }
+        if (block.showValueDots || block.chartType != null) {
+            VSpacer(12.dp)
+        }
     }
 }

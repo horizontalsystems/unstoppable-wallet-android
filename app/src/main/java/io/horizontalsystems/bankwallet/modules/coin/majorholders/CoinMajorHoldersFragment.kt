@@ -8,22 +8,22 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -41,6 +40,14 @@ class CoinMajorHoldersFragment : BaseFragment() {
 
     private val coinUid by lazy {
         requireArguments().getString(COIN_UID_KEY)!!
+    }
+
+    private val blockchainUid by lazy {
+        requireArguments().getString(BLOCKCHAIN_UID_KEY)!!
+    }
+
+    private val blockchainName by lazy {
+        requireArguments().getString(BLOCKCHAIN_NAME_KEY)!!
     }
 
     override fun onCreateView(
@@ -57,6 +64,8 @@ class CoinMajorHoldersFragment : BaseFragment() {
                 ComposeAppTheme {
                     CoinMajorHoldersScreen(
                         coinUid,
+                        blockchainUid,
+                        blockchainName,
                         findNavController(),
                     )
                 }
@@ -67,148 +76,165 @@ class CoinMajorHoldersFragment : BaseFragment() {
 
     companion object {
         private const val COIN_UID_KEY = "coin_uid_key"
+        private const val BLOCKCHAIN_UID_KEY = "blockchain_key"
+        private const val BLOCKCHAIN_NAME_KEY = "blockchain_name_key"
 
-        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
+        fun prepareParams(coinUid: String, blockchainUid: String, blockchainName: String) =
+            bundleOf(
+                COIN_UID_KEY to coinUid,
+                BLOCKCHAIN_UID_KEY to blockchainUid,
+                BLOCKCHAIN_NAME_KEY to blockchainName
+            )
     }
 }
 
 @Composable
 private fun CoinMajorHoldersScreen(
     coinUid: String,
+    blockchainUid: String,
+    blockchainName: String,
     navController: NavController,
     viewModel: CoinMajorHoldersViewModel = viewModel(
-        factory = CoinMajorHoldersModule.Factory(coinUid)
+        factory = CoinMajorHoldersModule.Factory(coinUid, blockchainUid)
     )
 ) {
-
-    val viewState = viewModel.viewState
-    val errorMessage = viewModel.errorMessage
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.CoinPage_MajorHolders),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
+                TranslatableString.PlainString(blockchainName),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = { navController.popBackStack() }
+                    )
+                )
             )
 
-            Crossfade(viewState) { viewState ->
+            Crossfade(viewModel.uiState.viewState) { viewState ->
                 when (viewState) {
                     ViewState.Loading -> {
                         Loading()
                     }
                     is ViewState.Error -> {
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                        viewModel.uiState.error?.let {
+                            SnackbarError(it.getString())
+                            viewModel.errorShown()
+                        }
                     }
                     ViewState.Success -> {
                         CoinMajorHoldersContent(viewModel)
                     }
                 }
             }
-
-        }
-
-        errorMessage?.let {
-            SnackbarError(it.getString())
-            viewModel.errorShown()
         }
     }
 }
 
 @Composable
-private fun CoinMajorHoldersContent(viewModel: CoinMajorHoldersViewModel) {
+private fun CoinMajorHoldersContent(
+    viewModel: CoinMajorHoldersViewModel,
+) {
+    val uiState = viewModel.uiState
+
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(top = 24.dp, bottom=30.dp)
+        contentPadding = PaddingValues(bottom = 30.dp)
     ) {
 
         item {
-            SemiCircleChartBlock(viewModel.semiPieChartValue)
+            HoldersGeneralInfo(uiState.top10Share, uiState.totalHoldersCount)
         }
 
         item {
-            ListHeader()
+            StackedBarChart(
+                slices = uiState.chartData,
+                modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
+            )
         }
 
-        items(viewModel.topWallets) {
+        items(uiState.topHolders) {
             TopWalletCell(it)
         }
 
+        item {
+            SeeAllButton()
+        }
     }
 }
 
 @Composable
-private fun ListHeader() {
-    CellSingleLineClear(
-        borderTop = true
+fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
+    VSpacer(12.dp)
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.Bottom
     ) {
-        body_leah(text = stringResource(R.string.CoinPage_MajorHolders_TopWallets))
+        headline1_bran(text = top10Share)
+        HSpacer(8.dp)
+        subhead1_grey(text = stringResource(R.string.CoinPage_MajorHolders_InTopWallets))
     }
+    VSpacer(12.dp)
+    subhead2_grey(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        text = stringResource(R.string.CoinPage_MajorHolders_HoldersNumber, totalHoldersCount)
+    )
+}
+
+@Composable
+fun SeeAllButton() {
+    VSpacer(32.dp)
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                onClick = { }
+            ) {
+                body_leah(
+                    text = stringResource(R.string.Market_SeeAll),
+                    modifier = Modifier.weight(1f)
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
+        }
+    )
+    VSpacer(32.dp)
 }
 
 @Composable
 private fun TopWalletCell(item: MajorHolderItem) {
-    val context = LocalContext.current
     val localView = LocalView.current
 
-    CellSingleLineClear(
-        borderTop = true
-    ) {
+    SectionItemBorderedRowUniversalClear(borderTop = true) {
         captionSB_grey(
             text = item.index.toString(),
             modifier = Modifier.width(24.dp),
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.width(16.dp))
-        body_jacob(text = item.sharePercent)
-        Spacer(Modifier.weight(1f))
+        Column(Modifier.weight(1f)) {
+            body_leah(text = item.sharePercent)
+            VSpacer(1.dp)
+            subhead2_grey(text = item.balance)
+        }
+
         ButtonSecondaryDefault(
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .height(28.dp),
             title = item.address.shorten(),
             onClick = {
                 TextHelper.copyText(item.address)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
             }
         )
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_globe_20,
-            onClick = {
-                LinkHelper.openLinkInAppBrowser(
-                    context = context,
-                    link = "https://etherscan.io/address/${item.address}"
-                )
-            }
-        )
-
     }
-}
-
-@Composable
-private fun SemiCircleChartBlock(share: Float) {
-    val portionRest = 100 - share
-
-    SemiCircleChart(
-        modifier = Modifier.padding(horizontal = 32.dp),
-        percentValues = listOf(share, portionRest),
-        title = App.numberFormatter.format(share, 0, 2, suffix = "%")
-    )
-
-    subhead2_grey(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 32.dp, end = 32.dp, top = 12.dp),
-        textAlign = TextAlign.Center,
-        overflow = TextOverflow.Ellipsis,
-        text = stringResource(R.string.CoinPage_MajorHolders_InTopWallets),
-    )
-
-    subhead2_grey(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 24.dp, end = 24.dp, top = 38.dp, bottom = 7.dp),
-        textAlign = TextAlign.Start,
-        overflow = TextOverflow.Ellipsis,
-        text = stringResource(R.string.CoinPage_MajorHolders_Description),
-    )
 }
