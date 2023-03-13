@@ -8,8 +8,6 @@ import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.Indicator
-import io.horizontalsystems.chartview.helpers.IndicatorHelper
-import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Single
@@ -26,12 +24,6 @@ class CoinOverviewChartService(
     override val initialChartInterval = HsTimePeriod.Day1
 
     override var chartIntervals = listOf<HsTimePeriod?>()
-
-    override val chartIndicators = listOf(
-        ChartIndicator.Ema,
-        ChartIndicator.Macd,
-        ChartIndicator.Rsi
-    )
 
     private var updatesSubscriptionKey: String? = null
     private val disposables = CompositeDisposable()
@@ -128,29 +120,15 @@ class CoinOverviewChartService(
         val points = chartInfo.points
         if (points.isEmpty()) return ChartPointsWrapper(chartInterval, listOf())
 
-        val values = points.map { it.value.toFloat() }
-        val emaFast = IndicatorHelper.ema(values, Indicator.EmaFast.period)
-        val emaSlow = IndicatorHelper.ema(values, Indicator.EmaSlow.period)
-
-        val rsi = IndicatorHelper.rsi(values, Indicator.Rsi.period)
-        val (macd, signal, histogram) = IndicatorHelper.macd(values, Indicator.Macd.fastPeriod, Indicator.Macd.slowPeriod, Indicator.Macd.signalPeriod)
-
         val items = points
             .mapIndexed { index, chartPoint ->
-                val indicators = mapOf(
-                    Indicator.Volume to chartPoint.extra[ChartPointType.Volume]?.toFloat(),
-                    Indicator.EmaFast to emaFast.getOrNull(index),
-                    Indicator.EmaSlow to emaSlow.getOrNull(index),
-                    Indicator.Rsi to rsi.getOrNull(index),
-                    Indicator.Macd to macd.getOrNull(index),
-                    Indicator.MacdSignal to signal.getOrNull(index),
-                    Indicator.MacdHistogram to histogram.getOrNull(index),
-                )
 
                 ChartPoint(
                     value = chartPoint.value.toFloat(),
                     timestamp = chartPoint.timestamp,
-                    indicators = indicators
+                    indicators = mapOf(
+                        Indicator.Volume to chartPoint.extra[ChartPointType.Volume]?.toFloat(),
+                    )
                 )
             }
             .toMutableList()

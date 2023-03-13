@@ -21,7 +21,8 @@ data class ChartInfoData(
     val chartData: ChartData,
     val chartInterval: HsTimePeriod?,
     val maxValue: String?,
-    val minValue: String?
+    val minValue: String?,
+    val hasVolumes: Boolean
 )
 
 data class MarketTickerViewItem(

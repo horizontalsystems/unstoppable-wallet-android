@@ -7,7 +7,6 @@ import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -26,7 +25,6 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartDataItemImmutable
-import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
@@ -53,7 +51,6 @@ fun HsChartLineHeader(chartHeaderView: ChartModule.ChartHeaderView?) {
 fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?) -> Unit)? = null) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
-    val chartIndicators by chartViewModel.indicatorsLiveData.observeAsState(listOf())
     val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
     val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
 
@@ -64,10 +61,6 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?
             onSelectTab = {
                 chartViewModel.onSelectChartInterval(it)
                 onSelectChartInterval?.invoke(it)
-            },
-            indicators = chartIndicators,
-            onSelectIndicator = {
-                chartViewModel.onSelectIndicator(it)
             },
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
@@ -81,8 +74,6 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?
 fun <T> Chart(
     tabItems: List<TabItem<T>>,
     onSelectTab: (T) -> Unit,
-    indicators: List<TabItem<ChartIndicator>>,
-    onSelectIndicator: (ChartIndicator?) -> Unit,
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
     viewState: ViewState?,
@@ -91,20 +82,12 @@ fun <T> Chart(
     Column {
         var selectedPoint by remember { mutableStateOf<SelectedPoint?>(null) }
         HsChartLinePeriodsAndPoint(tabItems, selectedPoint, onSelectTab)
-        val chartIndicator = indicators.firstOrNull { it.selected && it.enabled }?.item
         PriceVolChart(
             chartInfoData = chartInfoData,
-            chartIndicator = chartIndicator,
             loading = chartLoading,
-            viewState = viewState,
-            showIndicatorLine = indicators.isNotEmpty()
+            viewState = viewState
         ) { item ->
             selectedPoint = item?.let { itemToPointConverter.invoke(it) }
-        }
-        if (indicators.isNotEmpty()) {
-            HSIndicatorToggles(indicators) {
-                onSelectIndicator.invoke(it)
-            }
         }
     }
 }
@@ -139,33 +122,6 @@ private fun <T> HsChartLinePeriodsAndPoint(
                 }
 
                 when (val extraData = selectedPoint.extraData) {
-                    is SelectedPoint.ExtraData.Macd -> {
-                        Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                            extraData.histogram?.let {
-                                caption_lucian(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    text = extraData.histogram,
-                                    textAlign = TextAlign.End
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                extraData.macd?.let {
-                                    caption_issykBlue(
-                                        text = it,
-                                        textAlign = TextAlign.End
-                                    )
-                                }
-                                Spacer(modifier = Modifier.width(4.dp))
-                                extraData.signal?.let {
-                                    caption_jacob(
-                                        text = it,
-                                        textAlign = TextAlign.End
-                                    )
-                                }
-                            }
-                        }
-                    }
                     is SelectedPoint.ExtraData.Volume -> {
                         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                             caption_grey(
@@ -204,41 +160,13 @@ private fun <T> HsChartLinePeriodsAndPoint(
 }
 
 @Composable
-fun HSIndicatorToggles(indicators: List<TabItem<ChartIndicator>>, onSelect: (ChartIndicator?) -> Unit) {
-    CellHeaderSorting(
-        borderTop = true,
-        borderBottom = true
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            indicators.forEach { indicator ->
-                TabButtonSecondary(
-                    title = indicator.title,
-                    onSelect = {
-                        onSelect(if (indicator.selected) null else indicator.item)
-                    },
-                    selected = indicator.selected,
-                    enabled = indicator.enabled
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun PriceVolChart(
     chartInfoData: ChartInfoData?,
-    chartIndicator: ChartIndicator?,
     loading: Boolean,
     viewState: ViewState?,
-    showIndicatorLine: Boolean,
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
+    val showIndicatorLine = chartInfoData?.hasVolumes ?: false
     val height = if (showIndicatorLine) 228.dp else 180.dp
     Box(
         modifier = Modifier
@@ -283,11 +211,6 @@ fun PriceVolChart(
                         chartInfoData?.let { chartInfoData ->
                             chart.doOnLayout {
                                 chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
-                                if (chartIndicator != null) {
-                                    chart.setIndicator(chartIndicator, true)
-                                } else {
-                                    chart.hideAllIndicators()
-                                }
                             }
                         }
                     }
