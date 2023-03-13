@@ -8,7 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,20 +28,70 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 @Composable
-fun HsChartLineHeader(chartHeaderView: ChartModule.ChartHeaderView?) {
-    TabBalance(borderTop = true) {
-        Text(
-            modifier = Modifier.padding(end = 8.dp),
-            text = chartHeaderView?.value ?: "--",
-            style = ComposeAppTheme.typography.headline1,
-            color = ComposeAppTheme.colors.leah
-        )
-        (chartHeaderView as? ChartModule.ChartHeaderView.Latest)?.let { latest ->
+fun HsChartLineHeader(
+    chartHeaderView: ChartModule.ChartHeaderView?,
+    selectedPoint: SelectedPoint?
+) {
+    if (selectedPoint == null) {
+        TabBalance(borderTop = true) {
             Text(
-                text = formatValueAsDiff(latest.diff),
-                style = ComposeAppTheme.typography.subhead1,
-                color = diffColor(latest.diff.raw())
+                modifier = Modifier.padding(end = 8.dp),
+                text = chartHeaderView?.value ?: "--",
+                style = ComposeAppTheme.typography.headline1,
+                color = ComposeAppTheme.colors.leah
             )
+            (chartHeaderView as? ChartModule.ChartHeaderView.Latest)?.let { latest ->
+                Text(
+                    text = formatValueAsDiff(latest.diff),
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = diffColor(latest.diff.raw())
+                )
+            }
+        }
+    } else {
+        TabPeriod(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                captionSB_leah(text = selectedPoint.value)
+                Spacer(modifier = Modifier.height(4.dp))
+                caption_grey(text = selectedPoint.date)
+            }
+
+            when (val extraData = selectedPoint.extraData) {
+                is SelectedPoint.ExtraData.Volume -> {
+                    Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                        caption_grey(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.CoinPage_Volume),
+                            textAlign = TextAlign.End
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        caption_grey(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = extraData.volume,
+                            textAlign = TextAlign.End
+                        )
+                    }
+                }
+                is SelectedPoint.ExtraData.Dominance -> {
+                    Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                        caption_grey(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.Market_BtcDominance),
+                            textAlign = TextAlign.End
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        caption_jacob(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = extraData.dominance,
+                            textAlign = TextAlign.End
+                        )
+                    }
+                }
+                null ->{}
+            }
         }
     }
 }
@@ -55,7 +104,9 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?
     val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
 
     Column {
-        HsChartLineHeader(chartDataWrapper?.chartHeaderView)
+        var selectedPoint by remember { mutableStateOf<SelectedPoint?>(null) }
+
+        HsChartLineHeader(chartDataWrapper?.chartHeaderView, selectedPoint)
         Chart(
             tabItems = chartTabs,
             onSelectTab = {
@@ -64,9 +115,12 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?
             },
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
-            viewState = chartViewState,
-            itemToPointConverter = chartViewModel::getSelectedPoint
-        )
+            viewState = chartViewState
+        ) { item ->
+            selectedPoint = item?.let {
+                chartViewModel.getSelectedPoint(it)
+            }
+        }
     }
 }
 
@@ -77,85 +131,20 @@ fun <T> Chart(
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
     viewState: ViewState?,
-    itemToPointConverter: (ChartDataItemImmutable) -> SelectedPoint?
+    onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
     Column {
-        var selectedPoint by remember { mutableStateOf<SelectedPoint?>(null) }
-        HsChartLinePeriodsAndPoint(tabItems, selectedPoint, onSelectTab)
         PriceVolChart(
             chartInfoData = chartInfoData,
             loading = chartLoading,
-            viewState = viewState
-        ) { item ->
-            selectedPoint = item?.let { itemToPointConverter.invoke(it) }
-        }
-    }
-}
-
-@Composable
-private fun <T> HsChartLinePeriodsAndPoint(
-    tabItems: List<TabItem<T>>,
-    selectedPoint: SelectedPoint?,
-    onSelectTab: (T) -> Unit,
-) {
-    Box {
-        // Hide ChartTab if point is selected.
-        // Simply hiding and showing makes period tabs shows up with scrolling animation
-        // The desired behavior is to show without any animation
-        // Solved it with alpha property
-        val alpha = if (selectedPoint != null) 0f else 1f
+            viewState = viewState,
+            onSelectPoint = onSelectPoint
+        )
+        VSpacer(height = 8.dp)
         ChartTab(
-            modifier = Modifier.alpha(alpha),
             tabItems = tabItems,
             onSelect = onSelectTab
         )
-
-        if (selectedPoint != null) {
-            TabPeriod(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column {
-                    captionSB_leah(text = selectedPoint.value)
-                    Spacer(modifier = Modifier.height(4.dp))
-                    caption_grey(text = selectedPoint.date)
-                }
-
-                when (val extraData = selectedPoint.extraData) {
-                    is SelectedPoint.ExtraData.Volume -> {
-                        Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                            caption_grey(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = stringResource(R.string.CoinPage_Volume),
-                                textAlign = TextAlign.End
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            caption_grey(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = extraData.volume,
-                                textAlign = TextAlign.End
-                            )
-                        }
-                    }
-                    is SelectedPoint.ExtraData.Dominance -> {
-                        Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                            caption_grey(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = stringResource(R.string.Market_BtcDominance),
-                                textAlign = TextAlign.End
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            caption_jacob(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = extraData.dominance,
-                                textAlign = TextAlign.End
-                            )
-                        }
-                    }
-                    null ->{}
-                }
-            }
-        }
     }
 }
 
@@ -167,7 +156,7 @@ fun PriceVolChart(
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
     val showIndicatorLine = chartInfoData?.hasVolumes ?: false
-    val height = if (showIndicatorLine) 228.dp else 180.dp
+    val height = if (showIndicatorLine) 204.dp else 160.dp
     Box(
         modifier = Modifier
             .height(height)
