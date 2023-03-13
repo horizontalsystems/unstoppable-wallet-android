@@ -39,8 +39,8 @@ class AddressViewModel(
     else
         TranslatableString.PlainString(contactAddress.blockchain.name)
     private var address = contactAddress?.address ?: ""
+    private val editingAddress = contactAddress
     private var addressState: DataState<Address>? = contactAddress?.address?.let { DataState.Success(Address(it)) }
-    private val canChangeBlockchain = contactAddress == null
     private val availableBlockchains: List<Blockchain>
 
     init {
@@ -84,6 +84,10 @@ class AddressViewModel(
         emitUiState()
 
         validateAddress(address)
+    }
+
+    fun onDelete() {
+
     }
 
     private var validationJob: Job? = null
@@ -161,10 +165,12 @@ class AddressViewModel(
 
     private fun uiState() = UiState(
         headerTitle = title,
+        editingAddress = editingAddress,
         addressState = addressState,
         address = address,
         blockchain = blockchain,
-        canChangeBlockchain = canChangeBlockchain,
+        canChangeBlockchain = editingAddress == null,
+        showDelete = editingAddress != null,
         availableBlockchains = availableBlockchains,
         doneEnabled = addressState is DataState.Success
     )
@@ -175,10 +181,12 @@ class AddressViewModel(
 
     data class UiState(
         val headerTitle: TranslatableString,
+        val editingAddress: ContactAddress?,
         val addressState: DataState<Address>?,
         val address: String,
         val blockchain: Blockchain,
         val canChangeBlockchain: Boolean,
+        val showDelete: Boolean,
         val availableBlockchains: List<Blockchain>,
         val doneEnabled: Boolean
     )
