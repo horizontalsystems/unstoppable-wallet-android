@@ -38,7 +38,7 @@
     <string name="Button_Continue">继续</string>
     <string name="Button_Send">发送​​</string>
     <string name="Button_Search">查询</string>
-    <string name="Button_Back">Back</string>
+    <string name="Button_Back">返回</string>
     <string name="Button_Copy">复制</string>
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">删除</string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">个数有误。必须为12到24个单词。您输入了：%d</string>
     <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
     <string name="Restore_Title">选择区块链</string>
     <string name="Restore_Key">密钥</string>
     <string name="Restore_By">由</string>
@@ -347,8 +347,8 @@
     <string name="FeeSettings_Title">费用设置</string>
     <string name="FeeSettings_Reset">重置</string>
     <string name="FeeSettings_FeeLegacy">Max Fee</string>
-    <string name="FeeSettings_FeeLegacy_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
-    <string name="FeeSettings_Fee">Max Fee</string>
+    <string name="FeeSettings_FeeLegacy_Info">给定交易的最大预计总费用。通常，实际交易费用会更低。</string>
+    <string name="FeeSettings_Fee">最大手续费</string>
     <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
     <string name="FeeSettings_GasLimit">GAS限制</string>
     <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
@@ -361,7 +361,7 @@
     <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">有风险</string>
-    <string name="FeeSettings_RiskOfGettingStuckLegacy">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">交易可能会在一段时间内仍然处于待处理状态或完全失败。</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">有风险</string>
     <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">费用太高</string>
@@ -686,13 +686,13 @@
     <string name="AddEvmSyncSource_BasicAuthentication">基本认证(可选)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC 源</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">此网址的 RPC 源已存在</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： http，https，ws，wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">更改恢复源后，钱包必须将自身与 Bitcoin 区块链重新同步。</string>
     <string name="BtcBlockchainSettings_RestoreSource">恢复参数</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">通过交易为恢复钱包选择数据源。</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.\n\nAt this point, there are two potential ways for a mobile wallet like P.CASH to do this:\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).\n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
-    <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">输入/输出</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">交易输入 / 输出</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">通过改变交易结构的方式使您的BTC、LTC、BCH交易更难被追踪。</string>
@@ -895,7 +895,7 @@
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
-    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_Title">私钥</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
     <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
@@ -1062,7 +1062,7 @@
     <string name="CoinPage_Contracts">合约</string>
     <string name="CoinPage_Blockchains">区块链</string>
     <string name="CoinPage_Bips">BIPs</string>
-    <string name="CoinPage_CoinTypes">Coin Types</string>
+    <string name="CoinPage_CoinTypes">代币平台选择</string>
     <string name="CoinPage_Links">链接</string>
     <string name="CoinPage_Guide">指南</string>
     <string name="CoinPage_Website">网站</string>
@@ -1095,7 +1095,7 @@
     <string name="CoinPage_Performance_Month">1月</string>
     <string name="CoinPage_ReadMore">查看更多</string>
     <string name="CoinPage_ReadLess">关闭</string>
-    <string name="CoinPage_ShowMore">Show More</string>
+    <string name="CoinPage_ShowMore">显示更多</string>
     <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">起始日期</string>
     <string name="CoinPage_Tvl">总锁定</string>
@@ -1139,7 +1139,7 @@
     <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in active address count over 1 year period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">List of all tokens ranked based on the number of active wallets transacting with the token over 24h / 7D / 1M intervals.</string>
@@ -1147,7 +1147,7 @@
     <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TransactionCount_Info5">The total number of tokens transferred over the blockchain over the 30 day period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info5">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_Holders_Info1">Total number of unique addresses holding the token on various blockchains.</string>
     <string name="CoinAnalytics_Holders_Info1">Top 10 wallets holding the token on each blockchain.</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
