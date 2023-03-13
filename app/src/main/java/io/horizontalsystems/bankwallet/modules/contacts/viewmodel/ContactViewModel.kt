@@ -28,7 +28,7 @@ class ContactViewModel(
     private var contactName = contact.name
     private var addresses: MutableMap<Blockchain, ContactAddress> = contact.addresses.associateBy { it.blockchain }.toMutableMap()
     private var addressViewItems: List<AddressViewItem> = addressViewItems()
-    private val newContact = existingContact == null
+    private val isNewContact = existingContact == null
     private var closeAfterSave = false
 
     var uiState by mutableStateOf(uiState())
@@ -67,12 +67,30 @@ class ContactViewModel(
         emitUiState()
     }
 
-    private fun isSaveEnabled(): Boolean {
+    fun setAddress(address: ContactAddress) {
+        addresses[address.blockchain] = address
+        addressViewItems = addressViewItems()
+
+        emitUiState()
+    }
+
+    fun deleteAddress(address: ContactAddress) {
+        addresses.remove(address.blockchain)
+        addressViewItems = addressViewItems()
+
+        emitUiState()
+    }
+
+    private fun hasChanges(): Boolean {
         val savedAddresses = contact.addresses.toSet()
         val newAddresses = addresses.values.toSet()
-        val addressesChanged = (savedAddresses.toMutableSet() + newAddresses) != savedAddresses
+        val addressesChanged = savedAddresses.size != newAddresses.size || (savedAddresses.toMutableSet() + newAddresses) != savedAddresses
 
-        return contactName.isNotBlank() && (contactName != contact.name || addressesChanged)
+        return contactName != contact.name || addressesChanged
+    }
+
+    private fun isSaveEnabled(): Boolean {
+        return contactName.isNotBlank() && hasChanges()
     }
 
     private fun emitUiState() {
@@ -90,22 +108,17 @@ class ContactViewModel(
         contactName = contactName,
         addressViewItems = addressViewItems,
         saveEnabled = isSaveEnabled(),
-        showDelete = !newContact,
+        confirmBack = hasChanges(),
+        showDelete = !isNewContact,
         closeWithSuccess = closeAfterSave
     )
-
-    fun setAddress(address: ContactAddress) {
-        addresses[address.blockchain] = address
-        addressViewItems = addressViewItems()
-
-        emitUiState()
-    }
 
     data class UiState(
         val headerTitle: TranslatableString,
         val contactName: String,
         val addressViewItems: List<AddressViewItem>,
         val saveEnabled: Boolean,
+        val confirmBack: Boolean,
         val showDelete: Boolean,
         val closeWithSuccess: Boolean
     )

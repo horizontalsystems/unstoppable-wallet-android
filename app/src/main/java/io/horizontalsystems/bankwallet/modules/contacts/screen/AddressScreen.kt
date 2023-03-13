@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ fun AddressScreen(
     viewModel: AddressViewModel,
     onNavigateToBlockchainSelector: () -> Unit,
     onDone: (ContactAddress) -> Unit,
+    onDelete: (ContactAddress) -> Unit,
     onNavigateToBack: () -> Unit
 ) {
     val uiState = viewModel.uiState
@@ -35,11 +37,15 @@ fun AddressScreen(
             sheetState = modalBottomSheetState,
             sheetBackgroundColor = ComposeAppTheme.colors.transparent,
             sheetContent = {
-                DeletionWarningBottomSheet(
+                ConfirmationBottomSheet(
                     title = stringResource(R.string.Contacts_DeleteAddress),
                     text = stringResource(R.string.Contacts_DeleteAddress_Warning),
-                    onDelete = {
-                        //viewModel.onDelete()
+                    iconPainter = painterResource(R.drawable.ic_delete_20),
+                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                    confirmText = stringResource(R.string.Button_Delete),
+                    cancelText = stringResource(R.string.Button_Cancel),
+                    onConfirm = {
+                        uiState.editingAddress?.let { onDelete(it) }
                     },
                     onClose = {
                         coroutineScope.launch { modalBottomSheetState.hide() }
@@ -106,7 +112,37 @@ fun AddressScreen(
                 ) {
                     viewModel.onEnterAddress(it)
                 }
+                if (uiState.showDelete) {
+                    Spacer(modifier = Modifier.height(32.dp))
+                    DeleteAddressButton {
+                        coroutineScope.launch {
+                            modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+@Composable
+private fun DeleteAddressButton(onClick: () -> Unit) {
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(
+                onClick = onClick
+            ) {
+                Icon(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    painter = painterResource(R.drawable.ic_delete_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.lucian
+                )
+                body_lucian(
+                    text = stringResource(R.string.Contacts_DeleteAddress),
+                )
+            }
+
+        }
+    )
 }
