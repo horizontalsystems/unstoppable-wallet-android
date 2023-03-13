@@ -38,9 +38,9 @@
     <string name="Button_Continue">계속</string>
     <string name="Button_Send">전송</string>
     <string name="Button_Search">Search</string>
-    <string name="Button_Back">Back</string>
+    <string name="Button_Back">뒤로</string>
     <string name="Button_Copy">복사</string>
-    <string name="Button_Browser">Browser</string>
+    <string name="Button_Browser">자동</string>
     <string name="Button_Delete">삭제</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">단어 수가 틀렸습니다. 12 개 와 24개 사이여야 합니다. 이렇게 입력했습니다: %d</string>
     <string name="Restore_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
     <string name="Restore_Title">블록체인 선택</string>
     <string name="Restore_Key">키</string>
     <string name="Restore_By">으로</string>
@@ -637,7 +637,7 @@
     <string name="SettingsCurrency_Understand">이해합니다</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
-    <string name="Settings_SecurityCenter">Security</string>
+    <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
     <string name="Settings_ExperimentalFeatures">실험적인</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
@@ -686,7 +686,7 @@
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다.</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">복원 소스를 변경한 후 지갑은 Bitcoin 블록체인과 자체적으로 다시 동기화해야 합니다.</string>
     <string name="BtcBlockchainSettings_RestoreSource">매개 변수 복원</string>
@@ -695,7 +695,7 @@
 \n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
 \n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
 \n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
-    <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">트랜잭션 입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">거래 구조를 변경하여 BTC, LTC, BCH 거래를 추적하기 어렵게 만드십시오.</string>
