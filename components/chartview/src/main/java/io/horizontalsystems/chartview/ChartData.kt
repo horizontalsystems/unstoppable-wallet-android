@@ -123,8 +123,6 @@ class ChartDataBuilder constructor(
         Range(0f, range?.upper ?: 1f)
     }
 
-    val rsiRange = Range(0f, 100f)
-
     val dominanceRange by lazy {
         ranges[Indicator.Dominance] ?: Range(0f, 1f)
     }

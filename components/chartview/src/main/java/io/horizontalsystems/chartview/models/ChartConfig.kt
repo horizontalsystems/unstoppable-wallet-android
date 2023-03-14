@@ -53,11 +53,6 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var volumeWidth = dp2px(4f)
     var volumeOffset = dp2px(8f)
 
-    var macdHistogramUpColor = Color.parseColor("#8013D670")
-    var macdHistogramDownColor = Color.parseColor("#80FF4820")
-    var macdLineOffset = dp2px(2f)
-    var macdHistogramOffset = dp2px(4f)
-
     var strokeWidth = dp2px(1f)
     var strokeDash = dp2px(2f)
     var strokeDashWidth = dp2px(0.5f)
