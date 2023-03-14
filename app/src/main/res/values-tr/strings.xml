@@ -38,7 +38,7 @@
     <string name="Button_Continue">Devam</string>
     <string name="Button_Send">Gönder</string>
     <string name="Button_Search">Ara</string>
-    <string name="Button_Back">Back</string>
+    <string name="Button_Back">Geri</string>
     <string name="Button_Copy">Kopyala</string>
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Sil</string>
@@ -891,7 +891,7 @@
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
-    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_Title">Gizli Anahtar</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
     <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
@@ -963,7 +963,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Yerel</string>
     <string name="CoinPlatformsSelector_Title">Coin Tipi</string>
-    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
+    <string name="CoinPlatformsSelector_Description">Bu token birden fazla blok zincirinde bulunur.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Geri Yükleme Ayarları</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Bu değişiklikten sonra cüzdan %s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
