@@ -158,13 +158,11 @@ val Blockchain.description: String
     }
 
 fun Blockchain.eip20TokenUrl(address: String): String? {
-    when (uid) {
-        "ethereum" -> return "https://etherscan.io/token/$address"
-        "binance-smart-chain" -> return "https://bscscan.com/token/$address"
-        else -> {}
+    return when (uid) {
+        "ethereum" -> "https://etherscan.io/token/$address"
+        "binance-smart-chain" -> "https://bscscan.com/token/$address"
+        else -> eip3091url?.let { "$it/token/$address" }
     }
-
-    return eip3091url?.let { "$it/token/$address" }
 }
 
 fun Blockchain.bep2TokenUrl(symbol: String) = "https://explorer.binance.org/asset/$symbol"
