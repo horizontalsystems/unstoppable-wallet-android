@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticChart
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.BlockViewItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ChartViewItem
@@ -127,6 +128,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_CexVolume,
+                    info = AnalyticInfo.CexVolumeInfo,
                     value = getFormattedSum(data.points.map { it.volume }, currency),
                     valuePeriod = getValuePeriod(false),
                     analyticChart = getChartViewItem(data.chartPoints(), null, false),
@@ -138,6 +140,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_DexVolume,
+                    info = AnalyticInfo.DexVolumeInfo,
                     value = getFormattedSum(data.points.map { it.volume }, currency),
                     valuePeriod = getValuePeriod(false),
                     analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.DexVolume, false),
@@ -149,6 +152,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_DexLiquidity,
+                    info = AnalyticInfo.DexLiquidityInfo,
                     value = getFormattedValue(data.points.last().volume, currency),
                     valuePeriod = getValuePeriod(true),
                     analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.DexLiquidity, true),
@@ -160,6 +164,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_ActiveAddresses,
+                    info = AnalyticInfo.AddressesInfo,
                     value = getFormattedSum(listOf(data.count30d.toBigDecimal())),
                     valuePeriod = getValuePeriod(false),
                     analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.AddressesCount, false),
@@ -173,6 +178,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_TransactionCount,
+                    info = AnalyticInfo.TransactionCountInfo,
                     value = getFormattedSum(data.points.map { it.count }),
                     valuePeriod = getValuePeriod(false),
                     analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.TxVolume, false),
@@ -211,6 +217,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_Holders,
+                    info = AnalyticInfo.HoldersInfo,
                     value = getFormattedSum(listOf(total)),
                     valuePeriod = getValuePeriod(true),
                     analyticChart = ChartViewItem(AnalyticChart.StackedBars(chartSlices), coin.uid),
@@ -222,6 +229,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_ProjectTvl,
+                    info = AnalyticInfo.TvlInfo,
                     value = getFormattedValue(data.points.last().tvl, currency),
                     valuePeriod = getValuePeriod(true),
                     analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.TxVolume, true),
@@ -239,6 +247,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_ProjectRevenue,
+                    info = AnalyticInfo.RevenueInfo,
                     value = getFormattedSum(listOf(data.value30d), currency),
                     valuePeriod = getValuePeriod(false),
                     analyticChart = null,
@@ -288,6 +297,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 BlockViewItem(
                     title = null,
+                    info = null,
                     analyticChart = null,
                     footerItems = footerItems,
                     sectionTitle = R.string.CoinAnalytics_OtherData,
@@ -328,6 +338,7 @@ class CoinAnalyticsViewModel(
                 blocks.add(
                     PreviewBlockViewItem(
                         title = R.string.CoinAnalytics_CexVolume,
+                        info = AnalyticInfo.CexVolumeInfo,
                         chartType = if (cexVolume.points) PreviewChartType.Bars else null,
                         footerItems = if (cexVolume.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
                     )
@@ -339,6 +350,7 @@ class CoinAnalyticsViewModel(
                 blocks.add(
                     PreviewBlockViewItem(
                         title = R.string.CoinAnalytics_DexVolume,
+                        info = AnalyticInfo.DexVolumeInfo,
                         chartType = if (dexVolume.points) PreviewChartType.Bars else null,
                         footerItems = if (dexVolume.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
                     )
@@ -350,6 +362,7 @@ class CoinAnalyticsViewModel(
                 blocks.add(
                     PreviewBlockViewItem(
                         title = R.string.CoinAnalytics_DexLiquidity,
+                        info = AnalyticInfo.DexLiquidityInfo,
                         chartType = if (dexLiquidity.points) PreviewChartType.Line else null,
                         footerItems = if (dexLiquidity.rank) listOf(PreviewFooterItem(R.string.Coin_Analytics_Rank, true)) else emptyList()
                     )
@@ -361,6 +374,7 @@ class CoinAnalyticsViewModel(
                 blocks.add(
                     PreviewBlockViewItem(
                         title = R.string.CoinAnalytics_ActiveAddresses,
+                        info = AnalyticInfo.AddressesInfo,
                         chartType = if (addresses.points) PreviewChartType.Bars else null,
                         footerItems = if (addresses.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
                     )
@@ -379,6 +393,7 @@ class CoinAnalyticsViewModel(
                 blocks.add(
                     PreviewBlockViewItem(
                         title = R.string.CoinAnalytics_TransactionCount,
+                        info = AnalyticInfo.TransactionCountInfo,
                         chartType = if (transactionPreview.points) PreviewChartType.Bars else null,
                         footerItems = footerItems
                     )
@@ -394,6 +409,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 PreviewBlockViewItem(
                     title = R.string.CoinAnalytics_Holders,
+                    info = AnalyticInfo.HoldersInfo,
                     chartType = PreviewChartType.StackedBars,
                     footerItems = footerItems
                 )
@@ -404,6 +420,7 @@ class CoinAnalyticsViewModel(
                 blocks.add(
                     PreviewBlockViewItem(
                         title = R.string.CoinAnalytics_ProjectRevenue,
+                        info = AnalyticInfo.RevenueInfo,
                         chartType = null,
                         footerItems = if (revenue.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
                     )
@@ -421,7 +438,8 @@ class CoinAnalyticsViewModel(
                 }
                 blocks.add(
                     PreviewBlockViewItem(
-                        title = R.string.CoinAnalytics_ActiveAddresses,
+                        title = R.string.CoinAnalytics_ProjectTvl,
+                        info = AnalyticInfo.TvlInfo,
                         chartType = if (tvl.points) PreviewChartType.Line else null,
                         footerItems = footerItems,
                     )
@@ -445,6 +463,7 @@ class CoinAnalyticsViewModel(
             blocks.add(
                 PreviewBlockViewItem(
                     title = null,
+                    info = null,
                     chartType = null,
                     footerItems = footerItems,
                     sectionTitle = R.string.CoinAnalytics_OtherData,

@@ -30,7 +30,7 @@ import io.horizontalsystems.chartview.ChartMinimal
 @Composable
 fun AnalyticsBlockHeader(
     title: String,
-    info: String? = null
+    onInfoClick: (() -> Unit)? = null
 ) {
     Row(
         modifier = Modifier
@@ -39,12 +39,11 @@ fun AnalyticsBlockHeader(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         subhead2_grey(text = title)
-        info?.let {
+        onInfoClick?.let {
             HsIconButton(
                 modifier = Modifier.size(20.dp),
-                onClick = {
-
-                }) {
+                onClick = it
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
@@ -233,7 +232,7 @@ private fun Preview_HoldersBlockLocked() {
         titleRow = {
             AnalyticsBlockHeader(
                 title = "Holders",
-                info = "Info text"
+                onInfoClick = {}
             )
         },
         bottomRows = {
@@ -282,7 +281,7 @@ private fun Preview_AnalyticsBarChartDisabled() {
             titleRow = {
                 AnalyticsBlockHeader(
                     title = "Dex Volume",
-                    info = "Info text"
+                    onInfoClick = {}
                 )
             },
             bottomRows = {
@@ -312,7 +311,7 @@ private fun Preview_AnalyticsLineChartDisabled() {
             titleRow = {
                 AnalyticsBlockHeader(
                     title = "Dex Volume",
-                    info = "Info text"
+                    onInfoClick = {}
                 )
             },
             bottomRows = {
@@ -347,7 +346,7 @@ private fun Preview_HoldersBlock() {
         titleRow = {
             AnalyticsBlockHeader(
                 title = "Defi Cap",
-                info = "Info text"
+                onInfoClick = {}
             )
         },
         bottomRows = {
