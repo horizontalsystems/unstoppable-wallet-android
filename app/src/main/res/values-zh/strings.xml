@@ -1133,11 +1133,13 @@
     <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes that are being tracked:</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity_Info2">Chart showing variation in available liquidity for the token on leading decentralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes that are being tracked:</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
     <string name="CoinAnalytics_ActiveAddresses_Info1">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
@@ -1151,6 +1153,7 @@
     <string name="CoinAnalytics_TransactionCount_Info5">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_Holders_Info1">Total number of unique addresses holding the token on various blockchains.</string>
     <string name="CoinAnalytics_Holders_Info2">Top 10 wallets holding the token on each blockchain.</string>
+    <string name="CoinAnalytics_Holders_TrackedBlockchains">Tracked blockchains: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
     <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
@@ -1168,6 +1171,7 @@
     <string name="CoinAnalytics_TransactionCount">交易数</string>
     <string name="CoinAnalytics_Holders">Holders</string>
     <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
+    <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total Value Locked)</string>
     <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Project Revenue</string>
     <string name="CoinAnalytics_OtherData">Other Data</string>
