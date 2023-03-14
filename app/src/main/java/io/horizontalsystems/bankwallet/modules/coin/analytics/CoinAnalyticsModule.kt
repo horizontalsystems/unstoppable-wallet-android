@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.coin.analytics
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
@@ -14,6 +16,7 @@ import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
+import kotlinx.parcelize.Parcelize
 
 object CoinAnalyticsModule {
 
@@ -33,6 +36,7 @@ object CoinAnalyticsModule {
 
     data class BlockViewItem(
         val title: Int?,
+        val info: AnalyticInfo?,
         val value: String? = null,
         val valuePeriod: String? = null,
         val analyticChart: ChartViewItem?,
@@ -61,6 +65,7 @@ object CoinAnalyticsModule {
 
     data class PreviewBlockViewItem(
         val title: Int?,
+        val info: AnalyticInfo?,
         val chartType: PreviewChartType?,
         val footerItems: List<PreviewFooterItem>,
         val sectionTitle: Int? = null,
@@ -76,6 +81,18 @@ object CoinAnalyticsModule {
 
     enum class PreviewChartType {
         Line, Bars, StackedBars
+    }
+
+    @Parcelize
+    enum class AnalyticInfo(val title: Int): Parcelable {
+        CexVolumeInfo(R.string.CoinAnalytics_CexVolume),
+        DexVolumeInfo(R.string.CoinAnalytics_DexVolume),
+        DexLiquidityInfo(R.string.CoinAnalytics_DexLiquidity),
+        AddressesInfo(R.string.CoinAnalytics_ActiveAddresses),
+        TransactionCountInfo(R.string.CoinAnalytics_TransactionCount),
+        HoldersInfo(R.string.CoinAnalytics_Holders),
+        TvlInfo(R.string.CoinAnalytics_ProjectTvl_FullTitle),
+        RevenueInfo(R.string.CoinAnalytics_ProjectRevenue),
     }
 
     data class UiState(

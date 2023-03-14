@@ -145,6 +145,9 @@
             app:uri="unstoppable://coin-page?uid={coinUid}" />
     </fragment>
     <fragment
+        android:id="@+id/coinAnalyticsInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment" />
+    <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment" />
     <fragment
