@@ -145,6 +145,9 @@
             app:uri="pcash://coin-page?uid={coinUid}" />
     </fragment>
     <fragment
+        android:id="@+id/coinAnalyticsInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment" />
+    <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment" />
     <fragment

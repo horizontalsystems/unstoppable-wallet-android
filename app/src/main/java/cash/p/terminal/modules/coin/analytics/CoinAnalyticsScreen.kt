@@ -26,6 +26,7 @@ import cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.reports.CoinReportsFragment
 import cash.p.terminal.modules.coin.treasuries.CoinTreasuriesFragment
+import cash.p.terminal.modules.info.CoinAnalyticsInfoFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
@@ -59,7 +60,7 @@ fun CoinAnalyticsScreen(
                             )
                         }
                         is AnalyticsViewItem.Preview -> {
-                            AnalyticsDataPreview(item.blocks)
+                            AnalyticsDataPreview(item.blocks, navController)
                         }
                         is AnalyticsViewItem.Analytics -> {
                             AnalyticsData(item.blocks, navController, fragmentManager)
@@ -100,13 +101,14 @@ private fun AnalyticsData(
 @Composable
 private fun AnalyticsDataPreview(
     previewBlocks: List<CoinAnalyticsModule.PreviewBlockViewItem>,
+    navController: NavController,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
             AnalyticsDataLockedBlock()
         }
         items(previewBlocks) { block ->
-            AnalyticsPreviewBlock(block)
+            AnalyticsPreviewBlock(block, navController)
         }
         item {
             Spacer(modifier = Modifier.height(32.dp))
@@ -133,7 +135,12 @@ private fun AnalyticsBlock(
             block.title?.let {
                 AnalyticsBlockHeader(
                     title = stringResource(it),
-                    info = "Info text"
+                    onInfoClick = block.info?.let { info ->
+                        {
+                            val params = CoinAnalyticsInfoFragment.prepareParams(info)
+                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, params)
+                        }
+                    }
                 )
             }
         },
@@ -211,7 +218,7 @@ private fun AnalyticsBlock(
 }
 
 @Composable
-private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewItem) {
+private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewItem, navController: NavController) {
     AnalyticsContainer(
         sectionTitle = block.sectionTitle?.let {
             {
@@ -225,7 +232,12 @@ private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewIte
             block.title?.let {
                 AnalyticsBlockHeader(
                     title = stringResource(it),
-                    info = "Info text"
+                    onInfoClick = block.info?.let { info ->
+                        {
+                            val params = CoinAnalyticsInfoFragment.prepareParams(info)
+                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, params)
+                        }
+                    }
                 )
             }
         },
