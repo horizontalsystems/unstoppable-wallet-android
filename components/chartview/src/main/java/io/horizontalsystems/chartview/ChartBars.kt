@@ -70,7 +70,7 @@ class ChartBars(
         } else {
             frameValues = LinkedHashMap(
                 combinedKeys.map { key ->
-                    val fromValue = fromValues.getOrDefault(key, targetMinValue / 10)
+                    val fromValue = fromValues.getOrDefault(key, fromMinValue / 10)
                     val targetValue = targetValues.getOrDefault(key, targetMinValue / 10)
                     val frameValue = changeByPercentage(fromValue, targetValue, animatedFraction)
 
