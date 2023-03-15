@@ -152,7 +152,7 @@ class Chart @JvmOverloads constructor(
         config.setTrendColor(data)
 
         val coordinates =
-            PointConverter.coordinates(data, binding.chartMain.shape, config.curveVerticalOffset)
+            PointConverter.coordinates(data, binding.chartMain.shape, 0f)
 
         //Dominance
         val dominanceValues = data.valuesByTimestamp(Dominance)
@@ -244,7 +244,7 @@ class Chart @JvmOverloads constructor(
         config.setTrendColor(data)
 
         val coordinates =
-            PointConverter.coordinates(data, binding.chartMain.shape, config.curveVerticalOffset)
+            PointConverter.coordinates(data, binding.chartMain.shape, 0f)
 
         binding.chartTouch.configure(config, 0f)
         binding.chartTouch.setCoordinates(coordinates)
