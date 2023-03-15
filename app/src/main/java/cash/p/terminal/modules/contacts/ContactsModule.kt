@@ -1,7 +1,9 @@
 package cash.p.terminal.modules.contacts
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
@@ -36,6 +38,11 @@ object ContactsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return AddressViewModel(App.evmBlockchainManager, App.marketKit, contactAddress, definedAddresses) as T
         }
+    }
+
+    enum class ContactsAction(@StringRes val title: Int) {
+        Import(R.string.Contacts_Import),
+        Export(R.string.Contacts_Export)
     }
 
 }

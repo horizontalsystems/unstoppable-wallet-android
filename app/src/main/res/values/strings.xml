@@ -1580,6 +1580,7 @@
     <!--Contacts-->
     <string name="Contacts">Contacts</string>
     <string name="Contacts_Export">Export Contacts</string>
+    <string name="Contacts_Import">Import Contacts</string>
     <string name="Contacts_AddressesCount">Addresses: %s</string>
     <string name="Contacts_NewContact">New Contact</string>
     <string name="Contacts_AddNewContact">Add New Contact</string>
@@ -1594,5 +1595,6 @@
     <string name="Contacts_KeepEditing">Keep Editing</string>
     <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard this new changes?</string>
     <string name="Contacts_NoContacts">You do not have an added contact</string>
+    <string name="Contacts_ActionMore">More</string>
 
 </resources>
