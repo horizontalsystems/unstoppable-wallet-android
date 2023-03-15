@@ -50,8 +50,8 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var cursorColor = context.getColor(R.color.leah)
 
     var volumeColor = context.getColor(R.color.steel_20)
-    var volumeWidth = dp2px(4f)
-    var volumeOffset = dp2px(8f)
+    var volumeWidth = dp2px(2f)
+    var volumeMinHeight = dp2px(2f)
 
     var strokeWidth = dp2px(1f)
     var strokeDash = dp2px(2f)
