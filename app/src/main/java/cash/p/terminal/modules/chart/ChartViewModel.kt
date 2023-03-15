@@ -143,7 +143,7 @@ open class ChartViewModel(
 
     fun getSelectedPoint(item: ChartDataItemImmutable): SelectedPoint? {
         return item.values[Indicator.Candle]?.let { candle ->
-            val value = valueFormatter.formatValue(service.currency, candle.value.toBigDecimal())
+            val value = valueFormatter.formatValue(service.currency, candle.toBigDecimal())
             val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
 
             SelectedPoint(
@@ -160,10 +160,10 @@ open class ChartViewModel(
 
         return when {
             dominance != null -> SelectedPoint.ExtraData.Dominance(
-                App.numberFormatter.format(dominance.value, 0, 2, suffix = "%")
+                App.numberFormatter.format(dominance, 0, 2, suffix = "%")
             )
             volume != null -> SelectedPoint.ExtraData.Volume(
-                App.numberFormatter.formatFiatShort(volume.value.toBigDecimal(), service.currency.symbol, 2)
+                App.numberFormatter.formatFiatShort(volume.toBigDecimal(), service.currency.symbol, 2)
             )
             else -> null
         }
