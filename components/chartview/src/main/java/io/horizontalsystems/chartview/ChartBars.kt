@@ -4,10 +4,15 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import io.horizontalsystems.chartview.helpers.ChartAnimator
-import io.horizontalsystems.chartview.models.ChartConfig
 import kotlin.math.max
 
-class ChartVolume(private val config: ChartConfig, private val animator: ChartAnimator, override var isVisible: Boolean = true) : ChartDraw {
+class ChartBars(
+    private val animator: ChartAnimator,
+    var barColor: Int,
+    private val barMinHeight: Float,
+    private val barMaxWidth: Float
+) : ChartDraw {
+    override var isVisible: Boolean = true
 
     private var shape = RectF(0f, 0f, 0f, 0f)
 
@@ -33,7 +38,6 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = config.volumeColor
     }
 
     fun setShape(rect: RectF) {
@@ -95,7 +99,6 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
 
         refreshFrameValues(animator.animatedFraction)
 
-        val barMinHeight = config.volumeMinHeight
         val canvasWidth = shape.width()
         val canvasHeight = shape.height()
 
@@ -120,7 +123,7 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
             }
         }.toMap()
 
-        var strokeWidth = config.volumeWidth
+        var strokeWidth = barMaxWidth
         val pointXs = points.keys.toList()
         for (i in 0 until (pointXs.size - 1)) {
             val diff = pointXs[i + 1] - pointXs[i] - 1 // 1 is horizontal space between bars
@@ -129,6 +132,7 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
             }
         }
         paint.strokeWidth = max(strokeWidth, 1f)
+        paint.color = barColor
 
         points.forEach { (x, y) ->
             canvas.drawLine(x, canvasHeight, x, canvasHeight - y, paint)

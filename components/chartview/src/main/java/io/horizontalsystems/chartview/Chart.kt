@@ -34,12 +34,23 @@ class Chart @JvmOverloads constructor(
     private val animatorBottom = ChartAnimator { binding.chartBottom.invalidate() }
     private val animatorTopBottomRange = ChartAnimator { binding.topLowRange.invalidate() }
 
+    private val mainBars = ChartBars(
+        animatorMain,
+        config.barColor,
+        config.volumeMinHeight,
+        config.volumeWidth
+    )
     private val mainCurve = ChartCurve2(config)
     private val mainGradient = ChartGradient(animatorMain)
 
     private val mainRange = ChartGridRange(config)
 
-    private val bottomVolume = ChartVolume(config, animatorBottom)
+    private val bottomVolume = ChartBars(
+        animatorBottom,
+        config.volumeColor,
+        config.volumeMinHeight,
+        config.volumeWidth
+    )
 
     private val dominanceCurve = ChartCurve2(config)
     private val dominanceLabel = ChartBottomLabel(config)
@@ -61,6 +72,7 @@ class Chart @JvmOverloads constructor(
     fun setListener(listener: Listener) {
         binding.chartTouch.onUpdate(object : Listener {
             override fun onTouchDown() {
+                mainBars.barColor = config.barPressedColor
                 mainCurve.setColor(config.curvePressedColor)
                 mainGradient.setShader(config.pressedGradient)
                 binding.chartMain.invalidate()
@@ -68,6 +80,7 @@ class Chart @JvmOverloads constructor(
             }
 
             override fun onTouchUp() {
+                mainBars.barColor = config.barColor
                 mainCurve.setColor(config.curveColor)
                 mainGradient.setShader(config.curveGradient)
                 binding.chartMain.invalidate()
@@ -81,14 +94,14 @@ class Chart @JvmOverloads constructor(
     }
 
     fun showSpinner() {
+        binding.root.alpha = 0.5f
         binding.chartError.isVisible = false
         binding.chartViewSpinner.isVisible = true
-        binding.loadingShade.isVisible = true
     }
 
     fun hideSpinner() {
+        binding.root.alpha = 1f
         binding.chartViewSpinner.isVisible = false
-        binding.loadingShade.isVisible = false
     }
 
     fun showError(error: String) {
@@ -132,8 +145,8 @@ class Chart @JvmOverloads constructor(
             mainCurveAnimator,
             binding.chartMain.shape.right,
             binding.chartMain.shape.bottom,
-            config.curveVerticalOffset,
-            config.curveVerticalOffset,
+            0f,
+            0f,
         )
 
         config.setTrendColor(data)
@@ -153,8 +166,8 @@ class Chart @JvmOverloads constructor(
                 dominanceCurveAnimator,
                 binding.chartMain.shape.right,
                 binding.chartMain.shape.bottom,
-                config.curveVerticalOffset,
-                config.curveVerticalOffset,
+                0f,
+                0f,
             )
 
             dominanceCurve.setShape(binding.chartMain.shape)
@@ -195,7 +208,7 @@ class Chart @JvmOverloads constructor(
         mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)
 
-        mainRange.setShape(binding.chartMain.shape)
+        mainRange.setShape(binding.topLowRange.shape)
         mainRange.setValues(maxValue, minValue)
 
         // Volume
@@ -209,6 +222,50 @@ class Chart @JvmOverloads constructor(
         binding.chartMain.clear()
         binding.chartMain.add(mainCurve, mainGradient)
         binding.chartMain.add(dominanceLabel, dominanceCurve)
+
+        binding.topLowRange.clear()
+        binding.topLowRange.add(mainRange)
+
+        binding.chartBottom.clear()
+        binding.chartBottom.add(bottomVolume)
+
+        animatorMain.start()
+        animatorTopBottomRange.start()
+        animatorBottom.start()
+    }
+
+    fun setDataBars(
+        data: ChartData,
+        maxValue: String?,
+        minValue: String?
+    ) {
+        animatorMain.cancel()
+
+        config.setTrendColor(data)
+
+        val coordinates =
+            PointConverter.coordinates(data, binding.chartMain.shape, config.curveVerticalOffset)
+
+        binding.chartTouch.configure(config, 0f)
+        binding.chartTouch.setCoordinates(coordinates)
+
+        // Candles
+        mainBars.setShape(binding.chartMain.shape)
+        mainBars.setValues(data.valuesByTimestamp(Candle), data.startTimestamp, data.endTimestamp)
+
+        mainRange.setShape(binding.topLowRange.shape)
+        mainRange.setValues(maxValue, minValue)
+
+        // Volume
+        bottomVolume.setValues(data.valuesByTimestamp(Volume), data.startTimestamp, data.endTimestamp)
+        bottomVolume.setShape(binding.chartBottom.shape)
+
+        // ---------------------------
+        // *********
+        // ---------------------------
+
+        binding.chartMain.clear()
+        binding.chartMain.add(mainBars)
 
         binding.topLowRange.clear()
         binding.topLowRange.add(mainRange)
