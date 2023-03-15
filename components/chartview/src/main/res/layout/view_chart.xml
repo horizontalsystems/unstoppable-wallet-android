@@ -7,7 +7,8 @@
     <io.horizontalsystems.chartview.ChartView
         android:id="@+id/chartMain"
         android:layout_width="0dp"
-        android:layout_height="160dp"
+        android:layout_marginTop="20dp"
+        android:layout_height="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +25,7 @@
         android:id="@+id/chartBottom"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        app:layout_constraintTop_toBottomOf="@+id/chartMain"
+        app:layout_constraintTop_toBottomOf="@+id/topLowRange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -34,17 +35,6 @@
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <View
-        android:id="@+id/loadingShade"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:alpha="0.5"
-        android:background="@drawable/gwen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/chartViewSpinner"

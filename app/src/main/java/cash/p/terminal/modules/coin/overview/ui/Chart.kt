@@ -199,7 +199,11 @@ fun PriceVolChart(
 
                         chartInfoData?.let { chartInfoData ->
                             chart.doOnLayout {
-                                chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
+                                if (chartInfoData.chartData.isMovementChart) {
+                                    chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
+                                } else {
+                                    chart.setDataBars(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
+                                }
                             }
                         }
                     }
