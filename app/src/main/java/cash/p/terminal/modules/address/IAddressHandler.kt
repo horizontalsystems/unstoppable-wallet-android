@@ -38,13 +38,6 @@ class AddressHandlerEns(private val ensResolver: EnsResolver) : IAddressHandler 
 }
 
 class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode: String?) : IAddressHandler {
-//    private val infuraUrl = RpcSource.ethereumInfuraHttp(App.appConfigProvider.infuraProjectId, App.appConfigProvider.infuraProjectSecret).urls.first()
-//    private val polygonUrl = RpcSource.polygonRpcHttp().urls.first()
-//    private var resolution: DomainResolution = Resolution.builder()
-//        .unsProviderUrl(UNSLocation.Layer1, infuraUrl.toString())
-//        .unsProviderUrl(UNSLocation.Layer2, polygonUrl.toString())
-//        .build()
-
     private val resolution = Resolution()
     private val chain by lazy { chain(tokenQuery) }
     private val chainCoinCode by lazy { chainCoinCode(tokenQuery.blockchainType) }
