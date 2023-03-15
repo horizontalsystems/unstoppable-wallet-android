@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.contacts
 
-import android.os.Environment
 import com.google.gson.Gson
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
@@ -32,6 +32,9 @@ class ContactsRepository(
 
     val contacts: List<Contact>
         get() = contactsMap.map { it.value }.sortedBy { it.name }.toList()
+
+    private val asJsonString: String
+        get() = gson.toJson(ContactsJson(contacts.map { ContactJson(it) }, deletedContacts))
 
     private val _contactsFlow = MutableStateFlow(contacts)
     val contactsFlow: StateFlow<List<Contact>> = _contactsFlow
@@ -102,11 +105,64 @@ class ContactsRepository(
         }
     }
 
+    fun export(): String {
+        return asJsonString
+    }
+
+    fun import(json: String) {
+        val (contacts, deleted) = parseFromJson(json)
+
+        contacts.forEach { importingContact ->
+            val contact = contactsMap[importingContact.uid]
+            val deletedContact = deletedContacts.find { it.uid == importingContact.uid }
+
+            when {
+                contact == null && deletedContact == null -> {
+                    // no contact and no deleted contact
+                    contactsMap[importingContact.uid] = importingContact
+                }
+                contact != null && contact.modifiedTimestamp <= importingContact.modifiedTimestamp -> {
+                    // importing contact is newer than local contact
+                    contactsMap[importingContact.uid] = importingContact
+                }
+                deletedContact != null && deletedContact.deleted_at <= importingContact.modifiedTimestamp -> {
+                    // importing contact is newer than local deleted contact
+                    contactsMap[importingContact.uid] = importingContact
+                    deletedContacts.remove(deletedContact)
+                }
+            }
+        }
+        deleted.forEach { importingDeletedContact ->
+            val contact = contactsMap[importingDeletedContact.uid]
+            val deletedContact = deletedContacts.find { it.uid == importingDeletedContact.uid }
+
+            when {
+                contact == null && deletedContact == null -> {
+                    // importing deleted contact does not exist locally
+                    deletedContacts.add(importingDeletedContact)
+                }
+                contact != null && contact.modifiedTimestamp <= importingDeletedContact.deleted_at -> {
+                    // importing deleted contact is newer than local contact
+                    contactsMap.remove(importingDeletedContact.uid)
+                    deletedContacts.add(importingDeletedContact)
+                }
+                deletedContact != null && deletedContact.deleted_at < importingDeletedContact.deleted_at -> {
+                    // importing deleted contact is newer than local deleted contact
+                    deletedContacts.remove(deletedContact)
+                    deletedContacts.add(importingDeletedContact)
+                }
+            }
+        }
+
+        _contactsFlow.update { contacts }
+
+        coroutineScope.launch {
+            writeToFile()
+        }
+    }
+
     private val file: File
-        get() = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            "UW_Contacts.json"
-        )
+        get() = File(App.instance.filesDir, "UW_Contacts.json")
 
     private fun readFromFile() {
         try {
@@ -115,32 +171,41 @@ class ContactsRepository(
                     br.readText()
                 }
             }
-            val contactsJson = gson.fromJson(json, ContactsJson::class.java)
-            val contacts = contactsJson.contacts.map { contactJson ->
-                Contact(
-                    uid = contactJson.uid,
-                    name = contactJson.name,
-                    addresses = contactJson.addresses.mapNotNull { addressJson ->
-                        marketKit.blockchain(addressJson.blockchainUid)?.let { ContactAddress(it, addressJson.address) }
-                    },
-                    modifiedTimestamp = contactJson.modified_at
-                )
-            }
+            val (contacts, deleted) = parseFromJson(json)
 
             contactsMap = contacts.associateBy { it.uid }.toMutableMap()
-            deletedContacts = contactsJson.deleted.toMutableList()
+            deletedContacts = deleted.toMutableList()
         } catch (e: Throwable) {
-            logger.warning("readFromFile() error", e)
+            if (file.exists()) {
+                logger.warning("readFromFile() error", e)
+            }
         }
     }
 
-    private fun writeToFile() {
-        val json = gson.toJson(ContactsJson(contacts.map { ContactJson(it) }, deletedContacts))
+    private fun parseFromJson(json: String): Pair<List<Contact>, List<DeletedContact>> {
+        val contactsJson = gson.fromJson(json, ContactsJson::class.java)
+        val contacts = contactsJson.contacts.map { contactJson ->
+            Contact(
+                uid = contactJson.uid,
+                name = contactJson.name,
+                addresses = contactJson.addresses.mapNotNull { addressJson ->
+                    marketKit.blockchain(addressJson.blockchainUid)?.let { ContactAddress(it, addressJson.address) }
+                },
+                modifiedTimestamp = contactJson.modified_at
+            )
+        }
+        return Pair(contacts, contactsJson.deleted)
+    }
 
-        FileOutputStream(file).use { fos ->
-            fos.bufferedWriter().use { bw ->
-                bw.write(json)
+    private fun writeToFile() {
+        try {
+            FileOutputStream(file).use { fos ->
+                fos.bufferedWriter().use { bw ->
+                    bw.write(asJsonString)
+                }
             }
+        } catch (e: Throwable) {
+            logger.warning("writeToFile() error", e)
         }
     }
 

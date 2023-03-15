@@ -13,8 +13,14 @@ class ContactsViewModel(
     private val repository: ContactsRepository
 ) : ViewModel() {
 
-    val contacts: List<Contact>
+    private val contacts: List<Contact>
         get() = repository.contacts
+
+    val exportJsonData: String
+        get() = repository.export()
+
+    val exportFileName: String
+        get() = "UW_Contacts_${System.currentTimeMillis() / 1000}.json"
 
     var uiState by mutableStateOf(UiState(contacts))
         private set
@@ -29,6 +35,10 @@ class ContactsViewModel(
 
     private fun emitState() {
         uiState = UiState(contacts)
+    }
+
+    fun importContacts(json: String) {
+        repository.import(json)
     }
 
     data class UiState(
