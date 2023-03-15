@@ -140,11 +140,6 @@ class Chart @JvmOverloads constructor(
 
         val coordinates =
             PointConverter.coordinates(data, binding.chartMain.shape, config.curveVerticalOffset)
-        val volumes = PointConverter.volume(
-            data.values(Volume),
-            binding.chartBottom.shape,
-            config.volumeOffset
-        )
 
         //Dominance
         val dominanceValues = data.valuesByTimestamp(Dominance)
@@ -204,7 +199,7 @@ class Chart @JvmOverloads constructor(
         mainRange.setValues(maxValue, minValue)
 
         // Volume
-        bottomVolume.setPoints(volumes)
+        bottomVolume.setValues(data.valuesByTimestamp(Volume), data.startTimestamp, data.endTimestamp)
         bottomVolume.setShape(binding.chartBottom.shape)
 
         // ---------------------------
