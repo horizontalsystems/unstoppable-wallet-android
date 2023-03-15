@@ -581,6 +581,7 @@
     <string name="TransactionInfo_Id">Identifiant</string>
     <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
+    <string name="TransactionInfo_ContactName">Contact Name</string>
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
     <string name="TransactionInfo_Spender">Dépendant</string>
@@ -1312,4 +1313,23 @@
     <string name="EditPin_NewPinInfo">Le code nouveu</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
+    <!--Contacts-->
+    <string name="Contacts">Contacts</string>
+    <string name="Contacts_Export">Export Contacts</string>
+    <string name="Contacts_Import">Import Contacts</string>
+    <string name="Contacts_AddressesCount">Addresses: %s</string>
+    <string name="Contacts_NewContact">New Contact</string>
+    <string name="Contacts_AddNewContact">Add New Contact</string>
+    <string name="Contacts_NameHint">Nom</string>
+    <string name="Contacts_AddAddress">Add Address</string>
+    <string name="Contacts_AddressHint">Adresse ou domaine</string>
+    <string name="Contacts_DeleteContact">Delete Contact</string>
+    <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
+    <string name="Contacts_DeleteAddress">Delete Address</string>
+    <string name="Contacts_DeleteAddress_Warning">Are you sure you want to delete this address?</string>
+    <string name="Contacts_DiscardChanges">Discard Changes</string>
+    <string name="Contacts_KeepEditing">Keep Editing</string>
+    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard this new changes?</string>
+    <string name="Contacts_NoContacts">You do not have an added contact</string>
+    <string name="Contacts_ActionMore">More</string>
 </resources>
