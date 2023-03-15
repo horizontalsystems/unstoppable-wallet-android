@@ -3,7 +3,6 @@ package io.horizontalsystems.chartview
 import android.util.Range
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.chartview.models.ChartPointF
 import java.math.BigDecimal
 
 @Immutable
@@ -17,7 +16,7 @@ data class ChartData(
     val disabled: Boolean = false
 ) {
 
-    fun values(name: Indicator): List<ChartDataValueImmutable> {
+    fun values(name: Indicator): List<Float> {
         return items.mapNotNull { it.values[name] }
     }
 
@@ -25,14 +24,14 @@ data class ChartData(
         return LinkedHashMap(
             items.mapNotNull { item ->
                 item.values[name]?.let {
-                    item.timestamp to it.value
+                    item.timestamp to it
                 }
             }.toMap()
         )
     }
 
     fun diff(): BigDecimal {
-        val values = items.mapNotNull { it.values[Indicator.Candle]?.value }
+        val values = items.mapNotNull { it.values[Indicator.Candle] }
         if (values.isEmpty()) {
             return BigDecimal.ZERO
         }
@@ -51,19 +50,16 @@ data class ChartData(
     }
 
     fun sum(): BigDecimal {
-        val values = items.mapNotNull { it.values[Indicator.Candle]?.value }
+        val values = items.mapNotNull { it.values[Indicator.Candle] }
 
         return values.sum().toBigDecimal()
     }
 }
 
 @Immutable
-data class ChartDataValueImmutable(val value: Float, val point: ChartPointF)
-
-@Immutable
 data class ChartDataItemImmutable(
     val timestamp: Long,
-    val values: Map<Indicator, ChartDataValueImmutable?>
+    val values: Map<Indicator, Float?>
 )
 
 class ChartDataBuilder constructor(
@@ -118,15 +114,6 @@ class ChartDataBuilder constructor(
         ranges[Indicator.Candle] ?: Range(0f, 1f)
     }
 
-    val volumeRange by lazy {
-        val range = ranges[Indicator.Volume]
-        Range(0f, range?.upper ?: 1f)
-    }
-
-    val dominanceRange by lazy {
-        ranges[Indicator.Dominance] ?: Range(0f, 1f)
-    }
-
     val immutableItems: List<ChartDataItemImmutable>
 
     init {
@@ -139,38 +126,18 @@ class ChartDataBuilder constructor(
             }
         }
 
-        val visibleTimeInterval = endTimestamp - startTimestamp
-
         immutableItems = points.map { point ->
-            val timestamp = point.timestamp - startTimestamp
-            val x = (timestamp.toFloat() / visibleTimeInterval)
-
-            val valuesImmutable = mapOf(Indicator.Candle to ChartDataValueImmutable(point.value, ChartPointF(x, getPointY(point.value, getRangeForIndicator(Indicator.Candle)))))
+            val valuesImmutable = mapOf(Indicator.Candle to point.value)
                 .plus(
                     point.indicators.mapNotNull { (indicator, value) ->
                         value?.let {
-                            indicator to ChartDataValueImmutable(value, ChartPointF(x, getPointY(value, getRangeForIndicator(indicator))))
+                            indicator to value
                         }
                     }
                 )
 
             ChartDataItemImmutable(point.timestamp, valuesImmutable)
         }
-    }
-
-    private fun getPointY(
-        value: Float,
-        range: Range<Float>,
-    ): Float {
-        val delta = range.upper - range.lower
-        return if (delta == 0F && range.upper > 0f) 0.5f else (value - range.lower) / delta
-    }
-
-
-    fun getRangeForIndicator(indicator: Indicator) = when (indicator) {
-        Indicator.Candle -> valueRange
-        Indicator.Volume -> volumeRange
-        Indicator.Dominance -> dominanceRange
     }
 
     // Ranges
