@@ -2,10 +2,8 @@ package io.horizontalsystems.chartview.helpers
 
 import android.graphics.RectF
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartDataValueImmutable
 import io.horizontalsystems.chartview.Coordinate
 import io.horizontalsystems.chartview.Indicator.*
-import io.horizontalsystems.chartview.models.ChartPointF
 import io.horizontalsystems.chartview.models.PointInfo
 
 object PointConverter {
@@ -40,17 +38,5 @@ object PointConverter {
         }
 
         return coordinates
-    }
-
-    fun volume(values: List<ChartDataValueImmutable>, shape: RectF, topPadding: Float): List<ChartPointF> {
-        val height = shape.height() - topPadding
-
-        return values.map {
-            val point = it.point
-            val x = point.x * shape.width()
-            val y = point.y * height
-
-            ChartPointF(x, shape.height() - y)
-        }
     }
 }
