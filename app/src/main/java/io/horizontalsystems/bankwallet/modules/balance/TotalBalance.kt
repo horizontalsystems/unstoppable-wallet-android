@@ -67,7 +67,7 @@ class TotalBalance(
     private fun getPrimaryAmount(
         totalState: TotalService.State.Visible
     ) = totalState.currencyValue?.let {
-        App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
+        App.numberFormatter.formatFiatShort(it.value, it.currency.symbol, 2)
     }
 
     private fun getSecondaryAmount(
