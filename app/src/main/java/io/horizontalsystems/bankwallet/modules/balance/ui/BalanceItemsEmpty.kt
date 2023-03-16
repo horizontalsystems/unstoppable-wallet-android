@@ -25,13 +25,13 @@ fun BalanceItemsEmpty(navController: NavController, accountViewItem: AccountView
         ScreenMessageWithAction(
             text = stringResource(R.string.Balance_NoCoinsAlert),
             icon = R.drawable.ic_add_to_wallet_2_48
-        ){
+        ) {
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .padding(horizontal = 48.dp)
                     .fillMaxWidth(),
                 title = stringResource(R.string.Balance_AddCoins),
-                onClick = {navController.slideFromRight(R.id.manageWalletsFragment)}
+                onClick = { navController.slideFromRight(R.id.manageWalletsFragment) }
             )
         }
     }

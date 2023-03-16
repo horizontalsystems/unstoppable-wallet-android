@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
+import io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankFragment
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
@@ -174,10 +175,13 @@ private fun AnalyticsBlock(
                                     val arguments = CoinInvestmentsFragment.prepareParams(action.coinUid)
                                     navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
                                 }
+                                is CoinAnalyticsModule.ActionType.OpenRank -> {
+                                    val arguments = CoinRankFragment.prepareParams(action.type)
+                                    navController.slideFromBottom(R.id.coinRankFragment, arguments)
+                                }
                                 CoinAnalyticsModule.ActionType.OpenTvl -> {
                                     navController.slideFromBottom(R.id.tvlFragment)
                                 }
-                                else -> {}
                             }
                         }
                     }
