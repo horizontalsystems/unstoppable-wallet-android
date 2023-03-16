@@ -241,6 +241,14 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.getAnalyticsData(coinUid, currencyCode)
     }
 
+    fun rankValueSingle(type: String, currencyCode: String): Single<List<RankValue>> {
+        return service.getRankValue(type, currencyCode)
+    }
+
+    fun rankMultiValueSingle(type: String, currencyCode: String): Single<List<RankMultiValue>> {
+        return service.getRankMultiValue(type, currencyCode)
+    }
+
     private interface MarketService {
 
         @GET("coins")
@@ -452,6 +460,18 @@ class HsProvider(baseUrl: String, apiKey: String) {
             @Path("coinUid") coinUid: String,
             @Query("currency") currencyCode: String,
         ): Single<Analytics>
+
+        @GET("analytics/ranks")
+        fun getRankValue(
+            @Query("type") type: String,
+            @Query("currency") currencyCode: String,
+        ): Single<List<RankValue>>
+
+        @GET("analytics/ranks")
+        fun getRankMultiValue(
+            @Query("type") type: String,
+            @Query("currency") currencyCode: String,
+        ): Single<List<RankMultiValue>>
 
         companion object {
             private const val marketInfoFields =

@@ -33,6 +33,8 @@ class MarketKitWrapper(
 
     fun fullCoins(coinUids: List<String>) = marketKit.fullCoins(coinUids)
 
+    fun allCoins() = marketKit.allCoins()
+
     fun token(query: TokenQuery) = marketKit.token(query)
 
     fun tokens(queries: List<TokenQuery>) = marketKit.tokens(queries)
@@ -152,6 +154,13 @@ class MarketKitWrapper(
 
     fun activeAddressesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?) =
         marketKit.activeAddressesSingle(coinUid, currencyCode, timePeriod, sessionKey)
+
+    fun cexVolumeRanksSingle(currencyCode: String) = marketKit.cexVolumeRanksSingle(currencyCode)
+    fun dexVolumeRanksSingle(currencyCode: String) = marketKit.dexVolumeRanksSingle(currencyCode)
+    fun dexLiquidityRanksSingle(currencyCode: String) = marketKit.dexLiquidityRanksSingle(currencyCode)
+    fun activeAddressRanksSingle(currencyCode: String) = marketKit.activeAddressRanksSingle(currencyCode)
+    fun transactionCountsRanksSingle(currencyCode: String) = marketKit.transactionCountsRanksSingle(currencyCode)
+    fun revenueRanksSingle(currencyCode: String) = marketKit.revenueRanksSingle(currencyCode)
 
     // Overview
 

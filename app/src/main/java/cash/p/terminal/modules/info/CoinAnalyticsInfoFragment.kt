@@ -89,11 +89,11 @@ private fun CoinAnalyticsInfoScreen(
                     InfoHeader(info.title)
                     AnalyticsInfoBody(info)
                     Spacer(Modifier.height(20.dp))
-                } ?:run {
+                } ?: run {
                     ScreenMessageWithAction(
                         text = stringResource(R.string.Error),
                         icon = R.drawable.ic_error_48
-                    ){
+                    ) {
                         ButtonPrimaryYellow(
                             modifier = Modifier
                                 .padding(horizontal = 48.dp)

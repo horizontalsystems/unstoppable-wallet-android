@@ -261,3 +261,18 @@ data class AnalyticsPreview(
         val points: Boolean = false,
     )
 }
+
+data class RankMultiValue(
+    val uid: String,
+    @SerializedName("value_1d")
+    val value1d: BigDecimal?,
+    @SerializedName("value_7d")
+    val value7d: BigDecimal?,
+    @SerializedName("value_30d")
+    val value30d: BigDecimal?
+)
+
+data class RankValue(
+    val uid: String,
+    val value: BigDecimal?,
+)

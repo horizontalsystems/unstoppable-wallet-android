@@ -13,6 +13,8 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
     fun coins(coinUids: List<String>): List<Coin> =
         coinDao.getCoins(coinUids)
 
+    fun allCoins(): List<Coin> = coinDao.getAllCoins()
+
     fun fullCoins(filter: String, limit: Int): List<FullCoin> {
         val sql = """
             SELECT * FROM Coin

@@ -5,6 +5,8 @@ import java.math.BigDecimal
 
 data class TokenHolders(
     val count: BigDecimal,
+    @SerializedName("holders_url")
+    val holdersUrl: String?,
     @SerializedName("top_holders")
     val topHolders: List<Holder>
 )

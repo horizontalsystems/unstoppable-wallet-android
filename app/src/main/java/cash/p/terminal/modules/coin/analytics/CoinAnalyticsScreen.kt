@@ -24,6 +24,7 @@ import cash.p.terminal.modules.coin.audits.CoinAuditsFragment
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsFragment
 import cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
+import cash.p.terminal.modules.coin.ranks.CoinRankFragment
 import cash.p.terminal.modules.coin.reports.CoinReportsFragment
 import cash.p.terminal.modules.coin.treasuries.CoinTreasuriesFragment
 import cash.p.terminal.modules.info.CoinAnalyticsInfoFragment
@@ -174,10 +175,13 @@ private fun AnalyticsBlock(
                                     val arguments = CoinInvestmentsFragment.prepareParams(action.coinUid)
                                     navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
                                 }
+                                is CoinAnalyticsModule.ActionType.OpenRank -> {
+                                    val arguments = CoinRankFragment.prepareParams(action.type)
+                                    navController.slideFromBottom(R.id.coinRankFragment, arguments)
+                                }
                                 CoinAnalyticsModule.ActionType.OpenTvl -> {
                                     navController.slideFromBottom(R.id.tvlFragment)
                                 }
-                                else -> {}
                             }
                         }
                     }

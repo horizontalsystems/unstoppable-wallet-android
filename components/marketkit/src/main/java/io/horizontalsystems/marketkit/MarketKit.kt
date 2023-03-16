@@ -45,6 +45,8 @@ class MarketKit(
         return coinManager.fullCoins(coinUids)
     }
 
+    fun allCoins(): List<Coin> = coinManager.allCoins()
+
     fun token(query: TokenQuery): Token? =
         coinManager.token(query)
 
@@ -201,7 +203,7 @@ class MarketKit(
         return coinManager.auditReportsSingle(addresses)
     }
 
-    // Pro Details
+    // Pro Data
 
     fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<DexLiquiditiesResponse> {
         return coinManager.dexLiquiditySingle(coinUid, currencyCode, timePeriod, sessionKey)
@@ -225,6 +227,30 @@ class MarketKit(
 
     fun analyticsSingle(coinUid: String, currencyCode: String): Single<Analytics> {
         return hsProvider.analyticsSingle(coinUid, currencyCode)
+    }
+
+    fun cexVolumeRanksSingle(currencyCode: String): Single<List<RankMultiValue>> {
+        return hsProvider.rankMultiValueSingle("cex_volume", currencyCode)
+    }
+
+    fun dexVolumeRanksSingle(currencyCode: String): Single<List<RankMultiValue>> {
+        return hsProvider.rankMultiValueSingle("dex_volume", currencyCode)
+    }
+
+    fun dexLiquidityRanksSingle(currencyCode: String): Single<List<RankValue>> {
+        return hsProvider.rankValueSingle("dex_liquidity", currencyCode)
+    }
+
+    fun activeAddressRanksSingle(currencyCode: String): Single<List<RankMultiValue>> {
+        return hsProvider.rankMultiValueSingle("address", currencyCode)
+    }
+
+    fun transactionCountsRanksSingle(currencyCode: String): Single<List<RankMultiValue>> {
+        return hsProvider.rankMultiValueSingle("tx_count", currencyCode)
+    }
+
+    fun revenueRanksSingle(currencyCode: String): Single<List<RankMultiValue>> {
+        return hsProvider.rankMultiValueSingle("revenue", currencyCode)
     }
 
     // Overview

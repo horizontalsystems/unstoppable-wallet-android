@@ -30,6 +30,8 @@ class CoinManager(
         }
     }
 
+    fun allCoins(): List<Coin> = storage.allCoins()
+
     fun token(query: TokenQuery): Token? =
         storage.getToken(query)
 

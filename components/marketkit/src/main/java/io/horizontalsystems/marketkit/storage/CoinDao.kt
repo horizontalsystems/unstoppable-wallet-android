@@ -23,6 +23,9 @@ interface CoinDao {
     @Query("SELECT * FROM Coin WHERE uid IN (:uids)")
     fun getCoins(uids: List<String>): List<Coin>
 
+    @Query("SELECT * FROM Coin")
+    fun getAllCoins(): List<Coin>
+
     @RawQuery
     fun getFullCoins(query: SupportSQLiteQuery): List<FullCoinWrapper>
 
