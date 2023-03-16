@@ -31,8 +31,13 @@ fun HsChartLineHeader(
     chartHeaderView: ChartModule.ChartHeaderView?,
     selectedPoint: SelectedPoint?
 ) {
-    if (selectedPoint == null) {
-        TabBalance {
+    RowUniversal(
+        modifier = Modifier
+            .height(64.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    ) {
+        if (selectedPoint == null) {
             Text(
                 modifier = Modifier.padding(end = 8.dp),
                 text = chartHeaderView?.value ?: "--",
@@ -46,17 +51,14 @@ fun HsChartLineHeader(
                     color = diffColor(latest.diff.raw())
                 )
             }
-        }
-    } else {
-        TabPeriod(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        } else {
             Column {
                 captionSB_leah(text = selectedPoint.value)
                 Spacer(modifier = Modifier.height(4.dp))
                 caption_grey(text = selectedPoint.date)
             }
+
+            Spacer(modifier = Modifier.weight(1f))
 
             when (val extraData = selectedPoint.extraData) {
                 is SelectedPoint.ExtraData.Volume -> {
