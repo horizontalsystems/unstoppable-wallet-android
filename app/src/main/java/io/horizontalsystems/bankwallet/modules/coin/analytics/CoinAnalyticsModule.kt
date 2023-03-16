@@ -95,6 +95,16 @@ object CoinAnalyticsModule {
         RevenueInfo(R.string.CoinAnalytics_ProjectRevenue),
     }
 
+    @Parcelize
+    enum class RankType(val title: Int): Parcelable {
+        CexVolumeRank(R.string.CoinAnalytics_CexVolumeRank),
+        DexVolumeRank(R.string.CoinAnalytics_DexVolumeRank),
+        DexLiquidityRank(R.string.CoinAnalytics_DexLiquidityRank),
+        AddressesRank(R.string.CoinAnalytics_ActiveAddressesRank),
+        TransactionCountRank(R.string.CoinAnalytics_TransactionCountRank),
+        RevenueRank(R.string.CoinAnalytics_ProjectRevenueRank),
+    }
+
     data class UiState(
         val viewState: ViewState,
         val viewItem: AnalyticsViewItem? = null,
@@ -109,7 +119,7 @@ object CoinAnalyticsModule {
 
     sealed class ActionType {
         object OpenTvl : ActionType()
-        object OpenTvlRank : ActionType()
+        class OpenRank(val type: RankType) : ActionType()
         class OpenReports(val coinUid: String) : ActionType()
         class OpenInvestors(val coinUid: String) : ActionType()
         class OpenTreasuries(val coin: Coin) : ActionType()

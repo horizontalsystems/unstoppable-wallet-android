@@ -151,6 +151,9 @@
         android:id="@+id/coinMajorHoldersFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment" />
     <fragment
+        android:id="@+id/coinRankFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankFragment" />
+    <fragment
         android:id="@+id/coinTreasuriesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment" />
     <fragment
