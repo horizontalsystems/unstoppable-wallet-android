@@ -23,15 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.*
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.overview.ui.Chart
+import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -144,7 +141,7 @@ class MetricsPageFragment : BaseFragment() {
                                         MarketCoinClear(
                                             marketViewItem.fullCoin.coin.name,
                                             marketViewItem.fullCoin.coin.code,
-                                            marketViewItem.fullCoin.coin.iconUrl,
+                                            marketViewItem.fullCoin.coin.imageUrl,
                                             marketViewItem.fullCoin.iconPlaceholder,
                                             marketViewItem.coinRate,
                                             marketViewItem.marketDataValue,

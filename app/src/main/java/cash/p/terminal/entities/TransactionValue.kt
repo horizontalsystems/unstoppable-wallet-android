@@ -1,7 +1,7 @@
 package cash.p.terminal.entities
 
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
@@ -26,7 +26,7 @@ sealed class TransactionValue {
 
     data class CoinValue(val token: Token, val value: BigDecimal) : TransactionValue() {
         override val coin: Coin = token.coin
-        override val coinIconUrl = token.coin.iconUrl
+        override val coinIconUrl = token.coin.imageUrl
         override val coinIconPlaceholder = token.fullCoin.iconPlaceholder
         override val coinUid: String = coin.uid
         override val fullName: String = coin.name

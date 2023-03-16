@@ -26,10 +26,7 @@ import androidx.core.app.ShareCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.*
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -100,7 +97,7 @@ private fun ReceiveScreen(
                 title = title,
                 navigationIcon = {
                     CoinImage(
-                        iconUrl = fullCoin.coin.iconUrl,
+                        iconUrl = fullCoin.coin.imageUrl,
                         placeholder = fullCoin.iconPlaceholder,
                         modifier = Modifier
                             .padding(horizontal = 16.dp)

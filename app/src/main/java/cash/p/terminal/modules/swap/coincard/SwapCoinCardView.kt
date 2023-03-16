@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.coinselect.SelectSwapCoinFragment
@@ -97,7 +97,7 @@ fun SwapCoinCardView(
         ) {
             CoinImage(
                 modifier = Modifier.size(32.dp),
-                iconUrl = token?.coin?.iconUrl,
+                iconUrl = token?.coin?.imageUrl,
                 placeholder = token?.iconPlaceholder ?: R.drawable.coin_placeholder
             )
             Spacer(Modifier.width(8.dp))

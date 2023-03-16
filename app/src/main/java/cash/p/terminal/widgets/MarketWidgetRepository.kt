@@ -3,6 +3,7 @@ package cash.p.terminal.widgets
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.MarketKitWrapper
@@ -164,7 +165,7 @@ class MarketWidgetRepository(
             volume = volume,
             diff = diff,
             blockchainTypeUid = null,
-            imageRemoteUrl = marketItem.fullCoin.coin.iconUrl
+            imageRemoteUrl = marketItem.fullCoin.coin.imageUrl
         )
     }
 

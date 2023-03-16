@@ -257,7 +257,7 @@ class BalanceViewItemFactory {
                 currencySymbol = currency.symbol,
                 coinCode = coin.code,
                 coinTitle = coin.name,
-                coinIconUrl = coin.iconUrl,
+                coinIconUrl = coin.imageUrl,
                 coinIconPlaceholder = wallet.token.iconPlaceholder,
                 primaryValue = primaryValue,
                 secondaryValue = secondaryValue,

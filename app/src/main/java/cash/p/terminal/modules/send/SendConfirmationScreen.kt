@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
@@ -219,7 +219,7 @@ fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
-            iconUrl = coin.iconUrl,
+            iconUrl = coin.imageUrl,
             placeholder = R.drawable.coin_placeholder,
             modifier = Modifier.size(32.dp)
         )

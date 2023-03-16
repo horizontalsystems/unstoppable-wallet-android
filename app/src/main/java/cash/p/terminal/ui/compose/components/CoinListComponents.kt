@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.market.MarketViewItem
@@ -98,7 +97,7 @@ fun CoinList(
                         MarketCoin(
                             item.fullCoin.coin.name,
                             item.fullCoin.coin.code,
-                            item.fullCoin.coin.iconUrl,
+                            item.fullCoin.coin.imageUrl,
                             item.fullCoin.iconPlaceholder,
                             item.coinRate,
                             item.marketDataValue,

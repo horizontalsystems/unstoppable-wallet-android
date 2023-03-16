@@ -27,7 +27,7 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
@@ -89,7 +89,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                     if (token != null) {
                                         Image(
                                             painter = rememberAsyncImagePainter(
-                                                model = token.coin.iconUrl,
+                                                model = token.coin.imageUrl,
                                                 error = painterResource(token.iconPlaceholder)
                                             ),
                                             modifier = Modifier

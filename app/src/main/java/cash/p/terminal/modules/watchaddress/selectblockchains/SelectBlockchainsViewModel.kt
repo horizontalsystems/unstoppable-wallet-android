@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.description
-import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.ConfiguredToken
@@ -72,7 +71,7 @@ class SelectBlockchainsViewModel(
         val token = configuredToken.token
         return CoinViewItem(
             item = configuredToken,
-            imageSource = ImageSource.Remote(token.fullCoin.coin.iconUrl, R.drawable.coin_placeholder),
+            imageSource = ImageSource.Remote(token.fullCoin.coin.imageUrl, R.drawable.coin_placeholder),
             title = token.fullCoin.coin.code,
             subtitle = token.fullCoin.coin.name,
             enabled = false,

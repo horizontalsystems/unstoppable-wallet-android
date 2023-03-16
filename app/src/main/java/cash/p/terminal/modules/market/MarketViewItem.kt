@@ -3,7 +3,7 @@ package cash.p.terminal.modules.market
 import androidx.compose.runtime.Immutable
 import cash.p.terminal.core.App
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import io.horizontalsystems.marketkit.models.FullCoin
 
 @Immutable
@@ -25,7 +25,7 @@ data class MarketViewItem(
         get() = fullCoin.coin.name
 
     val iconUrl: String
-        get() = fullCoin.coin.iconUrl
+        get() = fullCoin.coin.imageUrl
 
     val iconPlaceHolder: Int
         get() = fullCoin.iconPlaceholder

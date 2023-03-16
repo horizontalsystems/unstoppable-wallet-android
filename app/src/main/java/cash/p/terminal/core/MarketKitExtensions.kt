@@ -303,7 +303,16 @@ val TokenType.order: Int
 
 
 val Coin.imageUrl: String
-    get() = "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
+    get() {
+        var pirate: String = "piratecash"
+        var cosa: String = "cosanta"
+        val coinURL = when (uid) {
+            pirate -> "https://p.cash/logo.png"
+            cosa -> "https://cosanta.net/logo.png"
+            else -> "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
+        }
+        return coinURL
+    }
 
 val TopPlatform.imageUrl
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/${blockchain.uid}@3x.png"

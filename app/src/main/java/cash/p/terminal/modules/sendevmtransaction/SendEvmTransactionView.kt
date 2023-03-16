@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.shorten
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
@@ -196,7 +196,7 @@ private fun AmountMulti(item: ViewItem.AmountMulti) {
     ) {
         CoinImage(
             modifier = Modifier.size(32.dp),
-            iconUrl = item.token.coin.iconUrl,
+            iconUrl = item.token.coin.imageUrl,
             placeholder = item.token.iconPlaceholder
         )
         Column(
@@ -245,7 +245,7 @@ private fun Amount(item: ViewItem.Amount) {
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp),
-            iconUrl = item.token.coin.iconUrl,
+            iconUrl = item.token.coin.imageUrl,
             placeholder = item.token.iconPlaceholder
         )
         Text(
@@ -288,7 +288,7 @@ private fun Token(item: ViewItem.TokenItem) {
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp),
-            iconUrl = item.token.coin.iconUrl,
+            iconUrl = item.token.coin.imageUrl,
             placeholder = item.token.iconPlaceholder
         )
         subhead1_leah(item.token.coin.code)

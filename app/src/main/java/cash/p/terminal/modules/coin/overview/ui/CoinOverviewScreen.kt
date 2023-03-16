@@ -22,7 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
@@ -113,7 +113,7 @@ fun CoinOverviewScreen(
                                 CoinScreenTitle(
                                     fullCoin.coin.name,
                                     fullCoin.coin.marketCapRank,
-                                    fullCoin.coin.iconUrl,
+                                    fullCoin.coin.imageUrl,
                                     fullCoin.iconPlaceholder
                                 )
 

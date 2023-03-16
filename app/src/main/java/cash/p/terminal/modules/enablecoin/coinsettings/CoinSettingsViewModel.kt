@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.AccountType
@@ -58,7 +58,7 @@ class CoinSettingsViewModel(
         allowEmpty: Boolean
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
+            icon = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder),
             title = token.coin.code,
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
             viewItems = allDerivations.map { derivation ->
@@ -79,7 +79,7 @@ class CoinSettingsViewModel(
         allowEmpty: Boolean
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
+            icon = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder),
             title = token.coin.code,
             selectedIndexes = current.map { types.indexOf(it) }.filter { it > -1 },
             viewItems = types.map { type ->

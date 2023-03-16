@@ -107,7 +107,7 @@ fun SendBitcoinScreen(
                 title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
                 navigationIcon = {
                     CoinImage(
-                        iconUrl = fullCoin.coin.iconUrl,
+                        iconUrl = fullCoin.coin.imageUrl,
                         placeholder = fullCoin.iconPlaceholder,
                         modifier = Modifier
                             .padding(horizontal = 16.dp)

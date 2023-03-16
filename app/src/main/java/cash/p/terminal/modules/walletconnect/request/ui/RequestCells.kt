@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.sendevmtransaction.AmountValues
 import cash.p.terminal.modules.sendevmtransaction.ValueType
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -63,7 +63,7 @@ fun AmountCell(
             .padding(horizontal = 16.dp),
     ) {
         CoinImage(
-            iconUrl = token.coin.iconUrl,
+            iconUrl = token.coin.imageUrl,
             placeholder = token.iconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -95,7 +95,7 @@ fun TokenCell(token: Token) {
             .fillMaxWidth(),
     ) {
         CoinImage(
-            iconUrl = token.coin.iconUrl,
+            iconUrl = token.coin.imageUrl,
             placeholder = token.iconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -119,7 +119,7 @@ fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, token: Token) 
             .fillMaxWidth(),
     ) {
         CoinImage(
-            iconUrl = token.coin.iconUrl,
+            iconUrl = token.coin.imageUrl,
             placeholder = token.iconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)

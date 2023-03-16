@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -31,7 +31,7 @@ fun SendScreen(
             title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
             navigationIcon = {
                 CoinImage(
-                    iconUrl = fullCoin.coin.iconUrl,
+                    iconUrl = fullCoin.coin.imageUrl,
                     placeholder = fullCoin.iconPlaceholder,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)

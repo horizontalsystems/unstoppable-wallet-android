@@ -22,10 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.*
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -117,7 +114,7 @@ fun SelectSwapCoinDialogScreen(
                             }
                         ) {
                             CoinImage(
-                                iconUrl = coinItem.token.coin.iconUrl,
+                                iconUrl = coinItem.token.coin.imageUrl,
                                 placeholder = coinItem.token.iconPlaceholder,
                                 modifier = Modifier.size(32.dp)
                             )

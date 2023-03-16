@@ -175,7 +175,7 @@ fun MarketSearchResults(
             MarketCoin(
                 coinViewItem.fullCoin.coin.code,
                 coinViewItem.fullCoin.coin.name,
-                coinViewItem.fullCoin.coin.iconUrl,
+                coinViewItem.fullCoin.coin.imageUrl,
                 coinViewItem.fullCoin.iconPlaceholder,
                 favorited = coinViewItem.favourited,
                 onClick = { onCoinClick(coinViewItem.fullCoin.coin) },
@@ -365,7 +365,7 @@ fun MarketCoinPreview() {
         MarketCoin(
             coin.code,
             coin.name,
-            coin.iconUrl,
+            coin.imageUrl,
             R.drawable.coin_placeholder,
             false,
             {},

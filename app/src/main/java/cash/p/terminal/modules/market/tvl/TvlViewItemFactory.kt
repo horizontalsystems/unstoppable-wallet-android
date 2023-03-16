@@ -2,7 +2,7 @@ package cash.p.terminal.modules.market.tvl
 
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.iconUrl
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
 
@@ -34,7 +34,7 @@ class TvlViewItemFactory {
                     TranslatableString.ResString(R.string.TvlRank_MultiChain)
                 else
                     TranslatableString.PlainString(item.chains.first()),
-                iconUrl = item.fullCoin?.coin?.iconUrl ?: item.iconUrl,
+                iconUrl = item.fullCoin?.coin?.imageUrl ?: item.iconUrl,
                 iconPlaceholder = item.fullCoin?.iconPlaceholder
             )
 
