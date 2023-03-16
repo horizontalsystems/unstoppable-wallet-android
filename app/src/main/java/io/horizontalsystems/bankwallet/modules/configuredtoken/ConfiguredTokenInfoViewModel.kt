@@ -48,7 +48,7 @@ class ConfiguredTokenInfoViewModel(
         }
 
         uiState = ConfiguredTokenInfoUiState(
-            iconSource = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
+            iconSource = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder),
             title = token.coin.code,
             subtitle = token.coin.name,
             tokenInfoType = type

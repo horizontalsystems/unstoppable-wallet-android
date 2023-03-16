@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
@@ -196,7 +196,7 @@ private fun AmountMulti(item: ViewItem.AmountMulti) {
     ) {
         CoinImage(
             modifier = Modifier.size(32.dp),
-            iconUrl = item.token.coin.iconUrl,
+            iconUrl = item.token.coin.imageUrl,
             placeholder = item.token.iconPlaceholder
         )
         Column(
@@ -245,7 +245,7 @@ private fun Amount(item: ViewItem.Amount) {
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp),
-            iconUrl = item.token.coin.iconUrl,
+            iconUrl = item.token.coin.imageUrl,
             placeholder = item.token.iconPlaceholder
         )
         Text(
@@ -288,7 +288,7 @@ private fun Token(item: ViewItem.TokenItem) {
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp),
-            iconUrl = item.token.coin.iconUrl,
+            iconUrl = item.token.coin.imageUrl,
             placeholder = item.token.iconPlaceholder
         )
         subhead1_leah(item.token.coin.code)

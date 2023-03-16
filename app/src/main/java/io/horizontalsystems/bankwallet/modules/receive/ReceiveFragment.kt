@@ -26,10 +26,7 @@ import androidx.core.app.ShareCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -100,7 +97,7 @@ private fun ReceiveScreen(
                 title = title,
                 navigationIcon = {
                     CoinImage(
-                        iconUrl = fullCoin.coin.iconUrl,
+                        iconUrl = fullCoin.coin.imageUrl,
                         placeholder = fullCoin.iconPlaceholder,
                         modifier = Modifier
                             .padding(horizontal = 16.dp)

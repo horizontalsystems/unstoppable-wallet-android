@@ -23,15 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -144,7 +141,7 @@ class MetricsPageFragment : BaseFragment() {
                                         MarketCoinClear(
                                             marketViewItem.fullCoin.coin.name,
                                             marketViewItem.fullCoin.coin.code,
-                                            marketViewItem.fullCoin.coin.iconUrl,
+                                            marketViewItem.fullCoin.coin.imageUrl,
                                             marketViewItem.fullCoin.iconPlaceholder,
                                             marketViewItem.coinRate,
                                             marketViewItem.marketDataValue,

@@ -43,7 +43,7 @@ class CoinTokensViewModel(
                 request.currentTokens.map { supportedTokens.indexOf(it) }
 
         val config = BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(fullCoin.coin.iconUrl, fullCoin.iconPlaceholder),
+            icon = ImageSource.Remote(fullCoin.coin.imageUrl, fullCoin.iconPlaceholder),
             title = fullCoin.coin.code,
             description = if (fullCoin.supportedTokens.size > 1) Translator.getString(R.string.CoinPlatformsSelector_Description) else null,
             selectedIndexes = selectedTokenIndexes,

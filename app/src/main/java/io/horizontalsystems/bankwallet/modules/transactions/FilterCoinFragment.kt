@@ -27,7 +27,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -89,7 +89,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                     if (token != null) {
                                         Image(
                                             painter = rememberAsyncImagePainter(
-                                                model = token.coin.iconUrl,
+                                                model = token.coin.imageUrl,
                                                 error = painterResource(token.iconPlaceholder)
                                             ),
                                             modifier = Modifier

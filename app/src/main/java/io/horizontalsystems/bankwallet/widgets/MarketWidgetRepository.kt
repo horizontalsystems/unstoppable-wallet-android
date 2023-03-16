@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.widgets
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -164,7 +165,7 @@ class MarketWidgetRepository(
             volume = volume,
             diff = diff,
             blockchainTypeUid = null,
-            imageRemoteUrl = marketItem.fullCoin.coin.iconUrl
+            imageRemoteUrl = marketItem.fullCoin.coin.imageUrl
         )
     }
 
