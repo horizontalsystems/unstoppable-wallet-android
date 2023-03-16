@@ -13,10 +13,8 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     //  colors
     val textFont: Typeface = Typeface.DEFAULT
     var timelineTextColor = context.getColor(R.color.nina)
-    var timelineTextSize = dp2px(10f)
-    var timelineTextPadding = dp2px(4f)
 
-    var gridTextColor = context.getColor(R.color.nina)
+    var gridTextColor = context.getColor(R.color.grey)
     var gridLineColor = context.getColor(R.color.steel_20)
     var gridDashColor = context.getColor(R.color.steel_10)
     var gridLabelColor = context.getColor(R.color.grey_50)
