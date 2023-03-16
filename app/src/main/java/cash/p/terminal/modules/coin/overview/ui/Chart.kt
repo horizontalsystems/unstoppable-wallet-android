@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.coin.overview.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
@@ -33,7 +32,7 @@ fun HsChartLineHeader(
     selectedPoint: SelectedPoint?
 ) {
     if (selectedPoint == null) {
-        TabBalance(borderTop = true) {
+        TabBalance {
             Text(
                 modifier = Modifier.padding(end = 8.dp),
                 text = chartHeaderView?.value ?: "--",
@@ -157,62 +156,58 @@ fun PriceVolChart(
 ) {
     val showIndicatorLine = chartInfoData?.hasVolumes ?: false
     val height = if (showIndicatorLine) 204.dp else 160.dp
-    Box(
+
+    AndroidView(
         modifier = Modifier
             .height(height)
-    ) {
-        Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
-
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = {
-                Chart(it).apply {
-                    setListener(object : Chart.Listener {
-                        override fun onTouchDown() {
-                        }
-
-                        override fun onTouchUp() {
-                            onSelectPoint.invoke(null)
-                        }
-
-                        override fun onTouchSelect(item: ChartDataItemImmutable) {
-                            onSelectPoint.invoke(item)
-                            HudHelper.vibrate(context)
-                        }
-                    })
-                }
-            },
-            update = { chart ->
-                if (loading) {
-                    chart.showSpinner()
-                } else {
-                    chart.hideSpinner()
-                }
-
-                when (viewState) {
-                    is ViewState.Error -> {
-                        chart.showError(viewState.t.localizedMessage ?: "")
+            .fillMaxWidth(),
+        factory = {
+            Chart(it).apply {
+                setListener(object : Chart.Listener {
+                    override fun onTouchDown() {
                     }
-                    ViewState.Success -> {
-                        chart.hideError()
-                        chart.setIndicatorLineVisible(showIndicatorLine)
 
-                        chartInfoData?.let { chartInfoData ->
-                            chart.doOnLayout {
-                                if (chartInfoData.chartData.isMovementChart) {
-                                    chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
-                                } else {
-                                    chart.setDataBars(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
-                                }
+                    override fun onTouchUp() {
+                        onSelectPoint.invoke(null)
+                    }
+
+                    override fun onTouchSelect(item: ChartDataItemImmutable) {
+                        onSelectPoint.invoke(item)
+                        HudHelper.vibrate(context)
+                    }
+                })
+            }
+        },
+        update = { chart ->
+            if (loading) {
+                chart.showSpinner()
+            } else {
+                chart.hideSpinner()
+            }
+
+            when (viewState) {
+                is ViewState.Error -> {
+                    chart.showError(viewState.t.localizedMessage ?: "")
+                }
+                ViewState.Success -> {
+                    chart.hideError()
+                    chart.setIndicatorLineVisible(showIndicatorLine)
+
+                    chartInfoData?.let { chartInfoData ->
+                        chart.doOnLayout {
+                            if (chartInfoData.chartData.isMovementChart) {
+                                chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
+                            } else {
+                                chart.setDataBars(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
                             }
                         }
                     }
-                    ViewState.Loading,
-                    null -> {}
                 }
+                ViewState.Loading,
+                null -> {}
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable
