@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
@@ -34,7 +34,7 @@ class TvlViewItemFactory {
                     TranslatableString.ResString(R.string.TvlRank_MultiChain)
                 else
                     TranslatableString.PlainString(item.chains.first()),
-                iconUrl = item.fullCoin?.coin?.iconUrl ?: item.iconUrl,
+                iconUrl = item.fullCoin?.coin?.imageUrl ?: item.iconUrl,
                 iconPlaceholder = item.fullCoin?.iconPlaceholder
             )
 

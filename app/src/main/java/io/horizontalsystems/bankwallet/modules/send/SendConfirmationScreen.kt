@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -219,7 +219,7 @@ fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
-            iconUrl = coin.iconUrl,
+            iconUrl = coin.imageUrl,
             placeholder = R.drawable.coin_placeholder,
             modifier = Modifier.size(32.dp)
         )

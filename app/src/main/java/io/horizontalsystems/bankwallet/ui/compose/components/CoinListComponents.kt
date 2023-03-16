@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -98,7 +97,7 @@ fun CoinList(
                         MarketCoin(
                             item.fullCoin.coin.name,
                             item.fullCoin.coin.code,
-                            item.fullCoin.coin.iconUrl,
+                            item.fullCoin.coin.imageUrl,
                             item.fullCoin.iconPlaceholder,
                             item.coinRate,
                             item.marketDataValue,

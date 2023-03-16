@@ -22,7 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -113,7 +113,7 @@ fun CoinOverviewScreen(
                                 CoinScreenTitle(
                                     fullCoin.coin.name,
                                     fullCoin.coin.marketCapRank,
-                                    fullCoin.coin.iconUrl,
+                                    fullCoin.coin.imageUrl,
                                     fullCoin.iconPlaceholder
                                 )
 

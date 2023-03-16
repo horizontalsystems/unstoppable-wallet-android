@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -58,7 +58,7 @@ class CoinSettingsViewModel(
         allowEmpty: Boolean
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
+            icon = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder),
             title = token.coin.code,
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
             viewItems = allDerivations.map { derivation ->
@@ -79,7 +79,7 @@ class CoinSettingsViewModel(
         allowEmpty: Boolean
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
+            icon = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder),
             title = token.coin.code,
             selectedIndexes = current.map { types.indexOf(it) }.filter { it > -1 },
             viewItems = types.map { type ->

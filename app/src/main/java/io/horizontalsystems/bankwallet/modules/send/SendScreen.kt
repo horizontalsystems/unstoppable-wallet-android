@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -31,7 +31,7 @@ fun SendScreen(
             title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
             navigationIcon = {
                 CoinImage(
-                    iconUrl = fullCoin.coin.iconUrl,
+                    iconUrl = fullCoin.coin.imageUrl,
                     placeholder = fullCoin.iconPlaceholder,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)

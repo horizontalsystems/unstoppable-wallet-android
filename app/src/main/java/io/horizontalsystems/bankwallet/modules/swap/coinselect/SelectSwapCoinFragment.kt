@@ -22,10 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -117,7 +114,7 @@ fun SelectSwapCoinDialogScreen(
                             }
                         ) {
                             CoinImage(
-                                iconUrl = coinItem.token.coin.iconUrl,
+                                iconUrl = coinItem.token.coin.imageUrl,
                                 placeholder = coinItem.token.iconPlaceholder,
                                 modifier = Modifier.size(32.dp)
                             )

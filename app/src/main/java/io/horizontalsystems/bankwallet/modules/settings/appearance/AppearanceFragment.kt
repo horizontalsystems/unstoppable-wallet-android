@@ -24,7 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -183,7 +183,7 @@ fun AppearanceScreen(navController: NavController) {
                             RowSelect(
                                 imageContent = {
                                     CoinImage(
-                                        iconUrl = option.coin.iconUrl,
+                                        iconUrl = option.coin.imageUrl,
                                         modifier = Modifier.size(32.dp)
                                     )
                                 },

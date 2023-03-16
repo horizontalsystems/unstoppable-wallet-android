@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.AmountValues
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -63,7 +63,7 @@ fun AmountCell(
             .padding(horizontal = 16.dp),
     ) {
         CoinImage(
-            iconUrl = token.coin.iconUrl,
+            iconUrl = token.coin.imageUrl,
             placeholder = token.iconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -95,7 +95,7 @@ fun TokenCell(token: Token) {
             .fillMaxWidth(),
     ) {
         CoinImage(
-            iconUrl = token.coin.iconUrl,
+            iconUrl = token.coin.imageUrl,
             placeholder = token.iconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -119,7 +119,7 @@ fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, token: Token) 
             .fillMaxWidth(),
     ) {
         CoinImage(
-            iconUrl = token.coin.iconUrl,
+            iconUrl = token.coin.imageUrl,
             placeholder = token.iconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
