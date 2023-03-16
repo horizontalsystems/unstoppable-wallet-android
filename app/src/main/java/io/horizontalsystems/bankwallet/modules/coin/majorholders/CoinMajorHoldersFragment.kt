@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -32,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -160,13 +162,16 @@ private fun CoinMajorHoldersContent(
         }
 
         item {
-            SeeAllButton()
+            uiState.seeAllUrl?.let {
+                val context = LocalContext.current
+                SeeAllButton { LinkHelper.openLinkInAppBrowser(context, it) }
+            }
         }
     }
 }
 
 @Composable
-fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
+private fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
     VSpacer(12.dp)
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -184,7 +189,7 @@ fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
 }
 
 @Composable
-fun SeeAllButton() {
+private fun SeeAllButton(onClick: () -> Unit) {
     VSpacer(32.dp)
     CellUniversalLawrenceSection(
         listOf {
@@ -192,7 +197,7 @@ fun SeeAllButton() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                onClick = { }
+                onClick = onClick
             ) {
                 body_leah(
                     text = stringResource(R.string.Market_SeeAll),

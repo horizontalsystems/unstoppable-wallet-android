@@ -22,6 +22,7 @@ object CoinMajorHoldersModule {
         val viewState: ViewState,
         val top10Share: String = "",
         val totalHoldersCount: String = "",
+        val seeAllUrl: String? = null,
         val chartData: List<StackBarSlice> = emptyList(),
         val topHolders: List<MajorHolderItem> = emptyList(),
         val error: TranslatableString? = null,
