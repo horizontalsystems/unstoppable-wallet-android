@@ -32,6 +32,7 @@ class CoinMajorHoldersViewModel(
     private var viewState: ViewState = ViewState.Loading
     private var top10Share: String = ""
     private var totalHoldersCount: String = ""
+    private var seeAllUrl: String? = null
     private var chartData: List<StackBarSlice> = emptyList()
     private var topHolders: List<MajorHolderItem> = emptyList()
     private var error: TranslatableString? = null
@@ -60,6 +61,7 @@ class CoinMajorHoldersViewModel(
             viewState = viewState,
             top10Share = top10Share,
             totalHoldersCount  = totalHoldersCount,
+            seeAllUrl = seeAllUrl,
             chartData = chartData,
             topHolders = topHolders,
             error = error
@@ -72,6 +74,7 @@ class CoinMajorHoldersViewModel(
             try {
                 val result = getTokenHolders(coinUid, blockchainUid)
                 val top10ShareNumber = result.topHolders.sumOf { it.percentage }
+                seeAllUrl = result.holdersUrl
                 top10Share = factory.getTop10Share(top10ShareNumber)
                 totalHoldersCount = factory.getHoldersCount(result.count)
                 viewState = ViewState.Success
