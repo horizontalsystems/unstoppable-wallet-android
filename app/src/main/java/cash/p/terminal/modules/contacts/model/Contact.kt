@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contacts.model
+package cash.p.terminal.modules.contacts.model
 
 import io.horizontalsystems.marketkit.models.Blockchain
 

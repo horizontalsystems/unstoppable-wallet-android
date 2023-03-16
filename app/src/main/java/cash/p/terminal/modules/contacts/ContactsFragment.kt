@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contacts
+package cash.p.terminal.modules.contacts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,12 +13,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.modules.contacts.screen.AddAddressScreen
-import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactScreen
-import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactsScreen
-import io.horizontalsystems.bankwallet.modules.contacts.screen.NewContactScreen
+import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.composablePage
+import cash.p.terminal.modules.contacts.screen.AddAddressScreen
+import cash.p.terminal.modules.contacts.screen.ContactScreen
+import cash.p.terminal.modules.contacts.screen.ContactsScreen
+import cash.p.terminal.modules.contacts.screen.NewContactScreen
 
 class ContactsFragment : BaseFragment() {
 

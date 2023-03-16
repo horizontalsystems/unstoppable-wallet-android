@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contacts.screen
+package cash.p.terminal.modules.contacts.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -6,13 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.contacts.Route
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import cash.p.terminal.R
+import cash.p.terminal.modules.contacts.Route
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
 
 @Composable
 fun ContactsScreen(

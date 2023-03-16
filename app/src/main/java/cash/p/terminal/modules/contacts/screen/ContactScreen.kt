@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contacts.screen
+package cash.p.terminal.modules.contacts.screen
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
