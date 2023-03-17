@@ -40,7 +40,7 @@ fun HsChartLineHeader(
 
     if (selectedPoint != null) {
         mainValue = selectedPoint.value
-        diff = null
+        diff = selectedPoint.diff
         date = selectedPoint.date
         extraData = selectedPoint.extraData
     } else {
