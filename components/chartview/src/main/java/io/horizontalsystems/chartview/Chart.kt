@@ -19,6 +19,8 @@ class Chart @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    lateinit var chartViewType: ChartViewType
+
     private val binding = ViewChartBinding.inflate(LayoutInflater.from(context), this)
 
     interface Listener {
@@ -129,6 +131,21 @@ class Chart @JvmOverloads constructor(
         maxValue: String?,
         minValue: String?
     ) {
+        when (chartViewType) {
+            ChartViewType.Line -> {
+                setDataLine(data, maxValue, minValue)
+            }
+            ChartViewType.Bar -> {
+                setDataBars(data, maxValue, minValue)
+            }
+        }
+    }
+
+    private fun setDataLine(
+        data: ChartData,
+        maxValue: String?,
+        minValue: String?
+    ) {
 
         animatorMain.cancel()
 
@@ -234,7 +251,7 @@ class Chart @JvmOverloads constructor(
         animatorBottom.start()
     }
 
-    fun setDataBars(
+    private fun setDataBars(
         data: ChartData,
         maxValue: String?,
         minValue: String?

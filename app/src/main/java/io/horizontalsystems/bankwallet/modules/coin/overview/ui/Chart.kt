@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartDataItemImmutable
+import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
@@ -117,7 +118,8 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
             viewState = chartViewState,
-            hasVolumes = chartViewModel.hasVolumes
+            hasVolumes = chartViewModel.hasVolumes,
+            chartViewType = chartViewModel.chartViewType
         ) { item ->
             selectedPoint = item?.let {
                 chartViewModel.getSelectedPoint(it)
@@ -134,6 +136,7 @@ fun <T> Chart(
     chartLoading: Boolean,
     viewState: ViewState?,
     hasVolumes: Boolean,
+    chartViewType: ChartViewType,
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
     Column {
@@ -142,7 +145,8 @@ fun <T> Chart(
             loading = chartLoading,
             viewState = viewState,
             onSelectPoint = onSelectPoint,
-            hasVolumes = hasVolumes
+            hasVolumes = hasVolumes,
+            chartViewType = chartViewType
         )
         VSpacer(height = 8.dp)
         ChartTab(
@@ -159,6 +163,7 @@ fun PriceVolChart(
     viewState: ViewState?,
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
     hasVolumes: Boolean,
+    chartViewType: ChartViewType,
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
@@ -168,6 +173,8 @@ fun PriceVolChart(
             .fillMaxWidth(),
         factory = {
             Chart(it).apply {
+                this.chartViewType = chartViewType
+
                 setListener(object : Chart.Listener {
                     override fun onTouchDown() {
                     }
@@ -200,11 +207,7 @@ fun PriceVolChart(
 
                     chartInfoData?.let { chartInfoData ->
                         chart.doOnLayout {
-                            if (chartInfoData.chartData.isMovementChart) {
-                                chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
-                            } else {
-                                chart.setDataBars(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
-                            }
+                            chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
                         }
                     }
                 }

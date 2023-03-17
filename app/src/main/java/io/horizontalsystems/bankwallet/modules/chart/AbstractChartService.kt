@@ -4,6 +4,7 @@ import androidx.annotation.CallSuper
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -14,6 +15,7 @@ import java.util.*
 abstract class AbstractChartService {
     open val hasVolumes = false
     abstract val chartIntervals: List<HsTimePeriod?>
+    abstract val chartViewType: ChartViewType
 
     protected abstract val currencyManager: CurrencyManager
     protected abstract val initialChartInterval: HsTimePeriod
