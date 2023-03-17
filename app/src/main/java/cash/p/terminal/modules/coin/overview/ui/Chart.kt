@@ -116,7 +116,8 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?
             },
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
-            viewState = chartViewState
+            viewState = chartViewState,
+            hasVolumes = chartViewModel.hasVolumes
         ) { item ->
             selectedPoint = item?.let {
                 chartViewModel.getSelectedPoint(it)
@@ -132,6 +133,7 @@ fun <T> Chart(
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
     viewState: ViewState?,
+    hasVolumes: Boolean,
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
     Column {
@@ -139,7 +141,8 @@ fun <T> Chart(
             chartInfoData = chartInfoData,
             loading = chartLoading,
             viewState = viewState,
-            onSelectPoint = onSelectPoint
+            onSelectPoint = onSelectPoint,
+            hasVolumes = hasVolumes
         )
         VSpacer(height = 8.dp)
         ChartTab(
@@ -155,9 +158,9 @@ fun PriceVolChart(
     loading: Boolean,
     viewState: ViewState?,
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
+    hasVolumes: Boolean,
 ) {
-    val showIndicatorLine = chartInfoData?.hasVolumes ?: false
-    val height = if (showIndicatorLine) 204.dp else 160.dp
+    val height = if (hasVolumes) 204.dp else 160.dp
 
     AndroidView(
         modifier = Modifier
@@ -193,7 +196,7 @@ fun PriceVolChart(
                 }
                 ViewState.Success -> {
                     chart.hideError()
-                    chart.setIndicatorLineVisible(showIndicatorLine)
+                    chart.setIndicatorLineVisible(hasVolumes)
 
                     chartInfoData?.let { chartInfoData ->
                         chart.doOnLayout {
