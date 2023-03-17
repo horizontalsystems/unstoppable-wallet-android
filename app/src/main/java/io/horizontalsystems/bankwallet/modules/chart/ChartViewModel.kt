@@ -97,18 +97,18 @@ open class ChartViewModel(
 
         val headerView = if (!chartPointsWrapper.isMovementChart) {
             val sum = valueFormatter.formatValue(service.currency, chartData.sum())
-            ChartModule.ChartHeaderView(sum, null, null)
+            ChartModule.ChartHeaderView(sum, null, null, null)
         } else {
             val latestItem = chartItems.last()
             val lastItemValue = latestItem.value
             val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
 
             val dominanceData = latestItem.indicators[Indicator.Dominance]?.let { dominance ->
-                SelectedPoint.ExtraData.Dominance(
+                ChartModule.ChartHeaderExtraData.Dominance(
                     App.numberFormatter.format(dominance, 0, 2, suffix = "%")
                 )
             }
-            ChartModule.ChartHeaderView(currentValue, Value.Percent(chartData.diff()), dominanceData)
+            ChartModule.ChartHeaderView(currentValue, null, Value.Percent(chartData.diff()), dominanceData)
         }
 
         val (minValue, maxValue) = getMinMax(chartData.valueRange)
@@ -149,7 +149,7 @@ open class ChartViewModel(
         service.stop()
     }
 
-    fun getSelectedPoint(item: ChartDataItemImmutable): SelectedPoint? {
+    fun getSelectedPoint(item: ChartDataItemImmutable): ChartModule.ChartHeaderView? {
         return item.values[Indicator.Candle]?.let { candle ->
             val value = valueFormatter.formatValue(service.currency, candle.toBigDecimal())
             val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
@@ -162,7 +162,7 @@ open class ChartViewModel(
                 }
             }
 
-            SelectedPoint(
+            ChartModule.ChartHeaderView(
                 value = value,
                 date = dayAndTime,
                 extraData = getItemExtraData(item),
@@ -171,31 +171,19 @@ open class ChartViewModel(
         }
     }
 
-    private fun getItemExtraData(item: ChartDataItemImmutable): SelectedPoint.ExtraData? {
+    private fun getItemExtraData(item: ChartDataItemImmutable): ChartModule.ChartHeaderExtraData? {
         val dominance = item.values[Indicator.Dominance]
         val volume = item.values[Indicator.Volume]
 
         return when {
-            dominance != null -> SelectedPoint.ExtraData.Dominance(
+            dominance != null -> ChartModule.ChartHeaderExtraData.Dominance(
                 App.numberFormatter.format(dominance, 0, 2, suffix = "%")
             )
-            volume != null -> SelectedPoint.ExtraData.Volume(
+            volume != null -> ChartModule.ChartHeaderExtraData.Volume(
                 App.numberFormatter.formatFiatShort(volume.toBigDecimal(), service.currency.symbol, 2)
             )
             else -> null
         }
-    }
-}
-
-data class SelectedPoint(
-    val value: String,
-    val date: String,
-    val extraData: ExtraData?,
-    val diff: Value.Percent?
-) {
-    sealed class ExtraData {
-        class Volume(val volume: String) : ExtraData()
-        class Dominance(val dominance: String) : ExtraData()
     }
 }
 
