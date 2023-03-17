@@ -5,6 +5,7 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
+import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
@@ -17,6 +18,7 @@ class CoinCategoryMarketDataChartService(
 
     override val initialChartInterval = HsTimePeriod.Day1
     override val chartIntervals = listOf(HsTimePeriod.Day1, HsTimePeriod.Week1, HsTimePeriod.Month1)
+    override val chartViewType = ChartViewType.Line
 
     override fun getItems(
         chartInterval: HsTimePeriod,

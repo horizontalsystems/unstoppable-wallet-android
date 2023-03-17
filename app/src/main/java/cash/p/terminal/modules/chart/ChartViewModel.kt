@@ -29,6 +29,7 @@ open class ChartViewModel(
     private val valueFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
     val hasVolumes = service.hasVolumes
+    val chartViewType = service.chartViewType
     val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod?>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()

@@ -7,6 +7,7 @@ import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
 import cash.p.terminal.modules.profeatures.ProFeaturesAuthorizationManager
 import cash.p.terminal.modules.profeatures.ProNft
+import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
@@ -22,6 +23,7 @@ class ProChartService(
     override val initialChartInterval = HsTimePeriod.Month1
 
     override val chartIntervals = HsTimePeriod.values().toList()
+    override val chartViewType = ChartViewType.Line
 
     override fun getItems(
         chartInterval: HsTimePeriod,

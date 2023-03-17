@@ -7,6 +7,7 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
+import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.*
@@ -24,6 +25,7 @@ class CoinOverviewChartService(
     override val initialChartInterval = HsTimePeriod.Day1
 
     override var chartIntervals = listOf<HsTimePeriod?>()
+    override val chartViewType = ChartViewType.Line
 
     private var updatesSubscriptionKey: String? = null
     private val disposables = CompositeDisposable()

@@ -6,6 +6,7 @@ import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
 import cash.p.terminal.modules.market.tvl.GlobalMarketRepository
 import cash.p.terminal.modules.metricchart.MetricsType
+import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
@@ -18,6 +19,7 @@ class MetricsPageChartService(
     override val initialChartInterval: HsTimePeriod = HsTimePeriod.Day1
 
     override val chartIntervals = HsTimePeriod.values().toList()
+    override val chartViewType = ChartViewType.Line
 
     override fun getItems(
         chartInterval: HsTimePeriod,
