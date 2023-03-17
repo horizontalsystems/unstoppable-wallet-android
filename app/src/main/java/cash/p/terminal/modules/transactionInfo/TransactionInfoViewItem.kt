@@ -5,6 +5,7 @@ import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.util.*
 
 sealed class TransactionInfoViewItem {
@@ -16,7 +17,7 @@ sealed class TransactionInfoViewItem {
 
     class Value(val title: String, val value: String) : TransactionInfoViewItem()
 
-    class Address(val title: String, val value: String, val showAdd: Boolean) : TransactionInfoViewItem()
+    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType) : TransactionInfoViewItem()
 
     class ContactItem(val contact: Contact) : TransactionInfoViewItem()
 

@@ -92,6 +92,8 @@ fun SendEthRequestScreen(
                                     item.title,
                                     item.value,
                                     item.showAdd,
+                                    item.blockchainType,
+                                    navController
                                 )
                                 is ViewItem.ContactItem -> TransactionInfoContactCell(
                                     item.contact.name

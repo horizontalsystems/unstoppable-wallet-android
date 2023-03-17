@@ -197,7 +197,7 @@ class SendBitcoinViewModel(
     fun getConfirmationData(): SendConfirmationData {
         val address = addressState.validAddress!!
         val contact = contactsRepo.getContactsFiltered(
-            wallet.token.blockchainType,
+            blockchainType,
             addressQuery = address.hex
         ).firstOrNull()
         return SendConfirmationData(

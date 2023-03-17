@@ -31,7 +31,7 @@ class SendZCashViewModel(
     private val memoService: SendZCashMemoService,
     private val contactsRepo: ContactsRepository
 ) : ViewModel() {
-
+    val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val memoMaxLength by memoService::memoMaxLength
@@ -123,7 +123,7 @@ class SendZCashViewModel(
     fun getConfirmationData(): SendConfirmationData {
         val address = addressState.address!!
         val contact = contactsRepo.getContactsFiltered(
-            wallet.token.blockchainType,
+            blockchainType,
             addressQuery = address.hex
         ).firstOrNull()
         return SendConfirmationData(

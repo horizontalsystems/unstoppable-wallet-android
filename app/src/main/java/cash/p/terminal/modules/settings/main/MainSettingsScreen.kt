@@ -27,6 +27,8 @@ import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.contacts.ContactsFragment
+import cash.p.terminal.modules.contacts.Mode
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
@@ -159,7 +161,7 @@ private fun SettingSections(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
                     onClick = {
-                        navController.slideFromRight(R.id.contactsFragment)
+                        navController.slideFromRight(R.id.contactsFragment, ContactsFragment.prepareParams(Mode.Full))
                     }
                 )
             },

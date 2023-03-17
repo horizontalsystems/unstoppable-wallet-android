@@ -30,6 +30,9 @@ class ContactsRepository(
 
     private val logger = AppLogger("contacts")
 
+    private val file: File
+        get() = File(App.instance.filesDir, "UW_Contacts.json")
+
     val contacts: List<Contact>
         get() = contactsMap.map { it.value }.sortedBy { it.name }.toList()
 
@@ -132,6 +135,7 @@ class ContactsRepository(
                 }
             }
         }
+
         deleted.forEach { importingDeletedContact ->
             val contact = contactsMap[importingDeletedContact.uid]
             val deletedContact = deletedContacts.find { it.uid == importingDeletedContact.uid }
@@ -160,9 +164,6 @@ class ContactsRepository(
             writeToFile()
         }
     }
-
-    private val file: File
-        get() = File(App.instance.filesDir, "UW_Contacts.json")
 
     private fun readFromFile() {
         try {

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +24,9 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.modules.coin.CoinFragment
+import cash.p.terminal.modules.contacts.ContactsFragment
+import cash.p.terminal.modules.contacts.ContactsModule
+import cash.p.terminal.modules.contacts.Mode
 import cash.p.terminal.modules.info.TransactionDoubleSpendInfoFragment
 import cash.p.terminal.modules.info.TransactionLockTimeInfoFragment
 import cash.p.terminal.modules.nft.asset.NftAssetModule
@@ -164,8 +167,9 @@ fun TitleAndValueCell(
 }
 
 @Composable
-fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean) {
+fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, blockchainType: BlockchainType, navController: NavController? = null) {
     val view = LocalView.current
+    var showSaveAddressDialog by remember { mutableStateOf(false) }
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
@@ -182,9 +186,7 @@ fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean) {
             HSpacer(16.dp)
             ButtonSecondaryCircle(
                 icon = R.drawable.icon_20_user_plus,
-                onClick = {
-
-                }
+                onClick = { showSaveAddressDialog = true }
             )
         }
 
@@ -197,6 +199,27 @@ fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean) {
             }
         )
     }
+
+    if (showSaveAddressDialog) {
+        SelectorDialogCompose(
+            title = stringResource(R.string.Contacts_AddAddress),
+            items = ContactsModule.AddAddressAction.values().map { (TabItem(stringResource(it.title), false, it)) },
+            onDismissRequest = {
+                showSaveAddressDialog = false
+            },
+            onSelectItem = { action ->
+                val args = when (action) {
+                    ContactsModule.AddAddressAction.AddToNewContact -> {
+                        ContactsFragment.prepareParams(mode = Mode.AddAddressToNewContact(blockchainType, value))
+
+                    }
+                    ContactsModule.AddAddressAction.AddToExistingContact -> {
+                        ContactsFragment.prepareParams(mode = Mode.AddAddressToExistingContact(blockchainType, value))
+                    }
+                }
+                navController?.slideFromRight(R.id.contactsFragment, args)
+            })
+    }
 }
 
 @Composable
@@ -206,7 +229,7 @@ fun TransactionInfoContactCell(name: String) {
     ) {
         subhead2_grey(text = stringResource(R.string.TransactionInfo_ContactName))
         HSpacer(16.dp)
-        subhead2_leah(
+        subhead1_leah(
             modifier = Modifier.weight(1f),
             text = name,
             textAlign = TextAlign.Right

@@ -132,7 +132,13 @@ fun TransactionInfoSection(
                     }
                     is TransactionInfoViewItem.Address -> {
                         add {
-                            TransactionInfoAddressCell(title = viewItem.title, value = viewItem.value, showAdd = viewItem.showAdd)
+                            TransactionInfoAddressCell(
+                                title = viewItem.title,
+                                value = viewItem.value,
+                                showAdd = viewItem.showAdd,
+                                blockchainType = viewItem.blockchainType,
+                                navController = navController
+                            )
                         }
                     }
                     is TransactionInfoViewItem.ContactItem -> {

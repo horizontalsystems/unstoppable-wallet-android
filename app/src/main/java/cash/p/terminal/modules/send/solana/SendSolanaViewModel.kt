@@ -39,6 +39,7 @@ class SendSolanaViewModel(
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
 ) : ViewModel() {
+    val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -90,7 +91,7 @@ class SendSolanaViewModel(
     fun getConfirmationData(): SendConfirmationData {
         val address = addressState.address!!
         val contact = contactsRepo.getContactsFiltered(
-            wallet.token.blockchainType,
+            blockchainType,
             addressQuery = address.hex
         ).firstOrNull()
         return SendConfirmationData(

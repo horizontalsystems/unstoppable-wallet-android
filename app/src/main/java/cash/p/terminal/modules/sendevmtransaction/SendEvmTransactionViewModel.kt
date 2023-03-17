@@ -231,7 +231,8 @@ class SendEvmTransactionViewModel(
                 ViewItem.Address(
                     Translator.getString(R.string.Send_Confirmation_To),
                     addressValue,
-                    contact == null
+                    contact == null,
+                    blockchainType
                 )
             )
 
@@ -289,7 +290,8 @@ class SendEvmTransactionViewModel(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
                     addressValue,
-                    contact == null
+                    contact == null,
+                    blockchainType
                 )
             )
             contact?.let {
@@ -510,7 +512,8 @@ class SendEvmTransactionViewModel(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
                     addressValue,
-                    contact == null
+                    contact == null,
+                    blockchainType
                 )
             )
             contact?.let {
@@ -619,7 +622,8 @@ class SendEvmTransactionViewModel(
             ViewItem.Address(
                 Translator.getString(R.string.Send_Confirmation_To),
                 addressValue,
-                contact == null
+                contact == null,
+                blockchainType
             )
         )
         contact?.let {
@@ -673,7 +677,8 @@ class SendEvmTransactionViewModel(
                 ViewItem.Address(
                     Translator.getString(R.string.Approve_Spender),
                     addressValue,
-                    contact == null
+                    contact == null,
+                    blockchainType
                 )
             )
             contact?.let {
@@ -705,7 +710,8 @@ class SendEvmTransactionViewModel(
                 ViewItem.Address(
                     Translator.getString(R.string.Send_Confirmation_To),
                     toValue,
-                    contact == null
+                    contact == null,
+                    blockchainType
                 )
             )
             contact?.let {
@@ -758,7 +764,8 @@ class SendEvmTransactionViewModel(
                 ViewItem.Address(
                     Translator.getString(R.string.Send_Confirmation_To),
                     toValue,
-                    contact == null
+                    contact == null,
+                    blockchainType
                 )
             )
             contact?.let {
@@ -789,7 +796,7 @@ class SendEvmTransactionViewModel(
         coinServiceFactory.getCoinService(token)
 
     private fun getNftAmount(value: BigInteger, previewImageUrl: String?): ViewItem.NftAmount =
-        ViewItem.NftAmount(previewImageUrl, "$value NFT", ValueType.Regular,)
+        ViewItem.NftAmount(previewImageUrl, "$value NFT", ValueType.Regular)
 
     private fun getAmount(amountData: SendModule.AmountData, valueType: ValueType, token: Token) =
         ViewItem.Amount(
@@ -889,7 +896,7 @@ sealed class ViewItem {
         val type: ValueType,
     ) : ViewItem()
 
-    class Address(val title: String, val value: String, val showAdd: Boolean) : ViewItem()
+    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType) : ViewItem()
     class Input(val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()
     class ContactItem(val contact: Contact) : ViewItem()

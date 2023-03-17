@@ -6,12 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.contacts.Mode
 import cash.p.terminal.modules.contacts.model.Contact
 import kotlinx.coroutines.launch
 
 class ContactsViewModel(
-    private val repository: ContactsRepository
+    private val repository: ContactsRepository,
+    mode: Mode
 ) : ViewModel() {
+
+    private val readOnly = mode != Mode.Full
+    private val showAddContact = !readOnly
+    private val showMoreOptions = !readOnly
 
     private val contacts: List<Contact>
         get() = repository.contacts
@@ -22,7 +28,7 @@ class ContactsViewModel(
     val exportFileName: String
         get() = "UW_Contacts_${System.currentTimeMillis() / 1000}.json"
 
-    var uiState by mutableStateOf(UiState(contacts))
+    var uiState by mutableStateOf(UiState(contacts, showAddContact, showMoreOptions))
         private set
 
     init {
@@ -34,7 +40,7 @@ class ContactsViewModel(
     }
 
     private fun emitState() {
-        uiState = UiState(contacts)
+        uiState = UiState(contacts, showAddContact, showMoreOptions)
     }
 
     fun importContacts(json: String) {
@@ -42,7 +48,9 @@ class ContactsViewModel(
     }
 
     data class UiState(
-        val contacts: List<Contact>
+        val contacts: List<Contact>,
+        val showAddContact: Boolean,
+        val showMoreOptions: Boolean
     )
 
 }
