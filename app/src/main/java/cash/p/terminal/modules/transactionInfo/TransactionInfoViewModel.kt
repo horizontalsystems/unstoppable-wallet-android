@@ -5,12 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.TransactionSource
 import kotlinx.coroutines.launch
 
 class TransactionInfoViewModel(
     private val service: TransactionInfoService,
-    private val factory: TransactionInfoViewItemFactory
+    private val factory: TransactionInfoViewItemFactory,
+    private val contactsRepository: ContactsRepository
 ) : ViewModel() {
 
     val source: TransactionSource by service::source
@@ -19,6 +21,11 @@ class TransactionInfoViewModel(
         private set
 
     init {
+        viewModelScope.launch {
+            contactsRepository.contactsFlow.collect {
+                viewItems = factory.getViewItemSections(service.transactionInfoItem)
+            }
+        }
         viewModelScope.launch {
             service.transactionInfoItemFlow.collect { transactionInfoItem ->
                 viewItems = factory.getViewItemSections(transactionInfoItem)

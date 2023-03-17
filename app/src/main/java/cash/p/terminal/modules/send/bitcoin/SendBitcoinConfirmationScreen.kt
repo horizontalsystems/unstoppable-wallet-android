@@ -1,9 +1,10 @@
 package cash.p.terminal.modules.send.bitcoin
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.send.SendConfirmationScreen
+import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 
 @Composable
 fun SendBitcoinConfirmationScreen(
@@ -11,7 +12,19 @@ fun SendBitcoinConfirmationScreen(
     sendViewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
-    val confirmationData = sendViewModel.getConfirmationData()
+    var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
+    var refresh by remember { mutableStateOf(false) }
+
+    DisposableLifecycleCallbacks(
+        onResume = {
+            if (refresh) {
+                confirmationData = sendViewModel.getConfirmationData()
+            }
+        },
+        onPause = {
+            refresh = true
+        }
+    )
 
     SendConfirmationScreen(
         navController = navController,

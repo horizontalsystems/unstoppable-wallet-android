@@ -43,14 +43,14 @@ class TransactionInfoService(
     private val _transactionInfoItemFlow = MutableStateFlow<TransactionInfoItem?>(null)
     val transactionInfoItemFlow = _transactionInfoItemFlow.filterNotNull()
 
-    private var transactionInfoItem = TransactionInfoItem(
+    var transactionInfoItem = TransactionInfoItem(
         transactionRecord,
         adapter.lastBlockInfo,
         TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
         mapOf(),
         mapOf()
     )
-        set(value) {
+        private set(value) {
             field = value
             _transactionInfoItemFlow.update { value }
         }
