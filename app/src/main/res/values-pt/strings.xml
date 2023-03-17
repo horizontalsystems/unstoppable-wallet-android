@@ -1322,6 +1322,10 @@
     <string name="Contacts_AddNewContact">Adicionar um novo contato</string>
     <string name="Contacts_NameHint">Nome</string>
     <string name="Contacts_AddAddress">Adicionar endereço</string>
+    <string name="Contacts_AddAddress_NewContact">Create New Contact</string>
+    <string name="Contacts_AddAddress_ExistingContact">Add to Existing Contact</string>
+    <string name="Contacts_AddAddress_Replace">Replace</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">This contact already has an address on this blockchain. Do you want to replace the address %s with the %s?</string>
     <string name="Contacts_AddressHint">Endereço ou Domínio</string>
     <string name="Contacts_DeleteContact">Excluir contato</string>
     <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
