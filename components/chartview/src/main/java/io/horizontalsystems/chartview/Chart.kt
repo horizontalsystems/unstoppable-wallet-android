@@ -11,7 +11,6 @@ import io.horizontalsystems.chartview.databinding.ViewChartBinding
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
-import java.text.DecimalFormat
 
 class Chart @JvmOverloads constructor(
     context: Context,
@@ -55,7 +54,6 @@ class Chart @JvmOverloads constructor(
     )
 
     private val dominanceCurve = ChartCurve2(config)
-    private val dominanceLabel = ChartBottomLabel(config)
 
     private var mainCurveAnimator: CurveAnimator? = null
     private var dominanceCurveAnimator: CurveAnimator? = null
@@ -191,26 +189,7 @@ class Chart @JvmOverloads constructor(
             dominanceCurve.setCurveAnimator(dominanceCurveAnimator!!)
             dominanceCurve.setColor(config.curveSlowColor)
 
-            dominanceLabel.setShape(binding.chartMain.shape)
-            val dValues = dominanceValues.values
-            val dominancePercent = decimalFormat.format(dValues.last())
-            val diff = dValues.last() - dValues.first()
-            val diffColor = if (diff > 0f) config.trendUpColor else config.trendDownColor
-            val sign = when {
-                diff > 0f -> "+"
-                diff < 0f -> "-"
-                else -> ""
-            }
-            val diffFormatted = sign + decimalFormat.format(diff)
-            dominanceLabel.setValues(
-                mapOf(
-                    "$diffFormatted%" to diffColor,
-                    "BTC Dominance $dominancePercent%" to config.curveDominanceLabelColor
-                )
-            )
-
             dominanceCurve.isVisible = true
-            dominanceLabel.isVisible = true
         }
 
         binding.chartTouch.configure(config, 0f)
@@ -238,7 +217,7 @@ class Chart @JvmOverloads constructor(
 
         binding.chartMain.clear()
         binding.chartMain.add(mainCurve, mainGradient)
-        binding.chartMain.add(dominanceLabel, dominanceCurve)
+        binding.chartMain.add(dominanceCurve)
 
         binding.topLowRange.clear()
         binding.topLowRange.add(mainRange)
@@ -297,10 +276,6 @@ class Chart @JvmOverloads constructor(
 
     private fun setVisible(vararg view: View, isVisible: Boolean) {
         view.forEach { it.isVisible = isVisible }
-    }
-
-    companion object {
-        private val decimalFormat = DecimalFormat("#.##")
     }
 
 }
