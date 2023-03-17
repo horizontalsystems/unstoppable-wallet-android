@@ -41,7 +41,7 @@ object TransactionInfoModule {
                 transactionSource.blockchain.type
             )
 
-            return TransactionInfoViewModel(service, factory) as T
+            return TransactionInfoViewModel(service, factory, App.contactsRepository) as T
         }
 
     }
