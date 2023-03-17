@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.chart.SelectedPoint
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
@@ -32,45 +33,83 @@ fun HsChartLineHeader(
     chartHeaderView: ChartModule.ChartHeaderView?,
     selectedPoint: SelectedPoint?
 ) {
+    val mainValue: String
+    val diff: Value.Percent?
+    val date: String?
+    val extraData: SelectedPoint.ExtraData?
+
+    if (selectedPoint != null) {
+        mainValue = selectedPoint.value
+        diff = null
+        date = selectedPoint.date
+        extraData = selectedPoint.extraData
+    } else {
+        mainValue = chartHeaderView?.value ?: "--"
+        diff = (chartHeaderView as? ChartModule.ChartHeaderView.Latest)?.diff
+        date = null
+        extraData = null
+    }
+
+    HsChartLineHeader(mainValue, diff, date, extraData)
+}
+
+@Composable
+private fun HsChartLineHeader(
+    mainValue: String,
+    diff: Value.Percent?,
+    date: String?,
+    extraData: SelectedPoint.ExtraData?
+) {
     RowUniversal(
         modifier = Modifier
             .height(64.dp)
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     ) {
-        if (selectedPoint == null) {
-            Text(
-                modifier = Modifier.padding(end = 8.dp),
-                text = chartHeaderView?.value ?: "--",
-                style = ComposeAppTheme.typography.headline1,
-                color = ComposeAppTheme.colors.leah
-            )
-            (chartHeaderView as? ChartModule.ChartHeaderView.Latest)?.let { latest ->
+        Column(modifier = Modifier.fillMaxHeight()) {
+            Row(
+                modifier = Modifier.weight(1f),
+            ) {
+                val style = if (date == null) {
+                    ComposeAppTheme.typography.title3
+                } else {
+                    ComposeAppTheme.typography.headline2
+                }
+
                 Text(
-                    text = formatValueAsDiff(latest.diff),
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = diffColor(latest.diff.raw())
+                    modifier = Modifier.alignByBaseline(),
+                    text = mainValue,
+                    style = style,
+                    color = ComposeAppTheme.colors.leah,
                 )
-            }
-        } else {
-            Column {
-                captionSB_leah(text = selectedPoint.value)
-                Spacer(modifier = Modifier.height(4.dp))
-                caption_grey(text = selectedPoint.date)
+                diff?.let {
+                    HSpacer(width = 4.dp)
+                    Text(
+                        modifier = Modifier.alignByBaseline(),
+                        text = formatValueAsDiff(diff),
+                        style = ComposeAppTheme.typography.subhead1,
+                        color = diffColor(diff.raw())
+                    )
+                }
             }
 
+            date?.let {
+                VSpacer(height = 1.dp)
+                subhead2_grey(text = date)
+            }
+        }
+
+        extraData?.let {
             Spacer(modifier = Modifier.weight(1f))
-
-            when (val extraData = selectedPoint.extraData) {
+            when (extraData) {
                 is SelectedPoint.ExtraData.Volume -> {
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                        caption_grey(
+                        subhead2_grey(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(R.string.CoinPage_Volume),
                             textAlign = TextAlign.End
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        caption_grey(
+                        subhead2_grey(
                             modifier = Modifier.fillMaxWidth(),
                             text = extraData.volume,
                             textAlign = TextAlign.End
@@ -79,20 +118,18 @@ fun HsChartLineHeader(
                 }
                 is SelectedPoint.ExtraData.Dominance -> {
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                        caption_grey(
+                        subhead2_grey(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(R.string.Market_BtcDominance),
                             textAlign = TextAlign.End
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        caption_jacob(
+                        subhead2_jacob(
                             modifier = Modifier.fillMaxWidth(),
                             text = extraData.dominance,
                             textAlign = TextAlign.End
                         )
                     }
                 }
-                null ->{}
             }
         }
     }
