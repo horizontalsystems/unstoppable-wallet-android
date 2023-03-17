@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hodler.LockTimeInterval
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
@@ -42,6 +43,7 @@ fun SendConfirmationScreen(
     rate: CurrencyValue?,
     feeCoinRate: CurrencyValue?,
     sendResult: SendResult?,
+    blockchainType: BlockchainType,
     coin: Coin,
     feeCoin: Coin,
     amount: BigDecimal,
@@ -130,7 +132,13 @@ fun SendConfirmationScreen(
                             ConfirmAmountCell(currencyAmount, coinAmount, coin)
                         }
                         add {
-                            TransactionInfoAddressCell(stringResource(R.string.Send_Confirmation_To), address.hex, contact == null)
+                            TransactionInfoAddressCell(
+                                title = stringResource(R.string.Send_Confirmation_To),
+                                value = address.hex,
+                                showAdd = contact == null,
+                                blockchainType = blockchainType,
+                                navController = navController
+                            )
                         }
                         contact?.let {
                             add {

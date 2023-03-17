@@ -74,28 +74,38 @@ fun ContactsScreen(
             AppBar(
                 title = TranslatableString.ResString(R.string.Contacts),
                 navigationIcon = { HsBackButton(onNavigateToBack) },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Search),
-                        icon = R.drawable.icon_search,
-                        enabled = false,
-                        onClick = { }
-                    ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Contacts_NewContact),
-                        icon = R.drawable.icon_user_plus,
-                        tint = ComposeAppTheme.colors.jacob,
-                        onClick = onNavigateToCreateContact
-                    ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Contacts_ActionMore),
-                        icon = R.drawable.ic_more2_20,
-                        enabled = true,
-                        onClick = {
-                            showMoreSelectorDialog = true
-                        }
+                menuItems = buildList {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Search),
+                            icon = R.drawable.icon_search,
+                            enabled = false,
+                            onClick = { }
+                        )
                     )
-                )
+                    if (uiState.showAddContact) {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Contacts_NewContact),
+                                icon = R.drawable.icon_user_plus,
+                                tint = ComposeAppTheme.colors.jacob,
+                                onClick = onNavigateToCreateContact
+                            )
+                        )
+                    }
+                    if (uiState.showMoreOptions) {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Contacts_ActionMore),
+                                icon = R.drawable.ic_more2_20,
+                                enabled = true,
+                                onClick = {
+                                    showMoreSelectorDialog = true
+                                }
+                            )
+                        )
+                    }
+                }
             )
             if (uiState.contacts.isNotEmpty()) {
                 Column(

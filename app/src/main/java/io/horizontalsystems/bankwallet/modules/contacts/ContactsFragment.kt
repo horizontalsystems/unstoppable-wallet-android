@@ -14,6 +14,7 @@ import androidx.navigation.*
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
@@ -40,30 +41,63 @@ class ContactsFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ContactsNavHost(findNavController())
+                ContactsNavHost(
+                    navController = findNavController(),
+                    mode = arguments?.getParcelable(modeKey) ?: Mode.Full
+                )
             }
+        }
+    }
+
+    companion object {
+        private const val modeKey = "modeKey"
+
+        fun prepareParams(mode: Mode): Bundle {
+            return bundleOf(modeKey to mode)
         }
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ContactsNavHost(navController: NavController) {
+fun ContactsNavHost(navController: NavController, mode: Mode) {
     val navHostController = rememberAnimatedNavController()
+
+    val startDestination: String
+    val addAddress: ContactAddress?
+
+    when (mode) {
+        is Mode.AddAddressToExistingContact -> {
+            startDestination = "contacts"
+            addAddress = App.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->
+                ContactAddress(blockchain, mode.address)
+            }
+        }
+        is Mode.AddAddressToNewContact -> {
+            startDestination = "contact"
+            addAddress = App.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->
+                ContactAddress(blockchain, mode.address)
+            }
+        }
+        Mode.Full -> {
+            startDestination = "contacts"
+            addAddress = null
+        }
+    }
 
     AnimatedNavHost(
         navController = navHostController,
-        startDestination = "contacts",
+        startDestination = startDestination
     ) {
         composable("contacts") { backStackEntry ->
-            val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory())
+            val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
             ContactsScreen(
                 viewModel = viewModel,
                 onNavigateToBack = { navController.popBackStack() },
                 onNavigateToCreateContact = { navHostController.navigate("contact") },
                 onNavigateToContact = { contact ->
                     backStackEntry.savedStateHandle["contact"] = contact
-                    backStackEntry.savedStateHandle["new_address"] = null
+                    backStackEntry.savedStateHandle["new_address"] = addAddress
 
                     navHostController.navigate("contact")
                 }
@@ -71,7 +105,7 @@ fun ContactsNavHost(navController: NavController) {
         }
         composablePage(route = "contact") { backStackEntry ->
             val contact = navHostController.previousBackStackEntry?.savedStateHandle?.get<Contact>("contact")
-            val newAddress = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("new_address")
+            val newAddress = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("new_address") ?: addAddress
 
             navHostController.previousBackStackEntry?.savedStateHandle?.set("contact", null)
             navHostController.previousBackStackEntry?.savedStateHandle?.set("new_address", null)
@@ -81,10 +115,13 @@ fun ContactsNavHost(navController: NavController) {
             ContactScreen(
                 viewModel = viewModel,
                 onNavigateToBack = {
-                    navHostController.popBackStack()
+                    if (mode == Mode.Full) {
+                        navHostController.popBackStack()
+                    } else {
+                        navController.popBackStack()
+                    }
                 },
                 onNavigateToAddress = { address ->
-
                     navHostController.getNavigationResult("contacts_address_result") { bundle ->
                         bundle.getParcelable<ContactAddress>("added_address")?.let { editedAddress ->
                             viewModel.setAddress(editedAddress)

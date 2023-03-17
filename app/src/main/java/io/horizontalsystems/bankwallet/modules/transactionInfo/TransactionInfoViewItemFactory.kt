@@ -102,7 +102,7 @@ class TransactionInfoViewItemFactory(
                         val contact = getContact(recipient)
 
                         youGetSectionItems.add(
-                            Address(getString(R.string.TransactionInfo_RecipientHash), recipient, contact == null)
+                            Address(getString(R.string.TransactionInfo_RecipientHash), recipient, contact == null, blockchainType)
                         )
 
                         contact?.let {
@@ -294,7 +294,7 @@ class TransactionInfoViewItemFactory(
         if (!mint && fromAddress != null) {
             val contact = getContact(fromAddress)
             items.add(
-                Address(getString(R.string.TransactionInfo_From), fromAddress, contact == null)
+                Address(getString(R.string.TransactionInfo_From), fromAddress, contact == null, blockchainType)
             )
             contact?.let {
                 items.add(
@@ -359,7 +359,7 @@ class TransactionInfoViewItemFactory(
         if (!burn && toAddress != null) {
             val contact = getContact(toAddress)
             items.add(
-                Address(getString(R.string.TransactionInfo_To), toAddress, contact == null)
+                Address(getString(R.string.TransactionInfo_To), toAddress, contact == null, blockchainType)
             )
 
             contact?.let {
@@ -494,7 +494,7 @@ class TransactionInfoViewItemFactory(
                 value.coinIconPlaceholder,
                 value.coin?.uid
             ),
-            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, contact == null)
+            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, contact == null, blockchainType)
         )
 
         contact?.let {
