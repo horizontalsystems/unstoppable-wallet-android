@@ -19,8 +19,14 @@ object ChartModule {
 
     data class ChartHeaderView(
         val value: String,
+        val date: String?,
         val diff: Value.Percent?,
-        val extraData: SelectedPoint.ExtraData?
+        val extraData: ChartHeaderExtraData?
     )
+
+    sealed class ChartHeaderExtraData {
+        class Volume(val volume: String) : ChartHeaderExtraData()
+        class Dominance(val dominance: String) : ChartHeaderExtraData()
+    }
 
 }
