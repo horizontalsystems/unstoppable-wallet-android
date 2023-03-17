@@ -100,7 +100,9 @@ class ContactViewModel(
     private fun addressViewItems(): List<AddressViewItem> {
         val sortedAddresses = addresses.values.sortedBy { it.blockchain.type.order }
         val savedAddresses = contact.addresses.associateBy { it.blockchain }
-        return sortedAddresses.map { AddressViewItem(it, edited = it != savedAddresses[it.blockchain]) }
+        return sortedAddresses.map { AddressViewItem(it, edited = it != savedAddresses[it.blockchain]) }.sortedByDescending {
+            it.edited
+        }
     }
 
     private fun uiState() = UiState(
