@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
+import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
@@ -43,6 +44,7 @@ fun AddressScreen(
                     iconPainter = painterResource(R.drawable.ic_delete_20),
                     iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
                     confirmText = stringResource(R.string.Button_Delete),
+                    cautionType = Caution.Type.Error,
                     cancelText = stringResource(R.string.Button_Cancel),
                     onConfirm = {
                         uiState.editingAddress?.let { onDelete(it) }
