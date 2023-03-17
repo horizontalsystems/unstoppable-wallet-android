@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -43,6 +44,7 @@ fun AddressScreen(
                     iconPainter = painterResource(R.drawable.ic_delete_20),
                     iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
                     confirmText = stringResource(R.string.Button_Delete),
+                    cautionType = Caution.Type.Error,
                     cancelText = stringResource(R.string.Button_Cancel),
                     onConfirm = {
                         uiState.editingAddress?.let { onDelete(it) }

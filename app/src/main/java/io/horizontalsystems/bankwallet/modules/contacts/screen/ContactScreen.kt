@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel.AddressViewItem
+import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -92,7 +93,7 @@ fun ContactScreen(
                         onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
                     }
                 }
-                ConfirmationBottomSheet(title, text, iconPainter, iconTint, confirmText, cancelText, onConfirm, onClose)
+                ConfirmationBottomSheet(title, text, iconPainter, iconTint, confirmText, Caution.Type.Error, cancelText, onConfirm, onClose)
             },
         ) {
             val confirmNavigateToBack: () -> Unit = {
@@ -176,6 +177,7 @@ fun ConfirmationBottomSheet(
     iconPainter: Painter,
     iconTint: ColorFilter,
     confirmText: String,
+    cautionType: Caution.Type,
     cancelText: String,
     onConfirm: () -> Unit,
     onClose: () -> Unit
@@ -193,15 +195,32 @@ fun ConfirmationBottomSheet(
         )
 
         Spacer(modifier = Modifier.height(32.dp))
-        ButtonPrimaryRed(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            title = confirmText,
-            onClick = {
-                onConfirm()
+
+        when (cautionType) {
+            Caution.Type.Error -> {
+                ButtonPrimaryRed(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    title = confirmText,
+                    onClick = {
+                        onConfirm()
+                    }
+                )
             }
-        )
+            Caution.Type.Warning -> {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    title = confirmText,
+                    onClick = {
+                        onConfirm()
+                    }
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
         ButtonPrimaryTransparent(
             modifier = Modifier
