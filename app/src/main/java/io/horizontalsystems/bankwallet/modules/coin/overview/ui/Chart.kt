@@ -17,9 +17,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.chart.SelectedPoint
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
@@ -31,35 +29,12 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 @Composable
 fun HsChartLineHeader(
     chartHeaderView: ChartModule.ChartHeaderView?,
-    selectedPoint: SelectedPoint?
 ) {
-    val mainValue: String
-    val diff: Value.Percent?
-    val date: String?
-    val extraData: SelectedPoint.ExtraData?
+    val mainValue = chartHeaderView?.value ?: "--"
+    val diff = chartHeaderView?.diff
+    val date = chartHeaderView?.date
+    val extraData = chartHeaderView?.extraData
 
-    if (selectedPoint != null) {
-        mainValue = selectedPoint.value
-        diff = selectedPoint.diff
-        date = selectedPoint.date
-        extraData = selectedPoint.extraData
-    } else {
-        mainValue = chartHeaderView?.value ?: "--"
-        diff = chartHeaderView?.diff
-        date = null
-        extraData = chartHeaderView?.extraData
-    }
-
-    HsChartLineHeader(mainValue, diff, date, extraData)
-}
-
-@Composable
-private fun HsChartLineHeader(
-    mainValue: String,
-    diff: Value.Percent?,
-    date: String?,
-    extraData: SelectedPoint.ExtraData?
-) {
     RowUniversal(
         modifier = Modifier
             .height(64.dp)
@@ -102,7 +77,7 @@ private fun HsChartLineHeader(
         extraData?.let {
             Spacer(modifier = Modifier.weight(1f))
             when (extraData) {
-                is SelectedPoint.ExtraData.Volume -> {
+                is ChartModule.ChartHeaderExtraData.Volume -> {
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                         subhead2_grey(
                             modifier = Modifier.fillMaxWidth(),
@@ -116,7 +91,7 @@ private fun HsChartLineHeader(
                         )
                     }
                 }
-                is SelectedPoint.ExtraData.Dominance -> {
+                is ChartModule.ChartHeaderExtraData.Dominance -> {
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                         subhead2_grey(
                             modifier = Modifier.fillMaxWidth(),
@@ -136,16 +111,19 @@ private fun HsChartLineHeader(
 }
 
 @Composable
-fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod?) -> Unit)? = null) {
+fun Chart(
+    chartViewModel: ChartViewModel,
+    onSelectChartInterval: ((HsTimePeriod?) -> Unit)? = null
+) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
     val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
     val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
 
     Column {
-        var selectedPoint by remember { mutableStateOf<SelectedPoint?>(null) }
+        var selectedPoint by remember { mutableStateOf<ChartModule.ChartHeaderView?>(null) }
 
-        HsChartLineHeader(chartDataWrapper?.chartHeaderView, selectedPoint)
+        HsChartLineHeader(selectedPoint ?: chartDataWrapper?.chartHeaderView)
         Chart(
             tabItems = chartTabs,
             onSelectTab = {
@@ -244,12 +222,17 @@ fun PriceVolChart(
 
                     chartInfoData?.let { chartInfoData ->
                         chart.doOnLayout {
-                            chart.setData(chartInfoData.chartData, chartInfoData.maxValue, chartInfoData.minValue)
+                            chart.setData(
+                                chartInfoData.chartData,
+                                chartInfoData.maxValue,
+                                chartInfoData.minValue
+                            )
                         }
                     }
                 }
                 ViewState.Loading,
-                null -> {}
+                null -> {
+                }
             }
         }
     )
