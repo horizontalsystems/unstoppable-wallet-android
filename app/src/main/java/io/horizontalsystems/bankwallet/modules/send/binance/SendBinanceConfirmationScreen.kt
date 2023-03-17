@@ -22,6 +22,7 @@ fun SendBinanceConfirmationScreen(
         rate = sendViewModel.coinRate,
         feeCoinRate = sendViewModel.feeCoinRate,
         sendResult = sendViewModel.sendResult,
+        blockchainType = sendViewModel.blockchainType,
         coin = confirmationData.coin,
         feeCoin = confirmationData.feeCoin,
         amount = confirmationData.amount,

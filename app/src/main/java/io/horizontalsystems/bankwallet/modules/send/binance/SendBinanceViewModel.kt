@@ -31,6 +31,7 @@ class SendBinanceViewModel(
     private val xRateService: XRateService,
     private val contactsRepo: ContactsRepository,
 ) : ViewModel() {
+    val blockchainType = wallet.token.blockchainType
     val feeToken by feeService::feeToken
     val feeTokenMaxAllowedDecimals = feeToken.decimals
 
@@ -128,7 +129,7 @@ class SendBinanceViewModel(
     fun getConfirmationData(): SendConfirmationData {
         val address = addressState.address!!
         val contact = contactsRepo.getContactsFiltered(
-            wallet.token.blockchainType,
+            blockchainType,
             addressQuery = address.hex
         ).firstOrNull()
         return SendConfirmationData(

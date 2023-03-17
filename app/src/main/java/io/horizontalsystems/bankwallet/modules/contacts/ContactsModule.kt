@@ -13,10 +13,10 @@ import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewMo
 
 object ContactsModule {
 
-    class ContactsViewModelFactory : ViewModelProvider.Factory {
+    class ContactsViewModelFactory(private val mode: Mode) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ContactsViewModel(App.contactsRepository) as T
+            return ContactsViewModel(App.contactsRepository, mode) as T
         }
     }
 
@@ -43,6 +43,11 @@ object ContactsModule {
     enum class ContactsAction(@StringRes val title: Int) {
         Import(R.string.Contacts_Import),
         Export(R.string.Contacts_Export)
+    }
+
+    enum class AddAddressAction(@StringRes val title: Int) {
+        AddToNewContact(R.string.Contacts_AddAddress_NewContact),
+        AddToExistingContact(R.string.Contacts_AddAddress_ExistingContact)
     }
 
 }
