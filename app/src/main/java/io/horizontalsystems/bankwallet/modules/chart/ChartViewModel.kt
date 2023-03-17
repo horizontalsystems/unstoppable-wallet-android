@@ -147,10 +147,19 @@ open class ChartViewModel(
             val value = valueFormatter.formatValue(service.currency, candle.toBigDecimal())
             val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
 
+            val diff = dataWrapperLiveData.value?.chartInfoData?.let {
+                it.chartData.items.firstOrNull()?.let {
+                    it.values[Indicator.Candle]?.let { earliestValue ->
+                        Value.Percent(((candle - earliestValue) / earliestValue * 100).toBigDecimal())
+                    }
+                }
+            }
+
             SelectedPoint(
                 value = value,
                 date = dayAndTime,
                 extraData = getItemExtraData(item),
+                diff = diff
             )
         }
     }
@@ -174,7 +183,8 @@ open class ChartViewModel(
 data class SelectedPoint(
     val value: String,
     val date: String,
-    val extraData: ExtraData?
+    val extraData: ExtraData?,
+    val diff: Value.Percent?
 ) {
     sealed class ExtraData {
         class Volume(val volume: String) : ExtraData()
