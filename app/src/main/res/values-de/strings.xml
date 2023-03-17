@@ -1334,6 +1334,10 @@
     <string name="Contacts_AddNewContact">Add New Contact</string>
     <string name="Contacts_NameHint">Name</string>
     <string name="Contacts_AddAddress">Add Address</string>
+    <string name="Contacts_AddAddress_NewContact">Create New Contact</string>
+    <string name="Contacts_AddAddress_ExistingContact">Add to Existing Contact</string>
+    <string name="Contacts_AddAddress_Replace">Replace</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">This contact already has an address on this blockchain. Do you want to replace the address %s with the %s?</string>
     <string name="Contacts_AddressHint">Adresse oder Domäne</string>
     <string name="Contacts_DeleteContact">Delete Contact</string>
     <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
