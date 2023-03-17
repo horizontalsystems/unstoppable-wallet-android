@@ -12,6 +12,7 @@ import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 
 abstract class AbstractChartService {
+    open val hasVolumes = false
     abstract val chartIntervals: List<HsTimePeriod?>
 
     protected abstract val currencyManager: CurrencyManager

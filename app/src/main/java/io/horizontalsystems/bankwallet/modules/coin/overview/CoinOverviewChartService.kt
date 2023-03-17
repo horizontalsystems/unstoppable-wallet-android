@@ -20,7 +20,7 @@ class CoinOverviewChartService(
     override val currencyManager: CurrencyManager,
     private val coinUid: String,
 ) : AbstractChartService() {
-
+    override val hasVolumes = true
     override val initialChartInterval = HsTimePeriod.Day1
 
     override var chartIntervals = listOf<HsTimePeriod?>()
