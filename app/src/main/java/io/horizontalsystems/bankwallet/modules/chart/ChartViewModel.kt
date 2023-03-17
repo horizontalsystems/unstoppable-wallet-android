@@ -28,6 +28,7 @@ open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
+    val hasVolumes = service.hasVolumes
     val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod?>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()
@@ -108,8 +109,7 @@ open class ChartViewModel(
             chartData,
             chartPointsWrapper.chartInterval,
             maxValue,
-            minValue,
-            chartData.items.any { it.values[Indicator.Volume] != null }
+            minValue
         )
 
         dataWrapperLiveData.postValue(ChartDataWrapper(headerView, chartInfoData))
