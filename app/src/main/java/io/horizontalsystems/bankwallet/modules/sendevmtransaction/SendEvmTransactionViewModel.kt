@@ -66,6 +66,11 @@ class SendEvmTransactionViewModel(
         sync(service.sendState)
 
         viewModelScope.launch {
+            contactsRepo.contactsFlow.collect {
+                sync(service.state)
+            }
+        }
+        viewModelScope.launch {
             service.start()
         }
     }
@@ -78,6 +83,7 @@ class SendEvmTransactionViewModel(
         disposable.clear()
     }
 
+    @Synchronized
     private fun sync(state: SendEvmTransactionService.State) {
         when (state) {
             is SendEvmTransactionService.State.Ready -> {
