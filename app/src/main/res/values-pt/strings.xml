@@ -1147,7 +1147,7 @@
     <string name="CoinAnalytics_TransactionCount_Info5">O número total de tokens transferidos sobre a blockchain ao longo do período de 30 dias.</string>
     <string name="CoinAnalytics_Holders_Info1">Número total de endereços únicos que contêm o token em várias blockchains.</string>
     <string name="CoinAnalytics_Holders_Info2">As 10 principais carteiras que possuem o token em cada blockchain.</string>
-    <string name="CoinAnalytics_Holders_TrackedBlockchains">Tracked blockchains: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
+    <string name="CoinAnalytics_Holders_TrackedBlockchains">Blockchains rastreadas: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
     <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
