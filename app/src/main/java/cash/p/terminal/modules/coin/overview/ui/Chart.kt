@@ -45,9 +45,9 @@ fun HsChartLineHeader(
         extraData = selectedPoint.extraData
     } else {
         mainValue = chartHeaderView?.value ?: "--"
-        diff = (chartHeaderView as? ChartModule.ChartHeaderView.Latest)?.diff
+        diff = chartHeaderView?.diff
         date = null
-        extraData = null
+        extraData = chartHeaderView?.extraData
     }
 
     HsChartLineHeader(mainValue, diff, date, extraData)

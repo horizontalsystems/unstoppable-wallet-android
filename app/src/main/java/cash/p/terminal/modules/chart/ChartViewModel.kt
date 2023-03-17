@@ -97,11 +97,18 @@ open class ChartViewModel(
 
         val headerView = if (!chartPointsWrapper.isMovementChart) {
             val sum = valueFormatter.formatValue(service.currency, chartData.sum())
-            ChartModule.ChartHeaderView.Sum(sum)
+            ChartModule.ChartHeaderView(sum, null, null)
         } else {
-            val lastItemValue = chartItems.last().value
+            val latestItem = chartItems.last()
+            val lastItemValue = latestItem.value
             val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
-            ChartModule.ChartHeaderView.Latest(currentValue, Value.Percent(chartData.diff()))
+
+            val dominanceData = latestItem.indicators[Indicator.Dominance]?.let { dominance ->
+                SelectedPoint.ExtraData.Dominance(
+                    App.numberFormatter.format(dominance, 0, 2, suffix = "%")
+                )
+            }
+            ChartModule.ChartHeaderView(currentValue, Value.Percent(chartData.diff()), dominanceData)
         }
 
         val (minValue, maxValue) = getMinMax(chartData.valueRange)

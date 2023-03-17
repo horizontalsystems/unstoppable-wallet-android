@@ -17,11 +17,10 @@ object ChartModule {
         fun formatValue(currency: Currency, value: BigDecimal): String
     }
 
-    sealed class ChartHeaderView {
-        abstract val value: String
-
-        data class Latest(override val value: String, val diff: Value.Percent) : ChartHeaderView()
-        data class Sum(override val value: String) : ChartHeaderView()
-    }
+    data class ChartHeaderView(
+        val value: String,
+        val diff: Value.Percent?,
+        val extraData: SelectedPoint.ExtraData?
+    )
 
 }
