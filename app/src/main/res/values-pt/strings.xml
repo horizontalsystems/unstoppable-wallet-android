@@ -148,9 +148,9 @@
     <string name="Market_DeFiCap">Mercado de DeFi</string>
     <string name="Market_SeeAll">Ver tudo</string>
     <string name="Market_PoweredByHorizontalApi">Desenvolvido Pela Horizontal API</string>
-    <string name="Market_Tab_Overview">Visão geral</string>
+    <string name="Market_Tab_Overview">Visão Geral</string>
     <string name="Market_Tab_Posts">Notícias</string>
-    <string name="Market_Tab_Watchlist">Lista de observação</string>
+    <string name="Market_Tab_Watchlist">Catálogo</string>
     <string name="Market_Tab_Watchlist_EmptyList">Seu catálogo está vazio.</string>
     <string name="Market_Category_TopCoins">Top Moedas</string>
     <string name="Market_Category_TopCoins_Description">Top moedas por classificação de capitalização de mercado</string>
@@ -581,7 +581,7 @@
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Serviço</string>
     <string name="TransactionInfo_RawTransaction">Transação bruta</string>
-    <string name="TransactionInfo_ContactName">Contact Name</string>
+    <string name="TransactionInfo_ContactName">Nome do Contato</string>
     <string name="TransactionInfo_To">Para</string>
     <string name="TransactionInfo_From">De</string>
     <string name="TransactionInfo_Spender">Gastador</string>
@@ -754,8 +754,8 @@
     <!-- Settings Launch Screen -->
     <string name="SettingsLaunchScreen_Auto">Automático</string>
     <string name="SettingsLaunchScreen_Balance">Saldo</string>
-    <string name="SettingsLaunchScreen_MarketOverview">Visão geral do mercado</string>
-    <string name="SettingsLaunchScreen_Watchlist">Lista de observação</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Visão Geral do Mercado</string>
+    <string name="SettingsLaunchScreen_Watchlist">Catálogo</string>
     <!--Settings-->
     <string name="SettingsTheme_Title">Tema</string>
     <string name="SettingsTheme_Dark">Escuro</string>
@@ -1193,7 +1193,7 @@
     <string name="Nfts_Asset_OnSaleUntil">até %s</string>
     <string name="Nfts_Empty">Você não tem NFTs em sua carteira</string>
     <string name="Nfts_PriceMode">Modo de Preço</string>
-    <string name="NftAsset_Overview">Visão geral</string>
+    <string name="NftAsset_Overview">Visão Geral</string>
     <string name="NftAsset_Activity">Atividade</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Compartilhar</string>
@@ -1223,7 +1223,7 @@
     <string name="Nft_TopCollections">Principais Coleções NFT</string>
     <string name="Nft_TopCollections_Description">Liderando coleções NFT pelo volume de trading.</string>
     <!-- NFT Collection -->
-    <string name="NftCollection_Overview">Visão geral</string>
+    <string name="NftCollection_Overview">Visão Geral</string>
     <string name="NftCollection_Items">Itens</string>
     <string name="NftCollection_Activity">Atividade</string>
     <string name="NftCollection_Owners">Donos</string>
@@ -1251,8 +1251,8 @@
     <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Desconhecido</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Top ganhadores</string>
-    <string name="RateList_TopLosers">Top Perdedores</string>
+    <string name="RateList_TopGainers">Maiores Altas</string>
+    <string name="RateList_TopLosers">Maiores Quedas</string>
     <string name="RateList_Posts">Notícias</string>
     <string name="Market_DaysAgo">%dd atrás</string>
     <string name="Market_HoursAgo">%dh atrás</string>
