@@ -23,6 +23,7 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -109,7 +110,17 @@ open class ChartViewModel(
 
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
         loading = true
-        emitState()
+        viewModelScope.launch {
+            // Solution to prevent flickering.
+            //
+            // When items are loaded fast for chartInterval change
+            // it shows loading state for a too little period of time.
+            // It looks like a flickering.
+            // It is true for most cases. Updating UI with some delay resolves it.
+            // Since it is true for the most cases here we set delay.
+            delay(300)
+            emitState()
+        }
 
         service.updateChartInterval(chartInterval)
     }
