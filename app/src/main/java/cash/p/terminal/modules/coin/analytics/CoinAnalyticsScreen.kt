@@ -200,8 +200,7 @@ private fun AnalyticsBlock(
                             fragmentManager,
                             coinUid,
                             chartType,
-                            Translator.getString(chartType.titleRes),
-                            Translator.getString(chartType.descriptionRes)
+                            Translator.getString(chartType.titleRes)
                         )
                     }
                 }

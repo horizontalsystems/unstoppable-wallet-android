@@ -76,18 +76,6 @@
         android:id="@+id/backupConfirmationKeyFragment"
         android:name="cash.p.terminal.modules.manageaccount.backupconfirmkey.BackupConfirmKeyFragment" />
     <fragment
-        android:id="@+id/securityParamsInfoFragment"
-        android:name="cash.p.terminal.modules.info.SecurityParamsInfoFragment"/>
-    <fragment
-        android:id="@+id/tokenTvlInfoFragment"
-        android:name="cash.p.terminal.modules.info.TokenTvlInfoFragment"/>
-    <fragment
-        android:id="@+id/tokenDistributionInfoFragment"
-        android:name="cash.p.terminal.modules.info.TokenDistributionInfoFragment"/>
-    <fragment
-        android:id="@+id/tokenLiquidityInfoFragment"
-        android:name="cash.p.terminal.modules.info.TokenLiquidityInfoFragment"/>
-    <fragment
         android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
         android:name="cash.p.terminal.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
     <fragment
@@ -152,7 +140,7 @@
         android:name="cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment" />
     <fragment
         android:id="@+id/coinRankFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankFragment" />
+        android:name="cash.p.terminal.modules.coin.ranks.CoinRankFragment" />
     <fragment
         android:id="@+id/coinTreasuriesFragment"
         android:name="cash.p.terminal.modules.coin.treasuries.CoinTreasuriesFragment" />
