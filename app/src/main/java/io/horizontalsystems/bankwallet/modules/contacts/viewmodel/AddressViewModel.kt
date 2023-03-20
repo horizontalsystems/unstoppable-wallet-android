@@ -149,6 +149,7 @@ class AddressViewModel(
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
             BlockchainType.Gnosis,
+            BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {
                 domainAddressHandlers.add(AddressHandlerEns(EnsResolverHolder.resolver))
                 rawAddressHandlers.add(AddressHandlerEvm())

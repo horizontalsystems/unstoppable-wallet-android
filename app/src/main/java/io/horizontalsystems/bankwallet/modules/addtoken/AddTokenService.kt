@@ -22,6 +22,7 @@ class AddTokenService(
         BlockchainType.Avalanche,
         BlockchainType.BinanceChain,
         BlockchainType.Gnosis,
+        BlockchainType.Fantom,
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
     )

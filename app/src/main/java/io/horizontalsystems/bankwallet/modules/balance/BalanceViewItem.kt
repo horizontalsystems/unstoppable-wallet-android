@@ -116,6 +116,7 @@ class BalanceViewItemFactory {
         BlockchainType.Optimism,
         BlockchainType.Solana,
         BlockchainType.Gnosis,
+        BlockchainType.Fantom,
         BlockchainType.ArbitrumOne -> 50
         BlockchainType.Solana -> 50
         is BlockchainType.Unsupported -> 0

@@ -52,6 +52,7 @@ class RestoreBlockchainsService(
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
+        BlockchainType.Fantom,
         BlockchainType.Zcash,
         BlockchainType.Dash,
         BlockchainType.BitcoinCash,
