@@ -1603,5 +1603,7 @@
     <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard this new changes?</string>
     <string name="Contacts_NoContacts">You do not have an added contact</string>
     <string name="Contacts_ActionMore">More</string>
+    <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
+    <string name="Contacts_Error_DefinedName">The name already exists</string>
 
 </resources>

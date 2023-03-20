@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel.AddressViewItem
@@ -143,6 +144,7 @@ fun ContactScreen(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         initial = uiState.contactName,
                         pasteEnabled = false,
+                        state = uiState.error?.let { DataState.Error(it) },
                         hint = stringResource(R.string.Contacts_NameHint),
                         onValueChange = viewModel::onNameChange
                     )

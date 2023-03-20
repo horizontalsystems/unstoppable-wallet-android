@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.order
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule.ContactValidationException
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
@@ -19,7 +20,7 @@ class ContactViewModel(
     newAddress: ContactAddress?
 ) : ViewModel() {
 
-    private val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf(), -1)
+    val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf(), -1)
     private val title = if (existingContact == null)
         TranslatableString.ResString(R.string.Contacts_NewContact)
     else
@@ -30,6 +31,7 @@ class ContactViewModel(
     private var addressViewItems: List<AddressViewItem> = addressViewItems()
     private val isNewContact = existingContact == null
     private var closeAfterSave = false
+    private var error: ContactValidationException? = null
 
     var uiState by mutableStateOf(uiState())
         private set
@@ -42,6 +44,13 @@ class ContactViewModel(
 
     fun onNameChange(name: String) {
         contactName = name
+
+        error = try {
+            repository.validateContactName(contactUid = contact.uid, name = name)
+            null
+        } catch (ex: ContactValidationException.DuplicateContactName) {
+            ex
+        }
 
         emitUiState()
     }
@@ -90,7 +99,7 @@ class ContactViewModel(
     }
 
     private fun isSaveEnabled(): Boolean {
-        return contactName.isNotBlank() && hasChanges()
+        return error == null && contactName.isNotBlank() && hasChanges()
     }
 
     private fun emitUiState() {
@@ -112,7 +121,8 @@ class ContactViewModel(
         saveEnabled = isSaveEnabled(),
         confirmBack = hasChanges(),
         showDelete = !isNewContact,
-        closeWithSuccess = closeAfterSave
+        closeWithSuccess = closeAfterSave,
+        error = error
     )
 
     data class UiState(
@@ -122,7 +132,8 @@ class ContactViewModel(
         val saveEnabled: Boolean,
         val confirmBack: Boolean,
         val showDelete: Boolean,
-        val closeWithSuccess: Boolean
+        val closeWithSuccess: Boolean,
+        val error: ContactValidationException?
     )
 
     data class AddressViewItem(
