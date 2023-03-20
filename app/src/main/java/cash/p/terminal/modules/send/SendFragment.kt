@@ -97,6 +97,7 @@ class SendFragment : BaseFragment() {
                         BlockchainType.Avalanche,
                         BlockchainType.Optimism,
                         BlockchainType.Gnosis,
+                        BlockchainType.Fantom,
                         BlockchainType.ArbitrumOne -> {
                             val factory = SendEvmModule.Factory(wallet)
                             val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(

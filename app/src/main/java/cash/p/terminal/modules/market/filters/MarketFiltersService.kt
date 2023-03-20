@@ -29,7 +29,7 @@ class MarketFiltersService(
         BlockchainType.ArbitrumOne,
         BlockchainType.Avalanche,
         BlockchainType.Gnosis,
-        BlockchainType.Unsupported("fantom"),
+        BlockchainType.Fantom,
         BlockchainType.Unsupported("harmony-shard-0"),
         BlockchainType.Unsupported("huobi-token"),
         BlockchainType.Unsupported("iotex"),

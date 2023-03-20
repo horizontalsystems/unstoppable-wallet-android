@@ -34,6 +34,7 @@ val Token.swappable: Boolean
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.Gnosis,
+        BlockchainType.Fantom,
         BlockchainType.ArbitrumOne -> true
         else -> false
     }
@@ -82,6 +83,7 @@ val TokenQuery.protocolType: String?
                 BlockchainType.ArbitrumOne -> "Arbitrum"
                 BlockchainType.BinanceChain -> "BEP2"
                 BlockchainType.Gnosis -> "Gnosis"
+                BlockchainType.Fantom -> "Fantom"
                 else -> null
             }
         }
@@ -95,6 +97,7 @@ val TokenQuery.protocolType: String?
                 BlockchainType.Optimism -> "Optimism"
                 BlockchainType.ArbitrumOne -> "Arbitrum"
                 BlockchainType.Gnosis -> "Gnosis"
+                BlockchainType.Fantom -> "Fantom"
                 else -> null
             }
         }
@@ -125,6 +128,7 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
+        BlockchainType.Fantom,
         BlockchainType.Avalanche -> {
             tokenType is TokenType.Native || tokenType is TokenType.Eip20
         }
@@ -154,6 +158,7 @@ val Blockchain.description: String
         BlockchainType.ArbitrumOne -> "L2 chain"
         BlockchainType.Solana -> "SOL, SPL tokens"
         BlockchainType.Gnosis -> "xDAI, ERC20 tokens"
+        BlockchainType.Fantom -> "FTM, ERC20 tokens"
         else -> ""
     }
 
@@ -210,10 +215,11 @@ val BlockchainType.order: Int
         BlockchainType.Dash -> 9
         BlockchainType.BinanceChain -> 10
         BlockchainType.Gnosis -> 11
-        BlockchainType.ArbitrumOne -> 12
-        BlockchainType.Optimism -> 13
-        BlockchainType.Solana -> 14
-        BlockchainType.EthereumGoerli -> 15
+        BlockchainType.Fantom -> 12
+        BlockchainType.ArbitrumOne -> 13
+        BlockchainType.Optimism -> 14
+        BlockchainType.Solana -> 15
+        BlockchainType.EthereumGoerli -> 16
         else -> Int.MAX_VALUE
     }
 
@@ -228,6 +234,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Optimism -> R.drawable.optimism_erc20
         BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
         BlockchainType.Gnosis -> R.drawable.gnosis_erc20
+        BlockchainType.Fantom -> R.drawable.fantom_erc20
         else -> R.drawable.coin_placeholder
     }
 
@@ -281,6 +288,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                     || this == BlockchainType.Optimism
                     || this == BlockchainType.ArbitrumOne
                     || this == BlockchainType.Gnosis
+                    || this == BlockchainType.Fantom
         is AccountType.EvmPrivateKey -> {
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain
@@ -289,6 +297,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                     || this == BlockchainType.Optimism
                     || this == BlockchainType.ArbitrumOne
                     || this == BlockchainType.Gnosis
+                    || this == BlockchainType.Fantom
         }
         is AccountType.SolanaAddress ->
             this == BlockchainType.Solana

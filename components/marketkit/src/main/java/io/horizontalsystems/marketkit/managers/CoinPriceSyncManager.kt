@@ -133,8 +133,8 @@ class CoinPriceSyncManager(
     override fun didUpdate(coinPriceMap: Map<String, CoinPrice>, currencyCode: String) {
         subjects.forEach { (key, subject) ->
             if (key.currencyCode == currencyCode) {
-                val rates = coinPriceMap.filter { (rateKey, _) ->
-                    key.coinUids.contains(rateKey)
+                val rates = coinPriceMap.filter { (coinUid, _) ->
+                    key.coinUids.contains(coinUid)
                 }
                 if (rates.isNotEmpty()) {
                     subject.onNext(rates)

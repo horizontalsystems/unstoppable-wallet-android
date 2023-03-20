@@ -3,8 +3,6 @@ package io.horizontalsystems.marketkit
 import android.content.Context
 import android.os.storage.StorageManager
 import io.horizontalsystems.marketkit.chart.ChartManager
-import io.horizontalsystems.marketkit.chart.ChartSchedulerFactory
-import io.horizontalsystems.marketkit.chart.ChartSyncManager
 import io.horizontalsystems.marketkit.managers.*
 import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.marketkit.providers.*
@@ -27,7 +25,6 @@ class MarketKit(
     private val postManager: PostManager,
     private val chartManager: ChartManager,
     private val exchangeSyncer: ExchangeSyncer,
-    private val chartSyncManager: ChartSyncManager,
     private val globalMarketInfoManager: GlobalMarketInfoManager,
     private val hsProvider: HsProvider,
     private val hsDataSyncer: HsDataSyncer
@@ -205,6 +202,21 @@ class MarketKit(
 
     // Pro Data
 
+    fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod): Single<List<ChartPoint>> {
+        return hsProvider.coinPriceChartSingle(coinUid, currencyCode, HsPeriodType.ByPeriod(timePeriod))
+            .map { response ->
+                response.mapNotNull { chartCoinPrice ->
+                    chartCoinPrice.totalVolume?.let { volume ->
+                        ChartPoint(
+                            volume,
+                            chartCoinPrice.timestamp,
+                            null
+                        )
+                    }
+                }
+            }
+    }
+
     fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<DexLiquiditiesResponse> {
         return coinManager.dexLiquiditySingle(coinUid, currencyCode, timePeriod, sessionKey)
     }
@@ -263,24 +275,12 @@ class MarketKit(
 
     // Chart Info
 
-    fun chartInfo(coinUid: String, currencyCode: String, periodType: HsPeriodType): ChartInfo? {
-        return chartManager.getChartInfo(coinUid, currencyCode, periodType)
-    }
-
-    fun chartInfoSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType): Single<ChartInfo> {
+    fun chartInfoSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType): Single<List<ChartPoint>> {
         return chartManager.chartInfoSingle(coinUid, currencyCode, periodType)
     }
 
     fun chartStartTimeSingle(coinUid: String): Single<Long> {
         return chartManager.chartStartTimeSingle(coinUid)
-    }
-
-    fun getChartInfoAsync(
-        coinUid: String,
-        currencyCode: String,
-        periodType: HsPeriodType
-    ): Observable<ChartInfo> {
-        return chartSyncManager.chartInfoObservable(coinUid, currencyCode, periodType)
     }
 
     // Global Market Info
@@ -316,7 +316,6 @@ class MarketKit(
             context: Context,
             hsApiBaseUrl: String,
             hsApiKey: String,
-            indicatorPoints: Int = 50,
             cryptoCompareApiKey: String? = null,
             defiYieldApiKey: String? = null
         ): MarketKit {
@@ -351,11 +350,7 @@ class MarketKit(
             coinPriceManager.listener = coinPriceSyncManager
             val cryptoCompareProvider = CryptoCompareProvider(cryptoCompareApiKey)
             val postManager = PostManager(cryptoCompareProvider)
-            val chartManager = ChartManager(coinManager, ChartPointStorage(marketDatabase), hsProvider, indicatorPoints)
-            val chartSchedulerFactory = ChartSchedulerFactory(chartManager, hsProvider, indicatorPoints)
-            val chartSyncManager = ChartSyncManager(coinManager, chartSchedulerFactory).also {
-                chartManager.listener = it
-            }
+            val chartManager = ChartManager(hsProvider)
             val globalMarketInfoStorage = GlobalMarketInfoStorage(marketDatabase)
             val globalMarketInfoManager = GlobalMarketInfoManager(hsProvider, globalMarketInfoStorage)
             val hsDataSyncer = HsDataSyncer(coinSyncer, hsProvider)
@@ -371,7 +366,6 @@ class MarketKit(
                 postManager,
                 chartManager,
                 exchangeSyncer,
-                chartSyncManager,
                 globalMarketInfoManager,
                 hsProvider,
                 hsDataSyncer

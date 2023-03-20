@@ -32,9 +32,6 @@ sealed class HsPeriodType {
     data class ByPeriod(val timePeriod: HsTimePeriod) : HsPeriodType()
     data class ByStartTime(val startTime: Long) : HsPeriodType()
 
-    val expiration: Long
-        get() = HsChartRequestHelper.pointInterval(this).interval
-
     val range: Long?
         get() = when (this) {
             is ByPeriod -> timePeriod.range

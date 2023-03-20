@@ -49,6 +49,7 @@ object WCRequestModule {
             Chain.Optimism -> BlockchainType.Optimism
             Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
             Chain.Gnosis -> BlockchainType.Gnosis
+            Chain.Fantom -> BlockchainType.Fantom
             else -> BlockchainType.Ethereum
         }
         private val token by lazy {
@@ -129,6 +130,7 @@ object WCRequestModule {
             Chain.Optimism -> BlockchainType.Optimism
             Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
             Chain.Gnosis -> BlockchainType.Gnosis
+            Chain.Fantom -> BlockchainType.Fantom
             else -> BlockchainType.Ethereum
         }
         private val token by lazy {

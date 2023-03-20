@@ -21,6 +21,7 @@ class EvmBlockchainManager(
             BlockchainType.Optimism,
             BlockchainType.ArbitrumOne,
             BlockchainType.Gnosis,
+            BlockchainType.Fantom,
     )
 
     val allBlockchains: List<Blockchain>
@@ -54,6 +55,7 @@ class EvmBlockchainManager(
         BlockchainType.Optimism -> Chain.Optimism
         BlockchainType.ArbitrumOne -> Chain.ArbitrumOne
         BlockchainType.Gnosis -> Chain.Gnosis
+        BlockchainType.Fantom -> Chain.Fantom
         else -> throw IllegalArgumentException("Unsupported blockchain type $blockchainType")
     }
 
