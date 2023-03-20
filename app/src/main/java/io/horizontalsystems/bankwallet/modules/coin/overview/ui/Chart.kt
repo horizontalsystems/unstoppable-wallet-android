@@ -5,7 +5,6 @@ import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -115,26 +114,23 @@ fun Chart(
     chartViewModel: ChartViewModel,
     onSelectChartInterval: ((HsTimePeriod?) -> Unit)? = null
 ) {
-    val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
-    val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
-    val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
-    val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
+    val uiState = chartViewModel.uiState
 
     Column {
         var selectedPoint by remember { mutableStateOf<ChartModule.ChartHeaderView?>(null) }
 
-        HsChartLineHeader(selectedPoint ?: chartDataWrapper?.chartHeaderView)
+        HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
         Chart(
-            tabItems = chartTabs,
+            tabItems = uiState.tabItems,
             onSelectTab = {
                 chartViewModel.onSelectChartInterval(it)
                 onSelectChartInterval?.invoke(it)
             },
-            chartInfoData = chartDataWrapper?.chartInfoData,
-            chartLoading = chartLoading,
-            viewState = chartViewState,
-            hasVolumes = chartViewModel.hasVolumes,
-            chartViewType = chartViewModel.chartViewType
+            chartInfoData = uiState.chartInfoData,
+            chartLoading = uiState.loading,
+            viewState = uiState.viewState,
+            hasVolumes = uiState.hasVolumes,
+            chartViewType = uiState.chartViewType
         ) { item ->
             selectedPoint = item?.let {
                 chartViewModel.getSelectedPoint(it)

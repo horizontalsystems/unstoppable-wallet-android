@@ -32,8 +32,8 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
@@ -86,8 +86,7 @@ class TvlFragment : BaseFragment() {
         onCoinClick: (String?) -> Unit
     ) {
         val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
-        val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
-        val viewState = itemsViewState?.merge(chartViewState)
+        val viewState = itemsViewState?.merge(chartViewModel.uiState.viewState)
         val tvlData by tvlViewModel.tvlLiveData.observeAsState()
         val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
         val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
