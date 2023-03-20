@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
 import android.util.Range
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
@@ -28,17 +30,31 @@ open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
-    val hasVolumes = service.hasVolumes
-    val chartViewType = service.chartViewType
-    val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod?>>>()
-    val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
-    val loadingLiveData = MutableLiveData<Boolean>()
-    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
+
+    private var tabItems = listOf<TabItem<HsTimePeriod?>>()
+    private var chartHeaderView: ChartModule.ChartHeaderView? = null
+    private var chartInfoData: ChartInfoData? = null
+    private var loading = false
+    private var viewState: ViewState = ViewState.Loading
+
+    var uiState by mutableStateOf(
+        ChartUiState(
+            tabItems = tabItems,
+            chartHeaderView = chartHeaderView,
+            chartInfoData = chartInfoData,
+            loading = loading,
+            viewState = viewState,
+            hasVolumes = service.hasVolumes,
+            chartViewType = service.chartViewType
+        )
+    )
+        private set
 
     private val disposables = CompositeDisposable()
 
     init {
-        loadingLiveData.postValue(true)
+        loading = true
+        emitState()
 
         service.chartTypeObservable
             .subscribeIO { chartType ->
@@ -46,7 +62,9 @@ open class ChartViewModel(
                     val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
                     TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
                 }
-                tabItemsLiveData.postValue(tabItems)
+                this.tabItems = tabItems
+
+                emitState()
             }
             .let {
                 disposables.add(it)
@@ -55,14 +73,16 @@ open class ChartViewModel(
         service.chartPointsWrapperObservable
             .subscribeIO { chartItemsDataState ->
                 chartItemsDataState.viewState?.let {
-                    viewStateLiveData.postValue(it)
+                    viewState = it
                 }
 
-                loadingLiveData.postValue(false)
+                loading = false
 
                 chartItemsDataState.getOrNull()?.let {
                     syncChartItems(it)
                 }
+
+                emitState()
             }
             .let {
                 disposables.add(it)
@@ -73,13 +93,31 @@ open class ChartViewModel(
         }
     }
 
+    private fun emitState() {
+        viewModelScope.launch {
+            uiState = ChartUiState(
+                tabItems = tabItems,
+                chartHeaderView = chartHeaderView,
+                chartInfoData = chartInfoData,
+                loading = loading,
+                viewState = viewState,
+                hasVolumes = service.hasVolumes,
+                chartViewType = service.chartViewType,
+            )
+        }
+    }
+
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
-        loadingLiveData.postValue(true)
+        loading = true
+        emitState()
+
         service.updateChartInterval(chartInterval)
     }
 
     fun refresh() {
-        loadingLiveData.postValue(true)
+        loading = true
+        emitState()
+
         service.refresh()
     }
 
@@ -120,7 +158,8 @@ open class ChartViewModel(
             minValue
         )
 
-        dataWrapperLiveData.postValue(ChartDataWrapper(headerView, chartInfoData))
+        this.chartHeaderView = headerView
+        this.chartInfoData = chartInfoData
     }
 
     private val noChangesLimitPercent = 0.2f
@@ -154,7 +193,7 @@ open class ChartViewModel(
             val value = valueFormatter.formatValue(service.currency, candle.toBigDecimal())
             val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
 
-            val diff = dataWrapperLiveData.value?.chartInfoData?.let {
+            val diff = chartInfoData?.let {
                 it.chartData.items.firstOrNull()?.let {
                     it.values[Indicator.Candle]?.let { earliestValue ->
                         Value.Percent(((candle - earliestValue) / earliestValue * 100).toBigDecimal())
