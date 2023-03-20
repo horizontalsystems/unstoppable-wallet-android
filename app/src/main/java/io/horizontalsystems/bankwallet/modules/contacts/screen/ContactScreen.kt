@@ -9,8 +9,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,9 +52,13 @@ fun ContactScreen(
         var bottomSheetType: BottomSheetType? by remember { mutableStateOf(null) }
         val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val coroutineScope = rememberCoroutineScope()
+        val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
 
         LaunchedEffect(uiState.closeWithSuccess) {
             if (uiState.closeWithSuccess) {
+                focusManager.clearFocus(true)
+
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.SHORT)
 
                 onNavigateToBack()
@@ -62,48 +69,48 @@ fun ContactScreen(
             sheetState = modalBottomSheetState,
             sheetBackgroundColor = ComposeAppTheme.colors.transparent,
             sheetContent = {
-                var title = ""
-                var text = ""
-                var iconPainter: Painter = painterResource(R.drawable.icon_warning_2_20)
-                var iconTint: ColorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
-                var confirmText = ""
-                var cancelText = ""
-                var onConfirm: () -> Unit = {}
-                var onClose: () -> Unit = {}
-
                 when (bottomSheetType) {
-                    null -> Unit
+                    null -> {
+                        Spacer(modifier = Modifier.height(1.dp))
+                    }
                     BottomSheetType.DeleteConfirmation -> {
-                        title = stringResource(R.string.Contacts_DeleteContact)
-                        text = stringResource(R.string.Contacts_DeleteContact_Warning)
-                        iconPainter = painterResource(R.drawable.ic_delete_20)
-                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian)
-                        confirmText = stringResource(R.string.Button_Delete)
-                        cancelText = stringResource(R.string.Button_Cancel)
-                        onConfirm = viewModel::onDelete
-                        onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
+                        ConfirmationBottomSheet(
+                            title = stringResource(R.string.Contacts_DeleteContact),
+                            text = stringResource(R.string.Contacts_DeleteContact_Warning),
+                            iconPainter = painterResource(R.drawable.ic_delete_20),
+                            iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                            confirmText = stringResource(R.string.Button_Delete),
+                            cautionType = Caution.Type.Error,
+                            cancelText = stringResource(R.string.Button_Cancel),
+                            onConfirm = viewModel::onDelete,
+                            onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
+                        )
                     }
                     BottomSheetType.DiscardChangesConfirmation -> {
-                        title = stringResource(R.string.Alert_TitleWarning)
-                        text = stringResource(R.string.Contacts_DiscardChanges_Warning)
-                        iconPainter = painterResource(R.drawable.icon_warning_2_20)
-                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
-                        confirmText = stringResource(R.string.Contacts_DiscardChanges)
-                        cancelText = stringResource(R.string.Contacts_KeepEditing)
-                        onConfirm = onNavigateToBack
-                        onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
+                        ConfirmationBottomSheet(
+                            title = stringResource(R.string.Alert_TitleWarning),
+                            text = stringResource(R.string.Contacts_DiscardChanges_Warning),
+                            iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                            confirmText = stringResource(R.string.Contacts_DiscardChanges),
+                            cautionType = Caution.Type.Error,
+                            cancelText = stringResource(R.string.Contacts_KeepEditing),
+                            onConfirm = onNavigateToBack,
+                            onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
+                        )
                     }
                 }
-                ConfirmationBottomSheet(title, text, iconPainter, iconTint, confirmText, Caution.Type.Error, cancelText, onConfirm, onClose)
             },
         ) {
             val confirmNavigateToBack: () -> Unit = {
                 if (uiState.confirmBack) {
                     bottomSheetType = BottomSheetType.DiscardChangesConfirmation
                     coroutineScope.launch {
+                        focusManager.clearFocus(true)
                         modalBottomSheetState.show()
                     }
                 } else {
+                    focusManager.clearFocus(true)
                     onNavigateToBack()
                 }
             }
@@ -141,7 +148,9 @@ fun ContactScreen(
                 ) {
                     Spacer(Modifier.height(12.dp))
                     FormsInput(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .padding(horizontal = 16.dp),
                         initial = uiState.contactName,
                         pasteEnabled = false,
                         state = uiState.error?.let { DataState.Error(it) },
@@ -167,6 +176,11 @@ fun ContactScreen(
 
                     Spacer(Modifier.height(32.dp))
                 }
+            }
+        }
+        LaunchedEffect(key1 = uiState.focusOnContactName) {
+            if (uiState.focusOnContactName) {
+                focusRequester.requestFocus()
             }
         }
     }

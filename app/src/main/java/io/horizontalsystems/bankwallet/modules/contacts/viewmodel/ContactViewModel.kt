@@ -121,6 +121,7 @@ class ContactViewModel(
         saveEnabled = isSaveEnabled(),
         confirmBack = hasChanges(),
         showDelete = !isNewContact,
+        focusOnContactName = isNewContact,
         closeWithSuccess = closeAfterSave,
         error = error
     )
@@ -132,6 +133,7 @@ class ContactViewModel(
         val saveEnabled: Boolean,
         val confirmBack: Boolean,
         val showDelete: Boolean,
+        val focusOnContactName: Boolean,
         val closeWithSuccess: Boolean,
         val error: ContactValidationException?
     )
