@@ -109,7 +109,7 @@
     <string name="Restore_PrivateKeyHint">EVM Özel Anahtarını, BIP32 Root Key veya Account Extended Private Key girin</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 veya 24 kelime girin</string>
     <string name="Restore_NonStandardRestore">Standart Olmayan Geri Yükleme</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandard_Description">Bu sayfa, standart olmayan bir cüzdanı olan Unstoppable kullanıcıları için özel geri yükleme mekanizması sağlar. Genel olarak, bu tür cüzdanlar, İngilizce olmayan bir anımsatma kelimeleri listesi ve/veya cüzdan şifresinde özel bir karakter (yani aksan simgesi) kullanılarak Unstoppable 0.27 - 0.28 sürümünde oluşturulmuş olabilir.\n\n Bu durumdan etkilenen bir kullanıcıysanız, 0.29 sürümüne güncelledikten sonra cüzdan bakiyeniz 0 olarak görüntülenir. Bu sayfa, standart olmayan cüzdanınıza erişimi geri yüklemenizi sağlayacaktır. Geri yüklendikten sonra, yeni bir cüzdan oluşturmanız (standartlarla uyumlu) ve paranızı oraya taşımanız önerilir.</string>
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
@@ -340,7 +340,7 @@
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">İleri düzey</string>
     <string name="SendEvmSettings_Nonce">İşlem Nonce</string>
-    <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
+    <string name="SendEvmSettings_Nonce_Info">Nonce, kullanıcının cüzdanındaki bir işlem için benzersiz bir tamsayı değeridir. Normalde gönderilen her işlemle birlikte artar ve değiştirilmesi gerekmez. İleri düzey kullanıcılar, yeni işlemin eskisinin onaylanmasını önlemek için yeterince yüksek bir ücrete sahip olduğu sürece, bu işlemi iptal etmek ve değiştirmek için bekleyen bir işlemin bir nonsine eşit olarak ayarlayabilirler (örneğin, onayını hızlandırmak veya işlem parametrelerini tamamen değiştirmek isteyebilirler). Birden fazla bekleyen işlem aynı nonce\'a sahip olduğunda, genellikle en yüksek ücrete sahip olan biri onaylanır.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Kullanılmış Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Bu nonce ile gerçekleştirilen bir işlem zaten var.</string>
     <!-- Fee Settings -->
@@ -349,31 +349,31 @@
     <string name="FeeSettings_FeeLegacy">Maks. Ücret</string>
     <string name="FeeSettings_FeeLegacy_Info">Verilen işlem için beklenen maksimum toplam ücret. Genellikle, gerçek işlem ücreti daha düşük olur.</string>
     <string name="FeeSettings_Fee">Maks. Ücret</string>
-    <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
+    <string name="FeeSettings_Fee_Info">Bu işlem için ödenecek maksimum tahmini işlem ücreti, aşağıdaki gaz limiti, maksimum ücret oranı ve maksimum öncelik ücreti değerlerine göre hesaplanır. Ödenen gerçek ücret normalde daha düşük olacaktır.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
+    <string name="FeeSettings_GasLimit_Info">İşlem karmaşıklığı \"gaz\" adı verilen birimlerle ölçülür. Yürütülen akıllı sözleşmeye bağlı olarak değişir. Gaz Limiti, onu yürütmek için gereken tahmini maksimum gazdır. Kullanılan gerçek gaz normalde daha düşük olacaktır.</string>
     <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
     <string name="FeeSettings_BaseFee">Baz Ücret</string>
-    <string name="FeeSettings_BaseFee_Info">The network protocol determines the base price per gas for each block, called base fee rate. It varies according to the network utilization level from block to block. It can increase or decrease by no more than 12.5% in the next block, making fees more predictable. The value shown here is the current block\'s base fee rate.</string>
+    <string name="FeeSettings_BaseFee_Info">Ağ protokolü, her blok için gaz başına taban fiyatı belirler ve buna baz ücret oranı denir. Bloktan bloğa ağ kullanım seviyesine göre değişir. Bir sonraki blokta% 12,5\'ten fazla artamaz veya azalabilir ve bu da ücretleri daha öngörülebilir hale getirir. Burada gösterilen değer, geçerli bloğun temel ücret oranıdır.</string>
     <string name="FeeSettings_MaxFee">Maks. Ücret Oranı (Gwei)</string>
-    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
+    <string name="FeeSettings_MaxFee_Info">Bu, kullanıcının ödemek istediği gaz başına maksimum toplam fiyattır. Ağın temel ücret oranını ve maksimum öncelik ücreti oranını kapsamalıdır. Burada gösterilen değer, bir sonraki bloğun taban ücret oranının tahmini artı kullanıcı tarafından seçilen maksimum öncelik ücreti oranına göre önerilir. Ödenen gerçek ücret oranı normalde daha düşük olacaktır. Bunu mevcut taban ücret oranından daha düşük bir değere ayarlamak, ödenen ücreti sınırlayacaktır, ancak işlemin onaylanması için daha uzun bekleme sürelerine, hatta sıkışmış bir işlemde bile sonuçlanacaktır.</string>
     <string name="FeeSettings_MaxMinerTips">Maks. Öncelik Ücreti (Gwei)</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Kullanıcılar, bir işlemin daha hızlı onaylanmasını teşvik etmek için öncelik ücretleri öderler. Bazen tips denir. Maksimum öncelik ücreti oranı, kullanıcının taban ücret oranının üzerine ödemek istediği gaz başına maksimum ek fiyattır. Burada gösterilen değer, tahmin edilen ağ koşullarına göre önerilir. Gerçek öncelik ücreti normalde daha düşük olacaktır. Bunu sıfıra ayarlamak, tüm kullanıcılardan bekleyen işlemler kuyruğunun sonuna yerleştirildiğinden, işlemin onaylanması için uzun bir bekleme süresine neden olabilir.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskli</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">İşlem bir süre beklemede kalabilir veya tamamen başarısız olabilir.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Riskli</string>
-    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">İşlemin hızlı bir şekilde yürütülmesini sağlamak için maksimum ücret oranı (çıkarılan maksimum mineri tip) mevcut baz ücret oranından daha yüksek olmalıdır. Aksi takdirde işlem, koşul yerine getirilene kadar beklemede kalabilir.</string>
     <string name="FeeSettings_Overpricing_Title">Ücret Çok Yüksek</string>
     <string name="FeeSettings_Overpricing">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için gereken ücretten daha yüksek.</string>
     <string name="FeeSettings_Info_IUnderstand">Anlıyorum</string>
     <string name="FeeSettings_FeeRate">Ücret Oranı (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">İşte sonraki 2 bloğa eklenmek için önerilen değer</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
-        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
-        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
-        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
-        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
+    <string name="FeeSettings_FeeRate_Info">Blok zincirleri, kullanıcıların işlemleri gönderirken ağ ücretlerini ödemelerini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksektir.
+         \n\nUnstoppable cüzdan, mevcut blockchain etkinliğine dayalı olarak ücreti tahmin eder ve işlemin makul bir süre içinde işlenmesi için en uygun değeri önerir.
+         \n\nSatoshi kullanıcının işlemin tek bir baytı için ödemesi gereken miktar olarak gösterilen önerilen ücret oranı. Bu nedenle toplam ücret, işlemin bayt cinsinden ölçülen toplam boyutuna bağlıdır.
+         \n\nKullanıcılar, ücret oranı değerini artırmak veya azaltmak için sağlanan kontrolleri kullanabilir. Ücret oranındaki değişiklik, kullanıcının ödeyeceği işlem için toplam ücreti değiştirir.
+         \n\nÜcret oranının önerilen değerin altında ayarlanması, bir işlemin saatlerce beklemede kalmasına veya reddedilmesine neden olabilir. Değer ne kadar düşük olursa, işlemin onaylanması o kadar uzun sürer. Önceliğin önemli olduğu işlemler için daha yüksek ücret oranı belirlemenizi öneririz.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">İşlem hızı</string>
     <string name="FeeInfo_Description">Hem Bitcoin hem de Ethereum blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksek ve blok zincir daha az meşgul olduğunda ücretler daha düşüktür.</string>
@@ -787,19 +787,19 @@
     <string name="ManageCoins_Search">Ad, kod veya sözleşme adresi</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
-    <string name="ManageCoins_BipsDescription">There are 3 common address formats %s wallets can use to receive incoming payments:
-\n
-\n- BIP-44 (older)
-\n- BIP-49 (newer)
-\n- BIP-84 (newest)
-\n
-\nWhile Unstoppable wallet supports all 3 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
-    <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
-\n
-\n- TYPE0 (older)
-\n- TYPE145 (newer)
-\n
-\nWhile Unstoppable wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
+    <string name="ManageCoins_BipsDescription">%s cüzdanlarının gelen ödemeleri almak için kullanabileceği 3 yaygın adres biçimi vardır:
+\n 
+\n- BIP-44 (eski)
+\n- BIP-49 (daha yeni) 
+\n- BIP-84 (en yeni) 
+\n 
+\nUnstoppable cüzdan 3\'ünü de desteklerken, BIP-84 formatında çalışan bir %s cüzdanı kullanmanızı önerir. Bu formatta çalışan cüzdanlar, %s işlemleri gönderirken en düşük ücretleri öderler.</string>
+    <string name="ManageCoins_BchTypeDescription">Bitcoin Cash cüzdanlarının gelen ödemeleri almak için kullanabileceği 2 adres formatı vardır: 
+\n 
+\n- TYPE0 (eski) 
+\n- TYPE145 (daha yeni) 
+\n 
+\nUnstoppable cüzdan her ikisini de desteklerken, TYPE145 formatında çalışan bir Bitcoin Cash cüzdanı kullanmanızı önerir.</string>
     <string name="ManageCoins_ContractAddress">CONTRACT ADRESİ</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
@@ -1337,6 +1337,6 @@
     <string name="Contacts_DiscardChanges">Değişiklikleri İptal Et</string>
     <string name="Contacts_KeepEditing">Düzenlemeyi sürdür</string>
     <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
-    <string name="Contacts_NoContacts">You do not have an added contact</string>
+    <string name="Contacts_NoContacts">Eklenmiş bir kişiniz yok</string>
     <string name="Contacts_ActionMore">Daha fazla</string>
 </resources>
