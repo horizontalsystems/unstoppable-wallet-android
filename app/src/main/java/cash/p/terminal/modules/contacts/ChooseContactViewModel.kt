@@ -16,13 +16,13 @@ class ChooseContactViewModel(
     var items: List<ContactViewItem> by mutableStateOf(listOf())
         private set
 
-    private var query = ""
+    private var query: String? = null
 
     init {
         rebuildItems()
     }
 
-    fun onEnterQuery(query: String) {
+    fun onEnterQuery(query: String?) {
         this.query = query
 
         rebuildItems()
