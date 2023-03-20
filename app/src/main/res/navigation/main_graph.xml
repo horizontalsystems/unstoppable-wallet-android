@@ -76,18 +76,6 @@
         android:id="@+id/backupConfirmationKeyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey.BackupConfirmKeyFragment" />
     <fragment
-        android:id="@+id/securityParamsInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.SecurityParamsInfoFragment"/>
-    <fragment
-        android:id="@+id/tokenTvlInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TokenTvlInfoFragment"/>
-    <fragment
-        android:id="@+id/tokenDistributionInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TokenDistributionInfoFragment"/>
-    <fragment
-        android:id="@+id/tokenLiquidityInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.TokenLiquidityInfoFragment"/>
-    <fragment
         android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
     <fragment
