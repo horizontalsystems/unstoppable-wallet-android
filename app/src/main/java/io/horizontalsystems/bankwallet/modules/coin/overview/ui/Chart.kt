@@ -97,11 +97,22 @@ fun HsChartLineHeader(
                             text = stringResource(R.string.Market_BtcDominance),
                             textAlign = TextAlign.End
                         )
-                        subhead2_jacob(
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
-                            text = extraData.dominance,
-                            textAlign = TextAlign.End
-                        )
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            subhead2_jacob(
+                                text = extraData.dominance
+                            )
+                            extraData.diff?.let { diff ->
+                                HSpacer(width = 4.dp)
+                                Text(
+                                    text = formatValueAsDiff(diff),
+                                    style = ComposeAppTheme.typography.subhead2,
+                                    color = diffColor(diff.raw())
+                                )
+                            }
+                        }
                     }
                 }
             }
