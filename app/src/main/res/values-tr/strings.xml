@@ -121,7 +121,7 @@
     <string name="Restore_ZCash_NewWallet">Yeni Cüzdan</string>
     <string name="Restore_ZCash_NewWallet_Description">Herhangi bir para işlemi yok</string>
     <string name="Restore_ZCash_OldWallet">Mevcut Cuzdan</string>
-    <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
+    <string name="Restore_ZCash_OldWallet_Description">Işlemler Mevcut</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Blok zinciri ile ilk senkronizasyon, çok fazla internet trafiği tüketebilir.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
@@ -289,7 +289,7 @@
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres veya Domain</string>
     <string name="Send_Fee">Masraf</string>
-    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
+    <string name="Send_Fee_Info">Blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksektir.</string>
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Advanced">İleri düzey</string>
@@ -310,7 +310,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">Bu uygulama için kameranıza erişim reddedildi, ayarlara gidip erişime izin verebilirsiniz</string>
     <string name="ScanQr_GoToSettings">Ayarlara gidin</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
-    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
+    <string name="Send_Error_UnsupportedAddress">Zaman kilitleme sadece BIP44 (1 ile başlayan) adresleriyle çalışır</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
     <string name="Send_Error_MinimumAmount">Minimum miktar %s</string>
     <string name="Send_Error_MaximumAmount">Maksimum miktar %s</string>
@@ -339,29 +339,29 @@
     <string name="Send_Error_FetchFeeRateFailed">Ücret oranı getirilirken hata oluştu</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">İleri düzey</string>
-    <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
+    <string name="SendEvmSettings_Nonce">İşlem Nonce</string>
     <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
-    <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
+    <string name="SendEvmSettings_Error_NonceUsed_Title">Kullanılmış Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Ücret Ayarları</string>
     <string name="FeeSettings_Reset">Sıfırla</string>
-    <string name="FeeSettings_FeeLegacy">Max Fee</string>
-    <string name="FeeSettings_FeeLegacy_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
-    <string name="FeeSettings_Fee">Max Fee</string>
+    <string name="FeeSettings_FeeLegacy">Maks. Ücret</string>
+    <string name="FeeSettings_FeeLegacy_Info">Verilen işlem için beklenen maksimum toplam ücret. Genellikle, gerçek işlem ücreti daha düşük olur.</string>
+    <string name="FeeSettings_Fee">Maks. Ücret</string>
     <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
     <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
-    <string name="FeeSettings_BaseFee">Base Fee</string>
+    <string name="FeeSettings_BaseFee">Baz Ücret</string>
     <string name="FeeSettings_BaseFee_Info">The network protocol determines the base price per gas for each block, called base fee rate. It varies according to the network utilization level from block to block. It can increase or decrease by no more than 12.5% in the next block, making fees more predictable. The value shown here is the current block\'s base fee rate.</string>
-    <string name="FeeSettings_MaxFee">Max Fee Rate (Gwei)</string>
+    <string name="FeeSettings_MaxFee">Maks. Ücret Oranı (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
-    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips">Maks. Öncelik Ücreti (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskli</string>
-    <string name="FeeSettings_RiskOfGettingStuckLegacy">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">İşlem bir süre beklemede kalabilir veya tamamen başarısız olabilir.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Riskli</string>
     <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">Ücret Çok Yüksek</string>
@@ -581,7 +581,7 @@
     <string name="TransactionInfo_Id">Kimlik</string>
     <string name="TransactionInfo_Service">Hizmet</string>
     <string name="TransactionInfo_RawTransaction">Ham işlem</string>
-    <string name="TransactionInfo_ContactName">Contact Name</string>
+    <string name="TransactionInfo_ContactName">Kişi Adı</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
     <string name="TransactionInfo_Spender">Harcayan</string>
@@ -694,7 +694,7 @@
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Cüzdanı işlemlerle geri yüklemek için veri kaynağını seçin.</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).\n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Giriş/Çıkış</string>
-    <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">İşlem Ayarları</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">İşlem Girdileri / Çıktıları</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">İşlemlerin yapılandırılma şeklini değiştirerek BTC, LTC, BCH işlemlerinizin izlenilmesini zorlaştırın.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.\n\nThere are two options available to Unstoppable users:\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
@@ -899,7 +899,7 @@
     <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
-    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
+    <string name="PrivateKeys_NeverShareWarning">Kurtarma ifadenizi asla kimseyle paylaşmayın. Unstoppable ekip asla kurtarma ifadenizi istemez.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Genel Anahtarlar</string>
     <string name="PublicKeys_EvmAddress">EVM Adresi</string>
@@ -981,7 +981,7 @@
     <string name="Tor_Status_Error">Tor başlatma hatası !</string>
     <string name="TorPage_Connecting">Connecting Tor…</string>
     <string name="TorPage_Connected">Bağlandı</string>
-    <string name="TorPage_Failed">Failed to Connect Tor</string>
+    <string name="TorPage_Failed">Tor bağlanılamadı</string>
     <string name="TorPage_ConnectionClosed">Bağlantı kesildi</string>
     <string name="Tor_TorIsActive">Tor aktif</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
@@ -1238,7 +1238,7 @@
     <string name="NftCollection_Royalty">Royalty</string>
     <string name="NftCollection_InceptionDate">Inception Date</string>
     <!-- NFT Collection Events -->
-    <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
+    <string name="NftCollection_EventType_SelectorTitle">Etkinlik Türü Seç</string>
     <string name="NftCollection_EventType_All">Hepsi</string>
     <string name="NftCollection_EventType_List">Liste</string>
     <string name="NftCollection_EventType_Sale">İndirim</string>
@@ -1317,26 +1317,26 @@
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Biyometri Tarayıcı</string>
     <!--Contacts-->
-    <string name="Contacts">Contacts</string>
-    <string name="Contacts_Export">Export Contacts</string>
-    <string name="Contacts_Import">Import Contacts</string>
-    <string name="Contacts_AddressesCount">Addresses: %s</string>
-    <string name="Contacts_NewContact">New Contact</string>
-    <string name="Contacts_AddNewContact">Add New Contact</string>
+    <string name="Contacts">Kişiler</string>
+    <string name="Contacts_Export">Kişileri Dışa Aktar</string>
+    <string name="Contacts_Import">Kişileri İçeri Aktar</string>
+    <string name="Contacts_AddressesCount">Adresler: %s</string>
+    <string name="Contacts_NewContact">Yeni Kişi</string>
+    <string name="Contacts_AddNewContact">Yeni Kişi Ekle</string>
     <string name="Contacts_NameHint">İsim</string>
-    <string name="Contacts_AddAddress">Add Address</string>
-    <string name="Contacts_AddAddress_NewContact">Create New Contact</string>
-    <string name="Contacts_AddAddress_ExistingContact">Add to Existing Contact</string>
-    <string name="Contacts_AddAddress_Replace">Replace</string>
+    <string name="Contacts_AddAddress">Adres ekle</string>
+    <string name="Contacts_AddAddress_NewContact">Yeni Kişi Oluştur</string>
+    <string name="Contacts_AddAddress_ExistingContact">Mevcut Kişiye Ekle</string>
+    <string name="Contacts_AddAddress_Replace">Değiştir</string>
     <string name="Contacts_AddAddress_ReplaceWarning">This contact already has an address on this blockchain. Do you want to replace the address %s with the %s?</string>
     <string name="Contacts_AddressHint">Adres veya Domain</string>
-    <string name="Contacts_DeleteContact">Delete Contact</string>
-    <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
-    <string name="Contacts_DeleteAddress">Delete Address</string>
-    <string name="Contacts_DeleteAddress_Warning">Are you sure you want to delete this address?</string>
-    <string name="Contacts_DiscardChanges">Discard Changes</string>
-    <string name="Contacts_KeepEditing">Keep Editing</string>
-    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard this new changes?</string>
+    <string name="Contacts_DeleteContact">Kişiyi Sil</string>
+    <string name="Contacts_DeleteContact_Warning">Bu kişi silmek istediğine emin misin?</string>
+    <string name="Contacts_DeleteAddress">Adresi Sil</string>
+    <string name="Contacts_DeleteAddress_Warning">Bu adresi silmek istediğinize emin misiniz?</string>
+    <string name="Contacts_DiscardChanges">Değişiklikleri İptal Et</string>
+    <string name="Contacts_KeepEditing">Düzenlemeyi sürdür</string>
+    <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
     <string name="Contacts_NoContacts">You do not have an added contact</string>
-    <string name="Contacts_ActionMore">More</string>
+    <string name="Contacts_ActionMore">Daha fazla</string>
 </resources>
