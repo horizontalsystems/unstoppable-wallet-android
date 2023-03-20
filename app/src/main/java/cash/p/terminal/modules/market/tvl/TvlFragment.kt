@@ -32,8 +32,8 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.overview.ui.Chart
+import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.Value
 import cash.p.terminal.modules.market.tvl.TvlModule.SelectorDialogState
@@ -86,8 +86,7 @@ class TvlFragment : BaseFragment() {
         onCoinClick: (String?) -> Unit
     ) {
         val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
-        val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
-        val viewState = itemsViewState?.merge(chartViewState)
+        val viewState = itemsViewState?.merge(chartViewModel.uiState.viewState)
         val tvlData by tvlViewModel.tvlLiveData.observeAsState()
         val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
         val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)

@@ -80,8 +80,7 @@ class MetricsPageFragment : BaseFragment() {
         onCoinClick: (String) -> Unit,
     ) {
         val itemsViewState by viewModel.viewStateLiveData.observeAsState()
-        val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
-        val viewState = itemsViewState?.merge(chartViewState)
+        val viewState = itemsViewState?.merge(chartViewModel.uiState.viewState)
         val marketData by viewModel.marketLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
 
