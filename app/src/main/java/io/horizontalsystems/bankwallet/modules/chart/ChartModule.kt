@@ -26,7 +26,7 @@ object ChartModule {
 
     sealed class ChartHeaderExtraData {
         class Volume(val volume: String) : ChartHeaderExtraData()
-        class Dominance(val dominance: String) : ChartHeaderExtraData()
+        class Dominance(val dominance: String, val diff: Value.Percent?) : ChartHeaderExtraData()
     }
 
 }
