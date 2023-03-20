@@ -131,6 +131,7 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
                         }
                     }
 
+                    backStackEntry.savedStateHandle["contact_uid"] = viewModel.contact.uid
                     backStackEntry.savedStateHandle["address"] = address
                     backStackEntry.savedStateHandle["defined_addresses"] = viewModel.uiState.addressViewItems.map { it.contactAddress }
 
@@ -141,11 +142,16 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
         composablePage(
             route = "address"
         ) {
+            val contactUid = navHostController.previousBackStackEntry?.savedStateHandle?.get<String>("contact_uid")
             val address = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("address")
             val definedAddresses = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<ContactAddress>>("defined_addresses")
 
             val viewModel = viewModel<AddressViewModel>(
-                factory = ContactsModule.AddressViewModelFactory(contactAddress = address, definedAddresses = definedAddresses)
+                factory = ContactsModule.AddressViewModelFactory(
+                    contactUid = contactUid,
+                    contactAddress = address,
+                    definedAddresses = definedAddresses
+                )
             )
 
             AddressNavHost(

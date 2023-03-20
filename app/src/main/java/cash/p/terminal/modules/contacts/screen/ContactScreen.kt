@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel.AddressViewItem
@@ -143,6 +144,7 @@ fun ContactScreen(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         initial = uiState.contactName,
                         pasteEnabled = false,
+                        state = uiState.error?.let { DataState.Error(it) },
                         hint = stringResource(R.string.Contacts_NameHint),
                         onValueChange = viewModel::onNameChange
                     )
