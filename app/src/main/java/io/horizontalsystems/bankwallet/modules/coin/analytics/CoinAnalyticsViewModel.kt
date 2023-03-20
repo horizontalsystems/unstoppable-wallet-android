@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString.ResString
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.chartview.ChartDataBuilder
+import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.AnalyticsPreview
 import io.horizontalsystems.marketkit.models.ChartPoint
@@ -107,7 +108,7 @@ class CoinAnalyticsViewModel(
         )
     }
 
-    private fun viewItem(item: CoinAnalyticsService.AnalyticData): AnalyticsViewItem? {
+    private fun viewItem(item: CoinAnalyticsService.AnalyticData): AnalyticsViewItem {
         if (item.analyticsPreview != null) {
             val viewItems = getPreviewViewItems(item.analyticsPreview)
             if (viewItems.isNotEmpty()) {
@@ -132,7 +133,7 @@ class CoinAnalyticsViewModel(
                     info = AnalyticInfo.CexVolumeInfo,
                     value = getFormattedSum(data.points.map { it.volume }, currency),
                     valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), null, false),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, null),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_30DayRank),
@@ -150,7 +151,7 @@ class CoinAnalyticsViewModel(
                     info = AnalyticInfo.DexVolumeInfo,
                     value = getFormattedSum(data.points.map { it.volume }, currency),
                     valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.DexVolume, false),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.DexVolume),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_30DayRank),
@@ -168,7 +169,7 @@ class CoinAnalyticsViewModel(
                     info = AnalyticInfo.DexLiquidityInfo,
                     value = getFormattedValue(data.points.last().volume, currency),
                     valuePeriod = getValuePeriod(true),
-                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.DexLiquidity, true),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.DexLiquidity),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_Rank),
@@ -186,7 +187,7 @@ class CoinAnalyticsViewModel(
                     info = AnalyticInfo.AddressesInfo,
                     value = getFormattedSum(listOf(data.count30d.toBigDecimal())),
                     valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.AddressesCount, false),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.AddressesCount),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_30DayRank),
@@ -204,7 +205,7 @@ class CoinAnalyticsViewModel(
                     info = AnalyticInfo.TransactionCountInfo,
                     value = getFormattedSum(data.points.map { it.count }),
                     valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.TxVolume, false),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.TxCount),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_30DayVolume),
@@ -262,7 +263,7 @@ class CoinAnalyticsViewModel(
                     info = AnalyticInfo.TvlInfo,
                     value = getFormattedValue(data.points.last().tvl, currency),
                     valuePeriod = getValuePeriod(true),
-                    analyticChart = getChartViewItem(data.chartPoints(), ProChartModule.ChartType.TxVolume, true),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.Tvl),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_Rank),
@@ -512,8 +513,8 @@ class CoinAnalyticsViewModel(
 
     private fun getChartViewItem(
         values: List<ChartPoint>,
+        chartViewType: ChartViewType,
         chartType: ProChartModule.ChartType?,
-        isMovementChart: Boolean,
     ): ChartViewItem? {
         if (values.isEmpty()) return null
 
@@ -521,20 +522,12 @@ class CoinAnalyticsViewModel(
             io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
-        return getAnalyticChart(points, chartType, isMovementChart)
-    }
+        val chartData = ChartDataBuilder.buildFromPoints(points, isMovementChart = false)
 
-    private fun getAnalyticChart(
-        points: List<io.horizontalsystems.chartview.models.ChartPoint>,
-        chartType: ProChartModule.ChartType?,
-        isMovementChart: Boolean
-    ): ChartViewItem {
-        val chartData = ChartDataBuilder.buildFromPoints(points, isMovementChart = isMovementChart)
-
-        val analyticChart = if (isMovementChart)
-            AnalyticChart.Line(chartData)
-        else
-            AnalyticChart.Bars(chartData)
+        val analyticChart = when (chartViewType) {
+            ChartViewType.Bar -> AnalyticChart.Bars(chartData)
+            ChartViewType.Line -> AnalyticChart.Line(chartData)
+        }
 
         return ChartViewItem(analyticChart, coin.uid, chartType)
     }

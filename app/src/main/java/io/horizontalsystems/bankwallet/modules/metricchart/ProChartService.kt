@@ -23,7 +23,13 @@ class ProChartService(
     override val initialChartInterval = HsTimePeriod.Month1
 
     override val chartIntervals = HsTimePeriod.values().toList()
-    override val chartViewType = ChartViewType.Line
+    override val chartViewType = when (chartType) {
+        ProChartModule.ChartType.Tvl,
+        ProChartModule.ChartType.DexLiquidity -> ChartViewType.Line
+        ProChartModule.ChartType.DexVolume,
+        ProChartModule.ChartType.AddressesCount,
+        ProChartModule.ChartType.TxCount -> ChartViewType.Bar
+    }
 
     override fun getItems(
         chartInterval: HsTimePeriod,
@@ -44,26 +50,25 @@ class ProChartService(
                 marketKit.transactionDataSingle(coinUid, currency.code, chartInterval, null, sessionKey)
                     .map { response -> response.countPoints }
 
-            ProChartModule.ChartType.TxVolume ->
-                marketKit.transactionDataSingle(coinUid, currency.code, chartInterval, null, sessionKey)
-                    .map { response -> response.volumePoints }
-
             ProChartModule.ChartType.AddressesCount ->
                 marketKit.activeAddressesSingle(coinUid, currency.code, chartInterval, sessionKey)
                     .map { response -> response.countPoints }
+
+            ProChartModule.ChartType.Tvl ->
+                marketKit.marketInfoTvlSingle(coinUid, currency.code, chartInterval)
         }
 
         val isMovementChart = when (chartType) {
             ProChartModule.ChartType.DexLiquidity,
-            ProChartModule.ChartType.AddressesCount -> true
+            ProChartModule.ChartType.Tvl -> true
             ProChartModule.ChartType.DexVolume,
             ProChartModule.ChartType.TxCount,
-            ProChartModule.ChartType.TxVolume -> false
+            ProChartModule.ChartType.AddressesCount -> false
         }
 
         return chartDataSingle
             .map { chartPoints ->
-                val items = chartPoints.mapNotNull { chartPoint ->
+                val items = chartPoints.map { chartPoint ->
                     ChartPoint(chartPoint.value.toFloat(), chartPoint.timestamp)
                 }
 
