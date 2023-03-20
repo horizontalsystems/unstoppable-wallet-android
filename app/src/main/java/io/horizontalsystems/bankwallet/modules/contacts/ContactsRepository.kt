@@ -44,7 +44,7 @@ class ContactsRepository(
     val contactsFlow: StateFlow<List<Contact>> = _contactsFlow
 
     fun getContactsFiltered(
-        blockchainType: BlockchainType,
+        blockchainType: BlockchainType? = null,
         nameQuery: String? = null,
         addressQuery: String? = null,
     ): List<Contact> {
@@ -56,17 +56,14 @@ class ContactsRepository(
             }
         }
 
-        criteria.add {
-            it.addresses.isNotEmpty()
-        }
-
         if (addressQuery != null) {
             criteria.add {
-                it.addresses.any {
-                    it.blockchain.type == blockchainType && it.address.equals(addressQuery, true)
+                it.addresses.any { contactAddress ->
+                    (blockchainType == null || blockchainType == contactAddress.blockchain.type)
+                            && contactAddress.address.equals(addressQuery, true)
                 }
             }
-        } else {
+        } else if (blockchainType != null) {
             criteria.add {
                 it.addresses.any { it.blockchain.type == blockchainType }
             }

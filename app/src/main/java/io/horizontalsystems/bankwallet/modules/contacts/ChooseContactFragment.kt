@@ -114,6 +114,7 @@ fun ChooseContactScreen(
                     navigationIcon = {
                         HsBackButton(onClick = {
                             if (searchMode) {
+                                viewModel.onEnterQuery(null)
                                 searchMode = false
                             } else {
                                 navController.popBackStack()

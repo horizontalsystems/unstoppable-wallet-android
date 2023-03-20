@@ -22,8 +22,9 @@ class ContactsViewModel(
     private val showAddContact = !readOnly
     private val showMoreOptions = !readOnly
 
+    private var nameQuery: String? = null
     private val contacts: List<Contact>
-        get() = repository.contacts
+        get() = repository.getContactsFiltered(nameQuery = nameQuery)
 
     val exportJsonData: String
         get() = repository.export()
@@ -31,7 +32,7 @@ class ContactsViewModel(
     val exportFileName: String
         get() = "UW_Contacts_${System.currentTimeMillis() / 1000}.json"
 
-    var uiState by mutableStateOf(UiState(contacts, showAddContact, showMoreOptions))
+    var uiState by mutableStateOf(UiState(contacts, nameQuery != null, showAddContact, showMoreOptions))
         private set
 
     init {
@@ -40,6 +41,11 @@ class ContactsViewModel(
                 emitState()
             }
         }
+    }
+
+    fun onEnterQuery(query: String?) {
+        nameQuery = query
+        emitState()
     }
 
     fun importContacts(json: String) {
@@ -59,11 +65,12 @@ class ContactsViewModel(
     }
 
     private fun emitState() {
-        uiState = UiState(contacts, showAddContact, showMoreOptions)
+        uiState = UiState(contacts, nameQuery != null, showAddContact, showMoreOptions)
     }
 
     data class UiState(
         val contacts: List<Contact>,
+        val searchMode: Boolean,
         val showAddContact: Boolean,
         val showMoreOptions: Boolean
     )
