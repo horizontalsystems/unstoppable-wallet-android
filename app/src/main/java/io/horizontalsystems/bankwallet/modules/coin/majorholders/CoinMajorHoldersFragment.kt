@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.Blockchain
 
 class CoinMajorHoldersFragment : BaseFragment() {
 
@@ -44,12 +45,8 @@ class CoinMajorHoldersFragment : BaseFragment() {
         requireArguments().getString(COIN_UID_KEY)!!
     }
 
-    private val blockchainUid by lazy {
-        requireArguments().getString(BLOCKCHAIN_UID_KEY)!!
-    }
-
-    private val blockchainName by lazy {
-        requireArguments().getString(BLOCKCHAIN_NAME_KEY)!!
+    private val blockchain by lazy {
+        requireArguments().getParcelable<Blockchain>(BLOCKCHAIN_KEY)!!
     }
 
     override fun onCreateView(
@@ -66,8 +63,7 @@ class CoinMajorHoldersFragment : BaseFragment() {
                 ComposeAppTheme {
                     CoinMajorHoldersScreen(
                         coinUid,
-                        blockchainUid,
-                        blockchainName,
+                        blockchain,
                         findNavController(),
                     )
                 }
@@ -78,14 +74,12 @@ class CoinMajorHoldersFragment : BaseFragment() {
 
     companion object {
         private const val COIN_UID_KEY = "coin_uid_key"
-        private const val BLOCKCHAIN_UID_KEY = "blockchain_key"
-        private const val BLOCKCHAIN_NAME_KEY = "blockchain_name_key"
+        private const val BLOCKCHAIN_KEY = "blockchain_key"
 
-        fun prepareParams(coinUid: String, blockchainUid: String, blockchainName: String) =
+        fun prepareParams(coinUid: String, blockchain: Blockchain) =
             bundleOf(
                 COIN_UID_KEY to coinUid,
-                BLOCKCHAIN_UID_KEY to blockchainUid,
-                BLOCKCHAIN_NAME_KEY to blockchainName
+                BLOCKCHAIN_KEY to blockchain,
             )
     }
 }
@@ -93,18 +87,17 @@ class CoinMajorHoldersFragment : BaseFragment() {
 @Composable
 private fun CoinMajorHoldersScreen(
     coinUid: String,
-    blockchainUid: String,
-    blockchainName: String,
+    blockchain: Blockchain,
     navController: NavController,
     viewModel: CoinMajorHoldersViewModel = viewModel(
-        factory = CoinMajorHoldersModule.Factory(coinUid, blockchainUid)
+        factory = CoinMajorHoldersModule.Factory(coinUid, blockchain)
     )
 ) {
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.PlainString(blockchainName),
+                TranslatableString.PlainString(blockchain.name),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),

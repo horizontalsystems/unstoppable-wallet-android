@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.brandColor
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
@@ -14,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersModule.UiState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.TokenHolders
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -24,7 +26,7 @@ import java.net.UnknownHostException
 
 class CoinMajorHoldersViewModel(
     private val coinUid: String,
-    private val blockchainUid: String,
+    private val blockchain: Blockchain,
     private val marketKit: MarketKitWrapper,
     private val factory: CoinViewFactory
 ) : ViewModel() {
@@ -72,13 +74,13 @@ class CoinMajorHoldersViewModel(
         viewModelScope.launch {
             delay(200)
             try {
-                val result = getTokenHolders(coinUid, blockchainUid)
+                val result = getTokenHolders(coinUid, blockchain.uid)
                 val top10ShareNumber = result.topHolders.sumOf { it.percentage }
                 seeAllUrl = result.holdersUrl
                 top10Share = factory.getTop10Share(top10ShareNumber)
                 totalHoldersCount = factory.getHoldersCount(result.count)
                 viewState = ViewState.Success
-                chartData = getChartData(top10ShareNumber.toFloat())
+                chartData = getChartData(top10ShareNumber.toFloat(), blockchain)
                 topHolders = factory.getCoinMajorHolders(result)
                 error = null
             } catch (e: Throwable) {
@@ -93,10 +95,10 @@ class CoinMajorHoldersViewModel(
         marketKit.tokenHoldersSingle(coinUid, blockchainUid).await()
     }
 
-    private fun getChartData(top10ShareFloat: Float): List<StackBarSlice> {
+    private fun getChartData(top10ShareFloat: Float, blockchain: Blockchain): List<StackBarSlice> {
         val remaining = 100f - top10ShareFloat
         return listOf(
-            StackBarSlice(value = top10ShareFloat, color = Color(0xFF6B7196)),
+            StackBarSlice(value = top10ShareFloat, color = blockchain.type.brandColor ?: Color(0xFFFFA800)),
             StackBarSlice(value = remaining, color = Color(0x806B7196)),
         )
     }

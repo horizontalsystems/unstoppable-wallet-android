@@ -156,7 +156,7 @@ private fun AnalyticsBlock(
                             when (action) {
                                 is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
                                     val arguments =
-                                        CoinMajorHoldersFragment.prepareParams(action.coin.uid, action.blockchain.uid, action.blockchain.name)
+                                        CoinMajorHoldersFragment.prepareParams(action.coin.uid, action.blockchain)
                                     navController.slideFromBottom(R.id.coinMajorHoldersFragment, arguments)
                                 }
                                 is CoinAnalyticsModule.ActionType.OpenAudits -> {
