@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.*
 import io.horizontalsystems.bankwallet.modules.contacts.ContactAddressParser
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
@@ -28,6 +29,8 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 class AddressViewModel(
+    private val contactUid: String?,
+    private val contactsRepository: ContactsRepository,
     evmBlockchainManager: EvmBlockchainManager,
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
@@ -86,10 +89,6 @@ class AddressViewModel(
         validateAddress(address)
     }
 
-    fun onDelete() {
-
-    }
-
     private var validationJob: Job? = null
 
     private fun validateAddress(address: String) {
@@ -101,6 +100,7 @@ class AddressViewModel(
             addressState = try {
                 val parsedAddress = addressParser.parseAddress(address)
                 ensureActive()
+                contactsRepository.validateAddress(contactUid, ContactAddress(blockchain, parsedAddress.hex))
                 DataState.Success(parsedAddress)
             } catch (error: Throwable) {
                 ensureActive()

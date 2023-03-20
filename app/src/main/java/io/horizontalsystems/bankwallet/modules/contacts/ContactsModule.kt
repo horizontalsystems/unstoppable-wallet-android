@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
@@ -31,12 +32,13 @@ object ContactsModule {
     }
 
     class AddressViewModelFactory(
+        private val contactUid: String?,
         private val contactAddress: ContactAddress?,
         private val definedAddresses: List<ContactAddress>?
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AddressViewModel(App.evmBlockchainManager, App.marketKit, contactAddress, definedAddresses) as T
+            return AddressViewModel(contactUid, App.contactsRepository, App.evmBlockchainManager, App.marketKit, contactAddress, definedAddresses) as T
         }
     }
 
@@ -49,5 +51,12 @@ object ContactsModule {
         AddToNewContact(R.string.Contacts_AddAddress_NewContact),
         AddToExistingContact(R.string.Contacts_AddAddress_ExistingContact)
     }
+
+    sealed class ContactValidationException(override val message: String?) : Throwable() {
+        object DuplicateContactName : ContactValidationException(Translator.getString(R.string.Contacts_Error_DefinedName))
+        class DuplicateAddress(val contact: Contact) :
+            ContactValidationException(Translator.getString(R.string.Contacts_Error_DefinedAddress, contact.name))
+    }
+
 
 }

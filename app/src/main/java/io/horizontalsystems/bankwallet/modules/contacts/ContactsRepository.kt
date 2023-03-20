@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule.ContactValidationException
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -81,6 +82,22 @@ class ContactsRepository(
     fun initialize() {
         coroutineScope.launch {
             readFromFile()
+        }
+    }
+
+    @Throws
+    fun validateContactName(contactUid: String, name: String) {
+        if (contacts.any { it.uid != contactUid && it.name == name }) {
+            throw ContactValidationException.DuplicateContactName
+        }
+    }
+
+    @Throws
+    fun validateAddress(contactUid: String?, address: ContactAddress) {
+        val contactWithSameAddress = contacts.find { it.uid != contactUid && it.addresses.contains(address) }
+
+        if (contactWithSameAddress != null) {
+            throw ContactValidationException.DuplicateAddress(contactWithSameAddress)
         }
     }
 
