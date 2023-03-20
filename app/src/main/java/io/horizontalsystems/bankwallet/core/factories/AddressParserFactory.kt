@@ -20,6 +20,7 @@ class AddressParserFactory {
         BlockchainType.ArbitrumOne,
         BlockchainType.Solana,
         BlockchainType.Gnosis,
+        BlockchainType.Fantom,
         is BlockchainType.Unsupported -> AddressParser("", false)
     }
 }

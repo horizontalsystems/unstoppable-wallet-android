@@ -32,6 +32,7 @@ object AddressInputModule {
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.Gnosis,
+                BlockchainType.Fantom,
                 BlockchainType.ArbitrumOne -> {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())
                 }
@@ -68,6 +69,7 @@ object AddressInputModule {
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.Gnosis,
+                BlockchainType.Fantom,
                 BlockchainType.ArbitrumOne -> {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())
                 }

@@ -92,6 +92,7 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
             BlockchainType.Optimism,
             BlockchainType.Avalanche,
             BlockchainType.Gnosis,
+            BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> "ETH"
             BlockchainType.Bitcoin -> "BTC"
             BlockchainType.BitcoinCash -> "BCH"
@@ -114,7 +115,8 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
                 BlockchainType.Ethereum,
                 BlockchainType.Optimism,
                 BlockchainType.ArbitrumOne,
-                BlockchainType.Gnosis -> "ERC20"
+                BlockchainType.Gnosis,
+                BlockchainType.Fantom -> "ERC20"
                 else -> null
             }
             else -> null
