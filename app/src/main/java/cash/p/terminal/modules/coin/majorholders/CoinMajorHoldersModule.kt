@@ -8,13 +8,14 @@ import cash.p.terminal.modules.coin.CoinViewFactory
 import cash.p.terminal.modules.coin.MajorHolderItem
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.StackBarSlice
+import io.horizontalsystems.marketkit.models.Blockchain
 
 object CoinMajorHoldersModule {
-    class Factory(private val coinUid: String, private val blockchainUid: String) : ViewModelProvider.Factory {
+    class Factory(private val coinUid: String, private val blockchain: Blockchain) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val factory = CoinViewFactory(App.currencyManager.baseCurrency, App.numberFormatter)
-            return CoinMajorHoldersViewModel(coinUid, blockchainUid, App.marketKit, factory) as T
+            return CoinMajorHoldersViewModel(coinUid, blockchain, App.marketKit, factory) as T
         }
     }
 
