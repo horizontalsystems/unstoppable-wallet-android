@@ -153,8 +153,14 @@ open class ChartViewModel(
             val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
 
             val dominanceData = latestItem.indicators[Indicator.Dominance]?.let { dominance ->
+                val earliestItem = chartItems.first()
+                val diff = earliestItem.indicators[Indicator.Dominance]?.let { earliestDominance ->
+                    Value.Percent((dominance - earliestDominance).toBigDecimal())
+                }
+
                 ChartModule.ChartHeaderExtraData.Dominance(
-                    App.numberFormatter.format(dominance, 0, 2, suffix = "%")
+                    App.numberFormatter.format(dominance, 0, 2, suffix = "%"),
+                    diff
                 )
             }
             ChartModule.ChartHeaderView(currentValue, null, Value.Percent(chartData.diff()), dominanceData)
@@ -226,9 +232,20 @@ open class ChartViewModel(
         val volume = item.values[Indicator.Volume]
 
         return when {
-            dominance != null -> ChartModule.ChartHeaderExtraData.Dominance(
-                App.numberFormatter.format(dominance, 0, 2, suffix = "%")
-            )
+            dominance != null -> {
+                val diff = chartInfoData?.let {
+                    it.chartData.items.firstOrNull()?.let {
+                        it.values[Indicator.Dominance]?.let { earliestValue ->
+                            Value.Percent((dominance - earliestValue).toBigDecimal())
+                        }
+                    }
+                }
+
+                ChartModule.ChartHeaderExtraData.Dominance(
+                    App.numberFormatter.format(dominance, 0, 2, suffix = "%"),
+                    diff
+                )
+            }
             volume != null -> ChartModule.ChartHeaderExtraData.Volume(
                 App.numberFormatter.formatFiatShort(volume.toBigDecimal(), service.currency.symbol, 2)
             )
