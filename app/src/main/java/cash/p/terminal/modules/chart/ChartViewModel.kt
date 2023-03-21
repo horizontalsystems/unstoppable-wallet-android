@@ -36,7 +36,7 @@ open class ChartViewModel(
     private var chartHeaderView: ChartModule.ChartHeaderView? = null
     private var chartInfoData: ChartInfoData? = null
     private var loading = false
-    private var viewState: ViewState = ViewState.Loading
+    private var viewState: ViewState = ViewState.Success
 
     var uiState by mutableStateOf(
         ChartUiState(
@@ -79,9 +79,7 @@ open class ChartViewModel(
 
                 loading = false
 
-                chartItemsDataState.getOrNull()?.let {
-                    syncChartItems(it)
-                }
+                syncChartItems(chartItemsDataState.getOrNull())
 
                 emitState()
             }
@@ -132,9 +130,13 @@ open class ChartViewModel(
         service.refresh()
     }
 
-    private fun syncChartItems(chartPointsWrapper: ChartPointsWrapper) {
-        val chartItems = chartPointsWrapper.items
-        if (chartItems.isEmpty()) return
+    private fun syncChartItems(chartPointsWrapper: ChartPointsWrapper?) {
+        if (chartPointsWrapper == null || chartPointsWrapper.items.isEmpty()) {
+            chartHeaderView = null
+            chartInfoData = null
+
+            return
+        }
 
         val chartData = ChartDataBuilder.buildFromPoints(
             chartPointsWrapper.items,
@@ -148,6 +150,8 @@ open class ChartViewModel(
             val sum = valueFormatter.formatValue(service.currency, chartData.sum())
             ChartModule.ChartHeaderView(sum, null, null, null)
         } else {
+            val chartItems = chartPointsWrapper.items
+
             val latestItem = chartItems.last()
             val lastItemValue = latestItem.value
             val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())

@@ -10,7 +10,10 @@ import cash.p.terminal.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.ChartInfo
+import io.horizontalsystems.marketkit.models.ChartPointType
+import io.horizontalsystems.marketkit.models.HsPeriodType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.rx2.await
@@ -80,7 +83,7 @@ class CoinOverviewChartService(
         chartInterval: HsTimePeriod?
     ): Single<ChartPointsWrapper> {
         val newKey = currency.code
-        if (forceRefresh || newKey != updatesSubscriptionKey) {
+        if (newKey != updatesSubscriptionKey) {
             unsubscribeFromUpdates()
             subscribeForUpdates(currency)
             updatesSubscriptionKey = newKey
@@ -88,9 +91,7 @@ class CoinOverviewChartService(
 
         return chartInfoCached(currency, periodType)
             .map {
-                val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
-
-                doGetItems(it, tmpLastCoinPrice, chartInterval)
+                doGetItems(it, chartInterval)
             }
     }
 
@@ -126,11 +127,12 @@ class CoinOverviewChartService(
 
     private fun doGetItems(
         chartInfo: ChartInfo,
-        lastCoinPrice: CoinPrice?,
         chartInterval: HsTimePeriod?
     ): ChartPointsWrapper {
+        val lastCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: return ChartPointsWrapper(listOf())
+
         val points = chartInfo.points
-        if (lastCoinPrice == null || points.isEmpty()) return ChartPointsWrapper(listOf())
+        if (points.isEmpty()) return ChartPointsWrapper(listOf())
 
         val items = points
             .map { chartPoint ->
