@@ -1,12 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -130,51 +136,65 @@ fun Chart(
     Column {
         var selectedPoint by remember { mutableStateOf<ChartModule.ChartHeaderView?>(null) }
 
-        HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
-        Chart(
-            tabItems = uiState.tabItems,
-            onSelectTab = {
-                chartViewModel.onSelectChartInterval(it)
-                onSelectChartInterval?.invoke(it)
-            },
-            chartInfoData = uiState.chartInfoData,
-            chartLoading = uiState.loading,
-            viewState = uiState.viewState,
-            hasVolumes = uiState.hasVolumes,
-            chartViewType = uiState.chartViewType
-        ) { item ->
-            selectedPoint = item?.let {
-                chartViewModel.getSelectedPoint(it)
+        Crossfade(targetState = uiState.viewState) {
+            when (it) {
+                is ViewState.Error -> {
+                    val height = if (uiState.hasVolumes) 268.dp else 224.dp
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(height),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .background(
+                                    color = ComposeAppTheme.colors.raina,
+                                    shape = CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(48.dp),
+                                painter = painterResource(R.drawable.ic_sync_error),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.grey
+                            )
+                        }
+                        VSpacer(height = 32.dp)
+                        subhead2_grey(text = stringResource(id = R.string.SyncError))
+                    }
+                }
+                ViewState.Loading -> Unit
+                ViewState.Success -> {
+                    Column {
+                        HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
+
+                        PriceVolChart(
+                            chartInfoData = uiState.chartInfoData,
+                            loading = uiState.loading,
+                            viewState = uiState.viewState,
+                            hasVolumes = uiState.hasVolumes,
+                            chartViewType = uiState.chartViewType,
+                        ) { item ->
+                            selectedPoint = item?.let {
+                                chartViewModel.getSelectedPoint(it)
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
-}
 
-@Composable
-fun <T> Chart(
-    tabItems: List<TabItem<T>>,
-    onSelectTab: (T) -> Unit,
-    chartInfoData: ChartInfoData?,
-    chartLoading: Boolean,
-    viewState: ViewState?,
-    hasVolumes: Boolean,
-    chartViewType: ChartViewType,
-    onSelectPoint: (ChartDataItemImmutable?) -> Unit,
-) {
-    Column {
-        PriceVolChart(
-            chartInfoData = chartInfoData,
-            loading = chartLoading,
-            viewState = viewState,
-            onSelectPoint = onSelectPoint,
-            hasVolumes = hasVolumes,
-            chartViewType = chartViewType
-        )
         VSpacer(height = 8.dp)
         ChartTab(
-            tabItems = tabItems,
-            onSelect = onSelectTab
-        )
+            tabItems = uiState.tabItems,
+        ) {
+            chartViewModel.onSelectChartInterval(it)
+            onSelectChartInterval?.invoke(it)
+        }
     }
 }
 
@@ -183,9 +203,9 @@ fun PriceVolChart(
     chartInfoData: ChartInfoData?,
     loading: Boolean,
     viewState: ViewState?,
-    onSelectPoint: (ChartDataItemImmutable?) -> Unit,
     hasVolumes: Boolean,
     chartViewType: ChartViewType,
+    onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
