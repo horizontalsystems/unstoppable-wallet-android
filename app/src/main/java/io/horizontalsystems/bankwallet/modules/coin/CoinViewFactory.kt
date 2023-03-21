@@ -123,7 +123,7 @@ class CoinViewFactory(
         tokenHolders.topHolders
             .sortedByDescending { it.percentage }
             .forEachIndexed { index, holder ->
-                val shareFormatted = numberFormatter.format(holder.percentage, 0, 2, suffix = "%")
+                val shareFormatted = numberFormatter.format(holder.percentage, 0, 4, suffix = "%")
                 val balanceFormatted = numberFormatter.formatNumberShort(holder.balance, 2)
                 list.add(
                     MajorHolderItem(
