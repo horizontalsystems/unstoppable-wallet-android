@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmOutgoi
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 abstract class TransactionRecord(
     val uid: String,
@@ -22,6 +23,9 @@ abstract class TransactionRecord(
 ) : Comparable<TransactionRecord> {
 
     open val mainValue: TransactionValue? = null
+
+    val blockchainType: BlockchainType
+        get() = source.blockchain.type
 
     open fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean =
         status(oldBlockInfo?.height) != status(newBlockInfo?.height)
