@@ -13,7 +13,6 @@ import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -23,7 +22,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
@@ -116,18 +114,16 @@ fun ContactsScreen(
                 AppBar(
                     title = {
                         if (searchMode) {
-                            var searchTextState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                                mutableStateOf(TextFieldValue(""))
-                            }
+                            var searchText by remember { mutableStateOf(uiState.nameQuery ?: "") }
                             val focusRequester = remember { FocusRequester() }
 
                             BasicTextField(
                                 modifier = Modifier
                                     .focusRequester(focusRequester),
-                                value = searchTextState,
+                                value = searchText,
                                 onValueChange = { value ->
-                                    searchTextState = value
-                                    viewModel.onEnterQuery(value.text)
+                                    searchText = value
+                                    viewModel.onEnterQuery(value)
                                 },
                                 singleLine = true,
                                 textStyle = ColoredTextStyle(
@@ -135,7 +131,7 @@ fun ContactsScreen(
                                     textStyle = ComposeAppTheme.typography.body
                                 ),
                                 decorationBox = { innerTextField ->
-                                    if (searchTextState.text.isEmpty()) {
+                                    if (searchText.isEmpty()) {
                                         body_grey50(stringResource(R.string.Market_Search_Hint))
                                     }
                                     innerTextField()
@@ -218,17 +214,24 @@ fun ContactsScreen(
                         Spacer(Modifier.height(32.dp))
                     }
                 } else {
-                    ScreenMessageWithAction(
-                        text = stringResource(R.string.Contacts_NoContacts),
-                        icon = R.drawable.icon_user_plus
-                    ) {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 48.dp)
-                                .fillMaxWidth(),
-                            title = stringResource(R.string.Contacts_AddNewContact),
-                            onClick = onNavigateToCreateContact
+                    if (searchMode) {
+                        ListEmptyView(
+                            text = stringResource(R.string.EmptyResults),
+                            icon = R.drawable.ic_not_found
                         )
+                    } else {
+                        ScreenMessageWithAction(
+                            text = stringResource(R.string.Contacts_NoContacts),
+                            icon = R.drawable.icon_user_plus
+                        ) {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 48.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Contacts_AddNewContact),
+                                onClick = onNavigateToCreateContact
+                            )
+                        }
                     }
                 }
 
