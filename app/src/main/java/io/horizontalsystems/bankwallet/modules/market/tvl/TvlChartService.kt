@@ -34,7 +34,7 @@ class TvlChartService(
             currency.code,
             chartInterval
         ).map {
-            ChartPointsWrapper(chartInterval, it)
+            ChartPointsWrapper(it)
         }
     }
 }

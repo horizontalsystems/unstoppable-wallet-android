@@ -80,11 +80,7 @@ class ProChartService(
                 }
 
                 return@map ChartPointsWrapper(
-                    chartInterval,
                     items,
-                    null,
-                    null,
-                    false,
                     isMovementChart
                 )
             }

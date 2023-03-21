@@ -170,7 +170,6 @@ open class ChartViewModel(
 
         val chartInfoData = ChartInfoData(
             chartData,
-            chartPointsWrapper.chartInterval,
             maxValue,
             minValue
         )
