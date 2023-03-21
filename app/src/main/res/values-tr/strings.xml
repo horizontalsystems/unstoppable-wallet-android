@@ -1284,8 +1284,9 @@
     <string name="BiometricAuth_DialogTitle">Biyometri Tarayıcı</string>
     <!--Contacts-->
     <string name="Contacts">Kişiler</string>
-    <string name="Contacts_Export">Kişileri Dışa Aktar</string>
-    <string name="Contacts_Import">Kişileri İçeri Aktar</string>
+    <string name="Contacts_Backup">Backup Contacts</string>
+    <string name="Contacts_Restore">Restore Contacts</string>
+    <string name="Contacts_Restore_Warning">This action will completely overwrite your contacts and delete your existing contact list. Do you want to replace your contact list? </string>
     <string name="Contacts_AddressesCount">Adresler: %s</string>
     <string name="Contacts_NewContact">Yeni Kişi</string>
     <string name="Contacts_AddNewContact">Yeni Kişi Ekle</string>
