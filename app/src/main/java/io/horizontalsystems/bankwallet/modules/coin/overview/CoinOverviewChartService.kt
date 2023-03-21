@@ -31,6 +31,7 @@ class CoinOverviewChartService(
     private val disposables = CompositeDisposable()
 
     private var chartStartTime: Long = 0
+    private val cache = mutableMapOf<String, ChartInfo>()
 
     override suspend fun start() {
         try {
@@ -78,33 +79,43 @@ class CoinOverviewChartService(
         periodType: HsPeriodType,
         chartInterval: HsTimePeriod?
     ): Single<ChartPointsWrapper> {
-        val newKey = (chartInterval?.name ?: "All") + currency.code
+        val newKey = currency.code
         if (forceRefresh || newKey != updatesSubscriptionKey) {
             unsubscribeFromUpdates()
-            subscribeForUpdates(currency, periodType)
+            subscribeForUpdates(currency)
             updatesSubscriptionKey = newKey
         }
 
-        val tmpChartInfo = marketKit.chartInfo(coinUid, currency.code, periodType)
-        val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
+        return chartInfoCached(currency, periodType)
+            .map {
+                val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
 
-        return Single.just(doGetItems(tmpChartInfo, tmpLastCoinPrice, chartInterval))
+                doGetItems(it, tmpLastCoinPrice, chartInterval)
+            }
+    }
+
+    private fun chartInfoCached(
+        currency: Currency,
+        periodType: HsPeriodType
+    ): Single<ChartInfo> {
+        val cacheKey = currency.code + periodType.serialize()
+        val cached = cache[cacheKey]
+        return if (cached != null) {
+            Single.just(cached)
+        } else {
+            marketKit.chartInfoSingle(coinUid, currency.code, periodType)
+                .doOnSuccess {
+                    cache[cacheKey] = it
+                }
+        }
     }
 
     private fun unsubscribeFromUpdates() {
         disposables.clear()
     }
 
-    private fun subscribeForUpdates(currency: Currency, periodType: HsPeriodType) {
+    private fun subscribeForUpdates(currency: Currency) {
         marketKit.coinPriceObservable(coinUid, currency.code)
-            .subscribeIO {
-                dataInvalidated()
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        marketKit.getChartInfoAsync(coinUid, currency.code, periodType)
             .subscribeIO {
                 dataInvalidated()
             }
@@ -114,17 +125,15 @@ class CoinOverviewChartService(
     }
 
     private fun doGetItems(
-        chartInfo: ChartInfo?,
+        chartInfo: ChartInfo,
         lastCoinPrice: CoinPrice?,
         chartInterval: HsTimePeriod?
     ): ChartPointsWrapper {
-        if (chartInfo == null || lastCoinPrice == null) return ChartPointsWrapper(chartInterval, listOf())
         val points = chartInfo.points
-        if (points.isEmpty()) return ChartPointsWrapper(chartInterval, listOf())
+        if (lastCoinPrice == null || points.isEmpty()) return ChartPointsWrapper(chartInterval, listOf())
 
         val items = points
-            .mapIndexed { index, chartPoint ->
-
+            .map { chartPoint ->
                 ChartPoint(
                     value = chartPoint.value.toFloat(),
                     timestamp = chartPoint.timestamp,
