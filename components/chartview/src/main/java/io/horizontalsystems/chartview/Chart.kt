@@ -3,7 +3,6 @@ package io.horizontalsystems.chartview
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.chartview.Indicator.*
@@ -97,33 +96,12 @@ class Chart @JvmOverloads constructor(
 
     fun showSpinner() {
         binding.root.alpha = 0.5f
-        binding.chartError.isVisible = false
         binding.chartViewSpinner.isVisible = true
     }
 
     fun hideSpinner() {
         binding.root.alpha = 1f
         binding.chartViewSpinner.isVisible = false
-    }
-
-    fun showError(error: String) {
-        showChart(false)
-        binding.chartError.isVisible = true
-        binding.chartError.text = error
-    }
-
-    fun hideError() {
-        showChart(true)
-        binding.chartError.isVisible = false
-        binding.chartError.text = null
-    }
-
-    private fun showChart(visible: Boolean = true) {
-        setVisible(
-            binding.chartMain,
-            binding.topLowRange,
-            isVisible = visible
-        )
     }
 
     fun setData(
@@ -276,10 +254,6 @@ class Chart @JvmOverloads constructor(
         animatorMain.start()
         animatorTopBottomRange.start()
         animatorBottom.start()
-    }
-
-    private fun setVisible(vararg view: View, isVisible: Boolean) {
-        view.forEach { it.isVisible = isVisible }
     }
 
 }
