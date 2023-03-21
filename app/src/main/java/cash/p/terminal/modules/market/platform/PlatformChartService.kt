@@ -27,7 +27,7 @@ class PlatformChartService(
     ): Single<ChartPointsWrapper> = try {
         marketKit.topPlatformMarketCapPointsSingle(platform.uid, chartInterval, currency.code)
             .map { info -> info.map { ChartPoint(it.marketCap.toFloat(), it.timestamp) } }
-            .map { ChartPointsWrapper(chartInterval, it) }
+            .map { ChartPointsWrapper(it) }
     } catch (e: Exception) {
         Single.error(e)
     }

@@ -28,7 +28,7 @@ class CoinTvlChartService(
             .map { info ->
                 info.map { ChartPoint(it.value.toFloat(), it.timestamp) }
             }
-            .map { ChartPointsWrapper(chartInterval, it) }
+            .map { ChartPointsWrapper(it) }
     } catch (e: Exception) {
         Single.error(e)
     }

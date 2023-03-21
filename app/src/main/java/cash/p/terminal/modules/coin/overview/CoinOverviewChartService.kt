@@ -130,7 +130,7 @@ class CoinOverviewChartService(
         chartInterval: HsTimePeriod?
     ): ChartPointsWrapper {
         val points = chartInfo.points
-        if (lastCoinPrice == null || points.isEmpty()) return ChartPointsWrapper(chartInterval, listOf())
+        if (lastCoinPrice == null || points.isEmpty()) return ChartPointsWrapper(listOf())
 
         val items = points
             .map { chartPoint ->
@@ -165,7 +165,7 @@ class CoinOverviewChartService(
 
         items.removeIf { it.timestamp < chartInfo.startTimestamp }
 
-        return ChartPointsWrapper(chartInterval, items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
+        return ChartPointsWrapper(items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
     }
 
 }

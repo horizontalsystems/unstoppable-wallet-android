@@ -1,20 +1,18 @@
 package cash.p.terminal.modules.chart
 
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 data class ChartPointsWrapper(
-    val chartInterval: HsTimePeriod?,
     val items: List<ChartPoint>,
     val startTimestamp: Long?,
     val endTimestamp: Long?,
     val isExpired: Boolean = false,
     val isMovementChart: Boolean = true,
 ) {
-    constructor(chartInterval: HsTimePeriod?, items: List<ChartPoint>) : this(
-        chartInterval,
+    constructor(items: List<ChartPoint>, isMovementChart: Boolean = true) : this(
         items,
         items.firstOrNull()?.timestamp,
         items.lastOrNull()?.timestamp,
+        isMovementChart
     )
 }

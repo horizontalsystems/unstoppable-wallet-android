@@ -19,7 +19,6 @@ import java.net.URI
 
 data class ChartInfoData(
     val chartData: ChartData,
-    val chartInterval: HsTimePeriod?,
     val maxValue: String?,
     val minValue: String?
 )
