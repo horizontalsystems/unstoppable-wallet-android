@@ -175,9 +175,6 @@ class MarketKitWrapper(
 
     fun chartInfoSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) = marketKit.chartInfoSingle(coinUid, currencyCode, periodType)
 
-    fun getChartInfoAsync(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
-        marketKit.getChartInfoAsync(coinUid, currencyCode, periodType)
-
     // Global Market Info
 
     fun globalMarketPointsSingle(currencyCode: String, timePeriod: HsTimePeriod) =
