@@ -10,7 +10,8 @@ class ChartBars(
     private val animator: ChartAnimator,
     var barColor: Int,
     private val barMinHeight: Float,
-    private val barMaxWidth: Float
+    private val barMaxWidth: Float,
+    private val horizontalOffset: Float
 ) : ChartDraw {
     override var isVisible: Boolean = true
 
@@ -107,14 +108,14 @@ class ChartBars(
         val valueMin = frameMinValue
         val valueMax = frameMaxValue
 
-        val xRatio = canvasWidth / (timestampMax - timestampMin)
+        val xRatio = (canvasWidth - horizontalOffset * 2) / (timestampMax - timestampMin)
         val yRatio = (canvasHeight - barMinHeight) / (valueMax - valueMin)
 
         val points = frameValues.mapNotNull { (timestamp, valueRaw) ->
             val value = valueRaw.coerceAtMost(valueMax)
 
-            val x = (timestamp - timestampMin) * xRatio
-            val y = ((value - valueMin) * yRatio + barMinHeight)
+            val x = (timestamp - timestampMin) * xRatio + horizontalOffset
+            val y = (value - valueMin) * yRatio + barMinHeight
 
             if (y >= 0) {
                 x to y

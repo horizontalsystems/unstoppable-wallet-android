@@ -6,8 +6,8 @@ import io.horizontalsystems.chartview.Coordinate
 import io.horizontalsystems.chartview.Indicator.Candle
 
 object PointConverter {
-    fun coordinates(data: ChartData, shape: RectF, verticalPadding: Float): List<Coordinate> {
-        val width = shape.width()
+    fun coordinates(data: ChartData, shape: RectF, verticalPadding: Float, horizontalOffset: Float): List<Coordinate> {
+        val width = shape.width() - horizontalOffset * 2
         val height = shape.height() - verticalPadding * 2
 
         val valueMin = data.valueRange.lower
@@ -26,7 +26,7 @@ object PointConverter {
 
             coordinates.add(
                 Coordinate(
-                    x = x,
+                    x = x + horizontalOffset,
                     y = shape.height() - verticalPadding - y,
                     item = item,
                 )
