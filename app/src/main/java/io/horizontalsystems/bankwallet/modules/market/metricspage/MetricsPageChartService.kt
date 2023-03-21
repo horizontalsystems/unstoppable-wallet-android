@@ -30,7 +30,7 @@ class MetricsPageChartService(
             chartInterval,
             metricsType
         ).map {
-            ChartPointsWrapper(chartInterval, it)
+            ChartPointsWrapper(it)
         }
     }
 }
