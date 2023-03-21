@@ -32,7 +32,7 @@ class ContactsViewModel(
     val exportFileName: String
         get() = "UW_Contacts_${System.currentTimeMillis() / 1000}.json"
 
-    var uiState by mutableStateOf(UiState(contacts, nameQuery != null, showAddContact, showMoreOptions))
+    var uiState by mutableStateOf(UiState(contacts, nameQuery, nameQuery != null, showAddContact, showMoreOptions))
         private set
 
     init {
@@ -65,11 +65,12 @@ class ContactsViewModel(
     }
 
     private fun emitState() {
-        uiState = UiState(contacts, nameQuery != null, showAddContact, showMoreOptions)
+        uiState = UiState(contacts, nameQuery, nameQuery != null, showAddContact, showMoreOptions)
     }
 
     data class UiState(
         val contacts: List<Contact>,
+        val nameQuery: String?,
         val searchMode: Boolean,
         val showAddContact: Boolean,
         val showMoreOptions: Boolean
