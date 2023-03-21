@@ -39,7 +39,8 @@ class Chart @JvmOverloads constructor(
         animatorMain,
         config.barColor,
         config.volumeMinHeight,
-        config.volumeWidth
+        config.volumeWidth,
+        config.horizontalOffset,
     )
     private val mainCurve = ChartCurve2(config)
     private val mainGradient = ChartGradient(animatorMain)
@@ -50,7 +51,8 @@ class Chart @JvmOverloads constructor(
         animatorBottom,
         config.volumeColor,
         config.volumeMinHeight,
-        config.volumeWidth
+        config.volumeWidth,
+        config.horizontalOffset,
     )
 
     private val dominanceCurve = ChartCurve2(config)
@@ -162,12 +164,13 @@ class Chart @JvmOverloads constructor(
             binding.chartMain.shape.bottom,
             0f,
             0f,
+            config.horizontalOffset
         )
 
         config.setTrendColor(data)
 
         val coordinates =
-            PointConverter.coordinates(data, binding.chartMain.shape, 0f)
+            PointConverter.coordinates(data, binding.chartMain.shape, 0f, config.horizontalOffset)
 
         //Dominance
         val dominanceValues = data.valuesByTimestamp(Dominance)
@@ -183,6 +186,7 @@ class Chart @JvmOverloads constructor(
                 binding.chartMain.shape.bottom,
                 0f,
                 0f,
+                config.horizontalOffset,
             )
 
             dominanceCurve.setShape(binding.chartMain.shape)
@@ -240,7 +244,7 @@ class Chart @JvmOverloads constructor(
         config.setTrendColor(data)
 
         val coordinates =
-            PointConverter.coordinates(data, binding.chartMain.shape, 0f)
+            PointConverter.coordinates(data, binding.chartMain.shape, 0f, config.horizontalOffset)
 
         binding.chartTouch.configure(config, 0f)
         binding.chartTouch.setCoordinates(coordinates)

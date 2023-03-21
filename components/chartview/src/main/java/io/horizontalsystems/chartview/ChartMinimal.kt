@@ -38,6 +38,7 @@ class ChartMinimal @JvmOverloads constructor(
             binding.chartMain.shape.bottom,
             0f,
             0f,
+            0f,
         )
         mainCurveAnimator.nextFrame(1f)
 

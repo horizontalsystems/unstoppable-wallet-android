@@ -57,6 +57,8 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var strokeDash = dp2px(2f)
     var strokeDashWidth = dp2px(0.5f)
 
+    var horizontalOffset = dp2px(8f)
+
     init {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.Chart)
         try {
