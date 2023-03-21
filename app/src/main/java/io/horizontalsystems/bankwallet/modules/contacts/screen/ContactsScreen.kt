@@ -37,7 +37,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 enum class ContactsScreenBottomSheetType {
-    ReplaceAddressConfirmation, RetoreContactsConfirmation
+    ReplaceAddressConfirmation, RestoreContactsConfirmation
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -124,7 +124,7 @@ fun ContactsScreen(
                             }
                         )
                     }
-                    ContactsScreenBottomSheetType.RetoreContactsConfirmation -> {
+                    ContactsScreenBottomSheetType.RestoreContactsConfirmation -> {
                         ConfirmationBottomSheet(
                             title = stringResource(R.string.Alert_TitleWarning),
                             text = stringResource(R.string.Contacts_Restore_Warning),
@@ -286,7 +286,7 @@ fun ContactsScreen(
                                 ContactsModule.ContactsAction.Restore -> {
                                     if (viewModel.shouldShowRestoreWarning()) {
                                         coroutineScope.launch {
-                                            bottomSheetType = ContactsScreenBottomSheetType.RetoreContactsConfirmation
+                                            bottomSheetType = ContactsScreenBottomSheetType.RestoreContactsConfirmation
                                             bottomSheetState.show()
                                         }
                                     } else {
