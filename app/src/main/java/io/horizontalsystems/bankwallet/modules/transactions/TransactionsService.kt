@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.nftUids
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -26,6 +27,7 @@ class TransactionsService(
     private val transactionRecordRepository: ITransactionRecordRepository,
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
+    private val contactsRepository: ContactsRepository,
     private val transactionAdapterManager: TransactionAdapterManager,
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
@@ -100,6 +102,25 @@ class TransactionsService(
                 handle(it)
             }
         }
+
+        coroutineScope.launch {
+            contactsRepository.contactsFlow.collect {
+                handleContactsUpdate()
+            }
+        }
+    }
+
+    @Synchronized
+    private fun handleContactsUpdate() {
+        val tmpList = mutableListOf<TransactionItem>()
+        transactionItems.forEach {
+            tmpList.add(it.copy())
+        }
+
+        transactionItems.clear()
+        transactionItems.addAll(tmpList)
+
+        itemsSubject.onNext(transactionItems)
     }
 
     @Synchronized
