@@ -1281,8 +1281,9 @@
     <string name="BiometricAuth_DialogTitle">Leitura Biométrica</string>
     <!--Contacts-->
     <string name="Contacts">Contatos</string>
-    <string name="Contacts_Export">Exportar Contatos</string>
-    <string name="Contacts_Import">Importar Contatos</string>
+    <string name="Contacts_Backup">Backup Contacts</string>
+    <string name="Contacts_Restore">Restore Contacts</string>
+    <string name="Contacts_Restore_Warning">This action will completely overwrite your contacts and delete your existing contact list. Do you want to replace your contact list? </string>
     <string name="Contacts_AddressesCount">Endereços: %s</string>
     <string name="Contacts_NewContact">Novo Contato</string>
     <string name="Contacts_AddNewContact">Adicionar um novo contato</string>
