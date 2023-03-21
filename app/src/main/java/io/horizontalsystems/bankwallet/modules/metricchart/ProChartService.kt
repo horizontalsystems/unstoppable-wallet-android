@@ -8,7 +8,9 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
 import io.horizontalsystems.chartview.ChartViewType
+import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.marketkit.models.ChartPointType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
@@ -21,6 +23,7 @@ class ProChartService(
 ) : AbstractChartService() {
 
     override val initialChartInterval = HsTimePeriod.Month1
+    override val hasVolumes = chartType == ProChartModule.ChartType.TxCount
 
     override val chartIntervals = HsTimePeriod.values().toList()
     override val chartViewType = when (chartType) {
@@ -69,7 +72,11 @@ class ProChartService(
         return chartDataSingle
             .map { chartPoints ->
                 val items = chartPoints.map { chartPoint ->
-                    ChartPoint(chartPoint.value.toFloat(), chartPoint.timestamp)
+                    ChartPoint(
+                        value = chartPoint.value.toFloat(),
+                        timestamp = chartPoint.timestamp,
+                        indicators = chartPoint.extra[ChartPointType.Volume]?.let { mapOf(Indicator.Volume to it.toFloat()) } ?: mapOf()
+                    )
                 }
 
                 return@map ChartPointsWrapper(
