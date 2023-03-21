@@ -20,7 +20,7 @@ class ContactViewModel(
     newAddress: ContactAddress?
 ) : ViewModel() {
 
-    val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf(), -1)
+    val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf())
     private val title = if (existingContact == null)
         TranslatableString.ResString(R.string.Contacts_NewContact)
     else
@@ -58,8 +58,7 @@ class ContactViewModel(
     fun onSave() {
         val editedContact = contact.copy(
             name = uiState.contactName,
-            addresses = uiState.addressViewItems.map { it.contactAddress },
-            modifiedTimestamp = System.currentTimeMillis() / 1000
+            addresses = uiState.addressViewItems.map { it.contactAddress }
         )
         repository.save(editedContact)
 

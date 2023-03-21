@@ -1548,8 +1548,9 @@
 
     <!--Contacts-->
     <string name="Contacts">Contacts</string>
-    <string name="Contacts_Export">Export Contacts</string>
-    <string name="Contacts_Import">Import Contacts</string>
+    <string name="Contacts_Backup">Backup Contacts</string>
+    <string name="Contacts_Restore">Restore Contacts</string>
+    <string name="Contacts_Restore_Warning">This action will completely overwrite your contacts and delete your existing contact list. Do you want to replace your contact list? </string>
     <string name="Contacts_AddressesCount">Addresses: %s</string>
     <string name="Contacts_NewContact">New Contact</string>
     <string name="Contacts_AddNewContact">Add New Contact</string>

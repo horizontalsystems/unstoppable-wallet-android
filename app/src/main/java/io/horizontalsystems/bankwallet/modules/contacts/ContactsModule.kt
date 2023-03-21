@@ -43,8 +43,8 @@ object ContactsModule {
     }
 
     enum class ContactsAction(@StringRes val title: Int) {
-        Import(R.string.Contacts_Import),
-        Export(R.string.Contacts_Export)
+        Restore(R.string.Contacts_Restore),
+        Backup(R.string.Contacts_Backup)
     }
 
     enum class AddAddressAction(@StringRes val title: Int) {
