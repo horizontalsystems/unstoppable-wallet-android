@@ -20,12 +20,13 @@ object TransactionsModule {
                     TransactionRecordRepository(App.transactionAdapterManager),
                     TransactionsRateRepository(App.currencyManager, App.marketKit),
                     TransactionSyncStateRepository(App.transactionAdapterManager),
+                    App.contactsRepository,
                     App.transactionAdapterManager,
                     App.walletManager,
                     TransactionFilterService(),
                     NftMetadataService(App.nftMetadataManager)
                 ),
-                TransactionViewItemFactory(App.evmLabelManager)
+                TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository)
             ) as T
         }
     }

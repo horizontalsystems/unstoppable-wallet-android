@@ -17,13 +17,17 @@ import cash.p.terminal.entities.transactionrecords.evm.*
 import cash.p.terminal.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
+import cash.p.terminal.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactionInfo.ColorName
 import cash.p.terminal.modules.transactionInfo.ColoredValue
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 import java.util.*
 
 class TransactionViewItemFactory(
-    private val evmLabelManager: EvmLabelManager
+    private val evmLabelManager: EvmLabelManager,
+    private val contactsRepository: ContactsRepository
 ) {
 
     private val cache = mutableMapOf<String, Map<Long, TransactionViewItem>>()
@@ -255,6 +259,14 @@ class TransactionViewItemFactory(
         )
     }
 
+    private fun getContact(address: String, blockchainType: BlockchainType): Contact? {
+        return contactsRepository.getContactsFiltered(blockchainType, addressQuery = address).firstOrNull()
+    }
+
+    private fun mapped(address: String, blockchainType: BlockchainType): String {
+        return getContact(address, blockchainType)?.name ?: evmLabelManager.mapped(address)
+    }
+
     private fun createViewItemFromSwapTransactionRecord(
         record: SwapTransactionRecord,
         progress: Float?,
@@ -269,7 +281,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = evmLabelManager.mapped(record.exchangeAddress),
+            subtitle = mapped(record.exchangeAddress, record.blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -289,7 +301,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = evmLabelManager.mapped(record.exchangeAddress),
+            subtitle = mapped(record.exchangeAddress, record.blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -333,7 +345,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Send),
-            subtitle = Translator.getString(R.string.Transactions_To, evmLabelManager.mapped(record.to)),
+            subtitle = Translator.getString(R.string.Transactions_To, mapped(record.to, record.blockchainType)),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -366,7 +378,7 @@ class TransactionViewItemFactory(
             title = Translator.getString(R.string.Transactions_Receive),
             subtitle = Translator.getString(
                 R.string.Transactions_From,
-                evmLabelManager.mapped(record.from)
+                mapped(record.from, record.blockchainType)
             ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
@@ -407,7 +419,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = title,
-            subtitle = evmLabelManager.mapped(record.contractAddress),
+            subtitle = mapped(record.contractAddress, record.blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -439,7 +451,7 @@ class TransactionViewItemFactory(
 
             subTitle = if (addresses.size == 1) {
                 Translator.getString(
-                    R.string.Transactions_From, evmLabelManager.mapped(addresses.first())
+                    R.string.Transactions_From, mapped(addresses.first(), record.blockchainType)
                 )
             } else {
                 Translator.getString(R.string.Transactions_Multiple)
@@ -471,7 +483,7 @@ class TransactionViewItemFactory(
         val subtitle = record.to?.let {
             Translator.getString(
                 R.string.Transactions_To,
-                evmLabelManager.mapped(it)
+                mapped(it, record.blockchainType)
             )
         } ?: "---"
 
@@ -517,7 +529,7 @@ class TransactionViewItemFactory(
         val subtitle = record.from?.let {
             Translator.getString(
                 R.string.Transactions_From,
-                evmLabelManager.mapped(it)
+                mapped(it, record.blockchainType)
             )
         } ?: "---"
 
@@ -568,7 +580,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Send),
-            subtitle = Translator.getString(R.string.Transactions_To, evmLabelManager.mapped(record.to)),
+            subtitle = Translator.getString(R.string.Transactions_To, mapped(record.to, record.blockchainType)),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -594,7 +606,7 @@ class TransactionViewItemFactory(
             title = Translator.getString(R.string.Transactions_Receive),
             subtitle = Translator.getString(
                 R.string.Transactions_From,
-                evmLabelManager.mapped(record.from)
+                mapped(record.from, record.blockchainType)
             ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
@@ -627,7 +639,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Approve),
-            subtitle = evmLabelManager.mapped(record.spender),
+            subtitle = mapped(record.spender, record.blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),

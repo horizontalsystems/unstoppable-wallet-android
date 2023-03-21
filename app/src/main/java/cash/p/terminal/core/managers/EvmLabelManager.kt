@@ -44,7 +44,7 @@ class EvmLabelManager(
         return methodLabelDao.get(methodId.lowercase())?.label
     }
 
-    fun addressLabel(address: String): String? {
+    private fun addressLabel(address: String): String? {
         return addressLabelDao.get(address.lowercase())?.label
     }
 
