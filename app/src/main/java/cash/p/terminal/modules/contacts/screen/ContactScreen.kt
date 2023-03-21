@@ -34,7 +34,7 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
-enum class BottomSheetType {
+enum class ContactScreenBottomSheetType {
     DeleteConfirmation, DiscardChangesConfirmation
 }
 
@@ -49,7 +49,7 @@ fun ContactScreen(
     val view = LocalView.current
 
     ComposeAppTheme {
-        var bottomSheetType: BottomSheetType? by remember { mutableStateOf(null) }
+        var bottomSheetType: ContactScreenBottomSheetType? by remember { mutableStateOf(null) }
         val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val coroutineScope = rememberCoroutineScope()
         val focusRequester = remember { FocusRequester() }
@@ -73,7 +73,7 @@ fun ContactScreen(
                     null -> {
                         Spacer(modifier = Modifier.height(1.dp))
                     }
-                    BottomSheetType.DeleteConfirmation -> {
+                    ContactScreenBottomSheetType.DeleteConfirmation -> {
                         ConfirmationBottomSheet(
                             title = stringResource(R.string.Contacts_DeleteContact),
                             text = stringResource(R.string.Contacts_DeleteContact_Warning),
@@ -86,7 +86,7 @@ fun ContactScreen(
                             onClose = { coroutineScope.launch { modalBottomSheetState.hide() } }
                         )
                     }
-                    BottomSheetType.DiscardChangesConfirmation -> {
+                    ContactScreenBottomSheetType.DiscardChangesConfirmation -> {
                         ConfirmationBottomSheet(
                             title = stringResource(R.string.Alert_TitleWarning),
                             text = stringResource(R.string.Contacts_DiscardChanges_Warning),
@@ -104,7 +104,7 @@ fun ContactScreen(
         ) {
             val confirmNavigateToBack: () -> Unit = {
                 if (uiState.confirmBack) {
-                    bottomSheetType = BottomSheetType.DiscardChangesConfirmation
+                    bottomSheetType = ContactScreenBottomSheetType.DiscardChangesConfirmation
                     coroutineScope.launch {
                         focusManager.clearFocus(true)
                         modalBottomSheetState.show()
@@ -167,7 +167,7 @@ fun ContactScreen(
                         onAddAddress = { onNavigateToAddress(null) },
                         showDelete = uiState.showDelete,
                         onDeleteContact = {
-                            bottomSheetType = BottomSheetType.DeleteConfirmation
+                            bottomSheetType = ContactScreenBottomSheetType.DeleteConfirmation
                             coroutineScope.launch {
                                 modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
                             }

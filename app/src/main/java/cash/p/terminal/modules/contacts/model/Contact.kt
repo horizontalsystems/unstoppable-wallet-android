@@ -9,8 +9,7 @@ import java.util.*
 data class Contact(
     val uid: String,
     val name: String,
-    val addresses: List<ContactAddress>,
-    val modifiedTimestamp: Long
+    val addresses: List<ContactAddress>
 ) : Parcelable
 
 @Parcelize

@@ -36,6 +36,10 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
+enum class ContactsScreenBottomSheetType {
+    ReplaceAddressConfirmation, RetoreContactsConfirmation
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ContactsScreen(
@@ -49,12 +53,12 @@ fun ContactsScreen(
     val context = LocalContext.current
     val view = LocalView.current
 
-    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {
             context.contentResolver.openInputStream(it)?.use { inputStream ->
                 try {
                     inputStream.bufferedReader().use { br ->
-                        viewModel.importContacts(br.readText())
+                        viewModel.restore(br.readText())
 
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.SHORT)
                     }
@@ -65,12 +69,12 @@ fun ContactsScreen(
         }
     }
 
-    val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
         uri?.let {
             context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                 try {
                     outputStream.bufferedWriter().use { bw ->
-                        bw.write(viewModel.exportJsonData)
+                        bw.write(viewModel.backupJson)
                         bw.flush()
 
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.SHORT)
@@ -83,31 +87,65 @@ fun ContactsScreen(
     }
 
     ComposeAppTheme {
-        val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        var bottomSheetType: ContactsScreenBottomSheetType? by remember { mutableStateOf(null) }
+        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
         val coroutineScope = rememberCoroutineScope()
         var selectedContact by remember { mutableStateOf<Contact?>(null) }
         var searchMode by remember { mutableStateOf(uiState.searchMode) }
 
         ModalBottomSheetLayout(
-            sheetState = modalBottomSheetState,
+            sheetState = bottomSheetState,
             sheetBackgroundColor = ComposeAppTheme.colors.transparent,
             sheetContent = {
-                val warningMessage = selectedContact?.let { viewModel.replaceWarningMessage(it)?.getString() }
-                ConfirmationBottomSheet(
-                    title = stringResource(R.string.Alert_TitleWarning),
-                    text = warningMessage ?: "",
-                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                    confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
-                    cautionType = Caution.Type.Warning,
-                    cancelText = stringResource(R.string.Button_Cancel),
-                    onConfirm = {
-                        selectedContact?.let { onNavigateToContact(it) }
-                    },
-                    onClose = {
-                        coroutineScope.launch { modalBottomSheetState.hide() }
+                when (bottomSheetType) {
+                    null -> {
+                        Spacer(modifier = Modifier.height(1.dp))
                     }
-                )
+                    ContactsScreenBottomSheetType.ReplaceAddressConfirmation -> {
+                        val warningMessage = selectedContact?.let { viewModel.replaceWarningMessage(it)?.getString() }
+                        ConfirmationBottomSheet(
+                            title = stringResource(R.string.Alert_TitleWarning),
+                            text = warningMessage ?: "",
+                            iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                            confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
+                            cautionType = Caution.Type.Warning,
+                            cancelText = stringResource(R.string.Button_Cancel),
+                            onConfirm = {
+                                selectedContact?.let {
+                                    coroutineScope.launch {
+                                        bottomSheetState.hide()
+                                        onNavigateToContact(it)
+                                    }
+                                }
+                            },
+                            onClose = {
+                                coroutineScope.launch { bottomSheetState.hide() }
+                            }
+                        )
+                    }
+                    ContactsScreenBottomSheetType.RetoreContactsConfirmation -> {
+                        ConfirmationBottomSheet(
+                            title = stringResource(R.string.Alert_TitleWarning),
+                            text = stringResource(R.string.Contacts_Restore_Warning),
+                            iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                            confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
+                            cautionType = Caution.Type.Error,
+                            cancelText = stringResource(R.string.Button_Cancel),
+                            onConfirm = {
+                                coroutineScope.launch {
+                                    bottomSheetState.hide()
+                                    restoreLauncher.launch(arrayOf("application/json"))
+                                }
+                            },
+                            onClose = {
+                                coroutineScope.launch { bottomSheetState.hide() }
+                            }
+                        )
+                    }
+                }
+
             }
         ) {
             Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -201,10 +239,11 @@ fun ContactsScreen(
                         Spacer(Modifier.height(12.dp))
                         CellUniversalLawrenceSection(uiState.contacts) { contact ->
                             Contact(contact) {
-                                if (viewModel.showReplaceWarning(contact)) {
+                                if (viewModel.shouldShowReplaceWarning(contact)) {
                                     coroutineScope.launch {
+                                        bottomSheetType = ContactsScreenBottomSheetType.ReplaceAddressConfirmation
                                         selectedContact = contact
-                                        modalBottomSheetState.show()
+                                        bottomSheetState.show()
                                     }
                                 } else {
                                     onNavigateToContact(contact)
@@ -244,11 +283,18 @@ fun ContactsScreen(
                         },
                         onSelectItem = { action ->
                             when (action) {
-                                ContactsModule.ContactsAction.Import -> {
-                                    importLauncher.launch(arrayOf("application/json"))
+                                ContactsModule.ContactsAction.Restore -> {
+                                    if (viewModel.shouldShowRestoreWarning()) {
+                                        coroutineScope.launch {
+                                            bottomSheetType = ContactsScreenBottomSheetType.RetoreContactsConfirmation
+                                            bottomSheetState.show()
+                                        }
+                                    } else {
+                                        restoreLauncher.launch(arrayOf("application/json"))
+                                    }
                                 }
-                                ContactsModule.ContactsAction.Export -> {
-                                    exportLauncher.launch(viewModel.exportFileName)
+                                ContactsModule.ContactsAction.Backup -> {
+                                    backupLauncher.launch(viewModel.backupFileName)
                                 }
                             }
                         })
