@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.contacts
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -27,7 +28,6 @@ class ContactsRepository(
     private val gson by lazy { Gson() }
 
     private var contactsMap: MutableMap<String, Contact> = mutableMapOf()
-    private var deletedContacts: MutableList<DeletedContact> = mutableListOf()
 
     private val logger = AppLogger("contacts")
 
@@ -37,8 +37,8 @@ class ContactsRepository(
     val contacts: List<Contact>
         get() = contactsMap.map { it.value }.sortedBy { it.name }.toList()
 
-    private val asJsonString: String
-        get() = gson.toJson(ContactsJson(contacts.map { ContactJson(it) }, deletedContacts))
+    val asJsonString: String
+        get() = gson.toJson(contacts.map { ContactJson(it) })
 
     private val _contactsFlow = MutableStateFlow(contacts)
     val contactsFlow: StateFlow<List<Contact>> = _contactsFlow
@@ -115,64 +115,20 @@ class ContactsRepository(
         contactsMap.remove(id)
         _contactsFlow.update { contacts }
 
-        deletedContacts.add(DeletedContact(id, System.currentTimeMillis() / 1000))
-
         coroutineScope.launch {
             writeToFile()
         }
     }
 
-    fun export(): String {
-        return asJsonString
-    }
-
-    fun import(json: String) {
-        val (contacts, deleted) = parseFromJson(json)
-
-        contacts.forEach { importingContact ->
-            val contact = contactsMap[importingContact.uid]
-            val deletedContact = deletedContacts.find { it.uid == importingContact.uid }
-
-            when {
-                contact == null && deletedContact == null -> {
-                    // no contact and no deleted contact
-                    contactsMap[importingContact.uid] = importingContact
-                }
-                contact != null && contact.modifiedTimestamp <= importingContact.modifiedTimestamp -> {
-                    // importing contact is newer than local contact
-                    contactsMap[importingContact.uid] = importingContact
-                }
-                deletedContact != null && deletedContact.deleted_at <= importingContact.modifiedTimestamp -> {
-                    // importing contact is newer than local deleted contact
-                    contactsMap[importingContact.uid] = importingContact
-                    deletedContacts.remove(deletedContact)
-                }
-            }
-        }
-
-        deleted.forEach { importingDeletedContact ->
-            val contact = contactsMap[importingDeletedContact.uid]
-            val deletedContact = deletedContacts.find { it.uid == importingDeletedContact.uid }
-
-            when {
-                contact == null && deletedContact == null -> {
-                    // importing deleted contact does not exist locally
-                    deletedContacts.add(importingDeletedContact)
-                }
-                contact != null && contact.modifiedTimestamp <= importingDeletedContact.deleted_at -> {
-                    // importing deleted contact is newer than local contact
-                    contactsMap.remove(importingDeletedContact.uid)
-                    deletedContacts.add(importingDeletedContact)
-                }
-                deletedContact != null && deletedContact.deleted_at < importingDeletedContact.deleted_at -> {
-                    // importing deleted contact is newer than local deleted contact
-                    deletedContacts.remove(deletedContact)
-                    deletedContacts.add(importingDeletedContact)
-                }
-            }
-        }
+    private fun parseAndRestore(json: String) {
+        val contacts = parseFromJson(json)
+        contactsMap = contacts.associateBy { it.uid }.toMutableMap()
 
         _contactsFlow.update { contacts }
+    }
+
+    fun restore(json: String) {
+        parseAndRestore(json)
 
         coroutineScope.launch {
             writeToFile()
@@ -186,10 +142,7 @@ class ContactsRepository(
                     br.readText()
                 }
             }
-            val (contacts, deleted) = parseFromJson(json)
-
-            contactsMap = contacts.associateBy { it.uid }.toMutableMap()
-            deletedContacts = deleted.toMutableList()
+            parseAndRestore(json)
         } catch (e: Throwable) {
             if (file.exists()) {
                 logger.warning("readFromFile() error", e)
@@ -197,19 +150,19 @@ class ContactsRepository(
         }
     }
 
-    private fun parseFromJson(json: String): Pair<List<Contact>, List<DeletedContact>> {
-        val contactsJson = gson.fromJson(json, ContactsJson::class.java)
-        val contacts = contactsJson.contacts.map { contactJson ->
+    private fun parseFromJson(json: String): List<Contact> {
+        val listType = object : TypeToken<List<ContactJson>>() {}.type
+        val contactsJson: List<ContactJson> = gson.fromJson(json, listType)
+
+        return contactsJson.map { contactJson ->
             Contact(
                 uid = contactJson.uid,
                 name = contactJson.name,
                 addresses = contactJson.addresses.mapNotNull { addressJson ->
-                    marketKit.blockchain(addressJson.blockchainUid)?.let { ContactAddress(it, addressJson.address) }
-                },
-                modifiedTimestamp = contactJson.modified_at
+                    marketKit.blockchain(addressJson.blockchain_uid)?.let { ContactAddress(it, addressJson.address) }
+                }
             )
         }
-        return Pair(contacts, contactsJson.deleted)
     }
 
     private fun writeToFile() {
@@ -224,31 +177,19 @@ class ContactsRepository(
         }
     }
 
-    data class ContactsJson(
-        val contacts: List<ContactJson>,
-        val deleted: List<DeletedContact>
-    )
-
-    data class DeletedContact(
-        val uid: String,
-        val deleted_at: Long
-    )
-
     data class ContactJson(
         val uid: String,
         val name: String,
-        val addresses: List<AddressJson>,
-        val modified_at: Long
+        val addresses: List<AddressJson>
     ) {
         constructor(contact: Contact) : this(
             contact.uid,
             contact.name,
-            contact.addresses.map { AddressJson(it.blockchain.uid, it.address) },
-            contact.modifiedTimestamp,
+            contact.addresses.map { AddressJson(it.blockchain.uid, it.address) }
         )
 
         data class AddressJson(
-            val blockchainUid: String,
+            val blockchain_uid: String,
             val address: String
         )
     }

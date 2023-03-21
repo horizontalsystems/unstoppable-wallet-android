@@ -26,10 +26,10 @@ class ContactsViewModel(
     private val contacts: List<Contact>
         get() = repository.getContactsFiltered(nameQuery = nameQuery)
 
-    val exportJsonData: String
-        get() = repository.export()
+    val backupJson: String
+        get() = repository.asJsonString
 
-    val exportFileName: String
+    val backupFileName: String
         get() = "UW_Contacts_${System.currentTimeMillis() / 1000}.json"
 
     var uiState by mutableStateOf(UiState(contacts, nameQuery, nameQuery != null, showAddContact, showMoreOptions))
@@ -48,12 +48,16 @@ class ContactsViewModel(
         emitState()
     }
 
-    fun importContacts(json: String) {
-        repository.import(json)
+    fun restore(json: String) {
+        repository.restore(json)
     }
 
-    fun showReplaceWarning(contact: Contact): Boolean {
+    fun shouldShowReplaceWarning(contact: Contact): Boolean {
         return mode is Mode.AddAddressToExistingContact && contact.addresses.any { it.blockchain.type == mode.blockchainType }
+    }
+
+    fun shouldShowRestoreWarning(): Boolean {
+        return contacts.isNotEmpty()
     }
 
     fun replaceWarningMessage(contact: Contact): TranslatableString? {
