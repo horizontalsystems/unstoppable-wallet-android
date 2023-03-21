@@ -175,7 +175,6 @@ fun Chart(
                         PriceVolChart(
                             chartInfoData = uiState.chartInfoData,
                             loading = uiState.loading,
-                            viewState = uiState.viewState,
                             hasVolumes = uiState.hasVolumes,
                             chartViewType = uiState.chartViewType,
                         ) { item ->
@@ -202,7 +201,6 @@ fun Chart(
 fun PriceVolChart(
     chartInfoData: ChartInfoData?,
     loading: Boolean,
-    viewState: ViewState?,
     hasVolumes: Boolean,
     chartViewType: ChartViewType,
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
@@ -239,26 +237,15 @@ fun PriceVolChart(
                 chart.hideSpinner()
             }
 
-            when (viewState) {
-                is ViewState.Error -> {
-                    chart.showError(viewState.t.localizedMessage ?: "")
-                }
-                ViewState.Success -> {
-                    chart.hideError()
-                    chart.setIndicatorLineVisible(hasVolumes)
+            chart.setIndicatorLineVisible(hasVolumes)
 
-                    chartInfoData?.let { chartInfoData ->
-                        chart.doOnLayout {
-                            chart.setData(
-                                chartInfoData.chartData,
-                                chartInfoData.maxValue,
-                                chartInfoData.minValue
-                            )
-                        }
-                    }
-                }
-                ViewState.Loading,
-                null -> {
+            chartInfoData?.let { chartInfoData ->
+                chart.doOnLayout {
+                    chart.setData(
+                        chartInfoData.chartData,
+                        chartInfoData.maxValue,
+                        chartInfoData.minValue
+                    )
                 }
             }
         }
