@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -53,6 +54,7 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
                 ComposeAppTheme {
                     BottomSheetHeader(
                         iconPainter = painterResource(R.drawable.ic_chart_24),
+                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                         title = title,
                         onCloseClick = { close() }
                     ) {
