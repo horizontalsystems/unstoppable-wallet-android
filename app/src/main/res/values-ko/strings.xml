@@ -170,12 +170,12 @@
     <string name="MarketGlobalMetrics_Volume">24h Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in the cumulative market value of tokens in the Decentralized Finance sector.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in the cumulative value of all cryptocurrency managed by decentralized protocols.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">Total market value of DeFi projects.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
