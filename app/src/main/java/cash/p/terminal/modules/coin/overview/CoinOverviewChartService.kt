@@ -10,14 +10,13 @@ import cash.p.terminal.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.ChartInfo
-import io.horizontalsystems.marketkit.models.ChartPointType
 import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.rx2.await
 import java.io.IOException
+import io.horizontalsystems.marketkit.models.ChartPoint as MarketKitChartPoint
 
 class CoinOverviewChartService(
     private val marketKit: MarketKitWrapper,
@@ -34,7 +33,7 @@ class CoinOverviewChartService(
     private val disposables = CompositeDisposable()
 
     private var chartStartTime: Long = 0
-    private val cache = mutableMapOf<String, ChartInfo>()
+    private val cache = mutableMapOf<String, List<MarketKitChartPoint>>()
 
     override suspend fun start() {
         try {
@@ -98,7 +97,7 @@ class CoinOverviewChartService(
     private fun chartInfoCached(
         currency: Currency,
         periodType: HsPeriodType
-    ): Single<ChartInfo> {
+    ): Single<List<MarketKitChartPoint>> {
         val cacheKey = currency.code + periodType.serialize()
         val cached = cache[cacheKey]
         return if (cached != null) {
@@ -126,12 +125,11 @@ class CoinOverviewChartService(
     }
 
     private fun doGetItems(
-        chartInfo: ChartInfo,
+        points: List<MarketKitChartPoint>,
         chartInterval: HsTimePeriod?
     ): ChartPointsWrapper {
         val lastCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: return ChartPointsWrapper(listOf())
 
-        val points = chartInfo.points
         if (points.isEmpty()) return ChartPointsWrapper(listOf())
 
         val items = points
@@ -140,7 +138,7 @@ class CoinOverviewChartService(
                     value = chartPoint.value.toFloat(),
                     timestamp = chartPoint.timestamp,
                     indicators = mapOf(
-                        Indicator.Volume to chartPoint.extra[ChartPointType.Volume]?.toFloat(),
+                        Indicator.Volume to chartPoint.volume?.toFloat(),
                     )
                 )
             }
@@ -165,9 +163,7 @@ class CoinOverviewChartService(
             }
         }
 
-        items.removeIf { it.timestamp < chartInfo.startTimestamp }
-
-        return ChartPointsWrapper(items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
+        return ChartPointsWrapper(items)
     }
 
 }

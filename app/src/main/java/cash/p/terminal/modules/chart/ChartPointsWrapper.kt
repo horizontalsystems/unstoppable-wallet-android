@@ -6,7 +6,6 @@ data class ChartPointsWrapper(
     val items: List<ChartPoint>,
     val startTimestamp: Long?,
     val endTimestamp: Long?,
-    val isExpired: Boolean = false,
     val isMovementChart: Boolean = true,
 ) {
     constructor(items: List<ChartPoint>, isMovementChart: Boolean = true) : this(

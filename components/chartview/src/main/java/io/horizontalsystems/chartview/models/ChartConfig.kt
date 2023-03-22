@@ -79,10 +79,6 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
                 curveColor = curveDisabledColor
                 curveGradient = outdatedGradient
             }
-            chartData.isExpired -> {
-                curveColor = curveOutdatedColor
-                curveGradient = outdatedGradient
-            }
             !chartData.isMovementChart -> {
                 curveColor = neutralColor
                 curveGradient = neutralGradientColor

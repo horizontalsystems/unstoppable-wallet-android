@@ -10,7 +10,6 @@ import cash.p.terminal.modules.profeatures.ProNft
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.ChartPointType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
@@ -75,7 +74,7 @@ class ProChartService(
                     ChartPoint(
                         value = chartPoint.value.toFloat(),
                         timestamp = chartPoint.timestamp,
-                        indicators = chartPoint.extra[ChartPointType.Volume]?.let { mapOf(Indicator.Volume to it.toFloat()) } ?: mapOf()
+                        indicators = chartPoint.volume?.let { mapOf(Indicator.Volume to it.toFloat()) } ?: mapOf()
                     )
                 }
 
