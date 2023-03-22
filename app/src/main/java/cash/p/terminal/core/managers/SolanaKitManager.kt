@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
@@ -17,6 +18,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.rx2.asObservable
 
 class SolanaKitManager(
+    private val appConfigProvider: AppConfigProvider,
     private val rpcSourceManager: SolanaRpcSourceManager,
     private val walletManager: SolanaWalletManager,
     backgroundManager: BackgroundManager
@@ -91,10 +93,11 @@ class SolanaKitManager(
         val signer = Signer.getInstance(seed)
 
         val kit = SolanaKit.getInstance(
-            App.instance,
-            address,
-            rpcSourceManager.rpcSource,
-            account.id
+            application = App.instance,
+            addressString = address,
+            rpcSource = rpcSourceManager.rpcSource,
+            walletId = account.id,
+            solscanApiKey = appConfigProvider.solscanApiKey
         )
 
         return SolanaKitWrapper(kit, signer)
@@ -107,10 +110,11 @@ class SolanaKitManager(
         val address = accountType.address
 
         val kit = SolanaKit.getInstance(
-            App.instance,
-            address,
-            rpcSourceManager.rpcSource,
-            account.id
+            application = App.instance,
+            addressString = address,
+            rpcSource = rpcSourceManager.rpcSource,
+            walletId = account.id,
+            solscanApiKey = appConfigProvider.solscanApiKey
         )
 
         return SolanaKitWrapper(kit, null)

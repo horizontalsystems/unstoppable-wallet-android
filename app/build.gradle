@@ -68,6 +68,7 @@ android {
             resValue "string", "marketApiBaseUrl", "https://api-dev.blocksdecoded.com"
             resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
             resValue "string", "walletConnectV2Key", "8b4f41c60880a3e3ad57d82fddb30568"
+            resValue "string", "solscanApiKey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE2Nzk0NjQyMTQ4NDAsImVtYWlsIjoiaHJ6c3lzdGVtczEwMUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJpYXQiOjE2Nzk0NjQyMTR9.BRM7J9RbDpHgd2oMAus00XfWOxTJgV2Tn2_chXZOdtk"
         }
 
         appcenterdebug {
@@ -104,6 +105,7 @@ android {
             resValue "string", "marketApiBaseUrl", "https://api.blocksdecoded.com"
             resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
             resValue "string", "walletConnectV2Key", "0c5ca155c2f165a7d0c88686f2113a72"
+            resValue "string", "solscanApiKey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE2Nzk0NjQxMTQ0ODUsImVtYWlsIjoiaHNkYW84ODg4QGdtYWlsLmNvbSIsImFjdGlvbiI6InRva2VuLWFwaSIsImlhdCI6MTY3OTQ2NDExNH0.91DUjjjYu86f1ZMMJ5cyJxIKTTw_srhI-vNgYaTCPUU"
         }
 
         appcenterrelease {
@@ -244,7 +246,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:2a89cad'
     //implementation 'com.github.horizontalsystems:market-kit-android:f29c84b'
-    implementation 'com.github.horizontalsystems:solana-kit-android:338f707'
+    implementation 'com.github.horizontalsystems:solana-kit-android:c403472'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.14.0-beta01"
 
