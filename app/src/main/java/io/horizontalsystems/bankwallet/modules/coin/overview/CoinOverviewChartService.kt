@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartViewType
-import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -137,9 +136,7 @@ class CoinOverviewChartService(
                 ChartPoint(
                     value = chartPoint.value.toFloat(),
                     timestamp = chartPoint.timestamp,
-                    indicators = mapOf(
-                        Indicator.Volume to chartPoint.volume?.toFloat(),
-                    )
+                    volume = chartPoint.volume?.toFloat(),
                 )
             }
             .toMutableList()
