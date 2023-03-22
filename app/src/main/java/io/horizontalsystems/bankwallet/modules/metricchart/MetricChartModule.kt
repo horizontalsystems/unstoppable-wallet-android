@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -24,5 +25,18 @@ enum class MetricsType : Parcelable {
             Volume24h -> R.string.MarketGlobalMetrics_VolumeDescription
             DefiCap -> R.string.MarketGlobalMetrics_DefiCapDescription
             TvlInDefi -> R.string.MarketGlobalMetrics_TvlInDefiDescription
+        }
+
+    val headerIcon: ImageSource
+        get() {
+            val imageName = when (this) {
+                TotalMarketCap,
+                BtcDominance -> "total mcap"
+                Volume24h -> "total volume"
+                DefiCap -> "defi cap"
+                TvlInDefi -> "tvl"
+            }
+
+            return ImageSource.Remote("https://cdn.blocksdecoded.com/category-icons/$imageName@3x.png")
         }
 }

@@ -94,7 +94,6 @@ class TvlFragment : BaseFragment() {
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.MarketGlobalMetrics_TvlInDefi),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
@@ -134,6 +133,11 @@ class TvlFragment : BaseFragment() {
                                 modifier = Modifier.fillMaxSize(),
                                 contentPadding = PaddingValues(bottom = 32.dp),
                             ) {
+                                item {
+                                    tvlViewModel.header.let { header ->
+                                        DescriptionCard(header.title, header.description, header.icon)
+                                    }
+                                }
                                 item {
                                     Chart(chartViewModel = chartViewModel) {
                                         tvlViewModel.onSelectChartInterval(it)
