@@ -170,12 +170,12 @@
     <string name="MarketGlobalMetrics_Volume">24h成交量</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi市值</string>
     <string name="MarketGlobalMetrics_TvlInDefi">DeFi锁定</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">加密货币市场总市值</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">比特币市值与其他加密货币市值之间比率的历史变化。\n\n通常，当比特币主导地位上升时，其他加密市场会下降，反之亦然。</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">所有加密货币每日交易量的历史变化。</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">%s 每日交易量的历史变化</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">去中心化金融板块代币累积市值的历史变化。</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">由去中心化协议管理的所有加密货币累积价值的历史变化。</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">Total market value of DeFi projects.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">通过区块链过滤</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">所有</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">此货币还未支持</string>
