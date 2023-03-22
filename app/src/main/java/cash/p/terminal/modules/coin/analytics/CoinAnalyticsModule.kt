@@ -140,17 +140,17 @@ object CoinAnalyticsModule {
 
             chartItems.addAll(
                 listOf(
-                    ChartPoint((baseValue + 2).toFloat(), (baseTimeStamp), mapOf()),
-                    ChartPoint((baseValue + 6).toFloat(), (baseTimeStamp + 25), mapOf()),
-                    ChartPoint((baseValue).toFloat(), (baseTimeStamp + 50), mapOf()),
-                    ChartPoint((baseValue + 9).toFloat(), (baseTimeStamp + 75), mapOf()),
+                    ChartPoint((baseValue + 2).toFloat(), (baseTimeStamp)),
+                    ChartPoint((baseValue + 6).toFloat(), (baseTimeStamp + 25)),
+                    ChartPoint((baseValue).toFloat(), (baseTimeStamp + 50)),
+                    ChartPoint((baseValue + 9).toFloat(), (baseTimeStamp + 75)),
                 )
             )
 
             lastTimeStamp = baseTimeStamp + (75 + 25)
         }
 
-        chartItems.add(ChartPoint(16f, lastTimeStamp, mapOf()))
+        chartItems.add(ChartPoint(16f, lastTimeStamp))
 
         val chartData = ChartDataBuilder(
             points = chartItems,

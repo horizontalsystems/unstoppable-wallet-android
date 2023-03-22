@@ -8,7 +8,6 @@ import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartViewType
-import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -137,9 +136,7 @@ class CoinOverviewChartService(
                 ChartPoint(
                     value = chartPoint.value.toFloat(),
                     timestamp = chartPoint.timestamp,
-                    indicators = mapOf(
-                        Indicator.Volume to chartPoint.volume?.toFloat(),
-                    )
+                    volume = chartPoint.volume?.toFloat(),
                 )
             }
             .toMutableList()

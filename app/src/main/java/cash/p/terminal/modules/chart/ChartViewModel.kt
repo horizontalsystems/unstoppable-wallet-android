@@ -153,9 +153,9 @@ open class ChartViewModel(
             val lastItemValue = latestItem.value
             val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
 
-            val dominanceData = latestItem.indicators[Indicator.Dominance]?.let { dominance ->
+            val dominanceData = latestItem.dominance?.let { dominance ->
                 val earliestItem = chartItems.first()
-                val diff = earliestItem.indicators[Indicator.Dominance]?.let { earliestDominance ->
+                val diff = earliestItem.dominance?.let { earliestDominance ->
                     Value.Percent((dominance - earliestDominance).toBigDecimal())
                 }
 

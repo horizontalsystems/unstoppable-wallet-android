@@ -7,7 +7,6 @@ import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.sort
 import cash.p.terminal.modules.metricchart.MetricsType
-import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -37,7 +36,7 @@ class GlobalMarketRepository(
                     }
 
                     val dominance = if (metricsType == MetricsType.TotalMarketCap) point.btcDominance.toFloat() else null
-                    ChartPoint(value = value.toFloat(), timestamp = point.timestamp, indicators = mapOf(Indicator.Dominance to dominance))
+                    ChartPoint(value = value.toFloat(), timestamp = point.timestamp, dominance = dominance)
                 }
             }
     }
