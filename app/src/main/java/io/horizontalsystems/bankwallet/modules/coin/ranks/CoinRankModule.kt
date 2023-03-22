@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.marketkit.models.RankMultiValue
@@ -36,5 +37,6 @@ object CoinRankModule {
         val rankViewItems: List<RankViewItem>,
         val showPeriodMenu: Boolean,
         val periodMenu: Select<TimeDuration>,
+        val header: MarketModule.Header
     )
 }
