@@ -40,6 +40,7 @@ class CoinRankViewModel(
     private val periodMenu: Select<TimeDuration>?
         get() = if (rankType == RankType.DexLiquidityRank) null else Select(selectedPeriod, periodOptions)
     private var sortDescending = true
+    private val itemsToShow = 300
 
     private val header = MarketModule.Header(
         title = Translator.getString(rankType.title),
@@ -96,7 +97,7 @@ class CoinRankViewModel(
                     resolvedValue?.let {
                         Item(internalItem.coin, it)
                     }
-                }
+                }.take(itemsToShow)
 
                 val sortedItems = if (sortDescending) items.sortedByDescending { it.value } else items.sortedBy { it.value }
 

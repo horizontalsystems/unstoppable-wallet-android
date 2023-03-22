@@ -122,7 +122,9 @@ private fun CoinRankScreen(
                 }
                 ViewState.Success -> {
                     var periodSelect by remember { mutableStateOf(uiState.periodSelect) }
-                    val listState = rememberSaveable(uiState.periodSelect?.selected, saver = LazyListState.Saver) { LazyListState() }
+                    val listState = rememberSaveable(uiState.periodSelect?.selected, uiState.sortDescending, saver = LazyListState.Saver) {
+                        LazyListState()
+                    }
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.fillMaxSize(),
