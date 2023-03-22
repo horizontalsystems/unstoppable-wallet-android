@@ -171,7 +171,6 @@ class MarketKitWrapper(
     // Chart Info
 
     fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
-    fun chartInfo(coinUid: String, currencyCode: String, periodType: HsPeriodType) = marketKit.chartInfo(coinUid, currencyCode, periodType)
 
     fun chartInfoSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) = marketKit.chartInfoSingle(coinUid, currencyCode, periodType)
 
