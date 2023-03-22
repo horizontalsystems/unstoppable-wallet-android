@@ -204,7 +204,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
         val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
-        solanaKitManager = SolanaKitManager(solanaRpcSourceManager, solanaWalletManager, backgroundManager)
+        solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
 
