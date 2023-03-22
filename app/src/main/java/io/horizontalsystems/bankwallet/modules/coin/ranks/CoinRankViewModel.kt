@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankModule.RankAnyValue
 import io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankModule.UiState
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.marketkit.models.Coin
@@ -36,7 +38,14 @@ class CoinRankViewModel(
     private val periodOptions = TimeDuration.values().toList()
     private var selectedPeriod: TimeDuration = periodOptions[2]
     private val showPeriodMenu = rankType != RankType.DexLiquidityRank
-    private val periodMenu = Select(selectedPeriod, periodOptions)
+    private val periodMenu: Select<TimeDuration>
+        get() = Select(selectedPeriod, periodOptions)
+    
+    private val header = MarketModule.Header(
+        title = Translator.getString(rankType.title),
+        description = Translator.getString(rankType.description),
+        icon = rankType.headerIcon
+    )
 
     var uiState by mutableStateOf(
         UiState(
@@ -44,6 +53,7 @@ class CoinRankViewModel(
             rankViewItems = emptyList(),
             showPeriodMenu = showPeriodMenu,
             periodMenu = periodMenu,
+            header = header
         )
     )
         private set
@@ -65,6 +75,7 @@ class CoinRankViewModel(
                 rankViewItems = emptyList(),
                 showPeriodMenu = showPeriodMenu,
                 periodMenu = periodMenu,
+                header = header
             )
             return
         }
@@ -105,6 +116,7 @@ class CoinRankViewModel(
                 rankViewItems = viewItems,
                 showPeriodMenu = showPeriodMenu,
                 periodMenu = periodMenu,
+                header = header
             )
         }
     }
