@@ -142,8 +142,7 @@ open class ChartViewModel(
             chartPointsWrapper.items,
             chartPointsWrapper.startTimestamp,
             chartPointsWrapper.endTimestamp,
-            chartPointsWrapper.isMovementChart,
-            chartPointsWrapper.isExpired
+            chartPointsWrapper.isMovementChart
         )
 
         val headerView = if (!chartPointsWrapper.isMovementChart) {
