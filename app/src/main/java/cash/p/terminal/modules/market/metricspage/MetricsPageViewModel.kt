@@ -3,10 +3,12 @@ package cash.p.terminal.modules.market.metricspage
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketItem
+import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.Select
@@ -26,6 +28,11 @@ class MetricsPageViewModel(
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val marketLiveData = MutableLiveData<MetricsPageModule.MarketData>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
+    var header = MarketModule.Header(
+        title = Translator.getString(metricsType.title),
+        description = Translator.getString(metricsType.description),
+        icon = metricsType.headerIcon
+    )
 
     val metricsType: MetricsType
         get() = service.metricsType

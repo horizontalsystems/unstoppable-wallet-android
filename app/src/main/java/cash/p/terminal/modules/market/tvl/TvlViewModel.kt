@@ -3,10 +3,13 @@ package cash.p.terminal.modules.market.tvl
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.tvl.TvlModule.SelectorDialogState
 import cash.p.terminal.modules.market.tvl.TvlModule.TvlDiffType
+import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.Select
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.disposables.CompositeDisposable
@@ -25,12 +28,19 @@ class TvlViewModel(
             tvlDiffTypeLiveData.postValue(value)
         }
     private var tvlItems: List<TvlModule.MarketTvlItem> = listOf()
+    private val metricsType = MetricsType.TvlInDefi
 
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val tvlLiveData = MutableLiveData<TvlModule.TvlData>()
     val tvlDiffTypeLiveData = MutableLiveData(tvlDiffType)
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val chainSelectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
+
+    var header = MarketModule.Header(
+        title = Translator.getString(metricsType.title),
+        description = Translator.getString(metricsType.description),
+        icon = metricsType.headerIcon
+    )
 
     init {
         service.marketTvlItemsObservable
