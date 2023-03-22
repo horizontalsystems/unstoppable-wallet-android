@@ -37,10 +37,10 @@ class CoinRankViewModel(
     private var viewState: ViewState = ViewState.Loading
     private val periodOptions = TimeDuration.values().toList()
     private var selectedPeriod: TimeDuration = periodOptions[2]
-    private val showPeriodMenu = rankType != RankType.DexLiquidityRank
-    private val periodMenu: Select<TimeDuration>
-        get() = Select(selectedPeriod, periodOptions)
-    
+    private val periodMenu: Select<TimeDuration>?
+        get() = if (rankType == RankType.DexLiquidityRank) null else Select(selectedPeriod, periodOptions)
+    private var sortDescending = true
+
     private val header = MarketModule.Header(
         title = Translator.getString(rankType.title),
         description = Translator.getString(rankType.description),
@@ -51,9 +51,9 @@ class CoinRankViewModel(
         UiState(
             viewState = viewState,
             rankViewItems = emptyList(),
-            showPeriodMenu = showPeriodMenu,
-            periodMenu = periodMenu,
-            header = header
+            periodSelect = periodMenu,
+            header = header,
+            sortDescending = sortDescending
         )
     )
         private set
@@ -73,9 +73,9 @@ class CoinRankViewModel(
             uiState = UiState(
                 viewState = viewState,
                 rankViewItems = emptyList(),
-                showPeriodMenu = showPeriodMenu,
-                periodMenu = periodMenu,
-                header = header
+                periodSelect = periodMenu,
+                header = header,
+                sortDescending = sortDescending
             )
             return
         }
@@ -98,7 +98,7 @@ class CoinRankViewModel(
                     }
                 }
 
-                val sortedItems = items.sortedByDescending { it.value }
+                val sortedItems = if (sortDescending) items.sortedByDescending { it.value } else items.sortedBy { it.value }
 
                 sortedItems.mapIndexed { index, item ->
                     CoinRankModule.RankViewItem(
@@ -114,9 +114,9 @@ class CoinRankViewModel(
             uiState = UiState(
                 viewState = viewState,
                 rankViewItems = viewItems,
-                showPeriodMenu = showPeriodMenu,
-                periodMenu = periodMenu,
-                header = header
+                periodSelect = periodMenu,
+                header = header,
+                sortDescending = sortDescending
             )
         }
     }
@@ -166,7 +166,7 @@ class CoinRankViewModel(
         }
     }
 
-    private fun formatted(value: BigDecimal, currency: Currency): String? {
+    private fun formatted(value: BigDecimal, currency: Currency): String {
         return when (rankType) {
             RankType.CexVolumeRank,
             RankType.DexVolumeRank,
@@ -179,6 +179,11 @@ class CoinRankViewModel(
 
     fun toggle(period: TimeDuration) {
         selectedPeriod = period
+        syncState()
+    }
+
+    fun toggleSortType() {
+        sortDescending = !sortDescending
         syncState()
     }
 
