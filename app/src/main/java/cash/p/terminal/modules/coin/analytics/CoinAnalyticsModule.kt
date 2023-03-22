@@ -154,8 +154,6 @@ object CoinAnalyticsModule {
 
         val chartData = ChartDataBuilder(
             points = chartItems,
-            start = null,
-            end = null,
             isMovementChart = isMovementChart,
             disabled = true
         ).build()

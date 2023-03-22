@@ -8,12 +8,17 @@ import java.math.BigDecimal
 @Immutable
 data class ChartData(
     val items: List<ChartDataItemImmutable>,
-    val startTimestamp: Long,
-    val endTimestamp: Long,
     val valueRange: Range<Float>,
     val isMovementChart: Boolean,
     val disabled: Boolean = false
 ) {
+    val startTimestamp: Long by lazy {
+        items.first().timestamp
+    }
+
+    val endTimestamp: Long by lazy {
+        items.last().timestamp
+    }
 
     fun values(name: Indicator): List<Float> {
         return items.mapNotNull { it.values[name] }
@@ -63,8 +68,6 @@ data class ChartDataItemImmutable(
 
 class ChartDataBuilder constructor(
     points: List<ChartPoint>,
-    start: Long?,
-    end: Long?,
     private val isMovementChart: Boolean,
     private val disabled: Boolean = false
 ) {
@@ -79,30 +82,21 @@ class ChartDataBuilder constructor(
                 ChartPoint(2.toFloat(), 500, mapOf()),
                 ChartPoint(2.toFloat(), 600, mapOf())
             ),
-            100,
-            600,
             true
         ).build()
 
         fun buildFromPoints(
             points: List<ChartPoint>,
-            startTimestamp: Long? = null,
-            endTimestamp: Long? = null,
             isMovementChart: Boolean = true,
             isDisabled: Boolean = false,
         ): ChartData {
             return ChartDataBuilder(
                 points,
-                startTimestamp,
-                endTimestamp,
                 isMovementChart,
                 isDisabled
             ).build()
         }
     }
-
-    private val startTimestamp = start ?: points.first().timestamp
-    private val endTimestamp = end ?: points.last().timestamp
 
     private val ranges: MutableMap<Indicator, Range<Float>> = mutableMapOf()
 
@@ -156,6 +150,6 @@ class ChartDataBuilder constructor(
     }
 
     fun build(): ChartData {
-        return ChartData(immutableItems, startTimestamp, endTimestamp, valueRange, isMovementChart, disabled)
+        return ChartData(immutableItems, valueRange, isMovementChart, disabled)
     }
 }
