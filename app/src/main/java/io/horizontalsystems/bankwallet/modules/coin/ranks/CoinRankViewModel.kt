@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.IAppNumberFormatter
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
 import cash.p.terminal.modules.coin.ranks.CoinRankModule.RankAnyValue
 import cash.p.terminal.modules.coin.ranks.CoinRankModule.UiState
+import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.ui.compose.Select
 import io.horizontalsystems.marketkit.models.Coin
@@ -36,7 +38,14 @@ class CoinRankViewModel(
     private val periodOptions = TimeDuration.values().toList()
     private var selectedPeriod: TimeDuration = periodOptions[2]
     private val showPeriodMenu = rankType != RankType.DexLiquidityRank
-    private val periodMenu = Select(selectedPeriod, periodOptions)
+    private val periodMenu: Select<TimeDuration>
+        get() = Select(selectedPeriod, periodOptions)
+    
+    private val header = MarketModule.Header(
+        title = Translator.getString(rankType.title),
+        description = Translator.getString(rankType.description),
+        icon = rankType.headerIcon
+    )
 
     var uiState by mutableStateOf(
         UiState(
@@ -44,6 +53,7 @@ class CoinRankViewModel(
             rankViewItems = emptyList(),
             showPeriodMenu = showPeriodMenu,
             periodMenu = periodMenu,
+            header = header
         )
     )
         private set
@@ -65,6 +75,7 @@ class CoinRankViewModel(
                 rankViewItems = emptyList(),
                 showPeriodMenu = showPeriodMenu,
                 periodMenu = periodMenu,
+                header = header
             )
             return
         }
@@ -105,6 +116,7 @@ class CoinRankViewModel(
                 rankViewItems = viewItems,
                 showPeriodMenu = showPeriodMenu,
                 periodMenu = periodMenu,
+                header = header
             )
         }
     }

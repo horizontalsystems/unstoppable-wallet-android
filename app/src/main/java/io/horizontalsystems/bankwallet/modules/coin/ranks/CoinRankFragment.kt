@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.*
@@ -38,7 +40,6 @@ import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
-import kotlinx.coroutines.launch
 
 class CoinRankFragment : BaseFragment() {
 
@@ -89,6 +90,7 @@ class CoinRankFragment : BaseFragment() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CoinRankScreen(
     type: RankType,
@@ -97,14 +99,11 @@ private fun CoinRankScreen(
         factory = CoinRankModule.Factory(type)
     )
 ) {
-
-    var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     val uiState = viewModel.uiState
     val viewItems = viewModel.uiState.rankViewItems
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(type.title),
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Close),
@@ -122,32 +121,42 @@ private fun CoinRankScreen(
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
                 ViewState.Success -> {
-                    Column(modifier = Modifier.fillMaxSize()) {
+                    var periodType by remember { mutableStateOf(uiState.periodMenu) }
+                    val listState = rememberSaveable(uiState.periodMenu.selected, saver = LazyListState.Saver) { LazyListState() }
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(bottom = 32.dp),
+                    ) {
+                        item {
+                            uiState.header.let { header ->
+                                DescriptionCard(header.title, header.description, header.icon)
+                            }
+                        }
                         if (viewItems.isEmpty()) {
-                            ListEmptyView(
-                                text = stringResource(R.string.CoinPage_NoDataAvailable),
-                                icon = R.drawable.ic_no_data
-                            )
+                            item {
+                                ListEmptyView(
+                                    text = stringResource(R.string.CoinPage_NoDataAvailable),
+                                    icon = R.drawable.ic_no_data
+                                )
+                            }
                         } else {
                             if (uiState.showPeriodMenu) {
-                                var periodType by remember { mutableStateOf(uiState.periodMenu) }
-                                HeaderSorting {
-                                    Spacer(Modifier.weight(1f))
-                                    ButtonSecondaryToggle(
-                                        modifier = Modifier.padding(end = 16.dp),
-                                        select = periodType,
-                                        onSelect = {
-                                            scrollToTopAfterUpdate = true
-                                            viewModel.toggle(it)
-                                            periodType = Select(it, uiState.periodMenu.options)
-                                        }
-                                    )
+                                stickyHeader {
+                                    HeaderSorting {
+                                        Spacer(Modifier.weight(1f))
+                                        ButtonSecondaryToggle(
+                                            modifier = Modifier.padding(end = 16.dp),
+                                            select = periodType,
+                                            onSelect = {
+                                                viewModel.toggle(it)
+                                                periodType = Select(it, uiState.periodMenu.options)
+                                            }
+                                        )
+                                    }
                                 }
                             }
-                            CoinRankList(viewItems, scrollToTopAfterUpdate)
-                            if (scrollToTopAfterUpdate) {
-                                scrollToTopAfterUpdate = false
-                            }
+                            coinRankList(viewItems)
                         }
                     }
                 }
@@ -156,38 +165,26 @@ private fun CoinRankScreen(
     }
 }
 
-@Composable
-private fun CoinRankList(
-    items: List<CoinRankModule.RankViewItem>,
-    scrollToTop: Boolean
+private fun LazyListScope.coinRankList(
+    items: List<CoinRankModule.RankViewItem>
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
-
-    LazyColumn(state = listState) {
-        item {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-            )
-        }
-        items(items) { item ->
-            CoinRankCell(
-                item.rank,
-                item.title,
-                item.subTitle,
-                item.iconUrl,
-                item.value
-            )
-        }
-        item {
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-        if (scrollToTop) {
-            coroutineScope.launch {
-                listState.scrollToItem(0)
-            }
-        }
+    item {
+        Divider(
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10,
+        )
+    }
+    items(items) { item ->
+        CoinRankCell(
+            item.rank,
+            item.title,
+            item.subTitle,
+            item.iconUrl,
+            item.value
+        )
+    }
+    item {
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 

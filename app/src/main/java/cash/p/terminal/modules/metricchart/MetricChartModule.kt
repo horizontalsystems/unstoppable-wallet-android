@@ -31,12 +31,12 @@ enum class MetricsType : Parcelable {
         get() {
             val imageName = when (this) {
                 TotalMarketCap,
-                BtcDominance -> "total mcap"
-                Volume24h -> "total volume"
-                DefiCap -> "defi cap"
+                BtcDominance -> "total_mcap"
+                Volume24h -> "total_volume"
+                DefiCap -> "defi_cap"
                 TvlInDefi -> "tvl"
             }
 
-            return ImageSource.Remote("https://cdn.blocksdecoded.com/category-icons/$imageName@3x.png")
+            return ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/$imageName@3x.png")
         }
 }

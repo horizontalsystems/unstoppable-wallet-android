@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
+import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.ui.compose.Select
 import io.horizontalsystems.marketkit.models.RankMultiValue
@@ -36,5 +37,6 @@ object CoinRankModule {
         val rankViewItems: List<RankViewItem>,
         val showPeriodMenu: Boolean,
         val periodMenu: Select<TimeDuration>,
+        val header: MarketModule.Header
     )
 }
