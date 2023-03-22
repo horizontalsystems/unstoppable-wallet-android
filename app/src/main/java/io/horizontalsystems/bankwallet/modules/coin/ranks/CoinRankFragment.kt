@@ -121,8 +121,8 @@ private fun CoinRankScreen(
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
                 ViewState.Success -> {
-                    var periodType by remember { mutableStateOf(uiState.periodMenu) }
-                    val listState = rememberSaveable(uiState.periodMenu.selected, saver = LazyListState.Saver) { LazyListState() }
+                    var periodSelect by remember { mutableStateOf(uiState.periodSelect) }
+                    val listState = rememberSaveable(uiState.periodSelect?.selected, saver = LazyListState.Saver) { LazyListState() }
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.fillMaxSize(),
@@ -141,16 +141,21 @@ private fun CoinRankScreen(
                                 )
                             }
                         } else {
-                            if (uiState.showPeriodMenu) {
-                                stickyHeader {
-                                    HeaderSorting {
-                                        Spacer(Modifier.weight(1f))
+                            stickyHeader {
+                                HeaderSorting {
+                                    ButtonSecondaryCircle(
+                                        modifier = Modifier.padding(start = 16.dp),
+                                        icon = if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                                        onClick = { viewModel.toggleSortType() }
+                                    )
+                                    Spacer(Modifier.weight(1f))
+                                    periodSelect?.let {
                                         ButtonSecondaryToggle(
                                             modifier = Modifier.padding(end = 16.dp),
-                                            select = periodType,
-                                            onSelect = {
-                                                viewModel.toggle(it)
-                                                periodType = Select(it, uiState.periodMenu.options)
+                                            select = it,
+                                            onSelect = { selectedDuration ->
+                                                viewModel.toggle(selectedDuration)
+                                                periodSelect = Select(selectedDuration, it.options)
                                             }
                                         )
                                     }

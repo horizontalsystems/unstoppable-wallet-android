@@ -35,8 +35,8 @@ object CoinRankModule {
     data class UiState(
         val viewState: ViewState,
         val rankViewItems: List<RankViewItem>,
-        val showPeriodMenu: Boolean,
-        val periodMenu: Select<TimeDuration>,
+        val periodSelect: Select<TimeDuration>?,
+        val sortDescending: Boolean,
         val header: MarketModule.Header
     )
 }
