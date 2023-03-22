@@ -3,10 +3,12 @@ package io.horizontalsystems.bankwallet.modules.market.metricspage
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -26,6 +28,11 @@ class MetricsPageViewModel(
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val marketLiveData = MutableLiveData<MetricsPageModule.MarketData>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
+    var header = MarketModule.Header(
+        title = Translator.getString(metricsType.title),
+        description = Translator.getString(metricsType.description),
+        icon = metricsType.headerIcon
+    )
 
     val metricsType: MetricsType
         get() = service.metricsType

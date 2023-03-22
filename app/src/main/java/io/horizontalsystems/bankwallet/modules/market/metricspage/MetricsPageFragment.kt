@@ -86,7 +86,6 @@ class MetricsPageFragment : BaseFragment() {
 
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(viewModel.metricsType.title),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
@@ -125,6 +124,11 @@ class MetricsPageFragment : BaseFragment() {
                                 state = listState,
                                 contentPadding = PaddingValues(bottom = 32.dp),
                             ) {
+                                item {
+                                    viewModel.header.let { header ->
+                                        DescriptionCard(header.title, header.description, header.icon)
+                                    }
+                                }
                                 item {
                                     Chart(chartViewModel = chartViewModel)
                                 }
