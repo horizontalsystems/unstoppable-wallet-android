@@ -1284,9 +1284,9 @@
     <string name="BiometricAuth_DialogTitle">Biyometri Tarayıcı</string>
     <!--Contacts-->
     <string name="Contacts">Kişiler</string>
-    <string name="Contacts_Backup">Backup Contacts</string>
-    <string name="Contacts_Restore">Restore Contacts</string>
-    <string name="Contacts_Restore_Warning">This action will completely overwrite your contacts and delete your existing contact list. Do you want to replace your contact list? </string>
+    <string name="Contacts_Backup">Kişileri Yedekle</string>
+    <string name="Contacts_Restore">Kişileri Geri Yükle</string>
+    <string name="Contacts_Restore_Warning">Bu eylem, varolan kişi listenizi tamamini siler ve yenisini oluşturur. Kişi listenizi değiştirmek istiyor musunuz? </string>
     <string name="Contacts_AddressesCount">Adresler: %s</string>
     <string name="Contacts_NewContact">Yeni Kişi</string>
     <string name="Contacts_AddNewContact">Yeni Kişi Ekle</string>
@@ -1306,6 +1306,6 @@
     <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
     <string name="Contacts_NoContacts">Eklenmiş bir kişiniz yok</string>
     <string name="Contacts_ActionMore">Daha fazla</string>
-    <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
-    <string name="Contacts_Error_DefinedName">The name already exists</string>
+    <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
+    <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>
 </resources>
