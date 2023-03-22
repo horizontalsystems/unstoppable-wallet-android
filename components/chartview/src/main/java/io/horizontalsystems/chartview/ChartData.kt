@@ -75,12 +75,12 @@ class ChartDataBuilder constructor(
     companion object {
         val placeholder = ChartDataBuilder(
             listOf(
-                ChartPoint(2.toFloat(), 100, mapOf()),
-                ChartPoint(2.toFloat(), 200, mapOf()),
-                ChartPoint(1.toFloat(), 300, mapOf()),
-                ChartPoint(3.toFloat(), 400, mapOf()),
-                ChartPoint(2.toFloat(), 500, mapOf()),
-                ChartPoint(2.toFloat(), 600, mapOf())
+                ChartPoint(2.toFloat(), 100),
+                ChartPoint(2.toFloat(), 200),
+                ChartPoint(1.toFloat(), 300),
+                ChartPoint(3.toFloat(), 400),
+                ChartPoint(2.toFloat(), 500),
+                ChartPoint(2.toFloat(), 600)
             ),
             true
         ).build()
@@ -109,22 +109,21 @@ class ChartDataBuilder constructor(
     init {
         points.forEach { point: ChartPoint ->
             adjustRange(Indicator.Candle, point.value)
-            point.indicators.forEach { (indicator, value) ->
-                value?.let {
-                    adjustRange(indicator, it)
-                }
+            point.volume?.let {
+                adjustRange(Indicator.Volume, it)
             }
         }
 
         immutableItems = points.map { point ->
-            val valuesImmutable = mapOf(Indicator.Candle to point.value)
-                .plus(
-                    point.indicators.mapNotNull { (indicator, value) ->
-                        value?.let {
-                            indicator to value
-                        }
-                    }
-                )
+            val valuesImmutable = buildMap {
+                put(Indicator.Candle, point.value)
+                point.volume?.let {
+                    put(Indicator.Volume, it)
+                }
+                point.dominance?.let {
+                    put(Indicator.Dominance, it)
+                }
+            }
 
             ChartDataItemImmutable(point.timestamp, valuesImmutable)
         }
