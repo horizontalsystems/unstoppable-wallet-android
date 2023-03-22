@@ -140,8 +140,6 @@ open class ChartViewModel(
 
         val chartData = ChartDataBuilder.buildFromPoints(
             chartPointsWrapper.items,
-            chartPointsWrapper.startTimestamp,
-            chartPointsWrapper.endTimestamp,
             chartPointsWrapper.isMovementChart
         )
 
