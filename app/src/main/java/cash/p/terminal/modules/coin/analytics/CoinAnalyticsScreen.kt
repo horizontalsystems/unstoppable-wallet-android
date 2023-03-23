@@ -199,8 +199,9 @@ private fun AnalyticsBlock(
                         ProChartFragment.show(
                             fragmentManager,
                             coinUid,
+                            Translator.getString(chartType.titleRes),
                             chartType,
-                            Translator.getString(chartType.titleRes)
+                            block.chartOverriddenValue,
                         )
                     }
                 }

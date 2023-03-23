@@ -15,6 +15,7 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticChart
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
@@ -181,13 +182,15 @@ class CoinAnalyticsViewModel(
             )
         }
         analytics.addresses?.let { data ->
+            val chartValue = getFormattedSum(listOf(data.count30d.toBigDecimal()))
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_ActiveAddresses,
                     info = AnalyticInfo.AddressesInfo,
-                    value = getFormattedSum(listOf(data.count30d.toBigDecimal())),
+                    value = chartValue,
                     valuePeriod = getValuePeriod(false),
                     analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.AddressesCount),
+                    chartOverriddenValue = ChartModule.OverriddenValue(chartValue, getValuePeriod(false)),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_30DayRank),

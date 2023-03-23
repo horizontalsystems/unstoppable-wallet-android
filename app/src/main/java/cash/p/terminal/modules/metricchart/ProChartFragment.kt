@@ -13,6 +13,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import cash.p.terminal.R
+import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.overview.ui.Chart
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -35,9 +36,13 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
         requireArguments().getString(titleKey) ?: ""
     }
 
+    private val overriddenValue by lazy {
+        requireArguments().getParcelable<ChartModule.OverriddenValue>(overriddenValueKey)
+    }
+
     private val chartViewModel by viewModels<ChartViewModel> {
         ProChartModule.Factory(
-            coinUid, chartType
+            coinUid, chartType, overriddenValue
         )
     }
 
@@ -70,10 +75,22 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
         private const val coinUidKey = "coinUidKey"
         private const val chartTypeKey = "chartTypeKey"
         private const val titleKey = "titleKey"
+        private const val overriddenValueKey = "overriddenValueKey"
 
-        fun show(fragmentManager: FragmentManager, coinUid: String, chartType: ProChartModule.ChartType, title: String) {
+        fun show(
+            fragmentManager: FragmentManager,
+            coinUid: String,
+            title: String,
+            chartType: ProChartModule.ChartType,
+            overriddenValue: ChartModule.OverriddenValue?
+        ) {
             val fragment = ProChartFragment()
-            fragment.arguments = bundleOf(coinUidKey to coinUid, titleKey to title, chartTypeKey to chartType.ordinal)
+            fragment.arguments = bundleOf(
+                coinUidKey to coinUid,
+                titleKey to title,
+                chartTypeKey to chartType.ordinal,
+                overriddenValueKey to overriddenValue
+            )
             fragment.show(fragmentManager, "pro_chart_dialog")
         }
     }
