@@ -47,7 +47,7 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     // ISendSolanaAdapter
     override val availableBalance: BigDecimal
         get() {
-            val availableBalance = balanceData.available - SolanaKit.fee
+            val availableBalance = balanceData.available - SolanaKit.fee - SolanaKit.accountRentAmount
             return if (availableBalance < BigDecimal.ZERO) BigDecimal.ZERO else availableBalance
         }
 
