@@ -123,7 +123,11 @@ fun ContactScreen(
                 }
             }
 
-            Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = ComposeAppTheme.colors.tyler)
+            ) {
                 AppBar(
                     title = uiState.headerTitle,
                     navigationIcon = {
@@ -140,12 +144,7 @@ fun ContactScreen(
                     )
                 )
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = ComposeAppTheme.colors.tyler)
-                        .verticalScroll(rememberScrollState())
-                ) {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Spacer(Modifier.height(12.dp))
                     FormsInput(
                         modifier = Modifier

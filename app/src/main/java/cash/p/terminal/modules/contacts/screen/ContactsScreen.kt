@@ -148,7 +148,11 @@ fun ContactsScreen(
 
             }
         ) {
-            Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = ComposeAppTheme.colors.tyler)
+            ) {
                 AppBar(
                     title = {
                         if (searchMode) {
@@ -231,11 +235,7 @@ fun ContactsScreen(
                     }
                 )
                 if (uiState.contacts.isNotEmpty()) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState())
-                    ) {
+                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                         Spacer(Modifier.height(12.dp))
                         CellUniversalLawrenceSection(uiState.contacts) { contact ->
                             Contact(contact) {

@@ -3,6 +3,7 @@ package cash.p.terminal.modules.contacts.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,7 +31,11 @@ fun BlockchainSelectorScreen(
     var selectedItem by remember { mutableStateOf(selectedBlockchain) }
 
     ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = ComposeAppTheme.colors.tyler)
+        ) {
             AppBar(
                 title = TranslatableString.ResString(R.string.Market_Filter_Blockchains),
                 navigationIcon = {

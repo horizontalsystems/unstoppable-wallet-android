@@ -55,7 +55,11 @@ fun AddressScreen(
                 )
             }
         ) {
-            Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = ComposeAppTheme.colors.tyler)
+            ) {
                 AppBar(
                     title = uiState.headerTitle,
                     navigationIcon = {
