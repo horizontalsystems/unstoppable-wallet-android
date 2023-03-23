@@ -370,8 +370,8 @@
     <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
-        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
-        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
+        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within a reasonable amount of time.
+        \n\nThe recommended fee rate shown as the amount of satoshi the user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
         \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
         \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
@@ -895,7 +895,7 @@
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
-    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_Title">개인 암호</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM 개인 키</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
     <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
