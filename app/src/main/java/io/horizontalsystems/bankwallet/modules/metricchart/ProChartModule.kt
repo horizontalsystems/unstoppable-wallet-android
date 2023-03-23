@@ -20,6 +20,7 @@ object ProChartModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val chartService = ProChartService(App.currencyManager, App.proFeatureAuthorizationManager, App.marketKit, coinUid, chartType)
             val chartNumberFormatter = when (chartType) {
+                ChartType.CexVolume,
                 ChartType.DexVolume,
                 ChartType.Tvl,
                 ChartType.DexLiquidity -> ChartCurrencyValueFormatterShortened()
@@ -31,6 +32,7 @@ object ProChartModule {
     }
 
     enum class ChartType(val titleRes: Int) {
+        CexVolume(R.string.CoinAnalytics_CexVolume),
         DexVolume(R.string.CoinAnalytics_DexVolume),
         DexLiquidity(R.string.CoinAnalytics_DexLiquidity),
         TxCount(R.string.CoinAnalytics_TransactionCount),
