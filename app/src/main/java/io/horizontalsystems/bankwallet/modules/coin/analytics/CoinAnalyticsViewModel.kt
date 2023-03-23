@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticChart
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
@@ -181,13 +182,15 @@ class CoinAnalyticsViewModel(
             )
         }
         analytics.addresses?.let { data ->
+            val chartValue = getFormattedSum(listOf(data.count30d.toBigDecimal()))
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_ActiveAddresses,
                     info = AnalyticInfo.AddressesInfo,
-                    value = getFormattedSum(listOf(data.count30d.toBigDecimal())),
+                    value = chartValue,
                     valuePeriod = getValuePeriod(false),
                     analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.AddressesCount),
+                    chartOverriddenValue = ChartModule.OverriddenValue(chartValue, getValuePeriod(false)),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_30DayRank),

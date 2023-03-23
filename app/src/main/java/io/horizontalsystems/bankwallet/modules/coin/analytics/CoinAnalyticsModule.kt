@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -40,7 +41,8 @@ object CoinAnalyticsModule {
         val valuePeriod: String? = null,
         val analyticChart: ChartViewItem?,
         val footerItems: List<FooterItem>,
-        val sectionTitle: Int? = null
+        val sectionTitle: Int? = null,
+        val chartOverriddenValue: ChartModule.OverriddenValue? = null
     )
 
     data class FooterItem(

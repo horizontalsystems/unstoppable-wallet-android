@@ -28,7 +28,8 @@ import java.util.*
 
 open class ChartViewModel(
     private val service: AbstractChartService,
-    private val valueFormatter: ChartModule.ChartNumberFormatter
+    private val valueFormatter: ChartModule.ChartNumberFormatter,
+    private val overriddenValue: ChartModule.OverriddenValue? = null
 ) : ViewModel() {
 
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
@@ -138,9 +139,24 @@ open class ChartViewModel(
         }
 
         val chartData = ChartData(chartPointsWrapper.items, chartPointsWrapper.isMovementChart, false)
-        val headerView = if (!chartPointsWrapper.isMovementChart) {
-            val sum = valueFormatter.formatValue(service.currency, chartData.sum())
-            ChartModule.ChartHeaderView(sum, null, null, null)
+
+        val headerView = if (overriddenValue != null) {
+            ChartModule.ChartHeaderView(
+                value = overriddenValue.value,
+                valueHint = overriddenValue.description,
+                date = null,
+                diff = null,
+                extraData = null
+            )
+        } else if (!chartPointsWrapper.isMovementChart) {
+            val value = valueFormatter.formatValue(service.currency, chartData.sum())
+            ChartModule.ChartHeaderView(
+                value = value,
+                valueHint = null,
+                date = null,
+                diff = null,
+                extraData = null
+            )
         } else {
             val chartItems = chartPointsWrapper.items
 
@@ -159,7 +175,13 @@ open class ChartViewModel(
                     diff
                 )
             }
-            ChartModule.ChartHeaderView(currentValue, null, Value.Percent(chartData.diff()), dominanceData)
+            ChartModule.ChartHeaderView(
+                value = currentValue,
+                valueHint = null,
+                date = null,
+                diff = Value.Percent(chartData.diff()),
+                extraData = dominanceData
+            )
         }
 
         val (minValue, maxValue) = getMinMax(chartData.valueRange)
@@ -206,6 +228,7 @@ open class ChartViewModel(
 
         return ChartModule.ChartHeaderView(
             value = value,
+            valueHint = null,
             date = dayAndTime,
             diff = null,
             extraData = getItemExtraData(item)
