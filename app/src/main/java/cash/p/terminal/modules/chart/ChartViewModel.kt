@@ -16,9 +16,8 @@ import cash.p.terminal.entities.viewState
 import cash.p.terminal.modules.coin.ChartInfoData
 import cash.p.terminal.modules.market.Value
 import cash.p.terminal.ui.compose.components.TabItem
-import io.horizontalsystems.chartview.ChartDataBuilder
-import io.horizontalsystems.chartview.ChartDataItemImmutable
-import io.horizontalsystems.chartview.Indicator
+import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.disposables.CompositeDisposable
@@ -138,11 +137,7 @@ open class ChartViewModel(
             return
         }
 
-        val chartData = ChartDataBuilder.buildFromPoints(
-            chartPointsWrapper.items,
-            chartPointsWrapper.isMovementChart
-        )
-
+        val chartData = ChartData(chartPointsWrapper.items, chartPointsWrapper.isMovementChart, false)
         val headerView = if (!chartPointsWrapper.isMovementChart) {
             val sum = valueFormatter.formatValue(service.currency, chartData.sum())
             ChartModule.ChartHeaderView(sum, null, null, null)
@@ -205,23 +200,21 @@ open class ChartViewModel(
         service.stop()
     }
 
-    fun getSelectedPoint(item: ChartDataItemImmutable): ChartModule.ChartHeaderView? {
-        return item.values[Indicator.Candle]?.let { candle ->
-            val value = valueFormatter.formatValue(service.currency, candle.toBigDecimal())
-            val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
+    fun getSelectedPoint(item: ChartPoint): ChartModule.ChartHeaderView {
+        val value = valueFormatter.formatValue(service.currency, item.value.toBigDecimal())
+        val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
 
-            ChartModule.ChartHeaderView(
-                value = value,
-                date = dayAndTime,
-                diff = null,
-                extraData = getItemExtraData(item)
-            )
-        }
+        return ChartModule.ChartHeaderView(
+            value = value,
+            date = dayAndTime,
+            diff = null,
+            extraData = getItemExtraData(item)
+        )
     }
 
-    private fun getItemExtraData(item: ChartDataItemImmutable): ChartModule.ChartHeaderExtraData? {
-        val dominance = item.values[Indicator.Dominance]
-        val volume = item.values[Indicator.Volume]
+    private fun getItemExtraData(item: ChartPoint): ChartModule.ChartHeaderExtraData? {
+        val dominance = item.dominance
+        val volume = item.volume
 
         return when {
             dominance != null -> {

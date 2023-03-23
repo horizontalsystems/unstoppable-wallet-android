@@ -7,11 +7,14 @@ import java.math.BigDecimal
 
 @Immutable
 data class ChartData(
-    val items: List<ChartDataItemImmutable>,
-    val valueRange: Range<Float>,
+    val items: List<ChartPoint>,
     val isMovementChart: Boolean,
     val disabled: Boolean = false
 ) {
+    val valueRange: Range<Float> by lazy {
+        Range(items.minOf { it.value }, items.maxOf { it.value })
+    }
+
     val startTimestamp: Long by lazy {
         items.first().timestamp
     }
@@ -20,14 +23,28 @@ data class ChartData(
         items.last().timestamp
     }
 
-    fun values(name: Indicator): List<Float> {
-        return items.mapNotNull { it.values[name] }
+    fun valuesByTimestamp(): LinkedHashMap<Long, Float> {
+        return LinkedHashMap(
+            items.associate { item ->
+                item.timestamp to item.value
+            }
+        )
     }
 
-    fun valuesByTimestamp(name: Indicator): LinkedHashMap<Long, Float> {
+    fun volumeByTimestamp(): LinkedHashMap<Long, Float> {
         return LinkedHashMap(
             items.mapNotNull { item ->
-                item.values[name]?.let {
+                item.volume?.let {
+                    item.timestamp to it
+                }
+            }.toMap()
+        )
+    }
+
+    fun dominanceByTimestamp(): LinkedHashMap<Long, Float> {
+        return LinkedHashMap(
+            items.mapNotNull { item ->
+                item.dominance?.let {
                     item.timestamp to it
                 }
             }.toMap()
@@ -35,7 +52,7 @@ data class ChartData(
     }
 
     fun diff(): BigDecimal {
-        val values = items.mapNotNull { it.values[Indicator.Candle] }
+        val values = items.map { it.value }
         if (values.isEmpty()) {
             return BigDecimal.ZERO
         }
@@ -54,101 +71,6 @@ data class ChartData(
     }
 
     fun sum(): BigDecimal {
-        val values = items.mapNotNull { it.values[Indicator.Candle] }
-
-        return values.sum().toBigDecimal()
-    }
-}
-
-@Immutable
-data class ChartDataItemImmutable(
-    val timestamp: Long,
-    val values: Map<Indicator, Float?>
-)
-
-class ChartDataBuilder constructor(
-    points: List<ChartPoint>,
-    private val isMovementChart: Boolean,
-    private val disabled: Boolean = false
-) {
-
-    companion object {
-        val placeholder = ChartDataBuilder(
-            listOf(
-                ChartPoint(2.toFloat(), 100),
-                ChartPoint(2.toFloat(), 200),
-                ChartPoint(1.toFloat(), 300),
-                ChartPoint(3.toFloat(), 400),
-                ChartPoint(2.toFloat(), 500),
-                ChartPoint(2.toFloat(), 600)
-            ),
-            true
-        ).build()
-
-        fun buildFromPoints(
-            points: List<ChartPoint>,
-            isMovementChart: Boolean = true,
-            isDisabled: Boolean = false,
-        ): ChartData {
-            return ChartDataBuilder(
-                points,
-                isMovementChart,
-                isDisabled
-            ).build()
-        }
-    }
-
-    private val ranges: MutableMap<Indicator, Range<Float>> = mutableMapOf()
-
-    val valueRange by lazy {
-        ranges[Indicator.Candle] ?: Range(0f, 1f)
-    }
-
-    val immutableItems: List<ChartDataItemImmutable>
-
-    init {
-        points.forEach { point: ChartPoint ->
-            adjustRange(Indicator.Candle, point.value)
-            point.volume?.let {
-                adjustRange(Indicator.Volume, it)
-            }
-        }
-
-        immutableItems = points.map { point ->
-            val valuesImmutable = buildMap {
-                put(Indicator.Candle, point.value)
-                point.volume?.let {
-                    put(Indicator.Volume, it)
-                }
-                point.dominance?.let {
-                    put(Indicator.Dominance, it)
-                }
-            }
-
-            ChartDataItemImmutable(point.timestamp, valuesImmutable)
-        }
-    }
-
-    // Ranges
-
-    private fun adjustRange(indicator: Indicator, value: Float) {
-        val prevRange = ranges[indicator] ?: Range(value, value)
-
-        var prevLower = prevRange.lower
-        var prevUpper = prevRange.upper
-
-        if (prevLower > value) {
-            prevLower = value
-        }
-
-        if (prevUpper < value) {
-            prevUpper = value
-        }
-
-        ranges[indicator] = Range(prevLower, prevUpper)
-    }
-
-    fun build(): ChartData {
-        return ChartData(immutableItems, valueRange, isMovementChart, disabled)
+        return items.map { it.value }.sum().toBigDecimal()
     }
 }

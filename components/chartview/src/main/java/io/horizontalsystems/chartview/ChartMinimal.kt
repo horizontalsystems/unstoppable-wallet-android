@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.horizontalsystems.chartview.Indicator.Candle
 import io.horizontalsystems.chartview.databinding.ViewChartMinimalBinding
 import io.horizontalsystems.chartview.models.ChartConfig
 
@@ -23,7 +22,7 @@ class ChartMinimal @JvmOverloads constructor(
     fun setData(data: ChartData) {
         config.setTrendColor(data)
 
-        val candleValues = data.valuesByTimestamp(Candle)
+        val candleValues = data.valuesByTimestamp()
         val minCandleValue = candleValues.values.minOrNull() ?: 0f
         val maxCandleValue = candleValues.values.maxOrNull() ?: 0f
 

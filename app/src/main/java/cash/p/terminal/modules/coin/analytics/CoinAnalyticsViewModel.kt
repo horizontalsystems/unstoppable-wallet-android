@@ -30,7 +30,7 @@ import cash.p.terminal.modules.metricchart.ProChartModule
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.TranslatableString.ResString
 import cash.p.terminal.ui.compose.components.StackBarSlice
-import io.horizontalsystems.chartview.ChartDataBuilder
+import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.AnalyticsPreview
@@ -522,7 +522,7 @@ class CoinAnalyticsViewModel(
             io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
-        val chartData = ChartDataBuilder.buildFromPoints(points, isMovementChart = false)
+        val chartData = ChartData(points, false, false)
 
         val analyticChart = when (chartViewType) {
             ChartViewType.Bar -> AnalyticChart.Bars(chartData)
