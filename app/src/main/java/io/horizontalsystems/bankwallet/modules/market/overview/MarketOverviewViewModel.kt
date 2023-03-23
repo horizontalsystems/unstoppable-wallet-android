@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.nft.nftCollectionItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Observable
@@ -287,7 +286,7 @@ class MarketOverviewViewModel(
         if (marketMetricsPoints.isEmpty()) return null
 
         val points = marketMetricsPoints.map { ChartPoint(it.value.toFloat(), it.timestamp) }
-        return ChartDataBuilder.buildFromPoints(points)
+        return ChartData(points, true, false)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {

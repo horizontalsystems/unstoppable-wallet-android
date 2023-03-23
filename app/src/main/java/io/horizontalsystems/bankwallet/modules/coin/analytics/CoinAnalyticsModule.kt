@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Coin
@@ -152,11 +151,7 @@ object CoinAnalyticsModule {
 
         chartItems.add(ChartPoint(16f, lastTimeStamp))
 
-        val chartData = ChartDataBuilder(
-            points = chartItems,
-            isMovementChart = isMovementChart,
-            disabled = true
-        ).build()
+        val chartData = ChartData(chartItems, isMovementChart, true)
 
         return if (isMovementChart) AnalyticChart.Line(chartData) else AnalyticChart.Bars(chartData)
     }

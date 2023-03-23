@@ -3,7 +3,6 @@ package io.horizontalsystems.chartview.helpers
 import android.graphics.RectF
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.Coordinate
-import io.horizontalsystems.chartview.Indicator.Candle
 
 object PointConverter {
     fun coordinates(data: ChartData, shape: RectF, verticalPadding: Float, horizontalOffset: Float): List<Coordinate> {
@@ -19,10 +18,8 @@ object PointConverter {
         val coordinates = mutableListOf<Coordinate>()
 
         for (item in data.items) {
-            val value = item.values[Candle] ?: continue
-
             val x = (item.timestamp - data.startTimestamp) * xRatio
-            val y = (value - valueMin) * yRatio
+            val y = (item.value - valueMin) * yRatio
 
             coordinates.add(
                 Coordinate(

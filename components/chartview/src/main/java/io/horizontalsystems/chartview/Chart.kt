@@ -5,11 +5,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import io.horizontalsystems.chartview.Indicator.*
 import io.horizontalsystems.chartview.databinding.ViewChartBinding
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartPoint
 
 class Chart @JvmOverloads constructor(
     context: Context,
@@ -24,7 +24,7 @@ class Chart @JvmOverloads constructor(
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchSelect(item: ChartDataItemImmutable)
+        fun onTouchSelect(item: ChartPoint)
     }
 
     private val config = ChartConfig(context, attrs)
@@ -88,7 +88,7 @@ class Chart @JvmOverloads constructor(
                 listener.onTouchUp()
             }
 
-            override fun onTouchSelect(item: ChartDataItemImmutable) {
+            override fun onTouchSelect(item: ChartPoint) {
                 listener.onTouchSelect(item)
             }
         })
@@ -127,7 +127,7 @@ class Chart @JvmOverloads constructor(
 
         animatorMain.cancel()
 
-        val candleValues = data.valuesByTimestamp(Candle)
+        val candleValues = data.valuesByTimestamp()
         val minCandleValue = candleValues.values.minOrNull() ?: 0f
         val maxCandleValue = candleValues.values.maxOrNull() ?: 0f
 
@@ -151,7 +151,7 @@ class Chart @JvmOverloads constructor(
             PointConverter.coordinates(data, binding.chartMain.shape, 0f, config.horizontalOffset)
 
         //Dominance
-        val dominanceValues = data.valuesByTimestamp(Dominance)
+        val dominanceValues = data.dominanceByTimestamp()
         if (dominanceValues.isNotEmpty()) {
             dominanceCurveAnimator = CurveAnimator(
                 dominanceValues,
@@ -190,7 +190,7 @@ class Chart @JvmOverloads constructor(
         mainRange.setValues(maxValue, minValue)
 
         // Volume
-        bottomVolume.setValues(data.valuesByTimestamp(Volume), data.startTimestamp, data.endTimestamp)
+        bottomVolume.setValues(data.volumeByTimestamp(), data.startTimestamp, data.endTimestamp)
         bottomVolume.setShape(binding.chartBottom.shape)
 
         // ---------------------------
@@ -229,13 +229,13 @@ class Chart @JvmOverloads constructor(
 
         // Candles
         mainBars.setShape(binding.chartMain.shape)
-        mainBars.setValues(data.valuesByTimestamp(Candle), data.startTimestamp, data.endTimestamp)
+        mainBars.setValues(data.valuesByTimestamp(), data.startTimestamp, data.endTimestamp)
 
         mainRange.setShape(binding.topLowRange.shape)
         mainRange.setValues(maxValue, minValue)
 
         // Volume
-        bottomVolume.setValues(data.valuesByTimestamp(Volume), data.startTimestamp, data.endTimestamp)
+        bottomVolume.setValues(data.volumeByTimestamp(), data.startTimestamp, data.endTimestamp)
         bottomVolume.setShape(binding.chartBottom.shape)
 
         // ---------------------------
