@@ -93,6 +93,13 @@ class AddressViewModel(
 
     private fun validateAddress(address: String) {
         validationJob?.cancel()
+
+        if (address.isEmpty()) {
+            addressState = null
+            emitUiState()
+            return
+        }
+
         validationJob = viewModelScope.launch {
             addressState = DataState.Loading
             emitUiState()
