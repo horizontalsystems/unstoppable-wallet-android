@@ -26,8 +26,8 @@ import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
-import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.ChartViewType
+import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
@@ -203,7 +203,7 @@ fun PriceVolChart(
     loading: Boolean,
     hasVolumes: Boolean,
     chartViewType: ChartViewType,
-    onSelectPoint: (ChartDataItemImmutable?) -> Unit,
+    onSelectPoint: (ChartPoint?) -> Unit,
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
@@ -223,7 +223,7 @@ fun PriceVolChart(
                         onSelectPoint.invoke(null)
                     }
 
-                    override fun onTouchSelect(item: ChartDataItemImmutable) {
+                    override fun onTouchSelect(item: ChartPoint) {
                         onSelectPoint.invoke(item)
                         HudHelper.vibrate(context)
                     }

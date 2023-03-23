@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.Indicator
 
 @Composable
 fun ChartBars(
@@ -25,7 +24,7 @@ fun ChartBars(
             val canvasWidth = size.width
             val canvasHeight = size.height
 
-            val valuesByTimestamp = chartData.valuesByTimestamp(Indicator.Candle)
+            val valuesByTimestamp = chartData.valuesByTimestamp()
 
             val valueMin = valuesByTimestamp.values.minOrNull() ?: 0f
             val valueMax = valuesByTimestamp.values.maxOrNull() ?: 0f
