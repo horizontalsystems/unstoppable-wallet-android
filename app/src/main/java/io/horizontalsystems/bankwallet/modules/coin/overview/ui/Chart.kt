@@ -36,6 +36,7 @@ fun HsChartLineHeader(
     chartHeaderView: ChartModule.ChartHeaderView?,
 ) {
     val mainValue = chartHeaderView?.value ?: "--"
+    val mainValueHint = chartHeaderView?.valueHint
     val diff = chartHeaderView?.diff
     val date = chartHeaderView?.date
     val extraData = chartHeaderView?.extraData
@@ -62,6 +63,13 @@ fun HsChartLineHeader(
                     style = style,
                     color = ComposeAppTheme.colors.leah,
                 )
+                mainValueHint?.let {
+                    HSpacer(width = 4.dp)
+                    subhead1_grey(
+                        text = it,
+                        modifier = Modifier.alignByBaseline()
+                    )
+                }
                 diff?.let {
                     HSpacer(width = 4.dp)
                     Text(
