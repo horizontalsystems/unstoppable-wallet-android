@@ -134,7 +134,7 @@ class CoinAnalyticsViewModel(
                     info = AnalyticInfo.CexVolumeInfo,
                     value = getFormattedSum(data.points.map { it.volume }, currency),
                     valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, null),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.CexVolume),
                     footerItems = listOf(
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_30DayRank),

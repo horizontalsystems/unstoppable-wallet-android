@@ -27,6 +27,7 @@ class ProChartService(
     override val chartViewType = when (chartType) {
         ProChartModule.ChartType.Tvl,
         ProChartModule.ChartType.DexLiquidity -> ChartViewType.Line
+        ProChartModule.ChartType.CexVolume,
         ProChartModule.ChartType.DexVolume,
         ProChartModule.ChartType.AddressesCount,
         ProChartModule.ChartType.TxCount -> ChartViewType.Bar
@@ -39,6 +40,9 @@ class ProChartService(
         val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK)?.key?.value
 
         val chartDataSingle: Single<List<io.horizontalsystems.marketkit.models.ChartPoint>> = when (chartType) {
+            ProChartModule.ChartType.CexVolume ->
+                marketKit.cexVolumesSingle(coinUid, currency.code, chartInterval)
+
             ProChartModule.ChartType.DexVolume ->
                 marketKit.dexVolumesSingle(coinUid, currency.code, chartInterval, sessionKey)
                     .map { response -> response.volumePoints }
@@ -62,6 +66,7 @@ class ProChartService(
         val isMovementChart = when (chartType) {
             ProChartModule.ChartType.DexLiquidity,
             ProChartModule.ChartType.Tvl -> true
+            ProChartModule.ChartType.CexVolume,
             ProChartModule.ChartType.DexVolume,
             ProChartModule.ChartType.TxCount,
             ProChartModule.ChartType.AddressesCount -> false

@@ -143,6 +143,9 @@ class MarketKitWrapper(
 
     // Pro Details
 
+    fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
+        marketKit.cexVolumesSingle(coinUid, currencyCode, timePeriod)
+
     fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?) =
         marketKit.dexLiquiditySingle(coinUid, currencyCode, timePeriod, sessionKey)
 
