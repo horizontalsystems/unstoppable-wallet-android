@@ -507,6 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">É provável que sua transação falhe.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Tolerância do Slippage não pode ser maior que %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Endereço inválido</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
     <string name="SwapSettings_Error_InvalidSlippage">Slippage Inválido</string>
     <string name="SwapSettings_Error_InvalidDeadline">Prazo de tarefa inválido</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Sua operação pode ser de front-running</string>
