@@ -49,7 +49,7 @@ fun BlockchainSelectorScreen(
             ) {
                 Spacer(Modifier.height(12.dp))
                 HSSectionRounded {
-                    blockchains.forEach { item ->
+                    blockchains.forEachIndexed { index, item ->
                         BlockchainCell(
                             item = item,
                             selected = selectedItem == item,
@@ -57,7 +57,8 @@ fun BlockchainSelectorScreen(
                                 selectedItem = item
 
                                 onSelectBlockchain(it)
-                            }
+                            },
+                            borderTop = index != 0
                         )
                     }
                 }
