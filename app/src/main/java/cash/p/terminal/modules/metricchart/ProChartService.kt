@@ -23,7 +23,19 @@ class ProChartService(
     override val initialChartInterval = HsTimePeriod.Month1
     override val hasVolumes = chartType == ProChartModule.ChartType.TxCount
 
-    override val chartIntervals = HsTimePeriod.values().toList()
+    override val chartIntervals = when (chartType) {
+        ProChartModule.ChartType.DexLiquidity -> {
+            listOf(
+                HsTimePeriod.Month1,
+                HsTimePeriod.Month3,
+                HsTimePeriod.Month6,
+                HsTimePeriod.Year1,
+                HsTimePeriod.Year2,
+            )
+        }
+        else -> HsTimePeriod.values().toList()
+    }
+
     override val chartViewType = when (chartType) {
         ProChartModule.ChartType.Tvl,
         ProChartModule.ChartType.DexLiquidity -> ChartViewType.Line
