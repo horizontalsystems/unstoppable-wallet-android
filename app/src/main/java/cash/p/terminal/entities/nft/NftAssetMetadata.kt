@@ -11,7 +11,7 @@ data class NftAssetMetadata(
     val imageUrl: String?,
     val previewImageUrl: String?,
     val description: String?,
-    val nftType: String,
+    val nftType: String?,
     val externalLink: String?,
     val providerLink: String?,
 

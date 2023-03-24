@@ -164,7 +164,7 @@ object OpenSeaNftApiResponse {
         val name: String,
         val address: String,
         val created_date: String,
-        val schema_name: String
+        val schema_name: String?
     )
 
     data class Assets(val next: String?, val assets: List<Asset>)
