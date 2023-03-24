@@ -430,11 +430,13 @@ private fun AssetContent(
                                 asset.nftUid.tokenId.shorten()
                             )
                         }
-                        add {
-                            DetailItem(
-                                stringResource(id = R.string.NftAsset_TokenStandard),
-                                asset.schemaName
-                            )
+                        asset.schemaName?.let { schemaName ->
+                            add {
+                                DetailItem(
+                                    stringResource(id = R.string.NftAsset_TokenStandard),
+                                    schemaName
+                                )
+                            }
                         }
                         add {
                             DetailItem(
