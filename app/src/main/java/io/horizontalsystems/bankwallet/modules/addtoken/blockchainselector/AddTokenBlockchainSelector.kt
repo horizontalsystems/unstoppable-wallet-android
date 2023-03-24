@@ -46,7 +46,7 @@ fun AddTokenBlockchainSelectorScreen(
             ) {
                 Spacer(Modifier.height(12.dp))
                 HSSectionRounded {
-                    blockchains.forEach { item ->
+                    blockchains.forEachIndexed { index, item ->
                         BlockchainCell(
                             item = item,
                             selected = selectedItems.contains(item),
@@ -58,6 +58,7 @@ fun AddTokenBlockchainSelectorScreen(
                                     ?.set(BlockchainSelectorResult, selectedItems.toList())
                                 navController.popBackStack()
                             },
+                            borderTop = index != 0
                         )
                     }
                 }
@@ -72,9 +73,10 @@ fun BlockchainCell(
     item: Blockchain,
     selected: Boolean,
     onCheck: (Blockchain) -> Unit,
+    borderTop: Boolean
 ) {
     CellBorderedRowUniversal(
-        borderTop = true,
+        borderTop = borderTop,
         modifier = Modifier
             .clickable {
                 onCheck(item)
