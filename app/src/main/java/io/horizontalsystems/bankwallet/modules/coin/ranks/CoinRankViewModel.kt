@@ -97,11 +97,10 @@ class CoinRankViewModel(
                     resolvedValue?.let {
                         Item(internalItem.coin, it)
                     }
-                }.take(itemsToShow)
+                }
 
-                val sortedItems = if (sortDescending) items.sortedByDescending { it.value } else items.sortedBy { it.value }
-
-                sortedItems.mapIndexed { index, item ->
+                val topItems = items.sortedByDescending { it.value }.take(itemsToShow)
+                val viewItems = topItems.mapIndexed { index, item ->
                     CoinRankModule.RankViewItem(
                         (index + 1).toString(),
                         item.coin.code,
@@ -110,6 +109,7 @@ class CoinRankViewModel(
                         formatted(item.value, baseCurrency)
                     )
                 }
+                if (sortDescending) viewItems else viewItems.reversed()
             }
 
             uiState = UiState(
