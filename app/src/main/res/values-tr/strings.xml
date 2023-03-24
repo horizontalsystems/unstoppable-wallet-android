@@ -507,6 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Slipaj Toleransı %s%% üzerinde olamaz</string>
     <string name="SwapSettings_Error_InvalidAddress">Geçersiz adres</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
     <string name="SwapSettings_Error_InvalidSlippage">Geçersiz Kayma</string>
     <string name="SwapSettings_Error_InvalidDeadline">Geçersiz Son Tarih</string>
     <string name="SwapSettings_Warning_UnusualSlippage">İşleminiz varlık fiyatını etkileyebilir</string>
