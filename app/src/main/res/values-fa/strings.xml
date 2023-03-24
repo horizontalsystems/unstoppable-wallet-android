@@ -507,6 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">تراکنش شما احتمالاً ناموفق است.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">تحمل لغزش نمی تواند بیشتر باشد از %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">آدرس نامعتبر</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
     <string name="SwapSettings_Error_InvalidSlippage">لغزش نامعتبر</string>
     <string name="SwapSettings_Error_InvalidDeadline">مهلت نامعتبر</string>
     <string name="SwapSettings_Warning_UnusualSlippage">معامله شما می تواند پیشرو باشد</string>
