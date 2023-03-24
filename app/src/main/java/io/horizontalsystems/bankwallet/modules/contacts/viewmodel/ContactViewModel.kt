@@ -98,7 +98,7 @@ class ContactViewModel(
     }
 
     private fun isSaveEnabled(): Boolean {
-        return error == null && contactName.isNotBlank() && hasChanges()
+        return addresses.isNotEmpty() && error == null && contactName.isNotBlank() && hasChanges()
     }
 
     private fun emitUiState() {
