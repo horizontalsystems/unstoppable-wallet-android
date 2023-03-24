@@ -168,7 +168,7 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         val traits: List<TraitViewItem>,
         val description: String?,
         val contractAddress: String,
-        val schemaName: String,
+        val schemaName: String?,
         val links: List<LinkViewItem>,
         val showSend: Boolean,
     ) {
