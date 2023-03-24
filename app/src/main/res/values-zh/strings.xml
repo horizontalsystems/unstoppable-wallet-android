@@ -507,6 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">滑点太小，您的交易可能失败。</string>
     <string name="SwapSettings_Error_SlippageTooHigh">滑点太大，最大允许值是 %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">地址无效</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
     <string name="SwapSettings_Error_InvalidSlippage">无效延误</string>
     <string name="SwapSettings_Error_InvalidDeadline">无效截止日期</string>
     <string name="SwapSettings_Warning_UnusualSlippage">您的交易可能提前完成</string>
