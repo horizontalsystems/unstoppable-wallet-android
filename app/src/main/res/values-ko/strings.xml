@@ -507,6 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">슬리피지 허용 오차는 %s%%를 초과할 수 없습니다.</string>
     <string name="SwapSettings_Error_InvalidAddress">잘못된 주소</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
     <string name="SwapSettings_Error_InvalidSlippage">올바르지 않은 슬립</string>
     <string name="SwapSettings_Error_InvalidDeadline">올바르지 않은 마감 시간</string>
     <string name="SwapSettings_Warning_UnusualSlippage">거래가 프론트런 당할 수 있습니다</string>
