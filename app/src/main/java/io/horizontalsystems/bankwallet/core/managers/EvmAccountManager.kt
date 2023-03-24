@@ -20,6 +20,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchUnknownDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapDecoration
 import kotlinx.coroutines.*
@@ -116,6 +117,13 @@ class EvmAccountManager(
 
                 is OneInchUnoswapDecoration -> {
                     val tokenOut = decoration.tokenOut
+                    if (tokenOut is OneInchDecoration.Token.Eip20Coin) {
+                        foundTokens.add(FoundToken(TokenType.Eip20(tokenOut.address.hex), tokenOut.tokenInfo))
+                    }
+                }
+
+                is OneInchUnknownDecoration -> {
+                    val tokenOut = decoration.tokenAmountOut?.token
                     if (tokenOut is OneInchDecoration.Token.Eip20Coin) {
                         foundTokens.add(FoundToken(TokenType.Eip20(tokenOut.address.hex), tokenOut.tokenInfo))
                     }
