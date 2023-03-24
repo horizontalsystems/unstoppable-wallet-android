@@ -507,6 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Сопротивление скольжению не может превышать %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Неверный Адрес</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
     <string name="SwapSettings_Error_InvalidSlippage">Неверное Отклонение</string>
     <string name="SwapSettings_Error_InvalidDeadline">Недопустимый Срок</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Ваша транзакция может быть авансированной</string>
