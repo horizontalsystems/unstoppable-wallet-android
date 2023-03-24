@@ -168,7 +168,7 @@ class AddressViewModel(
             }
         }
 
-        return ContactAddressParser(domainAddressHandlers, rawAddressHandlers)
+        return ContactAddressParser(domainAddressHandlers, rawAddressHandlers, blockchain)
     }
 
     private fun uiState() = UiState(
