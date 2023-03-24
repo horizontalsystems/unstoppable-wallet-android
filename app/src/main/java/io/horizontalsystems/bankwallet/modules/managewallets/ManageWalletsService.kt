@@ -33,6 +33,7 @@ class ManageWalletsService(
     private val account: Account? = accountManager.activeAccount
     private var wallets = setOf<Wallet>()
     private var fullCoins = listOf<FullCoin>()
+    private var sortedItems = listOf<Item>()
 
     private val disposables = CompositeDisposable()
 
@@ -56,7 +57,7 @@ class ManageWalletsService(
 
         sync(walletManager.activeWallets)
         syncFullCoins()
-        sortFullCoins()
+        sortItems()
         syncState()
     }
 
@@ -101,8 +102,12 @@ class ManageWalletsService(
         fullCoins = fetchFullCoins()
     }
 
-    private fun sortFullCoins() {
+    private fun sortItems() {
         fullCoins = fullCoins.sortedByFilter(filter)
+        sortedItems = fullCoins
+            .map { getItemsForFullCoin(it) }
+            .flatten()
+            .sortedByDescending { it.enabled }
     }
 
     private fun getItemsForFullCoin(fullCoin: FullCoin): List<Item> {
@@ -164,7 +169,7 @@ class ManageWalletsService(
     }
 
     private fun syncState() {
-        items = fullCoins.map { getItemsForFullCoin(it) }.flatten()
+        items = sortedItems
     }
 
     private fun handleUpdated(wallets: List<Wallet>) {
@@ -173,10 +178,20 @@ class ManageWalletsService(
         val newFullCons = fetchFullCoins()
         if (newFullCons.size > fullCoins.size) {
             fullCoins = newFullCons
-            sortFullCoins()
+            sortItems()
         }
 
         syncState()
+    }
+
+    private fun updateSortedItems(configuredToken: ConfiguredToken, enable: Boolean) {
+        sortedItems = sortedItems.map { item ->
+            if (item.configuredToken == configuredToken) {
+                item.copy(enabled = enable)
+            } else {
+                item
+            }
+        }
     }
 
     private fun enable(configuredToken: ConfiguredToken, restoreSettings: RestoreSettings) {
@@ -187,13 +202,15 @@ class ManageWalletsService(
         }
 
         walletManager.save(listOf(Wallet(configuredToken, account)))
+
+        updateSortedItems(configuredToken, true)
     }
 
     fun setFilter(filter: String) {
         this.filter = filter
 
         syncFullCoins()
-        sortFullCoins()
+        sortItems()
         syncState()
     }
 
@@ -210,6 +227,7 @@ class ManageWalletsService(
     fun disable(configuredToken: ConfiguredToken) {
         wallets.firstOrNull { it.configuredToken == configuredToken }?.let {
             walletManager.delete(listOf(it))
+            updateSortedItems(configuredToken, false)
         }
     }
 
