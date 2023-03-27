@@ -359,12 +359,12 @@
     <string name="FeeSettings_BaseFee_Info">Das Netzwerkprotokoll bestimmt den Basispreis pro Gas für jeden Block, sogenannte Basisgebühren. Sie variiert je nach Netzwerkauslastung von Block zu Block. Sie kann im nächsten Block um nicht mehr als 12,5% steigen oder sinken, was die Gebühren berechenbarer macht. Der hier angezeigte Wert ist die Basisgebühr des aktuellen Blocks.</string>
     <string name="FeeSettings_MaxFee">Max Gebühr (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">Dies ist der maximale Gesamtpreis pro Gas, den der Nutzer zu zahlen bereit ist. Es muss den Basistarif des Netzwerks und den maximalen Prioritätstarif abdecken. Der hier angezeigte Wert wird anhand einer Schätzung der Basisgebühr des nächsten Blocks plus der vom Nutzer gewählten Maximalgebührengebühr vorgeschlagen. Der tatsächlich gezahlte Gebührensatz ist normalerweise niedriger. Wenn diese Einstellung niedriger als die aktuelle Basisgebühr ist, wird die gezahlte Gebühr begrenzt aber führt zu längeren Wartezeiten für die Bestätigung der Transaktion oder sogar zu einer festgefahrenen Transaktion.</string>
-    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips">Max Prioritätsgebühr (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Benutzer zahlen Prioritätsgebühren, um eine Transaktion schneller zu bestätigen. Sie werden manchmal als Tipps bezeichnet. Die maximale Prioritätsgebühr ist der maximale Zusatzpreis pro Gas, den der Nutzer zusätzlich zur Basisgebühr zahlen möchte. Der hier angezeigte Wert wird basierend auf vorausgesagten Netzwerkbedingungen vorgeschlagen. Die tatsächliche Prioritätsgebühr wird normalerweise niedriger sein. Die Einstellung auf Null kann zu einer langen Wartezeit führen, bis die Transaktion bestätigt wird, , da er am Ende der Warteschlange aller Benutzer platziert ist.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskant</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">Die Transaktion kann eine Zeit lang ausstehend bleiben oder ganz fehlschlagen.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Riskant</string>
-    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Um eine schnelle Ausführung der Transaktion zu gewährleisten, ist die maximale Gebührenrate (abgezogen max. Miner-Tipp) sollte höher sein als die aktuelle Basisgebühr. Wenn nicht die Transaktion ausbleibt, bis die Bedingung erfüllt ist.</string>
     <string name="FeeSettings_Overpricing_Title">Gebühr zu hoch</string>
     <string name="FeeSettings_Overpricing">Die festgelegte Transaktionsgebühr ist höher als für die Bearbeitung dieser Transaktion jetzt erforderlich.</string>
     <string name="FeeSettings_Info_IUnderstand">Ich stimme zu</string>
@@ -504,7 +504,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">Ihre Transaktion wird wahrscheinlich fehlschlagen.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Die Slippage-Toleranz darf nicht mehr als %s%% betragen</string>
     <string name="SwapSettings_Error_InvalidAddress">Ungültige Adresse</string>
-    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Ungültige %s Adresse</string>
     <string name="SwapSettings_Error_InvalidSlippage">Ungültige Slippage</string>
     <string name="SwapSettings_Error_InvalidDeadline">Ungültige Frist</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Ihre Transaktion kann vorzeitig ausgeführt werden</string>
@@ -792,20 +792,9 @@
     <string name="ManageCoins_Search">Name, Code oder Vertragsadresse</string>
     <string name="ManageCoins_AddToken">Token hinzufügen</string>
     <string name="ManageCoins_NoResults">Keine Ergebnisse gefunden. Versuchen Sie, den Token manuell hinzuzufügen, wenn Sie die Adresse des Smart Contracts kennen.</string>
-    <string name="ManageCoins_BipsDescription">There are 3 common address formats %s wallets can use to receive incoming payments:
-\n
-\n- BIP-44 (older)
-\n- BIP-49 (newer)
-\n- BIP-84 (newest)
-\n
-\nWhile Unstoppable wallet supports all 3 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
-    <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
-\n
-\n- TYPE0 (older)
-\n- TYPE145 (newer)
-\n
-\nWhile Unstoppable wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
-    <string name="ManageCoins_ContractAddress">CONTRACT ADDRESS</string>
+    <string name="ManageCoins_BipsDescription">Es gibt 3 gängige Adressformate %s Brieftaschen können verwendet werden, um eingehende Zahlungen zu erhalten:\n\n- BIP44 (älter)\n- BIP49 (neuer)\n- BIP84 (neueste)\n\nWährend unaufhaltsame Brieftasche alle 3 unterstützt, empfiehlt es eine %s Brieftasche im BIP84-Format zu verwenden. Die Brieftaschen in diesem Format zahlen die niedrigsten Gebühren beim Versenden von %s Transaktionen.</string>
+    <string name="ManageCoins_BchTypeDescription">Es gibt 2 Adressformate Bitcoin Cash Wallets zum Empfang eingehender Zahlungen:\n\n- TYPE 0 (älter)\n- TYPE 145 (neuer)\n\nWährend unaufhaltsame Brieftaschen beide unterstützt, empfiehlt es sich, ein Bitcoin Cash Wallet im TYPE 145 Format zu verwenden.</string>
+    <string name="ManageCoins_ContractAddress">CONTRACT ADRESSE</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimentell</string>
     <string name="ExperimentalFeatures_Description">Die unten aufgeführten Funktionen sind experimentell und sollten mit Vorsicht eingesetzt werden. Wir haben sie zwar ausführlich mit unserem eigenen Kryptoguthaben getestet, aber wir können noch nicht garantieren, dass sie in allen denkbaren Fällen funktionieren.</string>
@@ -1298,20 +1287,20 @@
     <!--Contacts-->
     <string name="Contacts">Kontakte</string>
     <string name="Contacts_Backup">Kontakte speichern</string>
-    <string name="Contacts_Restore">Restore Contacts</string>
-    <string name="Contacts_Restore_Warning">This action will completely overwrite your contacts and delete your existing contact list. Do you want to replace your contact list? </string>
-    <string name="Contacts_AddressesCount">Addresses: %s</string>
+    <string name="Contacts_Restore">Kontakte wiederherstellen</string>
+    <string name="Contacts_Restore_Warning">Diese Aktion wird Ihre Kontakte komplett überschreiben und Ihre vorhandene Kontaktliste löschen. Möchten Sie Ihre Kontaktliste ersetzen? </string>
+    <string name="Contacts_AddressesCount">Adresse: %s</string>
     <string name="Contacts_NewContact">Neuer Kontakt</string>
     <string name="Contacts_AddNewContact">Neuen Kontakt hinzufügen</string>
     <string name="Contacts_NameHint">Name</string>
     <string name="Contacts_AddAddress">Adresse hinzufügen</string>
-    <string name="Contacts_AddAddress_NewContact">Create New Contact</string>
-    <string name="Contacts_AddAddress_ExistingContact">Add to Existing Contact</string>
-    <string name="Contacts_AddAddress_Replace">Replace</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">This contact already has an address on this blockchain. Do you want to replace the address %s with the %s?</string>
+    <string name="Contacts_AddAddress_NewContact">Neuen Kontakt erstellen</string>
+    <string name="Contacts_AddAddress_ExistingContact">Zu vorhandenem Kontakt hinzufügen</string>
+    <string name="Contacts_AddAddress_Replace">Ersetzen</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Dieser Kontakt hat bereits eine Adresse auf dieser Blockchain. Möchten Sie die Adresse %s durch die %s ersetzen?</string>
     <string name="Contacts_AddressHint">Adresse oder Domäne</string>
-    <string name="Contacts_DeleteContact">Delete Contact</string>
-    <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
+    <string name="Contacts_DeleteContact">Kontakt löschen</string>
+    <string name="Contacts_DeleteContact_Warning">Sind Sie sicher, dass Sie diesen Kontakt löschen möchten?</string>
     <string name="Contacts_DeleteAddress">Adresse löschen</string>
     <string name="Contacts_DeleteAddress_Warning">Sind Sie sicher, dass Sie diese Adresse löschen wollen?</string>
     <string name="Contacts_DiscardChanges">Änderungen verwerfen</string>
