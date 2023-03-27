@@ -311,7 +311,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">Zugriff auf Ihre Kamera für diese App wurde verweigert, Sie können zu Einstellungen gehen und den Zugriff erlauben</string>
     <string name="ScanQr_GoToSettings">Zu den Einstellungen</string>
     <string name="Send_Error_IncorrectAddress">Falscher Adresse</string>
-    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
+    <string name="Send_Error_UnsupportedAddress">Zeitsperre funktioniert nur mit P2PKH-Adressen (beginnend mit 1) </string>
     <string name="Send_Error_BalanceAmount">Guthaben %s</string>
     <string name="Send_Error_MinimumAmount">Minimaler Betrag %s</string>
     <string name="Send_Error_MaximumAmount">Maximaler Betrag %s</string>
@@ -341,7 +341,7 @@
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Erweitert</string>
     <string name="SendEvmSettings_Nonce">Transaktion Nonce</string>
-    <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
+    <string name="SendEvmSettings_Nonce_Info">Das nonce ist ein eindeutiger Integer-Wert für eine Transaktion innerhalb der Wallet des Benutzers. Sie erhöht sich normalerweise mit jeder abgeschlossenen Transaktion und muss sich nicht ändern. Fortgeschrittene Benutzer können es einem Nonce einer ausstehenden Transaktion gleichen, um diese Transaktion zu stornieren und zu ersetzen solange die neue Transaktion eine ausreichend höhere Gebühr hat, um zu verhindern, dass die alte statt dessen bestätigt wird (zum Beispiel Sie möchten möglicherweise die Bestätigung beschleunigen oder die Transaktionsparameter vollständig ändern). Wenn mehrere ausstehende Transaktionen die gleiche Nonce haben, wird nur eine bestätigt, typischerweise die mit der höchsten Gebühr.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Nonce verwendet</string>
     <string name="SendEvmSettings_Error_NonceUsed">Eine ausgeführte Transaktion mit diesem nonce existiert bereits.</string>
     <!-- Fee Settings -->
@@ -350,19 +350,19 @@
     <string name="FeeSettings_FeeLegacy">Max Gebühr</string>
     <string name="FeeSettings_FeeLegacy_Info">Die maximal erwartete Gesamtgebühr für die jeweilige Transaktion. In der Regel ist die tatsächliche Transaktionsgebühr niedriger.</string>
     <string name="FeeSettings_Fee">Max Gebühr</string>
-    <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
+    <string name="FeeSettings_Fee_Info">Die geschätzte Transaktionsgebühr, die für diese Transaktion gezahlt werden soll berechnet anhand des Gaslimits, der maximalen Gebührenrate und der unten angegebenen Maximalpriorität. Die tatsächlich gezahlte Gebühr ist in der Regel niedriger.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
+    <string name="FeeSettings_GasLimit_Info">Die Transaktionskomplexität wird in Einheiten mit dem Namen \"Gas\" gemessen, die je nach ausgeführten intelligenten Verträgen variieren. Das Gaslimit ist das geschätzte Höchstgas, das benötigt wird, um es auszuführen. Das tatsächliche Gas wird normalerweise niedriger sein.</string>
     <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Die Gebühr für Transaktionen im Netzwerk wird in Gaseinheiten gemessen. Der Gaspreis ist der Betrag, den ein Nutzer für eine Einheit Gas auszugeben bereit ist. Wenn das Netzwerk ausgelastet ist, sind die Gaspreise hoch, und niedrig, wenn es nicht genutzt wird. Ein unzureichender Gaspreis ist oft ein Grund dafür, dass eine Transaktion über einen längeren Zeitraum aussteht.</string>
     <string name="FeeSettings_BaseFee">Basisgebühr</string>
-    <string name="FeeSettings_BaseFee_Info">The network protocol determines the base price per gas for each block, called base fee rate. It varies according to the network utilization level from block to block. It can increase or decrease by no more than 12.5% in the next block, making fees more predictable. The value shown here is the current block\'s base fee rate.</string>
-    <string name="FeeSettings_MaxFee">Max Fee Rate (Gwei)</string>
-    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
+    <string name="FeeSettings_BaseFee_Info">Das Netzwerkprotokoll bestimmt den Basispreis pro Gas für jeden Block, sogenannte Basisgebühren. Sie variiert je nach Netzwerkauslastung von Block zu Block. Sie kann im nächsten Block um nicht mehr als 12,5% steigen oder sinken, was die Gebühren berechenbarer macht. Der hier angezeigte Wert ist die Basisgebühr des aktuellen Blocks.</string>
+    <string name="FeeSettings_MaxFee">Max Gebühr (Gwei)</string>
+    <string name="FeeSettings_MaxFee_Info">Dies ist der maximale Gesamtpreis pro Gas, den der Nutzer zu zahlen bereit ist. Es muss den Basistarif des Netzwerks und den maximalen Prioritätstarif abdecken. Der hier angezeigte Wert wird anhand einer Schätzung der Basisgebühr des nächsten Blocks plus der vom Nutzer gewählten Maximalgebührengebühr vorgeschlagen. Der tatsächlich gezahlte Gebührensatz ist normalerweise niedriger. Wenn diese Einstellung niedriger als die aktuelle Basisgebühr ist, wird die gezahlte Gebühr begrenzt aber führt zu längeren Wartezeiten für die Bestätigung der Transaktion oder sogar zu einer festgefahrenen Transaktion.</string>
     <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Benutzer zahlen Prioritätsgebühren, um eine Transaktion schneller zu bestätigen. Sie werden manchmal als Tipps bezeichnet. Die maximale Prioritätsgebühr ist der maximale Zusatzpreis pro Gas, den der Nutzer zusätzlich zur Basisgebühr zahlen möchte. Der hier angezeigte Wert wird basierend auf vorausgesagten Netzwerkbedingungen vorgeschlagen. Die tatsächliche Prioritätsgebühr wird normalerweise niedriger sein. Die Einstellung auf Null kann zu einer langen Wartezeit führen, bis die Transaktion bestätigt wird, , da er am Ende der Warteschlange aller Benutzer platziert ist.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskant</string>
-    <string name="FeeSettings_RiskOfGettingStuckLegacy">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">Die Transaktion kann eine Zeit lang ausstehend bleiben oder ganz fehlschlagen.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Riskant</string>
     <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">Gebühr zu hoch</string>
@@ -370,11 +370,7 @@
     <string name="FeeSettings_Info_IUnderstand">Ich stimme zu</string>
     <string name="FeeSettings_FeeRate">Gebühr (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Hier ist der empfohlene Wert, um die nächsten 2 Blöcke zu treffen</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
-        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
-        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
-        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
-        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
+    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.\n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.\n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.\n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.\n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Transaktionsgeschwindigkeit</string>
     <string name="FeeInfo_Description">Sowohl Bitcoin als auch Ethereum Blockchains verlangen vom Benutzer, Netzwerkgebühren zu zahlen, wenn er Transaktionen versendet. Die Gebühren sind höher, wenn viele Transaktionen im Netzwerk durchgeführt werden und niedriger, wenn die Blockchain weniger beschäftigt ist.</string>
@@ -583,7 +579,7 @@
     <string name="TransactionInfo_Id">Transaktion ID</string>
     <string name="TransactionInfo_Service">Dienst</string>
     <string name="TransactionInfo_RawTransaction">Rohdaten der Transaktion</string>
-    <string name="TransactionInfo_ContactName">Contact Name</string>
+    <string name="TransactionInfo_ContactName">Kontaktname</string>
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
     <string name="TransactionInfo_Spender">Spender</string>
@@ -698,8 +694,8 @@
 \n\nAn diesem Punkt es gibt zwei mögliche Wege für eine mobile Brieftasche wie Unstoppable zu tun:
 \n\n1. vom API-Server: Es gibt einen vordefinierten Server von Dritten, der die gesamte Blockchain beherbergt und alle Daten verarbeitet und optimiert hat, um diese Daten schnell zur Verfügung zu stellen. Diese Methode ist schnell, aber möglicherweise (nicht notwendig) weniger privat. Es ist auch eine zentralisierte Methode, um eine Brieftasche wiederherzustellen, da sie von der Verfügbarkeit eines Drittanbieter-Servers abhängt. Diese Option wird aufgrund der Geschwindigkeit des Abrufs von Daten (5-10 Minuten) empfohlen.
 \n\n\n 2. von Blockchain: Die App versucht direkt aus einem Netzwerk der Blockchain-Knoten wiederherzustellen. Dies ist ein dezentralisierter Weg, um das Gleichgewicht der Brieftasche und der vergangenen Transaktionen wiederherzustellen. Die App pingt viele Netzwerkknoten und fordert Daten von ihnen an, ohne einige Knoten speziell anzusprechen. Diese Option ist langsam und kann leicht 2-3 Stunden dauern. Die App muss während der Wiederherstellung geöffnet sein. Diese Wiederherstellungsmethode hängt nicht von einer Entität ab und sollte unter allen Bedingungen funktionieren.</string>
-    <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
-    <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">Ein-/Ausgänge</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">Transaktionseinstellungen</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Machen Sie Ihre BTC, LTC und BCH Transaktionen schwieriger nachvollziehbar, indem Sie die Transaktionsstruktur verändern.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
@@ -901,20 +897,20 @@
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPrivKey</string>
     <!-- Private Keys -->
-    <string name="PrivateKeys_Title">Private Keys</string>
+    <string name="PrivateKeys_Title">Private Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
-    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Gewährt volle Kontrolle über EVM-basierte Kryptos, d.h. Ethereum, Binance Smart Chain etc innerhalb der jeweiligen Wallet.</string>
     <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
-    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">Gewährt die volle Kontrolle über die Vermögenswerte auf der jeweiligen Brieftasche.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
-    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Gewährt volle Kontrolle über Bitcoin und andere auf UTXO basierende Kryptos, z.B. Litecoin, Bitcoin Cash, Dash, etc. innerhalb der jeweiligen Wallet.</string>
+    <string name="PrivateKeys_NeverShareWarning">Teilen Sie niemals Ihre Wiederherstellungsphrase mit niemandem. Das unaufhaltsame Team wird niemals nach Ihrer Wiederherstellungsphrase fragen.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Öffentliche Schlüssel</string>
     <string name="PublicKeys_EvmAddress">EVM-Adresse</string>
     <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
-    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
+    <string name="PublicKeys_EvmAddress_Description">Ermöglicht die bloße Überwachung von Brieftaschen mit Assets auf Ethereum, Binance Smart Chain und anderen EVM-basierten Blockchains.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Ermöglicht die schreibgeschützte Überwachung von Brieftaschen mit Bitcoin und anderen auf UTXO basierenden Verschlüsselungen (z.B. Litecoin, Bitcoin Cash, Dash, etc.).</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">Prüfen</string>
     <string name="RecoveryPhraseVerify_Description">Wählen Sie zwei angeforderte Wörter aus Ihrer Wallet-Wiederherstellungsphrase</string>
@@ -988,9 +984,9 @@
     <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Tor starten...</string>
     <string name="Tor_Status_Error">Fehler beim Starten von Tor!</string>
-    <string name="TorPage_Connecting">Connecting Tor…</string>
+    <string name="TorPage_Connecting">Tor wird verbunden…</string>
     <string name="TorPage_Connected">Verbunden</string>
-    <string name="TorPage_Failed">Failed to Connect Tor</string>
+    <string name="TorPage_Failed">Fehler beim Verbinden von Tor</string>
     <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
     <string name="Tor_TorIsActive">Tor ist aktiv</string>
     <string name="Tor_PrerequisitesAlert_Content">Durch die Aktivierung von TOR wird die Ethereum-Blockchain-Verbindung wieder auf Infura zurückgesetzt.</string>
@@ -1153,7 +1149,7 @@
     <string name="CoinAnalytics_TransactionCountRank_Description">Tokens ranked by number of transactions on a blockchain.</string>
     <string name="CoinAnalytics_Holders">Holders</string>
     <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
-    <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total Value Locked)</string>
+    <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total value Locked)</string>
     <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Project Revenue</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Project Revenue Rank</string>
@@ -1300,15 +1296,15 @@
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Biometrie-Scanner</string>
     <!--Contacts-->
-    <string name="Contacts">Contacts</string>
-    <string name="Contacts_Backup">Backup Contacts</string>
+    <string name="Contacts">Kontakte</string>
+    <string name="Contacts_Backup">Kontakte speichern</string>
     <string name="Contacts_Restore">Restore Contacts</string>
     <string name="Contacts_Restore_Warning">This action will completely overwrite your contacts and delete your existing contact list. Do you want to replace your contact list? </string>
     <string name="Contacts_AddressesCount">Addresses: %s</string>
-    <string name="Contacts_NewContact">New Contact</string>
-    <string name="Contacts_AddNewContact">Add New Contact</string>
+    <string name="Contacts_NewContact">Neuer Kontakt</string>
+    <string name="Contacts_AddNewContact">Neuen Kontakt hinzufügen</string>
     <string name="Contacts_NameHint">Name</string>
-    <string name="Contacts_AddAddress">Add Address</string>
+    <string name="Contacts_AddAddress">Adresse hinzufügen</string>
     <string name="Contacts_AddAddress_NewContact">Create New Contact</string>
     <string name="Contacts_AddAddress_ExistingContact">Add to Existing Contact</string>
     <string name="Contacts_AddAddress_Replace">Replace</string>
@@ -1316,13 +1312,13 @@
     <string name="Contacts_AddressHint">Adresse oder Domäne</string>
     <string name="Contacts_DeleteContact">Delete Contact</string>
     <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
-    <string name="Contacts_DeleteAddress">Delete Address</string>
-    <string name="Contacts_DeleteAddress_Warning">Are you sure you want to delete this address?</string>
-    <string name="Contacts_DiscardChanges">Discard Changes</string>
-    <string name="Contacts_KeepEditing">Keep Editing</string>
-    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard this new changes?</string>
-    <string name="Contacts_NoContacts">You do not have an added contact</string>
-    <string name="Contacts_ActionMore">More</string>
-    <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
-    <string name="Contacts_Error_DefinedName">The name already exists</string>
+    <string name="Contacts_DeleteAddress">Adresse löschen</string>
+    <string name="Contacts_DeleteAddress_Warning">Sind Sie sicher, dass Sie diese Adresse löschen wollen?</string>
+    <string name="Contacts_DiscardChanges">Änderungen verwerfen</string>
+    <string name="Contacts_KeepEditing">Weiter bearbeiten</string>
+    <string name="Contacts_DiscardChanges_Warning">Sind Sie sicher, dass Sie diese neuen Änderungen verwerfen möchten?</string>
+    <string name="Contacts_NoContacts">Sie haben keinen neuen Kontakt</string>
+    <string name="Contacts_ActionMore">Mehr</string>
+    <string name="Contacts_Error_DefinedAddress">Diese Adresse wird bereits für %s verwendet</string>
+    <string name="Contacts_Error_DefinedName">Dieser Name existiert bereits</string>
 </resources>
