@@ -170,7 +170,7 @@
     <string name="MarketGlobalMetrics_Volume">Volume em 24h</string>
     <string name="MarketGlobalMetrics_DefiCap">Mercado de DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL no DeFi</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total de mercado de todas as criptomoedas.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">A mudança histórica na relação entre o capital de mercado do Bitcoin e o resto dos mercados de criptomoedas. \n\nNormalmente, quando o domínio do Bitcoin está tendendo à alta, o resto das tendências do mercado cripto para baixo e vice-versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">A mudança histórica no volume diário de negociação agregada para %s</string>
