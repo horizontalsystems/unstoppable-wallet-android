@@ -166,6 +166,11 @@ private fun CoinMajorHoldersContent(
 @Composable
 private fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
     VSpacer(12.dp)
+    subhead2_grey(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        text = stringResource(R.string.CoinPage_MajorHolders_HoldersNumber, totalHoldersCount)
+    )
+    VSpacer(12.dp)
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalAlignment = Alignment.Bottom
@@ -174,11 +179,6 @@ private fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
         HSpacer(8.dp)
         subhead1_grey(text = stringResource(R.string.CoinPage_MajorHolders_InTopWallets))
     }
-    VSpacer(12.dp)
-    subhead2_grey(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        text = stringResource(R.string.CoinPage_MajorHolders_HoldersNumber, totalHoldersCount)
-    )
 }
 
 @Composable

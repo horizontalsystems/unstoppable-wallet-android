@@ -1281,7 +1281,7 @@
     <string name="CoinPage_IndicatorMACD" translatable="false">MACD</string>
     <string name="CoinPage_IndicatorRSI" translatable="false">RSI</string>
     <string name="CoinPage_IndicatorDominace" translatable="false">BTC Dominance</string>
-    <string name="CoinPage_MarketCap_Thousand">k</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
@@ -1312,8 +1312,8 @@
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
     <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">in top 10 addresses</string>
-    <string name="CoinPage_MajorHolders_HoldersNumber">Holders: %s</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
+    <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
     <string name="CoinPage_NftBannerTitle">P.CASH NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding P.CASH NFTs.</string>
