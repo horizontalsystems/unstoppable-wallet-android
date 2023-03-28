@@ -26,10 +26,17 @@ fun ChartBars(
 
             val valuesByTimestamp = chartData.valuesByTimestamp()
 
-            val valueMin = valuesByTimestamp.values.minOrNull() ?: 0f
+            var valueMin = valuesByTimestamp.values.minOrNull() ?: 0f
             val valueMax = valuesByTimestamp.values.maxOrNull() ?: 0f
-            val timestampMin = chartData.startTimestamp
-            val timestampMax = chartData.endTimestamp
+            if (valueMin == valueMax) {
+                valueMin *= 0.9f
+            }
+            var timestampMin = chartData.startTimestamp
+            var timestampMax = chartData.endTimestamp
+            if (timestampMin == timestampMax) {
+                timestampMin = (timestampMin * 0.9).toLong()
+                timestampMax = (timestampMax * 1.1).toLong()
+            }
 
             val xRatio = (canvasWidth - barWidth) / (timestampMax - timestampMin)
             val yRatio = (canvasHeight - barMinHeight) / (valueMax - valueMin)

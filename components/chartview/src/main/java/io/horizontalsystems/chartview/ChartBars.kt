@@ -58,6 +58,22 @@ class ChartBars(
         fromMinValue = frameMinValue
         fromMaxValue = frameMaxValue
 
+        if (targetMinValue == targetMaxValue) {
+            targetMinValue *= 0.9f
+        }
+
+        if (minKey == maxKey) {
+            targetMinKey = (minKey * 0.9).toLong()
+            targetMaxKey = (maxKey * 1.1).toLong()
+
+            // turn off animation
+            fromValues = targetValues
+            fromMinKey = targetMinKey
+            fromMaxKey = targetMaxKey
+            fromMinValue = targetMinValue
+            fromMaxValue = targetMaxValue
+        }
+
         combinedKeys = (fromValues.keys + targetValues.keys).distinct().sorted()
     }
 
