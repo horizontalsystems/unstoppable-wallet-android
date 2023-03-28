@@ -1049,7 +1049,7 @@
     <string name="CoinPage_DilutedMarketCap">Cap. De Mercado diluído</string>
     <string name="CoinPage_inCirculation">Em Circulação</string>
     <string name="CoinPage_TotalSupply">Fornecimento total</string>
-    <string name="CoinPage_MarketCap_Thousand">k</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
@@ -1080,8 +1080,8 @@
     <string name="CoinPage_Bep2Symbol">Símbolo BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Principais Carteiras</string>
     <string name="CoinPage_MajorHolders_Description">O gráfico acima mostra a % porcentagem de todos os tokens em circulação mantidos pelas 10 principais carteiras. Quanto mais baixa for a porcentagem, mais distribuída a moeda está.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">nos 10 melhores endereços</string>
-    <string name="CoinPage_MajorHolders_HoldersNumber">Holders: %s</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
+    <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Conduzir</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Obtenha acesso aos recursos avançados de carteiraFazendo Holdin NFTs Unstoppable.</string>
