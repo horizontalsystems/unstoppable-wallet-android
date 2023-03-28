@@ -4,10 +4,10 @@ import io.horizontalsystems.chartview.models.ChartPointF
 
 class CurveAnimator(
     private val toValues: LinkedHashMap<Long, Float>,
-    private val toStartTimestamp: Long,
-    private val toEndTimestamp: Long,
-    private val toMinValue: Float,
-    private val toMaxValue: Float,
+    private var toStartTimestamp: Long,
+    private var toEndTimestamp: Long,
+    private var toMinValue: Float,
+    private var toMaxValue: Float,
     prevCurveAnimator: CurveAnimator?,
     private val xMax: Float,
     private val yMax: Float,
@@ -15,11 +15,11 @@ class CurveAnimator(
     private val curveBottomOffset: Float,
     private val horizontalOffset: Float,
 ) {
-    private val fromValues: LinkedHashMap<Long, Float>
-    private val fromStartTimestamp: Long
-    private val fromEndTimestamp: Long
-    private val fromMinValue: Float
-    private val fromMaxValue: Float
+    private var fromValues: LinkedHashMap<Long, Float>
+    private var fromStartTimestamp: Long
+    private var fromEndTimestamp: Long
+    private var fromMinValue: Float
+    private var fromMaxValue: Float
 
     var frameValues: LinkedHashMap<Long, Float>
         private set
@@ -49,6 +49,22 @@ class CurveAnimator(
                     timestamp to 0F
                 }.toMap()
             )
+            fromStartTimestamp = toStartTimestamp
+            fromEndTimestamp = toEndTimestamp
+            fromMinValue = toMinValue
+            fromMaxValue = toMaxValue
+        }
+
+        if (toMinValue == toMaxValue) {
+            toMinValue *= 0.9f
+            toMaxValue *= 1.1f
+        }
+
+        if (toStartTimestamp == toEndTimestamp) {
+            toStartTimestamp = (toStartTimestamp * 0.9).toLong()
+            toEndTimestamp = (toEndTimestamp * 1.1).toLong()
+
+            fromValues = toValues
             fromStartTimestamp = toStartTimestamp
             fromEndTimestamp = toEndTimestamp
             fromMinValue = toMinValue

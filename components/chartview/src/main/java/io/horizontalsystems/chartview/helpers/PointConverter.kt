@@ -9,16 +9,31 @@ object PointConverter {
         val width = shape.width() - horizontalOffset * 2
         val height = shape.height() - verticalPadding * 2
 
-        val valueMin = data.valueRange.lower
-        val valueMax = data.valueRange.upper
+        var valueMin = data.valueRange.lower
+        var valueMax = data.valueRange.upper
 
-        val xRatio = width / (data.endTimestamp - data.startTimestamp)
+        if (valueMin == valueMax) {
+            valueMin *= 0.9f
+            valueMax *= 1.1f
+        }
+
+
+        var toStartTimestamp = data.startTimestamp
+        var toEndTimestamp = data.endTimestamp
+
+        if (toStartTimestamp == toEndTimestamp) {
+            toStartTimestamp = (toStartTimestamp * 0.9).toLong()
+            toEndTimestamp = (toEndTimestamp * 1.1).toLong()
+        }
+
+
+        val xRatio = width / (toEndTimestamp - toStartTimestamp)
         val yRatio = height / (valueMax - valueMin)
 
         val coordinates = mutableListOf<Coordinate>()
 
         for (item in data.items) {
-            val x = (item.timestamp - data.startTimestamp) * xRatio
+            val x = (item.timestamp - toStartTimestamp) * xRatio
             val y = (item.value - valueMin) * yRatio
 
             coordinates.add(
