@@ -692,7 +692,7 @@
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte de restauração, a carteira terá que ressincronizar-se com a blockchain do Bitcoin.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Restaurar Fonte</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restaurar uma carteira com transações.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Select a data source for wallet restore. Restoring from blockchain takes considerably more time.</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">Esta configuração só é relevante ao restaurar uma carteira existente. É um processo de obtenção de histórico de transações para uma determinada criptomoeda, então o aplicativo de carteira é capaz de exibir transações anteriores e calcular o saldo do usuário. Isto precisa acontecer apenas uma vez quando o usuário restaura as carteiras previamente criadas.\n\nNeste ponto, existem duas possíveis maneiras de uma carteira móvel como o Unstoppable de fazer isso:\n\n1. do Servidor API: Há um servidor predefinido por terceiros que hospeda toda a blockchain e tem todos os dados processados e otimizados para fornecer esses dados de forma rápida. Este método é rápido, mas potencialmente (não necessariamente) menos privado. É também um método centralizado para restaurar uma carteira, pois depende da disponibilidade de um servidor de terceiros. Esta opção é recomendada devido à velocidade de obtenção de dados (5-10 minutos).\n\n2. da Blockchain: O aplicativo tenta restaurar diretamente de uma rede de nós da blockchain. Essa é uma maneira descentralizada de restaurar o saldo das carteiras e transações anteriores. O aplicativo pança muitos dos nós da rede e solicita dados deles sem abordar alguns nós especificamente. Esta opção é lenta e pode levar facilmente 2-3 horas, o aplicativo precisa estar aberto enquanto a restauração está acontecendo. Este método de restauração não depende de nenhuma entidade e deve funcionar em todas as condições.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrada/Saída</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Configurações de transação</string>
@@ -1103,10 +1103,11 @@
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes que estão sendo rastreados:</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Número total de endereços de blockchain exclusivos que realizam transações com token em um período de 30 dias.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info2">Gráfico mostrando a variação na contagem de endereços ativos no período de 1 ano.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info3">Ranking do token com base no número de carteiras ativas que realizam transações com o período de 30 dias do token.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">Lista de todos os tokens com base no número de carteiras ativas que realizam transações com o token em intervalos de 24h / 7D / 1M.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_TransactionCount_Info1">Número total de transações únicas na blockchain com token em um período de 30 dias.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Gráfico mostrando a variação na contagem de transações no período de 1 ano.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Ranking do token com base no número de transações com o período de 30 dias do token.</string>
@@ -1307,7 +1308,7 @@
     <string name="Contacts_DeleteAddress_Warning">Você tem certeza que deseja excluir este endereço?</string>
     <string name="Contacts_DiscardChanges">Descartar Alterações</string>
     <string name="Contacts_KeepEditing">Continuar Editando</string>
-    <string name="Contacts_DiscardChanges_Warning">Tem certeza de que deseja descartar as novas alterações?</string>
+    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
     <string name="Contacts_NoContacts">Você não tem nenhum contato adicionado</string>
     <string name="Contacts_ActionMore">Mais</string>
     <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
