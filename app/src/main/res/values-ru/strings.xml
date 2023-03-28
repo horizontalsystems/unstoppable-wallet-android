@@ -1052,7 +1052,7 @@
     <string name="CoinPage_DilutedMarketCap">Разводненная рын.кап.</string>
     <string name="CoinPage_inCirculation">В Обороте</string>
     <string name="CoinPage_TotalSupply">Макс.Выпуск</string>
-    <string name="CoinPage_MarketCap_Thousand">тыс</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
     <string name="CoinPage_MarketCap_Million">млн</string>
     <string name="CoinPage_MarketCap_Billion">млрд</string>
     <string name="CoinPage_MarketCap_Trillion">трл</string>
@@ -1083,8 +1083,8 @@
     <string name="CoinPage_Bep2Symbol">Символ BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Лучшие кошельки</string>
     <string name="CoinPage_MajorHolders_Description">На графике выше показано % всех токенов, находящихся в обороте топ-10 кошельков. Чем ниже это процентное соотношение, тем выше распределение коина.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">в топ 10 адресов</string>
-    <string name="CoinPage_MajorHolders_HoldersNumber">Holders: %s</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
+    <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Лид</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Получите доступ к расширенным функциям Unstoppable Кошелька.</string>
