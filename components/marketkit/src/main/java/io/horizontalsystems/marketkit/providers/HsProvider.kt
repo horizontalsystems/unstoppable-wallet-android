@@ -81,13 +81,10 @@ class HsProvider(baseUrl: String, apiKey: String) {
     fun coinPriceChartSingle(
         coinUid: String,
         currencyCode: String,
-        periodType: HsPeriodType
+        periodType: HsPointTimePeriod,
+        fromTimestamp: Long?
     ): Single<List<ChartCoinPriceResponse>> {
-        val currentTime = Date().time / 1000
-        val fromTimestamp = HsChartRequestHelper.fromTimestamp(currentTime, periodType)
-        val pointInterval = HsChartRequestHelper.pointInterval(periodType)
-
-        return service.getCoinPriceChart(coinUid, currencyCode, fromTimestamp, pointInterval.value)
+        return service.getCoinPriceChart(coinUid, currencyCode, fromTimestamp, periodType.value)
     }
 
     fun coinPriceChartStartTime(coinUid: String): Single<Long> {
@@ -192,19 +189,19 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.getTopPlatformCoinList(chain, currencyCode)
     }
 
-    fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<DexLiquiditiesResponse> {
-        return service.getDexLiquidities(sessionKey?.let { "Bearer ${it}" }, coinUid, timePeriod.value)
+    fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<List<Analytics.VolumePoint>> {
+        return service.getDexLiquidities(sessionKey?.let { "Bearer ${it}" }, coinUid, currencyCode, timePeriod.value)
     }
 
-    fun dexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<DexVolumesResponse> {
-        return service.getDexVolumes(sessionKey?.let { "Bearer ${it}" }, coinUid, timePeriod.value)
+    fun dexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<List<Analytics.VolumePoint>> {
+        return service.getDexVolumes(sessionKey?.let { "Bearer ${it}" }, coinUid, currencyCode, timePeriod.value)
     }
 
-    fun transactionDataSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, platform: String?, sessionKey: String?): Single<TransactionsDataResponse> {
+    fun transactionDataSingle(coinUid: String, timePeriod: HsTimePeriod, platform: String?, sessionKey: String?): Single<List<Analytics.CountVolumePoint>> {
         return service.getTransactions(sessionKey?.let { "Bearer ${it}" }, coinUid, timePeriod.value, platform)
     }
 
-    fun activeAddressesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<ActiveAddressesDataResponse> {
+    fun activeAddressesSingle(coinUid: String, timePeriod: HsTimePeriod, sessionKey: String?): Single<List<Analytics.CountPoint>> {
         return service.getActiveAddresses(sessionKey?.let { "Bearer ${it}" }, coinUid, timePeriod.value)
     }
 
@@ -337,34 +334,36 @@ class HsProvider(baseUrl: String, apiKey: String) {
             @Query("currency") currencyCode: String
         ): Single<MarketInfoDetailsResponse>
 
-        @GET("transactions/dex-liquidity")
+        @GET("analytics/{coinUid}/dex-liquidity")
         fun getDexLiquidities(
             @Header("authorization") auth: String?,
-            @Query("coin_uid") coinUid: String,
+            @Path("coinUid") coinUid: String,
+            @Query("currency") currencyCode: String,
             @Query("interval") interval: String
-        ): Single<DexLiquiditiesResponse>
+        ): Single<List<Analytics.VolumePoint>>
 
-        @GET("transactions/dex-volumes")
+        @GET("analytics/{coinUid}/dex-volumes")
         fun getDexVolumes(
             @Header("authorization") auth: String?,
-            @Query("coin_uid") coinUid: String,
+            @Path("coinUid") coinUid: String,
+            @Query("currency") currencyCode: String,
             @Query("interval") interval: String
-        ): Single<DexVolumesResponse>
+        ): Single<List<Analytics.VolumePoint>>
 
-        @GET("transactions")
+        @GET("analytics/{coinUid}/transactions")
         fun getTransactions(
             @Header("authorization") auth: String?,
-            @Query("coin_uid") coinUid: String,
+            @Path("coinUid") coinUid: String,
             @Query("interval") interval: String,
             @Query("platform") platform: String?
-        ): Single<TransactionsDataResponse>
+        ): Single<List<Analytics.CountVolumePoint>>
 
-        @GET("addresses")
+        @GET("analytics/{coinUid}/addresses")
         fun getActiveAddresses(
             @Header("authorization") auth: String?,
-            @Query("coin_uid") coinUid: String,
+            @Path("coinUid") coinUid: String,
             @Query("interval") interval: String
-        ): Single<ActiveAddressesDataResponse>
+        ): Single<List<Analytics.CountPoint>>
 
         @GET("defi-protocols/{coinUid}/tvls")
         fun getMarketInfoTvl(

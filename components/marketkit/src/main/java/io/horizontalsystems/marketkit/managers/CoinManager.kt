@@ -99,51 +99,8 @@ class CoinManager(
         }
     }
 
-    fun marketInfoDetailsSingle(coinUid: String, currency: String): Single<MarketInfoDetails> {
-        return hsProvider.getMarketInfoDetails(coinUid, currency).map {
-            MarketInfoDetails(it)
-        }
-    }
-
-    fun marketInfoTvlSingle(
-        coinUid: String,
-        currencyCode: String,
-        timePeriod: HsTimePeriod
-    ): Single<List<ChartPoint>> {
-        return hsProvider.marketInfoTvlSingle(coinUid, currencyCode, timePeriod)
-    }
-
-    fun marketInfoGlobalTvlSingle(
-        chain: String,
-        currencyCode: String,
-        timePeriod: HsTimePeriod
-    ): Single<List<ChartPoint>> {
-        return hsProvider.marketInfoGlobalTvlSingle(chain, currencyCode, timePeriod)
-    }
-
-    fun treasuriesSingle(coinUid: String, currencyCode: String): Single<List<CoinTreasury>> {
-        return hsProvider.coinTreasuriesSingle(coinUid, currencyCode)
-    }
-
-    fun investmentsSingle(coinUid: String): Single<List<CoinInvestment>> {
-        return hsProvider.investmentsSingle(coinUid)
-    }
-
-    fun coinReportsSingle(coinUid: String): Single<List<CoinReport>> {
-        return hsProvider.coinReportsSingle(coinUid)
-    }
-
     fun auditReportsSingle(addresses: List<String>): Single<List<Auditor>> {
         return defiYieldProvider.auditReportsSingle(addresses)
-    }
-
-    fun topPlatformsSingle(currencyCode: String): Single<List<TopPlatform>> {
-        return hsProvider.topPlatformsSingle(currencyCode)
-            .map { responseList -> responseList.map { it.topPlatform } }
-    }
-
-    fun topPlatformMarketCapPointsSingle(chain: String, timePeriod: HsTimePeriod, currencyCode: String): Single<List<TopPlatformMarketCapPoint>> {
-        return hsProvider.topPlatformMarketCapPointsSingle(chain, timePeriod, currencyCode)
     }
 
     fun topPlatformCoinListSingle(chain: String, currencyCode: String): Single<List<MarketInfo>> {
@@ -177,49 +134,6 @@ class CoinManager(
             val fullCoin = hashMap[rawDefiMarketInfo.uid]
             DefiMarketInfo(rawDefiMarketInfo, fullCoin)
         }
-    }
-
-    fun dexLiquiditySingle(
-        coinUid: String,
-        currencyCode: String,
-        timePeriod: HsTimePeriod,
-        sessionKey: String?
-    ): Single<DexLiquiditiesResponse> {
-        return hsProvider.dexLiquiditySingle(coinUid, currencyCode, timePeriod, sessionKey)
-    }
-
-    fun dexVolumesSingle(
-        coinUid: String,
-        currencyCode: String,
-        timePeriod: HsTimePeriod,
-        sessionKey: String?
-    ): Single<DexVolumesResponse> {
-        return hsProvider.dexVolumesSingle(coinUid, currencyCode, timePeriod, sessionKey)
-    }
-
-    fun transactionDataSingle(
-        coinUid: String,
-        currencyCode: String,
-        timePeriod: HsTimePeriod,
-        platform: String?,
-        sessionKey: String?
-    ): Single<TransactionsDataResponse> {
-        return hsProvider.transactionDataSingle(
-            coinUid,
-            currencyCode,
-            timePeriod,
-            platform,
-            sessionKey
-        )
-    }
-
-    fun activeAddressesSingle(
-        coinUid: String,
-        currencyCode: String,
-        timePeriod: HsTimePeriod,
-        sessionKey: String?
-    ): Single<ActiveAddressesDataResponse> {
-        return hsProvider.activeAddressesSingle(coinUid, currencyCode, timePeriod, sessionKey)
     }
 
     fun topMoversSingle(currencyCode: String): Single<TopMovers> =

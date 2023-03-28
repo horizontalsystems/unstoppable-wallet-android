@@ -102,7 +102,7 @@ class CoinOverviewChartService(
         return if (cached != null) {
             Single.just(cached)
         } else {
-            marketKit.chartInfoSingle(coinUid, currency.code, periodType)
+            marketKit.chartPointsSingle(coinUid, currency.code, periodType)
                 .doOnSuccess {
                     cache[cacheKey] = it
                 }

@@ -15,7 +15,6 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticChart
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
@@ -182,16 +181,19 @@ class CoinAnalyticsViewModel(
             )
         }
         analytics.addresses?.let { data ->
-            val chartValue = getFormattedSum(listOf(data.count30d.toBigDecimal()))
+            val chartValue = formatNumberShort(data.points.last().count.toBigDecimal())
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_ActiveAddresses,
                     info = AnalyticInfo.AddressesInfo,
                     value = chartValue,
-                    valuePeriod = getValuePeriod(false),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.AddressesCount),
-                    chartOverriddenValue = ChartModule.OverriddenValue(chartValue, getValuePeriod(false)),
+                    valuePeriod = getValuePeriod(true),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.AddressesCount),
                     footerItems = listOf(
+                        FooterItem(
+                            title = ResString(R.string.Coin_Analytics_30DayUniqueAddress),
+                            value = formatNumberShort(data.count30d.toBigDecimal()),
+                        ),
                         FooterItem(
                             title = ResString(R.string.Coin_Analytics_30DayRank),
                             value = getRank(data.rank30d),
@@ -206,7 +208,7 @@ class CoinAnalyticsViewModel(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_TransactionCount,
                     info = AnalyticInfo.TransactionCountInfo,
-                    value = getFormattedSum(data.points.map { it.count }),
+                    value = getFormattedSum(data.points.map { it.count.toBigDecimal() }),
                     valuePeriod = getValuePeriod(false),
                     analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Bar, ProChartModule.ChartType.TxCount),
                     footerItems = listOf(
@@ -364,6 +366,10 @@ class CoinAnalyticsViewModel(
         return "$formatted $code"
     }
 
+    private fun formatNumberShort(number: BigDecimal): String {
+        return  numberFormatter.formatNumberShort(number, 1)
+    }
+
     private fun getValuePeriod(isMovement: Boolean): String {
         return Translator.getString(if (isMovement) R.string.Coin_Analytics_Current else R.string.Coin_Analytics_Last30d)
     }
@@ -409,13 +415,20 @@ class CoinAnalyticsViewModel(
             }
         }
         analyticsPreview.addresses?.let { addresses ->
-            if (addresses.points || addresses.rank30d) {
+            if (addresses.points || addresses.rank30d || addresses.count30d) {
+                val footerItems = mutableListOf<PreviewFooterItem>()
+                if (addresses.count30d) {
+                    footerItems.add(PreviewFooterItem(R.string.Coin_Analytics_30DayUniqueAddress, false))
+                }
+                if (addresses.rank30d) {
+                    footerItems.add(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true))
+                }
                 blocks.add(
                     PreviewBlockViewItem(
                         title = R.string.CoinAnalytics_ActiveAddresses,
                         info = AnalyticInfo.AddressesInfo,
-                        chartType = if (addresses.points) PreviewChartType.Bars else null,
-                        footerItems = if (addresses.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
+                        chartType = if (addresses.points) PreviewChartType.Line else null,
+                        footerItems = footerItems
                     )
                 )
             }
@@ -525,7 +538,7 @@ class CoinAnalyticsViewModel(
             io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
-        val chartData = ChartData(points, false, false)
+        val chartData = ChartData(points, chartViewType == ChartViewType.Line, false)
 
         val analyticChart = when (chartViewType) {
             ChartViewType.Bar -> AnalyticChart.Bars(chartData)

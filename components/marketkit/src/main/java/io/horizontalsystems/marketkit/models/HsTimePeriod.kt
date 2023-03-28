@@ -1,7 +1,5 @@
 package io.horizontalsystems.marketkit.models
 
-import io.horizontalsystems.marketkit.chart.HsChartRequestHelper
-
 enum class HsTimePeriod(val value: String) {
     Day1("1d"),
     Week1("1w"),

@@ -13,7 +13,6 @@ object ProChartModule {
     class Factory(
         private val coinUid: String,
         private val chartType: ChartType,
-        private val overriddenValue: ChartModule.OverriddenValue?
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -27,7 +26,7 @@ object ProChartModule {
                 ChartType.TxCount,
                 ChartType.AddressesCount -> ChartNumberFormatterShortened()
             }
-            return ChartModule.createViewModel(chartService, chartNumberFormatter, overriddenValue) as T
+            return ChartModule.createViewModel(chartService, chartNumberFormatter) as T
         }
     }
 

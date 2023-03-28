@@ -139,7 +139,7 @@ data class Analytics(
         fun chartPoints(): List<ChartPoint> {
             return points.map {
                 ChartPoint(
-                    it.count,
+                    it.count.toBigDecimal(),
                     it.timestamp,
                     null
                 )
@@ -157,7 +157,7 @@ data class Analytics(
         fun chartPoints(): List<ChartPoint> {
             return points.map {
                 ChartPoint(
-                    it.count,
+                    it.count.toBigDecimal(),
                     it.timestamp,
                     null
                 )
@@ -182,7 +182,13 @@ data class Analytics(
     }
 
     data class CountPoint(
-        val count: BigDecimal,
+        val count: String,
+        val timestamp: Long,
+    )
+
+    data class CountVolumePoint(
+        val count: String,
+        val volume: BigDecimal,
         val timestamp: Long,
     )
 
@@ -218,7 +224,7 @@ data class AnalyticsPreview(
     val dexVolume: VolumePreview?,
     @SerializedName("dex_liquidity")
     val dexLiquidity: LiquidityPreview?,
-    val addresses: VolumePreview?,
+    val addresses: AddressesPreview?,
     val transactions: TransactionPreview?,
     val revenue: RevenuePreview?,
     val tvl: TvlPreview?,
@@ -237,6 +243,14 @@ data class AnalyticsPreview(
 
     data class LiquidityPreview(
         val rank: Boolean = false,
+        val points: Boolean = false,
+    )
+
+    data class AddressesPreview(
+        @SerializedName("rank_30d")
+        val rank30d: Boolean = false,
+        @SerializedName("count_30d")
+        val count30d: Boolean = false,
         val points: Boolean = false,
     )
 

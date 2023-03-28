@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.metricchart.ProChartModule
 import cash.p.terminal.ui.compose.TranslatableString
@@ -42,7 +41,6 @@ object CoinAnalyticsModule {
         val analyticChart: ChartViewItem?,
         val footerItems: List<FooterItem>,
         val sectionTitle: Int? = null,
-        val chartOverriddenValue: ChartModule.OverriddenValue? = null
     )
 
     data class FooterItem(

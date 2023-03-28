@@ -24,8 +24,14 @@ class ProChartService(
     override val hasVolumes = chartType == ProChartModule.ChartType.TxCount
 
     override val chartIntervals = when (chartType) {
+        ProChartModule.ChartType.CexVolume,
+        ProChartModule.ChartType.DexVolume,
+        ProChartModule.ChartType.TxCount,
+        ProChartModule.ChartType.AddressesCount,
         ProChartModule.ChartType.DexLiquidity -> {
             listOf(
+                HsTimePeriod.Week1,
+                HsTimePeriod.Week2,
                 HsTimePeriod.Month1,
                 HsTimePeriod.Month3,
                 HsTimePeriod.Month6,
@@ -33,15 +39,15 @@ class ProChartService(
                 HsTimePeriod.Year2,
             )
         }
-        else -> HsTimePeriod.values().toList()
+        ProChartModule.ChartType.Tvl -> HsTimePeriod.values().toList()
     }
 
     override val chartViewType = when (chartType) {
         ProChartModule.ChartType.Tvl,
+        ProChartModule.ChartType.AddressesCount,
         ProChartModule.ChartType.DexLiquidity -> ChartViewType.Line
         ProChartModule.ChartType.CexVolume,
         ProChartModule.ChartType.DexVolume,
-        ProChartModule.ChartType.AddressesCount,
         ProChartModule.ChartType.TxCount -> ChartViewType.Bar
     }
 
@@ -51,53 +57,87 @@ class ProChartService(
     ): Single<ChartPointsWrapper> {
         val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK)?.key?.value
 
-        val chartDataSingle: Single<List<io.horizontalsystems.marketkit.models.ChartPoint>> = when (chartType) {
+        val chartDataSingle: Single<List<ChartPoint>> = when (chartType) {
             ProChartModule.ChartType.CexVolume ->
                 marketKit.cexVolumesSingle(coinUid, currency.code, chartInterval)
+                    .map { response ->
+                        response.map { chartPoint ->
+                            ChartPoint(
+                                value = chartPoint.value.toFloat(),
+                                timestamp = chartPoint.timestamp,
+                                volume = chartPoint.volume?.toFloat()
+                            )
+                        }
+                    }
+
 
             ProChartModule.ChartType.DexVolume ->
                 marketKit.dexVolumesSingle(coinUid, currency.code, chartInterval, sessionKey)
-                    .map { response -> response.volumePoints }
+                    .map { response ->
+                        response.map { chartPoint ->
+                            ChartPoint(
+                                value = chartPoint.volume.toFloat(),
+                                timestamp = chartPoint.timestamp,
+                            )
+                        }
+                    }
 
             ProChartModule.ChartType.DexLiquidity ->
                 marketKit.dexLiquiditySingle(coinUid, currency.code, chartInterval, sessionKey)
-                    .map { response -> response.volumePoints }
+                    .map { response ->
+                        response.map { chartPoint ->
+                            ChartPoint(
+                                value = chartPoint.volume.toFloat(),
+                                timestamp = chartPoint.timestamp,
+                            )
+                        }
+                    }
 
             ProChartModule.ChartType.TxCount ->
-                marketKit.transactionDataSingle(coinUid, currency.code, chartInterval, null, sessionKey)
-                    .map { response -> response.countPoints }
+                marketKit.transactionDataSingle(coinUid, chartInterval, null, sessionKey)
+                    .map { response ->
+                        response.map { chartPoint ->
+                            ChartPoint(
+                                value = chartPoint.count.toFloat(),
+                                timestamp = chartPoint.timestamp,
+                                volume = chartPoint.volume.toFloat(),
+                            )
+                        }
+                    }
 
             ProChartModule.ChartType.AddressesCount ->
-                marketKit.activeAddressesSingle(coinUid, currency.code, chartInterval, sessionKey)
-                    .map { response -> response.countPoints }
+                marketKit.activeAddressesSingle(coinUid, chartInterval, sessionKey)
+                    .map { response ->
+                        response.map { chartPoint ->
+                            ChartPoint(
+                                value = chartPoint.count.toFloat(),
+                                timestamp = chartPoint.timestamp,
+                            )
+                        }
+                    }
 
             ProChartModule.ChartType.Tvl ->
                 marketKit.marketInfoTvlSingle(coinUid, currency.code, chartInterval)
+                    .map { response ->
+                        response.map { chartPoint ->
+                            ChartPoint(
+                                value = chartPoint.value.toFloat(),
+                                timestamp = chartPoint.timestamp,
+                                volume = chartPoint.volume?.toFloat(),
+                            )
+                        }
+                    }
         }
 
         val isMovementChart = when (chartType) {
             ProChartModule.ChartType.DexLiquidity,
+            ProChartModule.ChartType.AddressesCount,
             ProChartModule.ChartType.Tvl -> true
             ProChartModule.ChartType.CexVolume,
             ProChartModule.ChartType.DexVolume,
-            ProChartModule.ChartType.TxCount,
-            ProChartModule.ChartType.AddressesCount -> false
+            ProChartModule.ChartType.TxCount -> false
         }
 
-        return chartDataSingle
-            .map { chartPoints ->
-                val items = chartPoints.map { chartPoint ->
-                    ChartPoint(
-                        value = chartPoint.value.toFloat(),
-                        timestamp = chartPoint.timestamp,
-                        volume = chartPoint.volume?.toFloat()
-                    )
-                }
-
-                return@map ChartPointsWrapper(
-                    items,
-                    isMovementChart
-                )
-            }
+        return chartDataSingle.map { ChartPointsWrapper(it, isMovementChart) }
     }
 }

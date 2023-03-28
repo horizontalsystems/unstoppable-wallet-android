@@ -139,6 +139,7 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
             BulletedText(R.string.CoinAnalytics_ActiveAddresses_Info2)
             BulletedText(R.string.CoinAnalytics_ActiveAddresses_Info3)
             BulletedText(R.string.CoinAnalytics_ActiveAddresses_Info4)
+            BulletedText(R.string.CoinAnalytics_ActiveAddresses_Info5)
         }
         AnalyticInfo.TransactionCountInfo -> {
             BulletedText(R.string.CoinAnalytics_TransactionCount_Info1)

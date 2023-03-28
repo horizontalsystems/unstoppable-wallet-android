@@ -27,7 +27,6 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
-    namespace 'io.horizontalsystems.marketkit'
 }
 
 dependencies {
