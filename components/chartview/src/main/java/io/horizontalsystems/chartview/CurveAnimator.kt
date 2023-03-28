@@ -44,11 +44,7 @@ class CurveAnimator(
             fromMinValue = prevCurveAnimator.frameMinValue
             fromMaxValue = prevCurveAnimator.frameMaxValue
         } else {
-            fromValues = LinkedHashMap(
-                toValues.map { (timestamp, _) ->
-                    timestamp to 0F
-                }.toMap()
-            )
+            fromValues = toValues
             fromStartTimestamp = toStartTimestamp
             fromEndTimestamp = toEndTimestamp
             fromMinValue = toMinValue
