@@ -14,7 +14,8 @@ jobs:
         with:
           to: ${{secrets.TELEGRAM_TO}}
           token: ${{secrets.TELEGRAM_TOKEN}}
-          args: |
+          disable_web_page_preview: true
+          message: |
             ${{ github.event.pull_request.html_url }}
 
             Title   : ${{github.event.pull_request.title}}
