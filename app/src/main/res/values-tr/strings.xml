@@ -692,7 +692,7 @@
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Bu değişiklikten sonra cüzdan Bitcoin blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Geri Yükleme Kaynağı</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Cüzdanı işlemlerle geri yüklemek için veri kaynağını seçin.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Select a data source for wallet restore. Restoring from blockchain takes considerably more time.</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).\n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Giriş/Çıkış</string>
     <string name="BtcBlockchainSettings_TransactionSettings">İşlem Ayarları</string>
@@ -1106,10 +1106,11 @@
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">İzlenen DEX\'ler:</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in active address count over 1 year period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info3">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">List of all tokens ranked based on the number of active wallets transacting with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
@@ -1310,7 +1311,7 @@
     <string name="Contacts_DeleteAddress_Warning">Bu adresi silmek istediğinize emin misiniz?</string>
     <string name="Contacts_DiscardChanges">Değişiklikleri İptal Et</string>
     <string name="Contacts_KeepEditing">Düzenlemeyi sürdür</string>
-    <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
+    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
     <string name="Contacts_NoContacts">Eklenmiş bir kişiniz yok</string>
     <string name="Contacts_ActionMore">Daha fazla</string>
     <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
