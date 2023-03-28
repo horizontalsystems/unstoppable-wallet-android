@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
-import android.os.Parcelable
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.market.Value
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 object ChartModule {
@@ -11,9 +9,8 @@ object ChartModule {
     fun createViewModel(
         chartService: AbstractChartService,
         chartNumberFormatter: ChartNumberFormatter,
-        overriddenValue: OverriddenValue? = null
     ): ChartViewModel {
-        return ChartViewModel(chartService, chartNumberFormatter, overriddenValue)
+        return ChartViewModel(chartService, chartNumberFormatter)
     }
 
     interface ChartNumberFormatter {
@@ -32,11 +29,5 @@ object ChartModule {
         class Volume(val volume: String) : ChartHeaderExtraData()
         class Dominance(val dominance: String, val diff: Value.Percent?) : ChartHeaderExtraData()
     }
-
-    @Parcelize
-    data class OverriddenValue(
-        val value: String,
-        val description: String?
-    ): Parcelable
 
 }

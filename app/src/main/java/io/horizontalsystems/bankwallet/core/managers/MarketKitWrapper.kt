@@ -152,11 +152,11 @@ class MarketKitWrapper(
     fun dexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?) =
         marketKit.dexVolumesSingle(coinUid, currencyCode, timePeriod, sessionKey)
 
-    fun transactionDataSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, platform: String?, sessionKey: String?) =
-        marketKit.transactionDataSingle(coinUid, currencyCode, timePeriod, platform, sessionKey)
+    fun transactionDataSingle(coinUid: String, timePeriod: HsTimePeriod, platform: String?, sessionKey: String?) =
+        marketKit.transactionDataSingle(coinUid, timePeriod, platform, sessionKey)
 
-    fun activeAddressesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod, sessionKey: String?) =
-        marketKit.activeAddressesSingle(coinUid, currencyCode, timePeriod, sessionKey)
+    fun activeAddressesSingle(coinUid: String, timePeriod: HsTimePeriod, sessionKey: String?) =
+        marketKit.activeAddressesSingle(coinUid, timePeriod, sessionKey)
 
     fun cexVolumeRanksSingle(currencyCode: String) = marketKit.cexVolumeRanksSingle(currencyCode)
     fun dexVolumeRanksSingle(currencyCode: String) = marketKit.dexVolumeRanksSingle(currencyCode)
@@ -175,7 +175,7 @@ class MarketKitWrapper(
 
     fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
 
-    fun chartInfoSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) = marketKit.chartInfoSingle(coinUid, currencyCode, periodType)
+    fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) = marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
 
     // Global Market Info
 

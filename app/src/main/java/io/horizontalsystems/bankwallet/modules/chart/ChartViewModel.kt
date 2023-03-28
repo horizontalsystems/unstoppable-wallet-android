@@ -29,7 +29,6 @@ import java.util.*
 open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter,
-    private val overriddenValue: ChartModule.OverriddenValue? = null
 ) : ViewModel() {
 
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
@@ -140,15 +139,7 @@ open class ChartViewModel(
 
         val chartData = ChartData(chartPointsWrapper.items, chartPointsWrapper.isMovementChart, false)
 
-        val headerView = if (overriddenValue != null) {
-            ChartModule.ChartHeaderView(
-                value = overriddenValue.value,
-                valueHint = overriddenValue.description,
-                date = null,
-                diff = null,
-                extraData = null
-            )
-        } else if (!chartPointsWrapper.isMovementChart) {
+        val headerView = if (!chartPointsWrapper.isMovementChart) {
             val value = valueFormatter.formatValue(service.currency, chartData.sum())
             ChartModule.ChartHeaderView(
                 value = value,

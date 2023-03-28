@@ -201,7 +201,6 @@ private fun AnalyticsBlock(
                             coinUid,
                             Translator.getString(chartType.titleRes),
                             chartType,
-                            block.chartOverriddenValue,
                         )
                     }
                 }
