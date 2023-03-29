@@ -1131,7 +1131,7 @@
     <string name="CoinAnalytics_DexLiquidity">DEX Liquidity</string>
     <string name="CoinAnalytics_DexLiquidityRank">DEX Liquidity Rank</string>
     <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens ranked by available liquidity on decentralized exchanges.</string>
-    <string name="CoinAnalytics_ActiveAddresses">Active Addresses</string>
+    <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Active Addresses Rank</string>
     <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens ranked by number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">Transaction Count</string>
@@ -1153,6 +1153,7 @@
     <string name="Coin_Analytics_Current">current</string>
     <string name="Coin_Analytics_Rank">Rank</string>
     <string name="Coin_Analytics_30DayRank">30-Day Rank</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
     <string name="Coin_Analytics_30DayVolume">30-Day Volume</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Durchschnitt 7D</string>
@@ -1298,7 +1299,7 @@
     <string name="Contacts_AddAddress_NewContact">Neuen Kontakt erstellen</string>
     <string name="Contacts_AddAddress_ExistingContact">Zu vorhandenem Kontakt hinzufügen</string>
     <string name="Contacts_AddAddress_Replace">Ersetzen</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">Dieser Kontakt hat bereits eine Adresse auf dieser Blockchain. Möchten Sie die Adresse %s durch die %s ersetzen?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
     <string name="Contacts_AddressHint">Adresse oder Domäne</string>
     <string name="Contacts_DeleteContact">Kontakt löschen</string>
     <string name="Contacts_DeleteContact_Warning">Sind Sie sicher, dass Sie diesen Kontakt löschen möchten?</string>
