@@ -507,7 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Slipaj Toleransı %s%% üzerinde olamaz</string>
     <string name="SwapSettings_Error_InvalidAddress">Geçersiz adres</string>
-    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Geçersiz %s adres</string>
     <string name="SwapSettings_Error_InvalidSlippage">Geçersiz Kayma</string>
     <string name="SwapSettings_Error_InvalidDeadline">Geçersiz Son Tarih</string>
     <string name="SwapSettings_Warning_UnusualSlippage">İşleminiz varlık fiyatını etkileyebilir</string>
@@ -1083,8 +1083,8 @@
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
     <string name="CoinPage_MajorHolders_Description">Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
-    <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">ilk 10 sahibinde</string>
+    <string name="CoinPage_MajorHolders_HoldersNumber">Toplam Sahip: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
@@ -1304,7 +1304,7 @@
     <string name="Contacts_AddAddress_NewContact">Yeni Kişi Oluştur</string>
     <string name="Contacts_AddAddress_ExistingContact">Mevcut Kişiye Ekle</string>
     <string name="Contacts_AddAddress_Replace">Değiştir</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Seçilen kişinin zaten %1$s üzerinde bir adresi var. Bu eylem, %2$s adresini %3$s ile değiştirecek?</string>
     <string name="Contacts_AddressHint">Adres veya Domain</string>
     <string name="Contacts_DeleteContact">Kişiyi Sil</string>
     <string name="Contacts_DeleteContact_Warning">Bu kişi silmek istediğine emin misin?</string>
@@ -1312,7 +1312,7 @@
     <string name="Contacts_DeleteAddress_Warning">Bu adresi silmek istediğinize emin misiniz?</string>
     <string name="Contacts_DiscardChanges">Değişiklikleri İptal Et</string>
     <string name="Contacts_KeepEditing">Düzenlemeyi sürdür</string>
-    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
+    <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
     <string name="Contacts_NoContacts">Eklenmiş bir kişiniz yok</string>
     <string name="Contacts_ActionMore">Daha fazla</string>
     <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
