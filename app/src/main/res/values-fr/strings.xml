@@ -358,7 +358,7 @@
     <string name="FeeSettings_BaseFee_Info">The network protocol determines the base price per gas for each block, called base fee rate. It varies according to the network utilization level from block to block. It can increase or decrease by no more than 12.5% in the next block, making fees more predictable. The value shown here is the current block\'s base fee rate.</string>
     <string name="FeeSettings_MaxFee">Taux de frais max (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
-    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips">Frais de priorité max (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risqué</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transaction risque de rester en attente pendant un certain temps ou d\'échouer complètement.</string>
@@ -367,7 +367,7 @@
     <string name="FeeSettings_Overpricing_Title">Frais trop élevés</string>
     <string name="FeeSettings_Overpricing">Les frais de transaction fixés sont plus élevés que ce qui est nécessaire pour traiter cette transaction immédiatement.</string>
     <string name="FeeSettings_Info_IUnderstand">J’ai Compris</string>
-    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate">Taux de frais (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Voici la valeur recommandée pour les 2 blocs suivants</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.\n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within a reasonable amount of time.\n\nThe recommended fee rate is shown as the amount of satoshi the user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.\n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.\n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
@@ -503,7 +503,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">Votre transaction est susceptible de ne pas aboutir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">La tolérance de glissement ne peut pas être supérieure à %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Adresse invalide</string>
-    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">%s Adresse non valide</string>
     <string name="SwapSettings_Error_InvalidSlippage">Slippage Invalide</string>
     <string name="SwapSettings_Error_InvalidDeadline">Date limite invalide</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
@@ -970,7 +970,7 @@
     <string name="Tor_Status_Error">Erreur lors du démarrage de Tor !</string>
     <string name="TorPage_Connecting">Connexion à Tor…</string>
     <string name="TorPage_Connected">Connecté</string>
-    <string name="TorPage_Failed">Failed to Connect Tor</string>
+    <string name="TorPage_Failed">Impossible de connecter Tor</string>
     <string name="TorPage_ConnectionClosed">Déconnecté</string>
     <string name="Tor_TorIsActive">Tor est actif</string>
     <string name="Tor_PrerequisitesAlert_Content">L\'activation de TOR réinitialisera la connexion de la blockchain Ethereum à Infura.</string>
@@ -1116,7 +1116,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info2">Classement du token basé sur les revenus générés sur une période de 30 jours pour les stakers de token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Liste de tous les tokens classés en fonction des revenus générés pour les stakers de tokens sur des intervalles de 24h / 7J / 1M.</string>
     <string name="CoinAnalytics_PageLocked">Cette page n\'est disponible que pour les utilisateurs Premium Unstoppable Wallet</string>
-    <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
+    <string name="CoinAnalytics_ProjectNoAnalyticData">Ce projet n\'a pas de données d\'analyse</string>
     <string name="CoinAnalytics_CexVolume">Volume CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Rang de volume CEX</string>
     <string name="CoinAnalytics_CexVolumeRank_Description">Les tokens classés en fonction du volume de trading du token sur les exchanges centralisés.</string>
@@ -1126,15 +1126,15 @@
     <string name="CoinAnalytics_DexLiquidity">Liquidité DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Classement de liquidité DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank_Description">Les tokens classés par liquidité disponible sur les exchanges décentralisés.</string>
-    <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
+    <string name="CoinAnalytics_ActiveAddresses">Adresses actives quotidiennes</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Classement des adresses actives</string>
     <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens classés par nombre d\'adresses uniques effectuant des transactions avec le token.</string>
     <string name="CoinAnalytics_TransactionCount">Nombre de transactions</string>
     <string name="CoinAnalytics_TransactionCountRank">Classement par nombre de tr.</string>
     <string name="CoinAnalytics_TransactionCountRank_Description">Tokens classés en fonction du nombre de transactions sur une blockchain.</string>
-    <string name="CoinAnalytics_Holders">Holders</string>
+    <string name="CoinAnalytics_Holders">Titres</string>
     <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
-    <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total Value Locked)</string>
+    <string name="CoinAnalytics_ProjectTvl_FullTitle">Projet TVL (valeur totale verrouillée)</string>
     <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Revenus du projet</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Classement en fonction des revenus du projet</string>
@@ -1148,7 +1148,7 @@
     <string name="Coin_Analytics_Current">actuel</string>
     <string name="Coin_Analytics_Rank">Rang</string>
     <string name="Coin_Analytics_30DayRank">Classement sur 30 jours</string>
-    <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">Adresses uniques de 30 jours</string>
     <string name="Coin_Analytics_30DayVolume">Volume sur 30 jours</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Moy. 7D</string>
@@ -1281,9 +1281,9 @@
     <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
     <!--Contacts-->
     <string name="Contacts">Contacts</string>
-    <string name="Contacts_Backup">Backup Contacts</string>
-    <string name="Contacts_Restore">Restore Contacts</string>
-    <string name="Contacts_Restore_Warning">This action will completely overwrite your contacts and delete your existing contact list. Do you want to replace your contact list? </string>
+    <string name="Contacts_Backup">Sauvegarder les contacts</string>
+    <string name="Contacts_Restore">Restaurer les contacts</string>
+    <string name="Contacts_Restore_Warning">Cette action écrasera complètement vos contacts et supprimera votre liste de contacts existante. Voulez-vous remplacer votre liste de contacts ? </string>
     <string name="Contacts_AddressesCount">Adresses : %s</string>
     <string name="Contacts_NewContact">Nouveau Contact</string>
     <string name="Contacts_AddNewContact">Ajouter un nouveau contact</string>
@@ -1292,7 +1292,7 @@
     <string name="Contacts_AddAddress_NewContact">Créer un nouveau contact</string>
     <string name="Contacts_AddAddress_ExistingContact">Ajouter au contact existant</string>
     <string name="Contacts_AddAddress_Replace">Remplacer</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Le contact sélectionné possède déjà une adresse sur %1$s. Cette action remplacera l\'adresse %2$s par %3$s?</string>
     <string name="Contacts_AddressHint">Adresse ou domaine</string>
     <string name="Contacts_DeleteContact">Supprimer le contact</string>
     <string name="Contacts_DeleteContact_Warning">Êtes-vous certain de vouloir supprimer ce contact?</string>
@@ -1300,7 +1300,7 @@
     <string name="Contacts_DeleteAddress_Warning">Etes-vous sûr de vouloir supprimer cette adresse ?</string>
     <string name="Contacts_DiscardChanges">Annuler les modifications</string>
     <string name="Contacts_KeepEditing">Poursuivre les modifications</string>
-    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
+    <string name="Contacts_DiscardChanges_Warning">Êtes-vous sûr de vouloir annuler ces modifications ?</string>
     <string name="Contacts_NoContacts">Vous n\'avez pas ajouté de contact</string>
     <string name="Contacts_ActionMore">Plus</string>
     <string name="Contacts_Error_DefinedAddress">Cette adresse est déjà utilisée pour %s</string>
