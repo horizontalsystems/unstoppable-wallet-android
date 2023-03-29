@@ -342,6 +342,7 @@ class CoinAnalyticsViewModel(
                     analyticChart = null,
                     footerItems = footerItems,
                     sectionTitle = R.string.CoinAnalytics_OtherData,
+                    showFooterDivider = false,
                 )
             )
         }
@@ -385,7 +386,8 @@ class CoinAnalyticsViewModel(
                         title = R.string.CoinAnalytics_CexVolume,
                         info = AnalyticInfo.CexVolumeInfo,
                         chartType = if (cexVolume.points) PreviewChartType.Bars else null,
-                        footerItems = if (cexVolume.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
+                        footerItems = if (cexVolume.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList(),
+                        showFooterDivider = cexVolume.rank30d
                     )
                 )
             }
@@ -397,7 +399,8 @@ class CoinAnalyticsViewModel(
                         title = R.string.CoinAnalytics_DexVolume,
                         info = AnalyticInfo.DexVolumeInfo,
                         chartType = if (dexVolume.points) PreviewChartType.Bars else null,
-                        footerItems = if (dexVolume.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
+                        footerItems = if (dexVolume.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList(),
+                        showFooterDivider = dexVolume.rank30d
                     )
                 )
             }
@@ -409,7 +412,8 @@ class CoinAnalyticsViewModel(
                         title = R.string.CoinAnalytics_DexLiquidity,
                         info = AnalyticInfo.DexLiquidityInfo,
                         chartType = if (dexLiquidity.points) PreviewChartType.Line else null,
-                        footerItems = if (dexLiquidity.rank) listOf(PreviewFooterItem(R.string.Coin_Analytics_Rank, true)) else emptyList()
+                        footerItems = if (dexLiquidity.rank) listOf(PreviewFooterItem(R.string.Coin_Analytics_Rank, true)) else emptyList(),
+                        showFooterDivider = dexLiquidity.rank
                     )
                 )
             }
@@ -428,7 +432,8 @@ class CoinAnalyticsViewModel(
                         title = R.string.CoinAnalytics_ActiveAddresses,
                         info = AnalyticInfo.AddressesInfo,
                         chartType = if (addresses.points) PreviewChartType.Line else null,
-                        footerItems = footerItems
+                        footerItems = footerItems,
+                        showFooterDivider = footerItems.isNotEmpty()
                     )
                 )
             }
@@ -447,7 +452,8 @@ class CoinAnalyticsViewModel(
                         title = R.string.CoinAnalytics_TransactionCount,
                         info = AnalyticInfo.TransactionCountInfo,
                         chartType = if (transactionPreview.points) PreviewChartType.Bars else null,
-                        footerItems = footerItems
+                        footerItems = footerItems,
+                        showFooterDivider = footerItems.isNotEmpty()
                     )
                 )
             }
@@ -463,7 +469,7 @@ class CoinAnalyticsViewModel(
                     title = R.string.CoinAnalytics_Holders,
                     info = AnalyticInfo.HoldersInfo,
                     chartType = PreviewChartType.StackedBars,
-                    footerItems = footerItems
+                    footerItems = footerItems,
                 )
             )
         }
@@ -474,7 +480,8 @@ class CoinAnalyticsViewModel(
                         title = R.string.CoinAnalytics_ProjectRevenue,
                         info = AnalyticInfo.RevenueInfo,
                         chartType = null,
-                        footerItems = if (revenue.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList()
+                        footerItems = if (revenue.rank30d) listOf(PreviewFooterItem(R.string.Coin_Analytics_30DayRank, true)) else emptyList(),
+                        showFooterDivider = revenue.rank30d
                     )
                 )
             }
@@ -494,6 +501,7 @@ class CoinAnalyticsViewModel(
                         info = AnalyticInfo.TvlInfo,
                         chartType = if (tvl.points) PreviewChartType.Line else null,
                         footerItems = footerItems,
+                        showFooterDivider = footerItems.isNotEmpty()
                     )
                 )
             }
@@ -519,7 +527,8 @@ class CoinAnalyticsViewModel(
                     chartType = null,
                     footerItems = footerItems,
                     sectionTitle = R.string.CoinAnalytics_OtherData,
-                    showValueDots = false
+                    showValueDots = false,
+                    showFooterDivider = false
                 )
             )
         }

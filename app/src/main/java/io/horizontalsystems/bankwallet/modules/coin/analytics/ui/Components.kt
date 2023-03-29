@@ -78,14 +78,17 @@ fun AnalyticsContentNumber(
 fun AnalyticsFooterCell(
     title: String,
     value: String?,
+    showTopDivider: Boolean = true,
     leftIcon: ImageSource? = null,
     onClick: (() -> Unit)? = null
 ) {
-    Divider(
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10,
-        modifier = Modifier.fillMaxWidth()
-    )
+    if (showTopDivider) {
+        Divider(
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = onClick
@@ -119,6 +122,7 @@ fun AnalyticsFooterCell(
 
 @Composable
 fun AnalyticsContainer(
+    showFooterDivider: Boolean = true,
     sectionTitle: @Composable (RowScope.() -> Unit)? = null,
     titleRow: @Composable (() -> Unit)? = null,
     bottomRows: @Composable ColumnScope.() -> Unit = {},
@@ -142,6 +146,13 @@ fun AnalyticsContainer(
     ) {
         titleRow?.invoke()
         content.invoke()
+        if (showFooterDivider) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         Column(
             content = bottomRows
         )

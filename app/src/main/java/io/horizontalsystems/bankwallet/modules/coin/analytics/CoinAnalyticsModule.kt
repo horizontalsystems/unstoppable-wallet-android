@@ -41,6 +41,7 @@ object CoinAnalyticsModule {
         val analyticChart: ChartViewItem?,
         val footerItems: List<FooterItem>,
         val sectionTitle: Int? = null,
+        val showFooterDivider: Boolean = true,
     )
 
     data class FooterItem(
@@ -68,7 +69,8 @@ object CoinAnalyticsModule {
         val chartType: PreviewChartType?,
         val footerItems: List<PreviewFooterItem>,
         val sectionTitle: Int? = null,
-        val showValueDots: Boolean = true
+        val showValueDots: Boolean = true,
+        val showFooterDivider: Boolean = true,
     )
 
     data class PreviewFooterItem(

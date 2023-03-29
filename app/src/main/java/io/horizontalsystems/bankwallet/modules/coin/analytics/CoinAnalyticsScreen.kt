@@ -124,6 +124,7 @@ private fun AnalyticsBlock(
     fragmentManager: FragmentManager
 ) {
     AnalyticsContainer(
+        showFooterDivider = block.showFooterDivider,
         sectionTitle = block.sectionTitle?.let {
             {
                 body_leah(
@@ -146,12 +147,13 @@ private fun AnalyticsBlock(
             }
         },
         bottomRows = {
-            block.footerItems.forEach {
+            block.footerItems.forEachIndexed { index, item ->
                 AnalyticsFooterCell(
-                    title = it.title.getString(),
-                    value = it.value,
-                    leftIcon = it.image,
-                    onClick = it.action?.let { action ->
+                    title = item.title.getString(),
+                    value = item.value,
+                    leftIcon = item.image,
+                    showTopDivider = index != 0,
+                    onClick = item.action?.let { action ->
                         {
                             when (action) {
                                 is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
@@ -223,6 +225,7 @@ private fun AnalyticsBlock(
 @Composable
 private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewItem, navController: NavController) {
     AnalyticsContainer(
+        showFooterDivider = block.showFooterDivider,
         sectionTitle = block.sectionTitle?.let {
             {
                 body_leah(
@@ -245,11 +248,12 @@ private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewIte
             }
         },
         bottomRows = {
-            block.footerItems.forEach {
+            block.footerItems.forEachIndexed { index, item ->
                 AnalyticsFooterCell(
-                    title = stringResource(it.title),
-                    value = if (it.hasValue) stringResource(R.string.CoinAnalytics_ThreeDots) else null,
-                    onClick = if (it.clickable) {
+                    title = stringResource(item.title),
+                    value = if (item.hasValue) stringResource(R.string.CoinAnalytics_ThreeDots) else null,
+                    showTopDivider = index != 0,
+                    onClick = if (item.clickable) {
                         { }
                     } else {
                         null
