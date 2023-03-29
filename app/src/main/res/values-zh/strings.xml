@@ -358,7 +358,7 @@
     <string name="FeeSettings_BaseFee_Info">网络协议将决定每一个区块的每一燃料（gas）的基础价格，称为基础费率。它根据不同区块的网络利用水平而变化。它可能会在下一个区块中增加或减少不多于12.5%，使得费用更具有可预测性。这里显示的值为当前区块的基础费率。</string>
     <string name="FeeSettings_MaxFee">最大收费率(Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">这是用户愿意支付的每一燃料（gas）的最高总价。它必须涵盖网络的基础费率和最高优先费率。这里显示的值是基于下一个区块的基础费率加上用户选择的最大优先费率的估计值。实际支付的费率通常会较低。如果将此设置为低于当前的基础费率，将限制所支付的费用，但会导致更长的交易确认等待时间，甚至导致交易被冻结。</string>
-    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips">最高优先费 (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">用户支付优先费用以激励交易更快地得到确认。这些费用有时被称为小费。最高优先费率是用户在基础费率基础上愿意支付的每一燃料（gas）的最高额外价格。这里显示的值是基于预测的网络条件的建议值。实际的优先费用通常会更低。将此设置为零可能会导致交易确认的等待时间很长，因为它被放置在所有用户的待定交易队列的末尾。</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">有风险</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">交易可能会在一段时间内仍然处于待处理状态或完全失败。</string>
@@ -367,7 +367,7 @@
     <string name="FeeSettings_Overpricing_Title">费用太高</string>
     <string name="FeeSettings_Overpricing">当前设置的交易费用高于处理此交易所需的费用。</string>
     <string name="FeeSettings_Info_IUnderstand">我理解</string>
-    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate">费率(SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">这是击中下2个区块的推荐值</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.\n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within a reasonable amount of time.\n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.\n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.\n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
@@ -503,7 +503,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">滑点太小，您的交易可能失败。</string>
     <string name="SwapSettings_Error_SlippageTooHigh">滑点太大，最大允许值是 %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">地址无效</string>
-    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">无效的 %s 地址</string>
     <string name="SwapSettings_Error_InvalidSlippage">无效延误</string>
     <string name="SwapSettings_Error_InvalidDeadline">无效截止日期</string>
     <string name="SwapSettings_Warning_UnusualSlippage">您的交易可能提前完成</string>
@@ -895,7 +895,7 @@
     <string name="PublicKeys_EvmAddress">EVM 地址</string>
     <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="PublicKeys_EvmAddress_Description">允许只读监视持有Etherum、 Binance Smart Chain和其他基于 EVM 的区块链的钱包。</string>
-    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">允许只读监视持有比特币和其他基于 UTXO 的加密钱包(即Liteco、 比特币现金、 破折号等)。</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">验证</string>
     <string name="RecoveryPhraseVerify_Description">从你的钱包恢复短语中选择两个请求的单词</string>
@@ -969,9 +969,9 @@
     <string name="Tor_Alert_Title">互联网</string>
     <string name="Tor_Status_Starting">正在启动Tor...</string>
     <string name="Tor_Status_Error">启动Tor时出错！</string>
-    <string name="TorPage_Connecting">Connecting Tor…</string>
+    <string name="TorPage_Connecting">토르 연결 중…</string>
     <string name="TorPage_Connected">已连接</string>
-    <string name="TorPage_Failed">Failed to Connect Tor</string>
+    <string name="TorPage_Failed">Tor 연결 실패</string>
     <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="Tor_TorIsActive">Tor 已激活</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
@@ -980,7 +980,7 @@
     <string name="CoinOption_bip49_Title">好</string>
     <string name="CoinOption_bip84_Title">最佳的</string>
     <!--Coin Page-->
-    <string name="Coin_Info">Coin Info</string>
+    <string name="Coin_Info">硬币信息</string>
     <string name="Coin_Tab_Overview">行情</string>
     <string name="Coin_Tab_Market">市场</string>
     <string name="Coin_Tab_Details">分析</string>
