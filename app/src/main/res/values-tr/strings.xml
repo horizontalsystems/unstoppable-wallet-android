@@ -1138,7 +1138,7 @@
     <string name="CoinAnalytics_DexLiquidity">DEX Liquidity</string>
     <string name="CoinAnalytics_DexLiquidityRank">DEX Likidite Sıralaması</string>
     <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens ranked by available liquidity on decentralized exchanges.</string>
-    <string name="CoinAnalytics_ActiveAddresses">Active Addresses</string>
+    <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Aktif Adresler Sıralaması</string>
     <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens ranked by number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">Transaction Count</string>
@@ -1160,6 +1160,7 @@
     <string name="Coin_Analytics_Current">current</string>
     <string name="Coin_Analytics_Rank">Rank</string>
     <string name="Coin_Analytics_30DayRank">30-Day Rank</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
     <string name="Coin_Analytics_30DayVolume">30-Day Volume</string>
     <string name="Nfts_Title">NFT\'ler</string>
     <string name="Nfts_PriceType_Days_7">Ortalama 7G</string>
@@ -1303,7 +1304,7 @@
     <string name="Contacts_AddAddress_NewContact">Yeni Kişi Oluştur</string>
     <string name="Contacts_AddAddress_ExistingContact">Mevcut Kişiye Ekle</string>
     <string name="Contacts_AddAddress_Replace">Değiştir</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">Bu kişinin zaten bu blok zincirinde bir adresi var. %s adresini %s ile değiştirmek istiyor musunuz?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
     <string name="Contacts_AddressHint">Adres veya Domain</string>
     <string name="Contacts_DeleteContact">Kişiyi Sil</string>
     <string name="Contacts_DeleteContact_Warning">Bu kişi silmek istediğine emin misin?</string>
