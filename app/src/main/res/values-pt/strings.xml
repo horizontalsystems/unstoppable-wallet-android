@@ -507,7 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">É provável que sua transação falhe.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Tolerância do Slippage não pode ser maior que %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Endereço inválido</string>
-    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Endereço %s inválido</string>
     <string name="SwapSettings_Error_InvalidSlippage">Slippage Inválido</string>
     <string name="SwapSettings_Error_InvalidDeadline">Prazo de tarefa inválido</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Sua operação pode ser de front-running</string>
@@ -692,7 +692,7 @@
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte de restauração, a carteira terá que ressincronizar-se com a blockchain do Bitcoin.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Restaurar Fonte</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Select a data source for wallet restore. Restoring from blockchain takes considerably more time.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restauração de carteira. Restaurar da blockchain leva consideravelmente mais tempo.</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">Esta configuração só é relevante ao restaurar uma carteira existente. É um processo de obtenção de histórico de transações para uma determinada criptomoeda, então o aplicativo de carteira é capaz de exibir transações anteriores e calcular o saldo do usuário. Isto precisa acontecer apenas uma vez quando o usuário restaura as carteiras previamente criadas.\n\nNeste ponto, existem duas possíveis maneiras de uma carteira móvel como o Unstoppable de fazer isso:\n\n1. do Servidor API: Há um servidor predefinido por terceiros que hospeda toda a blockchain e tem todos os dados processados e otimizados para fornecer esses dados de forma rápida. Este método é rápido, mas potencialmente (não necessariamente) menos privado. É também um método centralizado para restaurar uma carteira, pois depende da disponibilidade de um servidor de terceiros. Esta opção é recomendada devido à velocidade de obtenção de dados (5-10 minutos).\n\n2. da Blockchain: O aplicativo tenta restaurar diretamente de uma rede de nós da blockchain. Essa é uma maneira descentralizada de restaurar o saldo das carteiras e transações anteriores. O aplicativo pança muitos dos nós da rede e solicita dados deles sem abordar alguns nós especificamente. Esta opção é lenta e pode levar facilmente 2-3 horas, o aplicativo precisa estar aberto enquanto a restauração está acontecendo. Este método de restauração não depende de nenhuma entidade e deve funcionar em todas as condições.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrada/Saída</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Configurações de transação</string>
@@ -1080,8 +1080,8 @@
     <string name="CoinPage_Bep2Symbol">Símbolo BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Principais Carteiras</string>
     <string name="CoinPage_MajorHolders_Description">O gráfico acima mostra a % porcentagem de todos os tokens em circulação mantidos pelas 10 principais carteiras. Quanto mais baixa for a porcentagem, mais distribuída a moeda está.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
-    <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">nos Top 10 Holders</string>
+    <string name="CoinPage_MajorHolders_HoldersNumber">Número total de Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Conduzir</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Obtenha acesso aos recursos avançados de carteiraFazendo Holdin NFTs Unstoppable.</string>
@@ -1135,7 +1135,7 @@
     <string name="CoinAnalytics_DexLiquidity">Liquidez DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Ranking de Liquidez DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens classificados por liquidez disponível em corretoras descentralizadas.</string>
-    <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
+    <string name="CoinAnalytics_ActiveAddresses">Endereços ativos diários</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Ranking de Endereços Ativos</string>
     <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens classificados pelo número de endereços exclusivos que realizam transações com o token.</string>
     <string name="CoinAnalytics_TransactionCount">Contagem de transações</string>
@@ -1157,7 +1157,7 @@
     <string name="Coin_Analytics_Current">atual</string>
     <string name="Coin_Analytics_Rank">Classificação</string>
     <string name="Coin_Analytics_30DayRank">Classificação 30-Dias</string>
-    <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">30 Dias Endereços Únicos</string>
     <string name="Coin_Analytics_30DayVolume">Volume 30 Dias</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">média de 7D.</string>
@@ -1290,9 +1290,9 @@
     <string name="BiometricAuth_DialogTitle">Leitura Biométrica</string>
     <!--Contacts-->
     <string name="Contacts">Contatos</string>
-    <string name="Contacts_Backup">Backup Contacts</string>
-    <string name="Contacts_Restore">Restore Contacts</string>
-    <string name="Contacts_Restore_Warning">This action will completely overwrite your contacts and delete your existing contact list. Do you want to replace your contact list? </string>
+    <string name="Contacts_Backup">Backup de contatos</string>
+    <string name="Contacts_Restore">Restaurar contatos</string>
+    <string name="Contacts_Restore_Warning">Esta ação irá substituir completamente os seus contatos e excluir a sua lista de contatos. Deseja substituir a sua lista de contatos? </string>
     <string name="Contacts_AddressesCount">Endereços: %s</string>
     <string name="Contacts_NewContact">Novo Contato</string>
     <string name="Contacts_AddNewContact">Adicionar um novo contato</string>
@@ -1301,7 +1301,7 @@
     <string name="Contacts_AddAddress_NewContact">Criar Novo Contato</string>
     <string name="Contacts_AddAddress_ExistingContact">Adicionar ao Contato Existente</string>
     <string name="Contacts_AddAddress_Replace">Substituir</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">O contato selecionado já tem um endereço em %1$s. Esta ação substituirá o endereço %2$s por %3$s?</string>
     <string name="Contacts_AddressHint">Endereço ou Domínio</string>
     <string name="Contacts_DeleteContact">Excluir contato</string>
     <string name="Contacts_DeleteContact_Warning">Você tem certeza que deseja excluir este contato?</string>
@@ -1309,9 +1309,9 @@
     <string name="Contacts_DeleteAddress_Warning">Você tem certeza que deseja excluir este endereço?</string>
     <string name="Contacts_DiscardChanges">Descartar Alterações</string>
     <string name="Contacts_KeepEditing">Continuar Editando</string>
-    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
+    <string name="Contacts_DiscardChanges_Warning">Tem certeza de que deseja descartar as novas alterações?</string>
     <string name="Contacts_NoContacts">Você não tem nenhum contato adicionado</string>
     <string name="Contacts_ActionMore">Mais</string>
     <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
-    <string name="Contacts_Error_DefinedName">The name already exists</string>
+    <string name="Contacts_Error_DefinedName">O nome já existe</string>
 </resources>
