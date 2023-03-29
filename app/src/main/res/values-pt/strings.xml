@@ -1135,7 +1135,7 @@
     <string name="CoinAnalytics_DexLiquidity">Liquidez DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Ranking de Liquidez DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens classificados por liquidez disponível em corretoras descentralizadas.</string>
-    <string name="CoinAnalytics_ActiveAddresses">Endereços ativos</string>
+    <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Ranking de Endereços Ativos</string>
     <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens classificados pelo número de endereços exclusivos que realizam transações com o token.</string>
     <string name="CoinAnalytics_TransactionCount">Contagem de transações</string>
@@ -1157,6 +1157,7 @@
     <string name="Coin_Analytics_Current">atual</string>
     <string name="Coin_Analytics_Rank">Classificação</string>
     <string name="Coin_Analytics_30DayRank">Classificação 30-Dias</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
     <string name="Coin_Analytics_30DayVolume">Volume 30 Dias</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">média de 7D.</string>
@@ -1300,7 +1301,7 @@
     <string name="Contacts_AddAddress_NewContact">Criar Novo Contato</string>
     <string name="Contacts_AddAddress_ExistingContact">Adicionar ao Contato Existente</string>
     <string name="Contacts_AddAddress_Replace">Substituir</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">Este contato já possui um endereço nesta blockchain. Deseja substituir o endereço %s pelo %s?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
     <string name="Contacts_AddressHint">Endereço ou Domínio</string>
     <string name="Contacts_DeleteContact">Excluir contato</string>
     <string name="Contacts_DeleteContact_Warning">Você tem certeza que deseja excluir este contato?</string>
