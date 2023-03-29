@@ -689,7 +689,7 @@
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Nach dem Ändern der Quelle wiederherstellen muss sich die Wallet mit der %@ Blockchain synchronisieren.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Parameter wiederherstellen</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Select a data source for wallet restore. Restoring from blockchain takes considerably more time.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Wählen Sie eine Datenquelle für die Wallet-Wiederherstellung. Wiederherstellung von Blockchain dauert erheblich länger.</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">Diese Einstellung ist nur relevant, wenn eine bestehende Brieftasche wiederhergestellt wird. Es ist ein Prozess, die Transaktionsgeschichte für eine bestimmte Kryptowährung abzurufen, so dass die Wallet-App in der Lage ist, vergangene Transaktionen anzuzeigen und den Kontostand des Benutzers zu berechnen. Dies muss nur einmal passieren, wenn der Benutzer die zuvor erstellten Wallets wiederherstellt.
 \n\nAn diesem Punkt es gibt zwei mögliche Wege für eine mobile Brieftasche wie Unstoppable zu tun:
 \n\n1. vom API-Server: Es gibt einen vordefinierten Server von Dritten, der die gesamte Blockchain beherbergt und alle Daten verarbeitet und optimiert hat, um diese Daten schnell zur Verfügung zu stellen. Diese Methode ist schnell, aber möglicherweise (nicht notwendig) weniger privat. Es ist auch eine zentralisierte Methode, um eine Brieftasche wiederherzustellen, da sie von der Verfügbarkeit eines Drittanbieter-Servers abhängt. Diese Option wird aufgrund der Geschwindigkeit des Abrufs von Daten (5-10 Minuten) empfohlen.
@@ -1299,7 +1299,7 @@
     <string name="Contacts_AddAddress_NewContact">Neuen Kontakt erstellen</string>
     <string name="Contacts_AddAddress_ExistingContact">Zu vorhandenem Kontakt hinzufügen</string>
     <string name="Contacts_AddAddress_Replace">Ersetzen</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Der ausgewählte Kontakt hat bereits eine Adresse auf %1$s. Diese Aktion wird die Adresse %2$s durch %3$s ersetzen?</string>
     <string name="Contacts_AddressHint">Adresse oder Domäne</string>
     <string name="Contacts_DeleteContact">Kontakt löschen</string>
     <string name="Contacts_DeleteContact_Warning">Sind Sie sicher, dass Sie diesen Kontakt löschen möchten?</string>
@@ -1307,7 +1307,7 @@
     <string name="Contacts_DeleteAddress_Warning">Sind Sie sicher, dass Sie diese Adresse löschen wollen?</string>
     <string name="Contacts_DiscardChanges">Änderungen verwerfen</string>
     <string name="Contacts_KeepEditing">Weiter bearbeiten</string>
-    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
+    <string name="Contacts_DiscardChanges_Warning">Sind Sie sicher, dass Sie diese neuen Änderungen verwerfen möchten?</string>
     <string name="Contacts_NoContacts">Sie haben keinen neuen Kontakt</string>
     <string name="Contacts_ActionMore">Mehr</string>
     <string name="Contacts_Error_DefinedAddress">Diese Adresse wird bereits für %s verwendet</string>
