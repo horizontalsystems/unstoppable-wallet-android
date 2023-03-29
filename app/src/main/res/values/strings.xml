@@ -1569,7 +1569,7 @@
     <string name="Contacts_AddAddress_NewContact">Create New Contact</string>
     <string name="Contacts_AddAddress_ExistingContact">Add to Existing Contact</string>
     <string name="Contacts_AddAddress_Replace">Replace</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">This contact already has an address on this blockchain. Do you want to replace the address %s with the %s?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
     <string name="Contacts_AddressHint">Address or Domain</string>
     <string name="Contacts_DeleteContact">Delete Contact</string>
     <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
