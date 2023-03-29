@@ -1126,7 +1126,7 @@
     <string name="CoinAnalytics_DexLiquidity">Liquidité DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Classement de liquidité DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank_Description">Les tokens classés par liquidité disponible sur les exchanges décentralisés.</string>
-    <string name="CoinAnalytics_ActiveAddresses">Adresses actives</string>
+    <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Classement des adresses actives</string>
     <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens classés par nombre d\'adresses uniques effectuant des transactions avec le token.</string>
     <string name="CoinAnalytics_TransactionCount">Nombre de transactions</string>
@@ -1148,6 +1148,7 @@
     <string name="Coin_Analytics_Current">actuel</string>
     <string name="Coin_Analytics_Rank">Rang</string>
     <string name="Coin_Analytics_30DayRank">Classement sur 30 jours</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
     <string name="Coin_Analytics_30DayVolume">Volume sur 30 jours</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Moy. 7D</string>
@@ -1291,7 +1292,7 @@
     <string name="Contacts_AddAddress_NewContact">Créer un nouveau contact</string>
     <string name="Contacts_AddAddress_ExistingContact">Ajouter au contact existant</string>
     <string name="Contacts_AddAddress_Replace">Remplacer</string>
-    <string name="Contacts_AddAddress_ReplaceWarning">This contact already has an address on this blockchain. Do you want to replace the address %s with the %s?</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Selected contact already has an address on %1$s. This action will replace the address %2$s with %3$s?</string>
     <string name="Contacts_AddressHint">Adresse ou domaine</string>
     <string name="Contacts_DeleteContact">Supprimer le contact</string>
     <string name="Contacts_DeleteContact_Warning">Êtes-vous certain de vouloir supprimer ce contact?</string>
