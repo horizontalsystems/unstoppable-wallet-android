@@ -358,16 +358,16 @@
     <string name="FeeSettings_BaseFee_Info">El protocolo de red determina el precio base por gas para cada bloque, llamada tarifa base. Varía en función del nivel de utilización de la red de bloque a bloque. Puede aumentar o disminuir no más del 12,5% en el próximo bloque, haciendo que las comisiones sean más predecibles. El valor que se muestra aquí es la tarifa base del bloque actual.</string>
     <string name="FeeSettings_MaxFee">Tarifa Máxima de Tarifa (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
-    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips">Tarifa Máxima de prioridad (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Arriesgado</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transacción puede permanecer pendiente por un tiempo o fallar por completo.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Arriesgado</string>
-    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Para asegurar la ejecución rápida de la transacción la tasa máxima de comisión (máximo restado. propina de miner) debe ser mayor que la tarifa base actual. Si no es así, la transacción puede permanecer pendiente hasta que se cumpla la condición.</string>
     <string name="FeeSettings_Overpricing_Title">Cuota demasiado alta</string>
     <string name="FeeSettings_Overpricing">La tarifa de transacción establecida es mayor de lo necesario para procesar esta transacción ahora.</string>
     <string name="FeeSettings_Info_IUnderstand">Entiendo</string>
-    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate">Tarifa de tarifa (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Este es el valor recomendado para golpear los siguientes 2 bloques</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
         \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
@@ -507,7 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Tolerancia de deslizamiento no puede ser más de %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Dirección invalida</string>
-    <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Dirección %s no válida</string>
     <string name="SwapSettings_Error_InvalidSlippage">Deslizamiento no válido</string>
     <string name="SwapSettings_Error_InvalidDeadline">Fecha límite no válida</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Su transacción puede ser anticipada</string>
@@ -699,7 +699,7 @@
 \n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entradas/Salidas</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Ajustes de la transacción</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entradas / salidas de transacciones</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Haga que sus transacciones BTC, LTC, BCH sean más difíciles de rastrear cambiando la forma en que las transacciones están estructuradas.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.\n\nThere are two options available to Unstoppable users:\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
     <!--Info screen-->
