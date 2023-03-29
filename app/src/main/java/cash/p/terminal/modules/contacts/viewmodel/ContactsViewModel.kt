@@ -65,7 +65,12 @@ class ContactsViewModel(
         val address = (mode as? Mode.AddAddressToExistingContact)?.address ?: return null
         val oldAddress = contact.addresses.find { it.blockchain.type == blockchainType } ?: return null
 
-        return TranslatableString.ResString(R.string.Contacts_AddAddress_ReplaceWarning, oldAddress.address.shorten(), address.shorten())
+        return TranslatableString.ResString(
+            R.string.Contacts_AddAddress_ReplaceWarning,
+            oldAddress.blockchain.name,
+            oldAddress.address.shorten(),
+            address.shorten()
+        )
     }
 
     private fun emitState() {
