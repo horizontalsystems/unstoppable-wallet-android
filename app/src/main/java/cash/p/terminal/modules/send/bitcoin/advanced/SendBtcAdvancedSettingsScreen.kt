@@ -68,7 +68,7 @@ fun SendBtcAdvancedSettingsScreen(
                     },
                     onCloseClick = {
                         coroutineScope.launch {
-                            modalBottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+                            modalBottomSheetState.hide()
                         }
                     }
                 )
@@ -138,7 +138,7 @@ fun SendBtcAdvancedSettingsScreen(
                         viewModel.uiState.transactionSortTitle,
                     ) {
                         coroutineScope.launch {
-                            modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                            modalBottomSheetState.show()
                         }
                     }
 

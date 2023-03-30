@@ -122,7 +122,7 @@ fun AddressScreen(
                     Spacer(modifier = Modifier.height(32.dp))
                     DeleteAddressButton {
                         coroutineScope.launch {
-                            modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                            modalBottomSheetState.show()
                         }
                     }
                 }

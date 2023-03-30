@@ -184,7 +184,7 @@ dependencies {
     implementation 'androidx.glance:glance-appwidget:1.0.0-alpha05'
 
     // Room
-    def room_version = '2.5.0'
+    def room_version = '2.5.1'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
@@ -194,7 +194,7 @@ dependencies {
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
 
     implementation "com.google.android.material:material:$material_version"
 
@@ -218,7 +218,7 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.6'
 
     //Custom tabs, chrome
-    implementation "androidx.browser:browser:1.4.0"
+    implementation "androidx.browser:browser:1.5.0"
 
     // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
@@ -231,7 +231,7 @@ dependencies {
     api 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     // WorkManager Kotlin
-    def work_version = "2.7.1"
+    def work_version = "2.8.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
@@ -279,17 +279,17 @@ dependencies {
     implementation project(':components:marketkit')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation 'androidx.activity:activity-compose:1.7.0'
     // Compose Material Design
-    implementation 'androidx.compose.material:material:1.3.1'
+    implementation 'androidx.compose.material:material:1.4.0'
     // Animations
     implementation "androidx.compose.animation:animation:$compose_version"
     // Tooling support (Previews, etc.)
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
 
-    implementation "androidx.compose.runtime:runtime-livedata:1.3.3"
+    implementation "androidx.compose.runtime:runtime-livedata:1.4.0"
 
     def coil_version = "2.2.2"
     implementation "io.coil-kt:coil-compose:$coil_version"
@@ -304,14 +304,14 @@ dependencies {
     implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.3.3'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.4.0'
 
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // optional - Test helpers for LiveData
     testImplementation "junit:junit:$junit_version"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation "org.mockito:mockito-core:3.3.3"
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.7'
