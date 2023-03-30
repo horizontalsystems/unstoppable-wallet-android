@@ -25,12 +25,12 @@
     <string name="Button_Disconnect">Отсоединить</string>
     <string name="Button_Start">Начать</string>
     <string name="Button_Create">Создать</string>
-    <string name="Button_Advanced">Доп. Настройки</string>
+    <string name="Button_Advanced">Доп. настройки</string>
     <string name="Button_Restore">Импорт</string>
     <string name="Button_WatchAddress">Просмотр кошелька</string>
     <string name="Button_Reset">Сбросить</string>
-    <string name="Button_Reconnect">Повторное Подключение</string>
-    <string name="Button_Understand">Я Понимаю</string>
+    <string name="Button_Reconnect">Повторное подключение</string>
+    <string name="Button_Understand">Я понимаю</string>
     <string name="Button_Switch">Перекл.</string>
     <string name="Button_Remove">Удалить</string>
     <string name="Button_Save">Сохранить</string>
@@ -54,21 +54,21 @@
     <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Продолжить</string>
-    <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
+    <string name="Intro_Wallet_Screen2Title">Непривязанные активы</string>
     <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
-    <string name="Intro_Wallet_Screen3Title">Избавьтесь от Границ</string>
+    <string name="Intro_Wallet_Screen3Title">Избавьтесь от границ</string>
     <string name="Intro_Wallet_Screen3Description">Преодолейте барьеры и получите доступ к рынкам.</string>
-    <string name="Intro_Wallet_Screen4Title">Сохраняйте Конфиденциальность</string>
+    <string name="Intro_Wallet_Screen4Title">Сохраняйте конфиденциальность</string>
     <string name="Intro_Wallet_Screen4Description">Не допускайте утечку личных и финансовых данных.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">Я Понимаю</string>
+    <string name="RootedDevice_Button_Understand">Я понимаю</string>
     <!--Welcome-->
-    <string name="Welcome_PrivacySettings">Настройки Приватности</string>
+    <string name="Welcome_PrivacySettings">Настройки приватности</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Advanced_Title">Доп. Настройки</string>
+    <string name="CreateWallet_Advanced_Title">Доп. настройки</string>
     <string name="CreateWallet_Mnemonic">Фраза восстановления</string>
     <string name="CreateWallet_Wordlist">Список слов</string>
-    <string name="Passphrase">Кодовая Фраза</string>
+    <string name="Passphrase">Кодовая фраза</string>
     <string name="ConfirmPassphrase">Подтвердить</string>
     <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
     <string name="CreateWallet_N_Words">%s слов</string>
@@ -154,7 +154,7 @@
     <string name="Market_Tab_Posts">Новости</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
     <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
-    <string name="Market_Category_TopCoins">Лучшие токены</string>
+    <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">Лучшие секторы</string>
@@ -294,7 +294,7 @@
     <string name="Send_Fee_Info">Блокчейн требует от пользователей оплаты сетевых сборов при отправке транзакций. Эти сборы выше, когда в сети происходит много транзакций.</string>
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Max">Макс.</string>
-    <string name="Send_Advanced">Доп. Настройки</string>
+    <string name="Send_Advanced">Доп. настройки</string>
     <string name="Send_Hodler_Description">TimeLock работает только для отправки на адреса BIP44 (начинаются с 1)</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_Domain">Домен</string>
@@ -340,7 +340,7 @@
     <string name="Send_Warning_LowFee_Description">Транзакция может застрять в сети или будет отклонена</string>
     <string name="Send_Error_FetchFeeRateFailed">Ошибка при получении ставки комиссии</string>
     <!-- Send Evm Settings -->
-    <string name="SendEvmSettings_Title">Доп. Настройки</string>
+    <string name="SendEvmSettings_Title">Доп. настройки</string>
     <string name="SendEvmSettings_Nonce">Nonce транзакции</string>
     <string name="SendEvmSettings_Nonce_Info">Nonce - это уникальное целочисленное значение для транзакции в кошельке пользователя. Обычно оно увеличивается с каждой транзакцией и не нуждается в изменении. Продвинутые пользователи могут установить его равным nonce отложенной транзакции, чтобы отменить и заменить эту транзакцию, при условии, что новая транзакция имеет достаточно большую плату, чтобы старая не была подтверждена вместо нее (например, они могут захотеть ускорить ее подтверждение или полностью изменить параметры транзакции). Когда несколько ожидающих транзакций имеют одинаковый nonce, подтверждается только одна, обычно с наибольшей комиссией.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Использованый Nonce</string>
