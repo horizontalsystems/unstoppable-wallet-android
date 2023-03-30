@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.fee.FeeCell
+import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -202,6 +203,10 @@ private fun NumberInputWithButtons(
                     playShakeAnimation = true
                 }
             },
+            textStyle = ColoredTextStyle(
+                color = ComposeAppTheme.colors.leah,
+                textStyle = ComposeAppTheme.typography.body
+            ),
             singleLine = true,
             cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
