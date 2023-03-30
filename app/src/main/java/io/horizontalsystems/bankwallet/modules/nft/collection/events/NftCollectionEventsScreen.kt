@@ -203,7 +203,7 @@ fun NftEvents(
                         iconRight = painterResource(R.drawable.ic_down_arrow_20),
                         onClick = {
                             coroutineScope.launch {
-                                modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                modalBottomSheetState.show()
                             }
                         }
                     )

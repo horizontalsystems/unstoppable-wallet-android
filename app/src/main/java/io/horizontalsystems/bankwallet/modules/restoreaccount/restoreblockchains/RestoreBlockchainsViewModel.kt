@@ -4,9 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.toLiveData
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.description
@@ -27,9 +27,7 @@ class RestoreBlockchainsViewModel(
     var restored by mutableStateOf(false)
         private set
     val restoreEnabledLiveData: LiveData<Boolean>
-        get() = LiveDataReactiveStreams.fromPublisher(
-            service.canRestore.toFlowable(BackpressureStrategy.DROP)
-        )
+        get() = service.canRestore.toFlowable(BackpressureStrategy.DROP).toLiveData()
 
     private var disposables = CompositeDisposable()
 

@@ -168,7 +168,7 @@ fun ContactScreen(
                         onDeleteContact = {
                             bottomSheetType = ContactScreenBottomSheetType.DeleteConfirmation
                             coroutineScope.launch {
-                                modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                modalBottomSheetState.show()
                             }
                         }
                     )
