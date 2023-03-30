@@ -28,18 +28,23 @@ class ProChartService(
         ProChartModule.ChartType.DexVolume,
         ProChartModule.ChartType.TxCount,
         ProChartModule.ChartType.AddressesCount,
-        ProChartModule.ChartType.DexLiquidity -> {
-            listOf(
-                HsTimePeriod.Week1,
-                HsTimePeriod.Week2,
-                HsTimePeriod.Month1,
-                HsTimePeriod.Month3,
-                HsTimePeriod.Month6,
-                HsTimePeriod.Year1,
-                HsTimePeriod.Year2,
-            )
-        }
-        ProChartModule.ChartType.Tvl -> HsTimePeriod.values().toList()
+        ProChartModule.ChartType.DexLiquidity -> listOf(
+            HsTimePeriod.Week1,
+            HsTimePeriod.Week2,
+            HsTimePeriod.Month1,
+            HsTimePeriod.Month3,
+            HsTimePeriod.Month6,
+            HsTimePeriod.Year1,
+        )
+        ProChartModule.ChartType.Tvl -> listOf(
+            HsTimePeriod.Day1,
+            HsTimePeriod.Week1,
+            HsTimePeriod.Week2,
+            HsTimePeriod.Month1,
+            HsTimePeriod.Month3,
+            HsTimePeriod.Month6,
+            HsTimePeriod.Year1,
+        )
     }
 
     override val chartViewType = when (chartType) {
