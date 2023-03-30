@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
@@ -173,11 +172,16 @@ private fun HoldersGeneralInfo(top10Share: String, totalHoldersCount: String) {
     VSpacer(12.dp)
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.Bottom
     ) {
-        headline1_bran(text = top10Share)
+        headline1_bran(
+            text = top10Share,
+            modifier = Modifier.alignByBaseline()
+        )
         HSpacer(8.dp)
-        subhead1_grey(text = stringResource(R.string.CoinPage_MajorHolders_InTopWallets))
+        subhead1_grey(
+            text = stringResource(R.string.CoinPage_MajorHolders_InTopWallets),
+            modifier = Modifier.alignByBaseline()
+        )
     }
 }
 
