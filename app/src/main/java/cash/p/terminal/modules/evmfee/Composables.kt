@@ -32,6 +32,7 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import cash.p.terminal.modules.fee.FeeCell
+import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.animations.shake
 import cash.p.terminal.ui.compose.components.*
@@ -202,6 +203,10 @@ private fun NumberInputWithButtons(
                     playShakeAnimation = true
                 }
             },
+            textStyle = ColoredTextStyle(
+                color = ComposeAppTheme.colors.leah,
+                textStyle = ComposeAppTheme.typography.body
+            ),
             singleLine = true,
             cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
