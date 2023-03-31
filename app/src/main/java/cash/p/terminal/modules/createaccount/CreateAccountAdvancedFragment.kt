@@ -49,7 +49,8 @@ class CreateAccountAdvancedFragment : BaseFragment() {
                 val popUpToInclusiveId =
                     arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.createAccountAdvancedFragment)
                         ?: R.id.createAccountAdvancedFragment
-                CreateAccountScreen(findNavController(), popUpToInclusiveId)
+                val customName = arguments?.getString(ManageAccountsModule.customNameKey)
+                CreateAccountScreen(findNavController(), popUpToInclusiveId, customName)
             }
         }
     }
@@ -58,9 +59,10 @@ class CreateAccountAdvancedFragment : BaseFragment() {
 @Composable
 private fun CreateAccountScreen(
     navController: NavController,
-    popUpToInclusiveId: Int
+    popUpToInclusiveId: Int,
+    customName: String?
 ) {
-    val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
+    val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory(customName))
     val view = LocalView.current
 
     LaunchedEffect(viewModel.successMessage) {

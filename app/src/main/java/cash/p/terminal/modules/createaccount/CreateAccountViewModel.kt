@@ -25,6 +25,7 @@ class CreateAccountViewModel(
     private val walletActivator: WalletActivator,
     private val passphraseValidator: PassphraseValidator,
     private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
+    customName: String?,
 ) : ViewModel() {
 
     private var passphrase = ""
@@ -33,7 +34,7 @@ class CreateAccountViewModel(
     val mnemonicKinds = CreateAccountModule.Kind.values().toList()
 
     val defaultAccountName = accountFactory.getNextAccountName()
-    var accountName: String = defaultAccountName
+    var accountName: String = customName ?: defaultAccountName
         get() = field.ifBlank { defaultAccountName }
         private set
 

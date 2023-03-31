@@ -10,7 +10,7 @@ import cash.p.terminal.core.providers.Translator
 
 object CreateAccountModule {
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val customName: String? = null) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return CreateAccountViewModel(
@@ -22,7 +22,8 @@ object CreateAccountModule {
                 PredefinedBlockchainSettingsProvider(
                     App.restoreSettingsManager,
                     App.zcashBirthdayProvider
-                )
+                ),
+                customName
             ) as T
         }
     }
