@@ -15,10 +15,11 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 class RestorePrivateKeyViewModel(
     accountFactory: IAccountFactory,
+    customName: String?,
 ) : ViewModel() {
 
     val defaultName = accountFactory.getNextAccountName()
-    var accountName: String = defaultName
+    var accountName: String = customName ?: defaultName
         get() = field.ifBlank { defaultName }
         private set
 

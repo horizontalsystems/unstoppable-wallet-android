@@ -22,6 +22,7 @@ class RestoreMnemonicViewModel(
     accountFactory: IAccountFactory,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
+    customName: String?,
 ) : ViewModel() {
 
     val mnemonicLanguages = Language.values().toList()
@@ -57,7 +58,7 @@ class RestoreMnemonicViewModel(
     private val regex = Regex("\\S+")
 
     val defaultName = accountFactory.getNextAccountName()
-    var accountName: String = defaultName
+    var accountName: String = customName ?: defaultName
         get() = field.ifBlank { defaultName }
         private set
 
