@@ -106,7 +106,7 @@ private fun CreateAccountIntroScreen(navController: NavController, popUpToInclus
                             .clickable {
                                 navController.slideFromRight(
                                     R.id.createAccountAdvancedFragment,
-                                    ManageAccountsModule.prepareParams(popUpToInclusiveId, viewModel.accountName)
+                                    ManageAccountsModule.prepareParams(popUpToInclusiveId)
                                 )
                             }
                             .padding(horizontal = 16.dp),
