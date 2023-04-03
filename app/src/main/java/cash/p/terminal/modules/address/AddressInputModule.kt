@@ -19,6 +19,7 @@ object AddressInputModule {
             when (tokenQuery.blockchainType) {
                 BlockchainType.Bitcoin,
                 BlockchainType.BitcoinCash,
+                BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
@@ -56,6 +57,7 @@ object AddressInputModule {
             when (blockchainType) {
                 BlockchainType.Bitcoin,
                 BlockchainType.BitcoinCash,
+                BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
                 BlockchainType.Zcash,

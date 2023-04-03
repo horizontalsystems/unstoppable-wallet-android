@@ -19,6 +19,7 @@ import cash.p.terminal.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
 import io.horizontalsystems.bitcoinkit.MainNet
 import io.horizontalsystems.dashkit.MainNetDash
+import io.horizontalsystems.ecash.MainNetECash
 import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -55,7 +56,8 @@ class AddressViewModel(
                 BlockchainType.Litecoin,
                 BlockchainType.Zcash,
                 BlockchainType.Solana,
-                BlockchainType.BinanceChain
+                BlockchainType.BinanceChain,
+                BlockchainType.ECash
             )
             val definedBlockchainTypes = definedAddresses?.map { it.blockchain.type } ?: listOf()
             val availableBlockchainUids = allBlockchainTypes.filter { !definedBlockchainTypes.contains(it) }.map { it.uid }
@@ -130,6 +132,11 @@ class AddressViewModel(
             }
             BlockchainType.BitcoinCash -> {
                 val network = MainNetBitcoinCash()
+                rawAddressHandlers.add(AddressHandlerBase58(network))
+                rawAddressHandlers.add(AddressHandlerBitcoinCash(network))
+            }
+            BlockchainType.ECash -> {
+                val network = MainNetECash()
                 rawAddressHandlers.add(AddressHandlerBase58(network))
                 rawAddressHandlers.add(AddressHandlerBitcoinCash(network))
             }

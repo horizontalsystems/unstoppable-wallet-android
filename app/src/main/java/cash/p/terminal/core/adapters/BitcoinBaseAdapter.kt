@@ -33,6 +33,8 @@ abstract class BitcoinBaseAdapter(
     open val syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
     val wallet: Wallet,
+    private val confirmationsThreshold: Int,
+    protected val decimal: Int = 8
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, BackgroundManager.Listener {
 
     init {
@@ -339,9 +341,6 @@ abstract class BitcoinBaseAdapter(
     }
 
     companion object {
-        const val confirmationsThreshold = 3
-        const val decimal = 8
-
         fun getTransactionSortingType(sortType: TransactionDataSortMode?): TransactionDataSortType = when (sortType) {
             TransactionDataSortMode.Bip69 -> TransactionDataSortType.Bip69
             else -> TransactionDataSortType.Shuffle

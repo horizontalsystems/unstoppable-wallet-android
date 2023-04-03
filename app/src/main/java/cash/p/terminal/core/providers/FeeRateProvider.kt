@@ -90,3 +90,9 @@ class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRa
         feeRateProvider.dashFeeRate().blockingGet().toLong()
     }
 }
+
+class ECashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override suspend fun getFeeRate(feeRatePriority: FeeRatePriority) = withContext(Dispatchers.IO) {
+        1L
+    }
+}

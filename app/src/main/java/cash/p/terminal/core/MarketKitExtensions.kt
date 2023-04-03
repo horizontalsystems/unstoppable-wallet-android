@@ -116,6 +116,7 @@ val TokenQuery.isSupported: Boolean
     get() = when (blockchainType) {
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
         BlockchainType.Litecoin,
         BlockchainType.Dash,
         BlockchainType.Zcash -> {
@@ -145,6 +146,7 @@ val Blockchain.description: String
     get() = when (type) {
         BlockchainType.Bitcoin -> "BTC (BIP44, BIP49, BIP84)"
         BlockchainType.BitcoinCash -> "BCH (Legacy, CashAddress)"
+        BlockchainType.ECash -> "XEC"
         BlockchainType.Zcash -> "ZEC"
         BlockchainType.Litecoin -> "LTC (BIP44, BIP49, BIP84)"
         BlockchainType.Dash -> "DASH"
@@ -220,6 +222,7 @@ val BlockchainType.order: Int
         BlockchainType.Optimism -> 14
         BlockchainType.Solana -> 15
         BlockchainType.EthereumGoerli -> 16
+        BlockchainType.ECash -> 17
         else -> Int.MAX_VALUE
     }
 
@@ -276,6 +279,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                         || info.coinType == ExtendedKeyCoinType.Bitcoin && (info.purpose == HDWallet.Purpose.BIP44 || info.purpose == HDWallet.Purpose.BIP49 || info.purpose == HDWallet.Purpose.BIP84)
                 BlockchainType.BitcoinCash -> info.coinType == ExtendedKeyCoinType.Bitcoin && info.purpose == HDWallet.Purpose.BIP44
                 BlockchainType.Dash -> info.coinType == ExtendedKeyCoinType.Bitcoin && info.purpose == HDWallet.Purpose.BIP44
+                BlockchainType.ECash -> info.coinType == ExtendedKeyCoinType.Bitcoin && info.purpose == HDWallet.Purpose.BIP44
                 else -> false
             }
         }

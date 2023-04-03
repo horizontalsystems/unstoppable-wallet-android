@@ -59,6 +59,7 @@ class RestoreBlockchainsService(
         BlockchainType.Litecoin,
         BlockchainType.BinanceChain,
         BlockchainType.Solana,
+        BlockchainType.ECash,
     )
 
     init {

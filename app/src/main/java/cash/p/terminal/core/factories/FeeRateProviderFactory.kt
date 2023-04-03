@@ -2,10 +2,7 @@ package cash.p.terminal.core.factories
 
 import cash.p.terminal.core.App
 import cash.p.terminal.core.IFeeRateProvider
-import cash.p.terminal.core.providers.BitcoinCashFeeRateProvider
-import cash.p.terminal.core.providers.BitcoinFeeRateProvider
-import cash.p.terminal.core.providers.DashFeeRateProvider
-import cash.p.terminal.core.providers.LitecoinFeeRateProvider
+import cash.p.terminal.core.providers.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object FeeRateProviderFactory {
@@ -16,6 +13,7 @@ object FeeRateProviderFactory {
             is BlockchainType.Bitcoin -> BitcoinFeeRateProvider(feeRateProvider)
             is BlockchainType.Litecoin -> LitecoinFeeRateProvider(feeRateProvider)
             is BlockchainType.BitcoinCash -> BitcoinCashFeeRateProvider(feeRateProvider)
+            is BlockchainType.ECash -> ECashFeeRateProvider(feeRateProvider)
             is BlockchainType.Dash -> DashFeeRateProvider(feeRateProvider)
             else -> null
         }

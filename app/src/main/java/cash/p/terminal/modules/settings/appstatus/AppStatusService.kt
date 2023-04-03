@@ -84,7 +84,7 @@ class AppStatusService(
 
     private fun getBitcoinForkStatuses(): Map<String, Any> {
         val bitcoinChainStatus = LinkedHashMap<String, Any>()
-        val blockchainTypesToDisplay = listOf(BlockchainType.Bitcoin, BlockchainType.BitcoinCash, BlockchainType.Dash, BlockchainType.Litecoin)
+        val blockchainTypesToDisplay = listOf(BlockchainType.Bitcoin, BlockchainType.BitcoinCash, BlockchainType.Dash, BlockchainType.Litecoin, BlockchainType.ECash)
 
         walletManager.activeWallets
                 .filter { blockchainTypesToDisplay.contains(it.token.blockchainType) }

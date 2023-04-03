@@ -64,6 +64,9 @@ class WatchAddressService(
                         )
                     )
                 }
+                token(BlockchainType.ECash, accountType)?.let { token ->
+                    add(ConfiguredToken(token))
+                }
             }
         }
     }.sortedBy { it.token.blockchainType.order }

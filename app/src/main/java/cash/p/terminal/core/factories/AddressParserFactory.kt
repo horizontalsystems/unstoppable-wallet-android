@@ -7,6 +7,7 @@ class AddressParserFactory {
     fun parser(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Bitcoin -> AddressParser("bitcoin", true)
         BlockchainType.BitcoinCash -> AddressParser("bitcoincash", false)
+        BlockchainType.ECash -> AddressParser("ecash", false)
         BlockchainType.Litecoin -> AddressParser("litecoin", true)
         BlockchainType.Dash -> AddressParser("dash", true)
         BlockchainType.Zcash -> AddressParser("zcash", true)
