@@ -35,8 +35,8 @@ class RestoreAccountAdvancedFragment : BaseFragment() {
                 ComposeAppTheme {
                     val popUpToInclusiveId =
                         arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
-                    val customName = arguments?.getString(ManageAccountsModule.customNameKey)
-                    AdvancedRestoreScreen(findNavController(), popUpToInclusiveId, customName)
+
+                    AdvancedRestoreScreen(findNavController(), popUpToInclusiveId)
                 }
             }
         }
@@ -47,15 +47,14 @@ class RestoreAccountAdvancedFragment : BaseFragment() {
 fun AdvancedRestoreScreen(
     navController: NavController,
     popUpToInclusiveId: Int,
-    customName: String?,
     restoreMenuViewModel: RestoreMenuViewModel = viewModel(factory = RestoreMenuModule.Factory())
 ) {
     when (restoreMenuViewModel.restoreOption) {
         RestoreOption.RecoveryPhrase -> {
-            RestorePhrase(navController, popUpToInclusiveId, restoreMenuViewModel, advanced = true, customName)
+            RestorePhrase(navController, popUpToInclusiveId, restoreMenuViewModel, advanced = true)
         }
         RestoreOption.PrivateKey -> {
-            RestorePrivateKey(navController, popUpToInclusiveId, restoreMenuViewModel, customName)
+            RestorePrivateKey(navController, popUpToInclusiveId, restoreMenuViewModel)
         }
     }
 }

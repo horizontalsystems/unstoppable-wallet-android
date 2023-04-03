@@ -29,9 +29,8 @@ fun RestorePrivateKey(
     navController: NavController,
     popUpToInclusiveId: Int,
     restoreMenuViewModel: RestoreMenuViewModel,
-    customName: String?
 ) {
-    val viewModel = viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory(customName))
+    val viewModel = viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,

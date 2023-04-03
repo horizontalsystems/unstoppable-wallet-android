@@ -63,10 +63,9 @@ fun RestorePhrase(
     navController: NavController,
     popUpToInclusiveId: Int,
     restoreMenuViewModel: RestoreMenuViewModel,
-    advanced: Boolean,
-    customName: String? = null
+    advanced: Boolean
 ) {
-    val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory(customName))
+    val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
@@ -277,7 +276,7 @@ fun RestorePhrase(
                                 .clickable {
                                     navController.slideFromRight(
                                         R.id.restoreAccountAdvancedFragment,
-                                        ManageAccountsModule.prepareParams(popUpToInclusiveId, viewModel.accountName)
+                                        ManageAccountsModule.prepareParams(popUpToInclusiveId)
                                     )
                                 }
                                 .padding(horizontal = 16.dp),
