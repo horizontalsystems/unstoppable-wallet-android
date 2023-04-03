@@ -24,7 +24,7 @@ class BitcoinCashAdapter(
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), BitcoinCashKit.Listener, ISendBitcoinAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
     constructor(
         wallet: Wallet,
@@ -86,6 +86,7 @@ class BitcoinCashAdapter(
 
 
     companion object {
+        private const val confirmationsThreshold = 3
 
         private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): BitcoinCashKit {
             val account = wallet.account

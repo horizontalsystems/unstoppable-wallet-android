@@ -96,6 +96,7 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
             BlockchainType.ArbitrumOne -> "ETH"
             BlockchainType.Bitcoin -> "BTC"
             BlockchainType.BitcoinCash -> "BCH"
+            BlockchainType.ECash -> "XEC"
             BlockchainType.Litecoin -> "LTC"
             BlockchainType.Dash -> "DASH"
             BlockchainType.Zcash -> "ZEC"

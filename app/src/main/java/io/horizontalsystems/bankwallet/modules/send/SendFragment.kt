@@ -53,6 +53,7 @@ class SendFragment : BaseFragment() {
                 when (wallet.token.blockchainType) {
                     BlockchainType.Bitcoin,
                     BlockchainType.BitcoinCash,
+                    BlockchainType.ECash,
                     BlockchainType.Litecoin,
                     BlockchainType.Dash -> {
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) {

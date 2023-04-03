@@ -14,6 +14,7 @@ class AccountCleaner : IAccountCleaner {
         BinanceAdapter.clear(accountId)
         BitcoinAdapter.clear(accountId)
         BitcoinCashAdapter.clear(accountId)
+        ECashAdapter.clear(accountId)
         DashAdapter.clear(accountId)
         EvmAdapter.clear(accountId)
         Eip20Adapter.clear(accountId)
