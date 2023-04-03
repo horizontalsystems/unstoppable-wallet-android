@@ -104,6 +104,7 @@ class BalanceViewItemFactory {
     private fun getDefaultSyncingProgress(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
         BlockchainType.Litecoin,
         BlockchainType.Dash,
         BlockchainType.Zcash -> 10

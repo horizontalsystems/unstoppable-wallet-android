@@ -59,6 +59,7 @@ class TransactionRecordRepository(
             when (wallet.source.blockchain.type) {
                 BlockchainType.Bitcoin,
                 BlockchainType.BitcoinCash,
+                BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
