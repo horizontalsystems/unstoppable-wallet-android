@@ -6,10 +6,12 @@ import io.horizontalsystems.bankwallet.core.App
 
 object RestorePrivateKeyModule {
 
-    class Factory(private val customName: String?) : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestorePrivateKeyViewModel(App.accountFactory, customName) as T
+            return RestorePrivateKeyViewModel(
+                App.accountFactory
+            ) as T
         }
     }
 
