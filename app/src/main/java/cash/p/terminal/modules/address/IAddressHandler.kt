@@ -41,13 +41,19 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
     private val resolution = Resolution()
     private val chain by lazy { chain(tokenQuery) }
     private val chainCoinCode by lazy { chainCoinCode(tokenQuery.blockchainType) }
+    private val cache = mutableMapOf<String, Address>()
 
     override fun isSupported(value: String): Boolean {
-        return value.contains(".") && resolution.isSupported(value)
+        return try {
+            cache[value] = Address(resolveAddress(value), value)
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(resolveAddress(value), value)
+        return cache[value]!!
     }
 
     private fun resolveAddress(value: String): String {
