@@ -240,7 +240,7 @@ class CoinAnalyticsViewModel(
                         FooterItem(
                             title = TranslatableString.PlainString(blockchain.name),
                             value = percentFormatted,
-                            image = ImageSource.Remote(blockchain.type.imageUrl),
+                            image = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.coin_placeholder),
                             action = CoinAnalyticsModule.ActionType.OpenTokenHolders(coin, blockchain)
                         )
                     )
