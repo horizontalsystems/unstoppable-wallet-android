@@ -139,13 +139,13 @@ private fun MainScreen(
                 selectedAccount = uiState.activeWallet,
                 onSelectListener = {
                     coroutineScope.launch {
-                        modalBottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+                        modalBottomSheetState.hide()
                         viewModel.onSelect(it)
                     }
                 },
                 onCancelClick = {
                     coroutineScope.launch {
-                        modalBottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+                        modalBottomSheetState.hide()
                     }
                 }
             )
@@ -181,9 +181,7 @@ private fun MainScreen(
                                     onLongClick = {
                                         if (item.mainNavItem == MainNavigation.Balance) {
                                             coroutineScope.launch {
-                                                modalBottomSheetState.animateTo(
-                                                    ModalBottomSheetValue.Expanded
-                                                )
+                                                modalBottomSheetState.show()
                                             }
                                         }
                                     }

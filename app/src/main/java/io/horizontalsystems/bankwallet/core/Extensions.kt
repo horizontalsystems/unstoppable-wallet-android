@@ -183,7 +183,7 @@ fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
 }
 
 fun String.shorten(): String {
-    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:")
+    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:", "ecash:")
 
     var prefix = ""
     for (p in prefixes) {
