@@ -15,6 +15,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCRequestModule
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
@@ -56,6 +57,9 @@ class WC2RequestFragment : BaseFragment() {
                         val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
                         val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.wc2RequestFragment) { vmFactory }
                         val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wc2RequestFragment) { vmFactory }
+                        val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(R.id.wc2RequestFragment) { vmFactory }
+
+                        val cachedNonceViewModel = nonceViewModel //needed in SendEvmSettingsFragment
 
                         sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) { transactionHash ->
                             viewModel.approve(transactionHash)

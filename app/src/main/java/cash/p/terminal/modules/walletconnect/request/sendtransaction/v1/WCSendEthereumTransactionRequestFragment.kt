@@ -13,6 +13,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.walletconnect.WalletConnectViewModel
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCRequestModule
@@ -34,12 +35,15 @@ class WCSendEthereumTransactionRequestFragment : BaseFragment() {
     private val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
     private val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.wcSendEthereumTransactionRequestFragment) { vmFactory }
     private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wcSendEthereumTransactionRequestFragment) { vmFactory }
+    private val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(R.id.wcSendEthereumTransactionRequestFragment) { vmFactory }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val cacheNoneViewModel = nonceViewModel //Needed in SendEvmSettingsFragment
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)

@@ -15,6 +15,7 @@ import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmData.AdditionalInfo
 import cash.p.terminal.modules.send.evm.SendEvmData.WalletConnectInfo
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
+import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -82,7 +83,8 @@ object WCRequestModule {
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName))
-        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce)) }
+        private val nonceService by lazy { SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce) }
+        private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
@@ -113,6 +115,9 @@ object WCRequestModule {
                         blockchainType = blockchainType,
                         contactsRepo = App.contactsRepository
                     ) as T
+                }
+                SendEvmNonceViewModel::class.java -> {
+                    SendEvmNonceViewModel(nonceService) as T
                 }
                 else -> throw IllegalArgumentException()
             }
@@ -161,7 +166,8 @@ object WCRequestModule {
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName))
-        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(service.evmKitWrapper.evmKit, transaction.nonce)) }
+        private val nonceService by lazy { SendEvmNonceService(service.evmKitWrapper.evmKit, transaction.nonce) }
+        private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
 
         private val sendService by lazy {
             SendEvmTransactionService(
@@ -193,6 +199,9 @@ object WCRequestModule {
                         blockchainType = blockchainType,
                         contactsRepo = App.contactsRepository
                     ) as T
+                }
+                SendEvmNonceViewModel::class.java -> {
+                    SendEvmNonceViewModel(nonceService) as T
                 }
                 else -> throw IllegalArgumentException()
             }
