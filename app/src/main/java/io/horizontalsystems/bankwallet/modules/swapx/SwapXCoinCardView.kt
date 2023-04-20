@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.coincard
+package io.horizontalsystems.bankwallet.modules.swapx
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,9 +19,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -48,44 +46,48 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapXAmountInputState
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapXCoinCardViewState
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
+
 @Composable
-fun SwapCoinCardView(
-    modifier: Modifier = Modifier,
-    viewModel: SwapCoinCardViewModel,
-    uuid: Long,
-    amountEnabled: Boolean,
+fun SwapXCoinCardView(
+    dex: SwapXMainModule.Dex,
+    cardState: SwapXCoinCardViewState,
     navController: NavController,
+    modifier: Modifier = Modifier,
+    onCoinSelect: (Token) -> Unit,
     focusRequester: FocusRequester = remember { FocusRequester() },
-    isLoading: Boolean = false,
+    onAmountChange: ((String) -> Unit)? = null,
     onFocusChanged: ((Boolean) -> Unit)? = null,
 ) {
-    val token by viewModel.tokenCodeLiveData().observeAsState()
-    val isEstimated by viewModel.isEstimatedLiveData().observeAsState(false)
 
     Row(
         modifier = modifier
             .height(IntrinsicSize.Max)
             .fillMaxWidth()
     ) {
-        SwapAmountInput(
+        SwapXAmountInput(
+            state = cardState.inputState,
             modifier = Modifier
                 .weight(1f)
                 .padding(top = 3.dp),
-            viewModel = viewModel,
-            amountEnabled = amountEnabled,
             focusRequester = focusRequester,
-            amountDimming = isLoading && isEstimated,
-            onFocusChanged = onFocusChanged
+            onFocusChanged = onFocusChanged,
+            onChangeAmount = {
+                onAmountChange?.invoke(it)
+            }
         )
         Spacer(modifier = Modifier.width(6.dp))
         Row(
@@ -99,23 +101,23 @@ fun SwapCoinCardView(
                             val coinBalanceItem = bundle.getParcelable<SwapMainModule.CoinBalanceItem>(
                                 SelectSwapCoinFragment.coinBalanceItemResultKey
                             )
-                            if (requestId == uuid && coinBalanceItem != null) {
-                                viewModel.onSelectCoin(coinBalanceItem.token)
+                            if (requestId == cardState.uuid && coinBalanceItem != null) {
+                                onCoinSelect.invoke(coinBalanceItem.token)
                             }
                         }
 
-//                        val params = SelectSwapCoinFragment.prepareParams(uuid, viewModel.dex)
-//                        navController.slideFromBottom(R.id.selectSwapCoinDialog, params)
+                        val params = SelectSwapCoinFragment.prepareParams(cardState.uuid, dex)
+                        navController.slideFromBottom(R.id.selectSwapCoinDialog, params)
                     }),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CoinImage(
                 modifier = Modifier.size(32.dp),
-                iconUrl = token?.coin?.imageUrl,
-                placeholder = token?.iconPlaceholder ?: R.drawable.coin_placeholder
+                iconUrl = cardState.token?.coin?.imageUrl,
+                placeholder = cardState.token?.iconPlaceholder ?: R.drawable.coin_placeholder
             )
             Spacer(Modifier.width(8.dp))
-            val title = token?.coin?.code
+            val title = cardState.token?.coin?.code
             if (title != null) {
                 subhead1_leah(text = title)
             } else {
@@ -133,29 +135,25 @@ fun SwapCoinCardView(
 }
 
 @Composable
-fun SwapAmountInput(
+private fun SwapXAmountInput(
+    state: SwapXAmountInputState,
     modifier: Modifier = Modifier,
-    viewModel: SwapCoinCardViewModel,
-    amountEnabled: Boolean,
     focusRequester: FocusRequester,
-    amountDimming: Boolean,
+    onChangeAmount: (String) -> Unit,
     onFocusChanged: ((Boolean) -> Unit)?
 ) {
-    val amountData by viewModel.amountLiveData().observeAsState()
-    val secondaryInfo by viewModel.secondaryInfoLiveData().observeAsState()
     var focused by remember { mutableStateOf(false) }
 
     var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
     }
 
-    LaunchedEffect(amountData?.first) {
-        val amount = amountData?.second ?: ""
-        if (!amountsEqual(amount.toBigDecimalOrNull(), textState.text.toBigDecimalOrNull())) {
-            if (!amountDimming || amount.isNotEmpty())
-                textState = textState.copy(text = amount, selection = TextRange(amount.length))
-        }
+//    LaunchedEffect(amountData?.first) {
+    if (!amountsEqual(state.amount.toBigDecimalOrNull(), textState.text.toBigDecimalOrNull())) {
+        if (!state.dimAmount || state.amount.isNotEmpty())
+            textState = textState.copy(text = state.amount, selection = TextRange(state.amount.length))
     }
+//    }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
         BasicTextField(
@@ -167,16 +165,16 @@ fun SwapAmountInput(
                 .focusRequester(focusRequester)
                 .fillMaxWidth(),
             value = textState,
-            enabled = amountEnabled,
+            enabled = state.amountEnabled,
             singleLine = true,
             onValueChange = { textFieldValue ->
-                if (viewModel.isValid(textFieldValue.text)) {
+                if (isValid(textFieldValue.text, state.validDecimals)) {
                     textState = textFieldValue
-                    viewModel.onChangeAmount(textFieldValue.text)
+                    onChangeAmount.invoke(textFieldValue.text)
                 }
             },
             textStyle = ColoredTextStyle(
-                color = if (amountDimming) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
+                color = if (state.dimAmount) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
                 textStyle = ComposeAppTheme.typography.headline1,
                 textAlign = TextAlign.Start
             ),
@@ -190,12 +188,11 @@ fun SwapAmountInput(
                 1.00f to Color.Transparent
             ),
             visualTransformation = { text ->
-                val prefix = amountData?.third
-                if (text.isEmpty() || prefix == null) {
+                if (text.isEmpty() || state.inputParams.primaryPrefix == null) {
                     TransformedText(text, OffsetMapping.Identity)
                 } else {
-                    val out = prefix + text
-                    val prefixOffset = prefix.length
+                    val out = state.inputParams.primaryPrefix + text
+                    val prefixOffset = state.inputParams.primaryPrefix.length
 
                     val offsetTranslator = object : OffsetMapping {
                         override fun originalToTransformed(offset: Int): Int {
@@ -218,7 +215,7 @@ fun SwapAmountInput(
                     if (textState.text.isEmpty()) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = viewModel.inputParams.primaryPrefix ?: "0",
+                            text = state.inputParams.primaryPrefix ?: "0",
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                             color = ComposeAppTheme.colors.grey,
@@ -229,10 +226,10 @@ fun SwapAmountInput(
                     } else if (!focused) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "${viewModel.inputParams.primaryPrefix ?: ""}${textState.text}",
+                            text = "${state.inputParams.primaryPrefix ?: ""}${textState.text}",
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            color = if (amountDimming) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
+                            color = if (state.dimAmount) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
                             style = ComposeAppTheme.typography.headline1,
                             textAlign = TextAlign.Start
                         )
@@ -254,13 +251,23 @@ fun SwapAmountInput(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = secondaryInfo ?: "",
+            text = state.secondaryInfo,
             style = ComposeAppTheme.typography.caption,
             textAlign = TextAlign.Start,
             color = ComposeAppTheme.colors.grey,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
+    }
+}
+
+private fun isValid(amount: String?, validDecimals: Int): Boolean {
+    val newAmount = amount?.toBigDecimalOrNull()
+
+    return when {
+        amount.isNullOrBlank() -> true
+        newAmount != null && newAmount.scale() > validDecimals -> false
+        else -> true
     }
 }
 

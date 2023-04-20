@@ -4,7 +4,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
@@ -37,11 +38,11 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
     }
 
     fun priceImpactViewItem(
-        trade: UniswapTradeService.Trade,
-        minLevel: UniswapTradeService.PriceImpactLevel = UniswapTradeService.PriceImpactLevel.Normal
+        trade: SwapXMainModule.SwapData.UniswapData,
+        minLevel: PriceImpactLevel = PriceImpactLevel.Normal
     ): UniswapModule.PriceImpactViewItem? {
 
-        val priceImpact = trade.tradeData.priceImpact ?: return null
+        val priceImpact = trade.data.priceImpact ?: return null
         val impactLevel = trade.priceImpactLevel ?: return null
         if (impactLevel < minLevel) {
             return null
