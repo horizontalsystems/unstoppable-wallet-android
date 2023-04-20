@@ -9,8 +9,6 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
-import io.horizontalsystems.bankwallet.entities.description
-import io.horizontalsystems.bankwallet.entities.rawName
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
@@ -64,7 +62,7 @@ class CoinSettingsViewModel(
             viewItems = allDerivations.map { derivation ->
                 BottomSheetSelectorViewItem(
                     title = derivation.rawName,
-                    subtitle = derivation.description
+                    subtitle = derivation.addressType
                 )
             },
             description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name),

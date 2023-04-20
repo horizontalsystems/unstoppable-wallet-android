@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.receive
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.entities.addressType
 
 class ReceiveViewModel(
     val wallet: Wallet,

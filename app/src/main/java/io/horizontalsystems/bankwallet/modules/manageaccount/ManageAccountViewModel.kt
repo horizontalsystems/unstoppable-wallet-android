@@ -81,7 +81,7 @@ class ManageAccountViewModel(
                 KeyAction.PublicKeys
             )
             is AccountType.HdExtendedKey -> {
-                if (account.type.hdExtendedKey.info.isPublic) {
+                if (account.type.hdExtendedKey.isPublic) {
                     listOf(KeyAction.PublicKeys)
                 } else {
                     listOf(KeyAction.PrivateKeys, KeyAction.PublicKeys)
