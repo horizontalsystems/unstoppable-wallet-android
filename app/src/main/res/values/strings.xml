@@ -951,13 +951,14 @@
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
-    <string name="ManageCoins_BipsDescription">There are 3 common address formats %s wallets can use to receive incoming payments:
+    <string name="ManageCoins_BipsDescription">There are 4 common address formats %s wallets can use to receive incoming payments:
 \n
 \n- BIP-44 (older)
-\n- BIP-49 (newer)
-\n- BIP-84 (newest)
+\n- BIP-49
+\n- BIP-84 (recommended)
+\n- BIP-86 (newest)
 \n
-\nWhile Unstoppable wallet supports all 3 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
+\nWhile Unstoppable wallet supports all 4 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
     <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
 \n
 \n- TYPE0 (older)
@@ -1197,12 +1198,6 @@
     <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
-
-    <!--Coin Option-->
-
-    <string name="CoinOption_bip44_Title">Old</string>
-    <string name="CoinOption_bip49_Title">Good</string>
-    <string name="CoinOption_bip84_Title">Best</string>
 
     <!--Coin Page-->
 
