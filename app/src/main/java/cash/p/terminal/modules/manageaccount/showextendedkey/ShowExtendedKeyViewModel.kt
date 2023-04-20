@@ -41,7 +41,7 @@ class ShowExtendedKeyViewModel(
             DisplayKeyType.Bip32RootKey -> TranslatableString.ResString(R.string.Bip32RootKey)
         }
 
-    val accountExtendedKey: String
+    val extendedKey: String
         get() {
             val key = if (displayKeyType.isDerivable)
                 keyChain.getKeyByPath("m/${purpose.value}'/${blockchain.coinType}'/$account'")

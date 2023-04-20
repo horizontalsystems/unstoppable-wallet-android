@@ -103,7 +103,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     ) {
                         navController.authorizedAction {
                             navController.slideFromRight(
-                                R.id.accountExtendedKeyFragment,
+                                R.id.showExtendedKeyFragment,
                                 ShowExtendedKeyModule.prepareParams(
                                     key.hdKey,
                                     key.displayKeyType
@@ -119,7 +119,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     ) {
                         navController.authorizedAction {
                             navController.slideFromRight(
-                                R.id.accountExtendedKeyFragment,
+                                R.id.showExtendedKeyFragment,
                                 ShowExtendedKeyModule.prepareParams(key.hdKey, key.displayKeyType)
                             )
                         }

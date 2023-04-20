@@ -37,7 +37,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.launch
 
-class AccountExtendedKeyFragment : BaseFragment(screenshotEnabled = false) {
+class ShowExtendedKeyFragment : BaseFragment(screenshotEnabled = false) {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +61,7 @@ class AccountExtendedKeyFragment : BaseFragment(screenshotEnabled = false) {
                 if (hdExtendedKey == null || displayKeyType == null) {
                     NoExtendKeyScreen()
                 } else {
-                    AccountExtendedKeyScreen(findNavController(), hdExtendedKey, displayKeyType)
+                    ShowExtendedKeyScreen(findNavController(), hdExtendedKey, displayKeyType)
                 }
             }
         }
@@ -71,7 +71,7 @@ class AccountExtendedKeyFragment : BaseFragment(screenshotEnabled = false) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun AccountExtendedKeyScreen(
+private fun ShowExtendedKeyScreen(
     navController: NavController,
     extendedKey: HDExtendedKey,
     displayKeyType: DisplayKeyType
@@ -92,7 +92,7 @@ private fun AccountExtendedKeyScreen(
                 ConfirmCopyBottomSheet(
                     onConfirm = {
                         coroutineScope.launch {
-                            TextHelper.copyText(viewModel.accountExtendedKey)
+                            TextHelper.copyText(viewModel.extendedKey)
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                             sheetState.hide()
                         }
@@ -178,9 +178,9 @@ private fun AccountExtendedKeyScreen(
 
                     Spacer(Modifier.height(32.dp))
                     if (viewModel.displayKeyType.isPrivate) {
-                        HidableContent(viewModel.accountExtendedKey, stringResource(R.string.ExtendedKey_TapToShowPrivateKey))
+                        HidableContent(viewModel.extendedKey, stringResource(R.string.ExtendedKey_TapToShowPrivateKey))
                     } else {
-                        HidableContent(viewModel.accountExtendedKey)
+                        HidableContent(viewModel.extendedKey)
                     }
 
                     if (showPurposeSelectorDialog) {
@@ -232,7 +232,7 @@ private fun AccountExtendedKeyScreen(
                             sheetState.show()
                         }
                     } else {
-                        TextHelper.copyText(viewModel.accountExtendedKey)
+                        TextHelper.copyText(viewModel.extendedKey)
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                     }
                 }
