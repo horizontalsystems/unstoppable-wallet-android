@@ -9,8 +9,6 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.BitcoinCashCoinType
-import cash.p.terminal.entities.description
-import cash.p.terminal.entities.rawName
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import cash.p.terminal.ui.extensions.BottomSheetSelectorViewItem
@@ -64,7 +62,7 @@ class CoinSettingsViewModel(
             viewItems = allDerivations.map { derivation ->
                 BottomSheetSelectorViewItem(
                     title = derivation.rawName,
-                    subtitle = derivation.description
+                    subtitle = derivation.addressType
                 )
             },
             description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name),

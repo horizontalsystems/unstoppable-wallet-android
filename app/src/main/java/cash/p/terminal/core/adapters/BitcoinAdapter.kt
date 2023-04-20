@@ -18,13 +18,18 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
 class BitcoinAdapter(
-        override val kit: BitcoinKit,
-        syncMode: BitcoinCore.SyncMode,
-        backgroundManager: BackgroundManager,
-        wallet: Wallet,
+    override val kit: BitcoinKit,
+    syncMode: BitcoinCore.SyncMode,
+    backgroundManager: BackgroundManager,
+    wallet: Wallet,
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), BitcoinKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, backgroundManager: BackgroundManager) : this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
+    constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, backgroundManager: BackgroundManager) : this(
+        createKit(wallet, syncMode),
+        syncMode,
+        backgroundManager,
+        wallet
+    )
 
     init {
         kit.listener = this
@@ -85,13 +90,15 @@ class BitcoinAdapter(
 
         private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): BitcoinKit {
             val account = wallet.account
-            val accountType = account.type
 
-            when (accountType) {
+            when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
+                    val derivation = wallet.coinSettings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
+
                     return BitcoinKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
+                        purpose = derivation.purpose,
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
@@ -109,7 +116,7 @@ class BitcoinAdapter(
                         syncMode = syncMode,
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold,
-                        purpose = getPurpose(derivation)
+                        purpose = derivation.purpose
                     )
                 }
                 else -> throw UnsupportedAccountException()

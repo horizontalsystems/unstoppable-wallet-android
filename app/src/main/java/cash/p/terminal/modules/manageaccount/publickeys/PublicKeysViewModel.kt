@@ -47,9 +47,9 @@ class PublicKeysViewModel(
         } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Master) {
             accountPublicKey = AccountPublicKey(true)
             hdExtendedKey
-        } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Account && !hdExtendedKey.info.isPublic) {
+        } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Account && !hdExtendedKey.isPublic) {
             hdExtendedKey
-        } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Account && hdExtendedKey.info.isPublic) {
+        } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Account && hdExtendedKey.isPublic) {
             hdExtendedKey
         } else {
             null

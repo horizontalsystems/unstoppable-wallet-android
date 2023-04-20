@@ -158,7 +158,7 @@ class AddressHandlerBase58(network: Network) : IAddressHandler {
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(converter.convert(value).string)
+        return Address(converter.convert(value).stringValue)
     }
 }
 
@@ -173,7 +173,7 @@ class AddressHandlerBech32(network: Network) : IAddressHandler {
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(converter.convert(value).string)
+        return Address(converter.convert(value).stringValue)
     }
 }
 
@@ -188,7 +188,7 @@ class AddressHandlerBitcoinCash(network: Network) : IAddressHandler {
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(converter.convert(value).string)
+        return Address(converter.convert(value).stringValue)
     }
 }
 

@@ -57,7 +57,7 @@ class RestorePrivateKeyViewModel(
 
         try {
             val extendedKey = HDExtendedKey(textCleaned)
-            if (!extendedKey.info.isPublic) {
+            if (!extendedKey.isPublic) {
                 when (extendedKey.derivedType) {
                     HDExtendedKey.DerivedType.Master,
                     HDExtendedKey.DerivedType.Account -> {

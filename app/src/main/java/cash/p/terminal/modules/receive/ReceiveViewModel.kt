@@ -3,7 +3,6 @@ package cash.p.terminal.modules.receive
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.IReceiveAdapter
 import cash.p.terminal.entities.Wallet
-import cash.p.terminal.entities.addressType
 
 class ReceiveViewModel(
     val wallet: Wallet,
