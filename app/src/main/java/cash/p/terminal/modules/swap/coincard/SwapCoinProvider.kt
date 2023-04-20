@@ -6,13 +6,13 @@ import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
-import cash.p.terminal.modules.swap.SwapMainModule.Dex
+import cash.p.terminal.modules.swapx.SwapXMainModule
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class SwapCoinProvider(
-    private val dex: Dex,
+    private val dex: SwapXMainModule.Dex,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val currencyManager: CurrencyManager,

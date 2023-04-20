@@ -7,6 +7,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.Eip20Adapter
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
+import cash.p.terminal.modules.swapx.SwapXMainModule
 import io.horizontalsystems.ethereumkit.models.Address
 
 object SwapApproveModule {
@@ -48,5 +49,6 @@ object SwapApproveModule {
     }
 
     fun prepareParams(approveData: SwapAllowanceService.ApproveData) = bundleOf(dataKey to approveData)
+    fun prepareParams(approveData: SwapXMainModule.ApproveData) = bundleOf(dataKey to approveData)
 
 }

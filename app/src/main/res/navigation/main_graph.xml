@@ -170,7 +170,7 @@
         android:name="cash.p.terminal.modules.addtoken.AddTokenFragment"/>
     <fragment
         android:id="@+id/swapFragment"
-        android:name="cash.p.terminal.modules.swap.SwapMainFragment"
+        android:name="cash.p.terminal.modules.swapx.SwapXMainFragment"
         android:label="@string/Swap"
         tools:layout="@layout/fragment_swap"/>
     <fragment

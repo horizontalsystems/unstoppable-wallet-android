@@ -5,12 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,14 +47,20 @@ import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmation
 import cash.p.terminal.modules.swap.coincard.SwapCoinCardView
 import cash.p.terminal.modules.swap.coincard.SwapCoinCardViewModel
 import cash.p.terminal.modules.swap.confirmation.oneinch.OneInchConfirmationModule
-import cash.p.terminal.modules.swap.ui.*
+import cash.p.terminal.modules.swap.ui.ActionButtons
+import cash.p.terminal.modules.swap.ui.AvailableBalance
+import cash.p.terminal.modules.swap.ui.Price
+import cash.p.terminal.modules.swap.ui.SingleLineGroup
+import cash.p.terminal.modules.swap.ui.SuggestionsBar
+import cash.p.terminal.modules.swap.ui.SwapError
+import cash.p.terminal.modules.swap.ui.SwitchCoinsSection
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
-import java.util.*
+import java.util.UUID
 
 private val uuidFrom = UUID.randomUUID().leastSignificantBits
 private val uuidTo = UUID.randomUUID().leastSignificantBits
@@ -204,7 +220,7 @@ private fun OneInchScreen(
                         }
                     }
                     if (allowanceViewModel.uiState.isVisible && !allowanceViewModel.uiState.revokeRequired) {
-                        infoItems.add { SwapAllowance(allowanceViewModel, navController) }
+//                        infoItems.add { SwapAllowance(allowanceViewModel, navController) }
                     }
                     if (infoItems.isEmpty()) {
                         availableBalance?.let { infoItems.add { AvailableBalance(it) } }

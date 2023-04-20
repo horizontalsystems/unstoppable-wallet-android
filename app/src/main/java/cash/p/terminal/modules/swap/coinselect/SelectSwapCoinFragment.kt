@@ -23,8 +23,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.*
-import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
+import cash.p.terminal.modules.swapx.SwapXMainModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
@@ -42,7 +42,7 @@ class SelectSwapCoinFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val dex = arguments?.getParcelable<SwapMainModule.Dex>(dexKey)
+                val dex = arguments?.getParcelable<SwapXMainModule.Dex>(dexKey)
                 val requestId = arguments?.getLong(requestIdKey)
                 if (dex == null || requestId == null) {
                     findNavController().popBackStack()
@@ -77,7 +77,7 @@ class SelectSwapCoinFragment : BaseFragment() {
         const val requestIdKey = "requestIdKey"
         const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
 
-        fun prepareParams(requestId: Long, dex: SwapMainModule.Dex) = bundleOf(requestIdKey to requestId, dexKey to dex)
+        fun prepareParams(requestId: Long, dex: SwapXMainModule.Dex) = bundleOf(requestIdKey to requestId, dexKey to dex)
     }
 }
 
@@ -85,7 +85,7 @@ class SelectSwapCoinFragment : BaseFragment() {
 @Composable
 fun SelectSwapCoinDialogScreen(
     navController: NavController,
-    dex: SwapMainModule.Dex,
+    dex: SwapXMainModule.Dex,
     onClickItem: (CoinBalanceItem) -> Unit
 ) {
     val viewModel = viewModel<SelectSwapCoinViewModel>(factory = SelectSwapCoinModule.Factory(dex))

@@ -21,7 +21,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.*
+import java.util.UUID
 
 class SwapCoinCardViewModel(
     private val coinCardService: ISwapCoinCardService,
@@ -261,7 +261,7 @@ class SwapCoinCardViewModel(
     }
 
     companion object {
-        private const val maxValidDecimals = 8
+        const val maxValidDecimals = 8
     }
 }
 

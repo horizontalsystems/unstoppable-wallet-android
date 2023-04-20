@@ -75,7 +75,7 @@ class UniswapViewModel(
                     deadline = formatter.deadline(tradeService.tradeOptions.ttl),
                     recipientDomain = tradeService.tradeOptions.recipient?.title,
                     price = primaryPrice,
-                    priceImpact = trade?.let { formatter.priceImpactViewItem(it) }
+//                    priceImpact = trade?.let { formatter.priceImpactViewItem(it) }
                 )
                 val warnings: List<Warning> = if (trade?.priceImpactLevel == UniswapTradeService.PriceImpactLevel.Forbidden)
                     listOf(UniswapModule.UniswapWarnings.PriceImpactWarning)
@@ -286,7 +286,7 @@ class UniswapViewModel(
         return TradeViewItem(
             primaryPrice = primaryPrice,
             secondaryPrice = secondaryPrice,
-            priceImpact = formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
+            //priceImpact = formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
             guaranteedAmount = formatter.guaranteedAmountViewItem(
                 trade.tradeData,
                 tradeService.tokenFrom,

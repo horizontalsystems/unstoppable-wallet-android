@@ -63,8 +63,7 @@ class AmountTypeSwitchService {
         }
 
     private fun syncToggleAvailable() {
-        toggleAvailable = (fromListener?.toggleAvailable ?: false) &&
-                (toListener?.toggleAvailable ?: false)
+        toggleAvailable = (fromListener?.toggleAvailable ?: false) && (toListener?.toggleAvailable ?: false)
         if (!toggleAvailable && amountType == AmountType.Currency) {
             amountType = AmountType.Coin
         }

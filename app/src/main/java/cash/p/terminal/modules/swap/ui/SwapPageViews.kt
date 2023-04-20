@@ -4,12 +4,27 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,9 +40,22 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.swap.SwapActionState
 import cash.p.terminal.modules.swap.SwapButtons
-import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
+import cash.p.terminal.modules.swapx.allowance.SwapAllowanceViewModelX
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.BadgeStepCircle
+import cash.p.terminal.ui.compose.components.BoxTyler44
+import cash.p.terminal.ui.compose.components.ButtonPrimary
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaults
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.ButtonSecondary
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui.compose.components.SecondaryButtonDefaults
+import cash.p.terminal.ui.compose.components.TextImportantError
+import cash.p.terminal.ui.compose.components.subhead1_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui.compose.components.subhead2_lucian
 
 @Composable
 fun SwapError(modifier: Modifier = Modifier, text: String) {
@@ -41,7 +69,7 @@ fun SwapError(modifier: Modifier = Modifier, text: String) {
 
 @Composable
 fun SwapAllowance(
-    viewModel: SwapAllowanceViewModel,
+    viewModel: SwapAllowanceViewModelX,
     navController: NavController
 ) {
     val uiState = viewModel.uiState
