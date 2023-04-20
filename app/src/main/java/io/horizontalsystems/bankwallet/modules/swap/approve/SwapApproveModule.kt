@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
 import io.horizontalsystems.ethereumkit.models.Address
 
 object SwapApproveModule {
@@ -48,5 +49,6 @@ object SwapApproveModule {
     }
 
     fun prepareParams(approveData: SwapAllowanceService.ApproveData) = bundleOf(dataKey to approveData)
+    fun prepareParams(approveData: SwapXMainModule.ApproveData) = bundleOf(dataKey to approveData)
 
 }

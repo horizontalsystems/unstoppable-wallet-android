@@ -167,7 +167,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"/>
     <fragment
         android:id="@+id/swapFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swapx.SwapXMainFragment"
         android:label="@string/Swap"
         tools:layout="@layout/fragment_swap"/>
     <fragment
