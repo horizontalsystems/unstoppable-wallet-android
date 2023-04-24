@@ -6,7 +6,18 @@ import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.Bep2TokenInfoService
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.AddressData
+import io.horizontalsystems.bankwallet.entities.AppVersion
+import io.horizontalsystems.bankwallet.entities.EnabledWallet
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -36,7 +47,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.*
+import java.util.Date
+import java.util.Optional
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 
 interface IAdapterManager {
@@ -72,6 +84,7 @@ interface ILocalStorage {
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
     var balanceHidden: Boolean
+    var balanceAutoHideEnabled: Boolean
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
     var mainShowedOnce: Boolean
