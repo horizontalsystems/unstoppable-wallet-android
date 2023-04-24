@@ -6,7 +6,18 @@ import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.Bep2TokenInfoService
 import cash.p.terminal.core.managers.EvmKitWrapper
-import cash.p.terminal.entities.*
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.AccountOrigin
+import cash.p.terminal.entities.AccountType
+import cash.p.terminal.entities.AddressData
+import cash.p.terminal.entities.AppVersion
+import cash.p.terminal.entities.EnabledWallet
+import cash.p.terminal.entities.LastBlockInfo
+import cash.p.terminal.entities.LaunchPage
+import cash.p.terminal.entities.RestoreSettingRecord
+import cash.p.terminal.entities.SyncMode
+import cash.p.terminal.entities.TransactionDataSortMode
+import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.balance.BalanceSortType
@@ -36,7 +47,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.*
+import java.util.Date
+import java.util.Optional
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 
 interface IAdapterManager {
@@ -72,6 +84,7 @@ interface ILocalStorage {
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
     var balanceHidden: Boolean
+    var balanceAutoHideEnabled: Boolean
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
     var mainShowedOnce: Boolean

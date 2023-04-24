@@ -22,7 +22,8 @@ object AppearanceModule {
                 themeService,
                 App.baseTokenManager,
                 App.balanceViewTypeManager,
-                App.localStorage
+                App.localStorage,
+                App.balanceHiddenManager
             ) as T
         }
     }
