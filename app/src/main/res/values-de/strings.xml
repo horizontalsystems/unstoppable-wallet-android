@@ -792,7 +792,7 @@
     <string name="ManageCoins_Search">Name, Code oder Vertragsadresse</string>
     <string name="ManageCoins_AddToken">Token hinzufügen</string>
     <string name="ManageCoins_NoResults">Keine Ergebnisse gefunden. Versuchen Sie, den Token manuell hinzuzufügen, wenn Sie die Adresse des Smart Contracts kennen.</string>
-    <string name="ManageCoins_BipsDescription">Es gibt 4 gängige Adressformate %@ Brieftaschen können verwendet werden, um eingehende Zahlungen zu erhalten:\n\n- BIP44 (älter)\n- BIP49\n- BIP84 (empfohlen)\n- BIP86 (neueste)\n\nWährend unaufhaltsame Brieftasche alle 4 unterstützt, empfiehlt es eine %s Brieftasche im BIP84-Format zu verwenden.</string>
+    <string name="ManageCoins_BipsDescription">Es gibt 4 gängige Adressformate %s Brieftaschen können verwendet werden, um eingehende Zahlungen zu erhalten:\n\n- BIP44 (älter)\n- BIP49\n- BIP84 (empfohlen)\n- BIP86 (neueste)\n\nWährend unaufhaltsame Brieftasche alle 4 unterstützt, empfiehlt es eine %s Brieftasche im BIP84-Format zu verwenden.</string>
     <string name="ManageCoins_BchTypeDescription">Es gibt 2 Adressformate Bitcoin Cash Wallets zum Empfang eingehender Zahlungen:\n\n- TYPE 0 (älter)\n- TYPE 145 (neuer)\n\nWährend unaufhaltsame Brieftaschen beide unterstützt, empfiehlt es sich, ein Bitcoin Cash Wallet im TYPE 145 Format zu verwenden.</string>
     <string name="ManageCoins_ContractAddress">CONTRACT ADRESSE</string>
     <!-- Experimental Feature -->
