@@ -1,11 +1,15 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.swapx.approve
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,12 +29,17 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
-import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
+import io.horizontalsystems.bankwallet.modules.swapx.approve.SwapApproveModule.dataKey
+import io.horizontalsystems.bankwallet.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
 import io.horizontalsystems.core.findNavController
 
 class SwapApproveFragment : BaseFragment() {
@@ -45,7 +54,7 @@ class SwapApproveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val approveData = requireArguments().getParcelable<SwapAllowanceService.ApproveData>(dataKey)!!
+                val approveData = requireArguments().getParcelable<SwapXMainModule.ApproveData>(dataKey)!!
                 SwapApproveScreen(findNavController(), approveData)
             }
         }
@@ -55,7 +64,7 @@ class SwapApproveFragment : BaseFragment() {
 @Composable
 fun SwapApproveScreen(
     navController: NavController,
-    approveData: SwapAllowanceService.ApproveData
+    approveData: SwapXMainModule.ApproveData
 ) {
     val swapApproveViewModel =
         viewModel<SwapApproveViewModel>(factory = SwapApproveModule.Factory(approveData))

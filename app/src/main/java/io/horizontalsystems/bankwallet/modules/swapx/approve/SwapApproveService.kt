@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.swapx.approve
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator

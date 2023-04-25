@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve.confirmation
+package io.horizontalsystems.bankwallet.modules.swapx.approve.confirmation
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel

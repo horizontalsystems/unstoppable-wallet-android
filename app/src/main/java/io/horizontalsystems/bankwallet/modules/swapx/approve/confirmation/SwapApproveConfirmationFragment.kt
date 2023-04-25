@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve.confirmation
+package io.horizontalsystems.bankwallet.modules.swapx.approve.confirmation
 
 import android.os.Bundle
 import android.os.Handler
@@ -41,7 +41,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceVie
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swapx.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
