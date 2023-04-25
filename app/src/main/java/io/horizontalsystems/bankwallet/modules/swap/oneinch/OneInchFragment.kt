@@ -36,7 +36,6 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -44,7 +43,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.ui.ActionButtons
 import io.horizontalsystems.bankwallet.modules.swap.ui.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.swap.ui.Price
@@ -273,10 +271,10 @@ private fun OneInchScreen(
                     },
                     onTapProceed = {
                         viewModel.proceedParams?.let { params ->
-                            navController.slideFromRight(
-                                R.id.oneInchConfirmationFragment,
-                                OneInchConfirmationModule.prepareParams(params)
-                            )
+//                            navController.slideFromRight(
+//                                R.id.oneInchConfirmationFragment,
+//                                OneInchConfirmationModule.prepareParams(params)
+//                            )
                         }
                     }
                 )

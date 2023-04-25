@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
-import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.AmountTypeItem
@@ -42,6 +41,7 @@ import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceServ
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapPendingAllowanceServiceX
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.bankwallet.modules.swapx.oneinch.OneInchTradeXService
+import io.horizontalsystems.bankwallet.modules.swapx.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swapx.uniswap.UniswapTradeXService
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
@@ -72,7 +72,7 @@ class SwapXMainViewModel(
     private val disposable = CompositeDisposable()
     private val tradeDisposable = CompositeDisposable()
 
-    val dex: SwapXMainModule.Dex
+    private val dex: SwapXMainModule.Dex
         get() = service.dex
 
     val revokeEvmData: SendEvmData?

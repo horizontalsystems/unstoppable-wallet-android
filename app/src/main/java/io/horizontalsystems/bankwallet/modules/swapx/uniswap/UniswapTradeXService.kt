@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swapx.uniswap
 
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
-import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
+import io.horizontalsystems.bankwallet.modules.swapx.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapData.UniswapData
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapResultState

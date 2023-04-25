@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
+package io.horizontalsystems.bankwallet.modules.swapx.confirmation.oneinch
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable

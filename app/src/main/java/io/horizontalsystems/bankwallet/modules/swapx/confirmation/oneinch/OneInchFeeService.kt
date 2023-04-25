@@ -1,9 +1,15 @@
-package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
+package io.horizontalsystems.bankwallet.modules.swapx.confirmation.oneinch
 
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.evmfee.*
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsError
+import io.horizontalsystems.bankwallet.modules.evmfee.GasData
+import io.horizontalsystems.bankwallet.modules.evmfee.GasDataError
+import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
+import io.horizontalsystems.bankwallet.modules.evmfee.IEvmFeeService
+import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
+import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.EthereumKit
