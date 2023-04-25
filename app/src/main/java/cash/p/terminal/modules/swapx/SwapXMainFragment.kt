@@ -31,14 +31,18 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.entities.Address
+import cash.p.terminal.modules.send.evm.SendEvmModule
 import cash.p.terminal.modules.swap.SwapActionState
-import cash.p.terminal.modules.swap.approve.SwapApproveModule
-import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationModule
-import cash.p.terminal.modules.swap.confirmation.oneinch.OneInchConfirmationModule
 import cash.p.terminal.modules.swap.ui.*
 import cash.p.terminal.modules.swap.uniswap.PriceImpact
 import cash.p.terminal.modules.swapx.SwapXMainModule.ProviderTradeData
 import cash.p.terminal.modules.swapx.allowance.SwapAllowanceViewModelX
+import cash.p.terminal.modules.swapx.approve.SwapApproveModule
+import cash.p.terminal.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
+import cash.p.terminal.modules.swapx.confirmation.oneinch.OneInchSwapConfirmationFragment
+import cash.p.terminal.modules.swapx.confirmation.uniswap.UniswapConfirmationFragment
+import cash.p.terminal.modules.swapx.settings.oneinch.OneInchSettingsFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard.Opened
 import cash.p.terminal.ui.compose.TranslatableString
@@ -157,6 +161,7 @@ fun SwapCards(
     val keyboardState by observeKeyboardState()
     var showSuggestions by remember { mutableStateOf(false) }
 
+    val swapState = viewModel.swapState
     val fromState = viewModel.swapState.fromState
     val toState = viewModel.swapState.toState
     val availableBalance = viewModel.swapState.availableBalance
@@ -275,7 +280,7 @@ fun SwapCards(
                     viewModel.revokeEvmData?.let { revokeEvmData ->
                         navController.slideFromBottom(
                             R.id.swapApproveConfirmationFragment,
-                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.dex.blockchainType, false)
+                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, swapState.dex.blockchainType, false)
                         )
                     }
                 },
@@ -298,15 +303,22 @@ fun SwapCards(
                         is SwapXMainModule.SwapData.OneInchData -> {
                             navController.slideFromRight(
                                 R.id.oneInchConfirmationFragment,
-                                OneInchConfirmationModule.prepareParams(swapData.data)
+                                OneInchSwapConfirmationFragment.prepareParams(
+                                    swapState.dex.blockchainType,
+                                    swapData.data
+                                )
                             )
                         }
 
                         is SwapXMainModule.SwapData.UniswapData -> {
                             viewModel.getSendEvmData(swapData)?.let { sendEvmData ->
-                                navController.slideFromBottom(
-                                    R.id.swapApproveConfirmationFragment,
-                                    SwapApproveConfirmationModule.prepareParams(sendEvmData, viewModel.dex.blockchainType, true)
+                                navController.slideFromRight(
+                                    R.id.uniswapConfirmationFragment,
+                                    UniswapConfirmationFragment.prepareParams(
+                                        swapState.dex.blockchainType,
+                                        SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
+                                        sendEvmData.additionalInfo,
+                                    )
                                 )
                             }
                         }

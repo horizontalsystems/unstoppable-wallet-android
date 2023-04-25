@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.confirmation
+package cash.p.terminal.modules.swapx.confirmation
 
 import android.os.Bundle
 import android.os.Handler
@@ -6,7 +6,11 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -19,7 +23,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.BaseFragment
@@ -30,8 +33,6 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
-import cash.p.terminal.modules.swap.SwapMainModule
-import cash.p.terminal.modules.swap.SwapMainViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -50,10 +51,6 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
     protected abstract val feeViewModel: EvmFeeCellViewModel
     protected abstract val nonceViewModel: SendEvmNonceViewModel
     protected abstract val navGraphId: Int
-
-    private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
-    protected val dex: SwapMainModule.Dex
-        get() = mainViewModel.dex
 
     private var snackbarInProcess: CustomSnackbar? = null
 

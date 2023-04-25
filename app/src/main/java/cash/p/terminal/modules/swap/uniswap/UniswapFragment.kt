@@ -44,18 +44,14 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.swap.SwapActionState
 import cash.p.terminal.modules.swap.SwapBaseFragment
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainViewModel
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
-import cash.p.terminal.modules.swap.approve.SwapApproveModule
-import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import cash.p.terminal.modules.swap.coincard.SwapCoinCardView
 import cash.p.terminal.modules.swap.coincard.SwapCoinCardViewModel
-import cash.p.terminal.modules.swap.confirmation.uniswap.UniswapConfirmationModule
 import cash.p.terminal.modules.swap.ui.ActionButtons
 import cash.p.terminal.modules.swap.ui.AvailableBalance
 import cash.p.terminal.modules.swap.ui.Price
@@ -64,6 +60,8 @@ import cash.p.terminal.modules.swap.ui.SuggestionsBar
 import cash.p.terminal.modules.swap.ui.SwapError
 import cash.p.terminal.modules.swap.ui.SwitchCoinsSection
 import cash.p.terminal.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
+import cash.p.terminal.modules.swapx.approve.SwapApproveModule
+import cash.p.terminal.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard
 import cash.p.terminal.ui.compose.components.TextImportantWarning
@@ -291,12 +289,12 @@ private fun UniswapScreen(
                         }
                     },
                     onTapProceed = {
-                        viewModel.proceedParams?.let { sendEvmData ->
-                            navController.slideFromRight(
-                                R.id.uniswapConfirmationFragment,
-                                UniswapConfirmationModule.prepareParams(sendEvmData)
-                            )
-                        }
+//                        viewModel.proceedParams?.let { sendEvmData ->
+//                            navController.slideFromRight(
+//                                R.id.uniswapConfirmationFragment,
+//                                UniswapConfirmationModule.prepareParams(sendEvmData)
+//                            )
+//                        }
                     }
                 )
 

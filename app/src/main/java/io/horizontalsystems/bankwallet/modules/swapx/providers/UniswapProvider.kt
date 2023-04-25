@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.providers
+package cash.p.terminal.modules.swapx.providers
 
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData

@@ -1,9 +1,15 @@
-package cash.p.terminal.modules.swap.confirmation.oneinch
+package cash.p.terminal.modules.swapx.confirmation.oneinch
 
 import cash.p.terminal.core.EvmError
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.evmfee.*
+import cash.p.terminal.modules.evmfee.FeeSettingsError
+import cash.p.terminal.modules.evmfee.GasData
+import cash.p.terminal.modules.evmfee.GasDataError
+import cash.p.terminal.modules.evmfee.GasPriceInfo
+import cash.p.terminal.modules.evmfee.IEvmFeeService
+import cash.p.terminal.modules.evmfee.IEvmGasPriceService
+import cash.p.terminal.modules.evmfee.Transaction
 import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
 import cash.p.terminal.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.EthereumKit

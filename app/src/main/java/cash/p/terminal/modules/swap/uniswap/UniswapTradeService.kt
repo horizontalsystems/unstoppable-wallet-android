@@ -2,8 +2,8 @@ package cash.p.terminal.modules.swap.uniswap
 
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.AmountType
-import cash.p.terminal.modules.swap.providers.UniswapProvider
-import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
+import cash.p.terminal.modules.swapx.providers.UniswapProvider
+import cash.p.terminal.modules.swapx.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token

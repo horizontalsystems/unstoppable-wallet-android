@@ -19,6 +19,7 @@ import cash.p.terminal.core.fiat.AmountTypeSwitchService.AmountType
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.GasDataError
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.swap.SwapActionState
@@ -28,7 +29,6 @@ import cash.p.terminal.modules.swap.SwapViewItemHelper
 import cash.p.terminal.modules.swap.coincard.SwapCoinCardViewModel
 import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
 import cash.p.terminal.modules.swap.oneinch.OneInchSwapParameters
-import cash.p.terminal.modules.swap.providers.UniswapProvider
 import cash.p.terminal.modules.swap.uniswap.UniswapModule
 import cash.p.terminal.modules.swap.uniswap.UniswapTradeService
 import cash.p.terminal.modules.swapx.SwapXMainModule.AmountTypeItem
@@ -41,6 +41,7 @@ import cash.p.terminal.modules.swapx.allowance.SwapAllowanceServiceX
 import cash.p.terminal.modules.swapx.allowance.SwapPendingAllowanceServiceX
 import cash.p.terminal.modules.swapx.allowance.SwapPendingAllowanceState
 import cash.p.terminal.modules.swapx.oneinch.OneInchTradeXService
+import cash.p.terminal.modules.swapx.providers.UniswapProvider
 import cash.p.terminal.modules.swapx.uniswap.UniswapTradeXService
 import cash.p.terminal.ui.compose.Select
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
@@ -71,7 +72,7 @@ class SwapXMainViewModel(
     private val disposable = CompositeDisposable()
     private val tradeDisposable = CompositeDisposable()
 
-    val dex: SwapXMainModule.Dex
+    private val dex: SwapXMainModule.Dex
         get() = service.dex
 
     val revokeEvmData: SendEvmData?

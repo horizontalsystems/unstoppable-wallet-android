@@ -1,11 +1,12 @@
 package cash.p.terminal.modules.swapx.uniswap
 
+import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.swap.SwapMainModule.AmountType
-import cash.p.terminal.modules.swap.providers.UniswapProvider
-import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
+import cash.p.terminal.modules.swapx.providers.UniswapProvider
 import cash.p.terminal.modules.swapx.SwapXMainModule
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapData.UniswapData
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapResultState
+import cash.p.terminal.modules.swapx.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType

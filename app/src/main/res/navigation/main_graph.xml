@@ -77,7 +77,7 @@
         android:name="cash.p.terminal.modules.manageaccount.backupconfirmkey.BackupConfirmKeyFragment" />
     <fragment
         android:id="@+id/backupLocalFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalFragment"/>
+        android:name="cash.p.terminal.modules.backuplocal.BackupLocalFragment"/>
     <fragment
         android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
         android:name="cash.p.terminal.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
@@ -178,10 +178,10 @@
         android:name="cash.p.terminal.modules.swap.approve.SwapApproveFragment" />
     <fragment
         android:id="@+id/uniswapConfirmationFragment"
-        android:name="cash.p.terminal.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"/>
+        android:name="cash.p.terminal.modules.swapx.confirmation.uniswap.UniswapConfirmationFragment"/>
     <fragment
         android:id="@+id/oneInchConfirmationFragment"
-        android:name="cash.p.terminal.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"/>
+        android:name="cash.p.terminal.modules.swapx.confirmation.oneinch.OneInchSwapConfirmationFragment"/>
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
         android:name="cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
@@ -232,10 +232,10 @@
         android:name="cash.p.terminal.modules.restoreaccount.RestoreAccountFragment" />
     <fragment
         android:id="@+id/importWalletFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment" />
+        android:name="cash.p.terminal.modules.importwallet.ImportWalletFragment" />
     <fragment
         android:id="@+id/restoreLocalFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment" />
+        android:name="cash.p.terminal.modules.restorelocal.RestoreLocalFragment" />
     <fragment
         android:id="@+id/watchAddressFragment"
         android:name="cash.p.terminal.modules.watchaddress.WatchAddressFragment" />

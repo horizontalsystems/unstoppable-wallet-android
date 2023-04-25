@@ -10,7 +10,7 @@ import cash.p.terminal.modules.swap.SwapViewItemHelper
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
-import cash.p.terminal.modules.swap.providers.UniswapProvider
+import cash.p.terminal.modules.swapx.providers.UniswapProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.parcelize.Parcelize

@@ -1,39 +1,34 @@
-package cash.p.terminal.modules.swap.confirmation.oneinch
+package cash.p.terminal.modules.swapx.confirmation.uniswap
 
-import android.os.Bundle
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ethereum.CautionViewItemFactory
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
+import cash.p.terminal.modules.evmfee.EvmCommonGasDataService
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.evmfee.EvmFeeService
 import cash.p.terminal.modules.evmfee.IEvmGasPriceService
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyGasPriceService
+import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
+import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
-import cash.p.terminal.modules.swap.SwapViewItemHelper
-import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
-import cash.p.terminal.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-object OneInchConfirmationModule {
-    private const val oneInchSwapParametersKey = "oneInchSwapParametersKey"
+object UniswapConfirmationModule {
 
-    class Factory(val blockchainType: BlockchainType, private val arguments: Bundle) : ViewModelProvider.Factory {
+    class Factory(
+        private val blockchainType: BlockchainType,
+        private val sendEvmData: SendEvmData
+    ) : ViewModelProvider.Factory {
 
-        private val oneInchSwapParameters by lazy {
-            arguments.getParcelable<OneInchSwapParameters>(
-                oneInchSwapParametersKey
-            )!!
-        }
         private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
-        private val oneInchKitHelper by lazy { OneInchKitHelper(evmKitWrapper.evmKit) }
         private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
@@ -46,7 +41,8 @@ object OneInchConfirmationModule {
             }
         }
         private val feeService by lazy {
-            OneInchFeeService(oneInchKitHelper, evmKitWrapper.evmKit, gasPriceService, oneInchSwapParameters)
+            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, 20)
+            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, sendEvmData.transactionData)
         }
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
@@ -56,17 +52,12 @@ object OneInchConfirmationModule {
                 App.coinManager
             )
         }
+        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val nonceService by lazy { SendEvmNonceService(evmKitWrapper.evmKit) }
         private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
         private val sendService by lazy {
-            OneInchSendEvmTransactionService(
-                evmKitWrapper,
-                feeService,
-                settingsService,
-                SwapViewItemHelper(App.numberFormatter)
-            )
+            SendEvmTransactionService(sendEvmData, evmKitWrapper, settingsService, App.evmLabelManager)
         }
-        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -91,6 +82,4 @@ object OneInchConfirmationModule {
         }
     }
 
-    fun prepareParams(oneInchSwapParameters: OneInchSwapParameters) =
-        bundleOf(oneInchSwapParametersKey to oneInchSwapParameters)
 }
