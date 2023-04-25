@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.coinselect
+package io.horizontalsystems.bankwallet.modules.swapx.coinselect
 
 import android.os.Bundle
 import android.os.Handler
