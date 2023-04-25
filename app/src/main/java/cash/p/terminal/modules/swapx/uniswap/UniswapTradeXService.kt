@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.swapx.uniswap
 
 import cash.p.terminal.entities.Address
+import cash.p.terminal.modules.swap.SwapMainModule.AmountType
+import cash.p.terminal.modules.swap.providers.UniswapProvider
 import cash.p.terminal.modules.swapx.SwapXMainModule
-import cash.p.terminal.modules.swapx.SwapXMainModule.ExactType
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapData.UniswapData
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapResultState
-import cash.p.terminal.modules.swapx.providers.UniswapProvider
 import cash.p.terminal.modules.swapx.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
@@ -13,6 +13,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeData
+import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -34,6 +35,9 @@ class UniswapTradeXService(
             field = value
             _stateFlow.update { value }
         }
+
+    override val recipient: Address?
+        get() = tradeOptions.recipient
 
     private val _stateFlow = MutableStateFlow(state)
     override val stateFlow: StateFlow<SwapResultState>
@@ -73,6 +77,14 @@ class UniswapTradeXService(
             }, { error ->
                 state = SwapResultState.NotReady(listOf(error))
             })
+    }
+
+    override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
+        tradeOptions = SwapTradeOptions(
+            slippage ?: TradeOptions.defaultAllowedSlippage,
+            ttl ?: TradeOptions.defaultTtl,
+            recipient
+        )
     }
 
     @Throws

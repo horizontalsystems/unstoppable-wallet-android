@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.settings
+package cash.p.terminal.modules.swapx.settings
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.swap.settings.ui.InputButton
+import cash.p.terminal.modules.swapx.settings.ui.InputButton
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
@@ -26,7 +26,7 @@ interface ISwapSlippageService {
 }
 
 class SwapSlippageViewModel(
-        private val service: ISwapSlippageService
+    private val service: ISwapSlippageService
 ) : ViewModel(), IVerifiedInputViewModel {
 
     private val disposable = CompositeDisposable()
@@ -47,10 +47,10 @@ class SwapSlippageViewModel(
 
     init {
         service.slippageChangeObservable
-                .subscribe { sync() }
-                .let {
-                    disposable.add(it)
-                }
+            .subscribe { sync() }
+            .let {
+                disposable.add(it)
+            }
         sync()
     }
 

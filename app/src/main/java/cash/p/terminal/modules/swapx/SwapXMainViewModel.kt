@@ -22,24 +22,26 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.GasDataError
 import cash.p.terminal.modules.send.evm.SendEvmData
+import cash.p.terminal.modules.swap.SwapActionState
+import cash.p.terminal.modules.swap.SwapButtons
+import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapViewItemHelper
+import cash.p.terminal.modules.swap.coincard.SwapCoinCardViewModel
+import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
+import cash.p.terminal.modules.swap.oneinch.OneInchSwapParameters
+import cash.p.terminal.modules.swap.providers.UniswapProvider
+import cash.p.terminal.modules.swap.uniswap.UniswapModule
+import cash.p.terminal.modules.swap.uniswap.UniswapTradeService
 import cash.p.terminal.modules.swapx.SwapXMainModule.AmountTypeItem
-import cash.p.terminal.modules.swapx.SwapXMainModule.ExactType
 import cash.p.terminal.modules.swapx.SwapXMainModule.ISwapProvider
-import cash.p.terminal.modules.swapx.SwapXMainModule.PriceImpactLevel
 import cash.p.terminal.modules.swapx.SwapXMainModule.ProviderTradeData
 import cash.p.terminal.modules.swapx.SwapXMainModule.ProviderViewItem
-import cash.p.terminal.modules.swapx.SwapXMainModule.SwapActionState
-import cash.p.terminal.modules.swapx.SwapXMainModule.SwapButtons
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapData
-import cash.p.terminal.modules.swapx.SwapXMainModule.SwapError
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapResultState
-import cash.p.terminal.modules.swapx.SwapXMainModule.UniswapWarnings
 import cash.p.terminal.modules.swapx.allowance.SwapAllowanceServiceX
 import cash.p.terminal.modules.swapx.allowance.SwapPendingAllowanceServiceX
 import cash.p.terminal.modules.swapx.allowance.SwapPendingAllowanceState
-import cash.p.terminal.modules.swapx.oneinch.OneInchKitHelper
 import cash.p.terminal.modules.swapx.oneinch.OneInchTradeXService
-import cash.p.terminal.modules.swapx.providers.UniswapProvider
 import cash.p.terminal.modules.swapx.uniswap.UniswapTradeXService
 import cash.p.terminal.ui.compose.Select
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
@@ -125,6 +127,7 @@ class SwapXMainViewModel(
             error = error,
             buttons = buttons,
             hasNonZeroBalance = hasNonZeroBalance,
+            recipient = tradeService.recipient,
         )
     )
         private set
@@ -225,6 +228,7 @@ class SwapXMainViewModel(
             error = error,
             buttons = buttons,
             hasNonZeroBalance = hasNonZeroBalance,
+            recipient = tradeService.recipient,
         )
     }
 
@@ -669,5 +673,4 @@ class SwapXMainViewModel(
         tradeService.updateSwapSettings(recipient, slippage, ttl)
         syncSwapDataState()
     }
-
 }

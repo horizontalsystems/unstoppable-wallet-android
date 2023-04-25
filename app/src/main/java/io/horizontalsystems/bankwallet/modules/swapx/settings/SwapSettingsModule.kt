@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.settings
+package cash.p.terminal.modules.swapx.settings
 
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
@@ -43,6 +43,5 @@ object SwapSettingsModule {
         Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
         null -> null
     }
-
 
 }

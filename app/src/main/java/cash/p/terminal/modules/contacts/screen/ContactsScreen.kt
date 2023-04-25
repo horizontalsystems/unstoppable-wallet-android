@@ -27,7 +27,7 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.contacts.ContactsModule
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
-import cash.p.terminal.modules.swap.settings.Caution
+import cash.p.terminal.modules.swapx.settings.Caution
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString

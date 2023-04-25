@@ -36,25 +36,15 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
-import cash.p.terminal.modules.send.evm.SendEvmModule
-import cash.p.terminal.modules.swapx.SwapXMainModule.PriceImpactLevel
+import cash.p.terminal.modules.swap.SwapActionState
+import cash.p.terminal.modules.swap.approve.SwapApproveModule
+import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import cash.p.terminal.modules.swap.confirmation.oneinch.OneInchConfirmationModule
+import cash.p.terminal.modules.swap.ui.*
+import cash.p.terminal.modules.swap.uniswap.PriceImpact
 import cash.p.terminal.modules.swapx.SwapXMainModule.ProviderTradeData
-import cash.p.terminal.modules.swapx.SwapXMainModule.SwapActionState
 import cash.p.terminal.modules.swapx.allowance.SwapAllowanceViewModelX
-import cash.p.terminal.modules.swapx.approve.SwapApproveModule
-import cash.p.terminal.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
-import cash.p.terminal.modules.swapx.confirmation.oneinch.OneInchSwapConfirmationFragment
-import cash.p.terminal.modules.swapx.confirmation.uniswap.UniswapConfirmationFragment
 import cash.p.terminal.modules.swapx.settings.oneinch.OneInchSettingsFragment
-import cash.p.terminal.modules.swapx.ui.ActionButtons
-import cash.p.terminal.modules.swapx.ui.AvailableBalance
-import cash.p.terminal.modules.swapx.ui.Price
-import cash.p.terminal.modules.swapx.ui.SingleLineGroup
-import cash.p.terminal.modules.swapx.ui.SuggestionsBar
-import cash.p.terminal.modules.swapx.ui.SwapAllowance
-import cash.p.terminal.modules.swapx.ui.SwapError
-import cash.p.terminal.modules.swapx.ui.SwitchCoinsSection
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard.Opened
 import cash.p.terminal.ui.compose.TranslatableString
@@ -148,8 +138,8 @@ private fun SwapMainScreen(
                 ) {
                     TopMenu(
                         viewModel = viewModel,
+                        navController = navController,
                         showProviderSelector = { coroutineScope.launch { modalBottomSheetState.show() } },
-                        onSettingsClick = { navController.slideFromBottom(it) }
                     )
                     SwapCards(
                         navController = navController,
@@ -355,8 +345,8 @@ fun SwapCards(
 @Composable
 private fun TopMenu(
     viewModel: SwapXMainViewModel,
+    navController: NavController,
     showProviderSelector: () -> Unit,
-    onSettingsClick: (Int) -> Unit
 ) {
     val state = viewModel.swapState
     Row(
@@ -385,11 +375,25 @@ private fun TopMenu(
         ButtonSecondaryCircle(
             icon = R.drawable.ic_manage_2,
             onClick = {
-                val destination = when (state.dex.provider) {
-                    SwapXMainModule.OneInchProvider -> R.id.oneinchSettingsFragment
-                    else -> R.id.uniswapSettingsFragment
+                navController.getNavigationResult(SwapXMainModule.resultKey) {
+                    val recipient = it.getParcelable<Address>(SwapXMainModule.swapSettingsRecipientKey)
+                    val slippage = it.getString(SwapXMainModule.swapSettingsSlippageKey)
+                    val ttl = it.getLong(SwapXMainModule.swapSettingsTtlKey)
+                    viewModel.onUpdateSwapSettings(recipient, slippage?.toBigDecimal(), ttl)
                 }
-                onSettingsClick.invoke(destination)
+                when (state.dex.provider) {
+                    SwapXMainModule.OneInchProvider -> {
+                        navController.slideFromBottom(
+                            R.id.oneinchSettingsFragment, OneInchSettingsFragment.prepareParams(state.dex, state.recipient)
+                        )
+                    }
+
+                    SwapXMainModule.UniswapProvider -> {
+                        navController.slideFromBottom(
+                            R.id.uniswapSettingsFragment, OneInchSettingsFragment.prepareParams(state.dex, state.recipient)
+                        )
+                    }
+                }
             }
         )
     }

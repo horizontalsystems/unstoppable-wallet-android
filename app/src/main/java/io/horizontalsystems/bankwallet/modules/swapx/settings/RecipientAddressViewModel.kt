@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.settings
+package cash.p.terminal.modules.swapx.settings
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

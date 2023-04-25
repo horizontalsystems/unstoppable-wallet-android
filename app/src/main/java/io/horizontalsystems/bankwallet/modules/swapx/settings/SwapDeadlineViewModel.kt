@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.settings
+package cash.p.terminal.modules.swapx.settings
 
 import android.util.Range
 import androidx.compose.runtime.getValue
@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.swap.settings.SwapSettingsModule.getState
-import cash.p.terminal.modules.swap.settings.ui.InputButton
+import cash.p.terminal.modules.swapx.settings.SwapSettingsModule.getState
+import cash.p.terminal.modules.swapx.settings.ui.InputButton
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import java.util.*
+import java.util.Optional
 import kotlin.math.floor
 
 interface ISwapDeadlineService {
@@ -91,7 +91,6 @@ class SwapDeadlineViewModel(
         disposable.clear()
     }
 }
-
 
 interface IVerifiedInputViewModel {
     val inputButtons: List<InputButton> get() = listOf()

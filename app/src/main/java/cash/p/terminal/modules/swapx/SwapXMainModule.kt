@@ -7,11 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.Warning
 import cash.p.terminal.core.fiat.AmountTypeSwitchService
 import cash.p.terminal.core.fiat.FiatService
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.CurrencyValue
+import cash.p.terminal.modules.swap.SwapButtons
+import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapViewItemHelper
+import cash.p.terminal.modules.swap.coincard.InputParams
+import cash.p.terminal.modules.swap.oneinch.OneInchSwapParameters
+import cash.p.terminal.modules.swap.uniswap.UniswapModule
+import cash.p.terminal.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
 import cash.p.terminal.modules.swapx.allowance.SwapAllowanceServiceX
 import cash.p.terminal.modules.swapx.allowance.SwapAllowanceViewModelX
 import cash.p.terminal.modules.swapx.allowance.SwapPendingAllowanceServiceX
@@ -32,7 +37,11 @@ import kotlin.math.absoluteValue
 
 object SwapXMainModule {
 
-    private const val tokenFromKey = "tokenFromKey"
+    private const val tokenFromKey = "token_from_key"
+    const val resultKey = "swap_settings_result"
+    const val swapSettingsRecipientKey = "swap_settings_recipient"
+    const val swapSettingsSlippageKey = "swap_settings_slippage"
+    const val swapSettingsTtlKey = "swap_settings_ttl"
 
     fun prepareParams(tokenFrom: Token) = bundleOf(tokenFromKey to tokenFrom)
 
@@ -113,6 +122,7 @@ object SwapXMainModule {
     interface ISwapTradeXService {
         val state: SwapResultState
         val stateFlow: Flow<SwapResultState>
+        val recipient: Address?
 
         fun stop()
         fun fetchSwapData(
@@ -122,6 +132,8 @@ object SwapXMainModule {
             amountTo: BigDecimal?,
             exactType: ExactType
         )
+
+        fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?)
     }
 
     data class SwapState(
@@ -137,6 +149,7 @@ object SwapXMainModule {
         val error: String?,
         val buttons: SwapButtons,
         val hasNonZeroBalance: Boolean?,
+        val recipient: Address?,
     )
 
     data class SwapXCoinCardViewState(

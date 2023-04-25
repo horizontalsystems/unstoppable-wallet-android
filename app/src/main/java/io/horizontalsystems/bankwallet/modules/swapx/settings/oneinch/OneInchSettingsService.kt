@@ -1,32 +1,33 @@
-package cash.p.terminal.modules.swap.settings.oneinch
+package cash.p.terminal.modules.swapx.settings.oneinch
 
 import android.util.Range
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.swap.settings.IRecipientAddressService
-import cash.p.terminal.modules.swap.settings.ISwapSlippageService
-import cash.p.terminal.modules.swap.settings.SwapSettingsModule.InvalidSlippageType
-import cash.p.terminal.modules.swap.settings.SwapSettingsModule.SwapSettingsError
-import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
-import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule.State
+import cash.p.terminal.modules.swapx.settings.IRecipientAddressService
+import cash.p.terminal.modules.swapx.settings.ISwapSlippageService
+import cash.p.terminal.modules.swapx.settings.SwapSettingsModule.InvalidSlippageType
+import cash.p.terminal.modules.swapx.settings.SwapSettingsModule.SwapSettingsError
+import cash.p.terminal.modules.swapx.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
+import cash.p.terminal.modules.swapx.settings.oneinch.OneInchSwapSettingsModule.State
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 
 class OneInchSettingsService(
-    swapSettings: OneInchSwapSettings
+    address: Address?,
 ) : IRecipientAddressService, ISwapSlippageService {
+
+    val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
+    var errors: List<Throwable> = listOf()
+
+    private var recipient: Address? = address
+    private val swapSettings = OneInchSwapSettings(recipient = address)
 
     var state: State = State.Valid(swapSettings)
         private set(value) {
             field = value
             stateObservable.onNext(value)
         }
-
-    val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
-    var errors: List<Throwable> = listOf()
-
-    private var recipient: Address? = swapSettings.recipient
     private var recipientError: Throwable? = null
         set(value) {
             field = value

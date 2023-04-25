@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.settings.ui
+package cash.p.terminal.modules.swapx.settings.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,9 +24,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.address.HSAddressInput
-import cash.p.terminal.modules.swap.settings.RecipientAddressViewModel
-import cash.p.terminal.modules.swap.settings.SwapDeadlineViewModel
-import cash.p.terminal.modules.swap.settings.SwapSlippageViewModel
+import cash.p.terminal.modules.swapx.settings.RecipientAddressViewModel
+import cash.p.terminal.modules.swapx.settings.SwapDeadlineViewModel
+import cash.p.terminal.modules.swapx.settings.SwapSlippageViewModel
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*

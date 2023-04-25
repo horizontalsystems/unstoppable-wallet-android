@@ -187,11 +187,11 @@
         android:name="cash.p.terminal.modules.swapx.approve.confirmation.SwapApproveConfirmationFragment"/>
     <fragment
         android:id="@+id/uniswapSettingsFragment"
-        android:name="cash.p.terminal.modules.swap.settings.uniswap.UniswapSettingsFragment"
+        android:name="cash.p.terminal.modules.swapx.settings.uniswap.UniswapSettingsFragment"
         />
     <fragment
         android:id="@+id/oneinchSettingsFragment"
-        android:name="cash.p.terminal.modules.swap.settings.oneinch.OneInchSettingsFragment"
+        android:name="cash.p.terminal.modules.swapx.settings.oneinch.OneInchSettingsFragment"
         />
     <fragment
         android:id="@+id/marketSearchFragment"
