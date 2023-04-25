@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.approve.confirmation
+package cash.p.terminal.modules.swapx.approve.confirmation
 
 import android.os.Bundle
 import android.os.Handler
@@ -41,7 +41,7 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
-import cash.p.terminal.modules.swap.approve.SwapApproveModule
+import cash.p.terminal.modules.swapx.approve.SwapApproveModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar

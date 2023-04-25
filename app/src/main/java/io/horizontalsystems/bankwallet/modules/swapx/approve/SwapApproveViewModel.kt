@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.approve
+package cash.p.terminal.modules.swapx.approve
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,14 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.modules.send.evm.SendEvmData
-import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swapx.SwapXMainModule
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
 class SwapApproveViewModel(
-        val dex: SwapMainModule.Dex,
-        private val service: SwapApproveService,
-        private val coinService: EvmCoinService
+    val dex: SwapXMainModule.Dex,
+    private val service: SwapApproveService,
+    private val coinService: EvmCoinService
 ) : ViewModel() {
 
     val initialAmount = service.amount?.let {

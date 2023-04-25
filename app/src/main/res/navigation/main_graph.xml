@@ -175,7 +175,7 @@
         tools:layout="@layout/fragment_swap"/>
     <fragment
         android:id="@+id/swapApproveFragment"
-        android:name="cash.p.terminal.modules.swap.approve.SwapApproveFragment" />
+        android:name="cash.p.terminal.modules.swapx.approve.SwapApproveFragment" />
     <fragment
         android:id="@+id/uniswapConfirmationFragment"
         android:name="cash.p.terminal.modules.swapx.confirmation.uniswap.UniswapConfirmationFragment"/>
@@ -184,7 +184,7 @@
         android:name="cash.p.terminal.modules.swapx.confirmation.oneinch.OneInchSwapConfirmationFragment"/>
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
-        android:name="cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
+        android:name="cash.p.terminal.modules.swapx.approve.confirmation.SwapApproveConfirmationFragment"/>
     <fragment
         android:id="@+id/uniswapSettingsFragment"
         android:name="cash.p.terminal.modules.swap.settings.uniswap.UniswapSettingsFragment"

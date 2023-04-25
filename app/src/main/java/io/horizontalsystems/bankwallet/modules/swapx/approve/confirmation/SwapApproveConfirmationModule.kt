@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.approve.confirmation
+package cash.p.terminal.modules.swapx.approve.confirmation
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel

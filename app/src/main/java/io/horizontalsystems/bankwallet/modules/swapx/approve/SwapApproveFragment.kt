@@ -1,11 +1,15 @@
-package cash.p.terminal.modules.swap.approve
+package cash.p.terminal.modules.swapx.approve
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,12 +29,17 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
-import cash.p.terminal.modules.swap.approve.SwapApproveModule.dataKey
-import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import cash.p.terminal.modules.swapx.SwapXMainModule
+import cash.p.terminal.modules.swapx.approve.SwapApproveModule.dataKey
+import cash.p.terminal.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.FormsInput
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui.compose.components.TextPreprocessor
 import io.horizontalsystems.core.findNavController
 
 class SwapApproveFragment : BaseFragment() {
@@ -45,7 +54,7 @@ class SwapApproveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val approveData = requireArguments().getParcelable<SwapAllowanceService.ApproveData>(dataKey)!!
+                val approveData = requireArguments().getParcelable<SwapXMainModule.ApproveData>(dataKey)!!
                 SwapApproveScreen(findNavController(), approveData)
             }
         }
@@ -55,7 +64,7 @@ class SwapApproveFragment : BaseFragment() {
 @Composable
 fun SwapApproveScreen(
     navController: NavController,
-    approveData: SwapAllowanceService.ApproveData
+    approveData: SwapXMainModule.ApproveData
 ) {
     val swapApproveViewModel =
         viewModel<SwapApproveViewModel>(factory = SwapApproveModule.Factory(approveData))

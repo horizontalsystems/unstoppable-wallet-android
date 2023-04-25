@@ -32,16 +32,14 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.send.evm.SendEvmModule
 import cash.p.terminal.modules.swap.SwapActionState
+import cash.p.terminal.modules.swap.confirmation.oneinch.OneInchConfirmationModule
 import cash.p.terminal.modules.swap.ui.*
 import cash.p.terminal.modules.swap.uniswap.PriceImpact
 import cash.p.terminal.modules.swapx.SwapXMainModule.ProviderTradeData
 import cash.p.terminal.modules.swapx.allowance.SwapAllowanceViewModelX
 import cash.p.terminal.modules.swapx.approve.SwapApproveModule
 import cash.p.terminal.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
-import cash.p.terminal.modules.swapx.confirmation.oneinch.OneInchSwapConfirmationFragment
-import cash.p.terminal.modules.swapx.confirmation.uniswap.UniswapConfirmationFragment
 import cash.p.terminal.modules.swapx.settings.oneinch.OneInchSettingsFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard.Opened

@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.swap.SwapActionState
 import cash.p.terminal.modules.swap.SwapBaseFragment
 import cash.p.terminal.modules.swap.SwapMainModule
@@ -43,6 +44,7 @@ import cash.p.terminal.modules.swap.SwapMainViewModel
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.modules.swap.coincard.SwapCoinCardView
 import cash.p.terminal.modules.swap.coincard.SwapCoinCardViewModel
+import cash.p.terminal.modules.swap.confirmation.oneinch.OneInchConfirmationModule
 import cash.p.terminal.modules.swap.ui.ActionButtons
 import cash.p.terminal.modules.swap.ui.AvailableBalance
 import cash.p.terminal.modules.swap.ui.Price
@@ -262,12 +264,12 @@ private fun OneInchScreen(
                             }
                         }
 
-                        viewModel.approveData?.let { data ->
-                            navController.slideFromBottom(
-                                R.id.swapApproveFragment,
-                                SwapApproveModule.prepareParams(data)
-                            )
-                        }
+//                        viewModel.approveData?.let { data ->
+//                            navController.slideFromBottom(
+//                                R.id.swapApproveFragment,
+//                                SwapApproveModule.prepareParams(data)
+//                            )
+//                        }
                     },
                     onTapProceed = {
                         viewModel.proceedParams?.let { params ->

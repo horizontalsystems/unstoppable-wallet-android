@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.approve
+package cash.p.terminal.modules.swapx.approve
 
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
