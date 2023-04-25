@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountT
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.evmfee.GasDataError
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
@@ -125,6 +126,7 @@ class SwapXMainViewModel(
             error = error,
             buttons = buttons,
             hasNonZeroBalance = hasNonZeroBalance,
+            recipient = tradeService.recipient,
         )
     )
         private set
@@ -225,6 +227,7 @@ class SwapXMainViewModel(
             error = error,
             buttons = buttons,
             hasNonZeroBalance = hasNonZeroBalance,
+            recipient = tradeService.recipient,
         )
     }
 
@@ -659,5 +662,10 @@ class SwapXMainViewModel(
             SendEvmData.AdditionalInfo.Uniswap(swapInfo),
             warnings
         )
+    }
+
+    fun onUpdateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
+        tradeService.updateSwapSettings(recipient, slippage, ttl)
+        syncSwapDataState()
     }
 }

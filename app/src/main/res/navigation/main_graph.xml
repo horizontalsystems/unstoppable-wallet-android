@@ -184,11 +184,11 @@
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
     <fragment
         android:id="@+id/uniswapSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swapx.settings.uniswap.UniswapSettingsFragment"
         />
     <fragment
         android:id="@+id/oneinchSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSettingsFragment"
         />
     <fragment
         android:id="@+id/marketSearchFragment"

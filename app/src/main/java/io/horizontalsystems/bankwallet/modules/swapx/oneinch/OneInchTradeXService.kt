@@ -1,13 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.swapx.oneinch
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
-import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapData
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSwapSettingsModule
+import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.oneinchkit.Quote
 import io.reactivex.disposables.Disposable
@@ -28,15 +30,14 @@ class OneInchTradeXService(
             _stateFlow.update { value }
         }
 
+    override val recipient: Address?
+        get() = swapSettings.recipient
+
     private val _stateFlow = MutableStateFlow(state)
     override val stateFlow: StateFlow<SwapResultState>
         get() = _stateFlow
 
-    var swapSettings: OneInchSwapSettings = OneInchSwapSettings()
-        set(value) {
-            field = value
-//            syncQuote()
-        }
+    private var swapSettings = OneInchSwapSettings()
 
     override fun stop() {
         clearDisposables()
@@ -77,6 +78,13 @@ class OneInchTradeXService(
             }, { error ->
                 state = SwapResultState.NotReady(listOf(error))
             })
+    }
+
+    override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
+        swapSettings = OneInchSwapSettings(
+            recipient = recipient,
+            slippage = slippage ?: OneInchSwapSettingsModule.defaultSlippage
+        )
     }
 
     private fun handle(quote: Quote, tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal) {

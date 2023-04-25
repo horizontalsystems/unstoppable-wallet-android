@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.settings.ui
+package io.horizontalsystems.bankwallet.modules.swapx.settings.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,9 +24,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
-import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewModel
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
+import io.horizontalsystems.bankwallet.modules.swapx.settings.RecipientAddressViewModel
+import io.horizontalsystems.bankwallet.modules.swapx.settings.SwapDeadlineViewModel
+import io.horizontalsystems.bankwallet.modules.swapx.settings.SwapSlippageViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*

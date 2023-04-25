@@ -1,32 +1,33 @@
-package io.horizontalsystems.bankwallet.modules.swap.settings.oneinch
+package io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch
 
 import android.util.Range
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
-import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapSlippageService
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.InvalidSlippageType
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettingsError
-import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
-import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.State
+import io.horizontalsystems.bankwallet.modules.swapx.settings.IRecipientAddressService
+import io.horizontalsystems.bankwallet.modules.swapx.settings.ISwapSlippageService
+import io.horizontalsystems.bankwallet.modules.swapx.settings.SwapSettingsModule.InvalidSlippageType
+import io.horizontalsystems.bankwallet.modules.swapx.settings.SwapSettingsModule.SwapSettingsError
+import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
+import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSwapSettingsModule.State
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 
 class OneInchSettingsService(
-    swapSettings: OneInchSwapSettings
+    address: Address?,
 ) : IRecipientAddressService, ISwapSlippageService {
+
+    val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
+    var errors: List<Throwable> = listOf()
+
+    private var recipient: Address? = address
+    private val swapSettings = OneInchSwapSettings(recipient = address)
 
     var state: State = State.Valid(swapSettings)
         private set(value) {
             field = value
             stateObservable.onNext(value)
         }
-
-    val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
-    var errors: List<Throwable> = listOf()
-
-    private var recipient: Address? = swapSettings.recipient
     private var recipientError: Throwable? = null
         set(value) {
             field = value

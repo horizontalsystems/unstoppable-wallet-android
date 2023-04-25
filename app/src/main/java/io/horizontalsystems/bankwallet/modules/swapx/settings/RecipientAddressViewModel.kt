@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.settings
+package io.horizontalsystems.bankwallet.modules.swapx.settings
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

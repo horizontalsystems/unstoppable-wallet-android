@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapButtons
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
@@ -34,7 +35,11 @@ import java.util.*
 
 object SwapXMainModule {
 
-    private const val tokenFromKey = "tokenFromKey"
+    private const val tokenFromKey = "token_from_key"
+    const val resultKey = "swap_settings_result"
+    const val swapSettingsRecipientKey = "swap_settings_recipient"
+    const val swapSettingsSlippageKey = "swap_settings_slippage"
+    const val swapSettingsTtlKey = "swap_settings_ttl"
 
     fun prepareParams(tokenFrom: Token) = bundleOf(tokenFromKey to tokenFrom)
 
@@ -115,6 +120,7 @@ object SwapXMainModule {
     interface ISwapTradeXService {
         val state: SwapResultState
         val stateFlow: Flow<SwapResultState>
+        val recipient: Address?
 
         fun stop()
         fun fetchSwapData(
@@ -124,6 +130,8 @@ object SwapXMainModule {
             amountTo: BigDecimal?,
             amountType: SwapMainModule.AmountType
         )
+
+        fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?)
     }
 
     data class SwapState(
@@ -139,6 +147,7 @@ object SwapXMainModule {
         val error: String?,
         val buttons: SwapButtons,
         val hasNonZeroBalance: Boolean?,
+        val recipient: Address?,
     )
 
     data class SwapXCoinCardViewState(
