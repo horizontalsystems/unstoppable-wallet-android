@@ -791,7 +791,7 @@
     <string name="ManageCoins_Search">이름, 코드 또는 계약 주소</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
-    <string name="ManageCoins_BipsDescription">%s 지갑이 입금을 받는 데 사용할 수 있는 3가지 일반적인 주소 형식이 있습니다.\n\n- BIP44(이전)\n- BIP49(최신)\n- BIP84(최신)\n\nUnstoppable 지갑은 이 3가지 모두를 지원합니다. BIP84 형식으로 작동하는 %s 지갑을 사용하는 것이 좋습니다. 이 형식으로 작동하는 지갑은 %s 거래를 보낼 때 가장 낮은 수수료를 지불합니다.</string>
+    <string name="ManageCoins_BipsDescription">%s 지갑이 입금을 받는 데 사용할 수 있는 4가지 일반적인 주소 형식이 있습니다.\n\n- BIP44(이전)\n- BIP49\n- BIP84(추천)\n- BIP86(최신)\n\nUnstoppable 지갑은 이 4가지 모두를 지원합니다. BIP84 형식으로 작동하는 %s 지갑을 사용하는 것이 좋습니다.</string>
     <string name="ManageCoins_BchTypeDescription">비트코인 캐시 지갑이 수신 지불을 받는 데 사용할 수 있는 2가지 주소 형식이 있습니다.\n\n- 유형 0(이전)\n- 유형 145(최신)\n\nUnstoppable 지갑은 두 가지를 모두 지원하지만 비트코인 캐시를 사용하는 것이 좋습니다. TYPE 145 형식으로 작동하는 지갑.</string>
     <string name="ManageCoins_ContractAddress">계약 주소</string>
     <!-- Experimental Feature -->
