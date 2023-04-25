@@ -48,9 +48,9 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapXAmountInputState
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapXCoinCardViewState
+import io.horizontalsystems.bankwallet.modules.swapx.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
