@@ -33,13 +33,13 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
-import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.ProviderTradeData
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceViewModelX
+import io.horizontalsystems.bankwallet.modules.swapx.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard.Opened

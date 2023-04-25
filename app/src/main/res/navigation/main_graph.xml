@@ -171,7 +171,7 @@
         android:label="@string/Swap" />
     <fragment
         android:id="@+id/swapApproveFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.swapx.approve.SwapApproveFragment" />
     <fragment
         android:id="@+id/uniswapConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"/>
@@ -180,7 +180,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"/>
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.swapx.approve.confirmation.SwapApproveConfirmationFragment"/>
     <fragment
         android:id="@+id/uniswapSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swapx.settings.uniswap.UniswapSettingsFragment"

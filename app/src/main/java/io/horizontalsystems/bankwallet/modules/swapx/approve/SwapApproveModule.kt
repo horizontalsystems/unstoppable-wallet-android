@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.swapx.approve
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
 import io.horizontalsystems.ethereumkit.models.Address
 
@@ -16,7 +15,7 @@ object SwapApproveModule {
     const val resultKey = "result"
     const val dataKey = "data_key"
 
-    class Factory(private val approveData: SwapAllowanceService.ApproveData) :
+    class Factory(private val approveData: SwapXMainModule.ApproveData) :
         ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -43,12 +42,12 @@ object SwapApproveModule {
                     }
                     SwapApproveViewModel(approveData.dex, swapApproveService, coinService) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
         }
     }
 
-    fun prepareParams(approveData: SwapAllowanceService.ApproveData) = bundleOf(dataKey to approveData)
     fun prepareParams(approveData: SwapXMainModule.ApproveData) = bundleOf(dataKey to approveData)
 
 }

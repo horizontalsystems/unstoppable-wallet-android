@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.swapx.approve
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,14 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
 class SwapApproveViewModel(
-        val dex: SwapMainModule.Dex,
-        private val service: SwapApproveService,
-        private val coinService: EvmCoinService
+    val dex: SwapXMainModule.Dex,
+    private val service: SwapApproveService,
+    private val coinService: EvmCoinService
 ) : ViewModel() {
 
     val initialAmount = service.amount?.let {

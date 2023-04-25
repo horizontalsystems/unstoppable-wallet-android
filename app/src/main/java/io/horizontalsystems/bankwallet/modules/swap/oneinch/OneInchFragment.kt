@@ -42,8 +42,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
-import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
@@ -54,6 +52,8 @@ import io.horizontalsystems.bankwallet.modules.swap.ui.SingleLineGroup
 import io.horizontalsystems.bankwallet.modules.swap.ui.SuggestionsBar
 import io.horizontalsystems.bankwallet.modules.swap.ui.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.ui.SwitchCoinsSection
+import io.horizontalsystems.bankwallet.modules.swapx.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -264,12 +264,12 @@ private fun OneInchScreen(
                             }
                         }
 
-                        viewModel.approveData?.let { data ->
-                            navController.slideFromBottom(
-                                R.id.swapApproveFragment,
-                                SwapApproveModule.prepareParams(data)
-                            )
-                        }
+//                        viewModel.approveData?.let { data ->
+//                            navController.slideFromBottom(
+//                                R.id.swapApproveFragment,
+//                                SwapApproveModule.prepareParams(data)
+//                            )
+//                        }
                     },
                     onTapProceed = {
                         viewModel.proceedParams?.let { params ->
