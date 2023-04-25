@@ -1,6 +1,5 @@
-package io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap
+package io.horizontalsystems.bankwallet.modules.swapx.confirmation.uniswap
 
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -13,7 +12,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
@@ -83,10 +81,5 @@ object UniswapConfirmationModule {
             }
         }
     }
-
-    fun prepareParams(sendEvmData: SendEvmData) = bundleOf(
-        SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
-        SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo
-    )
 
 }

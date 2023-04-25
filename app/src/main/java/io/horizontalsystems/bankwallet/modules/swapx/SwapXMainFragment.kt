@@ -32,14 +32,16 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
-import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.ProviderTradeData
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceViewModelX
 import io.horizontalsystems.bankwallet.modules.swapx.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swapx.confirmation.oneinch.OneInchSwapConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.swapx.confirmation.uniswap.UniswapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard.Opened
@@ -159,6 +161,7 @@ fun SwapCards(
     val keyboardState by observeKeyboardState()
     var showSuggestions by remember { mutableStateOf(false) }
 
+    val swapState = viewModel.swapState
     val fromState = viewModel.swapState.fromState
     val toState = viewModel.swapState.toState
     val availableBalance = viewModel.swapState.availableBalance
@@ -277,7 +280,7 @@ fun SwapCards(
                     viewModel.revokeEvmData?.let { revokeEvmData ->
                         navController.slideFromBottom(
                             R.id.swapApproveConfirmationFragment,
-                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.dex.blockchainType, false)
+                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, swapState.dex.blockchainType, false)
                         )
                     }
                 },
@@ -300,15 +303,22 @@ fun SwapCards(
                         is SwapXMainModule.SwapData.OneInchData -> {
                             navController.slideFromRight(
                                 R.id.oneInchConfirmationFragment,
-                                OneInchConfirmationModule.prepareParams(swapData.data)
+                                OneInchSwapConfirmationFragment.prepareParams(
+                                    swapState.dex.blockchainType,
+                                    swapData.data
+                                )
                             )
                         }
 
                         is SwapXMainModule.SwapData.UniswapData -> {
                             viewModel.getSendEvmData(swapData)?.let { sendEvmData ->
-                                navController.slideFromBottom(
-                                    R.id.swapApproveConfirmationFragment,
-                                    SwapApproveConfirmationModule.prepareParams(sendEvmData, viewModel.dex.blockchainType, true)
+                                navController.slideFromRight(
+                                    R.id.uniswapConfirmationFragment,
+                                    UniswapConfirmationFragment.prepareParams(
+                                        swapState.dex.blockchainType,
+                                        SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
+                                        sendEvmData.additionalInfo,
+                                    )
                                 )
                             }
                         }

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.providers
+package io.horizontalsystems.bankwallet.modules.swapx.providers
 
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData

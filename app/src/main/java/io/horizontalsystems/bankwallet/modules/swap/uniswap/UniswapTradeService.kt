@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.uniswap
 
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
-import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
+import io.horizontalsystems.bankwallet.modules.swapx.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swapx.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData

@@ -44,7 +44,6 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
@@ -53,7 +52,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.ui.ActionButtons
 import io.horizontalsystems.bankwallet.modules.swap.ui.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.swap.ui.Price
@@ -291,12 +289,12 @@ private fun UniswapScreen(
 //                        }
                     },
                     onTapProceed = {
-                        viewModel.proceedParams?.let { sendEvmData ->
-                            navController.slideFromRight(
-                                R.id.uniswapConfirmationFragment,
-                                UniswapConfirmationModule.prepareParams(sendEvmData)
-                            )
-                        }
+//                        viewModel.proceedParams?.let { sendEvmData ->
+//                            navController.slideFromRight(
+//                                R.id.uniswapConfirmationFragment,
+//                                UniswapConfirmationModule.prepareParams(sendEvmData)
+//                            )
+//                        }
                     }
                 )
 

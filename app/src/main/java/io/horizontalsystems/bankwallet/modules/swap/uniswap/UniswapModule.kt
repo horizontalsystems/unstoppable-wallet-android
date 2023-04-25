@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
+import io.horizontalsystems.bankwallet.modules.swapx.providers.UniswapProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.parcelize.Parcelize
