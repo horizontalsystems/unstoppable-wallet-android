@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
-import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
+import io.horizontalsystems.bankwallet.modules.swapx.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*

@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.scaleUp
-import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
+import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveEip20Decoration

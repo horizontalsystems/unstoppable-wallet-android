@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.settings
+package io.horizontalsystems.bankwallet.modules.swapx.settings
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.swap.settings.ui.InputButton
+import io.horizontalsystems.bankwallet.modules.swapx.settings.ui.InputButton
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
@@ -26,7 +26,7 @@ interface ISwapSlippageService {
 }
 
 class SwapSlippageViewModel(
-        private val service: ISwapSlippageService
+    private val service: ISwapSlippageService
 ) : ViewModel(), IVerifiedInputViewModel {
 
     private val disposable = CompositeDisposable()
@@ -47,10 +47,10 @@ class SwapSlippageViewModel(
 
     init {
         service.slippageChangeObservable
-                .subscribe { sync() }
-                .let {
-                    disposable.add(it)
-                }
+            .subscribe { sync() }
+            .let {
+                disposable.add(it)
+            }
         sync()
     }
 

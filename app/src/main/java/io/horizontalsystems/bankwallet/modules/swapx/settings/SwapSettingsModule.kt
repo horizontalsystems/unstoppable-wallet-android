@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.settings
+package io.horizontalsystems.bankwallet.modules.swapx.settings
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -43,6 +43,5 @@ object SwapSettingsModule {
         Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
         null -> null
     }
-
 
 }

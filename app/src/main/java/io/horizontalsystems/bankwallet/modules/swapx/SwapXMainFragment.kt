@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
@@ -39,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.PriceImpact
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.ProviderTradeData
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceViewModelX
+import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard.Opened
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -132,8 +134,8 @@ private fun SwapMainScreen(
                 ) {
                     TopMenu(
                         viewModel = viewModel,
+                        navController = navController,
                         showProviderSelector = { coroutineScope.launch { modalBottomSheetState.show() } },
-                        onSettingsClick = { navController.slideFromBottom(it) }
                     )
                     SwapCards(
                         navController = navController,
@@ -331,8 +333,8 @@ fun SwapCards(
 @Composable
 private fun TopMenu(
     viewModel: SwapXMainViewModel,
+    navController: NavController,
     showProviderSelector: () -> Unit,
-    onSettingsClick: (Int) -> Unit
 ) {
     val state = viewModel.swapState
     Row(
@@ -361,11 +363,25 @@ private fun TopMenu(
         ButtonSecondaryCircle(
             icon = R.drawable.ic_manage_2,
             onClick = {
-                val destination = when (state.dex.provider) {
-                    SwapXMainModule.OneInchProvider -> R.id.oneinchSettingsFragment
-                    else -> R.id.uniswapSettingsFragment
+                navController.getNavigationResult(SwapXMainModule.resultKey) {
+                    val recipient = it.getParcelable<Address>(SwapXMainModule.swapSettingsRecipientKey)
+                    val slippage = it.getString(SwapXMainModule.swapSettingsSlippageKey)
+                    val ttl = it.getLong(SwapXMainModule.swapSettingsTtlKey)
+                    viewModel.onUpdateSwapSettings(recipient, slippage?.toBigDecimal(), ttl)
                 }
-                onSettingsClick.invoke(destination)
+                when (state.dex.provider) {
+                    SwapXMainModule.OneInchProvider -> {
+                        navController.slideFromBottom(
+                            R.id.oneinchSettingsFragment, OneInchSettingsFragment.prepareParams(state.dex, state.recipient)
+                        )
+                    }
+
+                    SwapXMainModule.UniswapProvider -> {
+                        navController.slideFromBottom(
+                            R.id.uniswapSettingsFragment, OneInchSettingsFragment.prepareParams(state.dex, state.recipient)
+                        )
+                    }
+                }
             }
         )
     }
