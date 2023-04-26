@@ -201,6 +201,7 @@ class SwapMainViewModel(
         setBalance()
         subscribeToTradeService()
         timerService.start()
+        allowanceService.start()
         syncButtonsState()
     }
 
@@ -624,7 +625,7 @@ class SwapMainViewModel(
     }
 
     fun didApprove() {
-
+        pendingAllowanceService.syncAllowance()
     }
 
     fun getSendEvmData(swapData: SwapData.UniswapData): SendEvmData? {
