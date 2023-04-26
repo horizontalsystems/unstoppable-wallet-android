@@ -15,11 +15,10 @@ import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
-import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceServiceX
+import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/SwapMainModule.kt
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -59,7 +58,7 @@ object SwapXMainModule {
         private val swapMainXService by lazy { SwapMainService(tokenFrom, swapProviders, App.localStorage) }
         private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(swapMainXService.dex.blockchainType).evmKitWrapper?.evmKit!! }
         private val allowanceService by lazy { SwapAllowanceService(App.adapterManager, evmKit) }
-        private val pendingAllowanceService by lazy { SwapPendingAllowanceServiceX(App.adapterManager, allowanceService) }
+        private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val errorShareService by lazy { ErrorShareService() }
 
         @Suppress("UNCHECKED_CAST")

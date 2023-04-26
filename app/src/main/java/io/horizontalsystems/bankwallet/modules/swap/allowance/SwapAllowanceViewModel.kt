@@ -18,7 +18,7 @@ import kotlinx.coroutines.rx2.asFlow
 class SwapAllowanceViewModel(
     private val errorShareService: ErrorShareService,
     private val allowanceService: SwapAllowanceService,
-    private val pendingAllowanceService: SwapPendingAllowanceServiceX,
+    private val pendingAllowanceService: SwapPendingAllowanceService,
     private val formatter: SwapViewItemHelper
 ) : ViewModel() {
 

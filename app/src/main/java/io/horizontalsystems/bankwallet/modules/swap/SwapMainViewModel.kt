@@ -35,14 +35,13 @@ import cash.p.terminal.modules.swap.SwapXMainModule.SwapError
 import cash.p.terminal.modules.swap.SwapXMainModule.SwapResultState
 import cash.p.terminal.modules.swap.SwapXMainModule.UniswapWarnings
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
-import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceServiceX
+import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceState
 import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
 import cash.p.terminal.modules.swap.oneinch.OneInchTradeService
 import cash.p.terminal.modules.swap.providers.UniswapProvider
 import cash.p.terminal.modules.swap.uniswap.UniswapTradeService
 import cash.p.terminal.ui.compose.Select
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/SwapMainViewModel.kt
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -62,7 +61,7 @@ class SwapMainViewModel(
     private val fromTokenService: SwapTokenService,
     private val toTokenService: SwapTokenService,
     private val allowanceService: SwapAllowanceService,
-    private val pendingAllowanceService: SwapPendingAllowanceServiceX,
+    private val pendingAllowanceService: SwapPendingAllowanceService,
     private val errorShareService: ErrorShareService,
     private val timerService: TimerService,
     private val currencyManager: CurrencyManager,
