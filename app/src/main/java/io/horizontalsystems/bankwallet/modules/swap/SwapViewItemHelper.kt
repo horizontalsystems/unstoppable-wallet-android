@@ -3,13 +3,10 @@ package io.horizontalsystems.bankwallet.modules.swap
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.GuaranteedAmountViewItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.PriceImpactLevel
 import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.PriceImpactViewItem
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
-import io.horizontalsystems.uniswapkit.models.TradeType
 import java.math.BigDecimal
 
 class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
@@ -49,33 +46,6 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         }
 
         return PriceImpactViewItem(impactLevel, Translator.getString(R.string.Swap_Percent, priceImpact))
-    }
-
-    fun guaranteedAmountViewItem(
-        tradeData: TradeData,
-        tokenIn: Token?,
-        tokenOut: Token?
-    ): GuaranteedAmountViewItem? {
-        when (tradeData.type) {
-            TradeType.ExactIn -> {
-                val amount = tradeData.amountOutMin ?: return null
-                val token = tokenOut ?: return null
-
-                return GuaranteedAmountViewItem(
-                    Translator.getString(R.string.Swap_MinimumGot),
-                    coinAmount(amount, token.coin.code)
-                )
-            }
-            TradeType.ExactOut -> {
-                val amount = tradeData.amountInMax ?: return null
-                val token = tokenIn ?: return null
-
-                return GuaranteedAmountViewItem(
-                    Translator.getString(R.string.Swap_MaximumPaid),
-                    coinAmount(amount, token.coin.code)
-                )
-            }
-        }
     }
 
     fun slippage(allowedSlippage: BigDecimal): String? {

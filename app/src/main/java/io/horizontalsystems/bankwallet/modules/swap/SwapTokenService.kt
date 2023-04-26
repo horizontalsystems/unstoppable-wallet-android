@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.InputParams
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -31,11 +30,8 @@ class SwapTokenService(
 
     var token: Token? = initialToken
         private set
-    private var inputParams = InputParams(
-        amountType = switchService.amountType,
-        primaryPrefix = if (switchService.amountType == AmountTypeSwitchService.AmountType.Currency) fiatService.currency.symbol else null,
-        switchEnabled = switchService.toggleAvailable
-    )
+    private var primaryPrefix = if (switchService.amountType == AmountTypeSwitchService.AmountType.Currency) fiatService.currency.symbol else null
+
     private var amount = ""
     private var secondaryInfo: String = ""
     private var isEstimated = false
@@ -49,7 +45,7 @@ class SwapTokenService(
             inputState = SwapXMainModule.SwapXAmountInputState(
                 amount = amount,
                 secondaryInfo = secondaryInfo,
-                inputParams = inputParams,
+                primaryPrefix = primaryPrefix,
                 validDecimals = validDecimals,
                 amountEnabled = amountEnabled,
                 dimAmount = isLoading && isEstimated,
@@ -135,9 +131,7 @@ class SwapTokenService(
     }
 
     private fun updateInputFields() {
-        val switchAvailable = switchService.toggleAvailable
-        val prefix = if (switchService.amountType == AmountTypeSwitchService.AmountType.Currency) fiatService.currency.symbol else null
-        inputParams = InputParams(switchService.amountType, prefix, switchAvailable)
+        primaryPrefix = if (switchService.amountType == AmountTypeSwitchService.AmountType.Currency) fiatService.currency.symbol else null
         syncState()
     }
 
