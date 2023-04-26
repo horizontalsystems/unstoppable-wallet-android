@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.send.SendAmountAdvancedService
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.PriceImpactViewItem
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
@@ -76,7 +76,7 @@ data class SendEvmData(
         val deadline: String? = null,
         val recipientDomain: String? = null,
         val price: String? = null,
-        val priceImpact: UniswapModule.PriceImpactViewItem? = null,
+        val priceImpact: PriceImpactViewItem? = null,
         val gasPrice: String? = null,
     ) : Parcelable
 

@@ -47,7 +47,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapXAmountInputState
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapXCoinCardViewState
 import io.horizontalsystems.bankwallet.modules.swapx.coinselect.SelectSwapCoinFragment
@@ -98,7 +98,7 @@ fun SwapXCoinCardView(
                     onClick = {
                         navController.getNavigationResult(SelectSwapCoinFragment.resultBundleKey) { bundle ->
                             val requestId = bundle.getLong(SelectSwapCoinFragment.requestIdKey)
-                            val coinBalanceItem = bundle.getParcelable<SwapMainModule.CoinBalanceItem>(
+                            val coinBalanceItem = bundle.getParcelable<CoinBalanceItem>(
                                 SelectSwapCoinFragment.coinBalanceItemResultKey
                             )
                             if (requestId == cardState.uuid && coinBalanceItem != null) {

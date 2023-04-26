@@ -13,9 +13,9 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSer
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
+import io.horizontalsystems.bankwallet.modules.swapx.SwapViewItemHelper
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.OneInchSwapParameters
+import io.horizontalsystems.bankwallet.modules.swapx.oneinch.OneInchKitHelper
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.marketkit.models.BlockchainType

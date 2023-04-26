@@ -10,8 +10,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.OneInchSwapParameters
+import io.horizontalsystems.bankwallet.modules.swapx.oneinch.OneInchKitHelper
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.oneinchkit.Swap

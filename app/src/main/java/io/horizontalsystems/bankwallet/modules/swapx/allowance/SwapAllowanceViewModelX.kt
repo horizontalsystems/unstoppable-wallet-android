@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swapx.ErrorShareService
+import io.horizontalsystems.bankwallet.modules.swapx.SwapViewItemHelper
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapError
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -73,8 +73,8 @@ class SwapAllowanceViewModelX(
     }
 
     private fun handle(errors: List<Throwable>) {
-        isError = errors.any { it is SwapMainModule.SwapError.InsufficientAllowance }
-        revokeRequired = errors.any { it is SwapMainModule.SwapError.RevokeAllowanceRequired }
+        isError = errors.any { it is SwapError.InsufficientAllowance }
+        revokeRequired = errors.any { it is SwapError.RevokeAllowanceRequired }
 
         syncVisible()
         emitState()

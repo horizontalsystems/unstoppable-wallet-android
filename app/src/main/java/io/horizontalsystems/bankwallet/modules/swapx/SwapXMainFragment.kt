@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +27,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -32,17 +36,25 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
-import io.horizontalsystems.bankwallet.modules.swap.ui.*
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.PriceImpact
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.PriceImpactLevel
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.ProviderTradeData
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceViewModelX
 import io.horizontalsystems.bankwallet.modules.swapx.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swapx.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swapx.confirmation.oneinch.OneInchSwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swapx.confirmation.uniswap.UniswapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSettingsFragment
+import io.horizontalsystems.bankwallet.modules.swapx.ui.ActionButtons
+import io.horizontalsystems.bankwallet.modules.swapx.ui.AvailableBalance
+import io.horizontalsystems.bankwallet.modules.swapx.ui.Price
+import io.horizontalsystems.bankwallet.modules.swapx.ui.SingleLineGroup
+import io.horizontalsystems.bankwallet.modules.swapx.ui.SuggestionsBar
+import io.horizontalsystems.bankwallet.modules.swapx.ui.SwapAllowance
+import io.horizontalsystems.bankwallet.modules.swapx.ui.SwapError
+import io.horizontalsystems.bankwallet.modules.swapx.ui.SwitchCoinsSection
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard.Opened
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -447,6 +459,58 @@ private fun BottomSheetProviderSelector(
             }
         }
         Spacer(Modifier.height(44.dp))
+    }
+}
+
+@Composable
+fun PriceImpact(
+    priceImpact: SwapXMainModule.PriceImpactViewItem,
+    navController: NavController
+) {
+    Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
+        val infoTitle = stringResource(id = R.string.SwapInfo_PriceImpactTitle)
+        val infoText = stringResource(id = R.string.SwapInfo_PriceImpactDescription)
+        Row(
+            modifier = Modifier.clickable(
+                onClick = {
+                    navController.slideFromBottom(
+                        R.id.feeSettingsInfoDialog,
+                        FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
+                    )
+                },
+                interactionSource = MutableInteractionSource(),
+                indication = null
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            subhead2_grey(text = stringResource(R.string.Swap_PriceImpact))
+
+            Image(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                painter = painterResource(id = R.drawable.ic_info_20),
+                contentDescription = ""
+            )
+        }
+        Spacer(Modifier.weight(1f))
+        Text(
+            text = priceImpact.value,
+            style = ComposeAppTheme.typography.subhead2,
+            color = getPriceImpactColor(priceImpact.level),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun getPriceImpactColor(
+    priceImpactLevel: PriceImpactLevel?
+): Color {
+    return when (priceImpactLevel) {
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.remus
+        PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+        else -> ComposeAppTheme.colors.grey
     }
 }
 

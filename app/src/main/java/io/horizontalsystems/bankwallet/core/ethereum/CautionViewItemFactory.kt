@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsError
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsWarning
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.UniswapWarnings
 
 class CautionViewItemFactory(
     private val baseCoinService: EvmCoinService
@@ -40,7 +40,7 @@ class CautionViewItemFactory(
                     CautionViewItem.Type.Warning
                 )
             }
-            UniswapModule.UniswapWarnings.PriceImpactWarning -> {
+            UniswapWarnings.PriceImpactWarning -> {
                 CautionViewItem(
                     Translator.getString(R.string.Swap_PriceImpact),
                     Translator.getString(R.string.Swap_PriceImpactTooHigh),
