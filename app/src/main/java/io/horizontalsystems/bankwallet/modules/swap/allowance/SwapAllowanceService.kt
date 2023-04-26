@@ -78,13 +78,6 @@ class SwapAllowanceService(
             .let { disposables.add(it) }
     }
 
-    fun stop() {
-        disposables.clear()
-
-        allowanceDisposable?.dispose()
-        allowanceDisposable = null
-    }
-
     fun onCleared() {
         disposables.clear()
         allowanceDisposable?.dispose()
