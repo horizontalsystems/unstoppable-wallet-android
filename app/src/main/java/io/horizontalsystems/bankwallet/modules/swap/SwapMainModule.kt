@@ -156,13 +156,11 @@ object SwapXMainModule {
     data class SwapXAmountInputState(
         val amount: String,
         val secondaryInfo: String,
-        val inputParams: InputParams,
+        val primaryPrefix: String?,
         val validDecimals: Int,
         val amountEnabled: Boolean,
         val dimAmount: Boolean,
     )
-
-    data class GuaranteedAmountViewItem(val title: String, val value: String)
 
     @Parcelize
     data class PriceImpactViewItem(val level: PriceImpactLevel, val value: String) : Parcelable
@@ -224,7 +222,6 @@ object SwapXMainModule {
             val primaryPrice: String? = null,
             val secondaryPrice: String? = null,
             val priceImpact: PriceImpactViewItem? = null,
-            val guaranteedAmount: GuaranteedAmountViewItem? = null,
         ) : ProviderTradeData()
     }
 
@@ -359,12 +356,6 @@ object SwapXMainModule {
         val revoke: SwapActionState,
         val approve: SwapActionState,
         val proceed: SwapActionState
-    )
-
-    class InputParams(
-        val amountType: AmountTypeSwitchService.AmountType,
-        val primaryPrefix: String?,
-        val switchEnabled: Boolean
     )
 
 }

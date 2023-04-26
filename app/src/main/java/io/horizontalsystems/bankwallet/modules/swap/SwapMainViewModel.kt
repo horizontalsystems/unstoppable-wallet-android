@@ -477,11 +477,6 @@ class SwapMainViewModel(
                 primaryPrice = primaryPrice,
                 secondaryPrice = secondaryPrice,
                 priceImpact = formatter.priceImpactViewItem(swapData, PriceImpactLevel.Warning),
-                guaranteedAmount = formatter.guaranteedAmountViewItem(
-                    swapData.data,
-                    tokenFrom,
-                    tokenTo
-                )
             )
         )
     }

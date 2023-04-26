@@ -188,11 +188,11 @@ private fun SwapXAmountInput(
                 1.00f to Color.Transparent
             ),
             visualTransformation = { text ->
-                if (text.isEmpty() || state.inputParams.primaryPrefix == null) {
+                if (text.isEmpty() || state.primaryPrefix == null) {
                     TransformedText(text, OffsetMapping.Identity)
                 } else {
-                    val out = state.inputParams.primaryPrefix + text
-                    val prefixOffset = state.inputParams.primaryPrefix.length
+                    val out = state.primaryPrefix + text
+                    val prefixOffset = state.primaryPrefix.length
 
                     val offsetTranslator = object : OffsetMapping {
                         override fun originalToTransformed(offset: Int): Int {
@@ -215,7 +215,7 @@ private fun SwapXAmountInput(
                     if (textState.text.isEmpty()) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = state.inputParams.primaryPrefix ?: "0",
+                            text = state.primaryPrefix ?: "0",
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                             color = ComposeAppTheme.colors.grey,
@@ -226,7 +226,7 @@ private fun SwapXAmountInput(
                     } else if (!focused) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "${state.inputParams.primaryPrefix ?: ""}${textState.text}",
+                            text = "${state.primaryPrefix ?: ""}${textState.text}",
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                             color = if (state.dimAmount) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
