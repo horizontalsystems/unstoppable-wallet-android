@@ -62,7 +62,7 @@ import java.math.BigDecimal
 
 
 @Composable
-fun SwapXCoinCardView(
+fun SwapCoinCardView(
     dex: SwapXMainModule.Dex,
     cardState: SwapXCoinCardViewState,
     navController: NavController,
@@ -78,7 +78,7 @@ fun SwapXCoinCardView(
             .height(IntrinsicSize.Max)
             .fillMaxWidth()
     ) {
-        SwapXAmountInput(
+        SwapAmountInput(
             state = cardState.inputState,
             modifier = Modifier
                 .weight(1f)
@@ -135,7 +135,7 @@ fun SwapXCoinCardView(
 }
 
 @Composable
-private fun SwapXAmountInput(
+private fun SwapAmountInput(
     state: SwapXAmountInputState,
     modifier: Modifier = Modifier,
     focusRequester: FocusRequester,

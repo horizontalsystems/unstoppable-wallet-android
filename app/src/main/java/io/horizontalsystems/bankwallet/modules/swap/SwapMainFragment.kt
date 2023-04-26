@@ -204,7 +204,7 @@ fun SwapCards(
                     .background(ComposeAppTheme.colors.lawrence)
             ) {
 
-                SwapXCoinCardView(
+                SwapCoinCardView(
                     dex = viewModel.swapState.dex,
                     cardState = fromState,
                     navController = navController,
@@ -220,7 +220,7 @@ fun SwapCards(
                 SwitchCoinsSection { viewModel.onTapSwitch() }
                 VSpacer(8.dp)
 
-                SwapXCoinCardView(
+                SwapCoinCardView(
                     dex = viewModel.swapState.dex,
                     cardState = toState,
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 22.dp),
