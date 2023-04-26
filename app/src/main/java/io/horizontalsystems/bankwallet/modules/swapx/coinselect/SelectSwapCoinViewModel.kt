@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinProvider
 
 class SelectSwapCoinViewModel(private val swapCoinProvider: SwapCoinProvider) : ViewModel() {
 

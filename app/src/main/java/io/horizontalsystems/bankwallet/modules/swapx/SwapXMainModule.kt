@@ -7,16 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.SwapButtons
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
-import io.horizontalsystems.bankwallet.modules.swap.coincard.InputParams
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceServiceX
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceViewModelX
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapPendingAllowanceServiceX
@@ -31,7 +26,9 @@ import io.horizontalsystems.uniswapkit.models.TradeData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
+import kotlin.math.absoluteValue
 
 object SwapXMainModule {
 
@@ -128,7 +125,7 @@ object SwapXMainModule {
             tokenTo: Token?,
             amountFrom: BigDecimal?,
             amountTo: BigDecimal?,
-            amountType: SwapMainModule.AmountType
+            exactType: ExactType
         )
 
         fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?)
@@ -164,6 +161,11 @@ object SwapXMainModule {
         val amountEnabled: Boolean,
         val dimAmount: Boolean,
     )
+
+    data class GuaranteedAmountViewItem(val title: String, val value: String)
+
+    @Parcelize
+    data class PriceImpactViewItem(val level: PriceImpactLevel, val value: String) : Parcelable
 
     sealed class AmountTypeItem : WithTranslatableTitle {
         object Coin : AmountTypeItem()
@@ -221,8 +223,8 @@ object SwapXMainModule {
         class UniswapTradeViewItem(
             val primaryPrice: String? = null,
             val secondaryPrice: String? = null,
-            val priceImpact: UniswapModule.PriceImpactViewItem? = null,
-            val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null,
+            val priceImpact: PriceImpactViewItem? = null,
+            val guaranteedAmount: GuaranteedAmountViewItem? = null,
         ) : ProviderTradeData()
     }
 
@@ -301,4 +303,78 @@ object SwapXMainModule {
         val allowance: BigDecimal
     ) : Parcelable
 
+    @Parcelize
+    enum class PriceImpactLevel : Parcelable {
+        Normal, Warning, Forbidden
+    }
+
+    abstract class UniswapWarnings : Warning() {
+        object PriceImpactWarning : UniswapWarnings()
+    }
+
+    @Parcelize
+    data class OneInchSwapParameters(
+        val tokenFrom: Token,
+        val tokenTo: Token,
+        val amountFrom: BigDecimal,
+        val amountTo: BigDecimal,
+        val slippage: BigDecimal,
+        val recipient: Address? = null
+    ) : Parcelable
+
+    sealed class SwapError : Throwable() {
+        object InsufficientBalanceFrom : SwapError()
+        object InsufficientAllowance : SwapError()
+        object RevokeAllowanceRequired : SwapError()
+    }
+
+    @Parcelize
+    data class CoinBalanceItem(
+        val token: Token,
+        val balance: BigDecimal?,
+        val fiatBalanceValue: CurrencyValue?,
+    ) : Parcelable
+
+    enum class ExactType {
+        ExactFrom, ExactTo
+    }
+
+    sealed class SwapActionState {
+        object Hidden : SwapActionState()
+        class Enabled(val buttonTitle: String) : SwapActionState()
+        class Disabled(val buttonTitle: String, val loading: Boolean = false) : SwapActionState()
+
+        val title: String
+            get() = when (this) {
+                is Enabled -> this.buttonTitle
+                is Disabled -> this.buttonTitle
+                else -> ""
+            }
+
+        val showProgress: Boolean
+            get() = this is Disabled && loading
+    }
+
+    data class SwapButtons(
+        val revoke: SwapActionState,
+        val approve: SwapActionState,
+        val proceed: SwapActionState
+    )
+
+    class InputParams(
+        val amountType: AmountTypeSwitchService.AmountType,
+        val primaryPrefix: String?,
+        val switchEnabled: Boolean
+    )
+
+}
+
+fun BigDecimal.scaleUp(scale: Int): BigInteger {
+    val exponent = scale - scale()
+
+    return if (exponent >= 0) {
+        unscaledValue() * BigInteger.TEN.pow(exponent)
+    } else {
+        unscaledValue() / BigInteger.TEN.pow(exponent.absoluteValue)
+    }
 }

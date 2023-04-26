@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.ui
+package io.horizontalsystems.bankwallet.modules.swapx.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -38,8 +38,8 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
-import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
-import io.horizontalsystems.bankwallet.modules.swap.SwapButtons
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapActionState
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapButtons
 import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceViewModelX
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeStepCircle

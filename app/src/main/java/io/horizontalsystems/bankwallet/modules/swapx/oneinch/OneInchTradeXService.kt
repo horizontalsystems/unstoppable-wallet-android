@@ -2,10 +2,9 @@ package io.horizontalsystems.bankwallet.modules.swapx.oneinch
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.ExactType
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapData
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapResultState
 import io.horizontalsystems.bankwallet.modules.swapx.settings.oneinch.OneInchSwapSettingsModule
@@ -57,7 +56,7 @@ class OneInchTradeXService(
         tokenTo: Token?,
         amountFrom: BigDecimal?,
         amountTo: BigDecimal?,
-        amountType: SwapMainModule.AmountType
+        exactType: ExactType
     ) {
         quoteDisposable?.dispose()
         quoteDisposable = null

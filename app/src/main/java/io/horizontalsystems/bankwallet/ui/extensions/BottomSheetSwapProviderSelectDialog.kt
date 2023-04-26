@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -17,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.ISwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -25,9 +29,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class BottomSheetSwapProviderSelectDialog() : BaseComposableBottomSheetFragment() {
 
-    var items: List<SwapMainModule.ISwapProvider>? = null
-    var selectedItem: SwapMainModule.ISwapProvider? = null
-    var onSelectListener: ((SwapMainModule.ISwapProvider) -> Unit)? = null
+    var items: List<ISwapProvider>? = null
+    var selectedItem: ISwapProvider? = null
+    var onSelectListener: ((ISwapProvider) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,9 +59,9 @@ class BottomSheetSwapProviderSelectDialog() : BaseComposableBottomSheetFragment(
 
 @Composable
 private fun BottomSheetScreen(
-    swapProviders: List<SwapMainModule.ISwapProvider>?,
-    selectedItem: SwapMainModule.ISwapProvider?,
-    onSelectListener: ((SwapMainModule.ISwapProvider) -> Unit)?,
+    swapProviders: List<ISwapProvider>?,
+    selectedItem: ISwapProvider?,
+    onSelectListener: ((ISwapProvider) -> Unit)?,
     onCloseClick: () -> Unit
 ) {
     val context = LocalContext.current

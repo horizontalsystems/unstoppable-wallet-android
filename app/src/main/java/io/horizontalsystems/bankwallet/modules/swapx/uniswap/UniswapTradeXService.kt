@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.swapx.uniswap
 
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
-import io.horizontalsystems.bankwallet.modules.swapx.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.ExactType
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapData.UniswapData
 import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swapx.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swapx.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
@@ -57,7 +57,7 @@ class UniswapTradeXService(
         tokenTo: Token?,
         amountFrom: BigDecimal?,
         amountTo: BigDecimal?,
-        amountType: AmountType
+        exactType: ExactType
     ) {
         if (tokenFrom == null || tokenTo == null) {
             state = SwapResultState.NotReady()
@@ -73,7 +73,7 @@ class UniswapTradeXService(
             .subscribeOn(Schedulers.io())
             .subscribe({
                 swapData = it
-                syncTradeData(amountType, amountFrom, amountTo, tokenFrom, tokenTo)
+                syncTradeData(exactType, amountFrom, amountTo, tokenFrom, tokenTo)
             }, { error ->
                 state = SwapResultState.NotReady(listOf(error))
             })
@@ -97,10 +97,10 @@ class UniswapTradeXService(
         swapDataDisposable = null
     }
 
-    private fun syncTradeData(amountType: AmountType, amountFrom: BigDecimal?, amountTo: BigDecimal?, tokenFrom: Token, tokenTo: Token) {
+    private fun syncTradeData(exactType: ExactType, amountFrom: BigDecimal?, amountTo: BigDecimal?, tokenFrom: Token, tokenTo: Token) {
         val swapData = swapData ?: return
 
-        val amount = if (amountType == AmountType.ExactFrom) amountFrom else amountTo
+        val amount = if (exactType == ExactType.ExactFrom) amountFrom else amountTo
 
         if (amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
             state = SwapResultState.NotReady()
@@ -108,9 +108,9 @@ class UniswapTradeXService(
         }
 
         try {
-            val tradeType = when (amountType) {
-                AmountType.ExactFrom -> TradeType.ExactIn
-                AmountType.ExactTo -> TradeType.ExactOut
+            val tradeType = when (exactType) {
+                ExactType.ExactFrom -> TradeType.ExactIn
+                ExactType.ExactTo -> TradeType.ExactOut
             }
             val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             state = SwapResultState.Ready(UniswapData(tradeData))
