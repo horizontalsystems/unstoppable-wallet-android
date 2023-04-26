@@ -6,8 +6,6 @@ import cash.p.terminal.core.fiat.FiatService
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.send.SendModule
-import cash.p.terminal.modules.swap.SwapXMainModule.InputParams
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/SwapTokenService.kt
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -32,11 +30,8 @@ class SwapTokenService(
 
     var token: Token? = initialToken
         private set
-    private var inputParams = InputParams(
-        amountType = switchService.amountType,
-        primaryPrefix = if (switchService.amountType == AmountTypeSwitchService.AmountType.Currency) fiatService.currency.symbol else null,
-        switchEnabled = switchService.toggleAvailable
-    )
+    private var primaryPrefix = if (switchService.amountType == AmountTypeSwitchService.AmountType.Currency) fiatService.currency.symbol else null
+
     private var amount = ""
     private var secondaryInfo: String = ""
     private var isEstimated = false
@@ -50,7 +45,7 @@ class SwapTokenService(
             inputState = SwapXMainModule.SwapXAmountInputState(
                 amount = amount,
                 secondaryInfo = secondaryInfo,
-                inputParams = inputParams,
+                primaryPrefix = primaryPrefix,
                 validDecimals = validDecimals,
                 amountEnabled = amountEnabled,
                 dimAmount = isLoading && isEstimated,
@@ -136,9 +131,7 @@ class SwapTokenService(
     }
 
     private fun updateInputFields() {
-        val switchAvailable = switchService.toggleAvailable
-        val prefix = if (switchService.amountType == AmountTypeSwitchService.AmountType.Currency) fiatService.currency.symbol else null
-        inputParams = InputParams(switchService.amountType, prefix, switchAvailable)
+        primaryPrefix = if (switchService.amountType == AmountTypeSwitchService.AmountType.Currency) fiatService.currency.symbol else null
         syncState()
     }
 
