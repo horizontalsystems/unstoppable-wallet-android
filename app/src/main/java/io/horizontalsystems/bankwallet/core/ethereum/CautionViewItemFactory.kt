@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsError
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsWarning
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
-import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.UniswapWarnings
+import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.UniswapWarnings
 
 class CautionViewItemFactory(
     private val baseCoinService: EvmCoinService

@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.send.SendAmountAdvancedService
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
-import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.PriceImpactViewItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.PriceImpactViewItem
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
