@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.modules.swapx.SwapXMainModule.ISwapProvider
+import cash.p.terminal.modules.swap.SwapXMainModule.ISwapProvider
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.RowUniversal

@@ -14,7 +14,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.swapx.settings.Caution
+import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*

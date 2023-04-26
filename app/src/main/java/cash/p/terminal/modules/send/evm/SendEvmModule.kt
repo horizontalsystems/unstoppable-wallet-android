@@ -11,7 +11,7 @@ import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.send.SendAmountAdvancedService
 import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
-import cash.p.terminal.modules.swapx.SwapXMainModule.PriceImpactViewItem
+import cash.p.terminal.modules.swap.SwapXMainModule.PriceImpactViewItem
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token

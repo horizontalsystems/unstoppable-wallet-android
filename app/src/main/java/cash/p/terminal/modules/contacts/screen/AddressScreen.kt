@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
-import cash.p.terminal.modules.swapx.settings.Caution
+import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*

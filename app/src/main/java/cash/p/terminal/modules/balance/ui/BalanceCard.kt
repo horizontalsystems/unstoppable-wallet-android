@@ -38,11 +38,20 @@ import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.receive.ReceiveFragment
 import cash.p.terminal.modules.send.SendFragment
-import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapXMainModule
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.CellMultilineClear
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.RateColor
+import cash.p.terminal.ui.compose.components.RateText
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 
