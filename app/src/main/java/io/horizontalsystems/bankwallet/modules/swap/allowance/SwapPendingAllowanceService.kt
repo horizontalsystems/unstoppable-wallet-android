@@ -21,7 +21,7 @@ enum class SwapPendingAllowanceState {
     fun loading() = this == Revoking || this == Approving
 }
 
-class SwapPendingAllowanceServiceX(
+class SwapPendingAllowanceService(
     private val adapterManager: IAdapterManager,
     private val allowanceService: SwapAllowanceService
 ) {

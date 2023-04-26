@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceServiceX
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -57,7 +57,7 @@ object SwapXMainModule {
         private val swapMainXService by lazy { SwapMainService(tokenFrom, swapProviders, App.localStorage) }
         private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(swapMainXService.dex.blockchainType).evmKitWrapper?.evmKit!! }
         private val allowanceService by lazy { SwapAllowanceService(App.adapterManager, evmKit) }
-        private val pendingAllowanceService by lazy { SwapPendingAllowanceServiceX(App.adapterManager, allowanceService) }
+        private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val errorShareService by lazy { ErrorShareService() }
 
         @Suppress("UNCHECKED_CAST")

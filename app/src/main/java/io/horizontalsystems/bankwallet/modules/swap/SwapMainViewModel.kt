@@ -34,7 +34,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapResultState
 import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.UniswapWarnings
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceServiceX
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
@@ -60,7 +60,7 @@ class SwapMainViewModel(
     private val fromTokenService: SwapTokenService,
     private val toTokenService: SwapTokenService,
     private val allowanceService: SwapAllowanceService,
-    private val pendingAllowanceService: SwapPendingAllowanceServiceX,
+    private val pendingAllowanceService: SwapPendingAllowanceService,
     private val errorShareService: ErrorShareService,
     private val timerService: TimerService,
     private val currencyManager: CurrencyManager,
