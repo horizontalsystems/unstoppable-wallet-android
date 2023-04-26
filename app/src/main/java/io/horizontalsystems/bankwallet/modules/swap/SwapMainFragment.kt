@@ -185,7 +185,7 @@ fun SwapCards(
     val buttons = viewModel.swapState.buttons
     val hasNonZeroBalance = viewModel.swapState.hasNonZeroBalance
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(swapState.refocusKey) {
         focusRequester.requestFocus()
     }
 

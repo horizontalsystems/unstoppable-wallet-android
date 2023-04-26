@@ -147,6 +147,7 @@ object SwapXMainModule {
         val buttons: SwapButtons,
         val hasNonZeroBalance: Boolean?,
         val recipient: Address?,
+        val refocusKey: Long
     )
 
     data class SwapXCoinCardViewState(
