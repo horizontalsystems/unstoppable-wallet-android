@@ -6,7 +6,7 @@ import cash.p.terminal.core.fiat.FiatService
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.send.SendModule
-import cash.p.terminal.modules.swap.coincard.InputParams
+import cash.p.terminal.modules.swapx.SwapXMainModule.InputParams
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher

@@ -3,7 +3,6 @@ package cash.p.terminal.modules.swap.coinselect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.swap.coincard.SwapCoinProvider
 import cash.p.terminal.modules.swapx.SwapXMainModule
 
 object SelectSwapCoinModule {

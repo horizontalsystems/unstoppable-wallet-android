@@ -11,7 +11,7 @@ import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.send.SendAmountAdvancedService
 import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
-import cash.p.terminal.modules.swap.uniswap.UniswapModule
+import cash.p.terminal.modules.swapx.SwapXMainModule.PriceImpactViewItem
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
@@ -76,7 +76,7 @@ data class SendEvmData(
         val deadline: String? = null,
         val recipientDomain: String? = null,
         val price: String? = null,
-        val priceImpact: UniswapModule.PriceImpactViewItem? = null,
+        val priceImpact: PriceImpactViewItem? = null,
         val gasPrice: String? = null,
     ) : Parcelable
 

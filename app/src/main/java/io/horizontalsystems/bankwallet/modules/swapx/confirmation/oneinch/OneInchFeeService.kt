@@ -10,8 +10,8 @@ import cash.p.terminal.modules.evmfee.GasPriceInfo
 import cash.p.terminal.modules.evmfee.IEvmFeeService
 import cash.p.terminal.modules.evmfee.IEvmGasPriceService
 import cash.p.terminal.modules.evmfee.Transaction
-import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
-import cash.p.terminal.modules.swap.oneinch.OneInchSwapParameters
+import cash.p.terminal.modules.swapx.SwapXMainModule.OneInchSwapParameters
+import cash.p.terminal.modules.swapx.oneinch.OneInchKitHelper
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.oneinchkit.Swap

@@ -22,24 +22,22 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.GasDataError
 import cash.p.terminal.modules.send.evm.SendEvmData
-import cash.p.terminal.modules.swap.SwapActionState
-import cash.p.terminal.modules.swap.SwapButtons
-import cash.p.terminal.modules.swap.SwapMainModule
-import cash.p.terminal.modules.swap.SwapViewItemHelper
-import cash.p.terminal.modules.swap.coincard.SwapCoinCardViewModel
-import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
-import cash.p.terminal.modules.swap.oneinch.OneInchSwapParameters
-import cash.p.terminal.modules.swap.uniswap.UniswapModule
-import cash.p.terminal.modules.swap.uniswap.UniswapTradeService
 import cash.p.terminal.modules.swapx.SwapXMainModule.AmountTypeItem
+import cash.p.terminal.modules.swapx.SwapXMainModule.ExactType
 import cash.p.terminal.modules.swapx.SwapXMainModule.ISwapProvider
+import cash.p.terminal.modules.swapx.SwapXMainModule.PriceImpactLevel
 import cash.p.terminal.modules.swapx.SwapXMainModule.ProviderTradeData
 import cash.p.terminal.modules.swapx.SwapXMainModule.ProviderViewItem
+import cash.p.terminal.modules.swapx.SwapXMainModule.SwapActionState
+import cash.p.terminal.modules.swapx.SwapXMainModule.SwapButtons
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapData
+import cash.p.terminal.modules.swapx.SwapXMainModule.SwapError
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapResultState
+import cash.p.terminal.modules.swapx.SwapXMainModule.UniswapWarnings
 import cash.p.terminal.modules.swapx.allowance.SwapAllowanceServiceX
 import cash.p.terminal.modules.swapx.allowance.SwapPendingAllowanceServiceX
 import cash.p.terminal.modules.swapx.allowance.SwapPendingAllowanceState
+import cash.p.terminal.modules.swapx.oneinch.OneInchKitHelper
 import cash.p.terminal.modules.swapx.oneinch.OneInchTradeXService
 import cash.p.terminal.modules.swapx.providers.UniswapProvider
 import cash.p.terminal.modules.swapx.uniswap.UniswapTradeXService
@@ -68,6 +66,7 @@ class SwapXMainViewModel(
     private val currencyManager: CurrencyManager,
     private val adapterManager: IAdapterManager,
 ) : ViewModel() {
+    private val maxValidDecimals = 8
 
     private val disposable = CompositeDisposable()
     private val tradeDisposable = CompositeDisposable()
@@ -86,7 +85,7 @@ class SwapXMainViewModel(
             )
         }
 
-    private var amountType: SwapMainModule.AmountType = SwapMainModule.AmountType.ExactFrom
+    private var exactType: ExactType = ExactType.ExactFrom
     private var balanceFrom: BigDecimal? = null
     private var availableBalance: String? = null
     private var amountTypeSelect = buildAmountTypeSelect()
@@ -270,7 +269,7 @@ class SwapXMainViewModel(
 
                     is SwapData.UniswapData -> {
                         tradeView = uniswapTradeViewItem(swapData, fromTokenService.token, toTokenService.token)
-                        if (amountType == SwapMainModule.AmountType.ExactFrom) {
+                        if (exactType == ExactType.ExactFrom) {
                             toTokenService.onChangeAmount(swapData.data.amountOut.toString(), true)
                         } else {
                             fromTokenService.onChangeAmount(swapData.data.amountIn.toString(), true)
@@ -287,9 +286,9 @@ class SwapXMainViewModel(
                 amountFrom?.let { amountFrom ->
                     if (amountFrom > state.allowance.value) {
                         if (revokeRequired()) {
-                            errors.add(SwapMainModule.SwapError.RevokeAllowanceRequired)
+                            errors.add(SwapError.RevokeAllowanceRequired)
                         } else {
-                            errors.add(SwapMainModule.SwapError.InsufficientAllowance)
+                            errors.add(SwapError.InsufficientAllowance)
                         }
                     }
                 }
@@ -305,7 +304,7 @@ class SwapXMainViewModel(
         amountFrom?.let { amountFrom ->
             val balance = balanceFrom
             if (balance == null || balance < amountFrom) {
-                errors.add(SwapMainModule.SwapError.InsufficientBalanceFrom)
+                errors.add(SwapError.InsufficientBalanceFrom)
             }
         }
 
@@ -316,7 +315,7 @@ class SwapXMainViewModel(
         allErrors = errors
         errorShareService.updateErrors(errors)
 
-        val filtered = allErrors.filter { it !is GasDataError && it !is SwapMainModule.SwapError }
+        val filtered = allErrors.filter { it !is GasDataError && it !is SwapError }
         error = filtered.firstOrNull()?.let { convert(it) }
 
         syncUiState()
@@ -330,7 +329,7 @@ class SwapXMainViewModel(
     }
 
     private fun resyncSwapData() {
-        tradeService.fetchSwapData(fromTokenService.token, toTokenService.token, amountFrom, amountTo, amountType)
+        tradeService.fetchSwapData(fromTokenService.token, toTokenService.token, amountFrom, amountTo, exactType)
     }
 
     private fun syncButtonsState() {
@@ -352,7 +351,7 @@ class SwapXMainViewModel(
 
         tradeService.state is SwapResultState.Ready -> {
             when {
-                allErrors.any { it == SwapMainModule.SwapError.InsufficientBalanceFrom } -> {
+                allErrors.any { it == SwapError.InsufficientBalanceFrom } -> {
                     SwapActionState.Disabled(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
                 }
 
@@ -380,7 +379,7 @@ class SwapXMainViewModel(
             SwapActionState.Disabled(Translator.getString(R.string.Swap_Revoking))
         }
 
-        allErrors.isNotEmpty() && allErrors.all { it == SwapMainModule.SwapError.RevokeAllowanceRequired } -> {
+        allErrors.isNotEmpty() && allErrors.all { it == SwapError.RevokeAllowanceRequired } -> {
             SwapActionState.Enabled(Translator.getString(R.string.Swap_Revoke))
         }
 
@@ -398,11 +397,11 @@ class SwapXMainViewModel(
             SwapActionState.Disabled(Translator.getString(R.string.Swap_Approving), loading = true)
         }
 
-        tradeService.state is SwapResultState.NotReady || allErrors.any { it == SwapMainModule.SwapError.InsufficientBalanceFrom } -> {
+        tradeService.state is SwapResultState.NotReady || allErrors.any { it == SwapError.InsufficientBalanceFrom } -> {
             SwapActionState.Hidden
         }
 
-        allErrors.any { it == SwapMainModule.SwapError.InsufficientAllowance } -> {
+        allErrors.any { it == SwapError.InsufficientAllowance } -> {
             SwapActionState.Enabled(Translator.getString(R.string.Swap_Approve))
         }
 
@@ -455,7 +454,7 @@ class SwapXMainViewModel(
         }
     }
 
-    private fun oneInchTradeViewItem(params: OneInchSwapParameters, tokenFrom: Token?, tokenTo: Token?) = try {
+    private fun oneInchTradeViewItem(params: SwapXMainModule.OneInchSwapParameters, tokenFrom: Token?, tokenTo: Token?) = try {
         val sellPrice = params.amountTo.divide(params.amountFrom, params.tokenFrom.decimals, RoundingMode.HALF_UP).stripTrailingZeros()
         val buyPrice = params.amountFrom.divide(params.amountTo, params.tokenTo.decimals, RoundingMode.HALF_UP).stripTrailingZeros()
         val (primaryPrice, secondaryPrice) = formatter.prices(sellPrice, buyPrice, tokenFrom, tokenTo)
@@ -475,7 +474,7 @@ class SwapXMainViewModel(
             ProviderTradeData.UniswapTradeViewItem(
                 primaryPrice = primaryPrice,
                 secondaryPrice = secondaryPrice,
-                priceImpact = formatter.priceImpactViewItem(swapData, UniswapTradeService.PriceImpactLevel.Warning),
+                priceImpact = formatter.priceImpactViewItem(swapData, PriceImpactLevel.Warning),
                 guaranteedAmount = formatter.guaranteedAmountViewItem(
                     swapData.data,
                     tokenFrom,
@@ -546,7 +545,7 @@ class SwapXMainViewModel(
     fun onSelectFromCoin(token: Token) {
         fromTokenService.onSelectCoin(token)
         syncBalance(balance(token))
-        if (amountType == SwapMainModule.AmountType.ExactTo) {
+        if (exactType == ExactType.ExactTo) {
             fromTokenService.onChangeAmount(null, true)
         }
         if (token == toTokenService.token) {
@@ -560,7 +559,7 @@ class SwapXMainViewModel(
 
     fun onSelectToCoin(token: Token) {
         toTokenService.onSelectCoin(token)
-        if (amountType == SwapMainModule.AmountType.ExactFrom) {
+        if (exactType == ExactType.ExactFrom) {
             toTokenService.onChangeAmount(null, true)
         }
         if (token == fromTokenService.token) {
@@ -571,7 +570,7 @@ class SwapXMainViewModel(
     }
 
     fun onFromAmountChange(amount: String?) {
-        amountType = SwapMainModule.AmountType.ExactFrom
+        exactType = ExactType.ExactFrom
         Log.e("TAG", "onFromAmountChange: ${switchService.amountType}", )
         val coinAmount = fromTokenService.getCoinAmount(amount)
         if (amountsEqual(amountFrom, coinAmount)) return
@@ -583,7 +582,7 @@ class SwapXMainViewModel(
     }
 
     fun onToAmountChange(amount: String?) {
-        amountType = SwapMainModule.AmountType.ExactTo
+        exactType = ExactType.ExactTo
         val coinAmount = toTokenService.getCoinAmount(amount)
         if (amountsEqual(amountTo, coinAmount)) return
         amountTo = coinAmount
@@ -614,7 +613,7 @@ class SwapXMainViewModel(
     }
 
     fun onSetAmountInBalancePercent(percent: Int) {
-        val coinDecimals = fromTokenService.token?.decimals ?: SwapCoinCardViewModel.maxValidDecimals
+        val coinDecimals = fromTokenService.token?.decimals ?: maxValidDecimals
         val percentRatio = BigDecimal.valueOf(percent.toDouble() / 100)
         val coinAmount = balanceFrom?.multiply(percentRatio)?.setScale(coinDecimals, RoundingMode.FLOOR) ?: return
 
@@ -650,8 +649,8 @@ class SwapXMainViewModel(
             price = primaryPrice,
             priceImpact = formatter.priceImpactViewItem(swapData)
         )
-        val warnings: List<Warning> = if (swapData.priceImpactLevel == UniswapTradeService.PriceImpactLevel.Forbidden)
-            listOf(UniswapModule.UniswapWarnings.PriceImpactWarning)
+        val warnings: List<Warning> = if (swapData.priceImpactLevel == PriceImpactLevel.Forbidden)
+            listOf(UniswapWarnings.PriceImpactWarning)
         else
             listOf()
 
@@ -661,4 +660,10 @@ class SwapXMainViewModel(
             warnings
         )
     }
+
+    fun onUpdateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
+        tradeService.updateSwapSettings(recipient, slippage, ttl)
+        syncSwapDataState()
+    }
+
 }

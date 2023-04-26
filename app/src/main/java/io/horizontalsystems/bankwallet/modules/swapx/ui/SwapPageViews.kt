@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swap.ui
+package io.horizontalsystems.bankwallet.modules.swapx.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -35,27 +35,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
-import cash.p.terminal.modules.swap.SwapActionState
-import cash.p.terminal.modules.swap.SwapButtons
-import cash.p.terminal.modules.swapx.allowance.SwapAllowanceViewModelX
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.BadgeStepCircle
-import cash.p.terminal.ui.compose.components.BoxTyler44
-import cash.p.terminal.ui.compose.components.ButtonPrimary
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaults
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.ButtonSecondary
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.HSCircularProgressIndicator
-import cash.p.terminal.ui.compose.components.SecondaryButtonDefaults
-import cash.p.terminal.ui.compose.components.TextImportantError
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
-import cash.p.terminal.ui.compose.components.subhead2_lucian
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapActionState
+import io.horizontalsystems.bankwallet.modules.swapx.SwapXMainModule.SwapButtons
+import io.horizontalsystems.bankwallet.modules.swapx.allowance.SwapAllowanceViewModelX
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.BadgeStepCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.BoxTyler44
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimary
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
+import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
 @Composable
 fun SwapError(modifier: Modifier = Modifier, text: String) {

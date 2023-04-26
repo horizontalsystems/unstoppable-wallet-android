@@ -8,7 +8,7 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.evmfee.FeeSettingsError
 import cash.p.terminal.modules.evmfee.FeeSettingsWarning
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
-import cash.p.terminal.modules.swap.uniswap.UniswapModule
+import cash.p.terminal.modules.swapx.SwapXMainModule.UniswapWarnings
 
 class CautionViewItemFactory(
     private val baseCoinService: EvmCoinService
@@ -40,7 +40,7 @@ class CautionViewItemFactory(
                     CautionViewItem.Type.Warning
                 )
             }
-            UniswapModule.UniswapWarnings.PriceImpactWarning -> {
+            UniswapWarnings.PriceImpactWarning -> {
                 CautionViewItem(
                     Translator.getString(R.string.Swap_PriceImpact),
                     Translator.getString(R.string.Swap_PriceImpactTooHigh),

@@ -1,13 +1,14 @@
 package cash.p.terminal.modules.swapx.oneinch
 
 import cash.p.terminal.core.subscribeIO
-import cash.p.terminal.modules.swap.SwapMainModule
-import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
-import cash.p.terminal.modules.swap.oneinch.OneInchSwapParameters
-import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
+import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.swapx.SwapXMainModule
+import cash.p.terminal.modules.swapx.SwapXMainModule.ExactType
+import cash.p.terminal.modules.swapx.SwapXMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapData
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapResultState
+import cash.p.terminal.modules.swapx.settings.oneinch.OneInchSwapSettingsModule
+import cash.p.terminal.modules.swapx.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.oneinchkit.Quote
 import io.reactivex.disposables.Disposable
@@ -56,7 +57,7 @@ class OneInchTradeXService(
         tokenTo: Token?,
         amountFrom: BigDecimal?,
         amountTo: BigDecimal?,
-        amountType: SwapMainModule.AmountType
+        exactType: ExactType
     ) {
         quoteDisposable?.dispose()
         quoteDisposable = null

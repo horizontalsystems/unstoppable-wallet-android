@@ -1,11 +1,11 @@
-package cash.p.terminal.modules.swap
+package cash.p.terminal.modules.swapx
 
 import cash.p.terminal.R
 import cash.p.terminal.core.IAppNumberFormatter
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.modules.swap.uniswap.UniswapModule
-import cash.p.terminal.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
-import cash.p.terminal.modules.swapx.SwapXMainModule
+import cash.p.terminal.modules.swapx.SwapXMainModule.GuaranteedAmountViewItem
+import cash.p.terminal.modules.swapx.SwapXMainModule.PriceImpactLevel
+import cash.p.terminal.modules.swapx.SwapXMainModule.PriceImpactViewItem
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
@@ -40,7 +40,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
     fun priceImpactViewItem(
         trade: SwapXMainModule.SwapData.UniswapData,
         minLevel: PriceImpactLevel = PriceImpactLevel.Normal
-    ): UniswapModule.PriceImpactViewItem? {
+    ): PriceImpactViewItem? {
 
         val priceImpact = trade.data.priceImpact ?: return null
         val impactLevel = trade.priceImpactLevel ?: return null
@@ -48,20 +48,20 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
             return null
         }
 
-        return UniswapModule.PriceImpactViewItem(impactLevel, Translator.getString(R.string.Swap_Percent, priceImpact))
+        return PriceImpactViewItem(impactLevel, Translator.getString(R.string.Swap_Percent, priceImpact))
     }
 
     fun guaranteedAmountViewItem(
         tradeData: TradeData,
         tokenIn: Token?,
         tokenOut: Token?
-    ): UniswapModule.GuaranteedAmountViewItem? {
+    ): GuaranteedAmountViewItem? {
         when (tradeData.type) {
             TradeType.ExactIn -> {
                 val amount = tradeData.amountOutMin ?: return null
                 val token = tokenOut ?: return null
 
-                return UniswapModule.GuaranteedAmountViewItem(
+                return GuaranteedAmountViewItem(
                     Translator.getString(R.string.Swap_MinimumGot),
                     coinAmount(amount, token.coin.code)
                 )
@@ -70,7 +70,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
                 val amount = tradeData.amountInMax ?: return null
                 val token = tokenIn ?: return null
 
-                return UniswapModule.GuaranteedAmountViewItem(
+                return GuaranteedAmountViewItem(
                     Translator.getString(R.string.Swap_MaximumPaid),
                     coinAmount(amount, token.coin.code)
                 )

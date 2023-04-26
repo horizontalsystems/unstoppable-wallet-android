@@ -23,8 +23,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.*
-import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import cash.p.terminal.modules.swapx.SwapXMainModule
+import cash.p.terminal.modules.swapx.SwapXMainModule.CoinBalanceItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController

@@ -1,6 +1,7 @@
-package cash.p.terminal.modules.swap.oneinch
+package cash.p.terminal.modules.swapx.oneinch
 
 import cash.p.terminal.core.convertedError
+import cash.p.terminal.modules.swapx.scaleUp
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
@@ -11,8 +12,6 @@ import io.horizontalsystems.oneinchkit.Quote
 import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.Single
 import java.math.BigDecimal
-import java.math.BigInteger
-import kotlin.math.absoluteValue
 
 class OneInchKitHelper(
     evmKit: EthereumKit
@@ -66,14 +65,3 @@ class OneInchKitHelper(
     }
 
 }
-
-fun BigDecimal.scaleUp(scale: Int): BigInteger {
-    val exponent = scale - scale()
-
-    return if (exponent >= 0) {
-        unscaledValue() * BigInteger.TEN.pow(exponent)
-    } else {
-        unscaledValue() / BigInteger.TEN.pow(exponent.absoluteValue)
-    }
-}
-

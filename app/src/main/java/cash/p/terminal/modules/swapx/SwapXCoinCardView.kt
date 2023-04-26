@@ -47,10 +47,10 @@ import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.modules.swap.SwapMainModule
-import cash.p.terminal.modules.swap.coinselect.SelectSwapCoinFragment
+import cash.p.terminal.modules.swapx.SwapXMainModule.CoinBalanceItem
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapXAmountInputState
 import cash.p.terminal.modules.swapx.SwapXMainModule.SwapXCoinCardViewState
+import cash.p.terminal.modules.swapx.coinselect.SelectSwapCoinFragment
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CoinImage
@@ -98,7 +98,7 @@ fun SwapXCoinCardView(
                     onClick = {
                         navController.getNavigationResult(SelectSwapCoinFragment.resultBundleKey) { bundle ->
                             val requestId = bundle.getLong(SelectSwapCoinFragment.requestIdKey)
-                            val coinBalanceItem = bundle.getParcelable<SwapMainModule.CoinBalanceItem>(
+                            val coinBalanceItem = bundle.getParcelable<CoinBalanceItem>(
                                 SelectSwapCoinFragment.coinBalanceItemResultKey
                             )
                             if (requestId == cardState.uuid && coinBalanceItem != null) {

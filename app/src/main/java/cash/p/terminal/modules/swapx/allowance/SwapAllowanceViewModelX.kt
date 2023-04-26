@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.modules.swap.SwapMainModule
-import cash.p.terminal.modules.swap.SwapViewItemHelper
 import cash.p.terminal.modules.swapx.ErrorShareService
+import cash.p.terminal.modules.swapx.SwapViewItemHelper
+import cash.p.terminal.modules.swapx.SwapXMainModule.SwapError
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -73,8 +73,8 @@ class SwapAllowanceViewModelX(
     }
 
     private fun handle(errors: List<Throwable>) {
-        isError = errors.any { it is SwapMainModule.SwapError.InsufficientAllowance }
-        revokeRequired = errors.any { it is SwapMainModule.SwapError.RevokeAllowanceRequired }
+        isError = errors.any { it is SwapError.InsufficientAllowance }
+        revokeRequired = errors.any { it is SwapError.RevokeAllowanceRequired }
 
         syncVisible()
         emitState()

@@ -17,9 +17,9 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.SendEvmData
-import cash.p.terminal.modules.swap.oneinch.scaleUp
-import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule
-import cash.p.terminal.modules.swap.uniswap.UniswapTradeService
+import cash.p.terminal.modules.swapx.SwapXMainModule.PriceImpactLevel
+import cash.p.terminal.modules.swapx.scaleUp
+import cash.p.terminal.modules.swapx.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveEip20Decoration
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
@@ -317,8 +317,8 @@ class SendEvmTransactionViewModel(
         }
         uniswapInfo?.priceImpact?.let {
             val color = when (it.level) {
-                UniswapTradeService.PriceImpactLevel.Warning -> R.color.jacob
-                UniswapTradeService.PriceImpactLevel.Forbidden -> R.color.lucian
+                PriceImpactLevel.Warning -> R.color.jacob
+                PriceImpactLevel.Forbidden -> R.color.lucian
                 else -> null
             }
 
