@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -52,6 +51,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.UUID
 
 class SwapMainViewModel(
     private val formatter: SwapViewItemHelper,
@@ -110,6 +110,7 @@ class SwapMainViewModel(
     private var hasNonZeroBalance: Boolean? = null
     private var swapData: SwapData? = null
     private var buttons = SwapButtons(SwapActionState.Hidden, SwapActionState.Hidden, SwapActionState.Hidden)
+    private var refocusKey = UUID.randomUUID().leastSignificantBits
 
     var swapState by mutableStateOf(
         SwapXMainModule.SwapState(
@@ -126,6 +127,7 @@ class SwapMainViewModel(
             buttons = buttons,
             hasNonZeroBalance = hasNonZeroBalance,
             recipient = tradeService.recipient,
+            refocusKey = refocusKey
         )
     )
         private set
@@ -227,6 +229,7 @@ class SwapMainViewModel(
             buttons = buttons,
             hasNonZeroBalance = hasNonZeroBalance,
             recipient = tradeService.recipient,
+            refocusKey = refocusKey
         )
     }
 
@@ -568,7 +571,6 @@ class SwapMainViewModel(
 
     fun onFromAmountChange(amount: String?) {
         exactType = ExactType.ExactFrom
-        Log.e("TAG", "onFromAmountChange: ${switchService.amountType}", )
         val coinAmount = fromTokenService.getCoinAmount(amount)
         if (amountsEqual(amountFrom, coinAmount)) return
         amountFrom = coinAmount
@@ -607,6 +609,9 @@ class SwapMainViewModel(
 
         timerService.stop()
         timerService.start()
+
+        refocusKey = UUID.randomUUID().leastSignificantBits
+        syncUiState()
     }
 
     fun onSetAmountInBalancePercent(percent: Int) {
