@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
@@ -27,13 +28,15 @@ class AppearanceViewModel(
     private val themeService: ThemeService,
     private val baseTokenManager: BaseTokenManager,
     private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
+    private val balanceHiddenManager: BalanceHiddenManager
 ) : ViewModel() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var appIconOptions = appIconService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
     private var baseTokenOptions = buildBaseTokenSelect(baseTokenManager.baseTokenFlow.value)
     private var marketsTabEnabled = localStorage.marketsTabEnabled
+    private var balanceAutoHideEnabled = balanceHiddenManager.balanceAutoHidden
     private var balanceViewTypeOptions =
         buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
 
@@ -44,7 +47,8 @@ class AppearanceViewModel(
             themeOptions = themeOptions,
             baseTokenOptions = baseTokenOptions,
             balanceViewTypeOptions = balanceViewTypeOptions,
-            marketsTabEnabled = marketsTabEnabled
+            marketsTabEnabled = marketsTabEnabled,
+            balanceAutoHideEnabled = balanceAutoHideEnabled
         )
     )
 
@@ -122,6 +126,7 @@ class AppearanceViewModel(
             baseTokenOptions = baseTokenOptions,
             balanceViewTypeOptions = balanceViewTypeOptions,
             marketsTabEnabled = marketsTabEnabled,
+            balanceAutoHideEnabled = balanceAutoHideEnabled,
         )
     }
 
@@ -162,6 +167,12 @@ class AppearanceViewModel(
         marketsTabEnabled = enabled
         emitState()
     }
+
+    fun onSetBalanceAutoHidden(enabled: Boolean) {
+        balanceAutoHideEnabled = enabled
+        emitState()
+        balanceHiddenManager.setBalanceAutoHidden(enabled)
+    }
 }
 
 data class AppearanceUIState(
@@ -171,4 +182,5 @@ data class AppearanceUIState(
     val baseTokenOptions: SelectOptional<Token>,
     val balanceViewTypeOptions: Select<BalanceViewType>,
     val marketsTabEnabled: Boolean,
+    val balanceAutoHideEnabled: Boolean,
 )

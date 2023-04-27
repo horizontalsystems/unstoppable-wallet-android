@@ -70,6 +70,7 @@ class LocalStorageManager(
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
+    private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
 
     private val gson by lazy { Gson() }
@@ -301,6 +302,12 @@ class LocalStorageManager(
         get() = preferences.getBoolean(BALANCE_HIDDEN, false)
         set(value) {
             preferences.edit().putBoolean(BALANCE_HIDDEN, value).apply()
+        }
+
+    override var balanceAutoHideEnabled: Boolean
+        get() = preferences.getBoolean(BALANCE_AUTO_HIDE_ENABLED, false)
+        set(value) {
+            preferences.edit().putBoolean(BALANCE_AUTO_HIDE_ENABLED, value).commit()
         }
 
     override var balanceTotalCoinUid: String?

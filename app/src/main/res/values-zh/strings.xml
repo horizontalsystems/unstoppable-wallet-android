@@ -788,7 +788,7 @@
     <string name="ManageCoins_Search">姓名、代码或合同地址</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_NoResults">找不到结果。如果您知道智能合约地址，请尝试手动添加代币。</string>
-    <string name="ManageCoins_BipsDescription">有3种%s钱包可用于接收应收款的常见地址格式：\n\n- BIP44（较旧）\n- BIP49（较新）\n- BIP84（最新）\n\n虽然Unstoppable钱包支持全部3种格式，但是我们建议使用以BIP84格式运作的%s钱包。在发送%s交易时，以此格式运作的钱包只需支付较低的费用。</string>
+    <string name="ManageCoins_BipsDescription">有4种%s钱包可用于接收应收款的常见地址格式：\n\n- BIP44（较旧）\n- BIP49\n- BIP84（较新）\n- BIP86（最新）\n\n虽然Unstoppable钱包支持全部4种格式，但是我们建议使用以BIP84格式运作的%s钱包。</string>
     <string name="ManageCoins_BchTypeDescription">有2种比特币现金钱包可用于接收应收款的常见地址格式：\n\n- TYPE 0（较旧）\n- TYPE 145（较新）\n\n虽然Unstoppable钱包支持全部两种格式，但是我们建议使用以TYPE 145格式运作的比特币现金钱包。</string>
     <string name="ManageCoins_ContractAddress">联系地址</string>
     <!-- Experimental Feature -->

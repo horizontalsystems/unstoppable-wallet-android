@@ -102,7 +102,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         description = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKeyDescription),
                     ) {
                         navController.slideFromRight(
-                            R.id.accountExtendedKeyFragment,
+                            R.id.showExtendedKeyFragment,
                             ShowExtendedKeyModule.prepareParams(
                                 publicKey.hdKey,
                                 publicKey.accountPublicKey
