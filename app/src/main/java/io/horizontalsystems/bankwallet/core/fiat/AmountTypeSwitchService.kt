@@ -23,7 +23,6 @@ class AmountTypeSwitchService {
     val amountTypeObservable: Observable<AmountType>
         get() = amountTypeSubject
 
-
     private val toggleAvailableSubject = PublishSubject.create<Boolean>()
     var toggleAvailable: Boolean = false
         private set(value) {
