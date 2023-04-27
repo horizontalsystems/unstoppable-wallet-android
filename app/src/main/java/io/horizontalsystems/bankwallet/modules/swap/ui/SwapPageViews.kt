@@ -38,8 +38,8 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapActionState
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapButtons
+import cash.p.terminal.modules.swap.SwapMainModule.SwapActionState
+import cash.p.terminal.modules.swap.SwapMainModule.SwapButtons
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.BadgeStepCircle

@@ -7,7 +7,7 @@ import cash.p.terminal.core.AppLogger
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
-import cash.p.terminal.modules.swap.SwapXMainModule.OneInchSwapParameters
+import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swap.confirmation.BaseSwapConfirmationFragment
 import io.horizontalsystems.marketkit.models.BlockchainType
 

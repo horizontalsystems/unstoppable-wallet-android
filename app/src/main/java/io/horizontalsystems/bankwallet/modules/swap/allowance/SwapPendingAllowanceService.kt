@@ -8,7 +8,6 @@ import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceState.Approvin
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceState.NA
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceState.Revoked
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceState.Revoking
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/allowance/SwapPendingAllowanceService.kt
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable

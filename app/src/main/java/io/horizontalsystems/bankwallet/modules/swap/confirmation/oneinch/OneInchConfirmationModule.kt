@@ -14,7 +14,7 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.swap.SwapViewItemHelper
-import cash.p.terminal.modules.swap.SwapXMainModule.OneInchSwapParameters
+import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider

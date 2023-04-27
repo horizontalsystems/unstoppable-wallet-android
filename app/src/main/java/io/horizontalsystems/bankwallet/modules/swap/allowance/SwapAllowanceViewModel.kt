@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.swap.allowance
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/allowance/SwapAllowanceViewModel.kt
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,8 +9,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.swap.ErrorShareService
 import cash.p.terminal.modules.swap.SwapViewItemHelper
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapError
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/allowance/SwapAllowanceViewModel.kt
+import cash.p.terminal.modules.swap.SwapMainModule.SwapError
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 

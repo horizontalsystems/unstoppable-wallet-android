@@ -5,15 +5,14 @@ import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.modules.swap.SwapXMainModule
-import cash.p.terminal.modules.swap.SwapXMainModule.CoinBalanceItem
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/coinselect/SwapCoinProvider.kt
+import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class SwapCoinProvider(
-    private val dex: SwapXMainModule.Dex,
+    private val dex: SwapMainModule.Dex,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val currencyManager: CurrencyManager,

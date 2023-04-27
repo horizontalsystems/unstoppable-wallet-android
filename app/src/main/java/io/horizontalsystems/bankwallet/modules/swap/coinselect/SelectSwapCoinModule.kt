@@ -3,12 +3,11 @@ package cash.p.terminal.modules.swap.coinselect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.swap.SwapXMainModule
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/coinselect/SelectSwapCoinModule.kt
+import cash.p.terminal.modules.swap.SwapMainModule
 
 object SelectSwapCoinModule {
 
-    class Factory(private val dex: SwapXMainModule.Dex) : ViewModelProvider.Factory {
+    class Factory(private val dex: SwapMainModule.Dex) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val coinProvider by lazy {

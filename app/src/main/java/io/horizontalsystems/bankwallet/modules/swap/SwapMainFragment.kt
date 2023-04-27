@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.swap
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/SwapMainFragment.kt
 
 import android.content.Context
 import android.os.Bundle
@@ -39,9 +38,9 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.send.evm.SendEvmModule
-import cash.p.terminal.modules.swap.SwapXMainModule.PriceImpactLevel
-import cash.p.terminal.modules.swap.SwapXMainModule.ProviderTradeData
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapActionState
+import cash.p.terminal.modules.swap.SwapMainModule.PriceImpactLevel
+import cash.p.terminal.modules.swap.SwapMainModule.ProviderTradeData
+import cash.p.terminal.modules.swap.SwapMainModule.SwapActionState
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.modules.swap.approve.SwapApproveModule
 import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationModule
@@ -62,20 +61,19 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.compose.observeKeyboardState
 import cash.p.terminal.ui.extensions.BottomSheetHeader
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/SwapMainFragment.kt
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.marketkit.models.*
 import kotlinx.coroutines.launch
 
-class SwapXMainFragment : BaseFragment() {
+class SwapMainFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val factory = SwapXMainModule.Factory(requireArguments())
+        val factory = SwapMainModule.Factory(requireArguments())
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -95,7 +93,7 @@ class SwapXMainFragment : BaseFragment() {
 @Composable
 private fun SwapNavHost(
     fragmentNavController: NavController,
-    factory: SwapXMainModule.Factory,
+    factory: SwapMainModule.Factory,
     mainViewModel: SwapMainViewModel = viewModel(factory = factory),
     allowanceViewModel: SwapAllowanceViewModel = viewModel(factory = factory),
 ) {
@@ -314,7 +312,7 @@ fun SwapCards(
                 },
                 onTapProceed = {
                     when (val swapData = viewModel.proceedParams) {
-                        is SwapXMainModule.SwapData.OneInchData -> {
+                        is SwapMainModule.SwapData.OneInchData -> {
                             navController.slideFromRight(
                                 R.id.oneInchConfirmationFragment,
                                 OneInchSwapConfirmationFragment.prepareParams(
@@ -324,7 +322,7 @@ fun SwapCards(
                             )
                         }
 
-                        is SwapXMainModule.SwapData.UniswapData -> {
+                        is SwapMainModule.SwapData.UniswapData -> {
                             viewModel.getSendEvmData(swapData)?.let { sendEvmData ->
                                 navController.slideFromRight(
                                     R.id.uniswapConfirmationFragment,
@@ -387,20 +385,20 @@ private fun TopMenu(
         ButtonSecondaryCircle(
             icon = R.drawable.ic_manage_2,
             onClick = {
-                navController.getNavigationResult(SwapXMainModule.resultKey) {
-                    val recipient = it.getParcelable<Address>(SwapXMainModule.swapSettingsRecipientKey)
-                    val slippage = it.getString(SwapXMainModule.swapSettingsSlippageKey)
-                    val ttl = it.getLong(SwapXMainModule.swapSettingsTtlKey)
+                navController.getNavigationResult(SwapMainModule.resultKey) {
+                    val recipient = it.getParcelable<Address>(SwapMainModule.swapSettingsRecipientKey)
+                    val slippage = it.getString(SwapMainModule.swapSettingsSlippageKey)
+                    val ttl = it.getLong(SwapMainModule.swapSettingsTtlKey)
                     viewModel.onUpdateSwapSettings(recipient, slippage?.toBigDecimal(), ttl)
                 }
                 when (state.dex.provider) {
-                    SwapXMainModule.OneInchProvider -> {
+                    SwapMainModule.OneInchProvider -> {
                         navController.slideFromBottom(
                             R.id.oneinchSettingsFragment, OneInchSettingsFragment.prepareParams(state.dex, state.recipient)
                         )
                     }
 
-                    SwapXMainModule.UniswapProvider -> {
+                    SwapMainModule.UniswapProvider -> {
                         navController.slideFromBottom(
                             R.id.uniswapSettingsFragment, OneInchSettingsFragment.prepareParams(state.dex, state.recipient)
                         )
@@ -413,8 +411,8 @@ private fun TopMenu(
 
 @Composable
 private fun BottomSheetProviderSelector(
-    items: List<SwapXMainModule.ProviderViewItem>,
-    onSelect: (SwapXMainModule.ISwapProvider) -> Unit,
+    items: List<SwapMainModule.ProviderViewItem>,
+    onSelect: (SwapMainModule.ISwapProvider) -> Unit,
     onCloseClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -466,7 +464,7 @@ private fun BottomSheetProviderSelector(
 
 @Composable
 fun PriceImpact(
-    priceImpact: SwapXMainModule.PriceImpactViewItem,
+    priceImpact: SwapMainModule.PriceImpactViewItem,
     navController: NavController
 ) {
     Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {

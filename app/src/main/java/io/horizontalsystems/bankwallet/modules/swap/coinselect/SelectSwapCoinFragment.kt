@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.swap.coinselect
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/coinselect/SelectSwapCoinFragment.kt
 
 import android.os.Bundle
 import android.os.Handler
@@ -24,11 +23,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.*
-import cash.p.terminal.modules.swap.SwapXMainModule
-import cash.p.terminal.modules.swap.SwapXMainModule.CoinBalanceItem
+import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/coinselect/SelectSwapCoinFragment.kt
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
 
@@ -44,7 +42,7 @@ class SelectSwapCoinFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val dex = arguments?.getParcelable<SwapXMainModule.Dex>(dexKey)
+                val dex = arguments?.getParcelable<SwapMainModule.Dex>(dexKey)
                 val requestId = arguments?.getLong(requestIdKey)
                 if (dex == null || requestId == null) {
                     findNavController().popBackStack()
@@ -79,7 +77,7 @@ class SelectSwapCoinFragment : BaseFragment() {
         const val requestIdKey = "requestIdKey"
         const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
 
-        fun prepareParams(requestId: Long, dex: SwapXMainModule.Dex) = bundleOf(requestIdKey to requestId, dexKey to dex)
+        fun prepareParams(requestId: Long, dex: SwapMainModule.Dex) = bundleOf(requestIdKey to requestId, dexKey to dex)
     }
 }
 
@@ -87,7 +85,7 @@ class SelectSwapCoinFragment : BaseFragment() {
 @Composable
 fun SelectSwapCoinDialogScreen(
     navController: NavController,
-    dex: SwapXMainModule.Dex,
+    dex: SwapMainModule.Dex,
     onClickItem: (CoinBalanceItem) -> Unit
 ) {
     val viewModel = viewModel<SelectSwapCoinViewModel>(factory = SelectSwapCoinModule.Factory(dex))

@@ -10,7 +10,7 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.ISendEvmTransactionService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 import cash.p.terminal.modules.swap.SwapViewItemHelper
-import cash.p.terminal.modules.swap.SwapXMainModule.OneInchSwapParameters
+import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable

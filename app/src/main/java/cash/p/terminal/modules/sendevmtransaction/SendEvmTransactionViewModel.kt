@@ -17,7 +17,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.SendEvmData
-import cash.p.terminal.modules.swap.SwapXMainModule.PriceImpactLevel
+import cash.p.terminal.modules.swap.SwapMainModule.PriceImpactLevel
 import cash.p.terminal.modules.swap.scaleUp
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.core.toHexString

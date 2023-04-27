@@ -2,14 +2,13 @@ package cash.p.terminal.modules.swap.oneinch
 
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.swap.SwapXMainModule
-import cash.p.terminal.modules.swap.SwapXMainModule.ExactType
-import cash.p.terminal.modules.swap.SwapXMainModule.OneInchSwapParameters
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapData
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapResultState
+import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapMainModule.ExactType
+import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
+import cash.p.terminal.modules.swap.SwapMainModule.SwapData
+import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/oneinch/OneInchTradeService.kt
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.oneinchkit.Quote
 import io.reactivex.disposables.Disposable
@@ -20,7 +19,7 @@ import java.math.BigDecimal
 
 class OneInchTradeService(
     private val oneInchKitHelper: OneInchKitHelper
-) : SwapXMainModule.ISwapTradeXService {
+) : SwapMainModule.ISwapTradeService {
 
     private var quoteDisposable: Disposable? = null
 

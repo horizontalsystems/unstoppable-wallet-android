@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.Eip20Adapter
 import cash.p.terminal.core.ethereum.EvmCoinService
-import cash.p.terminal.modules.swap.SwapXMainModule
+import cash.p.terminal.modules.swap.SwapMainModule
 import io.horizontalsystems.ethereumkit.models.Address
 
 object SwapApproveModule {
@@ -15,7 +15,7 @@ object SwapApproveModule {
     const val resultKey = "result"
     const val dataKey = "data_key"
 
-    class Factory(private val approveData: SwapXMainModule.ApproveData) :
+    class Factory(private val approveData: SwapMainModule.ApproveData) :
         ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -48,6 +48,6 @@ object SwapApproveModule {
         }
     }
 
-    fun prepareParams(approveData: SwapXMainModule.ApproveData) = bundleOf(dataKey to approveData)
+    fun prepareParams(approveData: SwapMainModule.ApproveData) = bundleOf(dataKey to approveData)
 
 }

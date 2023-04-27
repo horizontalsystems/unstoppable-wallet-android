@@ -26,7 +26,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.swap.SwapXMainModule
+import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.settings.RecipientAddressViewModel
 import cash.p.terminal.modules.swap.settings.SwapDeadlineViewModel
 import cash.p.terminal.modules.swap.settings.SwapSlippageViewModel
@@ -51,13 +51,13 @@ class UniswapSettingsFragment : BaseFragment() {
         private const val addressKey = "addressKey"
 
         fun prepareParams(
-            dex: SwapXMainModule.Dex,
+            dex: SwapMainModule.Dex,
             address: Address?
         ) = bundleOf(dexKey to dex, addressKey to address)
     }
 
     private val dex by lazy {
-        requireArguments().getParcelable<SwapXMainModule.Dex>(dexKey)
+        requireArguments().getParcelable<SwapMainModule.Dex>(dexKey)
     }
 
     private val address by lazy {
@@ -113,7 +113,7 @@ class UniswapSettingsFragment : BaseFragment() {
 private fun UniswapSettingsScreen(
     onCloseClick: () -> Unit,
     factory: UniswapSettingsModule.Factory,
-    dex: SwapXMainModule.Dex,
+    dex: SwapMainModule.Dex,
     uniswapSettingsViewModel: UniswapSettingsViewModel = viewModel(factory = factory),
     deadlineViewModel: SwapDeadlineViewModel = viewModel(factory = factory),
     recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
@@ -171,11 +171,11 @@ private fun UniswapSettingsScreen(
 
                         if (tradeOptions != null) {
                             navController.setNavigationResult(
-                                SwapXMainModule.resultKey,
+                                SwapMainModule.resultKey,
                                 bundleOf(
-                                    SwapXMainModule.swapSettingsRecipientKey to tradeOptions.recipient,
-                                    SwapXMainModule.swapSettingsSlippageKey to tradeOptions.allowedSlippage,
-                                    SwapXMainModule.swapSettingsTtlKey to tradeOptions.ttl,
+                                    SwapMainModule.swapSettingsRecipientKey to tradeOptions.recipient,
+                                    SwapMainModule.swapSettingsSlippageKey to tradeOptions.allowedSlippage,
+                                    SwapMainModule.swapSettingsTtlKey to tradeOptions.ttl,
                                 )
                             )
                             onCloseClick()

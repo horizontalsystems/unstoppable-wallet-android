@@ -8,7 +8,7 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.evmfee.FeeSettingsError
 import cash.p.terminal.modules.evmfee.FeeSettingsWarning
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
-import cash.p.terminal.modules.swap.SwapXMainModule.UniswapWarnings
+import cash.p.terminal.modules.swap.SwapMainModule.UniswapWarnings
 
 class CautionViewItemFactory(
     private val baseCoinService: EvmCoinService

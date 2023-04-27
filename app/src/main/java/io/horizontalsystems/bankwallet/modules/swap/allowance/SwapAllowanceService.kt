@@ -4,8 +4,7 @@ import cash.p.terminal.core.IAdapterManager
 import cash.p.terminal.core.adapters.Eip20Adapter
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.send.evm.SendEvmData
-import cash.p.terminal.modules.swap.SwapXMainModule
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/allowance/SwapAllowanceService.kt
+import cash.p.terminal.modules.swap.SwapMainModule
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
@@ -58,13 +57,13 @@ class SwapAllowanceService(
         return SendEvmData(adapter.eip20Kit.buildApproveTransactionData(address, BigInteger.ZERO))
     }
 
-    fun approveData(dex: SwapXMainModule.Dex, amount: BigDecimal): SwapXMainModule.ApproveData? {
+    fun approveData(dex: SwapMainModule.Dex, amount: BigDecimal): SwapMainModule.ApproveData? {
         val allowance = (state as? State.Ready)?.allowance
         val address = spenderAddress ?: return null
 
         return allowance?.let {
             token?.let { token ->
-                SwapXMainModule.ApproveData(dex, token, address.hex, amount, allowance.value)
+                SwapMainModule.ApproveData(dex, token, address.hex, amount, allowance.value)
             }
         }
 

@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.swap
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/SwapCoinCardView.kt
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -48,16 +47,15 @@ import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.modules.swap.SwapXMainModule.CoinBalanceItem
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapXAmountInputState
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapXCoinCardViewState
+import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
+import cash.p.terminal.modules.swap.SwapMainModule.SwapAmountInputState
+import cash.p.terminal.modules.swap.SwapMainModule.SwapCoinCardViewState
 import cash.p.terminal.modules.swap.coinselect.SelectSwapCoinFragment
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.subhead1_jacob
 import cash.p.terminal.ui.compose.components.subhead1_leah
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/SwapCoinCardView.kt
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -65,8 +63,8 @@ import java.math.BigDecimal
 
 @Composable
 fun SwapCoinCardView(
-    dex: SwapXMainModule.Dex,
-    cardState: SwapXCoinCardViewState,
+    dex: SwapMainModule.Dex,
+    cardState: SwapCoinCardViewState,
     navController: NavController,
     modifier: Modifier = Modifier,
     onCoinSelect: (Token) -> Unit,
@@ -138,7 +136,7 @@ fun SwapCoinCardView(
 
 @Composable
 private fun SwapAmountInput(
-    state: SwapXAmountInputState,
+    state: SwapAmountInputState,
     modifier: Modifier = Modifier,
     focusRequester: FocusRequester,
     onChangeAmount: (String) -> Unit,

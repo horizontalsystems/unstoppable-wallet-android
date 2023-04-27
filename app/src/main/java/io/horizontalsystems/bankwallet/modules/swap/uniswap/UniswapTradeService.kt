@@ -1,13 +1,12 @@
 package cash.p.terminal.modules.swap.uniswap
 
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.swap.SwapXMainModule
-import cash.p.terminal.modules.swap.SwapXMainModule.ExactType
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapData.UniswapData
-import cash.p.terminal.modules.swap.SwapXMainModule.SwapResultState
+import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapMainModule.ExactType
+import cash.p.terminal.modules.swap.SwapMainModule.SwapData.UniswapData
+import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
 import cash.p.terminal.modules.swap.providers.UniswapProvider
 import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/uniswap/UniswapTradeService.kt
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
@@ -26,7 +25,7 @@ import java.math.BigDecimal
 
 class UniswapTradeService(
     private val uniswapProvider: UniswapProvider
-) : SwapXMainModule.ISwapTradeXService {
+) : SwapMainModule.ISwapTradeService {
 
     private var swapDataDisposable: Disposable? = null
     private var swapData: SwapData? = null

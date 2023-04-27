@@ -28,7 +28,7 @@ import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.swap.settings.RecipientAddressViewModel
 import cash.p.terminal.modules.swap.settings.SwapSlippageViewModel
-import cash.p.terminal.modules.swap.SwapXMainModule
+import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.settings.ui.RecipientAddress
 import cash.p.terminal.modules.swap.settings.ui.SlippageAmount
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -49,13 +49,13 @@ class OneInchSettingsFragment : BaseFragment() {
         private const val addressKey = "addressKey"
 
         fun prepareParams(
-            dex: SwapXMainModule.Dex,
+            dex: SwapMainModule.Dex,
             address: Address?
         ) = bundleOf(dexKey to dex, addressKey to address)
     }
 
     private val dex by lazy {
-        requireArguments().getParcelable<SwapXMainModule.Dex>(dexKey)
+        requireArguments().getParcelable<SwapMainModule.Dex>(dexKey)
     }
 
     private val address by lazy {
@@ -109,7 +109,7 @@ class OneInchSettingsFragment : BaseFragment() {
 private fun OneInchSettingsScreen(
     onCloseClick: () -> Unit,
     factory: OneInchSwapSettingsModule.Factory,
-    dex: SwapXMainModule.Dex,
+    dex: SwapMainModule.Dex,
     oneInchSettingsViewModel: OneInchSettingsViewModel = viewModel(factory = factory),
     recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
     slippageViewModel: SwapSlippageViewModel = viewModel(factory = factory),
@@ -164,10 +164,10 @@ private fun OneInchSettingsScreen(
 
                         if (swapSettings != null) {
                             navController.setNavigationResult(
-                                SwapXMainModule.resultKey,
+                                SwapMainModule.resultKey,
                                 bundleOf(
-                                    SwapXMainModule.swapSettingsRecipientKey to swapSettings.recipient,
-                                    SwapXMainModule.swapSettingsSlippageKey to swapSettings.slippage,
+                                    SwapMainModule.swapSettingsRecipientKey to swapSettings.recipient,
+                                    SwapMainModule.swapSettingsSlippageKey to swapSettings.slippage,
                                 )
                             )
                             onCloseClick()

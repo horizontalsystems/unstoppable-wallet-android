@@ -2,7 +2,6 @@ package cash.p.terminal.modules.swap.oneinch
 
 import cash.p.terminal.core.convertedError
 import cash.p.terminal.modules.swap.scaleUp
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/oneinch/OneInchKitHelper.kt
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice

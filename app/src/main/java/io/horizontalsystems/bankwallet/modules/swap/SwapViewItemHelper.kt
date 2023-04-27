@@ -3,8 +3,8 @@ package cash.p.terminal.modules.swap
 import cash.p.terminal.R
 import cash.p.terminal.core.IAppNumberFormatter
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.modules.swap.SwapXMainModule.PriceImpactLevel
-import cash.p.terminal.modules.swap.SwapXMainModule.PriceImpactViewItem
+import cash.p.terminal.modules.swap.SwapMainModule.PriceImpactLevel
+import cash.p.terminal.modules.swap.SwapMainModule.PriceImpactViewItem
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import java.math.BigDecimal
@@ -35,7 +35,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
     }
 
     fun priceImpactViewItem(
-        trade: SwapXMainModule.SwapData.UniswapData,
+        trade: SwapMainModule.SwapData.UniswapData,
         minLevel: PriceImpactLevel = PriceImpactLevel.Normal
     ): PriceImpactViewItem? {
 

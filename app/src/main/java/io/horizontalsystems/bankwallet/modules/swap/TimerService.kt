@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.swap
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/TimerService.kt
 
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.Disposable

@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.swap.coinselect
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/coinselect/SelectSwapCoinViewModel.kt
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

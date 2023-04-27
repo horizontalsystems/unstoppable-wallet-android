@@ -29,7 +29,7 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.swap.SwapXMainModule
+import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.approve.SwapApproveModule.dataKey
 import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -54,7 +54,7 @@ class SwapApproveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val approveData = requireArguments().getParcelable<SwapXMainModule.ApproveData>(dataKey)!!
+                val approveData = requireArguments().getParcelable<SwapMainModule.ApproveData>(dataKey)!!
                 SwapApproveScreen(findNavController(), approveData)
             }
         }
@@ -64,7 +64,7 @@ class SwapApproveFragment : BaseFragment() {
 @Composable
 fun SwapApproveScreen(
     navController: NavController,
-    approveData: SwapXMainModule.ApproveData
+    approveData: SwapMainModule.ApproveData
 ) {
     val swapApproveViewModel =
         viewModel<SwapApproveViewModel>(factory = SwapApproveModule.Factory(approveData))

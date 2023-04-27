@@ -1,9 +1,8 @@
 package cash.p.terminal.modules.swap
 
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.modules.swap.SwapXMainModule.Dex
-import cash.p.terminal.modules.swap.SwapXMainModule.ISwapProvider
->>>>>>>> e3363e417 (Rename swap package name):app/src/main/java/cash.p.terminal/modules/swap/SwapMainService.kt
+import cash.p.terminal.modules.swap.SwapMainModule.Dex
+import cash.p.terminal.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -44,7 +43,7 @@ class SwapMainService(
 
     private fun getSwapProvider(blockchainType: BlockchainType): ISwapProvider? {
         val providerId = localStorage.getSwapProviderId(blockchainType)
-            ?: SwapXMainModule.OneInchProvider.id
+            ?: SwapMainModule.OneInchProvider.id
 
         return providers.firstOrNull { it.id == providerId }
     }

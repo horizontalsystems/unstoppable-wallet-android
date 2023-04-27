@@ -38,7 +38,7 @@ import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.receive.ReceiveFragment
 import cash.p.terminal.modules.send.SendFragment
-import cash.p.terminal.modules.swap.SwapXMainModule
+import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.ui.compose.ComposeAppTheme
