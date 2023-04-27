@@ -234,6 +234,7 @@ fun SwapCards(
                 SwapError(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp), text = swapError)
             } else {
                 val infoItems = mutableListOf<@Composable () -> Unit>()
+
                 when (val data = tradeView?.providerTradeData) {
                     is ProviderTradeData.OneInchTradeViewItem -> {
                         data.primaryPrice?.let { primaryPrice ->
@@ -249,15 +250,16 @@ fun SwapCards(
                                 infoItems.add { Price(primaryPrice, secondaryPrice, tradePriceExpiration ?: 1f, tradeView.expired) }
                             }
                         }
-                        if (allowanceViewModel.uiState.isVisible && !allowanceViewModel.uiState.revokeRequired) {
-                            infoItems.add { SwapAllowance(allowanceViewModel, navController) }
-                        }
                         data.priceImpact?.let {
                             infoItems.add { PriceImpact(it, navController) }
                         }
                     }
 
                     else -> {}
+                }
+
+                if (allowanceViewModel.uiState.isVisible && !allowanceViewModel.uiState.revokeRequired) {
+                    infoItems.add { SwapAllowance(allowanceViewModel, navController) }
                 }
 
                 if (infoItems.isEmpty()) {

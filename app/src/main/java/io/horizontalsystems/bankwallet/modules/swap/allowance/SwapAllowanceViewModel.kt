@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.swap.ErrorShareService
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapError
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class SwapAllowanceViewModel(
     private val errorShareService: ErrorShareService,
@@ -37,9 +36,9 @@ class SwapAllowanceViewModel(
 
     init {
         viewModelScope.launch {
-            allowanceService.stateObservable.asFlow()
+            allowanceService.stateFlow
                 .collect { allowanceState ->
-                    handle(allowanceState.orElse(null))
+                    handle(allowanceState)
                 }
         }
         viewModelScope.launch {

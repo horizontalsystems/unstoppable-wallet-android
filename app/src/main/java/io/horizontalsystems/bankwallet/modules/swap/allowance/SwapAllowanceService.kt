@@ -9,14 +9,14 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.Optional
 
 class SwapAllowanceService(
     private val adapterManager: IAdapterManager,
@@ -24,17 +24,17 @@ class SwapAllowanceService(
 ) {
 
     private var token: Token? = null
-    private val stateSubject = PublishSubject.create<Optional<State>>()
     private var spenderAddress: Address? = null
 
     var state: State? = null
         private set(value) {
-            if (field != value) {
-                field = value
-                stateSubject.onNext(Optional.ofNullable(value))
-            }
+            field = value
+            _stateFlow.tryEmit(value)
         }
-    val stateObservable: Observable<Optional<State>> = stateSubject
+
+    private val _stateFlow =
+        MutableSharedFlow<State?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val stateFlow = _stateFlow.asSharedFlow()
 
     private val disposables = CompositeDisposable()
     private var allowanceDisposable: Disposable? = null
