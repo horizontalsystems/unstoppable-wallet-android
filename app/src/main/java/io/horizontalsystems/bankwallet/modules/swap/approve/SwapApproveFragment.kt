@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -54,7 +54,7 @@ class SwapApproveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val approveData = requireArguments().getParcelable<SwapXMainModule.ApproveData>(dataKey)!!
+                val approveData = requireArguments().getParcelable<SwapMainModule.ApproveData>(dataKey)!!
                 SwapApproveScreen(findNavController(), approveData)
             }
         }
@@ -64,7 +64,7 @@ class SwapApproveFragment : BaseFragment() {
 @Composable
 fun SwapApproveScreen(
     navController: NavController,
-    approveData: SwapXMainModule.ApproveData
+    approveData: SwapMainModule.ApproveData
 ) {
     val swapApproveViewModel =
         viewModel<SwapApproveViewModel>(factory = SwapApproveModule.Factory(approveData))

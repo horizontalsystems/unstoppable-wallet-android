@@ -21,18 +21,18 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.evmfee.GasDataError
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.AmountTypeItem
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.ExactType
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.ISwapProvider
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.PriceImpactLevel
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.ProviderTradeData
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.ProviderViewItem
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapActionState
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapButtons
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapData
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapError
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapResultState
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.UniswapWarnings
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountTypeItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.PriceImpactLevel
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ProviderTradeData
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ProviderViewItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapActionState
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapButtons
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.UniswapWarnings
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
@@ -70,7 +70,7 @@ class SwapMainViewModel(
     private val disposable = CompositeDisposable()
     private val tradeDisposable = CompositeDisposable()
 
-    private val dex: SwapXMainModule.Dex
+    private val dex: SwapMainModule.Dex
         get() = service.dex
 
     val revokeEvmData: SendEvmData?
@@ -98,8 +98,8 @@ class SwapMainViewModel(
     private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit) }
     private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
     private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }
-    private var tradeService: SwapXMainModule.ISwapTradeXService = getTradeService(dex.provider)
-    private var tradeView: SwapXMainModule.TradeViewX? = null
+    private var tradeService: SwapMainModule.ISwapTradeService = getTradeService(dex.provider)
+    private var tradeView: SwapMainModule.TradeViewX? = null
     private var tradePriceExpiration: Float? = null
 
     private var amountFrom: BigDecimal? = null
@@ -112,7 +112,7 @@ class SwapMainViewModel(
     private var refocusKey = UUID.randomUUID().leastSignificantBits
 
     var swapState by mutableStateOf(
-        SwapXMainModule.SwapState(
+        SwapMainModule.SwapState(
             dex = dex,
             providerViewItems = providerViewItems,
             availableBalance = availableBalance,
@@ -131,7 +131,7 @@ class SwapMainViewModel(
     )
         private set
 
-    val approveData: SwapXMainModule.ApproveData?
+    val approveData: SwapMainModule.ApproveData?
         get() = balanceFrom?.let { amount ->
             allowanceService.approveData(dex, amount)
         }
@@ -153,7 +153,7 @@ class SwapMainViewModel(
         service.providerUpdatedFlow.collectWith(viewModelScope) { provider ->
             allowanceService.set(getSpenderAddress(provider))
             tradeService = getTradeService(provider)
-            toTokenService.setAmountEnabled(provider is SwapXMainModule.UniswapProvider)
+            toTokenService.setAmountEnabled(provider is SwapMainModule.UniswapProvider)
             syncUiState()
         }
 
@@ -192,7 +192,7 @@ class SwapMainViewModel(
             pendingAllowanceService.set(it)
         }
 
-        toTokenService.setAmountEnabled(dex.provider is SwapXMainModule.UniswapProvider)
+        toTokenService.setAmountEnabled(dex.provider is SwapMainModule.UniswapProvider)
         fromTokenService.start()
         toTokenService.start()
         setBalance()
@@ -203,17 +203,17 @@ class SwapMainViewModel(
     }
 
     private fun getTradeService(provider: ISwapProvider) = when (provider) {
-        SwapXMainModule.OneInchProvider -> OneInchTradeService(oneIncKitHelper)
+        SwapMainModule.OneInchProvider -> OneInchTradeService(oneIncKitHelper)
         else -> UniswapTradeService(uniswapProvider)
     }
 
     private fun getSpenderAddress(provider: ISwapProvider) = when (provider) {
-        SwapXMainModule.OneInchProvider -> oneIncKitHelper.smartContractAddress
+        SwapMainModule.OneInchProvider -> oneIncKitHelper.smartContractAddress
         else -> uniswapProvider.routerAddress
     }
 
     private fun syncUiState() {
-        swapState = SwapXMainModule.SwapState(
+        swapState = SwapMainModule.SwapState(
             dex = dex,
             providerViewItems = providerViewItems,
             availableBalance = availableBalance,
@@ -457,23 +457,23 @@ class SwapMainViewModel(
         }
     }
 
-    private fun oneInchTradeViewItem(params: SwapXMainModule.OneInchSwapParameters, tokenFrom: Token?, tokenTo: Token?) = try {
+    private fun oneInchTradeViewItem(params: SwapMainModule.OneInchSwapParameters, tokenFrom: Token?, tokenTo: Token?) = try {
         val sellPrice = params.amountTo.divide(params.amountFrom, params.tokenFrom.decimals, RoundingMode.HALF_UP).stripTrailingZeros()
         val buyPrice = params.amountFrom.divide(params.amountTo, params.tokenTo.decimals, RoundingMode.HALF_UP).stripTrailingZeros()
         val (primaryPrice, secondaryPrice) = formatter.prices(sellPrice, buyPrice, tokenFrom, tokenTo)
-        SwapXMainModule.TradeViewX(ProviderTradeData.OneInchTradeViewItem(primaryPrice, secondaryPrice))
+        SwapMainModule.TradeViewX(ProviderTradeData.OneInchTradeViewItem(primaryPrice, secondaryPrice))
     } catch (exception: ArithmeticException) {
         null
     }
 
-    private fun uniswapTradeViewItem(swapData: SwapData.UniswapData, tokenFrom: Token?, tokenTo: Token?): SwapXMainModule.TradeViewX {
+    private fun uniswapTradeViewItem(swapData: SwapData.UniswapData, tokenFrom: Token?, tokenTo: Token?): SwapMainModule.TradeViewX {
         val (primaryPrice, secondaryPrice) = swapData.data.executionPrice?.let {
             val sellPrice = it
             val buyPrice = BigDecimal.ONE.divide(sellPrice, sellPrice.scale(), RoundingMode.HALF_EVEN)
             formatter.prices(sellPrice, buyPrice, tokenFrom, tokenTo)
         } ?: Pair(null, null)
 
-        return SwapXMainModule.TradeViewX(
+        return SwapMainModule.TradeViewX(
             ProviderTradeData.UniswapTradeViewItem(
                 primaryPrice = primaryPrice,
                 secondaryPrice = secondaryPrice,

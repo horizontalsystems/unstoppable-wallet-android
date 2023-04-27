@@ -5,14 +5,14 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class SwapCoinProvider(
-    private val dex: SwapXMainModule.Dex,
+    private val dex: SwapMainModule.Dex,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val currencyManager: CurrencyManager,

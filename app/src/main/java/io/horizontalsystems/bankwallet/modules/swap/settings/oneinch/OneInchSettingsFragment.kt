@@ -28,7 +28,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
 import io.horizontalsystems.bankwallet.modules.swap.settings.ui.SlippageAmount
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -49,13 +49,13 @@ class OneInchSettingsFragment : BaseFragment() {
         private const val addressKey = "addressKey"
 
         fun prepareParams(
-            dex: SwapXMainModule.Dex,
+            dex: SwapMainModule.Dex,
             address: Address?
         ) = bundleOf(dexKey to dex, addressKey to address)
     }
 
     private val dex by lazy {
-        requireArguments().getParcelable<SwapXMainModule.Dex>(dexKey)
+        requireArguments().getParcelable<SwapMainModule.Dex>(dexKey)
     }
 
     private val address by lazy {
@@ -109,7 +109,7 @@ class OneInchSettingsFragment : BaseFragment() {
 private fun OneInchSettingsScreen(
     onCloseClick: () -> Unit,
     factory: OneInchSwapSettingsModule.Factory,
-    dex: SwapXMainModule.Dex,
+    dex: SwapMainModule.Dex,
     oneInchSettingsViewModel: OneInchSettingsViewModel = viewModel(factory = factory),
     recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
     slippageViewModel: SwapSlippageViewModel = viewModel(factory = factory),
@@ -164,10 +164,10 @@ private fun OneInchSettingsScreen(
 
                         if (swapSettings != null) {
                             navController.setNavigationResult(
-                                SwapXMainModule.resultKey,
+                                SwapMainModule.resultKey,
                                 bundleOf(
-                                    SwapXMainModule.swapSettingsRecipientKey to swapSettings.recipient,
-                                    SwapXMainModule.swapSettingsSlippageKey to swapSettings.slippage,
+                                    SwapMainModule.swapSettingsRecipientKey to swapSettings.recipient,
+                                    SwapMainModule.swapSettingsSlippageKey to swapSettings.slippage,
                                 )
                             )
                             onCloseClick()

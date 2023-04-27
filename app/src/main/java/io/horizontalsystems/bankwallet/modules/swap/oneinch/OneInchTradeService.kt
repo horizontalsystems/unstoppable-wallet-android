@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.ExactType
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.OneInchSwapParameters
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapData
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.OneInchSwapParameters
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
@@ -19,7 +19,7 @@ import java.math.BigDecimal
 
 class OneInchTradeService(
     private val oneInchKitHelper: OneInchKitHelper
-) : SwapXMainModule.ISwapTradeXService {
+) : SwapMainModule.ISwapTradeService {
 
     private var quoteDisposable: Disposable? = null
 

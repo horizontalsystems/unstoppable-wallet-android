@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.ErrorShareService
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapError
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import kotlinx.coroutines.launch
 
 class SwapAllowanceViewModel(
