@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.swap.uniswap
 
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.ExactType
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapData.UniswapData
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData.UniswapData
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
 import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -25,7 +25,7 @@ import java.math.BigDecimal
 
 class UniswapTradeService(
     private val uniswapProvider: UniswapProvider
-) : SwapXMainModule.ISwapTradeXService {
+) : SwapMainModule.ISwapTradeService {
 
     private var swapDataDisposable: Disposable? = null
     private var swapData: SwapData? = null

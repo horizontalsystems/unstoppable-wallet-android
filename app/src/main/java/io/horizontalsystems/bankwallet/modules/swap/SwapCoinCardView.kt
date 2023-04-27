@@ -47,9 +47,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.CoinBalanceItem
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapXAmountInputState
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.SwapXCoinCardViewState
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapAmountInputState
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapCoinCardViewState
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -63,8 +63,8 @@ import java.math.BigDecimal
 
 @Composable
 fun SwapCoinCardView(
-    dex: SwapXMainModule.Dex,
-    cardState: SwapXCoinCardViewState,
+    dex: SwapMainModule.Dex,
+    cardState: SwapCoinCardViewState,
     navController: NavController,
     modifier: Modifier = Modifier,
     onCoinSelect: (Token) -> Unit,
@@ -136,7 +136,7 @@ fun SwapCoinCardView(
 
 @Composable
 private fun SwapAmountInput(
-    state: SwapXAmountInputState,
+    state: SwapAmountInputState,
     modifier: Modifier = Modifier,
     focusRequester: FocusRequester,
     onChangeAmount: (String) -> Unit,

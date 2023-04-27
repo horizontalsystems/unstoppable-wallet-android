@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
@@ -57,13 +57,13 @@ class SwapAllowanceService(
         return SendEvmData(adapter.eip20Kit.buildApproveTransactionData(address, BigInteger.ZERO))
     }
 
-    fun approveData(dex: SwapXMainModule.Dex, amount: BigDecimal): SwapXMainModule.ApproveData? {
+    fun approveData(dex: SwapMainModule.Dex, amount: BigDecimal): SwapMainModule.ApproveData? {
         val allowance = (state as? State.Ready)?.allowance
         val address = spenderAddress ?: return null
 
         return allowance?.let {
             token?.let { token ->
-                SwapXMainModule.ApproveData(dex, token, address.hex, amount, allowance.value)
+                SwapMainModule.ApproveData(dex, token, address.hex, amount, allowance.value)
             }
         }
 

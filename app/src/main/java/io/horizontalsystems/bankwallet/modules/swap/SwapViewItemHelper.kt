@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.swap
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.PriceImpactLevel
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.PriceImpactViewItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.PriceImpactLevel
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.PriceImpactViewItem
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import java.math.BigDecimal
@@ -35,7 +35,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
     }
 
     fun priceImpactViewItem(
-        trade: SwapXMainModule.SwapData.UniswapData,
+        trade: SwapMainModule.SwapData.UniswapData,
         minLevel: PriceImpactLevel = PriceImpactLevel.Normal
     ): PriceImpactViewItem? {
 

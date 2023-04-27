@@ -38,11 +38,11 @@ class SwapTokenService(
     private var isLoading = false
     private var amountEnabled = true
 
-    val state: SwapXMainModule.SwapXCoinCardViewState
-        get() = SwapXMainModule.SwapXCoinCardViewState(
+    val state: SwapMainModule.SwapCoinCardViewState
+        get() = SwapMainModule.SwapCoinCardViewState(
             token = token,
             uuid = uuid,
-            inputState = SwapXMainModule.SwapXAmountInputState(
+            inputState = SwapMainModule.SwapAmountInputState(
                 amount = amount,
                 secondaryInfo = secondaryInfo,
                 primaryPrefix = primaryPrefix,
@@ -53,7 +53,7 @@ class SwapTokenService(
         )
 
     private val _stateFlow = MutableStateFlow(state)
-    val stateFlow: StateFlow<SwapXMainModule.SwapXCoinCardViewState>
+    val stateFlow: StateFlow<SwapMainModule.SwapCoinCardViewState>
         get() = _stateFlow
 
     fun start() {

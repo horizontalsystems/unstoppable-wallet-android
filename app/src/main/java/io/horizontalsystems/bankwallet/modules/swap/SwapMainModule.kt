@@ -30,7 +30,7 @@ import java.math.BigInteger
 import java.util.*
 import kotlin.math.absoluteValue
 
-object SwapXMainModule {
+object SwapMainModule {
 
     private const val tokenFromKey = "token_from_key"
     const val resultKey = "swap_settings_result"
@@ -114,7 +114,7 @@ object SwapXMainModule {
 
     }
 
-    interface ISwapTradeXService {
+    interface ISwapTradeService {
         val state: SwapResultState
         val stateFlow: Flow<SwapResultState>
         val recipient: Address?
@@ -137,8 +137,8 @@ object SwapXMainModule {
         val availableBalance: String?,
         val amountTypeSelect: Select<AmountTypeItem>,
         val amountTypeSelectEnabled: Boolean,
-        val fromState: SwapXCoinCardViewState,
-        val toState: SwapXCoinCardViewState,
+        val fromState: SwapCoinCardViewState,
+        val toState: SwapCoinCardViewState,
         val tradeView: TradeViewX?,
         val tradePriceExpiration: Float?,
         val error: String?,
@@ -148,13 +148,13 @@ object SwapXMainModule {
         val refocusKey: Long
     )
 
-    data class SwapXCoinCardViewState(
+    data class SwapCoinCardViewState(
         val token: Token?,
         val uuid: Long,
-        val inputState: SwapXAmountInputState,
+        val inputState: SwapAmountInputState,
     )
 
-    data class SwapXAmountInputState(
+    data class SwapAmountInputState(
         val amount: String,
         val secondaryInfo: String,
         val primaryPrefix: String?,

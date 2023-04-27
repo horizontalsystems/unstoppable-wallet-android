@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.Dex
-import io.horizontalsystems.bankwallet.modules.swap.SwapXMainModule.ISwapProvider
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -43,7 +43,7 @@ class SwapMainService(
 
     private fun getSwapProvider(blockchainType: BlockchainType): ISwapProvider? {
         val providerId = localStorage.getSwapProviderId(blockchainType)
-            ?: SwapXMainModule.OneInchProvider.id
+            ?: SwapMainModule.OneInchProvider.id
 
         return providers.firstOrNull { it.id == providerId }
     }
