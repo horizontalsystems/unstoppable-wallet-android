@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.fiat
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -15,11 +14,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.Optional
 
 class FiatService(
     private val switchService: AmountTypeSwitchService,
@@ -48,13 +47,9 @@ class FiatService(
     val currency: Currency
         get() = currencyManager.baseCurrency
 
-    //todo remove this subject
-    private val fullAmountInfoSubject = PublishSubject.create<Optional<FullAmountInfo>>()
-    val fullAmountInfoObservable: Observable<Optional<FullAmountInfo>>
-        get() = fullAmountInfoSubject
-
-    private val _fullAmountInfoFlow = MutableStateFlow<FullAmountInfo?>(null)
-    val fullAmountInfoFlow = _fullAmountInfoFlow.asStateFlow()
+    private val _fullAmountInfoFlow =
+        MutableSharedFlow<FullAmountInfo?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val fullAmountInfoFlow = _fullAmountInfoFlow.asSharedFlow()
 
     init {
         switchService.amountTypeObservable
@@ -92,7 +87,6 @@ class FiatService(
 
         toggleAvailable = rate != null
 
-        fullAmountInfoSubject.onNext(Optional.ofNullable(fullAmountInfo()))
         _fullAmountInfoFlow.tryEmit(fullAmountInfo())
     }
 
@@ -126,7 +120,6 @@ class FiatService(
     }
 
     private fun syncAmountType() {
-        fullAmountInfoSubject.onNext(Optional.ofNullable(fullAmountInfo()))
         _fullAmountInfoFlow.tryEmit(fullAmountInfo())
     }
 
@@ -159,7 +152,6 @@ class FiatService(
     }
 
     fun buildAmountInfo(amount: BigDecimal?): FullAmountInfo? {
-        Log.e("TAG", "buildAmountInfo: ${switchService.amountType}", )
         return when (switchService.amountType) {
             AmountType.Coin -> buildForCoin(amount)
             AmountType.Currency -> buildForCurrency(amount)
@@ -174,12 +166,10 @@ class FiatService(
 
         when (switchService.amountType) {
             AmountType.Coin -> {
-                fullAmountInfoSubject.onNext(Optional.ofNullable(buildForCoin(coinAmount)))
                 _fullAmountInfoFlow.tryEmit(buildForCoin(coinAmount))
             }
 
             AmountType.Currency -> {
-                fullAmountInfoSubject.onNext(Optional.ofNullable(buildForCurrency(currencyAmount)))
                 _fullAmountInfoFlow.tryEmit(buildForCurrency(currencyAmount))
             }
         }
