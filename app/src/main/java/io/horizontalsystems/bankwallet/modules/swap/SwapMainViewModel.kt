@@ -48,7 +48,6 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.UUID
@@ -174,12 +173,10 @@ class SwapMainViewModel(
                 disposable.add(it)
             }
 
-        allowanceService.stateObservable
-            .subscribeOn(Schedulers.io())
-            .subscribe {
+        allowanceService.stateFlow
+            .collectWith(viewModelScope) {
                 syncSwapDataState()
             }
-            .let { disposable.add(it) }
 
         pendingAllowanceService.stateObservable
             .subscribeIO {

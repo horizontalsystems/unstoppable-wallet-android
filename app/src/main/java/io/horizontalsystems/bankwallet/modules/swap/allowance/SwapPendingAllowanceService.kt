@@ -10,10 +10,13 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState.Revoking
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.util.concurrent.Executors
 
 enum class SwapPendingAllowanceState {
     NA, Revoking, Revoked, Approving, Approved;
@@ -28,7 +31,8 @@ class SwapPendingAllowanceService(
     private var token: Token? = null
     private var pendingAllowance: BigDecimal? = null
 
-    private val disposables = CompositeDisposable()
+    private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    private val coroutineScope = CoroutineScope(singleDispatcher)
 
     private val stateSubject = PublishSubject.create<SwapPendingAllowanceState>()
     var state: SwapPendingAllowanceState = NA
@@ -41,12 +45,10 @@ class SwapPendingAllowanceService(
     val stateObservable: Observable<SwapPendingAllowanceState> = stateSubject
 
     init {
-        allowanceService.stateObservable
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                sync()
-            }
-            .let { disposables.add(it) }
+        coroutineScope.launch {
+            allowanceService.stateFlow
+                .collect { sync() }
+        }
     }
 
     fun set(token: Token?) {
@@ -70,7 +72,7 @@ class SwapPendingAllowanceService(
     }
 
     fun onCleared() {
-        disposables.clear()
+        coroutineScope.cancel()
     }
 
     private fun sync() {
