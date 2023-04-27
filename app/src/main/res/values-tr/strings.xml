@@ -40,7 +40,7 @@
     <string name="Button_Search">Ara</string>
     <string name="Button_Back">Geri</string>
     <string name="Button_Copy">Kopyala</string>
-    <string name="Button_Browser">Browser</string>
+    <string name="Button_Browser">Tarayıcı</string>
     <string name="Button_Delete">Sil</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
@@ -49,7 +49,7 @@
     <string name="PercentTitle">Yüzde</string>
     <string name="Keyboard">Klavye</string>
     <string name="AccountRecovery_Note">Not</string>
-    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Free</string>
@@ -75,7 +75,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Lütfen yalnızca desteklenen sembolleri kullanın:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
+    <string name="CreateWallet_PassphraseDescription">Parolalar, cüzdanlar için ek bir güvenlik katmanı ekler. Bir cüzdanı geri yüklemek için bir kullanıcı hem anımsatıcı hem de bir parola gerektiriyordu.\n\n\nParolalar, kullanıcıların tek bir anımsatıcı ancak farklı bir parola kullanarak çok paralı cüzdanlara sahip olmalarını da kolaylaştırır.</string>
     <!--Languages-->
     <string name="Language_English">İngilizce</string>
     <string name="Language_Japanese">Japonca</string>
@@ -99,7 +99,7 @@
     <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolayı girin. Mevcut bir cüzdanı yeni bir parolayla geri yüklemek, yepyeni bir cüzdan oluşturur.</string>
     <string name="Restore_Title">Blok Zincirleri Seç</string>
     <string name="Restore_Key">Anahtar</string>
     <string name="Restore_By">İçerik</string>
@@ -109,19 +109,19 @@
     <string name="Restore_PrivateKeyHint">EVM Özel Anahtarını, BIP32 Root Key veya Account Extended Private Key girin</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 veya 24 kelime girin</string>
     <string name="Restore_NonStandardRestore">Standart Olmayan Geri Yükleme</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to P.CASH users who have a non-standard wallet. Such wallets might have been created in P.CASH version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandard_Description">Bu sayfa, standart olmayan bir cüzdanı olan P.CASH kullanıcıları için özel geri yükleme mekanizması sağlar. Genel olarak, bu tür cüzdanlar, İngilizce olmayan bir anımsatma kelimeleri listesi ve/veya cüzdan şifresinde özel bir karakter (yani aksan simgesi) kullanılarak P.CASH 0.27 - 0.28 sürümünde oluşturulmuş olabilir.\n\n Bu durumdan etkilenen bir kullanıcıysanız, 0.29 sürümüne güncelledikten sonra cüzdan bakiyeniz 0 olarak görüntülenir. Bu sayfa, standart olmayan cüzdanınıza erişimi geri yüklemenizi sağlayacaktır. Geri yüklendikten sonra, yeni bir cüzdan oluşturmanız (standartlarla uyumlu) ve paranızı oraya taşımanız önerilir.</string>
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Daha hızlı senkronizasyon için cüzdanın doğum günü yüksekliğini girin.</string>
     <string name="Restore_ZCash_Birthday_Hint">00000000 (isteğe bağlı)</string>
     <string name="Restore_ZCash_RestoreAsNew">Yeni olarak geri yükle</string>
     <string name="Restore_ZCash_NewWallet">Yeni Cüzdan</string>
-    <string name="Restore_ZCash_NewWallet_Description">Doesn\'t have any transactions</string>
-    <string name="Restore_ZCash_OldWallet">Existing Wallet</string>
-    <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
+    <string name="Restore_ZCash_NewWallet_Description">Herhangi bir para işlemi yok</string>
+    <string name="Restore_ZCash_OldWallet">Mevcut Cuzdan</string>
+    <string name="Restore_ZCash_OldWallet_Description">Işlemler Mevcut</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Blok zinciri ile ilk senkronizasyon, çok fazla internet trafiği tüketebilir.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
@@ -170,12 +170,12 @@
     <string name="MarketGlobalMetrics_Volume">24h Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in the cumulative market value of tokens in the Decentralized Finance sector.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in the cumulative value of all cryptocurrencies is managed by decentralized protocols.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">Total market value of DeFi projects.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Hepsi</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
@@ -289,11 +289,11 @@
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres veya Domain</string>
     <string name="Send_Fee">Masraf</string>
-    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
+    <string name="Send_Fee_Info">Blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksektir.</string>
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Advanced">İleri düzey</string>
-    <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
+    <string name="Send_Hodler_Description">TimeLock yalnızca BIP44 adreslerine (1 ile başlar) göndermek için çalışır</string>
     <string name="Send_Confirmation_Title">Onayla</string>
     <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
@@ -310,7 +310,7 @@
     <string name="ScanQr_CameraPermissionDeniedText">Bu uygulama için kameranıza erişim reddedildi, ayarlara gidip erişime izin verebilirsiniz</string>
     <string name="ScanQr_GoToSettings">Ayarlara gidin</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
-    <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
+    <string name="Send_Error_UnsupportedAddress">Zaman kilitleme sadece BIP44 (1 ile başlayan) adresleriyle çalışır</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
     <string name="Send_Error_MinimumAmount">Minimum miktar %s</string>
     <string name="Send_Error_MaximumAmount">Maksimum miktar %s</string>
@@ -339,41 +339,41 @@
     <string name="Send_Error_FetchFeeRateFailed">Ücret oranı getirilirken hata oluştu</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">İleri düzey</string>
-    <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
-    <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
-    <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
-    <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
+    <string name="SendEvmSettings_Nonce">İşlem Nonce</string>
+    <string name="SendEvmSettings_Nonce_Info">Nonce, kullanıcının cüzdanındaki bir işlem için benzersiz bir tamsayı değeridir. Normalde gönderilen her işlemle birlikte artar ve değiştirilmesi gerekmez. İleri düzey kullanıcılar, yeni işlemin eskisinin onaylanmasını önlemek için yeterince yüksek bir ücrete sahip olduğu sürece, bu işlemi iptal etmek ve değiştirmek için bekleyen bir işlemin bir nonsine eşit olarak ayarlayabilirler (örneğin, onayını hızlandırmak veya işlem parametrelerini tamamen değiştirmek isteyebilirler). Birden fazla bekleyen işlem aynı nonce\'a sahip olduğunda, genellikle en yüksek ücrete sahip olan biri onaylanır.</string>
+    <string name="SendEvmSettings_Error_NonceUsed_Title">Kullanılmış Nonce</string>
+    <string name="SendEvmSettings_Error_NonceUsed">Bu nonce ile gerçekleştirilen bir işlem zaten var.</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Ücret Ayarları</string>
     <string name="FeeSettings_Reset">Sıfırla</string>
-    <string name="FeeSettings_FeeLegacy">Max Fee</string>
-    <string name="FeeSettings_FeeLegacy_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
-    <string name="FeeSettings_Fee">Max Fee</string>
-    <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
+    <string name="FeeSettings_FeeLegacy">Maks. Ücret</string>
+    <string name="FeeSettings_FeeLegacy_Info">Verilen işlem için beklenen maksimum toplam ücret. Genellikle, gerçek işlem ücreti daha düşük olur.</string>
+    <string name="FeeSettings_Fee">Maks. Ücret</string>
+    <string name="FeeSettings_Fee_Info">Bu işlem için ödenecek maksimum tahmini işlem ücreti, aşağıdaki gaz limiti, maksimum ücret oranı ve maksimum öncelik ücreti değerlerine göre hesaplanır. Ödenen gerçek ücret normalde daha düşük olacaktır.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
+    <string name="FeeSettings_GasLimit_Info">İşlem karmaşıklığı \"gaz\" adı verilen birimlerle ölçülür. Yürütülen akıllı sözleşmeye bağlı olarak değişir. Gaz Limiti, onu yürütmek için gereken tahmini maksimum gazdır. Kullanılan gerçek gaz normalde daha düşük olacaktır.</string>
     <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
-    <string name="FeeSettings_BaseFee">Base Fee</string>
-    <string name="FeeSettings_BaseFee_Info">The network protocol determines the base price per gas for each block, called base fee rate. It varies according to the network utilization level from block to block. It can increase or decrease by no more than 12.5% in the next block, making fees more predictable. The value shown here is the current block\'s base fee rate.</string>
-    <string name="FeeSettings_MaxFee">Max Fee Rate (Gwei)</string>
-    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
-    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
+    <string name="FeeSettings_BaseFee">Baz Ücret</string>
+    <string name="FeeSettings_BaseFee_Info">Ağ protokolü, her blok için gaz başına taban fiyatı belirler ve buna baz ücret oranı denir. Bloktan bloğa ağ kullanım seviyesine göre değişir. Bir sonraki blokta% 12,5\'ten fazla artamaz veya azalabilir ve bu da ücretleri daha öngörülebilir hale getirir. Burada gösterilen değer, geçerli bloğun temel ücret oranıdır.</string>
+    <string name="FeeSettings_MaxFee">Maks. Ücret Oranı (Gwei)</string>
+    <string name="FeeSettings_MaxFee_Info">Bu, kullanıcının ödemek istediği gaz başına maksimum toplam fiyattır. Ağın temel ücret oranını ve maksimum öncelik ücreti oranını kapsamalıdır. Burada gösterilen değer, bir sonraki bloğun taban ücret oranının tahmini artı kullanıcı tarafından seçilen maksimum öncelik ücreti oranına göre önerilir. Ödenen gerçek ücret oranı normalde daha düşük olacaktır. Bunu mevcut taban ücret oranından daha düşük bir değere ayarlamak, ödenen ücreti sınırlayacaktır, ancak işlemin onaylanması için daha uzun bekleme sürelerine, hatta sıkışmış bir işlemde bile sonuçlanacaktır.</string>
+    <string name="FeeSettings_MaxMinerTips">Maks. Öncelik Ücreti (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Kullanıcılar, bir işlemin daha hızlı onaylanmasını teşvik etmek için öncelik ücretleri öderler. Bazen tips denir. Maksimum öncelik ücreti oranı, kullanıcının taban ücret oranının üzerine ödemek istediği gaz başına maksimum ek fiyattır. Burada gösterilen değer, tahmin edilen ağ koşullarına göre önerilir. Gerçek öncelik ücreti normalde daha düşük olacaktır. Bunu sıfıra ayarlamak, tüm kullanıcılardan bekleyen işlemler kuyruğunun sonuna yerleştirildiğinden, işlemin onaylanması için uzun bir bekleme süresine neden olabilir.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskli</string>
-    <string name="FeeSettings_RiskOfGettingStuckLegacy">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">İşlem bir süre beklemede kalabilir veya tamamen başarısız olabilir.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Riskli</string>
-    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">İşlemin hızlı bir şekilde yürütülmesini sağlamak için maksimum ücret oranı (çıkarılan maksimum mineri tip) mevcut baz ücret oranından daha yüksek olmalıdır. Aksi takdirde işlem, koşul yerine getirilene kadar beklemede kalabilir.</string>
     <string name="FeeSettings_Overpricing_Title">Ücret Çok Yüksek</string>
     <string name="FeeSettings_Overpricing">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için gereken ücretten daha yüksek.</string>
     <string name="FeeSettings_Info_IUnderstand">Anlıyorum</string>
-    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
-        \n\nThe P.CASH wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
-        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
-        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
-        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
+    <string name="FeeSettings_FeeRate">Ücret Oranı (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate_RecommendedInfo">İşte sonraki 2 bloğa eklenmek için önerilen değer</string>
+    <string name="FeeSettings_FeeRate_Info">Blok zincirleri, kullanıcıların işlemleri gönderirken ağ ücretlerini ödemelerini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksektir.
+         \n\nP.CASH cüzdan, mevcut blockchain etkinliğine dayalı olarak ücreti tahmin eder ve işlemin makul bir süre içinde işlenmesi için en uygun değeri önerir.
+         \n\nSatoshi kullanıcının işlemin tek bir baytı için ödemesi gereken miktar olarak gösterilen önerilen ücret oranı. Bu nedenle toplam ücret, işlemin bayt cinsinden ölçülen toplam boyutuna bağlıdır.
+         \n\nKullanıcılar, ücret oranı değerini artırmak veya azaltmak için sağlanan kontrolleri kullanabilir. Ücret oranındaki değişiklik, kullanıcının ödeyeceği işlem için toplam ücreti değiştirir.
+         \n\nÜcret oranının önerilen değerin altında ayarlanması, bir işlemin saatlerce beklemede kalmasına veya reddedilmesine neden olabilir. Değer ne kadar düşük olursa, işlemin onaylanması o kadar uzun sürer. Önceliğin önemli olduğu işlemler için daha yüksek ücret oranı belirlemenizi öneririz.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">İşlem hızı</string>
     <string name="FeeInfo_Description">Hem Bitcoin hem de Ethereum blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksek ve blok zincir daha az meşgul olduğunda ücretler daha düşüktür.</string>
@@ -507,6 +507,7 @@
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Slipaj Toleransı %s%% üzerinde olamaz</string>
     <string name="SwapSettings_Error_InvalidAddress">Geçersiz adres</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Geçersiz %s adres</string>
     <string name="SwapSettings_Error_InvalidSlippage">Geçersiz Kayma</string>
     <string name="SwapSettings_Error_InvalidDeadline">Geçersiz Son Tarih</string>
     <string name="SwapSettings_Warning_UnusualSlippage">İşleminiz varlık fiyatını etkileyebilir</string>
@@ -581,7 +582,7 @@
     <string name="TransactionInfo_Id">Kimlik</string>
     <string name="TransactionInfo_Service">Hizmet</string>
     <string name="TransactionInfo_RawTransaction">Ham işlem</string>
-    <string name="TransactionInfo_ContactName">Contact Name</string>
+    <string name="TransactionInfo_ContactName">Kişi Adı</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
     <string name="TransactionInfo_Spender">Harcayan</string>
@@ -691,10 +692,10 @@
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Bu değişiklikten sonra cüzdan Bitcoin blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Geri Yükleme Kaynağı</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Cüzdanı işlemlerle geri yüklemek için veri kaynağını seçin.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Select a data source for wallet restore. Restoring from blockchain takes considerably more time.</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.\n\nAt this point, there are two potential ways for a mobile wallet like P.CASH to do this:\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).\n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Giriş/Çıkış</string>
-    <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">İşlem Ayarları</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">İşlem Girdileri / Çıktıları</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">İşlemlerin yapılandırılma şeklini değiştirerek BTC, LTC, BCH işlemlerinizin izlenilmesini zorlaştırın.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.\n\nThe P.CASH wallet implements measures to make it harder for someone to figure out which output goes where.\n\nThere are two options available to P.CASH users:\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
@@ -787,20 +788,14 @@
     <string name="ManageCoins_Search">Ad, kod veya sözleşme adresi</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
-    <string name="ManageCoins_BipsDescription">There are 3 common address formats %s wallets can use to receive incoming payments:
-\n
-\n- BIP-44 (older)
-\n- BIP-49 (newer)
-\n- BIP-84 (newest)
-\n
-\nWhile P.CASH wallet supports all 3 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
-    <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
-\n
-\n- TYPE0 (older)
-\n- TYPE145 (newer)
-\n
-\nWhile P.CASH wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
-    <string name="ManageCoins_ContractAddress">CONTRACT ADDRESS</string>
+    <string name="ManageCoins_BipsDescription">%s cüzdanlarının gelen ödemeleri almak için kullanabileceği 4 yaygın adres biçimi vardır:\n\n- BIP-44 (eski)\n- BIP-49\n- BIP-84 (önerilen) \n- BIP-86 (en yeni)\n\nP.CASH cüzdan 4\'ünü de desteklerken, BIP-84 formatında çalışan bir %s cüzdanı kullanmanızı önerir.</string>
+    <string name="ManageCoins_BchTypeDescription">Bitcoin Cash cüzdanlarının gelen ödemeleri almak için kullanabileceği 2 adres formatı vardır: 
+\n 
+\n- TYPE0 (eski) 
+\n- TYPE145 (daha yeni) 
+\n 
+\nP.CASH cüzdan her ikisini de desteklerken, TYPE145 formatında çalışan bir Bitcoin Cash cüzdanı kullanmanızı önerir.</string>
+    <string name="ManageCoins_ContractAddress">CONTRACT ADRESİ</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
     <string name="ExperimentalFeatures_Description">Aşağıdaki özellikler deneyseldir ve dikkatli kullanılmalıdır. Bu özellikleri kendi kripto fonlarımızı kullanarak baştan sona test etmemize rağmen, olası tüm durumlarda beklendiği gibi çalışmalarını garanti edemeyiz.</string>
@@ -894,18 +889,18 @@
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Gizli Anahtar</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
-    <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over EVM based crypto i.e Ethereum, Binance Smart Chain etc. within respective wallet.</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Ilgili cüzdan içinde EVM tabanlı kripto, yani Ethereum, Binance Smart Chain vb. Üzerinde tam kontrol sağlar.</string>
     <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
-    <string name="PrivateKeys_Bip32RootKeyDescription">Grants full control over the assets on the respective wallet.</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">İlgili cüzdandaki varlıklar üzerinde tam kontrol sağlar.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO based crypto i.e. Litecoin, Bitcoin Cash, Dash etc. within respective wallet.</string>
-    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. P.CASH Wallet support team will never ask for it.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Ilgili cüzdan içinde Bitcoin ve diğer UTXO tabanlı kriptolar üzerinde tam kontrol sağlar, yani Litecoin, Bitcoin Cash, Dash vb.</string>
+    <string name="PrivateKeys_NeverShareWarning">Kurtarma ifadenizi asla kimseyle paylaşmayın. P.CASH ekip asla kurtarma ifadenizi istemez.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Genel Anahtarlar</string>
     <string name="PublicKeys_EvmAddress">EVM Adresi</string>
     <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
-    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
+    <string name="PublicKeys_EvmAddress_Description">Ethereum, Binance Smart Chain ve diğer EVM tabanlı blok zincirlerinde varlık tutan cüzdanların salt okunur olarak izlenmesini sağlar.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Bitcoin ve diğer UTXO tabanlı kriptoları (örneğin Litecoin, Bitcoin Cash, Dash vb.) tutan cüzdanların salt okunur olarak izlenmesine izin verir.</string>
     <!-- Recovery Phrase Verify -->
     <string name="RecoveryPhraseVerify_Title">Doğrula</string>
     <string name="RecoveryPhraseVerify_Description">Cüzdan kurtarma ifadenizden istenen iki kelimeyi seçin</string>
@@ -948,7 +943,7 @@
     <string name="AddToken_CoinCode">Coin Kodu</string>
     <string name="AddToken_Decimals">Ondalıklar</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">COIN TYPES</string>
+    <string name="AddToken_CoinTypes">COIN ÇEŞİTLERİ</string>
     <string name="AddToken_AlreadyAdded">ÇOKTAN EKLENMİŞ GÖRÜNÜYOR</string>
     <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
     <string name="AddToken_ChooseToken">Tokenleri seç</string>
@@ -979,9 +974,9 @@
     <string name="Tor_Alert_Title">İnternet</string>
     <string name="Tor_Status_Starting">Tor Başlatılıyor...</string>
     <string name="Tor_Status_Error">Tor başlatma hatası !</string>
-    <string name="TorPage_Connecting">Connecting Tor…</string>
+    <string name="TorPage_Connecting">Tor Bağlanıyor…</string>
     <string name="TorPage_Connected">Bağlandı</string>
-    <string name="TorPage_Failed">Failed to Connect Tor</string>
+    <string name="TorPage_Failed">Tor bağlanılamadı</string>
     <string name="TorPage_ConnectionClosed">Bağlantı kesildi</string>
     <string name="Tor_TorIsActive">Tor aktif</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
@@ -1019,15 +1014,6 @@
     <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
-    <string name="CoinPage_TokenDistribution">Token Distribution</string>
-    <string name="CoinPage_TokenDistribution_Description">Onchain token parameters. Typically, healthy projects have an active on-chain user base and well-distributed token.</string>
-    <string name="CoinPage_TokenLiquidity">Token Liquidity</string>
-    <string name="CoinPage_TokenLiquidity_Description">The state of liquidity for the given asset on decentralized exchange markets.</string>
-    <string name="CoinPage_TotalVolume">Total Volume</string>
-    <string name="CoinPage_DetailsTvl">TVL</string>
-    <string name="CoinPage_TokenTvl">Token TVL</string>
-    <string name="CoinPage_TokenTvl_Description">Total Value Locked (TVL) is a metric that shows the total value of crypto assets under automated management by the smart contracts powering the given protocol.</string>
-    <string name="CoinPage_SecurityParams">Security Parameters</string>
     <string name="CoinPage_SecurityParams_Privacy">Gizlilik</string>
     <string name="CoinPage_SecurityParams_Low">Yavaş</string>
     <string name="CoinPage_SecurityParams_Medium">Medium</string>
@@ -1038,20 +1024,6 @@
     <string name="CoinPage_SecurityParams_ConfiscationResistance">Confiscation-resistance</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance">Censorship-resistance</string>
     <string name="CoinPage_SecurityParams_Audits">Audits</string>
-    <string name="CoinPage_SecurityParams_Yes">Yes</string>
-    <string name="CoinPage_SecurityParams_No">No</string>
-    <string name="CoinPage_SecurityParams_Privacy_Low">LOW:\nTransactions with this token are fully public allowing 3rd party services to link different transactions to the same entity, see amounts transacted and view user balances.</string>
-    <string name="CoinPage_SecurityParams_Privacy_Medium">MEDIUM:\nTransactions with this token are semi-anonymous. A 3rd party service is able to see the amounts transacted and partially link different transactions to the same entity.</string>
-    <string name="CoinPage_SecurityParams_Privacy_High">HIGH:\nTransactions with this token are anonymous by default or provide such capabilities. No entity is able to link different transactions to the same individual or see the amounts transacted.</string>
-    <string name="CoinPage_SecurityParams_Issuance_Centralized">CENTRALIZED:\nThe amount of tokens in circulation can potentially be increased or decreased by a centralized entity at will.</string>
-    <string name="CoinPage_SecurityParams_Issuance_Decentralized">DECENTRALIZED:\nThe number of tokens in circulation controlled by an algorithm and works in a deterministic manner outside of centralized influence.</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">YES:\nThe tokens can\'t be confiscated when kept in a non-custodial wallet.</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance_No">NO:\nThe tokens can be confiscated or tampered with by an issuing entity.</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">YES:\nThe token holder can\'t be censored from transacting.</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance_No">NO:\nThe token holder can be censored from transacting.</string>
-    <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited by an external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk-free and not doesn\'t have any exploits risks.</string>
-    <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non-audited projects are more likely to have security issues in the code.</string>
-    <string name="CoinPage_SecurityParams_Info">Bilgi</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
@@ -1074,7 +1046,7 @@
     <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
-    <string name="CoinPage_MarketCap_Thousand">k</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
@@ -1105,20 +1077,9 @@
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
     <string name="CoinPage_MajorHolders_Description">Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">in top 10 addresses</string>
-    <string name="CoinPage_MajorHolders_HoldersNumber">Holders: %s</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">ilk 10 sahibinde</string>
+    <string name="CoinPage_MajorHolders_HoldersNumber">Toplam Sahip: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
-    <string name="CoinPage_DetailsDexVolume">Dex Volume</string>
-    <string name="CoinPage_DetailsDexVolume_Description">The trading volume for the token on decentralized exchanges.</string>
-    <string name="CoinPage_DetailsDexLiquidity">Dex Liquidity</string>
-    <string name="CoinPage_DetailsDexLiquidity_Description">The total amount of available liquidity for the token on decentralized exchanges.</string>
-    <string name="CoinPage_DetailsTxCount">Tx Count</string>
-    <string name="CoinPage_DetailsTxCount_Description">The number of token transactions recorded on-chain over various periods.</string>
-    <string name="CoinPage_DetailsTxVolume">Tx Volume</string>
-    <string name="CoinPage_DetailsTxVolume_Description">The aggregate token transaction volume is recorded on-chain. The volume is measured in the actual tokens (not USD).</string>
-    <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
-    <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
-    <string name="CoinPage_DetailsChartPeriod_Month1">30d</string>
     <string name="CoinPage_NftBannerTitle">P.CASH NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding P.CASH NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
@@ -1130,19 +1091,20 @@
     <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes that are being tracked:</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes">İzlenen DEX\'ler:</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity_Info2">Chart showing variation in available liquidity for the token on leading decentralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes that are being tracked:</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes">İzlenen DEX\'ler:</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in active address count over 1 year period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info3">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">List of all tokens ranked based on the number of active wallets transacting with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
@@ -1150,27 +1112,39 @@
     <string name="CoinAnalytics_TransactionCount_Info5">The total number of tokens transferred over the blockchain over the 30 day period.</string>
     <string name="CoinAnalytics_Holders_Info1">Total number of unique addresses holding the token on various blockchains.</string>
     <string name="CoinAnalytics_Holders_Info2">Top 10 wallets holding the token on each blockchain.</string>
-    <string name="CoinAnalytics_Holders_TrackedBlockchains">Tracked blockchains: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
+    <string name="CoinAnalytics_Holders_TrackedBlockchains">İzlenen blok zincirleri: Ethereum, Binance Smart Chain, İyimserlik, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
     <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">List of all tokens ranked based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Market Cap / TVL ratio for the project.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info1">Total revenue generated by the project\'s smart contracts over 30-day period.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated by the project\'s smart contracts over 30-day period.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated by the project\'s smart contracts over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_PageLocked">This page available only for Unstoppable Wallet premium users</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info1">30 günlük süre boyunca token sahipleri için üretilen toplam gelir. Tipik olarak, ücretler token bahisçileri tarafından veya bir token yakma mekanizması aracılığıyla toplanır.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'ın sıralaması, token bahisçileri için 30 günlük süre boyunca elde edilen gelire dayanmaktadır.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info3">Tüm belirteçlerin listesi, (24 saat / 7D / 1M aralıklarında) bahisçileri için üretilen gelire göre sıralanmıştır.</string>
+    <string name="CoinAnalytics_PageLocked">This page available only for P.CASH Wallet premium users</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
     <string name="CoinAnalytics_CexVolume">CEX Volume</string>
+    <string name="CoinAnalytics_CexVolumeRank">CEX Hacim Sıralaması</string>
+    <string name="CoinAnalytics_CexVolumeRank_Description">Tokens ranked by trading volume for the token on centralized exchanges.</string>
     <string name="CoinAnalytics_DexVolume">DEX Volume</string>
+    <string name="CoinAnalytics_DexVolumeRank">DEX Hacim Sıralaması</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens ranked by trading volume for the token on decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity">DEX Liquidity</string>
-    <string name="CoinAnalytics_ActiveAddresses">Active Addresses</string>
+    <string name="CoinAnalytics_DexLiquidityRank">DEX Likidite Sıralaması</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens ranked by available liquidity on decentralized exchanges.</string>
+    <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
+    <string name="CoinAnalytics_ActiveAddressesRank">Aktif Adresler Sıralaması</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens ranked by number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">Transaction Count</string>
+    <string name="CoinAnalytics_TransactionCountRank">İşlem Sayısı Sıralaması</string>
+    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens ranked by number of transactions on a blockchain.</string>
     <string name="CoinAnalytics_Holders">Holders</string>
     <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
-    <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total Value Locked)</string>
+    <string name="CoinAnalytics_ProjectTvl_FullTitle">Proje TVL (Toplam Değer)</string>
     <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Project Revenue</string>
+    <string name="CoinAnalytics_ProjectRevenueRank">Proje Gelir Sıralaması</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
     <string name="CoinAnalytics_OtherData">Other Data</string>
     <string name="CoinAnalytics_Reports">Reports</string>
     <string name="CoinAnalytics_Funding">Funding</string>
@@ -1180,6 +1154,7 @@
     <string name="Coin_Analytics_Current">current</string>
     <string name="Coin_Analytics_Rank">Rank</string>
     <string name="Coin_Analytics_30DayRank">30-Day Rank</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
     <string name="Coin_Analytics_30DayVolume">30-Day Volume</string>
     <string name="Nfts_Title">NFT\'ler</string>
     <string name="Nfts_PriceType_Days_7">Ortalama 7G</string>
@@ -1225,14 +1200,14 @@
     <string name="NftCollection_Activity">Aktivite</string>
     <string name="NftCollection_Owners">Sahip</string>
     <string name="NftCollection_AveragePrice">Tüm Zamanların Ortalaması</string>
-    <string name="NftCollection_ItemsCount">%d Items</string>
+    <string name="NftCollection_ItemsCount">%d adet</string>
     <string name="NftCollection_TodaysSales">Bugünün Satıcıları</string>
     <string name="NftCollection_TodaysSalesCount">%s NFT</string>
-    <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
+    <string name="NftCollection_AveragePriceDescription">NFT başına ~%s</string>
     <string name="NftCollection_Royalty">Royalty</string>
     <string name="NftCollection_InceptionDate">Inception Date</string>
     <!-- NFT Collection Events -->
-    <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
+    <string name="NftCollection_EventType_SelectorTitle">Etkinlik Türü Seç</string>
     <string name="NftCollection_EventType_All">Hepsi</string>
     <string name="NftCollection_EventType_List">Liste</string>
     <string name="NftCollection_EventType_Sale">İndirim</string>
@@ -1311,22 +1286,29 @@
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Biyometri Tarayıcı</string>
     <!--Contacts-->
-    <string name="Contacts">Contacts</string>
-    <string name="Contacts_Export">Export Contacts</string>
-    <string name="Contacts_Import">Import Contacts</string>
-    <string name="Contacts_AddressesCount">Addresses: %s</string>
-    <string name="Contacts_NewContact">New Contact</string>
-    <string name="Contacts_AddNewContact">Add New Contact</string>
+    <string name="Contacts">Kişiler</string>
+    <string name="Contacts_Backup">Kişileri Yedekle</string>
+    <string name="Contacts_Restore">Kişileri Geri Yükle</string>
+    <string name="Contacts_Restore_Warning">Bu eylem, varolan kişi listenizi tamamini siler ve yenisini oluşturur. Kişi listenizi değiştirmek istiyor musunuz? </string>
+    <string name="Contacts_AddressesCount">Adresler: %s</string>
+    <string name="Contacts_NewContact">Yeni Kişi</string>
+    <string name="Contacts_AddNewContact">Yeni Kişi Ekle</string>
     <string name="Contacts_NameHint">İsim</string>
-    <string name="Contacts_AddAddress">Add Address</string>
+    <string name="Contacts_AddAddress">Adres ekle</string>
+    <string name="Contacts_AddAddress_NewContact">Yeni Kişi Oluştur</string>
+    <string name="Contacts_AddAddress_ExistingContact">Mevcut Kişiye Ekle</string>
+    <string name="Contacts_AddAddress_Replace">Değiştir</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Seçilen kişinin zaten %1$s üzerinde bir adresi var. Bu eylem, %2$s adresini %3$s ile değiştirecek?</string>
     <string name="Contacts_AddressHint">Adres veya Domain</string>
-    <string name="Contacts_DeleteContact">Delete Contact</string>
-    <string name="Contacts_DeleteContact_Warning">Are you sure you want to delete this contact?</string>
-    <string name="Contacts_DeleteAddress">Delete Address</string>
-    <string name="Contacts_DeleteAddress_Warning">Are you sure you want to delete this address?</string>
-    <string name="Contacts_DiscardChanges">Discard Changes</string>
-    <string name="Contacts_KeepEditing">Keep Editing</string>
-    <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard this new changes?</string>
-    <string name="Contacts_NoContacts">You do not have an added contact</string>
-    <string name="Contacts_ActionMore">More</string>
+    <string name="Contacts_DeleteContact">Kişiyi Sil</string>
+    <string name="Contacts_DeleteContact_Warning">Bu kişi silmek istediğine emin misin?</string>
+    <string name="Contacts_DeleteAddress">Adresi Sil</string>
+    <string name="Contacts_DeleteAddress_Warning">Bu adresi silmek istediğinize emin misiniz?</string>
+    <string name="Contacts_DiscardChanges">Değişiklikleri İptal Et</string>
+    <string name="Contacts_KeepEditing">Düzenlemeyi sürdür</string>
+    <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
+    <string name="Contacts_NoContacts">Eklenmiş bir kişiniz yok</string>
+    <string name="Contacts_ActionMore">Daha fazla</string>
+    <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
+    <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>
 </resources>
