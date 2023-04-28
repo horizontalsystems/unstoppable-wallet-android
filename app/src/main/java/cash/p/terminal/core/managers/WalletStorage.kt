@@ -3,7 +3,11 @@ package cash.p.terminal.core.managers
 import cash.p.terminal.core.IEnabledWalletStorage
 import cash.p.terminal.core.IWalletStorage
 import cash.p.terminal.core.customCoinUid
-import cash.p.terminal.entities.*
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.CoinSettings
+import cash.p.terminal.entities.ConfiguredToken
+import cash.p.terminal.entities.EnabledWallet
+import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
@@ -32,7 +36,7 @@ class WalletStorage(
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
                 val coinUid = tokenQuery.customCoinUid
-                val blockchain = blockchains.first { it.uid == tokenQuery.blockchainType.uid }
+                val blockchain = blockchains.firstOrNull { it.uid == tokenQuery.blockchainType.uid } ?: return@mapNotNull null
 
                 val token = Token(
                     coin = io.horizontalsystems.marketkit.models.Coin(coinUid, enabledWallet.coinName, enabledWallet.coinCode),
