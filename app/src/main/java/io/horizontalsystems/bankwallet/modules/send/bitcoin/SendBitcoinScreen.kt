@@ -178,7 +178,6 @@ fun SendBitcoinScreen(
                         HSFeeInputRaw(
                             coinCode = wallet.coin.code,
                             coinDecimal = viewModel.coinMaxAllowedDecimals,
-                            fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                             fee = fee,
                             amountInputType = amountInputType,
                             rate = rate,
