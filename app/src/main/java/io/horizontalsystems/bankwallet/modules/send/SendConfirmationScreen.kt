@@ -1,7 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -24,7 +31,20 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1Italic_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hodler.LockTimeInterval
@@ -161,7 +181,6 @@ fun SendConfirmationScreen(
                             HSFeeInputRaw(
                                 coinCode = feeCoin.code,
                                 coinDecimal = feeCoinMaxAllowedDecimals,
-                                fiatDecimal = fiatMaxAllowedDecimals,
                                 fee = fee,
                                 amountInputType = amountInputType,
                                 rate = feeCoinRate,
