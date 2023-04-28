@@ -82,7 +82,7 @@ private fun AddTokenNavHost(
         composablePage(BlockchainSelectorPage) {
             AddTokenBlockchainSelectorScreen(
                 blockchains = viewModel.blockchains,
-                selectedBlockchains = listOf(viewModel.selectedBlockchain),
+                selectedBlockchain = viewModel.selectedBlockchain,
                 navController = navController
             )
         }
