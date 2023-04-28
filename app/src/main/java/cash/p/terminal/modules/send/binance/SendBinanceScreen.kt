@@ -112,7 +112,6 @@ fun SendBinanceScreen(
             HSFeeInput(
                 coinCode = viewModel.feeToken.coin.code,
                 coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.feeCoinRate,
