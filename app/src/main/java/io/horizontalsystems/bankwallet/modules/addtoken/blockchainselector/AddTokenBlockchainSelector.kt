@@ -1,11 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -16,7 +23,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellBorderedRowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.HSSectionRounded
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.marketkit.models.Blockchain
 
 const val BlockchainSelectorResult = "blockchain_selector_result_key"
@@ -24,12 +36,11 @@ const val BlockchainSelectorResult = "blockchain_selector_result_key"
 @Composable
 fun AddTokenBlockchainSelectorScreen(
     blockchains: List<Blockchain>,
-    selectedBlockchains: List<Blockchain>,
+    selectedBlockchain: Blockchain,
     navController: NavController,
 ) {
     val menuItems = emptyList<MenuItem>()
-    val selectedItems =
-        remember { mutableStateListOf<Blockchain>().apply { addAll(selectedBlockchains) } }
+    var selectedItem = selectedBlockchain
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -49,13 +60,12 @@ fun AddTokenBlockchainSelectorScreen(
                     blockchains.forEachIndexed { index, item ->
                         BlockchainCell(
                             item = item,
-                            selected = selectedItems.contains(item),
+                            selected = selectedItem == item,
                             onCheck = {
-                                selectedItems.clear()
-                                selectedItems.add(item)
+                                selectedItem = item
                                 navController.previousBackStackEntry
                                     ?.savedStateHandle
-                                    ?.set(BlockchainSelectorResult, selectedItems.toList())
+                                    ?.set(BlockchainSelectorResult, listOf(item))
                                 navController.popBackStack()
                             },
                             borderTop = index != 0
