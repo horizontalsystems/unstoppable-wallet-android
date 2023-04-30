@@ -791,7 +791,7 @@
     <string name="ManageCoins_Search">Nombre, código o dirección del contrato</string>
     <string name="ManageCoins_AddToken">Añadir Token</string>
     <string name="ManageCoins_NoResults">No se han encontrado resultados. Intente añadir un token manualmente si conoce su dirección de contrato inteligente.</string>
-    <string name="ManageCoins_BipsDescription">Hay 3 formatos de dirección comunes que %s monederos pueden usar para recibir pagos entrantes:\n\n- BIP44 (más antiguo)\n- BIP49 (más reciente)\n- BIP84 (más reciente)\n\nMientras que el monedero imparable soporta todos los 3 se recomienda usar un monedero %s que opere en formato BIP84. Las billeteras que operan en este formato pagan las tarifas más bajas al enviar %s transacciones.</string>
+    <string name="ManageCoins_BipsDescription">Hay 4 formatos de dirección comunes que %s monederos pueden usar para recibir pagos entrantes:\n\n- BIP44 (más antiguo)\n- BIP49 (más reciente)\n- BIP84 (recomendado)\n- BIP86 (más reciente)\n\nMientras que el monedero imparable soporta todos los 4 se recomienda usar un monedero %s que opere en formato BIP84.</string>
     <string name="ManageCoins_BchTypeDescription">Hay 2 formatos de dirección de las carteras Bitcoin Cash pueden usar para recibir pagos entrantes:\n\n- TYPE 0 (más antiguo)\n- TYPE 145 (más reciente)\n\nMientras que el monedero imparable soporta ambos se recomienda usar un monedero Bitcoin Cash que funcione en formato TYPE 145.</string>
     <string name="ManageCoins_ContractAddress">AÑADIR CONTRACTO</string>
     <!-- Experimental Feature -->

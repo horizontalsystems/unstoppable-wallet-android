@@ -41,12 +41,9 @@ class WatchAddressService(
             }
             is AccountType.HdExtendedKey -> {
                 token(BlockchainType.Bitcoin, accountType)?.let { token ->
-                    add(
-                        ConfiguredToken(
-                            token,
-                            CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value))
-                        )
-                    )
+                    accountType.hdExtendedKey.purposes.forEach { purpose ->
+                        add(ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.derivation to purpose.derivation.value))))
+                    }
                 }
                 token(BlockchainType.Dash, accountType)?.let { token ->
                     add(ConfiguredToken(token))
@@ -57,12 +54,9 @@ class WatchAddressService(
                     }
                 }
                 token(BlockchainType.Litecoin, accountType)?.let { token ->
-                    add(
-                        ConfiguredToken(
-                            token,
-                            CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value))
-                        )
-                    )
+                    accountType.hdExtendedKey.purposes.forEach { purpose ->
+                        add(ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.derivation to purpose.derivation.value))))
+                    }
                 }
                 token(BlockchainType.ECash, accountType)?.let { token ->
                     add(ConfiguredToken(token))

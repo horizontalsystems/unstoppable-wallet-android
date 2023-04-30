@@ -785,13 +785,7 @@
     <string name="ManageCoins_Search">Nome, código ou endereço do contrato</string>
     <string name="ManageCoins_AddToken">Adicionar token</string>
     <string name="ManageCoins_NoResults">Nenhum resultado encontrado. Tente adicionar o token manualmente se você souber seu endereço do contrato inteligente.</string>
-    <string name="ManageCoins_BipsDescription">Existem 3 formatos de endereço comuns que as carteiras %s podem usar para receber pagamentos:
-\n
-\n- BIP-44 (antigo)
-\n- BIP-49 (recente)
-\n- BIP-84 (mais recente)
-\n
-\nEmbora a Unstoppable wallet suporte todos os 3, recomenda-se usar uma carteira %s operando no formato BIP-84. As carteiras que operam neste formato pagam taxas mais baixas ao enviar %s transações.</string>
+    <string name="ManageCoins_BipsDescription">Existem 4 formatos de endereço comuns que as carteiras %s podem usar para receber pagamentos:\n\n- BIP-44 (antigo)\n- BIP-49\n- BIP-84 (recomendado)\n- BIP-86 (mais recente)\n\nEmbora a Unstoppable wallet suporte todos os 4, recomenda-se usar uma carteira %s operando no formato BIP-84.</string>
     <string name="ManageCoins_BchTypeDescription">Existem 2 formatos de endereço que as carteiras Bitcoin Cash podem usar para receber pagamentos:
 \n
 \n- TYPE0 (antigo)

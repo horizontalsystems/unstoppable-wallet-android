@@ -98,7 +98,6 @@ fun SendBtcAdvancedSettingsScreen(
                             HSFeeInputRaw(
                                 coinCode = wallet.coin.code,
                                 coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
-                                fiatDecimal = sendBitcoinViewModel.fiatMaxAllowedDecimals,
                                 fee = sendUiState.fee,
                                 amountInputType = amountInputType,
                                 rate = rate,

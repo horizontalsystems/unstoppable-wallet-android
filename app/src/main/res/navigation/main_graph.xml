@@ -67,8 +67,8 @@
         android:id="@+id/evmPrivateKeyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment"/>
     <fragment
-        android:id="@+id/accountExtendedKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.AccountExtendedKeyFragment"/>
+        android:id="@+id/showExtendedKeyFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment"/>
     <fragment
         android:id="@+id/backupKeyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyFragment"/>

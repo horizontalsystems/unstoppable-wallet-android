@@ -788,13 +788,7 @@
     <string name="ManageCoins_Search">Ad, kod veya sözleşme adresi</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
-    <string name="ManageCoins_BipsDescription">%s cüzdanlarının gelen ödemeleri almak için kullanabileceği 3 yaygın adres biçimi vardır:
-\n 
-\n- BIP-44 (eski)
-\n- BIP-49 (daha yeni) 
-\n- BIP-84 (en yeni) 
-\n 
-\nUnstoppable cüzdan 3\'ünü de desteklerken, BIP-84 formatında çalışan bir %s cüzdanı kullanmanızı önerir. Bu formatta çalışan cüzdanlar, %s işlemleri gönderirken en düşük ücretleri öderler.</string>
+    <string name="ManageCoins_BipsDescription">%s cüzdanlarının gelen ödemeleri almak için kullanabileceği 4 yaygın adres biçimi vardır:\n\n- BIP-44 (eski)\n- BIP-49\n- BIP-84 (önerilen) \n- BIP-86 (en yeni)\n\nUnstoppable cüzdan 4\'ünü de desteklerken, BIP-84 formatında çalışan bir %s cüzdanı kullanmanızı önerir.</string>
     <string name="ManageCoins_BchTypeDescription">Bitcoin Cash cüzdanlarının gelen ödemeleri almak için kullanabileceği 2 adres formatı vardır: 
 \n 
 \n- TYPE0 (eski) 

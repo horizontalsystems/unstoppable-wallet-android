@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData.AdditionalInfo
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData.WalletConnectInfo
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -82,7 +83,8 @@ object WCRequestModule {
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName))
-        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce)) }
+        private val nonceService by lazy { SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce) }
+        private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
@@ -113,6 +115,9 @@ object WCRequestModule {
                         blockchainType = blockchainType,
                         contactsRepo = App.contactsRepository
                     ) as T
+                }
+                SendEvmNonceViewModel::class.java -> {
+                    SendEvmNonceViewModel(nonceService) as T
                 }
                 else -> throw IllegalArgumentException()
             }
@@ -161,7 +166,8 @@ object WCRequestModule {
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName))
-        private val settingsService by lazy { SendEvmSettingsService(feeService, SendEvmNonceService(service.evmKitWrapper.evmKit, transaction.nonce)) }
+        private val nonceService by lazy { SendEvmNonceService(service.evmKitWrapper.evmKit, transaction.nonce) }
+        private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
 
         private val sendService by lazy {
             SendEvmTransactionService(
@@ -193,6 +199,9 @@ object WCRequestModule {
                         blockchainType = blockchainType,
                         contactsRepo = App.contactsRepository
                     ) as T
+                }
+                SendEvmNonceViewModel::class.java -> {
+                    SendEvmNonceViewModel(nonceService) as T
                 }
                 else -> throw IllegalArgumentException()
             }
