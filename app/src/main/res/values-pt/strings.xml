@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Alert_Close">Fechar</string>
@@ -12,6 +13,7 @@
     <string name="Button_Enable">Habilitar</string>
     <string name="Button_Disable">Desativar</string>
     <string name="Button_Close">Fechar</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Done">Concluído</string>
     <string name="Button_Retry">Tentar de novo</string>
     <string name="Button_Change">Alterar</string>
