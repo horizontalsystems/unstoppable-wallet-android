@@ -80,6 +80,7 @@ APK-FILE-NAME: Name of the apk file<br>
 ### 9. Create Release in GitHub Repository
 
 * Create new `Release`, add changelog and upload apk file. Make note in changelog if the 'Supported Android Versions' was changed
+* Compute the sha256 and md5 checksums of the apk file and attach them as separate files, named unstoppable-wallet-[version].apk.sha256 and unstoppable-wallet-[version].apk.md5 respectively, under the 'Assets' section.
 
 ### 10. Make sure Unstoppable Wallet is 'Reproducible' in [WalletScrutiny](https://walletscrutiny.com/android/io.horizontalsystems.bankwallet/)
 
