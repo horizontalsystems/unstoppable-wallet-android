@@ -114,7 +114,6 @@ fun SendZCashScreen(
             HSFeeInput(
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.coinRate,
