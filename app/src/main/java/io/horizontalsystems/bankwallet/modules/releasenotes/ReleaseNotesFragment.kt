@@ -5,7 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -24,7 +29,11 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownContent
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 
@@ -110,15 +119,18 @@ fun ReleaseNotesScreen(
                 Spacer(Modifier.padding(start = 16.dp))
                 IconButton(
                     R.drawable.ic_twitter_filled_24,
-                    viewModel.twitterUrl
+                    viewModel.twitterUrl,
+                    stringResource(R.string.CoinPage_Twitter)
                 )
                 IconButton(
                     R.drawable.ic_telegram_filled_24,
-                    viewModel.telegramUrl
+                    viewModel.telegramUrl,
+                    stringResource(R.string.CoinPage_Telegram)
                 )
                 IconButton(
                     R.drawable.ic_reddit_filled_24,
-                    viewModel.redditUrl
+                    viewModel.redditUrl,
+                    stringResource(R.string.CoinPage_Reddit)
                 )
 
                 Spacer(Modifier.weight(1f))
@@ -133,12 +145,12 @@ fun ReleaseNotesScreen(
 }
 
 @Composable
-private fun IconButton(icon: Int, twitterUrl: String) {
+private fun IconButton(icon: Int, url: String, description: String) {
     val context = LocalContext.current
-    HsIconButton(onClick = { LinkHelper.openLinkInAppBrowser(context, twitterUrl) }) {
+    HsIconButton(onClick = { LinkHelper.openLinkInAppBrowser(context, url) }) {
         Icon(
             painter = painterResource(id = icon),
-            contentDescription = null,
+            contentDescription = description,
             tint = ComposeAppTheme.colors.grey
         )
     }
