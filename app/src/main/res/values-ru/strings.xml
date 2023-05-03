@@ -347,6 +347,7 @@
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Риски</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">Обработка транзакции может отложиться на некоторое время, или транзакцию могут полностью отклонить.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Риски</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Для обеспечения быстрого выполнения транзакции максимальная ставка вознаграждения (вычитаются максимальные чаевые для майнера) должна быть выше текущей базовой ставки вознаграждения. В противном случае транзакция может оставаться на рассмотрении до тех пор, пока не будет выполнено условие.</string>
     <string name="FeeSettings_Overpricing_Title">Слишком высокая комиссия</string>
     <string name="FeeSettings_Overpricing">Установленная комиссия за транзакцию больше чем требуется для обработки этой транзакции.</string>
     <string name="FeeSettings_Info_IUnderstand">Я понимаю</string>
@@ -637,6 +638,7 @@
     <string name="Appearance_BalanceValue">ЗНАЧЕНИЕ БАЛАНСА</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_MarketsTab">Вкладка рынки</string>
+    <string name="Appearance_BalanceAutoHide">Автоматическое скрытие баланса</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
@@ -688,6 +690,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Wallet отключены. Чтобы получать уведомления об изменении цен, вам нужно включить уведомления и разрешить запуск приложения в фоновом режиме.</string>
     <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Случайное индексирование</string>
+    <string name="SettingsSecurity_SortingBip69Short">Детерминированный</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Рекомендовано</string>
@@ -786,6 +789,7 @@
     <string name="Watch_WatchBy">Смотреть</string>
     <string name="Watch_TypeEvmAddress">EVM адрес</string>
     <string name="Watch_TypeSolanaAddress">Solana адрес</string>
+    <string name="Watch_TypeXPubKey">xPubKey аккаунта</string>
     <string name="Watch_Error_InvalidXPubKey">Неправильный xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Название</string>
@@ -845,6 +849,7 @@
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
+    <string name="AccountExtendedPublicKey_Short">xPubKey аккаунта</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
