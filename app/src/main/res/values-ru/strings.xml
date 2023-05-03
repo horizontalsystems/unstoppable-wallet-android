@@ -848,18 +848,24 @@
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Purpose">Назначение</string>
+    <string name="ExtendedKey_Account">Аккаунт</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
+    <string name="AccountExtendedPrivateKey">Расширенный приватный ключ аккаунта</string>
+    <string name="AccountExtendedPublicKey">Расширенный публичный ключ аккаунта</string>
     <string name="AccountExtendedPublicKey_Short">xPubKey аккаунта</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Предоставляет полный контроль над криптовалютами на базе EVM, т.е. Ethereum, Binance Smart Chain и т.д. в пределах соответствующего кошелька.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Предоставляет полный контроль над активами на соответствующем кошельке.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Расширенный приватный ключ аккаунта</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Предоставляет полный контроль над Bitcoin и другими криптовалютами на базе UTXO, такими как Litecoin, Bitcoin Cash, Dash и т.д. в пределах соответствующего кошелька.</string>
     <string name="PrivateKeys_NeverShareWarning">Никогда ни с кем не делитесь вашей фразой восстановления. Команда Unstoppable никогда не запросит вашу фразу восстановления.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Публичные ключи</string>
     <string name="PublicKeys_EvmAddress">EVM адрес</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Расширенный публичный ключ аккаунта</string>
     <string name="PublicKeys_EvmAddress_Description">Позволяет отслеживать кошельки с активами на Ethereum, Binance Smart Chain и других блокчейнах на базе EVM, только для чтения.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Позволяет осуществлять мониторинг кошельков, содержащих Bitcoin и другие криптовалюты на основе UTXO (например, Litecoin, Bitcoin Cash, Dash и т.д.), только для чтения.</string>
     <!-- Recovery Phrase Verify -->
