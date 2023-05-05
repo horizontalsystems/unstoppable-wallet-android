@@ -24,13 +24,19 @@ object ManageAccountModule {
         val canSave: Boolean,
         val closeScreen: Boolean,
         val headerNote: HeaderNote,
-        val keyActions: List<KeyAction>
+        val keyActions: List<KeyAction>,
+        val backupActions: List<BackupItem>,
     )
 
     enum class KeyAction {
         RecoveryPhrase,
         PublicKeys,
         PrivateKeys,
-        Backup,
+    }
+
+    sealed class BackupItem{
+        class ManualBackup(val showAttention: Boolean) : BackupItem()
+        class LocalBackup(val showAttention: Boolean) : BackupItem()
+        class InfoText(val textRes: Int) : BackupItem()
     }
 }

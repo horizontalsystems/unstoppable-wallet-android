@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.balance.headerNote
+import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -27,7 +29,8 @@ class ManageAccountViewModel(
             canSave = false,
             closeScreen = false,
             headerNote = account.headerNote(false),
-            keyActions = getKeyActions(account)
+            keyActions = getKeyActions(account),
+            backupActions = getBackupItems(account),
         )
     )
         private set
@@ -60,19 +63,33 @@ class ManageAccountViewModel(
         viewState = viewState.copy(closeScreen = false)
     }
 
-    private fun getKeyActions(account: Account): List<KeyAction> {
+    private fun getBackupItems(account: Account): List<BackupItem> {
         if (!account.isBackedUp) {
-            return listOf(KeyAction.Backup)
+            return listOf(
+                BackupItem.ManualBackup(true),
+                BackupItem.LocalBackup(true),
+                BackupItem.InfoText(R.string.BackupRecoveryPhrase_BackupRequiredText),
+            )
         }
+        return when (account.type) {
+            is AccountType.Mnemonic,
+            is AccountType.EvmPrivateKey -> listOf(
+                BackupItem.LocalBackup(false),
+            )
+            else -> emptyList()
+        }
+    }
+
+    private fun getKeyActions(account: Account): List<KeyAction> {
         return when (account.type) {
             is AccountType.Mnemonic -> listOf(
                 KeyAction.RecoveryPhrase,
                 KeyAction.PrivateKeys,
-                KeyAction.PublicKeys
+                KeyAction.PublicKeys,
             )
             is AccountType.EvmPrivateKey -> listOf(
                 KeyAction.PrivateKeys,
-                KeyAction.PublicKeys
+                KeyAction.PublicKeys,
             )
             is AccountType.EvmAddress -> listOf(
                 KeyAction.PublicKeys

@@ -5,7 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,10 +30,12 @@ import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.balance.HeaderNote
 import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
+import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
 import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.modules.manageaccount.publickeys.PublicKeysModule
@@ -37,7 +43,21 @@ import cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
 import cash.p.terminal.modules.unlinkaccount.UnlinkAccountDialog
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.FormsInput
+import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.body_jacob
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.body_lucian
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -110,6 +130,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             }
                         )
                     }
+
                     HeaderNote.NonRecommendedAccount -> {
                         NoteWarning(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp),
@@ -123,12 +144,21 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             onClose = null
                         )
                     }
+
                     HeaderNote.None -> Unit
                 }
 
                 KeyActions(viewModel, navController)
 
-                Spacer(modifier = Modifier.height(32.dp))
+                if (viewModel.viewState.backupActions.isNotEmpty()) {
+                    BackupActions(
+                        viewModel.viewState.backupActions,
+                        viewModel.account,
+                        navController
+                    )
+                }
+
+                VSpacer(32.dp)
                 CellUniversalLawrenceSection(
                     listOf {
                         RedActionItem(
@@ -141,10 +171,72 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             )
                         }
                     })
-                Spacer(modifier = Modifier.height(32.dp))
+                VSpacer(32.dp)
             }
         }
     }
+}
+
+@Composable
+private fun BackupActions(
+    backupActions: List<BackupItem>,
+    account: Account,
+    navController: NavController
+) {
+    val actionItems = mutableListOf<@Composable () -> Unit>()
+    val infoItems = mutableListOf<@Composable () -> Unit>()
+
+    backupActions.forEach { action ->
+        when (action) {
+            is BackupItem.ManualBackup -> {
+                actionItems.add {
+                    YellowActionItem(
+                        title = stringResource(id = R.string.BackupRecoveryPhrase_ManualBackup),
+                        icon = painterResource(id = R.drawable.ic_edit_24),
+                        attention = action.showAttention
+                    ) {
+                        navController.authorizedAction {
+                            navController.slideFromBottom(
+                                R.id.backupKeyFragment,
+                                BackupKeyModule.prepareParams(account)
+                            )
+                        }
+                    }
+                }
+            }
+
+            is BackupItem.LocalBackup -> {
+                actionItems.add {
+                    YellowActionItem(
+                        title = stringResource(id = R.string.BackupRecoveryPhrase_LocalBackup),
+                        icon = painterResource(id = R.drawable.ic_file_24),
+                        attention = action.showAttention
+                    ) {
+                        navController.authorizedAction {
+                            navController.slideFromBottom(
+                                R.id.backupKeyFragment,
+                                BackupKeyModule.prepareParams(account)
+                            )
+                        }
+                    }
+                }
+            }
+
+            is BackupItem.InfoText -> {
+                infoItems.add {
+                    InfoText(text = stringResource(action.textRes))
+                }
+            }
+        }
+    }
+    if (actionItems.isNotEmpty()) {
+        VSpacer(32.dp)
+        CellUniversalLawrenceSection(actionItems)
+    }
+    infoItems.forEach {
+        it.invoke()
+    }
+
 }
 
 @Composable
@@ -171,6 +263,7 @@ private fun KeyActions(
                     }
                 }
             }
+
             KeyAction.PrivateKeys -> {
                 actionItems.add {
                     AccountActionItem(
@@ -184,6 +277,7 @@ private fun KeyActions(
                     }
                 }
             }
+
             KeyAction.PublicKeys -> {
                 actionItems.add {
                     AccountActionItem(
@@ -197,26 +291,11 @@ private fun KeyActions(
                     }
                 }
             }
-            KeyAction.Backup -> {
-                actionItems.add {
-                    RedActionItem(
-                        title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
-                        icon = painterResource(id = R.drawable.icon_warning_2_20)
-                    ) {
-                        navController.authorizedAction {
-                            navController.slideFromBottom(
-                                R.id.backupKeyFragment,
-                                BackupKeyModule.prepareParams(viewModel.account)
-                            )
-                        }
-                    }
-                }
-            }
         }
     }
 
     if (actionItems.isNotEmpty()) {
-        Spacer(modifier = Modifier.height(32.dp))
+        VSpacer(32.dp)
         CellUniversalLawrenceSection(actionItems)
     }
 }
@@ -237,7 +316,9 @@ private fun AccountActionItem(
     ) {
         icon?.let {
             Icon(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(24.dp),
                 painter = icon,
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey
@@ -289,7 +370,46 @@ private fun AccountActionItem(
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            HSpacer(16.dp)
+        }
+    }
+}
+
+@Composable
+private fun YellowActionItem(
+    title: String,
+    icon: Painter? = null,
+    attention: Boolean = false,
+    onClick: (() -> Unit)? = null
+) {
+
+    RowUniversal(
+        onClick = onClick
+    ) {
+        icon?.let {
+            Icon(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(24.dp),
+                painter = icon,
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.jacob
+            )
+        }
+
+        body_jacob(
+            modifier = Modifier.weight(1f),
+            text = title,
+        )
+
+        if (attention) {
+            Icon(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                painter = painterResource(id = R.drawable.ic_attention_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.lucian
+            )
+            HSpacer(6.dp)
         }
     }
 }
@@ -305,7 +425,9 @@ private fun RedActionItem(
         onClick = onClick
     ) {
         Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .size(24.dp),
             painter = icon,
             contentDescription = null,
             tint = ComposeAppTheme.colors.lucian
