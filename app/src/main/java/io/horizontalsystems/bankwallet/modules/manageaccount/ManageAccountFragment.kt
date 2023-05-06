@@ -213,10 +213,7 @@ private fun BackupActions(
                         attention = action.showAttention
                     ) {
                         navController.authorizedAction {
-                            navController.slideFromBottom(
-                                R.id.backupKeyFragment,
-                                BackupKeyModule.prepareParams(account)
-                            )
+                            navController.slideFromBottom(R.id.backupLocalFragment,)
                         }
                     }
                 }
