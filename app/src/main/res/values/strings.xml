@@ -1057,6 +1057,18 @@
     <string name="BackupRecoveryPhrase_Later">Later</string>
     <string name="BackupRecoveryPhrase_BackupRequiredText">Select and go through one of the recovery phrase backup options to start using the wallet.</string>
 
+    <!-- Local Backup -->
+    <string name="LocalBackup_Title">Local Backup</string>
+    <string name="LocalBackup_SaveAndBackup">Save and Backup</string>
+    <string name="LocalBackup_SetPassword">Set Password</string>
+    <string name="LocalBackup_BackupSaved">Backup Saved</string>
+    <string name="LocalBackup_ErrorPasswordLengthLessThan8">The password must be minimum 8 characters</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Don\'t forget this password and keep it in a safe place! It cannot be recovered or reset.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Protect the backup with a password to encrypt it in your local storage.</string>
+    <string name="LocalBackup_TermsWarningText">Local storage, such as hard drives, USB drives and shared folders, are vulnerable to data leakage or loss due to physical damage, theft or other unforeseen circumstances. Local storage is completely dependent on your ability to protect and secure your data. To prevent data loss, it is important to back up your files to a secure device and store them in a safe place, and to back up your wallet manually.</string>
+    <string name="LocalBackup_Term1">I understand that by backing up to local storage, I run the risk of attacking my wallet backups</string>
+    <string name="LocalBackup_Term2">I understand that if I lose my wallet backup on the storage device, I will lose access to my wallet funds</string>
+
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Recovery Phrase</string>
     <string name="RecoveryPhrase_Description">Write these words down in the correct order and keep them in a safe place</string>
