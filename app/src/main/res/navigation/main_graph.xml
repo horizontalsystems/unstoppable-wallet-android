@@ -76,6 +76,9 @@
         android:id="@+id/backupConfirmationKeyFragment"
         android:name="cash.p.terminal.modules.manageaccount.backupconfirmkey.BackupConfirmKeyFragment" />
     <fragment
+        android:id="@+id/backupLocalFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalFragment"/>
+    <fragment
         android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
         android:name="cash.p.terminal.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
     <fragment
