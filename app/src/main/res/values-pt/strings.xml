@@ -806,6 +806,9 @@
     <string name="ManageAccounts_CreateNewWallet">Criar</string>
     <string name="ManageAccounts_ImportWallet">Restaurar</string>
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">Ver Endereço</string>
+    <!-- Import Backup File -->
     <string name="Watch_Address_Hint">Endereço ou Domínio</string>
     <string name="Watch_XPubKey_Hint">Insira a chave pública estendida da conta</string>
     <string name="Watch_Address_Description">Disponível apenas para Ethereum e outras blockchains de EVM suportadas.</string>
@@ -859,10 +862,10 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Não Copiar</string>
     <string name="ShowKey_PrivateKey_Warning">Esta chave é para todas as blockchains compatíveis com EVM.\n\nComo medida de segurança, recomendamos não usar ação de cópia na chave privada.</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Carteira de Backup</string>
-    <string name="BackupRecoveryPhrase_Description">Fazer backup desta carteira criando uma cópia de sua frase de recuperação. Será necessário para acessar a carteira se seu telefone for perdido, roubado, quebrado, etc.</string>
+    <string name="BackupRecoveryPhrase_Title">Backup Phrase</string>
     <string name="BackupRecoveryPhrase_Backup">Backup</string>
     <string name="BackupRecoveryPhrase_Later">Mais tarde</string>
+    <!-- Local Backup -->
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Frase de Recuperação</string>
     <string name="RecoveryPhrase_Description">Escreva essas palavras na ordem correta e mantenha-as em um lugar seguro</string>
