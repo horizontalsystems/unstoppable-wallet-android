@@ -657,6 +657,7 @@
     <string name="Appearance_BalanceValue">VALEUR DE BALANCE</string>
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
     <string name="Appearance_MarketsTab">Onglet Marchés</string>
+    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
     <string name="BalanceViewType_FiatValue">Valeur Fiat</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
@@ -974,10 +975,6 @@
     <string name="TorPage_ConnectionClosed">Déconnecté</string>
     <string name="Tor_TorIsActive">Tor est actif</string>
     <string name="Tor_PrerequisitesAlert_Content">L\'activation de TOR réinitialisera la connexion de la blockchain Ethereum à Infura.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Ancien</string>
-    <string name="CoinOption_bip49_Title">Bon</string>
-    <string name="CoinOption_bip84_Title">Meilleur</string>
     <!--Coin Page-->
     <string name="Coin_Info">Informations de la cryptomonnaie</string>
     <string name="Coin_Tab_Overview">Prix</string>
