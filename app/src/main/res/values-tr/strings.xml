@@ -670,6 +670,9 @@
     <string name="ManageAccounts_CreateNewWallet">Oluştur</string>
     <string name="ManageAccounts_ImportWallet">Geri Yükle</string>
     <string name="ManageAccounts_WatchAddress">Adresi İzle</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">Adresi İzle</string>
+    <!-- Import Backup File -->
     <string name="Watch_Address_Hint">Adres veya Domain</string>
     <string name="Watch_XPubKey_Hint">Account Extended Public Key girin</string>
     <string name="Watch_Address_Description">Yalnızca Ethereum ve diğer desteklenen EVM blok zincirleri için kullanılabilir.</string>
@@ -722,10 +725,10 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Kopyalama</string>
     <string name="ShowKey_PrivateKey_Warning">Bu anahtar, tüm EVM uyumlu blok zincirleri içindir.\n\nGüvenlik önlemi olarak, özel anahtar üzerinde kopyalama eyleminin kullanılmamasını öneririz.</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Cüzdanı yedekle</string>
-    <string name="BackupRecoveryPhrase_Description">Kurtarma ifadesinin bir kopyasını oluşturarak bu cüzdanı yedekleyin. Telefonunuzun kaybolması, çalınması, kırılması vb. durumlarda cüzdana erişmek için gerekli olacaktır.</string>
+    <string name="BackupRecoveryPhrase_Title">Yedekleme İfadesi</string>
     <string name="BackupRecoveryPhrase_Backup">Yedekle</string>
     <string name="BackupRecoveryPhrase_Later">Sonra</string>
+    <!-- Local Backup -->
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Kurtarma cümlesi</string>
     <string name="RecoveryPhrase_Description">Bu kelimeleri doğru sırayla yazın ve güvenli bir yerde saklayın</string>
