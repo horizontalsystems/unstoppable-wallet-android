@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.manageaccount.ManageAccountModule
@@ -32,7 +33,16 @@ import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewIt
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.body_jacob
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.core.findNavController
 
 class ManageAccountsFragment : BaseFragment() {
@@ -119,9 +129,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                             }
                         },
                         ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                            navController.navigateWithTermsAccepted {
-                                navController.slideFromRight(R.id.restoreAccountFragment, args)
-                            }
+                            navController.slideFromBottom(R.id.importWalletFragment, args)
                         },
                         ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
                             navController.slideFromRight(R.id.watchAddressFragment, args)
