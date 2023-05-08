@@ -236,6 +236,12 @@
         android:id="@+id/restoreAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountFragment" />
     <fragment
+        android:id="@+id/importWalletFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment" />
+    <fragment
+        android:id="@+id/restoreLocalFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment" />
+    <fragment
         android:id="@+id/restoreAccountAdvancedFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountAdvancedFragment" />
     <fragment
