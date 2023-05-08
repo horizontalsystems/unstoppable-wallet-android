@@ -989,6 +989,21 @@
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
     <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
 
+    <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">Import Backup File</string>
+    <string name="ImportWallet_BackupFile_Description">Importing a wallet backup file from a storage</string>
+    <string name="ImportWallet_RecoveryPhrase">Import from Recovery Phrase or Private Key</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Manually add a recovery phrase or private key to recover a crypto wallet </string>
+    <string name="ImportWallet_WatchAddress">Watch Address</string>
+    <string name="ImportWallet_WatchAddress_Description">Observing mode of EVM-Chain and BTC, LTC, DASH addresses</string>
+    <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
+    <string name="ImportWallet_SelectAnotherFile">Select Another File</string>
+
+    <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Enter Password</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Enter the backup password to import your wallet.</string>
+
     <string name="Watch_Address_Hint">Address or Domain</string>
     <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
