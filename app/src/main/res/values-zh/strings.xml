@@ -657,6 +657,7 @@
     <string name="Appearance_BalanceValue">平衡值</string>
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
     <string name="Appearance_MarketsTab">市场选项卡</string>
+    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="BalanceViewType_CoinValue">币值</string>
     <string name="BalanceViewType_FiatValue">纤维值</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
@@ -975,10 +976,6 @@
     <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="Tor_TorIsActive">Tor 已激活</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">旧的</string>
-    <string name="CoinOption_bip49_Title">好</string>
-    <string name="CoinOption_bip84_Title">最佳的</string>
     <!--Coin Page-->
     <string name="Coin_Info">硬币信息</string>
     <string name="Coin_Tab_Overview">行情</string>
