@@ -4,9 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,13 +28,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.composablePage
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
+import cash.p.terminal.ui.compose.components.FormsInput
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.body_leah
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -44,14 +60,42 @@ class CreateAccountFragment : BaseFragment() {
             setContent {
                 val popUpToInclusiveId =
                     arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.createAccountFragment) ?: R.id.createAccountFragment
-                CreateAccountIntroScreen(findNavController(), popUpToInclusiveId)
+                CreateAccountNavHost(findNavController(), popUpToInclusiveId)
             }
         }
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun CreateAccountIntroScreen(navController: NavController, popUpToInclusiveId: Int) {
+private fun CreateAccountNavHost(fragmentNavController: NavController, popUpToInclusiveId: Int) {
+    val navController = rememberAnimatedNavController()
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = "create_account_intro",
+    ) {
+        composable("create_account_intro") {
+            CreateAccountIntroScreen(
+                openCreateAdvancedScreen = { navController.navigate("create_account_advanced") },
+                onBackClick = { fragmentNavController.popBackStack() },
+                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, true) },
+            )
+        }
+        composablePage("create_account_advanced") {
+            CreateAccountAdvancedScreen(
+                onBackClick = { navController.popBackStack() },
+                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, true) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun CreateAccountIntroScreen(
+    openCreateAdvancedScreen: () -> Unit,
+    onBackClick: () -> Unit,
+    onFinish: () -> Unit
+) {
     val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
 
@@ -65,7 +109,7 @@ private fun CreateAccountIntroScreen(navController: NavController, popUpToInclus
             )
             delay(300)
 
-            navController.popBackStack(popUpToInclusiveId, true)
+            onFinish.invoke()
             viewModel.onSuccessMessageShown()
         }
     }
@@ -82,7 +126,7 @@ private fun CreateAccountIntroScreen(navController: NavController, popUpToInclus
                         )
                     ),
                     navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
+                        HsBackButton(onClick = onBackClick)
                     },
                     backgroundColor = Color.Transparent
                 )
@@ -104,10 +148,7 @@ private fun CreateAccountIntroScreen(navController: NavController, popUpToInclus
                         modifier = Modifier
                             .fillMaxSize()
                             .clickable {
-                                navController.slideFromRight(
-                                    R.id.createAccountAdvancedFragment,
-                                    ManageAccountsModule.prepareParams(popUpToInclusiveId)
-                                )
+                                openCreateAdvancedScreen.invoke()
                             }
                             .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
