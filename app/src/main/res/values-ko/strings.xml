@@ -660,6 +660,9 @@
     <string name="ManageAccounts_CreateNewWallet">만들기</string>
     <string name="ManageAccounts_ImportWallet">다음에서 복원하기</string>
     <string name="ManageAccounts_WatchAddress">주소 관찰</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">주소 관찰</string>
+    <!-- Import Backup File -->
     <string name="Watch_Address_Hint">주소 또는 도메인</string>
     <string name="Watch_XPubKey_Hint">Account Extended Public Key 입력</string>
     <string name="Watch_Address_Description">Ethereum 및 기타 지원되는 EVM 블록체인에만 사용할 수 있습니다.</string>
@@ -712,10 +715,10 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">복사 금지</string>
     <string name="ShowKey_PrivateKey_Warning">이 키는 모든 EVM 호환 블록체인용입니다.\n\n보안 조치로 개인 키에 복사 작업을 사용하지 않는 것이 좋습니다.</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">백업용 지갑</string>
-    <string name="BackupRecoveryPhrase_Description">복구 문구의 복사본을 생성하여 이 지갑을 백업하십시오. 휴대폰 분실, 도난, 파손 등의 경우 지갑에 액세스하기 위해 필요합니다.</string>
+    <string name="BackupRecoveryPhrase_Title">백업 문구</string>
     <string name="BackupRecoveryPhrase_Backup">백업</string>
     <string name="BackupRecoveryPhrase_Later">나중에</string>
+    <!-- Local Backup -->
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">복구 문구</string>
     <string name="RecoveryPhrase_Description">이 단어들을 올바른 순서로 기록하고 안전한 장소에 보관하십시오</string>
