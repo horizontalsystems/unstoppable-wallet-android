@@ -96,6 +96,7 @@ class AppConfigProvider {
         Currency("EUR", "€", 2, R.drawable.icon_32_flag_europe),
         Currency("GBP", "£", 2, R.drawable.icon_32_flag_england),
         Currency("HKD", "HK$", 2, R.drawable.icon_32_flag_hongkong),
+        Currency("HUF", "Ft", 2, R.drawable.icon_32_flag_hungary),
         Currency("ILS", "₪", 2, R.drawable.icon_32_flag_israel),
         Currency("INR", "₹", 2, R.drawable.icon_32_flag_india),
         Currency("JPY", "¥", 2, R.drawable.icon_32_flag_japan),
