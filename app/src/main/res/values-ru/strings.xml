@@ -779,6 +779,9 @@
     <string name="ManageAccounts_CreateNewWallet">Создать</string>
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
+    <!-- Import Backup File -->
     <string name="Watch_Address_Hint">Адрес или домен</string>
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
@@ -833,9 +836,9 @@
     <string name="ShowKey_PrivateKey_Warning">Этот ключ для всех EVM-совместимых блокчейнов.\n\nВ качестве меры безопасности мы не рекомендуем использовать действие копирования на закрытом ключе.</string>
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Резервная копия</string>
-    <string name="BackupRecoveryPhrase_Description">Сделайте резервную копию этого кошелька, создав копию его фразы восстановления. Это будет необходимо для доступа к кошельку, если ваш телефон утерян, украден, повреждён и т.д.</string>
     <string name="BackupRecoveryPhrase_Backup">Резервная копия</string>
     <string name="BackupRecoveryPhrase_Later">Позже</string>
+    <!-- Local Backup -->
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Фраза восстановления</string>
     <string name="RecoveryPhrase_Description">Напишите эти слова в правильном порядке и храните их в безопасном месте</string>
