@@ -661,6 +661,7 @@
     <string name="Appearance_BalanceValue">BAKIYE DEĞERI</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
     <string name="Appearance_MarketsTab">Markets Tab</string>
+    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
     <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
@@ -980,10 +981,6 @@
     <string name="TorPage_ConnectionClosed">Bağlantı kesildi</string>
     <string name="Tor_TorIsActive">Tor aktif</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Eski</string>
-    <string name="CoinOption_bip49_Title">İyi</string>
-    <string name="CoinOption_bip84_Title">En İyi</string>
     <!--Coin Page-->
     <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Fiyat</string>
