@@ -661,6 +661,7 @@
     <string name="Appearance_BalanceValue">균형 가치</string>
     <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
     <string name="Appearance_MarketsTab">시장 탭</string>
+    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
     <string name="BalanceViewType_FiatValue">법정 가치</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
@@ -978,10 +979,6 @@
     <string name="TorPage_ConnectionClosed">연결 해제</string>
     <string name="Tor_TorIsActive">Tor 활성화</string>
     <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">기존</string>
-    <string name="CoinOption_bip49_Title">좋은</string>
-    <string name="CoinOption_bip84_Title">최상의</string>
     <!--Coin Page-->
     <string name="Coin_Info">코인 정보</string>
     <string name="Coin_Tab_Overview">금액</string>
