@@ -661,6 +661,7 @@
     <string name="Appearance_BalanceValue">BALANCE VALUE</string>
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="Appearance_MarketsTab">Markets Tab</string>
+    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="BalanceViewType_CoinValue">ارزش سکه</string>
     <string name="BalanceViewType_FiatValue">ارزش فیات</string>
     <string name="SettingsAboutApp_Title">درباره برنامه</string>
@@ -990,10 +991,6 @@
     <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">با فعال کردن TOR، اتصال Ethereum زنجیره بلوکی به Infura بازمی گردد.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Old</string>
-    <string name="CoinOption_bip49_Title">Good</string>
-    <string name="CoinOption_bip84_Title">Best</string>
     <!--Coin Page-->
     <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">قیمت</string>
