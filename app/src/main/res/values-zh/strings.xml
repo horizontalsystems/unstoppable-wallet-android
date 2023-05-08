@@ -773,6 +773,9 @@
     <string name="ManageAccounts_CreateNewWallet">创建</string>
     <string name="ManageAccounts_ImportWallet">恢复自</string>
     <string name="ManageAccounts_WatchAddress">观察地址</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">观察地址</string>
+    <!-- Import Backup File -->
     <string name="Watch_Address_Hint">地址或域名</string>
     <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
     <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
@@ -825,10 +828,10 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">不复制</string>
     <string name="ShowKey_PrivateKey_Warning">此密钥适用于所有EVM兼容的区块链。\n\n作为一项安全措施，我们建议不要在私钥上使用复制操作。</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">备份钱包</string>
-    <string name="BackupRecoveryPhrase_Description">通过创建一个恢复短语来备份这个钱包。 如果您的手机丢失、被盗、损坏等等，将需要它来访问钱包。</string>
+    <string name="BackupRecoveryPhrase_Title">备份码</string>
     <string name="BackupRecoveryPhrase_Backup">备份</string>
     <string name="BackupRecoveryPhrase_Later">稍后</string>
+    <!-- Local Backup -->
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">恢复码</string>
     <string name="RecoveryPhrase_Description">按正确顺序写下这些单词，并将其保留在一个安全的地方</string>
