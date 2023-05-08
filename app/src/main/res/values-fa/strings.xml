@@ -554,6 +554,9 @@
     <string name="ManageAccounts_CreateNewWallet">به وجود آوردن</string>
     <string name="ManageAccounts_ImportWallet">بازگرداني</string>
     <string name="ManageAccounts_WatchAddress">مشاهده آدرس</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">مشاهده آدرس</string>
+    <!-- Import Backup File -->
     <string name="Watch_Address_Hint">آدرس یا دامنه</string>
     <string name="Watch_Address_Watch">مشاهده</string>
     <string name="Watch_Select_Blockchains">انتخاب زنجیره های بلوکی</string>
@@ -595,8 +598,10 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Text">به عنوان یک اقدام امنیتی، توصیه می کنیم از عملکرد کپی در کلید خصوصی استفاده نکنید.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">من آن را به خطر می اندازم</string>
     <!-- Backup Recovery Phrase -->
+    <string name="BackupRecoveryPhrase_Title">عبارت پشتیبان</string>
     <string name="BackupRecoveryPhrase_Backup">پيشتيباني</string>
     <string name="BackupRecoveryPhrase_Later">بعداً</string>
+    <!-- Local Backup -->
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">عبارت بازیابی</string>
     <string name="RecoveryPhrase_Verify">تایید</string>
