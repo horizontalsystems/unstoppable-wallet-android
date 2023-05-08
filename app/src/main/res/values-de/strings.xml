@@ -658,6 +658,7 @@
     <string name="Appearance_BalanceValue">SALDO WERT</string>
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
     <string name="Appearance_MarketsTab">Markt-Tab</string>
+    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
@@ -979,10 +980,6 @@
     <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
     <string name="Tor_TorIsActive">Tor ist aktiv</string>
     <string name="Tor_PrerequisitesAlert_Content">Durch die Aktivierung von TOR wird die Ethereum-Blockchain-Verbindung wieder auf Infura zurückgesetzt.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Alt</string>
-    <string name="CoinOption_bip49_Title">Gut</string>
-    <string name="CoinOption_bip84_Title">Beste</string>
     <!--Coin Page-->
     <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Preis</string>
