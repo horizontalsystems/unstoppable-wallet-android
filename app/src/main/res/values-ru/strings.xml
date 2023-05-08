@@ -659,6 +659,7 @@
     <string name="Appearance_BalanceValue">ЗНАЧЕНИЕ БАЛАНСА</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_MarketsTab">Вкладка рынки</string>
+    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
@@ -973,10 +974,6 @@
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
     <string name="Tor_TorIsActive">Tor активен</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Старый</string>
-    <string name="CoinOption_bip49_Title">Новый</string>
-    <string name="CoinOption_bip84_Title">Новейший</string>
     <!--Coin Page-->
     <string name="Coin_Info">Информация о токене</string>
     <string name="Coin_Tab_Overview">Цена</string>
