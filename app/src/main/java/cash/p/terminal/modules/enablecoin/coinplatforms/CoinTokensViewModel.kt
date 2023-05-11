@@ -1,21 +1,35 @@
 package cash.p.terminal.modules.enablecoin.coinplatforms
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.copyableTypeInfo
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.protocolInfo
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.supportedTokens
+import cash.p.terminal.core.supports
+import cash.p.terminal.core.typeInfo
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import cash.p.terminal.ui.extensions.BottomSheetSelectorViewItem
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 
 class CoinTokensViewModel(
     private val service: CoinTokensService,
     private val accountManager: IAccountManager
 ) : ViewModel() {
-    val openSelectorEvent = SingleLiveEvent<BottomSheetSelectorMultipleDialog.Config>()
 
+    var showBottomSheetDialog by mutableStateOf(false)
+        private set
+
+    var config: BottomSheetSelectorMultipleDialog.Config? = null
+        private set
     private var currentRequest: CoinTokensService.Request? = null
     private val disposable: Disposable
 
@@ -57,7 +71,12 @@ class CoinTokensViewModel(
                 )
             }
         )
-        openSelectorEvent.postValue(config)
+        showBottomSheetDialog = true
+        this.config = config
+    }
+
+    fun bottomSheetDialogShown() {
+        showBottomSheetDialog = false
     }
 
     fun onSelect(indexes: List<Int>) {

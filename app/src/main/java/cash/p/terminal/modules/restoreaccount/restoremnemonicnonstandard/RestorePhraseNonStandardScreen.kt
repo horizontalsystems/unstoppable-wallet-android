@@ -39,19 +39,15 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.core.utils.Utils
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.createaccount.MnemonicLanguageCell
-import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
-import cash.p.terminal.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
+import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoremnemonic.SuggestionsBar
 import cash.p.terminal.ui.compose.*
 import cash.p.terminal.ui.compose.components.*
@@ -62,8 +58,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RestorePhraseNonStandard(
-    navController: NavController,
-    popUpToInclusiveId: Int,
+    mainViewModel: RestoreViewModel,
+    openSelectCoinsScreen: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     val viewModel =
         viewModel<RestoreMnemonicNonStandardViewModel>(factory = RestoreMnemonicNonStandardModule.Factory())
@@ -99,7 +96,7 @@ fun RestorePhraseNonStandard(
         AppBar(
             title = TranslatableString.ResString(R.string.Restore_NonStandardRestore),
             navigationIcon = {
-                HsBackButton(onClick = navController::popBackStack)
+                HsBackButton(onClick = onBackClick)
             },
             menuItems = listOf(
                 MenuItem(
@@ -287,15 +284,8 @@ fun RestorePhraseNonStandard(
     }
 
     uiState.accountType?.let { accountType ->
-        navController.slideFromRight(
-            R.id.restoreSelectCoinsFragment,
-            bundleOf(
-                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.accountName,
-                RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
-                ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-            )
-        )
-
+        mainViewModel.setAccountData(accountType, viewModel.accountName)
+        openSelectCoinsScreen.invoke()
         viewModel.onSelectCoinsShown()
     }
 

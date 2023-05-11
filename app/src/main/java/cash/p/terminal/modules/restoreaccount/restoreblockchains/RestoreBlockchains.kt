@@ -1,0 +1,267 @@
+package cash.p.terminal.modules.restoreaccount.restoreblockchains
+
+import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import cash.p.terminal.R
+import cash.p.terminal.core.App
+import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
+import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsViewModel
+import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import cash.p.terminal.modules.restoreaccount.RestoreViewModel
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.CellMultilineClear
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.extensions.BottomSheetSelectorMultiple
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+enum class RestoreBlockchainsBottomSheetType {
+    CoinSettings, CoinTokens
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ManageWalletsScreen(
+    mainViewModel: RestoreViewModel,
+    openZCashConfigure: () -> Unit,
+    onBackClick: () -> Unit,
+    onFinish: () -> Unit
+) {
+    val accountType = mainViewModel.accountType ?: run {
+        Toast.makeText(App.instance, "Error: accountType is NULL", Toast.LENGTH_SHORT).show()
+        onBackClick.invoke()
+        return
+    }
+
+    val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType)
+    val viewModel: RestoreBlockchainsViewModel = viewModel(factory = factory)
+    val restoreSettingsViewModel: RestoreSettingsViewModel = viewModel(factory = factory)
+    val coinSettingsViewModel: CoinSettingsViewModel = viewModel(factory = factory)
+    val coinTokensViewModel: CoinTokensViewModel = viewModel(factory = factory)
+
+    val view = LocalView.current
+
+    val coinItems by viewModel.viewItemsLiveData.observeAsState()
+    val doneButtonEnabled by viewModel.restoreEnabledLiveData.observeAsState(false)
+    val restored = viewModel.restored
+
+    mainViewModel.zCashConfig?.let { config ->
+        restoreSettingsViewModel.onEnter(config)
+        mainViewModel.setZCashConfig(null)
+    }
+
+    if (mainViewModel.cancelZCashConfig) {
+        restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+        mainViewModel.cancelZCashConfig = false
+    }
+
+    if (restoreSettingsViewModel.openZcashConfigure != null) {
+        restoreSettingsViewModel.zcashConfigureOpened()
+        openZCashConfigure.invoke()
+    }
+
+    LaunchedEffect(restored) {
+        if (restored) {
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_Restored,
+                icon = R.drawable.icon_add_to_wallet_2_24,
+                iconTint = R.color.white
+            )
+            delay(300)
+            onFinish.invoke()
+        }
+    }
+
+    var bottomSheetType: RestoreBlockchainsBottomSheetType? by remember { mutableStateOf(null) }
+    val coroutineScope = rememberCoroutineScope()
+    val skipHalfExpanded by remember { mutableStateOf(true) }
+    val modalBottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = skipHalfExpanded
+    )
+
+    LaunchedEffect(coinSettingsViewModel.showBottomSheetDialog) {
+        if (coinSettingsViewModel.showBottomSheetDialog) {
+            bottomSheetType = RestoreBlockchainsBottomSheetType.CoinSettings
+            coroutineScope.launch {
+                modalBottomSheetState.show()
+            }
+            coinSettingsViewModel.bottomSheetDialogShown()
+        }
+    }
+
+    LaunchedEffect(coinTokensViewModel.showBottomSheetDialog) {
+        if (coinTokensViewModel.showBottomSheetDialog) {
+            bottomSheetType = RestoreBlockchainsBottomSheetType.CoinTokens
+            coroutineScope.launch {
+                modalBottomSheetState.show()
+            }
+            coinTokensViewModel.bottomSheetDialogShown()
+        }
+    }
+
+    ModalBottomSheetLayout(
+        sheetState = modalBottomSheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            when (bottomSheetType) {
+                null -> {
+                    Spacer(modifier = Modifier.height(1.dp))
+                }
+
+                RestoreBlockchainsBottomSheetType.CoinSettings -> {
+                    coinSettingsViewModel.config?.let { config ->
+                        BottomSheetSelectorMultiple(
+                            config = config,
+                            onItemsSelected = { coinSettingsViewModel.onSelect(it) },
+                            onCloseClick = {
+                                coinSettingsViewModel.onCancelSelect()
+                                coroutineScope.launch { modalBottomSheetState.hide() }
+                            },
+                        )
+                    }
+                }
+
+                RestoreBlockchainsBottomSheetType.CoinTokens -> {
+                    coinTokensViewModel.config?.let { config ->
+                        BottomSheetSelectorMultiple(
+                            config = config,
+                            onItemsSelected = { coinTokensViewModel.onSelect(it) },
+                            onCloseClick = {
+                                coinTokensViewModel.onCancelSelect()
+                                coroutineScope.launch { modalBottomSheetState.hide() }
+                            },
+                        )
+                    }
+                }
+            }
+        },
+    ) {
+        Column(
+            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+        ) {
+            AppBar(
+                title = TranslatableString.ResString(R.string.Restore_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = onBackClick)
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Restore),
+                        onClick = { viewModel.onRestore() },
+                        enabled = doneButtonEnabled
+                    )
+                ),
+            )
+
+            LazyColumn {
+                item {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Divider(
+                        thickness = 1.dp,
+                        color = ComposeAppTheme.colors.steel10,
+                    )
+                }
+                coinItems?.let {
+                    items(it) { viewItem ->
+                        CellMultilineClear(
+                            borderBottom = true,
+                            onClick = { onItemClick(viewItem, viewModel) }
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 16.dp)
+                            ) {
+                                Image(
+                                    painter = viewItem.imageSource.painter(),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .padding(end = 16.dp)
+                                        .size(32.dp)
+                                )
+                                Column(modifier = Modifier.weight(1f)) {
+                                    body_leah(
+                                        text = viewItem.title,
+                                        maxLines = 1,
+                                    )
+                                    subhead2_grey(
+                                        text = viewItem.subtitle,
+                                        maxLines = 1,
+                                        modifier = Modifier.padding(top = 1.dp)
+                                    )
+                                }
+                                Spacer(Modifier.width(12.dp))
+                                if (viewItem.hasSettings) {
+                                    HsIconButton(
+                                        onClick = { viewModel.onClickSettings(viewItem.item) }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_edit_20),
+                                            contentDescription = null,
+                                            tint = ComposeAppTheme.colors.grey
+                                        )
+                                    }
+                                }
+                                HsSwitch(
+                                    checked = viewItem.enabled,
+                                    onCheckedChange = { onItemClick(viewItem, viewModel) },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private fun onItemClick(viewItem: CoinViewItem<Blockchain>, viewModel: RestoreBlockchainsViewModel) {
+    if (viewItem.enabled) {
+        viewModel.disable(viewItem.item)
+    } else {
+        viewModel.enable(viewItem.item)
+    }
+}

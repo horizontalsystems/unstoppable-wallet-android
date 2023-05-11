@@ -35,20 +35,16 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.core.utils.Utils
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.createaccount.MnemonicLanguageCell
 import cash.p.terminal.modules.createaccount.PassphraseCell
-import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
-import cash.p.terminal.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
+import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreByMenu
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import cash.p.terminal.ui.compose.*
@@ -60,10 +56,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RestorePhrase(
-    navController: NavController,
-    popUpToInclusiveId: Int,
+    advanced: Boolean,
     restoreMenuViewModel: RestoreMenuViewModel,
-    advanced: Boolean
+    mainViewModel: RestoreViewModel,
+    openRestoreAdvanced: (() -> Unit)? = null,
+    openSelectCoins: () -> Unit,
+    openNonStandardRestore: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
@@ -96,7 +95,7 @@ fun RestorePhrase(
         AppBar(
             title = if (advanced) TranslatableString.ResString(R.string.Restore_Advanced_Title) else TranslatableString.ResString(R.string.ManageAccounts_ImportWallet),
             navigationIcon = {
-                HsBackButton(onClick = navController::popBackStack)
+                HsBackButton(onClick = onBackClick)
             },
             menuItems = listOf(
                 MenuItem(
@@ -262,10 +261,9 @@ fun RestorePhrase(
 
                 if (advanced) {
                     BottomSection(
-                        navController,
                         viewModel,
                         uiState,
-                        popUpToInclusiveId,
+                        openNonStandardRestore,
                         coroutineScope
                     )
                 } else {
@@ -274,10 +272,7 @@ fun RestorePhrase(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clickable {
-                                    navController.slideFromRight(
-                                        R.id.restoreAccountAdvancedFragment,
-                                        ManageAccountsModule.prepareParams(popUpToInclusiveId)
-                                    )
+                                    openRestoreAdvanced?.invoke()
                                 }
                                 .padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -321,15 +316,8 @@ fun RestorePhrase(
     }
 
     uiState.accountType?.let { accountType ->
-        navController.slideFromRight(
-            R.id.restoreSelectCoinsFragment,
-            bundleOf(
-                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.accountName,
-                RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
-                ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-            )
-        )
-
+        mainViewModel.setAccountData(accountType, viewModel.accountName)
+        openSelectCoins.invoke()
         viewModel.onSelectCoinsShown()
     }
 
@@ -355,11 +343,10 @@ fun RestorePhrase(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun ColumnScope.BottomSection(
-    navController: NavController,
+private fun BottomSection(
     viewModel: RestoreMnemonicViewModel,
     uiState: RestoreMnemonicModule.UiState,
-    popUpToInclusiveId: Int,
+    openNonStandardRestore: () -> Unit,
     coroutineScope: CoroutineScope,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -436,10 +423,7 @@ private fun ColumnScope.BottomSection(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    navController.slideFromRight(
-                        R.id.restoreMnemonicNonStandardFragment,
-                        bundleOf(ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId)
-                    )
+                    openNonStandardRestore.invoke()
                 }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,

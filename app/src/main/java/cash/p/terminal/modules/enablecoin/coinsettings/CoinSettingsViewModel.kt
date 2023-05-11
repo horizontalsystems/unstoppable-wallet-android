@@ -1,5 +1,8 @@
 package cash.p.terminal.modules.enablecoin.coinsettings
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.Clearable
@@ -12,7 +15,6 @@ import cash.p.terminal.entities.BitcoinCashCoinType
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import cash.p.terminal.ui.extensions.BottomSheetSelectorViewItem
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
@@ -23,7 +25,11 @@ class CoinSettingsViewModel(
 
     private var disposables = CompositeDisposable()
 
-    val openBottomSelectorLiveEvent = SingleLiveEvent<BottomSheetSelectorMultipleDialog.Config>()
+    var showBottomSheetDialog by mutableStateOf(false)
+        private set
+
+    var config: BottomSheetSelectorMultipleDialog.Config? = null
+        private set
 
     private var currentRequest: CoinSettingsService.Request? = null
 
@@ -40,13 +46,15 @@ class CoinSettingsViewModel(
             is CoinSettingsService.RequestType.Derivation -> {
                 derivationConfig(request.token, request.type.allDerivations, request.type.current, request.allowEmpty)
             }
+
             is CoinSettingsService.RequestType.BCHCoinType -> {
-                bitcoinCashCoinTypeConfig(request.token, request.type.allTypes, request.type.current, request.allowEmpty,)
+                bitcoinCashCoinTypeConfig(request.token, request.type.allTypes, request.type.current, request.allowEmpty)
             }
         }
 
         currentRequest = request
-        openBottomSelectorLiveEvent.postValue(config)
+        this.config = config
+        showBottomSheetDialog = true
     }
 
     private fun derivationConfig(
@@ -92,6 +100,10 @@ class CoinSettingsViewModel(
         )
     }
 
+    fun bottomSheetDialogShown() {
+        showBottomSheetDialog = false
+    }
+
     fun onSelect(indexes: List<Int>) {
         val request = currentRequest ?: return
 
@@ -99,6 +111,7 @@ class CoinSettingsViewModel(
             is CoinSettingsService.RequestType.Derivation -> {
                 service.selectDerivations(indexes.map { request.type.allDerivations[it] }, request.token)
             }
+
             is CoinSettingsService.RequestType.BCHCoinType -> {
                 service.selectBchCoinTypes(indexes.map { request.type.allTypes[it] }, request.token)
             }

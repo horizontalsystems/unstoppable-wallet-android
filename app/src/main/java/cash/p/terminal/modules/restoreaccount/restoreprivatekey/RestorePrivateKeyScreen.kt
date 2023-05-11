@@ -11,24 +11,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
-import cash.p.terminal.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
+import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreByMenu
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.FormsInput
+import cash.p.terminal.ui.compose.components.FormsInputMultiline
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
 
 @Composable
 fun RestorePrivateKey(
-    navController: NavController,
-    popUpToInclusiveId: Int,
     restoreMenuViewModel: RestoreMenuViewModel,
+    mainViewModel: RestoreViewModel,
+    openSelectCoinsScreen: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     val viewModel = viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
 
@@ -38,21 +40,15 @@ fun RestorePrivateKey(
             AppBar(
                 title = TranslatableString.ResString(R.string.Restore_Advanced_Title),
                 navigationIcon = {
-                    HsBackButton(onClick = navController::popBackStack)
+                    HsBackButton(onClick = onBackClick)
                 },
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Next),
                         onClick = {
                             viewModel.resolveAccountType()?.let { accountType ->
-                                navController.slideFromRight(
-                                    R.id.restoreSelectCoinsFragment,
-                                    bundleOf(
-                                        RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.accountName,
-                                        RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
-                                        ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-                                    )
-                                )
+                                mainViewModel.setAccountData(accountType, viewModel.accountName)
+                                openSelectCoinsScreen.invoke()
                             }
                         }
                     )

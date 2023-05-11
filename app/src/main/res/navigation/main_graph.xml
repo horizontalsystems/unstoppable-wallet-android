@@ -228,9 +228,6 @@
         android:id="@+id/createAccountFragment"
         android:name="cash.p.terminal.modules.createaccount.CreateAccountFragment" />
     <fragment
-        android:id="@+id/restoreMnemonicNonStandardFragment"
-        android:name="cash.p.terminal.modules.restoreaccount.restoremnemonicnonstandard.RestoreMnemonicNonStandardFragment" />
-    <fragment
         android:id="@+id/restoreAccountFragment"
         android:name="cash.p.terminal.modules.restoreaccount.RestoreAccountFragment" />
     <fragment
@@ -240,17 +237,11 @@
         android:id="@+id/restoreLocalFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment" />
     <fragment
-        android:id="@+id/restoreAccountAdvancedFragment"
-        android:name="cash.p.terminal.modules.restoreaccount.RestoreAccountAdvancedFragment" />
-    <fragment
         android:id="@+id/watchAddressFragment"
         android:name="cash.p.terminal.modules.watchaddress.WatchAddressFragment" />
     <fragment
         android:id="@+id/selectBlockchainsFragment"
         android:name="cash.p.terminal.modules.watchaddress.selectblockchains.SelectBlockchainsFragment" />
-    <fragment
-        android:id="@+id/restoreSelectCoinsFragment"
-        android:name="cash.p.terminal.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment"/>
     <fragment
         android:id="@+id/zcashConfigure"
         android:name="cash.p.terminal.modules.zcashconfigure.ZcashConfigure"/>
