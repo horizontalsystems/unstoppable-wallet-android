@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData.UniswapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -13,7 +14,6 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
-import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.Single
@@ -90,8 +90,8 @@ class UniswapTradeService(
     }
 
     @Throws
-    fun transactionData(tradeData: TradeData): TransactionData {
-        return uniswapKit.transactionData(tradeData)
+    fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
+        return uniswapKit.transactionData(tradeData.getTradeDataV2())
     }
 
     private fun clearDisposables() {
@@ -136,8 +136,8 @@ class UniswapTradeService(
         }
     }
 
-    private fun tradeData(swapData: SwapData, amount: BigDecimal, tradeType: TradeType, tradeOptions: TradeOptions): TradeData {
-        return when (tradeType) {
+    private fun tradeData(swapData: SwapData, amount: BigDecimal, tradeType: TradeType, tradeOptions: TradeOptions): UniversalSwapTradeData {
+        val tradeData = when (tradeType) {
             TradeType.ExactIn -> {
                 uniswapKit.bestTradeExactIn(swapData, amount, tradeOptions)
             }
@@ -145,6 +145,7 @@ class UniswapTradeService(
                 uniswapKit.bestTradeExactOut(swapData, amount, tradeOptions)
             }
         }
+        return UniversalSwapTradeData.buildFromTradeDataV2(tradeData)
     }
 
     @Throws
