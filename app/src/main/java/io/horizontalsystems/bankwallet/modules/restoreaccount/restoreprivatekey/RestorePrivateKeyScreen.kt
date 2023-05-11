@@ -11,24 +11,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
+import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreByMenu
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputMultiline
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 @Composable
 fun RestorePrivateKey(
-    navController: NavController,
-    popUpToInclusiveId: Int,
     restoreMenuViewModel: RestoreMenuViewModel,
+    mainViewModel: RestoreViewModel,
+    openSelectCoinsScreen: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     val viewModel = viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
 
@@ -38,21 +40,15 @@ fun RestorePrivateKey(
             AppBar(
                 title = TranslatableString.ResString(R.string.Restore_Advanced_Title),
                 navigationIcon = {
-                    HsBackButton(onClick = navController::popBackStack)
+                    HsBackButton(onClick = onBackClick)
                 },
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Next),
                         onClick = {
                             viewModel.resolveAccountType()?.let { accountType ->
-                                navController.slideFromRight(
-                                    R.id.restoreSelectCoinsFragment,
-                                    bundleOf(
-                                        RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.accountName,
-                                        RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
-                                        ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-                                    )
-                                )
+                                mainViewModel.setAccountData(accountType, viewModel.accountName)
+                                openSelectCoinsScreen.invoke()
                             }
                         }
                     )

@@ -1,21 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.copyableTypeInfo
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.protocolInfo
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.supportedTokens
+import io.horizontalsystems.bankwallet.core.supports
+import io.horizontalsystems.bankwallet.core.typeInfo
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 
 class CoinTokensViewModel(
     private val service: CoinTokensService,
     private val accountManager: IAccountManager
 ) : ViewModel() {
-    val openSelectorEvent = SingleLiveEvent<BottomSheetSelectorMultipleDialog.Config>()
 
+    var showBottomSheetDialog by mutableStateOf(false)
+        private set
+
+    var config: BottomSheetSelectorMultipleDialog.Config? = null
+        private set
     private var currentRequest: CoinTokensService.Request? = null
     private val disposable: Disposable
 
@@ -57,7 +71,12 @@ class CoinTokensViewModel(
                 )
             }
         )
-        openSelectorEvent.postValue(config)
+        showBottomSheetDialog = true
+        this.config = config
+    }
+
+    fun bottomSheetDialogShown() {
+        showBottomSheetDialog = false
     }
 
     fun onSelect(indexes: List<Int>) {
