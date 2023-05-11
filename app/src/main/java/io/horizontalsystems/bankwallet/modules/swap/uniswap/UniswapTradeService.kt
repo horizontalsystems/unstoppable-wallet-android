@@ -5,16 +5,18 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData.UniswapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
-import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.TradeError
+import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +26,7 @@ import java.math.BigDecimal
 
 
 class UniswapTradeService(
-    private val uniswapProvider: UniswapProvider
+    private val uniswapKit: UniswapKit
 ) : SwapMainModule.ISwapTradeService {
 
     private var swapDataDisposable: Disposable? = null
@@ -69,7 +71,7 @@ class UniswapTradeService(
         swapDataDisposable?.dispose()
         swapDataDisposable = null
 
-        swapDataDisposable = uniswapProvider.swapDataSingle(tokenFrom, tokenTo)
+        swapDataDisposable = swapDataSingle(tokenFrom, tokenTo)
             .subscribeOn(Schedulers.io())
             .subscribe({
                 swapData = it
@@ -89,7 +91,7 @@ class UniswapTradeService(
 
     @Throws
     fun transactionData(tradeData: TradeData): TransactionData {
-        return uniswapProvider.transactionData(tradeData)
+        return uniswapKit.transactionData(tradeData)
     }
 
     private fun clearDisposables() {
@@ -112,7 +114,7 @@ class UniswapTradeService(
                 ExactType.ExactFrom -> TradeType.ExactIn
                 ExactType.ExactTo -> TradeType.ExactOut
             }
-            val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
+            val tradeData = tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             state = SwapResultState.Ready(UniswapData(tradeData))
         } catch (e: Throwable) {
             val error = when {
@@ -123,9 +125,49 @@ class UniswapTradeService(
         }
     }
 
-    private val wethAddressHex = uniswapProvider.wethAddress.hex
+    private fun swapDataSingle(tokenIn: Token?, tokenOut: Token?): Single<SwapData> {
+        return try {
+            val uniswapTokenIn = uniswapToken(tokenIn)
+            val uniswapTokenOut = uniswapToken(tokenOut)
+
+            uniswapKit.swapData(uniswapTokenIn, uniswapTokenOut)
+        } catch (error: Throwable) {
+            Single.error(error)
+        }
+    }
+
+    private fun tradeData(swapData: SwapData, amount: BigDecimal, tradeType: TradeType, tradeOptions: TradeOptions): TradeData {
+        return when (tradeType) {
+            TradeType.ExactIn -> {
+                uniswapKit.bestTradeExactIn(swapData, amount, tradeOptions)
+            }
+            TradeType.ExactOut -> {
+                uniswapKit.bestTradeExactOut(swapData, amount, tradeOptions)
+            }
+        }
+    }
+
+    @Throws
+    private fun uniswapToken(token: Token?) = when (val tokenType = token?.type) {
+        TokenType.Native -> when (token.blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> uniswapKit.etherToken()
+            else -> throw Exception("Invalid coin for swap: $token")
+        }
+        is TokenType.Eip20 -> uniswapKit.token(
+            io.horizontalsystems.ethereumkit.models.Address(
+                tokenType.address
+            ), token.decimals)
+        else -> throw Exception("Invalid coin for swap: $token")
+    }
+
+    private val TokenType.isWeth: Boolean
+        get() = this is TokenType.Eip20 && address.equals(uniswapKit.etherToken().address.hex, true)
     private val Token.isWeth: Boolean
-        get() = (type as? TokenType.Eip20)?.address?.equals(wethAddressHex, ignoreCase = true) ?: false
+        get() = type.isWeth
     private val Token.isNative: Boolean
         get() = type == TokenType.Native
 
