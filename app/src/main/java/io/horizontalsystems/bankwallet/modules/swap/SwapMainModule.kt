@@ -22,7 +22,6 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.uniswapkit.models.TradeData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -194,7 +193,7 @@ object SwapMainModule {
 
     sealed class SwapData {
         data class OneInchData(val data: OneInchSwapParameters) : SwapData()
-        data class UniswapData(val data: TradeData) : SwapData() {
+        data class UniswapData(val data: UniversalSwapTradeData) : SwapData() {
             private val warningPriceImpact = BigDecimal(1)
             private val forbiddenPriceImpact = BigDecimal(5)
 
