@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
-import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
@@ -97,7 +96,6 @@ class SwapMainViewModel(
     private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchainType).evmKitWrapper?.evmKit!! }
     private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit) }
     private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
-    private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }
     private var tradeService: SwapMainModule.ISwapTradeService = getTradeService(dex.provider)
     private var tradeView: SwapMainModule.TradeViewX? = null
     private var tradePriceExpiration: Float? = null
@@ -202,14 +200,14 @@ class SwapMainViewModel(
         syncButtonsState()
     }
 
-    private fun getTradeService(provider: ISwapProvider) = when (provider) {
+    private fun getTradeService(provider: ISwapProvider): SwapMainModule.ISwapTradeService = when (provider) {
         SwapMainModule.OneInchProvider -> OneInchTradeService(oneIncKitHelper)
-        else -> UniswapTradeService(uniswapProvider)
+        else -> UniswapTradeService(uniswapKit)
     }
 
     private fun getSpenderAddress(provider: ISwapProvider) = when (provider) {
         SwapMainModule.OneInchProvider -> oneIncKitHelper.smartContractAddress
-        else -> uniswapProvider.routerAddress
+        else -> uniswapKit.routerAddress
     }
 
     private fun syncUiState() {
