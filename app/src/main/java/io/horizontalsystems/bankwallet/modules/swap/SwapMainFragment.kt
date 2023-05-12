@@ -406,14 +406,26 @@ private fun TopMenu(
                         )
                     }
 
+                    SwapMainModule.UniswapV3Provider -> {
+                        navController.slideFromBottom(
+                            R.id.uniswapSettingsFragment,
+                            UniswapSettingsFragment.prepareParams(
+                                dex = state.dex,
+                                address = state.recipient,
+                                slippage = state.slippage,
+                                ttlEnabled = false,
+                            )
+                        )
+                    }
                     else -> {
                         navController.slideFromBottom(
                             R.id.uniswapSettingsFragment,
                             UniswapSettingsFragment.prepareParams(
-                                state.dex,
-                                state.recipient,
-                                state.slippage,
-                                state.ttl,
+                                dex = state.dex,
+                                address = state.recipient,
+                                slippage = state.slippage,
+                                ttlEnabled = true,
+                                ttl = state.ttl,
                             )
                         )
                     }
