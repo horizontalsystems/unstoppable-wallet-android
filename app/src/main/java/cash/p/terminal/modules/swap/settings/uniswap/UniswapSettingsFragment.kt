@@ -52,18 +52,26 @@ class UniswapSettingsFragment : BaseFragment() {
         private const val addressKey = "addressKey"
         private const val slippageKey = "slippageKey"
         private const val ttlKey = "ttlKey"
+        private const val ttlEnabledKey = "ttlEnabledKey"
 
         fun prepareParams(
             dex: SwapMainModule.Dex,
             address: Address?,
             slippage: BigDecimal,
-            ttl: Long?
-        ) = bundleOf(
-            dexKey to dex,
-            addressKey to address,
-            slippageKey to slippage.toPlainString(),
-            ttlKey to ttl
-        )
+            ttlEnabled: Boolean,
+            ttl: Long? = null
+        ): Bundle {
+            val bundle = bundleOf(
+                dexKey to dex,
+                addressKey to address,
+                slippageKey to slippage.toPlainString(),
+                ttlEnabledKey to ttlEnabled
+            )
+            if (ttl != null) {
+                bundle.putLong(ttlKey, ttl)
+            }
+            return bundle
+        }
     }
 
     private val dex by lazy {
@@ -76,6 +84,10 @@ class UniswapSettingsFragment : BaseFragment() {
 
     private val slippage by lazy {
         requireArguments().getString(slippageKey)?.toBigDecimal()
+    }
+
+    private val ttlEnabled by lazy {
+        requireArguments().getBoolean(ttlEnabledKey)
     }
 
     private val ttl by lazy {
@@ -109,7 +121,8 @@ class UniswapSettingsFragment : BaseFragment() {
                             },
                             dex = dexValue,
                             factory = UniswapSettingsModule.Factory(address, slippage, ttl),
-                            navController = findNavController()
+                            navController = findNavController(),
+                            ttlEnabled = ttlEnabled
                         )
                     } else {
                         ScreenMessageWithAction(
@@ -142,6 +155,7 @@ private fun UniswapSettingsScreen(
     recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
     slippageViewModel: SwapSlippageViewModel = viewModel(factory = factory),
     navController: NavController,
+    ttlEnabled: Boolean,
 ) {
     val (buttonTitle, buttonEnabled) = uniswapSettingsViewModel.buttonState
     val view = LocalView.current
@@ -171,8 +185,10 @@ private fun UniswapSettingsScreen(
                     Spacer(modifier = Modifier.height(24.dp))
                     SlippageAmount(slippageViewModel)
 
-                    Spacer(modifier = Modifier.height(24.dp))
-                    TransactionDeadlineInput(deadlineViewModel)
+                    if (ttlEnabled) {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        TransactionDeadlineInput(deadlineViewModel)
+                    }
 
                     Spacer(modifier = Modifier.height(24.dp))
                     TextImportantWarning(
