@@ -264,12 +264,14 @@ class SwapXMainViewModel(
                 when (val swapData = state.swapData) {
                     is SwapData.OneInchData -> {
                         tradeView = oneInchTradeViewItem(swapData.data, fromTokenService.token, toTokenService.token)
+                        amountTo = swapData.data.amountTo
                         toTokenService.onChangeAmount(swapData.data.amountTo.toString(), true)
                     }
 
                     is SwapData.UniswapData -> {
                         tradeView = uniswapTradeViewItem(swapData, fromTokenService.token, toTokenService.token)
                         if (exactType == ExactType.ExactFrom) {
+                            amountTo = swapData.data.amountOut
                             toTokenService.onChangeAmount(swapData.data.amountOut.toString(), true)
                         } else {
                             fromTokenService.onChangeAmount(swapData.data.amountIn.toString(), true)
@@ -601,6 +603,8 @@ class SwapXMainViewModel(
 
         resyncSwapData()
         setBalance()
+        allowanceService.set(toToken)
+        pendingAllowanceService.set(toToken)
     }
 
     fun setProvider(provider: ISwapProvider) {
