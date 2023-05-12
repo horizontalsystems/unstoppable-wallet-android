@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send.bitcoin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
-import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -12,11 +12,13 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 object SendBitcoinModule {
 
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val adapter: ISendBitcoinAdapter,
+        private val provider: IFeeRateProvider
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendBitcoinAdapter
 
-            val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType)!!
             val feeService = SendBitcoinFeeService(adapter)
             val feeRateService = SendBitcoinFeeRateService(provider)
             val amountService = SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
@@ -33,7 +35,7 @@ object SendBitcoinModule {
                 XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 App.btcBlockchainManager,
                 App.contactsRepository
-            )  as T
+            ) as T
         }
     }
 }

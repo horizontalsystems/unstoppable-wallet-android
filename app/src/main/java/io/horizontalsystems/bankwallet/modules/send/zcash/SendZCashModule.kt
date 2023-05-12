@@ -11,10 +11,13 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object SendZCashModule {
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val adapter: ISendZcashAdapter
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendZcashAdapter
+
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
             val amountService = SendAmountService(
                 AmountValidator(),

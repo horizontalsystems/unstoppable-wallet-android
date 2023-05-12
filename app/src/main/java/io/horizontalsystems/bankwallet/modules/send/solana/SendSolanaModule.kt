@@ -8,17 +8,16 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.send.SendAmountAdvancedService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.marketkit.models.Token
 import java.math.RoundingMode
 
 object SendSolanaModule {
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-        val adapter by lazy {
-            App.adapterManager.getAdapterForWallet(wallet) as ISendSolanaAdapter
-        }
+    class Factory(
+        private val wallet: Wallet,
+        private val adapter: ISendSolanaAdapter,
+        private val feeToken: Token
+    ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -28,13 +27,12 @@ object SendSolanaModule {
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
                     val amountService = SendAmountAdvancedService(
-                            adapter.availableBalance.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
-                            wallet.token,
-                            amountValidator,
+                        adapter.availableBalance.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
+                        wallet.token,
+                        amountValidator,
                     )
                     val addressService = SendSolanaAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-                    val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
 
                     SendSolanaViewModel(
                         wallet,
@@ -48,6 +46,7 @@ object SendSolanaModule {
                         App.contactsRepository
                     ) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
         }

@@ -12,6 +12,12 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
+import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
+import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
+import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
+import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
@@ -33,6 +39,8 @@ import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class SendFragment : BaseFragment() {
 
@@ -56,8 +64,10 @@ class SendFragment : BaseFragment() {
                     BlockchainType.ECash,
                     BlockchainType.Litecoin,
                     BlockchainType.Dash -> {
+                        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("No adapter for wallet: ${wallet.coin.code}")
+                        val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType) ?: throw IllegalStateException("No fee rate provider for blockchain: ${wallet.token.blockchainType}")
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) {
-                            SendBitcoinModule.Factory(wallet)
+                            SendBitcoinModule.Factory(wallet, adapter, provider)
                         }
                         setContent {
                             SendBitcoinNavHost(
@@ -68,8 +78,9 @@ class SendFragment : BaseFragment() {
                         }
                     }
                     is BlockchainType.BinanceChain -> {
+                        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBinanceAdapter) ?: throw IllegalStateException("No adapter for wallet: ${wallet.coin.code}")
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) {
-                            SendBinanceModule.Factory(wallet)
+                            SendBinanceModule.Factory(wallet, adapter)
                         }
                         setContent {
                             SendBinanceScreen(
@@ -80,8 +91,9 @@ class SendFragment : BaseFragment() {
                         }
                     }
                     BlockchainType.Zcash -> {
+                        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("No adapter for wallet: ${wallet.coin.code}")
                         val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) {
-                            SendZCashModule.Factory(wallet)
+                            SendZCashModule.Factory(wallet, adapter)
                         }
                         setContent {
                             SendZCashScreen(
@@ -100,7 +112,8 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Gnosis,
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
-                        val factory = SendEvmModule.Factory(wallet)
+                        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalStateException("No adapter for wallet: ${wallet.coin.code}")
+                        val factory = SendEvmModule.Factory(wallet, adapter)
                         val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
                             R.id.sendXFragment
                         ) { factory }
@@ -115,7 +128,9 @@ class SendFragment : BaseFragment() {
                         }
                     }
                     BlockchainType.Solana -> {
-                        val factory = SendSolanaModule.Factory(wallet)
+                        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter) ?: throw IllegalStateException("No adapter for wallet: ${wallet.coin.code}")
+                        val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalStateException("No fee token for blockchain: ${wallet.token.blockchainType}")
+                        val factory = SendSolanaModule.Factory(wallet, adapter, feeToken)
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendSolanaScreen(

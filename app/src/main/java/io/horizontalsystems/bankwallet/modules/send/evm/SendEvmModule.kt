@@ -114,10 +114,10 @@ object SendEvmModule {
     }
 
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-        val adapter by lazy {
-            App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
-        }
+    class Factory(
+        private val wallet: Wallet,
+        private val adapter: ISendEthereumAdapter
+    ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -125,6 +125,7 @@ object SendEvmModule {
                 EvmKitWrapperHoldingViewModel::class.java -> {
                     EvmKitWrapperHoldingViewModel(adapter.evmKitWrapper) as T
                 }
+
                 SendEvmViewModel::class.java -> {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -147,6 +148,7 @@ object SendEvmModule {
                         coinMaxAllowedDecimals
                     ) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
         }
