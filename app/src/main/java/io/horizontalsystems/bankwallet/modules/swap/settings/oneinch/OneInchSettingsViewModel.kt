@@ -4,12 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettingsError
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.State
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class OneInchSettingsViewModel(
     private val service: OneInchSettingsService,
@@ -35,7 +37,9 @@ class OneInchSettingsViewModel(
     private fun syncAction() {
         when (service.state) {
             is State.Valid -> {
-                buttonState = Pair(Translator.getString(R.string.SwapSettings_Apply), true)
+                viewModelScope.launch {
+                    buttonState = Pair(Translator.getString(R.string.SwapSettings_Apply), true)
+                }
             }
 
             State.Invalid -> {
@@ -58,7 +62,9 @@ class OneInchSettingsViewModel(
                 }
 
                 errorText?.let {
-                    buttonState = Pair(it, false)
+                    viewModelScope.launch {
+                        buttonState = Pair(it, false)
+                    }
                 }
             }
         }

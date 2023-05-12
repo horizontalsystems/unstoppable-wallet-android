@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.uniswap
 
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData.UniswapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
@@ -24,10 +23,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-
-class UniswapTradeService(
+class UniswapV2TradeService(
     private val uniswapKit: UniswapKit
-) : SwapMainModule.ISwapTradeService {
+) : IUniswapTradeService {
 
     private var swapDataDisposable: Disposable? = null
     private var swapData: SwapData? = null
@@ -40,12 +38,16 @@ class UniswapTradeService(
 
     override val recipient: Address?
         get() = tradeOptions.recipient
+    override val slippage: BigDecimal
+        get() = tradeOptions.allowedSlippage
+    override val ttl: Long
+        get() = tradeOptions.ttl
 
     private val _stateFlow = MutableStateFlow(state)
     override val stateFlow: StateFlow<SwapResultState>
         get() = _stateFlow
 
-    var tradeOptions: SwapTradeOptions = SwapTradeOptions()
+    override var tradeOptions: SwapTradeOptions = SwapTradeOptions()
         set(value) {
             field = value
         }
@@ -90,7 +92,7 @@ class UniswapTradeService(
     }
 
     @Throws
-    fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
+    override fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
         return uniswapKit.transactionData(tradeData.getTradeDataV2())
     }
 

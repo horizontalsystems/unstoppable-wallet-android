@@ -53,6 +53,7 @@ fun SlippageAmount(
     InputWithButtons(
         modifier = Modifier.padding(horizontal = 16.dp),
         hint = slippageViewModel.inputFieldPlaceholder,
+        initial = slippageViewModel.initialValue,
         buttons = slippageViewModel.inputButtons,
         state = slippageViewModel.errorState,
         onValueChange = {
@@ -72,6 +73,7 @@ fun TransactionDeadlineInput(deadlineViewModel: SwapDeadlineViewModel) {
     InputWithButtons(
         modifier = Modifier.padding(horizontal = 16.dp),
         hint = deadlineViewModel.inputFieldPlaceholder,
+        initial = deadlineViewModel.initialValue,
         buttons = deadlineViewModel.inputButtons,
         state = deadlineViewModel.errorState,
         onValueChange = {
@@ -117,6 +119,7 @@ fun RecipientAddress(
 fun InputWithButtons(
     modifier: Modifier = Modifier,
     hint: String? = null,
+    initial: String? = null,
     buttons: List<InputButton>,
     state: DataState<Any>? = null,
     onValueChange: (String) -> Unit,
@@ -149,8 +152,8 @@ fun InputWithButtons(
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue(""))
+            var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+                mutableStateOf(TextFieldValue(initial ?: ""))
             }
 
             BasicTextField(
@@ -198,6 +201,7 @@ fun InputWithButtons(
                                 text = button.rawValue,
                                 selection = TextRange(button.rawValue.length)
                             )
+                            onValueChange.invoke(button.rawValue)
                         },
                     )
                 }

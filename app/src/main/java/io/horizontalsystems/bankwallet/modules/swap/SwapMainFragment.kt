@@ -397,13 +397,24 @@ private fun TopMenu(
                 when (state.dex.provider) {
                     SwapMainModule.OneInchProvider -> {
                         navController.slideFromBottom(
-                            R.id.oneinchSettingsFragment, OneInchSettingsFragment.prepareParams(state.dex, state.recipient)
+                            R.id.oneinchSettingsFragment,
+                            OneInchSettingsFragment.prepareParams(
+                                state.dex,
+                                state.recipient,
+                                state.slippage,
+                            )
                         )
                     }
 
                     else -> {
                         navController.slideFromBottom(
-                            R.id.uniswapSettingsFragment, UniswapSettingsFragment.prepareParams(state.dex, state.recipient)
+                            R.id.uniswapSettingsFragment,
+                            UniswapSettingsFragment.prepareParams(
+                                state.dex,
+                                state.recipient,
+                                state.slippage,
+                                state.ttl,
+                            )
                         )
                     }
                 }

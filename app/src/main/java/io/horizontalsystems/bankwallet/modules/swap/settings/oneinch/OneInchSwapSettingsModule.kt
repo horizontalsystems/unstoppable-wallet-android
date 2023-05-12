@@ -24,9 +24,10 @@ object OneInchSwapSettingsModule {
 
     class Factory(
         private val address: Address?,
+        private val slippage: BigDecimal?,
     ) : ViewModelProvider.Factory {
 
-        private val service by lazy { OneInchSettingsService(address) }
+        private val service by lazy { OneInchSettingsService(address, slippage) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

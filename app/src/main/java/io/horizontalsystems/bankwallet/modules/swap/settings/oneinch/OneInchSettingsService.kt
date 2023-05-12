@@ -15,13 +15,14 @@ import java.math.BigDecimal
 
 class OneInchSettingsService(
     address: Address?,
+    slippage: BigDecimal?,
 ) : IRecipientAddressService, ISwapSlippageService {
 
     val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
     var errors: List<Throwable> = listOf()
 
     private var recipient: Address? = address
-    private val swapSettings = OneInchSwapSettings(recipient = address)
+    private val swapSettings = OneInchSwapSettings(recipient = address, slippage = slippage ?: OneInchSwapSettingsModule.defaultSlippage)
 
     var state: State = State.Valid(swapSettings)
         private set(value) {
