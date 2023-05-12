@@ -1,11 +1,10 @@
 package cash.p.terminal.modules.swap.uniswap
 
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.ExactType
 import cash.p.terminal.modules.swap.SwapMainModule.SwapData.UniswapData
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
-import cash.p.terminal.modules.swap.providers.UniswapProvider
+import cash.p.terminal.modules.swap.UniversalSwapTradeData
 import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
@@ -22,10 +21,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-
-class UniswapTradeService(
-    private val uniswapProvider: UniswapProvider
-) : SwapMainModule.ISwapTradeService {
+class UniswapV2TradeService(
+    private val uniswapKit: UniswapKit
+) : IUniswapTradeService {
 
     private var swapDataDisposable: Disposable? = null
     private var swapData: SwapData? = null
@@ -38,12 +36,16 @@ class UniswapTradeService(
 
     override val recipient: Address?
         get() = tradeOptions.recipient
+    override val slippage: BigDecimal
+        get() = tradeOptions.allowedSlippage
+    override val ttl: Long
+        get() = tradeOptions.ttl
 
     private val _stateFlow = MutableStateFlow(state)
     override val stateFlow: StateFlow<SwapResultState>
         get() = _stateFlow
 
-    var tradeOptions: SwapTradeOptions = SwapTradeOptions()
+    override var tradeOptions: SwapTradeOptions = SwapTradeOptions()
         set(value) {
             field = value
         }
@@ -88,8 +90,8 @@ class UniswapTradeService(
     }
 
     @Throws
-    fun transactionData(tradeData: TradeData): TransactionData {
-        return uniswapProvider.transactionData(tradeData)
+    override fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
+        return uniswapKit.transactionData(tradeData.getTradeDataV2())
     }
 
     private fun clearDisposables() {

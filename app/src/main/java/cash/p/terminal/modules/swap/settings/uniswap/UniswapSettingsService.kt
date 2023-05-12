@@ -16,10 +16,22 @@ import java.math.BigDecimal
 import java.util.Optional
 
 class UniswapSettingsService(
-    recipientAddress: Address?
+    recipientAddress: Address?,
+    slippage: BigDecimal?,
+    ttl: Long?
 ) : IRecipientAddressService, ISwapSlippageService, ISwapDeadlineService {
 
-    var state: State = State.Valid(SwapTradeOptions(recipient = recipientAddress))
+    private var recipient: Address? = recipientAddress
+    private var slippage: BigDecimal = slippage ?: TradeOptions.defaultAllowedSlippage
+    private var deadline: Long = ttl ?: TradeOptions.defaultTtl
+
+    var state: State = State.Valid(
+        SwapTradeOptions(
+            allowedSlippage = this.slippage,
+            ttl = deadline,
+            recipient = recipient
+        )
+    )
         private set(value) {
             field = value
             stateObservable.onNext(value)
@@ -36,7 +48,6 @@ class UniswapSettingsService(
 
     private val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("50"))
     private val usualHighestSlippage = BigDecimal(5)
-    private var slippage: BigDecimal = TradeOptions.defaultAllowedSlippage
 
     override val initialSlippage: BigDecimal?
         get() = state.let {
@@ -68,8 +79,6 @@ class UniswapSettingsService(
         return errors.find { it is SwapSettingsModule.SwapSettingsError.InvalidSlippage }
     }
 
-    private var deadline: Long = TradeOptions.defaultTtl
-
     override val initialDeadline: Long?
         get() = state.let {
             if (it is State.Valid && it.tradeOptions.ttl != defaultDeadline) {
@@ -99,7 +108,6 @@ class UniswapSettingsService(
         sync()
     }
 
-    private var recipient: Address? = recipientAddress
     private var recipientError: Throwable? = null
         set(value) {
             field = value

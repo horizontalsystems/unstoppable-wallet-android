@@ -49,6 +49,7 @@ object SwapMainModule {
         private val tokenFrom: Token? = arguments.getParcelable(tokenFromKey)
         private val swapProviders: List<ISwapProvider> = listOf(
             UniswapProvider,
+            UniswapV3Provider,
             PancakeSwapProvider,
             OneInchProvider,
             QuickSwapProvider
@@ -118,6 +119,8 @@ object SwapMainModule {
         val state: SwapResultState
         val stateFlow: Flow<SwapResultState>
         val recipient: Address?
+        val slippage: BigDecimal
+        val ttl: Long? get() = null
 
         fun stop()
         fun fetchSwapData(
@@ -145,6 +148,8 @@ object SwapMainModule {
         val buttons: SwapButtons,
         val hasNonZeroBalance: Boolean?,
         val recipient: Address?,
+        val slippage: BigDecimal,
+        val ttl: Long?,
         val refocusKey: Long
     )
 
@@ -235,6 +240,7 @@ object SwapMainModule {
         val id: String
         val title: String
         val url: String
+        val supportsExactOut: Boolean
 
         fun supports(blockchainType: BlockchainType): Boolean
     }
@@ -244,9 +250,22 @@ object SwapMainModule {
         override val id get() = "uniswap"
         override val title get() = "Uniswap"
         override val url get() = "https://uniswap.org/"
+        override val supportsExactOut get() = true
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.Ethereum
+        }
+    }
+
+    @Parcelize
+    object UniswapV3Provider : ISwapProvider {
+        override val id get() = "uniswap_v3"
+        override val title get() = "Uniswap V3"
+        override val url get() = "https://uniswap.org/"
+        override val supportsExactOut get() = true
+
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.Ethereum || blockchainType == BlockchainType.ArbitrumOne
         }
     }
 
@@ -255,6 +274,7 @@ object SwapMainModule {
         override val id get() = "pancake"
         override val title get() = "PancakeSwap"
         override val url get() = "https://pancakeswap.finance/"
+        override val supportsExactOut get() = true
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.BinanceSmartChain
@@ -266,6 +286,7 @@ object SwapMainModule {
         override val id get() = "oneinch"
         override val title get() = "1inch"
         override val url get() = "https://app.1inch.io/"
+        override val supportsExactOut get() = false
 
         override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
@@ -286,6 +307,7 @@ object SwapMainModule {
         override val id get() = "quickswap"
         override val title get() = "QuickSwap"
         override val url get() = "https://quickswap.exchange/"
+        override val supportsExactOut get() = true
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.Polygon

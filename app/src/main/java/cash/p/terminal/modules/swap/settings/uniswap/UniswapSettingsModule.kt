@@ -6,6 +6,7 @@ import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.swap.settings.RecipientAddressViewModel
 import cash.p.terminal.modules.swap.settings.SwapDeadlineViewModel
 import cash.p.terminal.modules.swap.settings.SwapSlippageViewModel
+import java.math.BigDecimal
 
 object UniswapSettingsModule {
 
@@ -16,9 +17,11 @@ object UniswapSettingsModule {
 
     class Factory(
         private val recipient: Address?,
+        private val slippage: BigDecimal?,
+        private val ttl: Long?,
     ) : ViewModelProvider.Factory {
 
-        private val service by lazy { UniswapSettingsService(recipient) }
+        private val service by lazy { UniswapSettingsService(recipient, slippage, ttl) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

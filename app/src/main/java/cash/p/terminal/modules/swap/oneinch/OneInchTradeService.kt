@@ -32,6 +32,9 @@ class OneInchTradeService(
     override val recipient: Address?
         get() = swapSettings.recipient
 
+    override val slippage: BigDecimal
+        get() = swapSettings.slippage
+
     private val _stateFlow = MutableStateFlow(state)
     override val stateFlow: StateFlow<SwapResultState>
         get() = _stateFlow
