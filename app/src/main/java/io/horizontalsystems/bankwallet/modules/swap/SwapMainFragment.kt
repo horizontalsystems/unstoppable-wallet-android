@@ -47,6 +47,7 @@ import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmation
 import cash.p.terminal.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment
 import cash.p.terminal.modules.swap.confirmation.uniswap.UniswapConfirmationFragment
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSettingsFragment
+import cash.p.terminal.modules.swap.settings.uniswap.UniswapSettingsFragment
 import cash.p.terminal.modules.swap.ui.ActionButtons
 import cash.p.terminal.modules.swap.ui.AvailableBalance
 import cash.p.terminal.modules.swap.ui.Price
@@ -398,9 +399,9 @@ private fun TopMenu(
                         )
                     }
 
-                    SwapMainModule.UniswapProvider -> {
+                    else -> {
                         navController.slideFromBottom(
-                            R.id.uniswapSettingsFragment, OneInchSettingsFragment.prepareParams(state.dex, state.recipient)
+                            R.id.uniswapSettingsFragment, UniswapSettingsFragment.prepareParams(state.dex, state.recipient)
                         )
                     }
                 }
