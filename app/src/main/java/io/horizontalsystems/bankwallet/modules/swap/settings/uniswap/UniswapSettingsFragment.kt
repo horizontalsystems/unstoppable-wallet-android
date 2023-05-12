@@ -43,17 +43,27 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResult
+import java.math.BigDecimal
 
 class UniswapSettingsFragment : BaseFragment() {
 
     companion object {
         private const val dexKey = "dexKey"
         private const val addressKey = "addressKey"
+        private const val slippageKey = "slippageKey"
+        private const val ttlKey = "ttlKey"
 
         fun prepareParams(
             dex: SwapMainModule.Dex,
-            address: Address?
-        ) = bundleOf(dexKey to dex, addressKey to address)
+            address: Address?,
+            slippage: BigDecimal,
+            ttl: Long?
+        ) = bundleOf(
+            dexKey to dex,
+            addressKey to address,
+            slippageKey to slippage.toPlainString(),
+            ttlKey to ttl
+        )
     }
 
     private val dex by lazy {
@@ -62,6 +72,19 @@ class UniswapSettingsFragment : BaseFragment() {
 
     private val address by lazy {
         requireArguments().getParcelable<Address>(addressKey)
+    }
+
+    private val slippage by lazy {
+        requireArguments().getString(slippageKey)?.toBigDecimal()
+    }
+
+    private val ttl by lazy {
+        val arguments = requireArguments()
+        if (arguments.containsKey(ttlKey)) {
+            arguments.getLong(ttlKey)
+        } else {
+            null
+        }
     }
 
     override fun onCreateView(
@@ -85,7 +108,7 @@ class UniswapSettingsFragment : BaseFragment() {
                                 findNavController().popBackStack()
                             },
                             dex = dexValue,
-                            factory = UniswapSettingsModule.Factory(address),
+                            factory = UniswapSettingsModule.Factory(address, slippage, ttl),
                             navController = findNavController()
                         )
                     } else {
@@ -174,7 +197,7 @@ private fun UniswapSettingsScreen(
                                 SwapMainModule.resultKey,
                                 bundleOf(
                                     SwapMainModule.swapSettingsRecipientKey to tradeOptions.recipient,
-                                    SwapMainModule.swapSettingsSlippageKey to tradeOptions.allowedSlippage,
+                                    SwapMainModule.swapSettingsSlippageKey to tradeOptions.allowedSlippage.toPlainString(),
                                     SwapMainModule.swapSettingsTtlKey to tradeOptions.ttl,
                                 )
                             )

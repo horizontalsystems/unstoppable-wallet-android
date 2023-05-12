@@ -38,7 +38,9 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.IUniswapTradeService
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapV2TradeService
+import io.horizontalsystems.bankwallet.modules.swap.uniswapv3.UniswapV3TradeService
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -46,6 +48,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapKit
+import io.horizontalsystems.uniswapkit.UniswapV3Kit
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -96,6 +99,7 @@ class SwapMainViewModel(
     private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchainType).evmKitWrapper?.evmKit!! }
     private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit) }
     private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
+    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit) }
     private var tradeService: SwapMainModule.ISwapTradeService = getTradeService(dex.provider)
     private var tradeView: SwapMainModule.TradeViewX? = null
     private var tradePriceExpiration: Float? = null
@@ -124,6 +128,8 @@ class SwapMainViewModel(
             buttons = buttons,
             hasNonZeroBalance = hasNonZeroBalance,
             recipient = tradeService.recipient,
+            slippage = tradeService.slippage,
+            ttl = tradeService.ttl,
             refocusKey = refocusKey
         )
     )
@@ -151,7 +157,7 @@ class SwapMainViewModel(
         service.providerUpdatedFlow.collectWith(viewModelScope) { provider ->
             allowanceService.set(getSpenderAddress(provider))
             tradeService = getTradeService(provider)
-            toTokenService.setAmountEnabled(provider is SwapMainModule.UniswapProvider)
+            toTokenService.setAmountEnabled(provider.supportsExactOut)
             syncUiState()
         }
 
@@ -190,7 +196,7 @@ class SwapMainViewModel(
             pendingAllowanceService.set(it)
         }
 
-        toTokenService.setAmountEnabled(dex.provider is SwapMainModule.UniswapProvider)
+        toTokenService.setAmountEnabled(dex.provider.supportsExactOut)
         fromTokenService.start()
         toTokenService.start()
         setBalance()
@@ -202,11 +208,13 @@ class SwapMainViewModel(
 
     private fun getTradeService(provider: ISwapProvider): SwapMainModule.ISwapTradeService = when (provider) {
         SwapMainModule.OneInchProvider -> OneInchTradeService(oneIncKitHelper)
-        else -> UniswapTradeService(uniswapKit)
+        SwapMainModule.UniswapV3Provider -> UniswapV3TradeService(uniswapV3Kit)
+        else -> UniswapV2TradeService(uniswapKit)
     }
 
     private fun getSpenderAddress(provider: ISwapProvider) = when (provider) {
         SwapMainModule.OneInchProvider -> oneIncKitHelper.smartContractAddress
+        SwapMainModule.UniswapV3Provider -> uniswapV3Kit.routerAddress
         else -> uniswapKit.routerAddress
     }
 
@@ -225,6 +233,8 @@ class SwapMainViewModel(
             buttons = buttons,
             hasNonZeroBalance = hasNonZeroBalance,
             recipient = tradeService.recipient,
+            slippage = tradeService.slippage,
+            ttl = tradeService.ttl,
             refocusKey = refocusKey
         )
     }
@@ -629,7 +639,7 @@ class SwapMainViewModel(
     }
 
     fun getSendEvmData(swapData: SwapData.UniswapData): SendEvmData? {
-        val uniswapTradeService = tradeService as? UniswapTradeService ?: return null
+        val uniswapTradeService = tradeService as? IUniswapTradeService ?: return null
         val tradeOptions = uniswapTradeService.tradeOptions
         val transactionData = try {
             uniswapTradeService.transactionData(swapData.data)

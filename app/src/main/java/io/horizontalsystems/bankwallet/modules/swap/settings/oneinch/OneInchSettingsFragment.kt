@@ -26,9 +26,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
 import io.horizontalsystems.bankwallet.modules.swap.settings.ui.SlippageAmount
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -41,17 +41,24 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResult
+import java.math.BigDecimal
 
 class OneInchSettingsFragment : BaseFragment() {
 
     companion object {
         private const val dexKey = "dexKey"
         private const val addressKey = "addressKey"
+        private const val slippageKey = "slippageKey"
 
         fun prepareParams(
             dex: SwapMainModule.Dex,
-            address: Address?
-        ) = bundleOf(dexKey to dex, addressKey to address)
+            address: Address?,
+            slippage: BigDecimal
+        ) = bundleOf(
+            dexKey to dex,
+            addressKey to address,
+            slippageKey to slippage.toPlainString()
+        )
     }
 
     private val dex by lazy {
@@ -60,6 +67,10 @@ class OneInchSettingsFragment : BaseFragment() {
 
     private val address by lazy {
         requireArguments().getParcelable<Address>(addressKey)
+    }
+
+    private val slippage by lazy {
+        requireArguments().getString(slippageKey)?.toBigDecimal()
     }
 
     override fun onCreateView(
@@ -81,7 +92,7 @@ class OneInchSettingsFragment : BaseFragment() {
                                 findNavController().popBackStack()
                             },
                             dex = dexValue,
-                            factory = OneInchSwapSettingsModule.Factory(address),
+                            factory = OneInchSwapSettingsModule.Factory(address, slippage),
                             navController = findNavController()
                         )
                     } else {
@@ -167,7 +178,7 @@ private fun OneInchSettingsScreen(
                                 SwapMainModule.resultKey,
                                 bundleOf(
                                     SwapMainModule.swapSettingsRecipientKey to swapSettings.recipient,
-                                    SwapMainModule.swapSettingsSlippageKey to swapSettings.slippage,
+                                    SwapMainModule.swapSettingsSlippageKey to swapSettings.slippage.toString(),
                                 )
                             )
                             onCloseClick()
