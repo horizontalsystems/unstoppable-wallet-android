@@ -115,9 +115,7 @@ object SendEvmModule {
 
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-        val adapter by lazy {
-            App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
-        }
+        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
