@@ -277,6 +277,7 @@ class SwapMainViewModel(
                             amountTo = swapData.data.amountOut
                             toTokenService.onChangeAmount(swapData.data.amountOut.toString(), true)
                         } else {
+                            amountFrom = swapData.data.amountIn
                             fromTokenService.onChangeAmount(swapData.data.amountIn.toString(), true)
                         }
                     }
