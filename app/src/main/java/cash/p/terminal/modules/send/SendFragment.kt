@@ -56,8 +56,9 @@ class SendFragment : BaseFragment() {
                     BlockchainType.ECash,
                     BlockchainType.Litecoin,
                     BlockchainType.Dash -> {
+                        val factory = SendBitcoinModule.Factory(wallet)
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) {
-                            SendBitcoinModule.Factory(wallet)
+                            factory
                         }
                         setContent {
                             SendBitcoinNavHost(
@@ -68,8 +69,9 @@ class SendFragment : BaseFragment() {
                         }
                     }
                     is BlockchainType.BinanceChain -> {
+                        val factory = SendBinanceModule.Factory(wallet)
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) {
-                            SendBinanceModule.Factory(wallet)
+                            factory
                         }
                         setContent {
                             SendBinanceScreen(
@@ -80,8 +82,9 @@ class SendFragment : BaseFragment() {
                         }
                     }
                     BlockchainType.Zcash -> {
+                        val factory = SendZCashModule.Factory(wallet)
                         val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) {
-                            SendZCashModule.Factory(wallet)
+                            factory
                         }
                         setContent {
                             SendZCashScreen(

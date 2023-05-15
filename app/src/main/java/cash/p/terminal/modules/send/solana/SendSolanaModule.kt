@@ -16,9 +16,7 @@ import java.math.RoundingMode
 object SendSolanaModule {
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-        val adapter by lazy {
-            App.adapterManager.getAdapterForWallet(wallet) as ISendSolanaAdapter
-        }
+        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter) ?: throw IllegalStateException("SendSolanaAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
