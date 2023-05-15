@@ -12,11 +12,10 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 object SendBinanceModule {
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBinanceAdapter) ?: throw IllegalStateException("SendBinanceAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-            val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendBinanceAdapter
             val amountValidator = AmountValidator()
             val amountService = SendAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
             val addressService = SendBinanceAddressService(adapter)
