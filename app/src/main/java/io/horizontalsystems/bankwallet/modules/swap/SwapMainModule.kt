@@ -263,8 +263,13 @@ object SwapMainModule {
         override val url get() = "https://uniswap.org/"
         override val supportsExactOut get() = true
 
-        override fun supports(blockchainType: BlockchainType): Boolean {
-            return blockchainType == BlockchainType.Ethereum || blockchainType == BlockchainType.ArbitrumOne
+        override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.ArbitrumOne,
+//            BlockchainType.Optimism,
+            BlockchainType.Polygon -> true
+
+            else -> false
         }
     }
 
