@@ -17,15 +17,18 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceVie
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object UniswapConfirmationModule {
 
     class Factory(
         private val blockchainType: BlockchainType,
-        private val sendEvmData: SendEvmData
+        private val transactionData: TransactionData,
+        private val additionalInfo: SendEvmData.AdditionalInfo?
     ) : ViewModelProvider.Factory {
 
         private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
@@ -42,7 +45,7 @@ object UniswapConfirmationModule {
         }
         private val feeService by lazy {
             val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, 20)
-            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, sendEvmData.transactionData)
+            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
@@ -55,16 +58,13 @@ object UniswapConfirmationModule {
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val nonceService by lazy { SendEvmNonceService(evmKitWrapper.evmKit) }
         private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
-        private val sendService by lazy {
-            SendEvmTransactionService(sendEvmData, evmKitWrapper, settingsService, App.evmLabelManager)
-        }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
                     SendEvmTransactionViewModel(
-                        sendService,
+                        getSendService(),
                         coinServiceFactory,
                         cautionViewItemFactory,
                         blockchainType = blockchainType,
@@ -79,6 +79,22 @@ object UniswapConfirmationModule {
                 }
                 else -> throw IllegalArgumentException()
             }
+        }
+
+        private fun getSendService(): SendEvmTransactionService {
+            val priceImpactLevel = additionalInfo?.uniswapInfo?.priceImpact?.level
+            val warnings = if (priceImpactLevel == SwapMainModule.PriceImpactLevel.Forbidden)
+                listOf(SwapMainModule.UniswapWarnings.PriceImpactWarning)
+            else
+                listOf()
+
+            val sendEvmData = SendEvmData(transactionData, additionalInfo, warnings)
+            return SendEvmTransactionService(
+                sendEvmData,
+                evmKitWrapper,
+                settingsService,
+                App.evmLabelManager
+            )
         }
     }
 

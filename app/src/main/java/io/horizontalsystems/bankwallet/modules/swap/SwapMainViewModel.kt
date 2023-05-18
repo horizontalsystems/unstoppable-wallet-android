@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
-import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
@@ -32,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapButtons
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.UniswapWarnings
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
@@ -662,15 +660,10 @@ class SwapMainViewModel(
             price = primaryPrice,
             priceImpact = formatter.priceImpactViewItem(swapData)
         )
-        val warnings: List<Warning> = if (swapData.priceImpactLevel == PriceImpactLevel.Forbidden)
-            listOf(UniswapWarnings.PriceImpactWarning)
-        else
-            listOf()
 
         return SendEvmData(
             transactionData,
             SendEvmData.AdditionalInfo.Uniswap(swapInfo),
-            warnings
         )
     }
 
