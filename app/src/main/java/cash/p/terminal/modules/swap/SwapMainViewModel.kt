@@ -11,7 +11,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.EvmError
 import cash.p.terminal.core.IAdapterManager
 import cash.p.terminal.core.IBalanceAdapter
-import cash.p.terminal.core.Warning
 import cash.p.terminal.core.convertedError
 import cash.p.terminal.core.fiat.AmountTypeSwitchService
 import cash.p.terminal.core.fiat.AmountTypeSwitchService.AmountType
@@ -32,7 +31,6 @@ import cash.p.terminal.modules.swap.SwapMainModule.SwapButtons
 import cash.p.terminal.modules.swap.SwapMainModule.SwapData
 import cash.p.terminal.modules.swap.SwapMainModule.SwapError
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
-import cash.p.terminal.modules.swap.SwapMainModule.UniswapWarnings
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceState
@@ -664,15 +662,10 @@ class SwapMainViewModel(
             price = primaryPrice,
             priceImpact = formatter.priceImpactViewItem(swapData)
         )
-        val warnings: List<Warning> = if (swapData.priceImpactLevel == PriceImpactLevel.Forbidden)
-            listOf(UniswapWarnings.PriceImpactWarning)
-        else
-            listOf()
 
         return SendEvmData(
             transactionData,
             SendEvmData.AdditionalInfo.Uniswap(swapInfo),
-            warnings
         )
     }
 

@@ -56,7 +56,8 @@ class UniswapConfirmationFragment(
     private val vmFactory by lazy {
         UniswapConfirmationModule.Factory(
             blockchainType,
-            SendEvmData(transactionData, additionalInfo)
+            transactionData,
+            additionalInfo
         )
     }
     override val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(navGraphId) { vmFactory }
