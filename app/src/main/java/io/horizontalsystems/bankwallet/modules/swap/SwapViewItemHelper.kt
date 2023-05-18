@@ -45,7 +45,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
             return null
         }
 
-        return PriceImpactViewItem(impactLevel, Translator.getString(R.string.Swap_Percent, priceImpact))
+        return PriceImpactViewItem(impactLevel, Translator.getString(R.string.Swap_Percent, priceImpact * BigDecimal.valueOf(-1)))
     }
 
     fun slippage(allowedSlippage: BigDecimal): String? {
