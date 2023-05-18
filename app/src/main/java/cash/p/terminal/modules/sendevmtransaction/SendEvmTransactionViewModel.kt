@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.sendevmtransaction
 
-import androidx.annotation.ColorRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -316,18 +315,17 @@ class SendEvmTransactionViewModel(
             )
         }
         uniswapInfo?.priceImpact?.let {
-            val color = when (it.level) {
-                PriceImpactLevel.Warning -> R.color.jacob
-                PriceImpactLevel.Forbidden -> R.color.lucian
-                else -> null
+            val type = when (it.level) {
+                PriceImpactLevel.Warning -> ValueType.Warning
+                PriceImpactLevel.Forbidden -> ValueType.Forbidden
+                else -> ValueType.Regular
             }
 
             otherViewItems.add(
                 ViewItem.Value(
                     Translator.getString(R.string.Swap_PriceImpact),
                     it.value,
-                    ValueType.Regular,
-                    color
+                    type
                 )
             )
         }
@@ -872,7 +870,6 @@ sealed class ViewItem {
         val title: String,
         val value: String,
         val type: ValueType,
-        @ColorRes val color: Int? = null
     ) : ViewItem()
 
     class ValueMulti(
@@ -880,7 +877,6 @@ sealed class ViewItem {
         val primaryValue: String,
         val secondaryValue: String,
         val type: ValueType,
-        @ColorRes val color: Int? = null
     ) : ViewItem()
 
     class AmountMulti(
@@ -911,5 +907,5 @@ sealed class ViewItem {
 data class AmountValues(val coinAmount: String, val fiatAmount: String?)
 
 enum class ValueType {
-    Regular, Disabled, Outgoing, Incoming
+    Regular, Disabled, Outgoing, Incoming, Warning, Forbidden
 }

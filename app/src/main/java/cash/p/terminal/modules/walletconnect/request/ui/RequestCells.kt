@@ -1,6 +1,14 @@
 package cash.p.terminal.modules.walletconnect.request.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +24,14 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.sendevmtransaction.AmountValues
 import cash.p.terminal.modules.sendevmtransaction.ValueType
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.caption_grey
+import cash.p.terminal.ui.compose.components.subhead1_grey
+import cash.p.terminal.ui.compose.components.subhead1_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -56,6 +71,8 @@ fun AmountCell(
         ValueType.Disabled -> ComposeAppTheme.colors.grey
         ValueType.Outgoing -> ComposeAppTheme.colors.leah
         ValueType.Incoming -> ComposeAppTheme.colors.remus
+        ValueType.Warning -> ComposeAppTheme.colors.jacob
+        ValueType.Forbidden -> ComposeAppTheme.colors.lucian
     }
     RowUniversal(
         modifier = Modifier
@@ -112,6 +129,8 @@ fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, token: Token) 
         ValueType.Disabled -> ComposeAppTheme.colors.grey
         ValueType.Outgoing -> ComposeAppTheme.colors.leah
         ValueType.Incoming -> ComposeAppTheme.colors.remus
+        ValueType.Warning -> ComposeAppTheme.colors.jacob
+        ValueType.Forbidden -> ComposeAppTheme.colors.lucian
     }
     RowUniversal(
         modifier = Modifier
@@ -177,6 +196,8 @@ fun TitleTypedValueCell(title: String, value: String, type: ValueType = ValueTyp
         ValueType.Disabled -> ComposeAppTheme.colors.grey
         ValueType.Outgoing -> ComposeAppTheme.colors.jacob
         ValueType.Incoming -> ComposeAppTheme.colors.remus
+        ValueType.Warning -> ComposeAppTheme.colors.jacob
+        ValueType.Forbidden -> ComposeAppTheme.colors.lucian
     }
     RowUniversal(
         modifier = Modifier
