@@ -24,13 +24,13 @@ class EvmCoinService(
             }
         }
 
-    fun amountData(value: BigInteger): SendModule.AmountData {
+    fun amountData(value: BigInteger, approximate: Boolean = false): SendModule.AmountData {
         val decimalValue = BigDecimal(value, token.decimals)
         val coinValue = CoinValue(token, decimalValue)
 
-        val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
+        val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue, approximate)
         val secondaryAmountInfo = rate?.let {
-            SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value * decimalValue))
+            SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value * decimalValue), approximate)
         }
 
         return SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)

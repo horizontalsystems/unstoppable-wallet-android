@@ -10,21 +10,13 @@ import java.math.BigDecimal
 
 object SendModule {
 
-    data class AmountData(val primary: AmountInfo, val secondary: AmountInfo?) {
-        fun getFormatted(): String {
-            var formatted = primary.getFormattedPlain()
-
-            secondary?.let {
-                formatted += "  |  " + it.getFormattedPlain()
-            }
-
-            return formatted
-        }
-    }
+    data class AmountData(val primary: AmountInfo, val secondary: AmountInfo?)
 
     sealed class AmountInfo {
-        data class CoinValueInfo(val coinValue: CoinValue) : AmountInfo()
-        data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo()
+        abstract val approximate: Boolean
+
+        data class CoinValueInfo(val coinValue: CoinValue, override val approximate: Boolean = false) : AmountInfo()
+        data class CurrencyValueInfo(val currencyValue: CurrencyValue, override val approximate: Boolean = false) : AmountInfo()
 
         val value: BigDecimal
             get() = when (this) {
@@ -38,24 +30,26 @@ object SendModule {
                 is CurrencyValueInfo -> currencyValue.currency.decimal
             }
 
-        fun getAmountName(): String = when (this) {
-            is CoinValueInfo -> coinValue.coin.name
-            is CurrencyValueInfo -> currencyValue.currency.code
-        }
-
-        fun getFormatted(): String = when (this) {
-            is CoinValueInfo -> coinValue.getFormattedFull()
-            is CurrencyValueInfo -> App.numberFormatter.formatFiatFull(
+        fun getFormatted(): String {
+            val prefix = if (approximate) "~" else ""
+            return prefix + when (this) {
+                is CoinValueInfo -> coinValue.getFormattedFull()
+                is CurrencyValueInfo -> App.numberFormatter.formatFiatFull(
                     currencyValue.value, currencyValue.currency.symbol
                 )
+            }
         }
 
-        fun getFormattedPlain(): String = when (this) {
-            is CoinValueInfo -> {
-                App.numberFormatter.formatCoinFull(value, coinValue.coin.code, coinValue.decimal)
-            }
-            is CurrencyValueInfo -> {
-                App.numberFormatter.formatFiatFull(currencyValue.value, currencyValue.currency.symbol)
+        fun getFormattedPlain(): String {
+            val prefix = if (approximate) "~" else ""
+            return prefix + when (this) {
+                is CoinValueInfo -> {
+                    App.numberFormatter.formatCoinFull(value, coinValue.coin.code, coinValue.decimal)
+                }
+
+                is CurrencyValueInfo -> {
+                    App.numberFormatter.formatFiatFull(currencyValue.value, currencyValue.currency.symbol)
+                }
             }
         }
 

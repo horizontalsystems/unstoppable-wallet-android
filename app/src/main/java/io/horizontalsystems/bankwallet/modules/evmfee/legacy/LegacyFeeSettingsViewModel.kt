@@ -82,7 +82,7 @@ class LegacyFeeSettingsViewModel(
             is DataState.Success -> {
                 val transaction = transactionStatus.data
                 val viewState = transaction.errors.firstOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
-                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.estimatedFee)
+                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.estimatedFee, transactionStatus.data.gasData.isSurcharged)
                 val feeItem = FeeItem(feeAmountData.primary.getFormattedPlain(), feeAmountData.secondary?.getFormattedPlain())
                 val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
 
