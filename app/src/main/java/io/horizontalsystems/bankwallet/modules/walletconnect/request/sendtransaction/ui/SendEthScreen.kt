@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -23,10 +27,22 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettings
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.*
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.AmountCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.AmountMultiCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.SubheadCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleHexValueCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TokenCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 
 @Composable
 fun SendEthRequestScreen(
@@ -127,8 +143,8 @@ fun SendEthRequestScreen(
                 CellUniversalLawrenceSection(
                     listOf {
                         FeeCell(
-                            title = stringResource(R.string.FeeSettings_Fee),
-                            info = stringResource(R.string.FeeSettings_Fee_Info),
+                            title = stringResource(R.string.FeeSettings_NetworkFee),
+                            info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                             value = fee,
                             viewState = viewState,
                             navController = navController

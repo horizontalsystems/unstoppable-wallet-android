@@ -22,6 +22,12 @@ import java.math.BigInteger
 import java.math.RoundingMode
 
 object EvmFeeModule {
+    private const val surchargePercent = 10
+
+    fun surcharged(gasLimit: Long) : Long {
+        return (gasLimit + gasLimit / 100.0 * surchargePercent).toLong()
+    }
+
     class Factory(
         private val feeService: IEvmFeeService,
         private val gasPriceService: IEvmGasPriceService,
@@ -83,14 +89,36 @@ data class GasPriceInfo(
     val errors: List<Throwable>
 )
 
-open class GasData(val gasLimit: Long, var gasPrice: GasPrice) {
+open class GasData(
+    val gasLimit: Long,
+    val estimatedGasLimit: Long = gasLimit,
+    var gasPrice: GasPrice
+) {
     open val fee: BigInteger
         get() = gasLimit.toBigInteger() * gasPrice.max.toBigInteger()
+
+    open val estimatedFee: BigInteger
+        get() = estimatedGasLimit.toBigInteger() * gasPrice.max.toBigInteger()
+
+    val isSurcharged: Boolean
+        get() = gasLimit != estimatedGasLimit
 }
 
-class RollupGasData(gasLimit: Long, gasPrice: GasPrice, val l1Fee: BigInteger) : GasData(gasLimit, gasPrice) {
+class RollupGasData(
+    gasLimit: Long,
+    estimatedGasLimit: Long = gasLimit,
+    gasPrice: GasPrice,
+    val l1Fee: BigInteger
+) : GasData(
+    gasLimit = gasLimit,
+    estimatedGasLimit = estimatedGasLimit,
+    gasPrice = gasPrice
+) {
     override val fee: BigInteger
         get() = super.fee + l1Fee
+
+    override val estimatedFee: BigInteger
+        get() = super.estimatedFee + l1Fee
 }
 
 //TODO rename to FeeData

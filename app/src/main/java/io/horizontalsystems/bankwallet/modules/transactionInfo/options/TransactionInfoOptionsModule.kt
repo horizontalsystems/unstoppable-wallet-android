@@ -108,7 +108,11 @@ object TransactionInfoOptionsModule {
                 Type.SpeedUp -> transaction.gasLimit
                 Type.Cancel -> null
             }
-            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimit = gasLimit)
+            val gasDataService = EvmCommonGasDataService.instance(
+                evmKitWrapper.evmKit,
+                evmKitWrapper.blockchainType,
+                gasLimit = gasLimit
+            )
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
 
