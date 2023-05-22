@@ -44,7 +44,10 @@ object UniswapConfirmationModule {
             }
         }
         private val feeService by lazy {
-            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, 20)
+            val gasDataService = EvmCommonGasDataService.instance(
+                evmKitWrapper.evmKit,
+                evmKitWrapper.blockchainType
+            )
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val coinServiceFactory by lazy {

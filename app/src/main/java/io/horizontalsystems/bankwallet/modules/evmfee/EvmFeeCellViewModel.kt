@@ -46,7 +46,7 @@ class EvmFeeCellViewModel(
                     viewStateLiveData.postValue(ViewState.Success)
                 }
 
-                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.fee)
+                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.estimatedFee)
                 val feeViewItem = FeeItem(
                     primary = feeAmountData.primary.getFormattedPlain(),
                     secondary = feeAmountData.secondary?.getFormattedPlain()
