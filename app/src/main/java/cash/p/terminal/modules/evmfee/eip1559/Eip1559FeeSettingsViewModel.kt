@@ -13,7 +13,11 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.FeePriceScale
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.evmfee.*
+import cash.p.terminal.modules.evmfee.FeeSummaryViewItem
+import cash.p.terminal.modules.evmfee.FeeViewItem
+import cash.p.terminal.modules.evmfee.GasPriceInfo
+import cash.p.terminal.modules.evmfee.IEvmFeeService
+import cash.p.terminal.modules.evmfee.Transaction
 import cash.p.terminal.modules.fee.FeeItem
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.reactivex.disposables.CompositeDisposable
@@ -132,7 +136,7 @@ class Eip1559FeeSettingsViewModel(
             is DataState.Success -> {
                 val transaction = transactionStatus.data
                 val viewState = transaction.errors.firstOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
-                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.fee)
+                val feeAmountData = coinService.amountData(transactionStatus.data.gasData.estimatedFee)
                 val feeItem = FeeItem(feeAmountData.primary.getFormattedPlain(), feeAmountData.secondary?.getFormattedPlain())
                 val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
 

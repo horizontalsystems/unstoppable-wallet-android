@@ -78,7 +78,7 @@ object WCRequestModule {
             )
         }
         private val feeService by lazy {
-            val gasDataService = EvmCommonGasDataService(evmKitWrapper.evmKit, 10)
+            val gasDataService = EvmCommonGasDataService(evmKitWrapper.evmKit)
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
@@ -161,7 +161,10 @@ object WCRequestModule {
         }
         private val feeService by lazy {
             val evmKitWrapper = service.evmKitWrapper
-            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, 10)
+            val gasDataService = EvmCommonGasDataService.instance(
+                evmKitWrapper.evmKit,
+                evmKitWrapper.blockchainType
+            )
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }

@@ -1,7 +1,11 @@
 package cash.p.terminal.modules.walletconnect.request.sendtransaction.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -23,10 +27,22 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.sendevmtransaction.ViewItem
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
-import cash.p.terminal.modules.walletconnect.request.ui.*
+import cash.p.terminal.modules.walletconnect.request.ui.AmountCell
+import cash.p.terminal.modules.walletconnect.request.ui.AmountMultiCell
+import cash.p.terminal.modules.walletconnect.request.ui.SubheadCell
+import cash.p.terminal.modules.walletconnect.request.ui.TitleHexValueCell
+import cash.p.terminal.modules.walletconnect.request.ui.TitleTypedValueCell
+import cash.p.terminal.modules.walletconnect.request.ui.TokenCell
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
+import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
 
 @Composable
 fun SendEthRequestScreen(
@@ -127,8 +143,8 @@ fun SendEthRequestScreen(
                 CellUniversalLawrenceSection(
                     listOf {
                         FeeCell(
-                            title = stringResource(R.string.FeeSettings_Fee),
-                            info = stringResource(R.string.FeeSettings_Fee_Info),
+                            title = stringResource(R.string.FeeSettings_NetworkFee),
+                            info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                             value = fee,
                             viewState = viewState,
                             navController = navController

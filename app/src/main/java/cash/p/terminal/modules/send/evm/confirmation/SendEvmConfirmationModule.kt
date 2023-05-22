@@ -58,8 +58,10 @@ object SendEvmConfirmationModule {
             }
         }
         private val feeService by lazy {
-            val gasLimitSurchargePercent = if (sendEvmData.transactionData.input.isEmpty()) 0 else 20
-            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimitSurchargePercent)
+            val gasDataService = EvmCommonGasDataService.instance(
+                evmKitWrapper.evmKit,
+                evmKitWrapper.blockchainType
+            )
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, sendEvmData.transactionData)
         }
         private val coinServiceFactory by lazy {

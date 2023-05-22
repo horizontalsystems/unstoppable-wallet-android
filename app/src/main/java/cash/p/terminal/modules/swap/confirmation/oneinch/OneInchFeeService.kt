@@ -36,8 +36,6 @@ class OneInchFeeService(
     private var retryDelayTimeInSeconds = 3L
     private var retryDisposable: Disposable? = null
 
-    private val gasLimitSurchargePercent: Int = 25
-
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
 
@@ -102,7 +100,7 @@ class OneInchFeeService(
     private fun sync(swap: Swap, gasPriceInfo: GasPriceInfo) {
         val swapTx = swap.transaction
         val gasData = GasData(
-            gasLimit = getSurchargedGasLimit(swapTx.gasLimit),
+            gasLimit = swapTx.gasLimit,
             gasPrice = gasPriceInfo.gasPrice
         )
 
@@ -135,9 +133,5 @@ class OneInchFeeService(
                     sync(gasPriceInfo)
                 }
         }
-    }
-
-    private fun getSurchargedGasLimit(estimatedGasLimit: Long): Long {
-        return (estimatedGasLimit + estimatedGasLimit / 100.0 * gasLimitSurchargePercent).toLong()
     }
 }

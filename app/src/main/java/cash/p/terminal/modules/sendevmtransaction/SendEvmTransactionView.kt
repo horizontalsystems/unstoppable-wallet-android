@@ -80,8 +80,8 @@ fun SendEvmTransactionView(
             CellUniversalLawrenceSection(
                 listOf {
                     FeeCell(
-                        title = stringResource(R.string.FeeSettings_Fee),
-                        info = stringResource(R.string.FeeSettings_Fee_Info),
+                        title = stringResource(R.string.FeeSettings_NetworkFee),
+                        info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                         value = fee,
                         viewState = viewState,
                         navController = navController
