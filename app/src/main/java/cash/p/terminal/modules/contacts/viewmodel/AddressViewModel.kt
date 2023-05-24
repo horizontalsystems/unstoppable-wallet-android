@@ -19,7 +19,6 @@ import cash.p.terminal.modules.address.AddressHandlerEns
 import cash.p.terminal.modules.address.AddressHandlerEvm
 import cash.p.terminal.modules.address.AddressHandlerPure
 import cash.p.terminal.modules.address.AddressHandlerSolana
-import cash.p.terminal.modules.address.AddressHandlerTron
 import cash.p.terminal.modules.address.AddressHandlerUdn
 import cash.p.terminal.modules.address.EnsResolverHolder
 import cash.p.terminal.modules.address.IAddressHandler
@@ -168,7 +167,6 @@ class AddressViewModel(
                 rawAddressHandlers.add(AddressHandlerPure())
             }
             BlockchainType.Ethereum,
-            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Avalanche,

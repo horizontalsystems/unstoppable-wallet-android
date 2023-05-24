@@ -11,8 +11,7 @@ class AddressParserFactory {
         BlockchainType.Litecoin -> AddressParser("litecoin", true)
         BlockchainType.Dash -> AddressParser("dash", true)
         BlockchainType.Zcash -> AddressParser("zcash", true)
-        BlockchainType.Ethereum,
-        BlockchainType.EthereumGoerli -> AddressParser("ethereum", true)
+        BlockchainType.Ethereum -> AddressParser("ethereum", true)
         BlockchainType.BinanceSmartChain -> AddressParser("", true)
         BlockchainType.BinanceChain -> AddressParser("binance", true)
         BlockchainType.Polygon,

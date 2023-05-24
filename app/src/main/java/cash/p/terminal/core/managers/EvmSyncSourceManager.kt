@@ -31,7 +31,6 @@ class EvmSyncSourceManager(
     private fun defaultTransactionSource(blockchainType: BlockchainType): TransactionSource {
         return when (blockchainType) {
             BlockchainType.Ethereum -> TransactionSource.ethereumEtherscan(appConfigProvider.etherscanApiKey)
-            BlockchainType.EthereumGoerli -> TransactionSource.goerliEtherscan(appConfigProvider.etherscanApiKey)
             BlockchainType.BinanceSmartChain -> TransactionSource.bscscan(appConfigProvider.bscscanApiKey)
             BlockchainType.Polygon -> TransactionSource.polygonscan(appConfigProvider.polygonscanApiKey)
             BlockchainType.Avalanche -> TransactionSource.snowtrace(appConfigProvider.snowtraceApiKey)
@@ -71,17 +70,6 @@ class EvmSyncSourceManager(
                     type,
                     "LlamaNodes",
                     RpcSource.Http(listOf(URL("https://eth.llamarpc.com")), null),
-                    defaultTransactionSource(type)
-                )
-            )
-            BlockchainType.EthereumGoerli -> listOf(
-                evmSyncSource(
-                    type,
-                    "Goerli HTTP",
-                    RpcSource.goerliInfuraHttp(
-                        appConfigProvider.infuraProjectId,
-                        appConfigProvider.infuraProjectSecret
-                    ),
                     defaultTransactionSource(type)
                 )
             )

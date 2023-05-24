@@ -17,9 +17,6 @@ import cash.p.terminal.core.adapters.SolanaAdapter
 import cash.p.terminal.core.adapters.SolanaTransactionConverter
 import cash.p.terminal.core.adapters.SolanaTransactionsAdapter
 import cash.p.terminal.core.adapters.SplAdapter
-import cash.p.terminal.core.adapters.TronAdapter
-import cash.p.terminal.core.adapters.TronTransactionConverter
-import cash.p.terminal.core.adapters.TronTransactionsAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
@@ -28,7 +25,6 @@ import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
-import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
@@ -100,7 +96,6 @@ class AdapterFactory(
                 ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType))
             }
             BlockchainType.Ethereum,
-            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Avalanche,
@@ -168,7 +163,6 @@ class AdapterFactory(
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
-            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,
@@ -192,7 +186,6 @@ class AdapterFactory(
     fun unlinkAdapter(transactionSource: TransactionSource) {
         when (val blockchainType = transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
-            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,

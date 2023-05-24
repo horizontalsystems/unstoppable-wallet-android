@@ -5,7 +5,12 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Analytics
+import io.horizontalsystems.marketkit.models.AnalyticsPreview
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -56,7 +61,8 @@ class CoinAnalyticsService(
     }
 
     private fun fetch() {
-        marketKit.analyticsSingle(fullCoin.coin.uid, currency.code)
+        val authToken = ""
+        marketKit.analyticsSingle(fullCoin.coin.uid, currency.code, authToken)
             .subscribeIO({ item ->
                 stateSubject.onNext(DataState.Success(AnalyticData(analytics = item)))
             }, {
@@ -68,7 +74,8 @@ class CoinAnalyticsService(
 
     private fun handleError(error: Throwable) {
         if (error is HttpException && error.code() == 401) {
-            marketKit.analyticsPreviewSingle(fullCoin.coin.uid)
+            val addresses = listOf<String>()
+            marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses)
                 .subscribeIO({ item ->
                     stateSubject.onNext(DataState.Success(AnalyticData(analyticsPreview = item)))
                 }, {
