@@ -91,7 +91,6 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
     companion object {
         private fun chainCoinCode(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
-            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.BinanceChain,
             BlockchainType.Polygon,
