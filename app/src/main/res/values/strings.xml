@@ -49,6 +49,8 @@
     <string name="Button_Copy">Copy</string>
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Delete</string>
+    <string name="Button_LearnMore">Learn More</string>
+    <string name="Button_Activate">Activate</string>
 
 
     <string name="Error">Error</string>
@@ -1396,6 +1398,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
 
     <string name="CoinAnalytics_PageLocked">This page available only for Unstoppable Wallet premium users</string>
+    <string name="CoinAnalytics_ActivateSubscription">Activate yor subscription for getting access to analytics</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
     <string name="CoinAnalytics_ThreeDots" translatable="false">•••</string>
     <string name="CoinAnalytics_CexVolume">CEX Volume</string>
