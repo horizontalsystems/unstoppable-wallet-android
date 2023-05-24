@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.metricchart.ProChartModule
@@ -23,7 +24,16 @@ object CoinAnalyticsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinAnalyticsService(fullCoin, App.marketKit, App.currencyManager)
+            val subscriptionManager = SubscriptionManager()
+            val service = CoinAnalyticsService(
+                fullCoin,
+                App.marketKit,
+                App.currencyManager,
+                subscriptionManager,
+                App.accountManager,
+                App.appConfigProvider,
+            )
+
 
             return CoinAnalyticsViewModel(
                 service,
@@ -116,7 +126,7 @@ object CoinAnalyticsModule {
     )
 
     sealed class AnalyticsViewItem {
-        class Preview(val blocks: List<PreviewBlockViewItem>) : AnalyticsViewItem()
+        class Preview(val blocks: List<PreviewBlockViewItem>, val subscriptionAddress: String?) : AnalyticsViewItem()
         class Analytics(val blocks: List<BlockViewItem>) : AnalyticsViewItem()
         object NoData : AnalyticsViewItem()
     }

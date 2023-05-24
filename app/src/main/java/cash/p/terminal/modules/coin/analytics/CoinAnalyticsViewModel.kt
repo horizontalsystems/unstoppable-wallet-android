@@ -48,6 +48,7 @@ class CoinAnalyticsViewModel(
     private val code: String
 ) : ViewModel() {
 
+    val analyticsLink by service::analyticsLink
     private val disposables = CompositeDisposable()
 
     private val currency = service.currency
@@ -112,7 +113,12 @@ class CoinAnalyticsViewModel(
         if (item.analyticsPreview != null) {
             val viewItems = getPreviewViewItems(item.analyticsPreview)
             if (viewItems.isNotEmpty()) {
-                return AnalyticsViewItem.Preview(viewItems)
+                val subscriptionAddress = item.analyticsPreview.subscriptions
+                    ?.sortedByDescending { it.deadline }
+                    ?.firstOrNull()
+                    ?.address
+
+                return AnalyticsViewItem.Preview(viewItems, subscriptionAddress)
             }
         } else if (item.analytics != null) {
             val viewItems = getViewItems(item.analytics)

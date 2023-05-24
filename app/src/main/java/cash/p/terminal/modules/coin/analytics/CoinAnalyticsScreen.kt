@@ -2,12 +2,17 @@ package cash.p.terminal.modules.coin.analytics
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
@@ -19,7 +24,13 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
-import cash.p.terminal.modules.coin.analytics.ui.*
+import cash.p.terminal.modules.coin.analytics.ui.AnalyticsBlockHeader
+import cash.p.terminal.modules.coin.analytics.ui.AnalyticsChart
+import cash.p.terminal.modules.coin.analytics.ui.AnalyticsContainer
+import cash.p.terminal.modules.coin.analytics.ui.AnalyticsContentNumber
+import cash.p.terminal.modules.coin.analytics.ui.AnalyticsDataLockedBlockNoSubscription
+import cash.p.terminal.modules.coin.analytics.ui.AnalyticsDataLockedBlockNotActivated
+import cash.p.terminal.modules.coin.analytics.ui.AnalyticsFooterCell
 import cash.p.terminal.modules.coin.audits.CoinAuditsFragment
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsFragment
 import cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment
@@ -30,7 +41,13 @@ import cash.p.terminal.modules.coin.treasuries.CoinTreasuriesFragment
 import cash.p.terminal.modules.info.CoinAnalyticsInfoFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.StackBarSlice
+import cash.p.terminal.ui.compose.components.StackedBarChart
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.helpers.LinkHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
@@ -42,6 +59,7 @@ fun CoinAnalyticsScreen(
     val viewModel = viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
 
     val uiState = viewModel.uiState
+    val context = LocalContext.current
 
     HSSwipeRefresh(
         refreshing = uiState.isRefreshing,
@@ -61,7 +79,17 @@ fun CoinAnalyticsScreen(
                             )
                         }
                         is AnalyticsViewItem.Preview -> {
-                            AnalyticsDataPreview(item.blocks, navController)
+                            AnalyticsDataPreview(
+                                previewBlocks = item.blocks,
+                                subscriptionAddress = item.subscriptionAddress,
+                                onClickLearnMore = {
+                                    LinkHelper.openLinkInAppBrowser(context, viewModel.analyticsLink)
+                                },
+                                onClickActivate = {
+
+                                },
+                                navController = navController
+                            )
                         }
                         is AnalyticsViewItem.Analytics -> {
                             AnalyticsData(item.blocks, navController, fragmentManager)
@@ -102,11 +130,24 @@ private fun AnalyticsData(
 @Composable
 private fun AnalyticsDataPreview(
     previewBlocks: List<CoinAnalyticsModule.PreviewBlockViewItem>,
+    subscriptionAddress: String?,
+    onClickLearnMore: () -> Unit,
+    onClickActivate: (String) -> Unit,
     navController: NavController,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
-            AnalyticsDataLockedBlock()
+            if (subscriptionAddress != null) {
+                AnalyticsDataLockedBlockNotActivated(
+                    onClickActivate = {
+                        onClickActivate.invoke(subscriptionAddress)
+                    }
+                )
+            } else {
+                AnalyticsDataLockedBlockNoSubscription(
+                    onClickLearnMore = onClickLearnMore
+                )
+            }
         }
         items(previewBlocks) { block ->
             AnalyticsPreviewBlock(block, navController)

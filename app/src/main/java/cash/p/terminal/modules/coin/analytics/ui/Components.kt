@@ -2,7 +2,17 @@ package cash.p.terminal.modules.coin.analytics.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -24,7 +34,19 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.ChartBars
+import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.StackBarSlice
+import cash.p.terminal.ui.compose.components.StackedBarChart
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.headline1_bran
+import cash.p.terminal.ui.compose.components.subhead1_grey
+import cash.p.terminal.ui.compose.components.subhead1_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.chartview.ChartMinimal
 
 @Composable
@@ -196,10 +218,14 @@ fun AnalyticsChart(
 }
 
 @Composable
-fun AnalyticsDataLockedBlock() {
+fun AnalyticsDataLockedBlockNotActivated(
+    onClickActivate: () -> Unit
+) {
     AnalyticsContainer {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(32.dp))
@@ -207,7 +233,53 @@ fun AnalyticsDataLockedBlock() {
                 modifier = Modifier
                     .size(100.dp)
                     .background(
-                        color = ComposeAppTheme.colors.andy,
+                        color = ComposeAppTheme.colors.steel10,
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    modifier = Modifier.size(48.dp),
+                    painter = painterResource(R.drawable.icon_unlocked_48),
+                    contentDescription = "lock icon",
+                    tint = ComposeAppTheme.colors.jacob
+                )
+            }
+            VSpacer(32.dp)
+            subhead2_grey(
+                modifier = Modifier.padding(horizontal = 48.dp),
+                text = stringResource(R.string.CoinAnalytics_ActivateSubscription),
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+            )
+            VSpacer(32.dp)
+            ButtonPrimaryYellow(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(id = R.string.Button_Activate),
+                onClick = onClickActivate
+            )
+            VSpacer(32.dp)
+        }
+    }
+}
+
+@Composable
+fun AnalyticsDataLockedBlockNoSubscription(
+    onClickLearnMore: () -> Unit
+) {
+    AnalyticsContainer {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.height(32.dp))
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(
+                        color = ComposeAppTheme.colors.steel10,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -226,7 +298,13 @@ fun AnalyticsDataLockedBlock() {
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
             )
-            Spacer(Modifier.height(32.dp))
+            VSpacer(32.dp)
+            ButtonPrimaryDefault(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(id = R.string.Button_LearnMore),
+                onClick = onClickLearnMore
+            )
+            VSpacer(32.dp)
         }
     }
 }
@@ -280,7 +358,7 @@ private fun Preview_HoldersBlockLocked() {
 @Composable
 private fun Preview_AnalyticsDataLockedBlock() {
     ComposeAppTheme {
-        AnalyticsDataLockedBlock()
+        AnalyticsDataLockedBlockNoSubscription {}
     }
 }
 

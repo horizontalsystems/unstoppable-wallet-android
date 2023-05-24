@@ -7,6 +7,7 @@ class AppConfigProvider {
 
      val companyWebPageLink: String = "https://p.cash/"
      val appWebPageLink: String = "https://p.cash/wallet"
+     val analyticsLink: String = "https://portfolio.cash/"
      val appGithubLink: String = "https://github.com/piratecash/pcash-wallet-android"
      val appTwitterLink: String = "https://twitter.com/PirateCash_NET"
      val appTelegramLink: String = "https://t.me/pcash"

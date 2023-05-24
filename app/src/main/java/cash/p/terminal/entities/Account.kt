@@ -5,7 +5,13 @@ import cash.p.terminal.R
 import cash.p.terminal.core.managers.PassphraseValidator
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.shorten
-import io.horizontalsystems.hdwalletkit.*
+import io.horizontalsystems.ethereumkit.core.signer.Signer
+import io.horizontalsystems.ethereumkit.models.Chain
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
+import io.horizontalsystems.hdwalletkit.HDWallet
+import io.horizontalsystems.hdwalletkit.Language
+import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.hdwalletkit.WordList
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
@@ -224,6 +230,12 @@ sealed class AccountType : Parcelable {
             is Mnemonic, is EvmPrivateKey -> true
             else -> false
         }
+
+    fun evmAddress(chain: Chain) = when (this) {
+        is Mnemonic -> Signer.address(seed, chain)
+        is EvmPrivateKey -> Signer.address(key)
+        else -> null
+    }
 }
 
 val HDWallet.Purpose.derivation: AccountType.Derivation
