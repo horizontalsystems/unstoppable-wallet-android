@@ -4,9 +4,27 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.adapters.*
+import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.ECashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.EvmAdapter
+import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SplAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
@@ -77,7 +95,6 @@ class AdapterFactory(
                 ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType))
             }
             BlockchainType.Ethereum,
-            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Avalanche,
@@ -127,7 +144,6 @@ class AdapterFactory(
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
-            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,
@@ -148,7 +164,6 @@ class AdapterFactory(
     fun unlinkAdapter(transactionSource: TransactionSource) {
         when (val blockchainType = transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
-            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,

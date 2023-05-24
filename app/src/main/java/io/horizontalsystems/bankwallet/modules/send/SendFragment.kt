@@ -95,7 +95,6 @@ class SendFragment : BaseFragment() {
                         }
                     }
                     BlockchainType.Ethereum,
-                    BlockchainType.EthereumGoerli,
                     BlockchainType.BinanceSmartChain,
                     BlockchainType.Polygon,
                     BlockchainType.Avalanche,
