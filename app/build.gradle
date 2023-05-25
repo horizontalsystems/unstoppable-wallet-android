@@ -10,8 +10,8 @@ android {
         applicationId "cash.p.terminal"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 84
-        versionName "0.32.0"
+        versionCode 85
+        versionName "0.32.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
