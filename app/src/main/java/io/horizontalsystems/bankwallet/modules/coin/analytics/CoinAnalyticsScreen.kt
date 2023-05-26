@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
+import io.horizontalsystems.bankwallet.modules.subscription.ActivateSubscriptionFragment
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
@@ -86,7 +87,7 @@ fun CoinAnalyticsScreen(
                                     LinkHelper.openLinkInAppBrowser(context, viewModel.analyticsLink)
                                 },
                                 onClickActivate = {
-
+                                    navController.slideFromBottom(R.id.activateSubscription, ActivateSubscriptionFragment.prepareParams(it))
                                 },
                                 navController = navController
                             )
