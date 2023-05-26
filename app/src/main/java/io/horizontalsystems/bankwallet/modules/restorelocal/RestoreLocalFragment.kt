@@ -18,9 +18,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -49,6 +52,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.findNavController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class RestoreLocalFragment : BaseFragment() {
     companion object{
@@ -125,6 +130,7 @@ private fun RestoreLocalNavHost(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RestoreLocalScreen(
     backupJsonString: String?,
@@ -135,6 +141,7 @@ private fun RestoreLocalScreen(
     val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString))
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
@@ -150,8 +157,13 @@ private fun RestoreLocalScreen(
 
     uiState.accountType?.let { accountType ->
         mainViewModel.setAccountData(accountType, viewModel.accountName)
-        openSelectCoins.invoke()
-        viewModel.onSelectCoinsShown()
+        val keyboardController = LocalSoftwareKeyboardController.current
+        coroutineScope.launch {
+            keyboardController?.hide()
+            delay(300)
+            openSelectCoins.invoke()
+            viewModel.onSelectCoinsShown()
+        }
     }
 
     ComposeAppTheme {

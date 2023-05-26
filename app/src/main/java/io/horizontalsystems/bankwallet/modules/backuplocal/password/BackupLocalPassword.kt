@@ -55,7 +55,7 @@ fun LocalBackupPasswordScreen(
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
         uri?.let {
             context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                viewModel.backupJson?.let { backupJson ->
+                uiState.backupJson?.let { backupJson ->
                     try {
                         outputStream.bufferedWriter().use { bw ->
                             bw.write(backupJson)
@@ -85,9 +85,8 @@ fun LocalBackupPasswordScreen(
         viewModel.accountErrorIsShown()
     }
 
-    if (uiState.backupLocally) {
+    if (uiState.backupJson != null) {
         backupLauncher.launch(viewModel.backupFileName)
-        viewModel.backupLocallyStarted()
     }
 
     if (uiState.closeScreen) {
