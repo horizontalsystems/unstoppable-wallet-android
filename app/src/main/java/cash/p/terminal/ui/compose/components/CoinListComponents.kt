@@ -128,9 +128,22 @@ fun ListErrorView(
     errorText: String,
     onClick: () -> Unit
 ) {
+    ListErrorView(
+        errorText = errorText,
+        icon = R.drawable.ic_sync_error,
+        onClick = onClick,
+    )
+}
+
+@Composable
+fun ListErrorView(
+    errorText: String,
+    @DrawableRes icon: Int = R.drawable.ic_sync_error,
+    onClick: () -> Unit
+) {
     ScreenMessageWithAction(
         text = errorText,
-        icon = R.drawable.ic_sync_error,
+        icon = icon,
     ) {
         ButtonPrimaryYellow(
             modifier = Modifier

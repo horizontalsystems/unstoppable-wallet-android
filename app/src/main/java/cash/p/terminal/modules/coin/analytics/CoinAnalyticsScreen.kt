@@ -40,6 +40,7 @@ import cash.p.terminal.modules.coin.reports.CoinReportsFragment
 import cash.p.terminal.modules.coin.treasuries.CoinTreasuriesFragment
 import cash.p.terminal.modules.info.CoinAnalyticsInfoFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
+import cash.p.terminal.modules.subscription.ActivateSubscriptionFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
@@ -86,7 +87,7 @@ fun CoinAnalyticsScreen(
                                     LinkHelper.openLinkInAppBrowser(context, viewModel.analyticsLink)
                                 },
                                 onClickActivate = {
-
+                                    navController.slideFromBottom(R.id.activateSubscription, ActivateSubscriptionFragment.prepareParams(it))
                                 },
                                 navController = navController
                             )
