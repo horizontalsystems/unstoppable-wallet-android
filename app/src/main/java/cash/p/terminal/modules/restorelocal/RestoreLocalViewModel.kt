@@ -15,6 +15,7 @@ import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RestoreLocalViewModel(
     private val backupJsonString: String?,
@@ -22,7 +23,6 @@ class RestoreLocalViewModel(
 ) : ViewModel() {
 
     private var passphrase = ""
-
     private var passphraseState: DataState.Error? = null
     private var showButtonSpinner = false
     private var closeScreen = false
@@ -81,7 +81,9 @@ class RestoreLocalViewModel(
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             }
             showButtonSpinner = false
-            syncState()
+            withContext(Dispatchers.Main) {
+                syncState()
+            }
         }
     }
 

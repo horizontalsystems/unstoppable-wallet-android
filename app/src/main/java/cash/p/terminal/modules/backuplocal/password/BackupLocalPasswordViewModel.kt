@@ -19,6 +19,7 @@ import io.horizontalsystems.core.toHexString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 
 class BackupLocalPasswordViewModel(
@@ -27,20 +28,17 @@ class BackupLocalPasswordViewModel(
     accountId: String?,
 ) : ViewModel() {
 
-    private lateinit var account: Account
+    private var account: Account? = null
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
     private var passphraseState: DataState.Error? = null
     private var passphraseConfirmState: DataState.Error? = null
     private var showButtonSpinner = false
-    private var backupLocally = false
     private var closeScreen = false
     private var showAccountIsNullError = false
     private val encryptDecryptManager = EncryptDecryptManager()
-
-    var backupJson: String? = null
-        private set
+    private var backupJson: String? = null
 
     var backupFileName: String = "UW_Backup.json"
         private set
@@ -50,7 +48,7 @@ class BackupLocalPasswordViewModel(
             passphraseState = null,
             passphraseConfirmState = null,
             showButtonSpinner = showButtonSpinner,
-            backupLocally = backupLocally,
+            backupJson = backupJson,
             closeScreen = closeScreen,
             showAccountIsNullError = showAccountIsNullError
         )
@@ -98,12 +96,8 @@ class BackupLocalPasswordViewModel(
         }
     }
 
-    fun backupLocallyStarted() {
-        backupLocally = false
-        syncState()
-    }
-
     fun backupFinished() {
+        backupJson = null
         showButtonSpinner = false
         syncState()
         viewModelScope.launch {
@@ -124,9 +118,10 @@ class BackupLocalPasswordViewModel(
     }
 
     private fun saveAccount() {
+        val accountType = account?.type ?: return
         viewModelScope.launch(Dispatchers.IO) {
             val kdfParams = BackupLocalModule.kdfDefault
-            val secretText = BackupLocalModule.getStringForEncryption(account.type)
+            val secretText = BackupLocalModule.getStringForEncryption(accountType)
             val id = getId(secretText)
             val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: return@launch
 
@@ -146,7 +141,7 @@ class BackupLocalPasswordViewModel(
             val backup = WalletBackup(
                 crypto = crypto,
                 id = id,
-                type = BackupLocalModule.getAccountTypeString(account.type),
+                type = BackupLocalModule.getAccountTypeString(accountType),
                 version = 1
             )
 
@@ -154,8 +149,9 @@ class BackupLocalPasswordViewModel(
                 .disableHtmlEscaping()
                 .create()
             backupJson = gson.toJson(backup)
-            backupLocally = true
-            syncState()
+            withContext(Dispatchers.Main) {
+                syncState()
+            }
         }
     }
 
@@ -170,7 +166,7 @@ class BackupLocalPasswordViewModel(
             passphraseState = passphraseState,
             passphraseConfirmState = passphraseConfirmState,
             showButtonSpinner = showButtonSpinner,
-            backupLocally = backupLocally,
+            backupJson = backupJson,
             closeScreen = closeScreen,
             showAccountIsNullError = showAccountIsNullError
         )

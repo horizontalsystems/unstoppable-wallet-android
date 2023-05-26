@@ -23,7 +23,7 @@ object BackupLocalPasswordModule {
         val passphraseState: DataState.Error?,
         val passphraseConfirmState: DataState.Error?,
         val showButtonSpinner: Boolean,
-        val backupLocally: Boolean,
+        val backupJson: String?,
         val closeScreen: Boolean,
         val showAccountIsNullError: Boolean
     )
