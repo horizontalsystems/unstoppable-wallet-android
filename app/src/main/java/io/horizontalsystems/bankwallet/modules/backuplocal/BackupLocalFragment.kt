@@ -8,6 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -31,21 +32,36 @@ class BackupLocalFragment : BaseFragment() {
             )
 
             setContent {
-                BackupLocalNavHost(findNavController())
+                BackupLocalNavHost(findNavController(), requireArguments().getString(ACCOUNT_ID_KEY))
             }
+        }
+    }
+
+    companion object {
+        private const val ACCOUNT_ID_KEY = "coin_uid_key"
+        fun prepareParams(accountId: String): Bundle {
+            return bundleOf(ACCOUNT_ID_KEY to accountId)
         }
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun BackupLocalNavHost(fragmentNavController: NavController) {
+private fun BackupLocalNavHost(fragmentNavController: NavController, accountId: String?) {
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(
         navController = navController,
         startDestination = "terms_page",
     ) {
-        composable("terms_page") { LocalBackupTermsScreen(fragmentNavController, navController) }
-        composablePage("password_page") { LocalBackupPasswordScreen(fragmentNavController, navController) }
+        composable("terms_page") {
+            LocalBackupTermsScreen(fragmentNavController, navController)
+        }
+        composablePage("password_page") {
+            LocalBackupPasswordScreen(
+                fragmentNavController,
+                navController,
+                accountId
+            )
+        }
     }
 }

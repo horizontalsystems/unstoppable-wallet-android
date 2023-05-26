@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.password
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -40,9 +42,10 @@ import io.horizontalsystems.core.helpers.HudHelper
 @Composable
 fun LocalBackupPasswordScreen(
     fragmentNavController: NavController,
-    navController: NavController
+    navController: NavController,
+    accountId: String?
 ) {
-    val viewModel = viewModel<BackupLocalPasswordViewModel>(factory = BackupLocalPasswordModule.Factory())
+    val viewModel = viewModel<BackupLocalPasswordViewModel>(factory = BackupLocalPasswordModule.Factory(accountId))
 
     val view = LocalView.current
     val context = LocalContext.current
@@ -52,26 +55,34 @@ fun LocalBackupPasswordScreen(
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
         uri?.let {
             context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                try {
-                    outputStream.bufferedWriter().use { bw ->
-                        bw.write(viewModel.backupJson)
-                        bw.flush()
+                viewModel.backupJson?.let { backupJson ->
+                    try {
+                        outputStream.bufferedWriter().use { bw ->
+                            bw.write(backupJson)
+                            bw.flush()
 
-                        HudHelper.showSuccessMessage(
-                            contenView = view,
-                            resId = R.string.LocalBackup_BackupSaved,
-                            duration = SnackbarDuration.SHORT,
-                            icon = R.drawable.ic_download_24,
-                            iconTint = R.color.white
-                        )
+                            HudHelper.showSuccessMessage(
+                                contenView = view,
+                                resId = R.string.LocalBackup_BackupSaved,
+                                duration = SnackbarDuration.SHORT,
+                                icon = R.drawable.ic_download_24,
+                                iconTint = R.color.white
+                            )
 
-                        viewModel.backupFinished()
+                            viewModel.backupFinished()
+                        }
+                    } catch (e: Throwable) {
+                        HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                     }
-                } catch (e: Throwable) {
-                    HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                 }
             }
         }
+    }
+
+    if (uiState.showAccountIsNullError) {
+        Toast.makeText(App.instance, "Account is Null", Toast.LENGTH_SHORT).show()
+        fragmentNavController.popBackStack()
+        viewModel.accountErrorIsShown()
     }
 
     if (uiState.backupLocally) {

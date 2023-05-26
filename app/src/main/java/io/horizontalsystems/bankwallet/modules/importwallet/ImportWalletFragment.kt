@@ -22,20 +22,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
+import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -48,7 +51,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 class ImportWalletFragment : BaseFragment() {
@@ -81,26 +83,28 @@ private fun ImportWalletScreen(
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val view = LocalView.current
 
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {
             context.contentResolver.openInputStream(it)?.use { inputStream ->
                 try {
                     inputStream.bufferedReader().use { br ->
-                        //todo validate for json format
+                        val jsonString = br.readText()
+                        //validate json format
+                        val json = Gson().fromJson(jsonString, BackupLocalModule.WalletBackup::class.java)
                         navController.navigateWithTermsAccepted {
                             navController.slideFromBottom(
                                 R.id.restoreLocalFragment,
                                 bundleOf(
                                     ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-                                    "jsonFile" to br.readText()
+                                    RestoreLocalFragment.jsonFileKey to jsonString
                                 )
                             )
                         }
                     }
                 } catch (e: Throwable) {
-                    HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
+                    //show json parsing error
+                    coroutineScope.launch { bottomSheetState.show() }
                 }
             }
         }
