@@ -22,20 +22,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.backuplocal.BackupLocalModule
+import cash.p.terminal.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
+import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -48,7 +51,6 @@ import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.headline2_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 class ImportWalletFragment : BaseFragment() {
@@ -81,26 +83,28 @@ private fun ImportWalletScreen(
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val view = LocalView.current
 
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {
             context.contentResolver.openInputStream(it)?.use { inputStream ->
                 try {
                     inputStream.bufferedReader().use { br ->
-                        //todo validate for json format
+                        val jsonString = br.readText()
+                        //validate json format
+                        val json = Gson().fromJson(jsonString, BackupLocalModule.WalletBackup::class.java)
                         navController.navigateWithTermsAccepted {
                             navController.slideFromBottom(
                                 R.id.restoreLocalFragment,
                                 bundleOf(
                                     ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-                                    "jsonFile" to br.readText()
+                                    RestoreLocalFragment.jsonFileKey to jsonString
                                 )
                             )
                         }
                     }
                 } catch (e: Throwable) {
-                    HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
+                    //show json parsing error
+                    coroutineScope.launch { bottomSheetState.show() }
                 }
             }
         }

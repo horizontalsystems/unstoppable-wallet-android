@@ -2,16 +2,19 @@ package cash.p.terminal.modules.backuplocal.password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.PassphraseValidator
 import cash.p.terminal.entities.DataState
 
 object BackupLocalPasswordModule {
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val accountId: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return BackupLocalPasswordViewModel(
                 PassphraseValidator(),
+                App.accountManager,
+                accountId
             ) as T
         }
     }
@@ -22,5 +25,6 @@ object BackupLocalPasswordModule {
         val showButtonSpinner: Boolean,
         val backupLocally: Boolean,
         val closeScreen: Boolean,
+        val showAccountIsNullError: Boolean
     )
 }

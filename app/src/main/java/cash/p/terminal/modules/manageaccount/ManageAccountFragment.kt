@@ -31,6 +31,7 @@ import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Account
+import cash.p.terminal.modules.backuplocal.BackupLocalFragment
 import cash.p.terminal.modules.balance.HeaderNote
 import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
@@ -213,7 +214,7 @@ private fun BackupActions(
                         attention = action.showAttention
                     ) {
                         navController.authorizedAction {
-                            navController.slideFromBottom(R.id.backupLocalFragment,)
+                            navController.slideFromBottom(R.id.backupLocalFragment, BackupLocalFragment.prepareParams(account.id))
                         }
                     }
                 }

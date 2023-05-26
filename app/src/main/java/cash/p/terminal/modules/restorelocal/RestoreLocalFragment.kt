@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,10 +27,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.composablePage
+import cash.p.terminal.core.composablePopup
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
+import cash.p.terminal.modules.restoreaccount.RestoreViewModel
+import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
+import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -39,6 +51,10 @@ import cash.p.terminal.ui.compose.components.VSpacer
 import io.horizontalsystems.core.findNavController
 
 class RestoreLocalFragment : BaseFragment() {
+    companion object{
+        const val jsonFileKey = "jsonFileKey"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,21 +67,92 @@ class RestoreLocalFragment : BaseFragment() {
             val popUpToInclusiveId =
                 arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
+            val backupJsonString = arguments?.getString(jsonFileKey)
+
             setContent {
-                RestoreLocalScreen(findNavController(), popUpToInclusiveId)
+                ComposeAppTheme {
+                    RestoreLocalNavHost(
+                        backupJsonString,
+                        findNavController(),
+                        popUpToInclusiveId
+                    )
+                }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun RestoreLocalNavHost(
+    backupJsonString: String?,
+    fragmentNavController: NavController,
+    popUpToInclusiveId: Int
+) {
+    val navController = rememberAnimatedNavController()
+    val mainViewModel: RestoreViewModel = viewModel()
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = "restore_local",
+    ) {
+        composable("restore_local") {
+            RestoreLocalScreen(
+                backupJsonString = backupJsonString,
+                navController = navController,
+                mainViewModel = mainViewModel,
+                openSelectCoins = { navController.navigate("restore_select_coins") },
+            )
+        }
+        composablePage("restore_select_coins") {
+            ManageWalletsScreen(
+                mainViewModel = mainViewModel,
+                openZCashConfigure = { navController.navigate("zcash_configure") },
+                onBackClick = { navController.popBackStack() }
+            ) { fragmentNavController.popBackStack(popUpToInclusiveId, true) }
+        }
+        composablePopup("zcash_configure") {
+            ZcashConfigureScreen(
+                onCloseWithResult = { config ->
+                    mainViewModel.setZCashConfig(config)
+                    navController.popBackStack()
+                },
+                onCloseClick = {
+                    mainViewModel.cancelZCashConfig = true
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
 
 @Composable
 private fun RestoreLocalScreen(
+    backupJsonString: String?,
     navController: NavController,
-    popUpToInclusiveId: Int
+    mainViewModel: RestoreViewModel,
+    openSelectCoins: () -> Unit,
 ) {
-    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory())
+    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString))
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
+
+    LaunchedEffect(uiState.parseError) {
+        uiState.parseError?.let { error ->
+            Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
+            navController.popBackStack()
+        }
+    }
+
+    if (uiState.closeScreen) {
+        navController.popBackStack()
+        viewModel.closeScreenCalled()
+    }
+
+    uiState.accountType?.let { accountType ->
+        mainViewModel.setAccountData(accountType, viewModel.accountName)
+        openSelectCoins.invoke()
+        viewModel.onSelectCoinsShown()
+    }
 
     ComposeAppTheme {
         Scaffold(
