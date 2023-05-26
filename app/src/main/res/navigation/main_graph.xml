@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
     app:startDestination="@id/mainFragment">
 
@@ -135,6 +134,9 @@
             app:action="android.intent.action.VIEW"
             app:uri="unstoppable://coin-page?uid={coinUid}" />
     </fragment>
+    <fragment
+        android:id="@+id/activateSubscription"
+        android:name="io.horizontalsystems.bankwallet.modules.subscription.ActivateSubscriptionFragment" />
     <fragment
         android:id="@+id/coinAnalyticsInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment" />

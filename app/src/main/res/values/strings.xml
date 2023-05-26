@@ -3,6 +3,7 @@
 
     <!--Common-->
 
+    <string name="Error_ParameterNotSet">Parameter is not set</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
 
     <string name="Alert_Cancel">Cancel</string>
@@ -51,6 +52,8 @@
     <string name="Button_Delete">Delete</string>
     <string name="Button_LearnMore">Learn More</string>
     <string name="Button_Activate">Activate</string>
+    <string name="Button_Sign">Sign</string>
+    <string name="Button_Activating">Activating</string>
 
 
     <string name="Error">Error</string>
@@ -1439,6 +1442,12 @@
     <string name="Coin_Analytics_Blockchain1" translatable="false">Blockchain 1</string>
     <string name="Coin_Analytics_Blockchain2" translatable="false">Blockchain 2</string>
     <string name="Coin_Analytics_Blockchain3" translatable="false">Blockchain 3</string>
+
+    <string name="ActivateSubscription_Title">Activate</string>
+    <string name="ActivateSubscription_Wallet">Wallet</string>
+    <string name="ActivateSubscription_Address">Address</string>
+    <string name="ActivateSubscription_MessageToSign">Message to Sign</string>
+    <string name="ActivateSubscription_SignMessageDescription">You need to sign this message to activate your subscription</string>
 
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">7D avg.</string>
