@@ -5,9 +5,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.App
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.toHexString
+import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 
-class ActivateSubscriptionViewModel(private val address: String) : ViewModel() {
+class ActivateSubscriptionViewModel(
+    private val address: String,
+    private val marketKit: MarketKitWrapper,
+    private val accountManager: IAccountManager
+) : ViewModel() {
 
+    private val account = accountManager.accounts.find {
+        it.type.evmAddress(App.evmBlockchainManager.getChain(BlockchainType.Ethereum))?.hex == address
+    }
     private var fetchingMessage = true
     private var fetchingMessageError: Throwable? = null
     private var subscriptionInfo: SubscriptionInfo? = null
@@ -22,7 +38,42 @@ class ActivateSubscriptionViewModel(private val address: String) : ViewModel() {
         private set
 
     init {
+        fetchMessageToSign()
+    }
 
+    fun fetchMessageToSign() {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchingMessage = true
+            emitState()
+
+            try {
+                val messageToSign = marketKit.authKey(address).await()
+
+                fetchingMessage = false
+                fetchingMessageError = null
+                subscriptionInfo = SubscriptionInfo(
+                    walletName = "walletName",
+                    walletAddress = address,
+                    messageToSign = messageToSign
+                )
+
+            } catch (e: Throwable) {
+                fetchingMessage = false
+                fetchingMessageError = e
+            }
+
+            emitState()
+        }
+    }
+
+    private fun emitState() {
+        viewModelScope.launch {
+            uiState = ActivateSubscription(
+                fetchingMessage = fetchingMessage,
+                fetchingMessageError = fetchingMessageError,
+                subscriptionInfo = subscriptionInfo
+            )
+        }
     }
 
 
@@ -30,18 +81,25 @@ class ActivateSubscriptionViewModel(private val address: String) : ViewModel() {
         TODO("Not yet implemented")
     }
 
-    fun fetchMessageToSign() {
-        TODO("Not yet implemented")
-    }
-
     fun sign() {
-        TODO("Not yet implemented")
+        val tmpSubscriptionInfo = subscriptionInfo ?: return
+        val tmpAccount = account ?: return
+
+        val signature = tmpAccount.type.sign(tmpSubscriptionInfo.messageToSign.toByteArray()) ?: return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val token = marketKit.authenticate(signature.toHexString(), address).await()
+        }
     }
 
     class Factory(private val address: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ActivateSubscriptionViewModel(address) as T
+            return ActivateSubscriptionViewModel(
+                address,
+                App.marketKit,
+                App.accountManager
+            ) as T
         }
     }
 }
