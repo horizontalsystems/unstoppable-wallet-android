@@ -126,11 +126,8 @@ android {
     packagingOptions {
         resources {
             pickFirsts += ['META-INF/atomicfu.kotlin_module']
+            excludes += ['META-INF/INDEX.LIST', 'META-INF/DEPENDENCIES', 'META-INF/LICENSE.md', 'META-INF/NOTICE.md']
         }
-        exclude 'META-INF/INDEX.LIST'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE.md'
-        exclude 'META-INF/NOTICE.md'
     }
 
     kotlinOptions {
@@ -141,6 +138,9 @@ android {
         kotlinCompilerExtensionVersion '1.4.0'
     }
     namespace 'io.horizontalsystems.bankwallet'
+    lint {
+        disable 'LogNotTimber'
+    }
 
     configurations.all { c ->
         c.resolutionStrategy.dependencySubstitution {
@@ -156,9 +156,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'LogNotTimber'
-    }
 }
 
 dependencies {

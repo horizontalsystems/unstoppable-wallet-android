@@ -5,17 +5,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.GsonBuilder
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.managers.EncryptDecryptManager
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
+import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule.WalletBackup
+import io.horizontalsystems.core.toHexString
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
 
 class BackupLocalPasswordViewModel(
     private val passphraseValidator: PassphraseValidator,
+    private val accountManager: IAccountManager,
+    accountId: String?,
 ) : ViewModel() {
 
+    private lateinit var account: Account
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
@@ -24,12 +36,14 @@ class BackupLocalPasswordViewModel(
     private var showButtonSpinner = false
     private var backupLocally = false
     private var closeScreen = false
+    private var showAccountIsNullError = false
+    private val encryptDecryptManager = EncryptDecryptManager()
 
-    val backupJson: String
-        get() = "repository.asJsonString"
+    var backupJson: String? = null
+        private set
 
-    val backupFileName: String
-        get() = "UW_Backup_${System.currentTimeMillis() / 1000}.json"
+    var backupFileName: String = "UW_Backup.json"
+        private set
 
     var uiState by mutableStateOf(
         BackupLocalPasswordModule.UiState(
@@ -38,9 +52,22 @@ class BackupLocalPasswordViewModel(
             showButtonSpinner = showButtonSpinner,
             backupLocally = backupLocally,
             closeScreen = closeScreen,
+            showAccountIsNullError = showAccountIsNullError
         )
     )
         private set
+
+    init {
+        val account = accountId?.let { accountManager.account(it) }
+        if (account == null) {
+            showAccountIsNullError = true
+            syncState()
+        } else {
+            this.account = account
+            val walletName = account.name.replace(" ", "_")
+            backupFileName = "UW_Backup_$walletName.json"
+        }
+    }
 
     fun onChangePassphrase(v: String) {
         if (passphraseValidator.validate(v)) {
@@ -66,8 +93,8 @@ class BackupLocalPasswordViewModel(
         validatePassword()
         if (passphraseState == null && passphraseConfirmState == null) {
             showButtonSpinner = true
-            backupLocally = true
             syncState()
+            saveAccount()
         }
     }
 
@@ -77,8 +104,10 @@ class BackupLocalPasswordViewModel(
     }
 
     fun backupFinished() {
+        showButtonSpinner = false
+        syncState()
         viewModelScope.launch {
-            delay(2000) //Wait for showing Snackbar (SHORT duration ~ 1500ms)
+            delay(1700) //Wait for showing Snackbar (SHORT duration ~ 1500ms)
             closeScreen = true
             syncState()
         }
@@ -89,6 +118,53 @@ class BackupLocalPasswordViewModel(
         syncState()
     }
 
+    fun accountErrorIsShown() {
+        showAccountIsNullError = false
+        syncState()
+    }
+
+    private fun saveAccount() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val kdfParams = BackupLocalModule.kdfDefault
+            val secretText = BackupLocalModule.getStringForEncryption(account.type)
+            val id = getId(secretText)
+            val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: return@launch
+
+            val iv = EncryptDecryptManager.generateRandomBytes(16).toHexString()
+            val encrypted = encryptDecryptManager.encrypt(secretText, key, iv)
+            val mac = EncryptDecryptManager.generateMac(key, encrypted.toByteArray())
+
+            val crypto = BackupLocalModule.BackupCrypto(
+                cipher = "aes-128-ctr",
+                cipherparams = BackupLocalModule.CipherParams(iv),
+                ciphertext = encrypted,
+                kdf = "scrypt",
+                kdfparams = kdfParams,
+                mac = mac.toHexString()
+            )
+
+            val backup = WalletBackup(
+                crypto = crypto,
+                id = id,
+                type = BackupLocalModule.getAccountTypeString(account.type),
+                version = 1
+            )
+
+            val gson = GsonBuilder()
+                .disableHtmlEscaping()
+                .create()
+            backupJson = gson.toJson(backup)
+            backupLocally = true
+            syncState()
+        }
+    }
+
+    private fun getId(words: String): String {
+        val md = MessageDigest.getInstance("SHA-512")
+        val digest = md.digest(words.toByteArray())
+        return digest.toHexString()
+    }
+
     private fun syncState() {
         uiState = BackupLocalPasswordModule.UiState(
             passphraseState = passphraseState,
@@ -96,6 +172,7 @@ class BackupLocalPasswordViewModel(
             showButtonSpinner = showButtonSpinner,
             backupLocally = backupLocally,
             closeScreen = closeScreen,
+            showAccountIsNullError = showAccountIsNullError
         )
     }
 

@@ -1005,6 +1005,7 @@
     <!-- Import Backup File -->
     <string name="ImportBackupFile_EnterPassword">Enter Password</string>
     <string name="ImportBackupFile_EnterPassword_Description">Enter the backup password to import your wallet.</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">Invalid Password</string>
 
     <string name="Watch_Address_Hint">Address or Domain</string>
     <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
