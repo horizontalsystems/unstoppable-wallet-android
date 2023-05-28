@@ -57,8 +57,12 @@ class CoinAnalyticsService(
         return marketKit.blockchains(uids)
     }
 
-    fun start() {
+    suspend fun start() {
         fetch()
+
+        subscriptionManager.authTokenFlow.collect {
+            fetch()
+        }
     }
 
     fun refresh() {
@@ -87,7 +91,7 @@ class CoinAnalyticsService(
     }
 
     private fun handleError(error: Throwable) {
-        if (error is HttpException && error.code() == 401) {
+        if (error is HttpException && (error.code() == 401 || error.code() == 403)) {
             preview()
         } else {
             stateSubject.onNext(DataState.Error(error))

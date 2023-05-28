@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.core.toHexString
+import cash.p.terminal.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +20,8 @@ import kotlinx.coroutines.rx2.await
 class ActivateSubscriptionViewModel(
     private val address: String,
     private val marketKit: MarketKitWrapper,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val subscriptionManager: SubscriptionManager
 ) : ViewModel() {
 
     private val account = accountManager.accounts.find {
@@ -27,12 +30,19 @@ class ActivateSubscriptionViewModel(
     private var fetchingMessage = true
     private var fetchingMessageError: Throwable? = null
     private var subscriptionInfo: SubscriptionInfo? = null
+    private var fetchingToken = false
+    private var fetchingTokenError: Throwable? = null
+    private var fetchingTokenSuccess = false
 
     var uiState: ActivateSubscription by mutableStateOf(
         ActivateSubscription(
             fetchingMessage = fetchingMessage,
             fetchingMessageError = fetchingMessageError,
-            subscriptionInfo = subscriptionInfo
+            subscriptionInfo = subscriptionInfo,
+            fetchingToken = fetchingToken,
+            fetchingTokenError = fetchingTokenError,
+            fetchingTokenSuccess = fetchingTokenSuccess,
+            signButtonState = getSignButtonState(),
         )
     )
         private set
@@ -71,24 +81,41 @@ class ActivateSubscriptionViewModel(
             uiState = ActivateSubscription(
                 fetchingMessage = fetchingMessage,
                 fetchingMessageError = fetchingMessageError,
-                subscriptionInfo = subscriptionInfo
+                subscriptionInfo = subscriptionInfo,
+                fetchingToken = fetchingToken,
+                fetchingTokenError = fetchingTokenError,
+                fetchingTokenSuccess = fetchingTokenSuccess,
+                signButtonState = getSignButtonState()
             )
         }
     }
 
-
-    fun cancel() {
-        TODO("Not yet implemented")
+    private fun getSignButtonState() = when {
+        fetchingToken -> WCSessionViewModel.ButtonState.Disabled
+        fetchingMessage -> WCSessionViewModel.ButtonState.Hidden
+        subscriptionInfo != null -> WCSessionViewModel.ButtonState.Enabled
+        else -> WCSessionViewModel.ButtonState.Hidden
     }
 
     fun sign() {
         val tmpSubscriptionInfo = subscriptionInfo ?: return
         val tmpAccount = account ?: return
 
-        val signature = tmpAccount.type.sign(tmpSubscriptionInfo.messageToSign.toByteArray()) ?: return
+        fetchingToken = true
+        emitState()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val token = marketKit.authenticate(signature.toHexString(), address).await()
+            try {
+                val signature = tmpAccount.type.sign(tmpSubscriptionInfo.messageToSign.toByteArray()) ?: throw IllegalStateException()
+                val token = marketKit.authenticate(signature.toHexString(), address).await()
+                subscriptionManager.authToken = token
+                fetchingTokenSuccess = true
+            } catch (t: Throwable) {
+                fetchingTokenError = t
+            }
+
+            fetchingToken = false
+            emitState()
         }
     }
 
@@ -98,7 +125,8 @@ class ActivateSubscriptionViewModel(
             return ActivateSubscriptionViewModel(
                 address,
                 App.marketKit,
-                App.accountManager
+                App.accountManager,
+                App.subscriptionManager
             ) as T
         }
     }
@@ -113,7 +141,11 @@ data class SubscriptionInfo(
 data class ActivateSubscription(
     val fetchingMessage: Boolean,
     val fetchingMessageError: Throwable?,
-    val subscriptionInfo: SubscriptionInfo?
+    val subscriptionInfo: SubscriptionInfo?,
+    val fetchingToken: Boolean,
+    val fetchingTokenError: Throwable?,
+    val fetchingTokenSuccess: Boolean,
+    val signButtonState: WCSessionViewModel.ButtonState
 ) {
 //    sealed class Step {
 //        object FetchingMessageToSign : Step()

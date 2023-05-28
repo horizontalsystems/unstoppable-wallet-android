@@ -68,6 +68,7 @@ class CoinAnalyticsViewModel(
                 when (state) {
                     is DataState.Loading -> {
                         viewState = ViewState.Loading
+                        syncState()
                     }
                     is DataState.Success -> {
                         viewState = ViewState.Success
@@ -76,6 +77,7 @@ class CoinAnalyticsViewModel(
                     }
                     is DataState.Error -> {
                         viewState = ViewState.Error(state.error)
+                        syncState()
                     }
                 }
             }
@@ -83,7 +85,9 @@ class CoinAnalyticsViewModel(
                 disposables.add(it)
             }
 
-        service.start()
+        viewModelScope.launch {
+            service.start()
+        }
     }
 
     fun refresh() {

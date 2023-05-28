@@ -33,6 +33,7 @@ class LocalStorageManager(
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
     private val BASE_CURRENCY_CODE = "base_currency_code"
+    private val AUTH_TOKEN = "auth_token"
     private val FAILED_ATTEMPTS = "failed_attempts"
     private val LOCKOUT_TIMESTAMP = "lockout_timestamp"
     private val BASE_BITCOIN_PROVIDER = "base_bitcoin_provider"
@@ -95,6 +96,12 @@ class LocalStorageManager(
         get() = preferences.getString(BASE_CURRENCY_CODE, null)
         set(value) {
             preferences.edit().putString(BASE_CURRENCY_CODE, value).apply()
+        }
+
+    override var authToken: String?
+        get() = preferences.getString(AUTH_TOKEN, null)
+        set(value) {
+            preferences.edit().putString(AUTH_TOKEN, value).apply()
         }
 
     override var baseBitcoinProvider: String?
