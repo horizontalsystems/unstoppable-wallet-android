@@ -66,6 +66,7 @@ interface IAdapterManager {
 interface ILocalStorage {
     var amountInputType: AmountInputType?
     var baseCurrencyCode: String?
+    var authToken: String?
 
     var baseBitcoinProvider: String?
     var baseLitecoinProvider: String?

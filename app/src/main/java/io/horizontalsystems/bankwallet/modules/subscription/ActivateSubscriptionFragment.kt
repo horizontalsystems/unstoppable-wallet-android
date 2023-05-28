@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
@@ -79,6 +80,19 @@ fun ActivateSubscriptionScreen(navController: NavController, address: String) {
 
     val uiState = viewModel.uiState
 
+    val view = LocalView.current
+
+    LaunchedEffect(uiState.fetchingTokenSuccess) {
+        if (uiState.fetchingTokenSuccess) {
+            navController.popBackStack()
+        }
+    }
+    LaunchedEffect(uiState.fetchingTokenError) {
+        uiState.fetchingTokenError?.let { error ->
+            HudHelper.showErrorMessage(view, error.message ?: error.javaClass.simpleName)
+        }
+    }
+
     ComposeAppTheme {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -123,19 +137,22 @@ fun ActivateSubscriptionScreen(navController: NavController, address: String) {
                         }
                     },
                     buttonsContent = {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = stringResource(R.string.Button_Sign),
-                            onClick = {
-                                viewModel.sign()
-                            },
-                        )
-                        Spacer(Modifier.height(16.dp))
+                        if (uiState.signButtonState.visible) {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier.fillMaxWidth(),
+                                title = stringResource(R.string.Button_Sign),
+                                enabled = uiState.signButtonState.enabled,
+                                onClick = {
+                                    viewModel.sign()
+                                },
+                            )
+                            Spacer(Modifier.height(16.dp))
+                        }
+
                         ButtonPrimaryDefault(
                             modifier = Modifier.fillMaxWidth(),
                             title = stringResource(R.string.Button_Cancel),
                             onClick = {
-                                viewModel.cancel()
                                 navController.popBackStack()
                             }
                         )
