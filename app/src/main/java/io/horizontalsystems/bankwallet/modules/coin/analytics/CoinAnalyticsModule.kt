@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
@@ -24,12 +23,11 @@ object CoinAnalyticsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val subscriptionManager = SubscriptionManager()
             val service = CoinAnalyticsService(
                 fullCoin,
                 App.marketKit,
                 App.currencyManager,
-                subscriptionManager,
+                App.subscriptionManager,
                 App.accountManager,
                 App.appConfigProvider,
             )
