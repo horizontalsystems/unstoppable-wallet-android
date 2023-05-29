@@ -56,7 +56,7 @@ object SwapMainModule {
         )
         private val switchService by lazy { AmountTypeSwitchService() }
         private val swapMainXService by lazy { SwapMainService(tokenFrom, swapProviders, App.localStorage) }
-        private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(swapMainXService.dex.blockchainType).evmKitWrapper?.evmKit!! }
+        private val evmKit: EthereumKit = App.evmBlockchainManager.getEvmKitManager(swapMainXService.dex.blockchainType).evmKitWrapper?.evmKit ?: throw Exception("EvmKit is not initialized")
         private val allowanceService by lazy { SwapAllowanceService(App.adapterManager, evmKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val errorShareService by lazy { ErrorShareService() }
