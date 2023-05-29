@@ -39,6 +39,7 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.coroutines.delay
 
 class AddTokenFragment : BaseFragment() {
 
@@ -75,7 +76,7 @@ private fun AddTokenNavHost(
         composable(AddTokenPage) {
             AddTokenScreen(
                 navController = navController,
-                onBackPress = { fragmentNavController.popBackStack() },
+                closeScreen = { fragmentNavController.popBackStack() },
                 viewModel = viewModel
             )
         }
@@ -92,7 +93,7 @@ private fun AddTokenNavHost(
 @Composable
 private fun AddTokenScreen(
     navController: NavController,
-    onBackPress: () -> Unit,
+    closeScreen: () -> Unit,
     viewModel: AddTokenViewModel,
 ) {
     navController.currentBackStackEntry
@@ -108,12 +109,14 @@ private fun AddTokenScreen(
         }
 
     val uiState = viewModel.uiState
+    val view = LocalView.current
 
-    if (uiState.finished) {
-        HudHelper.showSuccessMessage(
-            LocalView.current, R.string.Hud_Text_Done, SnackbarDuration.LONG
-        )
-        navController.popBackStack()
+    LaunchedEffect(uiState.finished) {
+        if (uiState.finished) {
+            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.LONG)
+            delay(300)
+            closeScreen.invoke()
+        }
     }
 
     ComposeAppTheme {
@@ -121,7 +124,7 @@ private fun AddTokenScreen(
             AppBar(
                 title = TranslatableString.ResString(R.string.AddToken_Title),
                 navigationIcon = {
-                    HsBackButton(onClick = onBackPress)
+                    HsBackButton(onClick = closeScreen)
                 },
                 menuItems = listOf(
                     MenuItem(
