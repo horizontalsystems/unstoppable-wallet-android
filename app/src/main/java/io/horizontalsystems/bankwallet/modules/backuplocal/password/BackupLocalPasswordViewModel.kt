@@ -142,6 +142,7 @@ class BackupLocalPasswordViewModel(
                 crypto = crypto,
                 id = id,
                 type = BackupLocalModule.getAccountTypeString(accountType),
+                timestamp = System.currentTimeMillis() / 1000,
                 version = 1
             )
 
