@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,9 +30,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -74,18 +76,28 @@ class SwapMainFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val factory = SwapMainModule.Factory(requireArguments())
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
-            setContent {
-                ComposeAppTheme {
-                    SwapNavHost(
-                        findNavController(),
-                        factory
-                    )
+            try {
+                val factory = SwapMainModule.Factory(requireArguments())
+                val mainViewModel: SwapMainViewModel by viewModels { factory }
+                val allowanceViewModel: SwapAllowanceViewModel by viewModels { factory }
+                setContent {
+                    ComposeAppTheme {
+                        SwapNavHost(
+                            findNavController(),
+                            mainViewModel,
+                            allowanceViewModel
+                        )
+                    }
                 }
+            } catch (t: Throwable) {
+                Toast.makeText(
+                    App.instance, t.message ?: t.javaClass.simpleName, Toast.LENGTH_SHORT
+                ).show()
+                findNavController().popBackStack()
             }
         }
     }
@@ -94,9 +106,8 @@ class SwapMainFragment : BaseFragment() {
 @Composable
 private fun SwapNavHost(
     fragmentNavController: NavController,
-    factory: SwapMainModule.Factory,
-    mainViewModel: SwapMainViewModel = viewModel(factory = factory),
-    allowanceViewModel: SwapAllowanceViewModel = viewModel(factory = factory),
+    mainViewModel: SwapMainViewModel,
+    allowanceViewModel: SwapAllowanceViewModel,
 ) {
     SwapMainScreen(
         navController = fragmentNavController,
