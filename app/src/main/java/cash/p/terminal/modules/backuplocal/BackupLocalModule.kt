@@ -15,6 +15,7 @@ object BackupLocalModule {
         val crypto: BackupCrypto,
         val id: String,
         val type: String,
+        val timestamp: Long,
         val version: Int
     )
 
