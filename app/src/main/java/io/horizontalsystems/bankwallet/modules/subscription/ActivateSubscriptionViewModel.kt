@@ -146,23 +146,4 @@ data class ActivateSubscription(
     val fetchingTokenError: Throwable?,
     val fetchingTokenSuccess: Boolean,
     val signButtonState: WCSessionViewModel.ButtonState
-) {
-//    sealed class Step {
-//        object FetchingMessageToSign : Step()
-//        object FetchingMessageToSignFailed : Step()
-//        data class FetchingMessageToSignSuccess(
-//            val walletName: String,
-//            val walletAddress: String,
-//            val messageToSign: String
-//        ) : Step()
-//
-//        data class SendingSignedMessage(
-//            val walletName: String,
-//            val walletAddress: String,
-//            val messageToSign: String
-//        ) : Step()
-//
-//        object SendingSignedMessageFailed : Step()
-//        object SendingSignedMessageSuccess : Step()
-//    }
-}
+)
