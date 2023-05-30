@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -112,165 +111,46 @@ fun ActivateSubscriptionScreen(navController: NavController, address: String) {
             Column(
                 modifier = Modifier.padding(it)
             ) {
-
-                Xxx(
-                    mainContent = {
-                        if (uiState.fetchingMessage) {
-                            Loading()
-                        }
-
-                        uiState.fetchingMessageError?.let { error ->
-                            ListErrorView(
-                                errorText = error.message ?: error.javaClass.simpleName,
-                                icon = R.drawable.ic_error_48
-                            ) {
-                                viewModel.fetchMessageToSign()
-                            }
-                        }
-
-                        uiState.subscriptionInfo?.let { subscriptionInfo ->
-                            MessageToSignSection(
-                                subscriptionInfo.walletName,
-                                subscriptionInfo.walletAddress,
-                                subscriptionInfo.messageToSign
-                            )
-                        }
-                    },
-                    buttonsContent = {
-                        if (uiState.signButtonState.visible) {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier.fillMaxWidth(),
-                                title = stringResource(R.string.Button_Sign),
-                                enabled = uiState.signButtonState.enabled,
-                                onClick = {
-                                    viewModel.sign()
-                                },
-                            )
-                            Spacer(Modifier.height(16.dp))
-                        }
-
-                        ButtonPrimaryDefault(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = stringResource(R.string.Button_Cancel),
-                            onClick = {
-                                navController.popBackStack()
-                            }
-                        )
+                if (uiState.fetchingMessage) {
+                    Loading()
+                }
+                uiState.fetchingMessageError?.let { error ->
+                    ListErrorView(
+                        errorText = error.message ?: error.javaClass.simpleName,
+                        icon = R.drawable.ic_error_48
+                    ) {
+                        viewModel.fetchMessageToSign()
                     }
-                )
-
-
-//                val step = uiState.step
-//                when (step) {
-//                    ActivateSubscription.Step.FetchingMessageToSign -> {
-//                        Xxx(
-//                            mainContent = {
-//                                Loading()
-//                            },
-//                            buttonsContent = {
-//                                ButtonPrimaryDefault(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    title = stringResource(R.string.Button_Cancel),
-//                                    onClick = {
-//                                        viewModel.cancel()
-//                                        navController.popBackStack()
-//                                    }
-//                                )
-//                            }
-//                        )
-//                    }
-//
-//                    ActivateSubscription.Step.FetchingMessageToSignFailed -> {
-//                        Xxx(
-//                            mainContent = {
-//                                ListErrorView(
-//                                    errorText = "Error",
-//                                    icon = R.drawable.ic_error_48
-//                                ) {
-//                                    viewModel.fetchMessageToSign()
-//                                }
-//                            },
-//                            buttonsContent = {
-//                                ButtonPrimaryDefault(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    title = stringResource(R.string.Button_Cancel),
-//                                    onClick = {
-//                                        viewModel.cancel()
-//                                        navController.popBackStack()
-//                                    }
-//                                )
-//                            }
-//                        )
-//                    }
-//
-//                    is ActivateSubscription.Step.FetchingMessageToSignSuccess -> {
-//                        Xxx(
-//                            mainContent = {
-//                                MessageToSignSection(
-//                                    step.walletName,
-//                                    step.walletAddress,
-//                                    step.messageToSign
-//                                )
-//                            },
-//                            buttonsContent = {
-//                                ButtonPrimaryYellow(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    title = stringResource(R.string.Button_Sign),
-//                                    onClick = {
-//                                        viewModel.sign()
-//                                    },
-//                                )
-//                                Spacer(Modifier.height(16.dp))
-//                                ButtonPrimaryDefault(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    title = stringResource(R.string.Button_Cancel),
-//                                    onClick = {
-//                                        viewModel.cancel()
-//                                        navController.popBackStack()
-//                                    }
-//                                )
-//                            }
-//                        )
-//                    }
-//
-//                    is ActivateSubscription.Step.SendingSignedMessage -> {
-//                        Xxx(
-//                            mainContent = {
-//                                MessageToSignSection(
-//                                    step.walletName,
-//                                    step.walletAddress,
-//                                    step.messageToSign
-//                                )
-//                            },
-//                            buttonsContent = {
-//                                ButtonPrimaryYellowWithSpinner(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    title = stringResource(R.string.Button_Activating),
-//                                    enabled = false,
-//                                    onClick = {},
-//                                    showSpinner = true,
-//                                )
-//                                Spacer(Modifier.height(16.dp))
-//                                ButtonPrimaryDefault(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    title = stringResource(R.string.Button_Cancel),
-//                                    onClick = {
-//                                        viewModel.cancel()
-//                                        navController.popBackStack()
-//                                    }
-//                                )
-//                            }
-//                        )
-//                    }
-//
-//                    ActivateSubscription.Step.SendingSignedMessageFailed -> {
-//
-//                    }
-//
-//                    ActivateSubscription.Step.SendingSignedMessageSuccess -> {
-//                        navController.popBackStack()
-//                    }
-//                }
+                }
+                uiState.subscriptionInfo?.let { subscriptionInfo ->
+                    MessageToSignSection(
+                        subscriptionInfo.walletName,
+                        subscriptionInfo.walletAddress,
+                        subscriptionInfo.messageToSign
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Column(Modifier.padding(horizontal = 24.dp)) {
+                    if (uiState.signButtonState.visible) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = stringResource(R.string.Button_Sign),
+                            enabled = uiState.signButtonState.enabled,
+                            onClick = {
+                                viewModel.sign()
+                            },
+                        )
+                        Spacer(Modifier.height(16.dp))
+                    }
+                    ButtonPrimaryDefault(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = stringResource(R.string.Button_Cancel),
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                    Spacer(Modifier.height(32.dp))
+                }
             }
         }
     }
@@ -307,17 +187,4 @@ private fun MessageToSignSection(
         }
     })
     InfoText(text = stringResource(id = R.string.ActivateSubscription_SignMessageDescription))
-}
-
-@Composable
-private fun ColumnScope.Xxx(
-    mainContent: @Composable ColumnScope.() -> Unit,
-    buttonsContent: @Composable ColumnScope.() -> Unit
-) {
-    mainContent.invoke(this)
-    Spacer(modifier = Modifier.Companion.weight(1f))
-    Column(Modifier.padding(horizontal = 24.dp)) {
-        buttonsContent.invoke(this)
-        Spacer(Modifier.height(32.dp))
-    }
 }
