@@ -339,7 +339,7 @@ fun SwapCards(
                                 navController.slideFromRight(
                                     R.id.uniswapConfirmationFragment,
                                     UniswapConfirmationFragment.prepareParams(
-                                        swapState.dex.blockchainType,
+                                        swapState.dex,
                                         SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
                                         sendEvmData.additionalInfo,
                                     )
@@ -542,8 +542,8 @@ private fun getPriceImpactColor(
     priceImpactLevel: PriceImpactLevel?
 ): Color {
     return when (priceImpactLevel) {
-        PriceImpactLevel.Normal -> ComposeAppTheme.colors.remus
-        PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.Warning,
         PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
         else -> ComposeAppTheme.colors.grey
     }
