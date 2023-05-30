@@ -2,8 +2,13 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.os.Handler
 import android.os.HandlerThread
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -21,6 +26,7 @@ class AdapterManager(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
+    private val tronKitManager: TronKitManager
 ) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -113,6 +119,7 @@ class AdapterManager(
 
         binanceKitManager.binanceKit?.refresh()
         solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
+        tronKitManager.tronKitWrapper?.tronKit?.refresh()
     }
 
     @Synchronized

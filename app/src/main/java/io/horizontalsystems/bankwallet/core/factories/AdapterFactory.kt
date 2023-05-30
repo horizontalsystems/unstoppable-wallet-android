@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SplAdapter
+import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.TronAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TronTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.TronTransactionsAdapter
@@ -74,6 +75,12 @@ class AdapterFactory(
         return SplAdapter(solanaKitWrapper, wallet, address)
     }
 
+    private fun getTrc20Adapter(wallet: Wallet, address: String): IAdapter {
+        val tronKitWrapper = tronKitManager.getTronKitWrapper(wallet.account)
+
+        return Trc20Adapter(tronKitWrapper, address, wallet)
+    }
+
     fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
         TokenType.Native -> when (wallet.token.blockchainType) {
             BlockchainType.Bitcoin -> {
@@ -107,8 +114,14 @@ class AdapterFactory(
             BlockchainType.Optimism,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
-            BlockchainType.ArbitrumOne -> getEvmAdapter(wallet)
-            BlockchainType.BinanceChain -> getBinanceAdapter(wallet, "BNB")
+            BlockchainType.ArbitrumOne -> {
+                getEvmAdapter(wallet)
+            }
+
+            BlockchainType.BinanceChain -> {
+                getBinanceAdapter(wallet, "BNB")
+            }
+
             BlockchainType.Solana -> {
                 val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
                 SolanaAdapter(solanaKitWrapper)
@@ -121,7 +134,7 @@ class AdapterFactory(
         }
         is TokenType.Eip20 -> {
             if (wallet.token.blockchainType == BlockchainType.Tron) {
-                TODO("handle trc20 tokens")
+                getTrc20Adapter(wallet, tokenType.address)
             } else {
                 getEip20Adapter(wallet, tokenType.address)
             }

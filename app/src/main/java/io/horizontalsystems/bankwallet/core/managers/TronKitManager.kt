@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.os.Handler
+import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
@@ -134,12 +136,11 @@ class TronKitManager(
     //
 
     override fun willEnterForeground() {
-        //TODO
-//        this.tronKitWrapper?.tronKit?.let { kit ->
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                kit.refresh()
-//            }, 1000)
-//        }
+        this.tronKitWrapper?.tronKit?.let { kit ->
+            Handler(Looper.getMainLooper()).postDelayed({
+                kit.refresh()
+            }, 1000)
+        }
     }
 
     override fun didEnterBackground() = Unit
