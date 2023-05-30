@@ -62,7 +62,7 @@ class ActivateSubscriptionViewModel(
                 fetchingMessage = false
                 fetchingMessageError = null
                 subscriptionInfo = SubscriptionInfo(
-                    walletName = "walletName",
+                    walletName = account?.name ?: "--",
                     walletAddress = address,
                     messageToSign = messageToSign
                 )
