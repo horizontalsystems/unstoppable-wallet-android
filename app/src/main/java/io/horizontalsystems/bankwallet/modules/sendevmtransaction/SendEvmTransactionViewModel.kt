@@ -86,7 +86,8 @@ class SendEvmTransactionViewModel(
     private fun sync(state: SendEvmTransactionService.State) {
         when (state) {
             is SendEvmTransactionService.State.Ready -> {
-                sendEnabledLiveData.postValue(true)
+                val sendEnabled = service.txDataState.additionalInfo?.uniswapInfo?.priceImpact?.level != PriceImpactLevel.Forbidden
+                sendEnabledLiveData.postValue(sendEnabled)
                 cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(state.warnings, errors = listOf()))
             }
             is SendEvmTransactionService.State.NotReady -> {
@@ -316,7 +317,8 @@ class SendEvmTransactionViewModel(
         }
         uniswapInfo?.priceImpact?.let {
             val type = when (it.level) {
-                PriceImpactLevel.Warning -> ValueType.Warning
+                PriceImpactLevel.Normal -> ValueType.Warning
+                PriceImpactLevel.Warning,
                 PriceImpactLevel.Forbidden -> ValueType.Forbidden
                 else -> ValueType.Regular
             }

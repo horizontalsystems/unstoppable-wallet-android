@@ -21,18 +21,17 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
 
 object UniswapConfirmationModule {
 
     class Factory(
-        private val blockchainType: BlockchainType,
+        private val dex: SwapMainModule.Dex,
         private val transactionData: TransactionData,
         private val additionalInfo: SendEvmData.AdditionalInfo?
     ) : ViewModelProvider.Factory {
 
-        private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
-        private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
+        private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchainType).evmKitWrapper!! }
+        private val token by lazy { App.evmBlockchainManager.getBaseToken(dex.blockchainType)!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
             if (evmKit.chain.isEIP1559Supported) {
@@ -70,7 +69,7 @@ object UniswapConfirmationModule {
                         getSendService(),
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = blockchainType,
+                        blockchainType = dex.blockchainType,
                         contactsRepo = App.contactsRepository
                     ) as T
                 }
@@ -85,11 +84,12 @@ object UniswapConfirmationModule {
         }
 
         private fun getSendService(): SendEvmTransactionService {
-            val priceImpactLevel = additionalInfo?.uniswapInfo?.priceImpact?.level
-            val warnings = if (priceImpactLevel == SwapMainModule.PriceImpactLevel.Forbidden)
-                listOf(SwapMainModule.UniswapWarnings.PriceImpactWarning)
-            else
-                listOf()
+            val warnings = when (additionalInfo?.uniswapInfo?.priceImpact?.level) {
+                SwapMainModule.PriceImpactLevel.Forbidden -> listOf(SwapMainModule.UniswapWarnings.PriceImpactForbidden(dex.provider.title))
+                SwapMainModule.PriceImpactLevel.Warning -> listOf(SwapMainModule.UniswapWarnings.PriceImpactWarning)
+                SwapMainModule.PriceImpactLevel.Normal -> listOf(SwapMainModule.UniswapWarnings.PriceImpactNormal)
+                else -> listOf()
+            }
 
             val sendEvmData = SendEvmData(transactionData, additionalInfo, warnings)
             return SendEvmTransactionService(
