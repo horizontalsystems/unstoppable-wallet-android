@@ -2,8 +2,13 @@ package cash.p.terminal.core.managers
 
 import android.os.Handler
 import android.os.HandlerThread
-import cash.p.terminal.core.*
+import cash.p.terminal.core.IAdapter
+import cash.p.terminal.core.IAdapterManager
+import cash.p.terminal.core.IBalanceAdapter
+import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.factories.AdapterFactory
+import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -21,6 +26,7 @@ class AdapterManager(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
+    private val tronKitManager: TronKitManager
 ) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -113,6 +119,7 @@ class AdapterManager(
 
         binanceKitManager.binanceKit?.refresh()
         solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
+        tronKitManager.tronKitWrapper?.tronKit?.refresh()
     }
 
     @Synchronized

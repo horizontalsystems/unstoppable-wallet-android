@@ -40,7 +40,8 @@ class ExternalContractCallTransactionRecord(
                 val value = event.value
                 if (
                     value is TransactionValue.CoinValue && value.value > BigDecimal.ZERO ||
-                    value is TransactionValue.NftValue && value.value > BigDecimal.ZERO
+                    value is TransactionValue.NftValue && value.value > BigDecimal.ZERO ||
+                    value is TransactionValue.TokenValue && value.value > BigDecimal.ZERO
                 ) {
                     return false
                 }

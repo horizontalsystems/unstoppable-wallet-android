@@ -17,6 +17,10 @@ import cash.p.terminal.core.adapters.SolanaAdapter
 import cash.p.terminal.core.adapters.SolanaTransactionConverter
 import cash.p.terminal.core.adapters.SolanaTransactionsAdapter
 import cash.p.terminal.core.adapters.SplAdapter
+import cash.p.terminal.core.adapters.Trc20Adapter
+import cash.p.terminal.core.adapters.TronAdapter
+import cash.p.terminal.core.adapters.TronTransactionConverter
+import cash.p.terminal.core.adapters.TronTransactionsAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
@@ -25,6 +29,7 @@ import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
@@ -70,6 +75,12 @@ class AdapterFactory(
         return SplAdapter(solanaKitWrapper, wallet, address)
     }
 
+    private fun getTrc20Adapter(wallet: Wallet, address: String): IAdapter {
+        val tronKitWrapper = tronKitManager.getTronKitWrapper(wallet.account)
+
+        return Trc20Adapter(tronKitWrapper, address, wallet)
+    }
+
     fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
         TokenType.Native -> when (wallet.token.blockchainType) {
             BlockchainType.Bitcoin -> {
@@ -102,8 +113,14 @@ class AdapterFactory(
             BlockchainType.Optimism,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
-            BlockchainType.ArbitrumOne -> getEvmAdapter(wallet)
-            BlockchainType.BinanceChain -> getBinanceAdapter(wallet, "BNB")
+            BlockchainType.ArbitrumOne -> {
+                getEvmAdapter(wallet)
+            }
+
+            BlockchainType.BinanceChain -> {
+                getBinanceAdapter(wallet, "BNB")
+            }
+
             BlockchainType.Solana -> {
                 val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
                 SolanaAdapter(solanaKitWrapper)
@@ -116,7 +133,7 @@ class AdapterFactory(
         }
         is TokenType.Eip20 -> {
             if (wallet.token.blockchainType == BlockchainType.Tron) {
-                TODO("handle trc20 tokens")
+                getTrc20Adapter(wallet, tokenType.address)
             } else {
                 getEip20Adapter(wallet, tokenType.address)
             }

@@ -1,5 +1,7 @@
 package cash.p.terminal.core.managers
 
+import android.os.Handler
+import android.os.Looper
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.providers.AppConfigProvider
@@ -134,12 +136,11 @@ class TronKitManager(
     //
 
     override fun willEnterForeground() {
-        //TODO
-//        this.tronKitWrapper?.tronKit?.let { kit ->
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                kit.refresh()
-//            }, 1000)
-//        }
+        this.tronKitWrapper?.tronKit?.let { kit ->
+            Handler(Looper.getMainLooper()).postDelayed({
+                kit.refresh()
+            }, 1000)
+        }
     }
 
     override fun didEnterBackground() = Unit
