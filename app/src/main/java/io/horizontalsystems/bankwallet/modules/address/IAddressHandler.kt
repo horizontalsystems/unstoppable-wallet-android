@@ -11,6 +11,7 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.tronkit.account.AddressHandler
 import org.web3j.ens.EnsResolver
 
 interface IAddressHandler {
@@ -107,6 +108,7 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
             BlockchainType.Dash -> "DASH"
             BlockchainType.Zcash -> "ZEC"
             BlockchainType.Solana -> "SOL"
+            BlockchainType.Tron -> "TRX"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 
@@ -220,6 +222,20 @@ class AddressHandlerSolana : IAddressHandler {
         return Address(value)
     }
 
+}
+
+class AddressHandlerTron : IAddressHandler {
+    override fun isSupported(value: String) = try {
+        io.horizontalsystems.tronkit.models.Address.fromBase58(value)
+        true
+    } catch (e: AddressHandler.AddressValidationException) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        val tronAddress = io.horizontalsystems.tronkit.models.Address.fromBase58(value)
+        return Address(tronAddress.base58)
+    }
 }
 
 class AddressHandlerPure : IAddressHandler {

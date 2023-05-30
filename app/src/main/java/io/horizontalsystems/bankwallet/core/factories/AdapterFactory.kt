@@ -4,9 +4,31 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.adapters.*
+import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.ECashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.EvmAdapter
+import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SplAdapter
+import io.horizontalsystems.bankwallet.core.adapters.TronAdapter
+import io.horizontalsystems.bankwallet.core.adapters.TronTransactionConverter
+import io.horizontalsystems.bankwallet.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
+import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
@@ -21,6 +43,7 @@ class AdapterFactory(
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
+    private val tronKitManager: TronKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -90,9 +113,19 @@ class AdapterFactory(
                 val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
                 SolanaAdapter(solanaKitWrapper)
             }
+            BlockchainType.Tron -> {
+                TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
+            }
+
             else -> null
         }
-        is TokenType.Eip20 -> getEip20Adapter(wallet, tokenType.address)
+        is TokenType.Eip20 -> {
+            if (wallet.token.blockchainType == BlockchainType.Tron) {
+                TODO("handle trc20 tokens")
+            } else {
+                getEip20Adapter(wallet, tokenType.address)
+            }
+        }
         is TokenType.Bep2 -> getBinanceAdapter(wallet, tokenType.symbol)
         is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
         is TokenType.Unsupported -> null
@@ -124,6 +157,14 @@ class AdapterFactory(
         return SolanaTransactionsAdapter(solanaKitWrapper, solanaTransactionConverter)
     }
 
+    fun tronTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+        val tronKitWrapper = tronKitManager.getTronKitWrapper(source.account)
+        val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: return null
+        val tronTransactionConverter = TronTransactionConverter(coinManager, tronKitWrapper, source, baseToken, evmLabelManager)
+
+        return TronTransactionsAdapter(tronKitWrapper, tronTransactionConverter)
+    }
+
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
@@ -140,6 +181,9 @@ class AdapterFactory(
             }
             BlockchainType.Solana -> {
                 solanaKitManager.unlink(wallet.account)
+            }
+            BlockchainType.Tron -> {
+                tronKitManager.unlink(wallet.account)
             }
             else -> Unit
         }
@@ -158,6 +202,9 @@ class AdapterFactory(
             }
             BlockchainType.Solana -> {
                 solanaKitManager.unlink(transactionSource.account)
+            }
+            BlockchainType.Tron -> {
+                tronKitManager.unlink(transactionSource.account)
             }
             else -> Unit
         }

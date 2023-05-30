@@ -4,10 +4,22 @@ import androidx.compose.ui.graphics.Color
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
+import io.horizontalsystems.bankwallet.entities.CoinSettingType
+import io.horizontalsystems.bankwallet.entities.CoinSettings
+import io.horizontalsystems.bankwallet.entities.FeePriceScale
+import io.horizontalsystems.bankwallet.entities.derivation
 import io.horizontalsystems.hdwalletkit.ExtendedKeyCoinType
 import io.horizontalsystems.hdwalletkit.HDWallet
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.marketkit.models.TopPlatform
 import io.horizontalsystems.nftkit.models.NftType
 
 val Token.protocolType: String?
@@ -139,6 +151,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Solana -> {
             tokenType is TokenType.Native || tokenType is TokenType.Spl
         }
+        BlockchainType.Tron -> {
+            tokenType is TokenType.Native || tokenType is TokenType.Eip20
+        }
         else -> false
     }
 
@@ -161,6 +176,7 @@ val Blockchain.description: String
         BlockchainType.Solana -> "SOL, SPL tokens"
         BlockchainType.Gnosis -> "xDAI, ERC20 tokens"
         BlockchainType.Fantom -> "FTM, ERC20 tokens"
+        BlockchainType.Tron -> "TRX, TRC20 tokens"
         else -> ""
     }
 
@@ -242,6 +258,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
         BlockchainType.Gnosis -> R.drawable.gnosis_erc20
         BlockchainType.Fantom -> R.drawable.fantom_erc20
+        BlockchainType.Tron -> R.drawable.fantom_erc20 //TODO
         else -> R.drawable.coin_placeholder
     }
 

@@ -40,6 +40,9 @@ object AddressInputModule {
                 BlockchainType.Solana -> {
                     addressViewModel.addAddressHandler(AddressHandlerSolana())
                 }
+                BlockchainType.Tron -> {
+                    addressViewModel.addAddressHandler(AddressHandlerTron())
+                }
                 is BlockchainType.Unsupported -> Unit
             }
 
@@ -76,6 +79,7 @@ object AddressInputModule {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())
                 }
                 BlockchainType.Solana,
+                BlockchainType.Tron,
                 is BlockchainType.Unsupported -> Unit
             }
 

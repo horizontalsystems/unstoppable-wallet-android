@@ -8,7 +8,13 @@ import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
-open class EvmTransactionRecord(transaction: Transaction, baseToken: Token, source: TransactionSource, val foreignTransaction: Boolean = false, spam: Boolean = false) :
+open class EvmTransactionRecord(
+    transaction: Transaction,
+    baseToken: Token,
+    source: TransactionSource,
+    val foreignTransaction: Boolean = false,
+    spam: Boolean = false
+) :
     TransactionRecord(
         uid = transaction.hashString,
         transactionHash = transaction.hashString,
@@ -20,8 +26,6 @@ open class EvmTransactionRecord(transaction: Transaction, baseToken: Token, sour
         spam = spam,
         source = source
     ) {
-
-    data class TransferEvent(val address: String?, val value: TransactionValue)
 
     val fee: TransactionValue?
 
@@ -40,50 +44,56 @@ open class EvmTransactionRecord(transaction: Transaction, baseToken: Token, sour
         }
     }
 
-    private fun sameType(value: TransactionValue, value2: TransactionValue): Boolean =
-        when {
-            value is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue ->
-                value.token == value2.token
-            value is TransactionValue.TokenValue && value2 is TransactionValue.TokenValue ->
-                value.tokenName == value2.tokenName && value.tokenCode == value2.tokenCode && value.tokenDecimals == value2.tokenDecimals
-            value is TransactionValue.NftValue && value2 is TransactionValue.NftValue ->
-                value.nftUid == value2.nftUid
-            else ->
-                false
-        }
+    companion object {
+        private fun sameType(value: TransactionValue, value2: TransactionValue): Boolean =
+            when {
+                value is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue ->
+                    value.token == value2.token
 
-    fun combined(incomingEvents: List<TransferEvent>, outgoingEvents: List<TransferEvent>): Pair<List<TransactionValue>, List<TransactionValue>> {
-        val values = (incomingEvents + outgoingEvents).map { it.value }
-        val resultIncoming: MutableList<TransactionValue> = mutableListOf()
-        val resultOutgoing: MutableList<TransactionValue> = mutableListOf()
+                value is TransactionValue.TokenValue && value2 is TransactionValue.TokenValue ->
+                    value.tokenName == value2.tokenName && value.tokenCode == value2.tokenCode && value.tokenDecimals == value2.tokenDecimals
 
-        for (value in values) {
-            if ((resultIncoming + resultOutgoing).any { sameType(value, it) }) {
-                continue
+                value is TransactionValue.NftValue && value2 is TransactionValue.NftValue ->
+                    value.nftUid == value2.nftUid
+
+                else ->
+                    false
             }
 
-            val sameTypeValues = values.filter { sameType(value, it) }
-            val totalValue = sameTypeValues.map { it.decimalValue ?: BigDecimal.ZERO }.reduce { sum, t -> sum + t }
-            val resultValue = when (value) {
-                is TransactionValue.CoinValue -> TransactionValue.CoinValue(value.token, totalValue)
-                is TransactionValue.TokenValue -> TransactionValue.TokenValue(
+        fun combined(incomingEvents: List<TransferEvent>, outgoingEvents: List<TransferEvent>): Pair<List<TransactionValue>, List<TransactionValue>> {
+            val values = (incomingEvents + outgoingEvents).map { it.value }
+            val resultIncoming: MutableList<TransactionValue> = mutableListOf()
+            val resultOutgoing: MutableList<TransactionValue> = mutableListOf()
+
+            for (value in values) {
+                if ((resultIncoming + resultOutgoing).any { sameType(value, it) }) {
+                    continue
+                }
+
+                val sameTypeValues = values.filter { sameType(value, it) }
+                val totalValue = sameTypeValues.map { it.decimalValue ?: BigDecimal.ZERO }.reduce { sum, t -> sum + t }
+                val resultValue = when (value) {
+                    is TransactionValue.CoinValue -> TransactionValue.CoinValue(value.token, totalValue)
+                    is TransactionValue.TokenValue -> TransactionValue.TokenValue(
                         tokenName = value.tokenName,
                         tokenCode = value.tokenCode,
                         tokenDecimals = value.tokenDecimals,
                         value = totalValue
-                )
-                is TransactionValue.RawValue -> value
-                is TransactionValue.NftValue -> value.copy(value = totalValue)
+                    )
+
+                    is TransactionValue.RawValue -> value
+                    is TransactionValue.NftValue -> value.copy(value = totalValue)
+                }
+
+                if (totalValue > BigDecimal.ZERO) {
+                    resultIncoming.add(resultValue)
+                } else {
+                    resultOutgoing.add(resultValue)
+                }
             }
 
-            if (totalValue > BigDecimal.ZERO) {
-                resultIncoming.add(resultValue)
-            } else {
-                resultOutgoing.add(resultValue)
-            }
+            return Pair(resultIncoming, resultOutgoing)
         }
-
-        return Pair(resultIncoming, resultOutgoing)
     }
 
 }
