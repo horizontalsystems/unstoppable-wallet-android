@@ -199,12 +199,14 @@ object SwapMainModule {
     sealed class SwapData {
         data class OneInchData(val data: OneInchSwapParameters) : SwapData()
         data class UniswapData(val data: UniversalSwapTradeData) : SwapData() {
-            private val warningPriceImpact = BigDecimal(1)
-            private val forbiddenPriceImpact = BigDecimal(5)
+            private val normalPriceImpact = BigDecimal(1)
+            private val warningPriceImpact = BigDecimal(5)
+            private val forbiddenPriceImpact = BigDecimal(20)
 
             val priceImpactLevel: PriceImpactLevel? = data.priceImpact?.let {
                 when {
-                    it >= BigDecimal.ZERO && it < warningPriceImpact -> PriceImpactLevel.Normal
+                    it >= BigDecimal.ZERO && it < normalPriceImpact -> PriceImpactLevel.Negligible
+                    it >= normalPriceImpact && it < warningPriceImpact -> PriceImpactLevel.Normal
                     it >= warningPriceImpact && it < forbiddenPriceImpact -> PriceImpactLevel.Warning
                     else -> PriceImpactLevel.Forbidden
                 }
@@ -329,11 +331,13 @@ object SwapMainModule {
 
     @Parcelize
     enum class PriceImpactLevel : Parcelable {
-        Normal, Warning, Forbidden
+        Negligible, Normal, Warning, Forbidden
     }
 
     abstract class UniswapWarnings : Warning() {
+        object PriceImpactNormal : UniswapWarnings()
         object PriceImpactWarning : UniswapWarnings()
+        class PriceImpactForbidden(val providerName: String) : UniswapWarnings()
     }
 
     @Parcelize
@@ -350,6 +354,7 @@ object SwapMainModule {
         object InsufficientBalanceFrom : SwapError()
         object InsufficientAllowance : SwapError()
         object RevokeAllowanceRequired : SwapError()
+        object ForbiddenPriceImpactLevel : SwapError()
     }
 
     @Parcelize
