@@ -106,11 +106,13 @@ class CoinAnalyticsViewModel(
     }
 
     private fun syncState() {
-        uiState = CoinAnalyticsModule.UiState(
-            viewState = viewState,
-            viewItem = analyticsViewItem,
-            isRefreshing = isRefreshing
-        )
+        viewModelScope.launch {
+            uiState = CoinAnalyticsModule.UiState(
+                viewState = viewState,
+                viewItem = analyticsViewItem,
+                isRefreshing = isRefreshing
+            )
+        }
     }
 
     private fun viewItem(item: CoinAnalyticsService.AnalyticData): AnalyticsViewItem {
