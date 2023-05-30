@@ -50,6 +50,7 @@ import java.math.BigInteger
 import java.util.Date
 import java.util.Optional
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
+import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
@@ -318,6 +319,12 @@ interface IAdapter {
 interface ISendSolanaAdapter {
     val availableBalance: BigDecimal
     suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
+}
+
+interface ISendTronAdapter {
+    val balanceData: BalanceData
+
+    suspend fun send(amount: BigInteger, to: TronAddress): String
 }
 
 interface IAccountsStorage {

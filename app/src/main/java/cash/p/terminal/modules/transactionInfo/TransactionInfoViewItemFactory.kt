@@ -17,20 +17,46 @@ import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransa
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.TransactionLockState
-import cash.p.terminal.entities.transactionrecords.evm.*
+import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.ContractCreationTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.EvmIncomingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.SwapTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.UnknownSwapTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronIncomingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
-import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.*
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Address
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Amount
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.ContactItem
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.DoubleSpend
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Explorer
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.LockState
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.NftAmount
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.RawTransaction
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.SentToSelf
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.SpeedUpCancel
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Status
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Transaction
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.TransactionHash
+import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Value
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.*
+import java.util.Date
 import kotlin.math.min
 
 class TransactionInfoViewItemFactory(
@@ -69,7 +95,29 @@ class TransactionInfoViewItemFactory(
                     )
                 )
 
+            is TronIncomingTransactionRecord ->
+                itemSections.add(
+                    getReceiveSectionItems(
+                        transaction.value,
+                        transaction.from,
+                        rates[transaction.value.coinUid]
+                    )
+                )
+
             is EvmOutgoingTransactionRecord -> {
+                sentToSelf = transaction.sentToSelf
+                itemSections.add(
+                    getSendSectionItems(
+                        transaction.value,
+                        transaction.to,
+                        rates[transaction.value.coinUid],
+                        transaction.sentToSelf,
+                        nftMetadata
+                    )
+                )
+            }
+
+            is TronOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
                 itemSections.add(
                     getSendSectionItems(
@@ -136,8 +184,23 @@ class TransactionInfoViewItemFactory(
             is ApproveTransactionRecord ->
                 itemSections.add(getApproveSectionItems(transaction.value, rates[transaction.value.coinUid], transaction.spender))
 
+            is TronApproveTransactionRecord ->
+                itemSections.add(getApproveSectionItems(transaction.value, rates[transaction.value.coinUid], transaction.spender))
+
             is ContractCallTransactionRecord -> {
-                itemSections.add(getContractMethodSectionItems(transaction))
+                itemSections.add(getContractMethodSectionItems(transaction.method, transaction.contractAddress, transaction.blockchainType))
+
+                for (event in transaction.outgoingEvents) {
+                    itemSections.add(getSendSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
+                }
+
+                for (event in transaction.incomingEvents) {
+                    itemSections.add(getReceiveSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
+                }
+            }
+
+            is TronContractCallTransactionRecord -> {
+                itemSections.add(getContractMethodSectionItems(transaction.method, transaction.contractAddress, transaction.blockchainType))
 
                 for (event in transaction.outgoingEvents) {
                     itemSections.add(getSendSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
@@ -149,6 +212,16 @@ class TransactionInfoViewItemFactory(
             }
 
             is ExternalContractCallTransactionRecord -> {
+                for (event in transaction.outgoingEvents) {
+                    itemSections.add(getSendSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
+                }
+
+                for (event in transaction.incomingEvents) {
+                    itemSections.add(getReceiveSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
+                }
+            }
+
+            is TronExternalContractCallTransactionRecord -> {
                 for (event in transaction.outgoingEvents) {
                     itemSections.add(getSendSectionItems(event.value, event.address, rates[event.value.coinUid], nftMetadata = nftMetadata))
                 }
@@ -446,7 +519,7 @@ class TransactionInfoViewItemFactory(
             Transaction(
                 getString(R.string.Transactions_ContractCreation),
                 "",
-                TransactionViewItem.Icon.Platform(transaction.source).iconRes
+                TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
             )
         )
 
@@ -504,14 +577,17 @@ class TransactionInfoViewItemFactory(
         return items
     }
 
-    private fun getContractMethodSectionItems(transaction: ContractCallTransactionRecord) =
-        listOf(
-            Transaction(
-                transaction.method ?: getString(R.string.Transactions_ContractCall),
-                evmLabelManager.mapped(transaction.contractAddress),
-                TransactionViewItem.Icon.Platform(transaction.source).iconRes
-            )
+    private fun getContractMethodSectionItems(
+        method: String?,
+        contractAddress: String,
+        blockchainType: BlockchainType
+    ) = listOf(
+        Transaction(
+            method ?: getString(R.string.Transactions_ContractCall),
+            evmLabelManager.mapped(contractAddress),
+            TransactionViewItem.Icon.Platform(blockchainType).iconRes
         )
+    )
 
     private fun getBitcoinSectionItems(transaction: BitcoinTransactionRecord, lastBlockInfo: LastBlockInfo?): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf()

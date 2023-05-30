@@ -2,9 +2,13 @@ package cash.p.terminal.modules.balance
 
 import androidx.compose.runtime.Immutable
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.AdapterState
+import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.swappable
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.core.helpers.DateHelper
@@ -118,8 +122,9 @@ class BalanceViewItemFactory {
         BlockchainType.Solana,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne -> 50
-        BlockchainType.Solana -> 50
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Solana,
+        BlockchainType.Tron -> 50
         is BlockchainType.Unsupported -> 0
     }
 

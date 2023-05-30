@@ -83,6 +83,10 @@ class AppConfigProvider {
         Translator.getString(R.string.solscanApiKey)
     }
 
+    val trongridApiKey by lazy {
+        Translator.getString(R.string.trongridApiKey)
+    }
+
      val fiatDecimal: Int = 2
      val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 

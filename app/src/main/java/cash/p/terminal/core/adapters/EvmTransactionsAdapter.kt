@@ -1,7 +1,6 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.AdapterState
-import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.EvmKitWrapper
@@ -12,7 +11,6 @@ import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
@@ -106,24 +104,5 @@ class EvmTransactionsAdapter(
         }
 
         return listOfNotNull(filterCoin, filterTag).map { listOf(it) }
-    }
-
-    companion object {
-        const val decimal = 18
-
-        fun clear(walletId: String) {
-            val networkTypes = listOf(
-                Chain.Ethereum,
-                Chain.BinanceSmartChain,
-                Chain.Polygon,
-                Chain.Optimism,
-                Chain.ArbitrumOne,
-                Chain.Gnosis,
-            )
-
-            networkTypes.forEach {
-                EthereumKit.clear(App.instance, it, walletId)
-            }
-        }
     }
 }

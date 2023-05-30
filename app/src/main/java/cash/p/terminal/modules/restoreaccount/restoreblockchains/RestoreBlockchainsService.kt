@@ -1,16 +1,29 @@
 package cash.p.terminal.modules.restoreaccount.restoreblockchains
 
-import cash.p.terminal.core.*
+import cash.p.terminal.core.Clearable
+import cash.p.terminal.core.IAccountFactory
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.core.coinSettingType
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
+import cash.p.terminal.core.order
+import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.supportedTokens
+import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.enablecoin.EnableCoinService
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.RestoreBlockchainsModule.InternalItem
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -60,6 +73,7 @@ class RestoreBlockchainsService(
         BlockchainType.BinanceChain,
         BlockchainType.Solana,
         BlockchainType.ECash,
+        BlockchainType.Tron,
     )
 
     init {

@@ -1,7 +1,15 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.IAccountCleaner
-import cash.p.terminal.core.adapters.*
+import cash.p.terminal.core.adapters.BinanceAdapter
+import cash.p.terminal.core.adapters.BitcoinAdapter
+import cash.p.terminal.core.adapters.BitcoinCashAdapter
+import cash.p.terminal.core.adapters.DashAdapter
+import cash.p.terminal.core.adapters.ECashAdapter
+import cash.p.terminal.core.adapters.Eip20Adapter
+import cash.p.terminal.core.adapters.EvmAdapter
+import cash.p.terminal.core.adapters.SolanaAdapter
+import cash.p.terminal.core.adapters.TronAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 
 class AccountCleaner : IAccountCleaner {
@@ -20,6 +28,7 @@ class AccountCleaner : IAccountCleaner {
         Eip20Adapter.clear(accountId)
         ZcashAdapter.clear(accountId)
         SolanaAdapter.clear(accountId)
+        TronAdapter.clear(accountId)
     }
 
 }
