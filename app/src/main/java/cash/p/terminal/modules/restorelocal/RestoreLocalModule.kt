@@ -18,7 +18,6 @@ object RestoreLocalModule {
     data class UiState(
         val passphraseState: DataState.Error?,
         val showButtonSpinner: Boolean,
-        val closeScreen: Boolean,
         val parseError: Exception?,
         val accountType: AccountType?
     )

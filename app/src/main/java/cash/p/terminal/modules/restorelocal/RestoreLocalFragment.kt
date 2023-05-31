@@ -72,6 +72,9 @@ class RestoreLocalFragment : BaseFragment() {
             val popUpToInclusiveId =
                 arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
+            val popUpInclusive =
+                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+
             val backupJsonString = arguments?.getString(jsonFileKey)
 
             setContent {
@@ -79,7 +82,8 @@ class RestoreLocalFragment : BaseFragment() {
                     RestoreLocalNavHost(
                         backupJsonString,
                         findNavController(),
-                        popUpToInclusiveId
+                        popUpToInclusiveId,
+                        popUpInclusive
                     )
                 }
             }
@@ -92,7 +96,8 @@ class RestoreLocalFragment : BaseFragment() {
 private fun RestoreLocalNavHost(
     backupJsonString: String?,
     fragmentNavController: NavController,
-    popUpToInclusiveId: Int
+    popUpToInclusiveId: Int,
+    popUpInclusive: Boolean
 ) {
     val navController = rememberAnimatedNavController()
     val mainViewModel: RestoreViewModel = viewModel()
@@ -103,17 +108,16 @@ private fun RestoreLocalNavHost(
         composable("restore_local") {
             RestoreLocalScreen(
                 backupJsonString = backupJsonString,
-                navController = navController,
                 mainViewModel = mainViewModel,
-                openSelectCoins = { navController.navigate("restore_select_coins") },
-            )
+                onBackClick = { fragmentNavController.popBackStack() },
+            ) { navController.navigate("restore_select_coins") }
         }
         composablePage("restore_select_coins") {
             ManageWalletsScreen(
                 mainViewModel = mainViewModel,
                 openZCashConfigure = { navController.navigate("zcash_configure") },
                 onBackClick = { navController.popBackStack() }
-            ) { fragmentNavController.popBackStack(popUpToInclusiveId, true) }
+            ) { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
         }
         composablePopup("zcash_configure") {
             ZcashConfigureScreen(
@@ -134,8 +138,8 @@ private fun RestoreLocalNavHost(
 @Composable
 private fun RestoreLocalScreen(
     backupJsonString: String?,
-    navController: NavController,
     mainViewModel: RestoreViewModel,
+    onBackClick: () -> Unit,
     openSelectCoins: () -> Unit,
 ) {
     val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString))
@@ -146,13 +150,8 @@ private fun RestoreLocalScreen(
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
             Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
-            navController.popBackStack()
+            onBackClick.invoke()
         }
-    }
-
-    if (uiState.closeScreen) {
-        navController.popBackStack()
-        viewModel.closeScreenCalled()
     }
 
     uiState.accountType?.let { accountType ->
@@ -176,9 +175,7 @@ private fun RestoreLocalScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
-                            onClick = {
-                                navController.popBackStack()
-                            }
+                            onClick = onBackClick
                         )
                     )
                 )

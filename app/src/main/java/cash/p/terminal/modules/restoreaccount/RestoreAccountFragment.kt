@@ -42,8 +42,11 @@ class RestoreAccountFragment : BaseFragment() {
                 val popUpToInclusiveId =
                     arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
+                val inclusive =
+                    arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+
                 ComposeAppTheme {
-                    RestoreAccountNavHost(findNavController(), popUpToInclusiveId)
+                    RestoreAccountNavHost(findNavController(), popUpToInclusiveId, inclusive)
                 }
             }
         }
@@ -52,7 +55,11 @@ class RestoreAccountFragment : BaseFragment() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun RestoreAccountNavHost(fragmentNavController: NavController, popUpToInclusiveId: Int) {
+private fun RestoreAccountNavHost(
+    fragmentNavController: NavController,
+    popUpToInclusiveId: Int,
+    inclusive: Boolean
+) {
     val navController = rememberAnimatedNavController()
     val restoreMenuViewModel: RestoreMenuViewModel = viewModel(factory = RestoreMenuModule.Factory())
     val mainViewModel: RestoreViewModel = viewModel()
@@ -85,7 +92,7 @@ private fun RestoreAccountNavHost(fragmentNavController: NavController, popUpToI
                 mainViewModel = mainViewModel,
                 openZCashConfigure = { navController.navigate("zcash_configure") },
                 onBackClick = { navController.popBackStack() }
-            ) { fragmentNavController.popBackStack(popUpToInclusiveId, true) }
+            ) { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
         }
         composablePage("restore_phrase_nonstandard") {
             RestorePhraseNonStandard(
