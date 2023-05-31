@@ -25,7 +25,6 @@ class RestoreLocalViewModel(
     private var passphrase = ""
     private var passphraseState: DataState.Error? = null
     private var showButtonSpinner = false
-    private var closeScreen = false
     private var walletBackup: BackupLocalModule.WalletBackup? = null
     private val encryptDecryptManager = EncryptDecryptManager()
     private var parseError: Exception? = null
@@ -39,7 +38,6 @@ class RestoreLocalViewModel(
         RestoreLocalModule.UiState(
             passphraseState = null,
             showButtonSpinner = showButtonSpinner,
-            closeScreen = closeScreen,
             parseError = parseError,
             accountType = accountType,
         )
@@ -87,11 +85,6 @@ class RestoreLocalViewModel(
         }
     }
 
-    fun closeScreenCalled() {
-        closeScreen = false
-        syncState()
-    }
-
     fun onSelectCoinsShown() {
         accountType = null
         syncState()
@@ -101,7 +94,6 @@ class RestoreLocalViewModel(
         uiState = RestoreLocalModule.UiState(
             passphraseState = passphraseState,
             showButtonSpinner = showButtonSpinner,
-            closeScreen = closeScreen,
             parseError = parseError,
             accountType = accountType,
         )
