@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
@@ -176,17 +175,6 @@ private fun ImportWalletScreen(
                         }
                     )
                     VSpacer(12.dp)
-                    ImportOption(
-                        title = stringResource(R.string.ImportWallet_WatchAddress),
-                        description = stringResource(R.string.ImportWallet_WatchAddress_Description),
-                        icon = R.drawable.icon_binocule_24,
-                        onClick = {
-                            navController.slideFromRight(
-                                R.id.watchAddressFragment,
-                                bundleOf(ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId)
-                            )
-                        }
-                    )
                 }
             }
         }
