@@ -58,8 +58,6 @@ class CoinAnalyticsService(
     }
 
     suspend fun start() {
-        fetch()
-
         subscriptionManager.authTokenFlow.collect {
             fetch()
         }
@@ -79,6 +77,8 @@ class CoinAnalyticsService(
         if (authToken.isNullOrBlank()) {
             preview()
         } else {
+            stateSubject.onNext(DataState.Loading)
+
             marketKit.analyticsSingle(fullCoin.coin.uid, currency.code, authToken)
                 .subscribeIO({ item ->
                     stateSubject.onNext(DataState.Success(AnalyticData(analytics = item)))
