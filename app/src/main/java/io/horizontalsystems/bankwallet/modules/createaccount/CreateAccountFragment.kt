@@ -60,7 +60,9 @@ class CreateAccountFragment : BaseFragment() {
             setContent {
                 val popUpToInclusiveId =
                     arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.createAccountFragment) ?: R.id.createAccountFragment
-                CreateAccountNavHost(findNavController(), popUpToInclusiveId)
+                val inclusive =
+                    arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
+                CreateAccountNavHost(findNavController(), popUpToInclusiveId, inclusive)
             }
         }
     }
@@ -68,7 +70,11 @@ class CreateAccountFragment : BaseFragment() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun CreateAccountNavHost(fragmentNavController: NavController, popUpToInclusiveId: Int) {
+private fun CreateAccountNavHost(
+    fragmentNavController: NavController,
+    popUpToInclusiveId: Int,
+    inclusive: Boolean
+) {
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(
         navController = navController,
@@ -78,13 +84,13 @@ private fun CreateAccountNavHost(fragmentNavController: NavController, popUpToIn
             CreateAccountIntroScreen(
                 openCreateAdvancedScreen = { navController.navigate("create_account_advanced") },
                 onBackClick = { fragmentNavController.popBackStack() },
-                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, true) },
+                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) },
             )
         }
         composablePage("create_account_advanced") {
             CreateAccountAdvancedScreen(
                 onBackClick = { navController.popBackStack() },
-                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, true) }
+                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
             )
         }
     }

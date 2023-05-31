@@ -5,7 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -29,7 +33,13 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.ByMenu
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputMultiline
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -52,7 +62,9 @@ class WatchAddressFragment : BaseFragment() {
                 ComposeAppTheme {
                     val popUpToInclusiveId =
                         arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.watchAddressFragment) ?: R.id.watchAddressFragment
-                    WatchAddressScreen(findNavController(), popUpToInclusiveId)
+                    val inclusive =
+                        arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
+                    WatchAddressScreen(findNavController(), popUpToInclusiveId, inclusive)
                 }
             }
         }
@@ -60,7 +72,7 @@ class WatchAddressFragment : BaseFragment() {
 }
 
 @Composable
-fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
+fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, inclusive: Boolean) {
     val view = LocalView.current
 
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
@@ -80,7 +92,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                 iconTint = R.color.white
             )
             delay(300)
-            navController.popBackStack(popUpToInclusiveId, true)
+            navController.popBackStack(popUpToInclusiveId, inclusive)
         }
     }
 
@@ -93,6 +105,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                 SelectBlockchainsModule.accountTypeKey to accountType,
                 SelectBlockchainsModule.accountNameKey to accountName,
                 ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                ManageAccountsModule.popOffInclusiveKey to inclusive,
             )
         )
     }

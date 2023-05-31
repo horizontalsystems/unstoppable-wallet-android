@@ -64,10 +64,13 @@ class ImportWalletFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             val popUpToInclusiveId =
-                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
+                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.importWalletFragment) ?: R.id.importWalletFragment
+
+            val inclusive =
+                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
 
             setContent {
-                ImportWalletScreen(findNavController(), popUpToInclusiveId)
+                ImportWalletScreen(findNavController(), popUpToInclusiveId, inclusive)
             }
         }
     }
@@ -77,7 +80,8 @@ class ImportWalletFragment : BaseFragment() {
 @Composable
 private fun ImportWalletScreen(
     navController: NavController,
-    popUpToInclusiveId: Int
+    popUpToInclusiveId: Int,
+    inclusive: Boolean
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -96,6 +100,7 @@ private fun ImportWalletScreen(
                                 R.id.restoreLocalFragment,
                                 bundleOf(
                                     ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                                    ManageAccountsModule.popOffInclusiveKey to inclusive,
                                     RestoreLocalFragment.jsonFileKey to jsonString
                                 )
                             )
@@ -169,7 +174,10 @@ private fun ImportWalletScreen(
                             navController.navigateWithTermsAccepted {
                                 navController.slideFromBottom(
                                     R.id.restoreAccountFragment,
-                                    bundleOf(ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId)
+                                    bundleOf(
+                                        ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                                        ManageAccountsModule.popOffInclusiveKey to inclusive,
+                                    )
                                 )
                             }
                         }

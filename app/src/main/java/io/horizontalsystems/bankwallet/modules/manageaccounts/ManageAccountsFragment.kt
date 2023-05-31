@@ -116,10 +116,8 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                     }
 
                     val args = when (mode) {
-                        ManageAccountsModule.Mode.Manage -> null
-                        ManageAccountsModule.Mode.Switcher -> {
-                            ManageAccountsModule.prepareParams(R.id.manageAccountsFragment)
-                        }
+                        ManageAccountsModule.Mode.Manage -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, false)
+                        ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, true)
                     }
 
                     val actions = listOf(

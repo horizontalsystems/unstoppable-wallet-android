@@ -1,7 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -66,7 +74,7 @@ fun BalanceNoAccount(navController: NavController) {
             title = stringResource(R.string.ManageAccounts_ImportWallet),
             onClick = {
                 navController.navigateWithTermsAccepted {
-                    navController.slideFromRight(R.id.restoreAccountFragment)
+                    navController.slideFromRight(R.id.importWalletFragment)
                 }
             }
         )
