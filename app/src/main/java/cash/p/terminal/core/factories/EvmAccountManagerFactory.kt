@@ -5,14 +5,14 @@ import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.managers.EvmAccountManager
 import cash.p.terminal.core.managers.EvmKitManager
 import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.storage.EvmAccountStateDao
+import cash.p.terminal.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class EvmAccountManagerFactory(
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
-    private val evmAccountStateDao: EvmAccountStateDao
+    private val tokenAutoEnableManager: TokenAutoEnableManager
 ) {
 
     fun evmAccountManager(blockchainType: BlockchainType, evmKitManager: EvmKitManager) =
@@ -22,7 +22,7 @@ class EvmAccountManagerFactory(
             walletManager,
             marketKit,
             evmKitManager,
-            evmAccountStateDao
+            tokenAutoEnableManager
         )
 
 }

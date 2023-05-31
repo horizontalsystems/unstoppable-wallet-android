@@ -54,11 +54,13 @@ import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.managers.SolanaWalletManager
-import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TermsManager
+import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.managers.TorManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
+import cash.p.terminal.core.managers.TronAccountManager
+import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WalletManager
 import cash.p.terminal.core.managers.WalletStorage
@@ -135,6 +137,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var transactionAdapterManager: TransactionAdapterManager
         lateinit var walletManager: IWalletManager
         lateinit var walletActivator: WalletActivator
+        lateinit var tokenAutoEnableManager: TokenAutoEnableManager
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
         lateinit var accountFactory: IAccountFactory
@@ -277,12 +280,13 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         encryptionManager = EncryptionManager(keyProvider)
 
         walletActivator = WalletActivator(walletManager, marketKit)
+        tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,
             marketKit,
-            appDatabase.evmAccountStateDao()
+            tokenAutoEnableManager
         )
         evmBlockchainManager = EvmBlockchainManager(
             backgroundManager,
@@ -290,6 +294,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             marketKit,
             evmAccountManagerFactory,
         )
+
+        val tronAccountManager = TronAccountManager(
+            accountManager,
+            walletManager,
+            marketKit,
+            tronKitManager,
+            tokenAutoEnableManager
+        )
+        tronAccountManager.start()
 
         systemInfoManager = SystemInfoManager()
 

@@ -253,7 +253,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
         BlockchainType.Gnosis -> R.drawable.gnosis_erc20
         BlockchainType.Fantom -> R.drawable.fantom_erc20
-        BlockchainType.Tron -> R.drawable.fantom_erc20 //TODO
+        BlockchainType.Tron -> R.drawable.tron_trc20
         else -> R.drawable.coin_placeholder
     }
 

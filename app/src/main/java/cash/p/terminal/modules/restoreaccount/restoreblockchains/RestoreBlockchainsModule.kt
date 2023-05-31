@@ -45,6 +45,7 @@ object RestoreBlockchainsModule {
                 App.marketKit,
                 enableCoinService,
                 App.evmBlockchainManager,
+                App.tokenAutoEnableManager
             )
         }
 

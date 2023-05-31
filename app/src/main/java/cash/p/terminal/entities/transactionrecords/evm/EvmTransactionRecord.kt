@@ -78,7 +78,8 @@ open class EvmTransactionRecord(
                         tokenName = value.tokenName,
                         tokenCode = value.tokenCode,
                         tokenDecimals = value.tokenDecimals,
-                        value = totalValue
+                        value = totalValue,
+                        coinIconPlaceholder = value.coinIconPlaceholder
                     )
 
                     is TransactionValue.RawValue -> value

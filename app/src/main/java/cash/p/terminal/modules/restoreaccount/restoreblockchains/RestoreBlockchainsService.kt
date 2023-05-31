@@ -8,6 +8,7 @@ import cash.p.terminal.core.coinSettingType
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
+import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.order
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supportedTokens
@@ -37,6 +38,7 @@ class RestoreBlockchainsService(
     private val marketKit: MarketKitWrapper,
     private val enableCoinService: EnableCoinService,
     private val evmBlockchainManager: EvmBlockchainManager,
+    private val tokenAutoEnableManager: TokenAutoEnableManager
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
@@ -198,10 +200,7 @@ class RestoreBlockchainsService(
         }
 
         items.filter { it.enabled }.forEach { item ->
-            val isEvm = evmBlockchainManager.allBlockchainTypes.contains(item.blockchain.type)
-            if (isEvm) {
-                evmBlockchainManager.getEvmAccountManager(item.blockchain.type).markAutoEnable(account)
-            }
+            tokenAutoEnableManager.markAutoEnable(account, item.blockchain.type)
         }
 
         if (enabledCoins.isEmpty()) return

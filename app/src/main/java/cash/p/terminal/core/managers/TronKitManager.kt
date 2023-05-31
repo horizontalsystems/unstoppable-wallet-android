@@ -11,38 +11,34 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.tronkit.TronKit
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.tronkit.transaction.Signer
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class TronKitManager(
     private val appConfigProvider: AppConfigProvider,
     backgroundManager: BackgroundManager
 ) : BackgroundManager.Listener {
 
-    private var tokenAccountDisposable: Disposable? = null
+    private val _kitStartedFlow = MutableStateFlow(false)
+    val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
 
     var tronKitWrapper: TronKitWrapper? = null
+        private set(value) {
+            field = value
+
+            _kitStartedFlow.update { value != null }
+        }
 
     private var useCount = 0
     var currentAccount: Account? = null
         private set
-    private val kitStoppedSubject = PublishSubject.create<Unit>()
-
-    val kitStoppedObservable: Observable<Unit>
-        get() = kitStoppedSubject
 
     val statusInfo: Map<String, Any>?
         get() = tronKitWrapper?.tronKit?.statusInfo()
 
     init {
         backgroundManager.registerListener(this)
-    }
-
-    private fun handleUpdateNetwork() {
-        stopKit()
-
-        kitStoppedSubject.onNext(Unit)
     }
 
     @Synchronized
@@ -124,7 +120,6 @@ class TronKitManager(
         tronKitWrapper?.tronKit?.stop()
         tronKitWrapper = null
         currentAccount = null
-        tokenAccountDisposable?.dispose()
     }
 
     private fun startKit() {
