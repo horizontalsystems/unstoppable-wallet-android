@@ -157,7 +157,7 @@ class TronTransactionConverter(
     }
 
     private fun getEip20Value(tokenAddress: Address, amount: BigInteger, negative: Boolean, tokenInfo: TokenInfo? = null): TransactionValue {
-        val query = TokenQuery(BlockchainType.Tron, TokenType.Eip20(tokenAddress.hex))
+        val query = TokenQuery(BlockchainType.Tron, TokenType.Eip20(tokenAddress.base58))
         val token = coinManager.getToken(query)
 
         return when {

@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.coinSettingType
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
+import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.core.supportedTokens
@@ -37,6 +38,7 @@ class RestoreBlockchainsService(
     private val marketKit: MarketKitWrapper,
     private val enableCoinService: EnableCoinService,
     private val evmBlockchainManager: EvmBlockchainManager,
+    private val tokenAutoEnableManager: TokenAutoEnableManager
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
@@ -198,10 +200,7 @@ class RestoreBlockchainsService(
         }
 
         items.filter { it.enabled }.forEach { item ->
-            val isEvm = evmBlockchainManager.allBlockchainTypes.contains(item.blockchain.type)
-            if (isEvm) {
-                evmBlockchainManager.getEvmAccountManager(item.blockchain.type).markAutoEnable(account)
-            }
+            tokenAutoEnableManager.markAutoEnable(account, item.blockchain.type)
         }
 
         if (enabledCoins.isEmpty()) return

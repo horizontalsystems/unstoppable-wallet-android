@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.tronkit.models.Contract
 import java.math.BigDecimal
 import java.util.Date
 
@@ -376,10 +377,10 @@ class TransactionViewItemFactory(
             }
 
             is TronTransactionRecord -> {
-                createViewItemFromEvmTransactionRecord(
+                createViewItemFromTronTransactionRecord(
                     uid = record.uid,
                     timestamp = record.timestamp,
-                    blockchainType = record.blockchainType,
+                    contract = record.transaction.contract,
                     progress = progress,
                     icon = icon
                 )
@@ -506,6 +507,25 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
             icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
+        )
+    }
+
+    private fun createViewItemFromTronTransactionRecord(
+        uid: String,
+        timestamp: Long,
+        contract: Contract?,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        return TransactionViewItem(
+            uid = uid,
+            progress = progress,
+            title = contract?.javaClass?.simpleName ?: Translator.getString(R.string.Transactions_Unknown),
+            subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
+            primaryValue = null,
+            secondaryValue = null,
+            date = Date(timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Platform(BlockchainType.Tron)
         )
     }
 

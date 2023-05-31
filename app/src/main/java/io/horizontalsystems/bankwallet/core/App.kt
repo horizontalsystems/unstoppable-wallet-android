@@ -56,8 +56,10 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
+import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.core.managers.TronAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
@@ -135,6 +137,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var transactionAdapterManager: TransactionAdapterManager
         lateinit var walletManager: IWalletManager
         lateinit var walletActivator: WalletActivator
+        lateinit var tokenAutoEnableManager: TokenAutoEnableManager
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
         lateinit var accountFactory: IAccountFactory
@@ -276,12 +279,13 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         encryptionManager = EncryptionManager(keyProvider)
 
         walletActivator = WalletActivator(walletManager, marketKit)
+        tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,
             marketKit,
-            appDatabase.evmAccountStateDao()
+            tokenAutoEnableManager
         )
         evmBlockchainManager = EvmBlockchainManager(
             backgroundManager,
@@ -289,6 +293,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             marketKit,
             evmAccountManagerFactory,
         )
+
+        val tronAccountManager = TronAccountManager(
+            accountManager,
+            walletManager,
+            marketKit,
+            tronKitManager,
+            tokenAutoEnableManager
+        )
+        tronAccountManager.start()
 
         systemInfoManager = SystemInfoManager()
 

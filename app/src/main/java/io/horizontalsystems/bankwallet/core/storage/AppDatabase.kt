@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnec
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 50, exportSchema = false, entities = [
+@Database(version = 51, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionD
     WalletConnectV2Session::class,
     RestoreSettingRecord::class,
     ActiveAccount::class,
-    EvmAccountState::class,
     NftCollectionRecord::class,
     NftAssetRecord::class,
     NftMetadataSyncRecord::class,
@@ -38,7 +37,8 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionD
     ProFeaturesSessionKey::class,
     EvmAddressLabel::class,
     EvmMethodLabel::class,
-    SyncerState::class
+    SyncerState::class,
+    TokenAutoEnabledBlockchain::class
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -54,12 +54,12 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun marketFavoritesDao(): MarketFavoritesDao
     abstract fun wc1SessionDao(): WC1SessionDao
     abstract fun wc2SessionDao(): WC2SessionDao
-    abstract fun evmAccountStateDao(): EvmAccountStateDao
     abstract fun nftDao(): NftDao
     abstract fun proFeaturesDao(): ProFeaturesDao
     abstract fun evmAddressLabelDao(): EvmAddressLabelDao
     abstract fun evmMethodLabelDao(): EvmMethodLabelDao
     abstract fun syncerStateDao(): SyncerStateDao
+    abstract fun tokenAutoEnabledBlockchainDao(): TokenAutoEnabledBlockchainDao
 
     companion object {
 
@@ -96,6 +96,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_47_48,
                             Migration_48_49,
                             Migration_49_50,
+                            Migration_50_51
                     )
                     .build()
         }

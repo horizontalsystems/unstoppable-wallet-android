@@ -8,7 +8,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tronkit.models.Transaction
 
 open class TronTransactionRecord(
-    transaction: Transaction,
+    val transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,
     val foreignTransaction: Boolean = false,
