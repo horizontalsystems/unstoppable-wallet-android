@@ -33,7 +33,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
 import cash.p.terminal.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
@@ -176,17 +175,6 @@ private fun ImportWalletScreen(
                         }
                     )
                     VSpacer(12.dp)
-                    ImportOption(
-                        title = stringResource(R.string.ImportWallet_WatchAddress),
-                        description = stringResource(R.string.ImportWallet_WatchAddress_Description),
-                        icon = R.drawable.icon_binocule_24,
-                        onClick = {
-                            navController.slideFromRight(
-                                R.id.watchAddressFragment,
-                                bundleOf(ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId)
-                            )
-                        }
-                    )
                 }
             }
         }
