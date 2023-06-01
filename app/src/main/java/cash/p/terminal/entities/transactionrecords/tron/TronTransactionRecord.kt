@@ -4,6 +4,7 @@ import cash.p.terminal.core.adapters.BaseTronAdapter
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.TransactionSource
+import cash.p.terminal.modules.transactions.TransactionStatus
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tronkit.models.Transaction
 
@@ -37,6 +38,31 @@ open class TronTransactionRecord(
             TransactionValue.CoinValue(baseToken, feeDecimal)
         } else {
             null
+        }
+    }
+
+    override fun status(lastBlockHeight: Int?): TransactionStatus {
+        when {
+            failed -> {
+                return TransactionStatus.Failed
+            }
+
+            transaction.confirmed -> {
+                return TransactionStatus.Completed
+            }
+
+            blockHeight != null && lastBlockHeight != null -> {
+                val threshold = confirmationsThreshold ?: 1
+                val confirmations = lastBlockHeight - blockHeight.toInt() + 1
+
+                return if (confirmations >= threshold) {
+                    TransactionStatus.Completed
+                } else {
+                    TransactionStatus.Processing(confirmations.toFloat() / threshold.toFloat())
+                }
+            }
+
+            else -> return TransactionStatus.Pending
         }
     }
 
