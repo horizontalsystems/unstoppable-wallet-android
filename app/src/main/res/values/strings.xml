@@ -1020,6 +1020,8 @@
     <string name="ImportWallet_BackupFile_Description">Import from a backup file</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Import using recovery phrase or private key.</string>
+    <string name="ImportWallet_ExchangeWallet">Exchange Wallet</string>
+    <string name="ImportWallet_ExchangeWallet_Description">Import wallet from a centralized exchange</string>
     <string name="ImportWallet_WatchAddress">Watch Address</string>
     <string name="ImportWallet_WatchAddress_Description">Observing mode of EVM-Chain and BTC, LTC, DASH addresses</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>

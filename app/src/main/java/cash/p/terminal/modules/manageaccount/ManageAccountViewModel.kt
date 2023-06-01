@@ -110,6 +110,8 @@ class ManageAccountViewModel(
                     listOf(KeyAction.PrivateKeys, KeyAction.PublicKeys)
                 }
             }
+
+            is AccountType.Cex -> TODO()
         }
     }
 

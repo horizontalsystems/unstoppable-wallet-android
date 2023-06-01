@@ -330,6 +330,8 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 
         is AccountType.TronAddress ->
             this == BlockchainType.Tron
+
+        is AccountType.Cex -> TODO()
     }
 }
 

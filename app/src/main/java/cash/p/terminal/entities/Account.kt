@@ -85,6 +85,9 @@ data class Account(
 @Parcelize
 sealed class AccountType : Parcelable {
     @Parcelize
+    class Cex : AccountType()
+
+    @Parcelize
     data class EvmAddress(val address: String) : AccountType()
 
     @Parcelize
@@ -200,6 +203,7 @@ sealed class AccountType : Parcelable {
                     else -> ""
                 }
             }
+            is Cex -> "Cex"
         }
 
     val supportedDerivations: List<Derivation>
