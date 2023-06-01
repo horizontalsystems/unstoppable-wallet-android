@@ -87,7 +87,6 @@ object UniswapConfirmationModule {
             val warnings = when (additionalInfo?.uniswapInfo?.priceImpact?.level) {
                 SwapMainModule.PriceImpactLevel.Forbidden -> listOf(SwapMainModule.UniswapWarnings.PriceImpactForbidden(dex.provider.title))
                 SwapMainModule.PriceImpactLevel.Warning -> listOf(SwapMainModule.UniswapWarnings.PriceImpactWarning)
-                SwapMainModule.PriceImpactLevel.Normal -> listOf(SwapMainModule.UniswapWarnings.PriceImpactNormal)
                 else -> listOf()
             }
 

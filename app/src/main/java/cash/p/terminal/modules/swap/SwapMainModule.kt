@@ -335,7 +335,6 @@ object SwapMainModule {
     }
 
     abstract class UniswapWarnings : Warning() {
-        object PriceImpactNormal : UniswapWarnings()
         object PriceImpactWarning : UniswapWarnings()
         class PriceImpactForbidden(val providerName: String) : UniswapWarnings()
     }
