@@ -118,6 +118,12 @@ class BackupLocalPasswordViewModel(
         syncState()
     }
 
+    fun backupCanceled() {
+        backupJson = null
+        showButtonSpinner = false
+        syncState()
+    }
+
     private fun saveAccount() {
         val accountType = account?.type ?: return
         viewModelScope.launch(Dispatchers.IO) {

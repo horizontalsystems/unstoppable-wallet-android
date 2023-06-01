@@ -76,6 +76,8 @@ fun LocalBackupPasswordScreen(
                     }
                 }
             }
+        } ?: run {
+            viewModel.backupCanceled()
         }
     }
 
@@ -119,7 +121,8 @@ fun LocalBackupPasswordScreen(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .verticalScroll(rememberScrollState()
+                        .verticalScroll(
+                            rememberScrollState()
                         )
                 ) {
 
