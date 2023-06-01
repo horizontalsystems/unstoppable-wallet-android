@@ -50,12 +50,7 @@ sealed class EvmError(message: String? = null) : Throwable(message) {
 }
 
 sealed class PasswordError : Throwable() {
-    object PasswordTooShort : PasswordError()
-    object PasswordContainsInvalidCharacters : PasswordError()
-    object PasswordWithoutUppercase : PasswordError()
-    object PasswordWithoutLowercase : PasswordError()
-    object PasswordWithoutNumber : PasswordError()
-    object PasswordWithoutSymbol : PasswordError()
+    object PasswordInvalid : PasswordError()
 }
 
 sealed class EvmAddressError : Throwable() {
