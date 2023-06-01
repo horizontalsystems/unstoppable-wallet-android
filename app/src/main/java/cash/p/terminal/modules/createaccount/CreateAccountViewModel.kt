@@ -12,7 +12,11 @@ import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.*
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.AccountOrigin
+import cash.p.terminal.entities.AccountType
+import cash.p.terminal.entities.DataState
+import cash.p.terminal.entities.normalizeNFKD
 import cash.p.terminal.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -76,7 +80,7 @@ class CreateAccountViewModel(
     }
 
     fun onChangePassphrase(v: String) {
-        if (passphraseValidator.validate(v)) {
+        if (passphraseValidator.containsValidCharacters(v)) {
             passphraseState = null
             passphrase = v
         } else {

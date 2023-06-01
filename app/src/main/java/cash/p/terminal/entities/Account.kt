@@ -64,7 +64,7 @@ data class Account(
     val nonRecommended: Boolean by lazy {
         if (type is AccountType.Mnemonic) {
             val englishWords = WordList.wordList(Language.English).validWords(type.words)
-            val standardPassphrase = PassphraseValidator().validate(type.passphrase)
+            val standardPassphrase = PassphraseValidator().containsValidCharacters(type.passphrase)
             !englishWords || !standardPassphrase
         } else {
             false
