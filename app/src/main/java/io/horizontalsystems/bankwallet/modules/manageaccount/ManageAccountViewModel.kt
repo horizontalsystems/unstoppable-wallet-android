@@ -76,6 +76,13 @@ class ManageAccountViewModel(
             is AccountType.EvmPrivateKey -> listOf(
                 BackupItem.LocalBackup(false),
             )
+            is AccountType.HdExtendedKey -> {
+                if (!account.type.hdExtendedKey.isPublic) {
+                    listOf(BackupItem.LocalBackup(false),)
+                } else {
+                    emptyList()
+                }
+            }
             else -> emptyList()
         }
     }
