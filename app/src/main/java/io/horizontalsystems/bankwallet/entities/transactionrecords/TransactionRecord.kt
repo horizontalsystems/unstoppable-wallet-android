@@ -49,7 +49,7 @@ abstract class TransactionRecord(
         return uid.hashCode()
     }
 
-    fun status(lastBlockHeight: Int?): TransactionStatus {
+    open fun status(lastBlockHeight: Int?): TransactionStatus {
         if (failed) {
             return TransactionStatus.Failed
         } else if (blockHeight != null && lastBlockHeight != null) {
