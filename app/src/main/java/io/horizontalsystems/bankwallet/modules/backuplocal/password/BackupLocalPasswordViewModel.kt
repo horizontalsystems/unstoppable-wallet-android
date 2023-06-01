@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.PasswordError
 import io.horizontalsystems.bankwallet.core.managers.EncryptDecryptManager
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -68,7 +69,7 @@ class BackupLocalPasswordViewModel(
     }
 
     fun onChangePassphrase(v: String) {
-        if (passphraseValidator.validate(v)) {
+        if (passphraseValidator.containsValidCharacters(v)) {
             passphraseState = null
             passphrase = v
         } else {
@@ -177,20 +178,32 @@ class BackupLocalPasswordViewModel(
         passphraseState = null
         passphraseConfirmState = null
 
-        if (passphrase.isBlank()) {
-            passphraseState = DataState.Error(
-                Exception(Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase))
-            )
-        } else if (passphrase.length < 8) {
-            passphraseState = DataState.Error(
-                Exception(Translator.getString(R.string.LocalBackup_ErrorPasswordLengthLessThan8))
-            )
-        } else if (passphrase != passphraseConfirmation) {
+        try {
+            passphraseValidator.validatePassword(passphrase)
+        } catch (e: PasswordError) {
+            passphraseState = getLocalizedError(e)
+            syncState()
+            return
+        }
+
+        if (passphrase != passphraseConfirmation) {
             passphraseConfirmState = DataState.Error(
                 Exception(Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation))
             )
         }
 
         syncState()
+    }
+
+    private fun getLocalizedError(e: PasswordError): DataState.Error {
+        val errorText = when (e) {
+            PasswordError.PasswordContainsInvalidCharacters -> Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+            PasswordError.PasswordTooShort -> Translator.getString(R.string.LocalBackup_ErrorPasswordTooShort)
+            PasswordError.PasswordWithoutUppercase -> Translator.getString(R.string.LocalBackup_ErrorPasswordNoUppercase)
+            PasswordError.PasswordWithoutLowercase -> Translator.getString(R.string.LocalBackup_ErrorPasswordNoLowercase)
+            PasswordError.PasswordWithoutNumber -> Translator.getString(R.string.LocalBackup_ErrorPasswordNoNumber)
+            PasswordError.PasswordWithoutSymbol -> Translator.getString(R.string.LocalBackup_ErrorPasswordNoSymbol)
+        }
+        return DataState.Error(Exception(errorText))
     }
 }
