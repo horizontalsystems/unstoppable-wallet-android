@@ -54,13 +54,6 @@ class CautionViewItemFactory(
                     CautionViewItem.Type.Error
                 )
             }
-            UniswapWarnings.PriceImpactNormal -> {
-                CautionViewItem(
-                    Translator.getString(R.string.Swap_PriceImpact),
-                    Translator.getString(R.string.Swap_PriceImpactNormal),
-                    CautionViewItem.Type.Warning
-                )
-            }
             else -> {
                 CautionViewItem(
                     Translator.getString(R.string.EthereumTransaction_Warning_Title),
