@@ -21,6 +21,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val SOLANA_ADDRESS = "solana_address"
         private const val TRON_ADDRESS = "tron_address"
         private const val HD_EXTENDED_LEY = "hd_extended_key"
+        private const val CEX = "cex"
     }
 
     override var activeAccountId: String?
@@ -47,6 +48,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
                             TRON_ADDRESS -> AccountType.TronAddress(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
+                            CEX -> AccountType.Cex()
                             else -> null
                         }
                         Account(
@@ -122,6 +124,9 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.HdExtendedKey -> {
                 key = SecretString(account.type.keySerialized)
                 accountType = HD_EXTENDED_LEY
+            }
+            is AccountType.Cex -> {
+                accountType = CEX
             }
         }
 

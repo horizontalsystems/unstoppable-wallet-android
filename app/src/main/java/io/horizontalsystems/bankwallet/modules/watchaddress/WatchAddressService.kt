@@ -30,6 +30,7 @@ class WatchAddressService(
 
     fun configuredTokens(accountType: AccountType) = buildList {
         when (accountType) {
+            is AccountType.Cex,
             is AccountType.Mnemonic,
             is AccountType.EvmPrivateKey -> Unit // N/A
             is AccountType.SolanaAddress -> {
