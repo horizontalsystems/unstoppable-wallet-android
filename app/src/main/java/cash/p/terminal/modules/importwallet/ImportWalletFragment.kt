@@ -50,6 +50,7 @@ import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.headline2_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ImportWalletFragment : BaseFragment() {
@@ -108,7 +109,10 @@ private fun ImportWalletScreen(
                     }
                 } catch (e: Throwable) {
                     //show json parsing error
-                    coroutineScope.launch { bottomSheetState.show() }
+                    coroutineScope.launch {
+                        delay(300)
+                        bottomSheetState.show()
+                    }
                 }
             }
         }
