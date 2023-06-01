@@ -36,7 +36,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
 
     fun priceImpactViewItem(
         trade: SwapMainModule.SwapData.UniswapData,
-        minLevel: PriceImpactLevel = PriceImpactLevel.Normal
+        minLevel: PriceImpactLevel = PriceImpactLevel.Negligible
     ): PriceImpactViewItem? {
 
         val priceImpact = trade.data.priceImpact ?: return null

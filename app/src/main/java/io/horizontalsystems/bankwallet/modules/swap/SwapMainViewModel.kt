@@ -486,7 +486,7 @@ class SwapMainViewModel(
             ProviderTradeData.UniswapTradeViewItem(
                 primaryPrice = primaryPrice,
                 secondaryPrice = secondaryPrice,
-                priceImpact = formatter.priceImpactViewItem(swapData, PriceImpactLevel.Warning),
+                priceImpact = formatter.priceImpactViewItem(swapData, PriceImpactLevel.Negligible),
             )
         )
     }
