@@ -181,7 +181,9 @@ class BackupLocalPasswordViewModel(
         try {
             passphraseValidator.validatePassword(passphrase)
         } catch (e: PasswordError) {
-            passphraseState = getLocalizedError(e)
+            passphraseState = DataState.Error(
+                Exception(Translator.getString(R.string.LocalBackup_PasswordInvalid))
+            )
             syncState()
             return
         }
@@ -193,17 +195,5 @@ class BackupLocalPasswordViewModel(
         }
 
         syncState()
-    }
-
-    private fun getLocalizedError(e: PasswordError): DataState.Error {
-        val errorText = when (e) {
-            PasswordError.PasswordContainsInvalidCharacters -> Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
-            PasswordError.PasswordTooShort -> Translator.getString(R.string.LocalBackup_ErrorPasswordTooShort)
-            PasswordError.PasswordWithoutUppercase -> Translator.getString(R.string.LocalBackup_ErrorPasswordNoUppercase)
-            PasswordError.PasswordWithoutLowercase -> Translator.getString(R.string.LocalBackup_ErrorPasswordNoLowercase)
-            PasswordError.PasswordWithoutNumber -> Translator.getString(R.string.LocalBackup_ErrorPasswordNoNumber)
-            PasswordError.PasswordWithoutSymbol -> Translator.getString(R.string.LocalBackup_ErrorPasswordNoSymbol)
-        }
-        return DataState.Error(Exception(errorText))
     }
 }
