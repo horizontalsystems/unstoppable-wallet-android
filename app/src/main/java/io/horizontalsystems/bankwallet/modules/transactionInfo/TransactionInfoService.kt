@@ -11,11 +11,24 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.SwapTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.UnknownSwapTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.nftUids
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronContractCallTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -89,10 +102,37 @@ class TransactionInfoService(
                     tempCoinUidList.addAll(tx.outgoingTransfers.map { it.value.coinUid })
                     tempCoinUidList
                 }
+                is TronOutgoingTransactionRecord -> {
+                    listOf(tx.value.coinUid, tx.fee?.coinUid)
+                }
+                is TronIncomingTransactionRecord -> {
+                    listOf(tx.value.coinUid)
+                }
+                is TronApproveTransactionRecord -> {
+                    listOf(tx.value.coinUid, tx.fee?.coinUid)
+                }
+                is TronContractCallTransactionRecord -> {
+                    val tempCoinUidList = mutableListOf<String>()
+                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                    tempCoinUidList
+                }
+                is TronExternalContractCallTransactionRecord -> {
+                    val tempCoinUidList = mutableListOf<String>()
+                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                    tempCoinUidList
+                }
                 else -> emptyList()
             }
 
             (transactionRecord as? EvmTransactionRecord)?.let { transactionRecord ->
+                if (!transactionRecord.foreignTransaction) {
+                    coinUids.add(transactionRecord.fee?.coinUid)
+                }
+            }
+
+            (transactionRecord as? TronTransactionRecord)?.let { transactionRecord ->
                 if (!transactionRecord.foreignTransaction) {
                     coinUids.add(transactionRecord.fee?.coinUid)
                 }
