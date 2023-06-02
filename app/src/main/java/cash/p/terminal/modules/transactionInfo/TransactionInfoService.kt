@@ -11,11 +11,24 @@ import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainInco
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.*
+import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.EvmIncomingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.SwapTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.UnknownSwapTransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
 import cash.p.terminal.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronApproveTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronIncomingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionSource
@@ -89,10 +102,37 @@ class TransactionInfoService(
                     tempCoinUidList.addAll(tx.outgoingTransfers.map { it.value.coinUid })
                     tempCoinUidList
                 }
+                is TronOutgoingTransactionRecord -> {
+                    listOf(tx.value.coinUid, tx.fee?.coinUid)
+                }
+                is TronIncomingTransactionRecord -> {
+                    listOf(tx.value.coinUid)
+                }
+                is TronApproveTransactionRecord -> {
+                    listOf(tx.value.coinUid, tx.fee?.coinUid)
+                }
+                is TronContractCallTransactionRecord -> {
+                    val tempCoinUidList = mutableListOf<String>()
+                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                    tempCoinUidList
+                }
+                is TronExternalContractCallTransactionRecord -> {
+                    val tempCoinUidList = mutableListOf<String>()
+                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                    tempCoinUidList
+                }
                 else -> emptyList()
             }
 
             (transactionRecord as? EvmTransactionRecord)?.let { transactionRecord ->
+                if (!transactionRecord.foreignTransaction) {
+                    coinUids.add(transactionRecord.fee?.coinUid)
+                }
+            }
+
+            (transactionRecord as? TronTransactionRecord)?.let { transactionRecord ->
                 if (!transactionRecord.foreignTransaction) {
                     coinUids.add(transactionRecord.fee?.coinUid)
                 }
