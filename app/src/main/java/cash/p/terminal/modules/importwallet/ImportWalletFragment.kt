@@ -1,6 +1,10 @@
 package cash.p.terminal.modules.importwallet
 
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +56,7 @@ import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 
 class ImportWalletFragment : BaseFragment() {
 
@@ -89,20 +94,22 @@ private fun ImportWalletScreen(
     val context = LocalContext.current
 
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let {
-            context.contentResolver.openInputStream(it)?.use { inputStream ->
+        uri?.let { uriNonNull ->
+            context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
                 try {
                     inputStream.bufferedReader().use { br ->
                         val jsonString = br.readText()
                         //validate json format
                         val json = Gson().fromJson(jsonString, BackupLocalModule.WalletBackup::class.java)
                         navController.navigateWithTermsAccepted {
+                            val fileName = context.getFileName(uriNonNull)
                             navController.slideFromBottom(
                                 R.id.restoreLocalFragment,
                                 bundleOf(
                                     ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
                                     ManageAccountsModule.popOffInclusiveKey to inclusive,
-                                    RestoreLocalFragment.jsonFileKey to jsonString
+                                    RestoreLocalFragment.jsonFileKey to jsonString,
+                                    RestoreLocalFragment.fileNameKey to fileName
                                 )
                             )
                         }
@@ -219,3 +226,15 @@ private fun ImportOption(
         }
     }
 }
+
+fun Context.getFileName(uri: Uri): String? = when(uri.scheme) {
+    ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
+    else -> uri.path?.let(::File)?.name
+}
+
+private fun Context.getContentFileName(uri: Uri): String? = runCatching {
+    contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        cursor.moveToFirst()
+        return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
+    }
+}.getOrNull()
