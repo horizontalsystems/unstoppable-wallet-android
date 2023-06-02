@@ -104,10 +104,9 @@ class TronTransactionConverter(
                 val outgoingEip20Transfers = eip20Transfers.filter { it.from == address }
 
                 val contractAddress = decoration.toAddress
-                val value = decoration.value
 
                 when {
-                    decoration.fromAddress == address && contractAddress != null && value != null -> {
+                    decoration.fromAddress == address && contractAddress != null -> {
                         TronContractCallTransactionRecord(
                             transaction, baseToken, source,
                             contractAddress.base58,
