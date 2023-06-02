@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronCont
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Address
@@ -626,7 +627,13 @@ class TransactionInfoViewItemFactory(
         when (transaction) {
             is EvmTransactionRecord -> {
                 if (!transaction.foreignTransaction && transaction.fee != null) {
-                    items.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                }
+            }
+
+            is TronTransactionRecord -> {
+                if (!transaction.foreignTransaction && transaction.fee != null) {
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
                 }
             }
 
@@ -780,7 +787,7 @@ class TransactionInfoViewItemFactory(
         return Value(getString(R.string.TransactionInfo_Fee), feeAmountString)
     }
 
-    private fun getEvmFeeItem(
+    private fun getFeeItem(
         transactionValue: TransactionValue,
         rate: CurrencyValue?,
         status: TransactionStatus
