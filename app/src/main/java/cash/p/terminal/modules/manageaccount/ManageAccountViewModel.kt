@@ -76,34 +76,43 @@ class ManageAccountViewModel(
             is AccountType.EvmPrivateKey -> listOf(
                 BackupItem.LocalBackup(false),
             )
+
             is AccountType.HdExtendedKey -> {
                 if (!account.type.hdExtendedKey.isPublic) {
-                    listOf(BackupItem.LocalBackup(false),)
+                    listOf(BackupItem.LocalBackup(false))
                 } else {
                     emptyList()
                 }
             }
+
             else -> emptyList()
         }
     }
 
     private fun getKeyActions(account: Account): List<KeyAction> {
+        if (!account.isBackedUp) {
+            return emptyList()
+        }
         return when (account.type) {
             is AccountType.Mnemonic -> listOf(
                 KeyAction.RecoveryPhrase,
                 KeyAction.PrivateKeys,
                 KeyAction.PublicKeys,
             )
+
             is AccountType.EvmPrivateKey -> listOf(
                 KeyAction.PrivateKeys,
                 KeyAction.PublicKeys,
             )
+
             is AccountType.EvmAddress -> listOf(
                 KeyAction.PublicKeys
             )
+
             is AccountType.SolanaAddress -> listOf(
                 KeyAction.PublicKeys
             )
+
             is AccountType.HdExtendedKey -> {
                 if (account.type.hdExtendedKey.isPublic) {
                     listOf(KeyAction.PublicKeys)
@@ -117,7 +126,10 @@ class ManageAccountViewModel(
     private fun handleUpdatedAccounts(accounts: List<Account>) {
         val account = accounts.find { it.id == account.id }
         viewState = if (account != null) {
-            viewState.copy(keyActions = getKeyActions(account))
+            viewState.copy(
+                keyActions = getKeyActions(account),
+                backupActions = getBackupItems(account)
+            )
         } else {
             viewState.copy(closeScreen = true)
         }
