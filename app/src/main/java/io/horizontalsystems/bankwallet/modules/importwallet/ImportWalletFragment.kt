@@ -169,15 +169,6 @@ private fun ImportWalletScreen(
                 ) {
                     VSpacer(12.dp)
                     ImportOption(
-                        title = stringResource(R.string.ImportWallet_BackupFile),
-                        description = stringResource(R.string.ImportWallet_BackupFile_Description),
-                        icon = R.drawable.ic_download_24,
-                        onClick = {
-                            restoreLauncher.launch(arrayOf("application/json"))
-                        }
-                    )
-                    VSpacer(12.dp)
-                    ImportOption(
                         title = stringResource(R.string.ImportWallet_RecoveryPhrase),
                         description = stringResource(R.string.ImportWallet_RecoveryPhrase_Description),
                         icon = R.drawable.ic_edit_24,
@@ -191,6 +182,15 @@ private fun ImportWalletScreen(
                                     )
                                 )
                             }
+                        }
+                    )
+                    VSpacer(12.dp)
+                    ImportOption(
+                        title = stringResource(R.string.ImportWallet_BackupFile),
+                        description = stringResource(R.string.ImportWallet_BackupFile_Description),
+                        icon = R.drawable.ic_download_24,
+                        onClick = {
+                            restoreLauncher.launch(arrayOf("application/json"))
                         }
                     )
                     VSpacer(12.dp)
