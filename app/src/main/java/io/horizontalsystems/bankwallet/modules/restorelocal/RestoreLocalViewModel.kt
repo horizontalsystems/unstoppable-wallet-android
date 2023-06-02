@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 
 class RestoreLocalViewModel(
     private val backupJsonString: String?,
+    fileName: String?,
     accountFactory: IAccountFactory,
 ) : ViewModel() {
 
@@ -31,6 +32,12 @@ class RestoreLocalViewModel(
     private var accountType: AccountType? = null
 
     val accountName by lazy {
+        fileName?.let { name ->
+            return@lazy name
+                .replace(".json", "")
+                .replace("UW_Backup_", "")
+                .replace("_", " ")
+        }
         accountFactory.getNextAccountName()
     }
 

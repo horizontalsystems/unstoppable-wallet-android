@@ -8,10 +8,10 @@ import io.horizontalsystems.bankwallet.entities.DataState
 
 object RestoreLocalModule {
 
-    class Factory(private val backupJsonString: String?) : ViewModelProvider.Factory {
+    class Factory(private val backupJsonString: String?, private val fileName: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreLocalViewModel(backupJsonString, App.accountFactory,) as T
+            return RestoreLocalViewModel(backupJsonString, fileName, App.accountFactory) as T
         }
     }
 

@@ -58,6 +58,7 @@ import kotlinx.coroutines.launch
 class RestoreLocalFragment : BaseFragment() {
     companion object{
         const val jsonFileKey = "jsonFileKey"
+        const val fileNameKey = "fileNameKey"
     }
 
     override fun onCreateView(
@@ -76,11 +77,13 @@ class RestoreLocalFragment : BaseFragment() {
                 arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
 
             val backupJsonString = arguments?.getString(jsonFileKey)
+            val fileName = arguments?.getString(fileNameKey)
 
             setContent {
                 ComposeAppTheme {
                     RestoreLocalNavHost(
                         backupJsonString,
+                        fileName,
                         findNavController(),
                         popUpToInclusiveId,
                         popUpInclusive
@@ -95,6 +98,7 @@ class RestoreLocalFragment : BaseFragment() {
 @Composable
 private fun RestoreLocalNavHost(
     backupJsonString: String?,
+    fileName: String?,
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
     popUpInclusive: Boolean
@@ -108,6 +112,7 @@ private fun RestoreLocalNavHost(
         composable("restore_local") {
             RestoreLocalScreen(
                 backupJsonString = backupJsonString,
+                fileName = fileName,
                 mainViewModel = mainViewModel,
                 onBackClick = { fragmentNavController.popBackStack() },
             ) { navController.navigate("restore_select_coins") }
@@ -138,11 +143,12 @@ private fun RestoreLocalNavHost(
 @Composable
 private fun RestoreLocalScreen(
     backupJsonString: String?,
+    fileName: String?,
     mainViewModel: RestoreViewModel,
     onBackClick: () -> Unit,
     openSelectCoins: () -> Unit,
 ) {
-    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString))
+    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName))
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
