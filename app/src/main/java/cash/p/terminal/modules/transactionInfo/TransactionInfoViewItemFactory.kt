@@ -34,6 +34,7 @@ import cash.p.terminal.entities.transactionrecords.tron.TronContractCallTransact
 import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Address
@@ -626,7 +627,13 @@ class TransactionInfoViewItemFactory(
         when (transaction) {
             is EvmTransactionRecord -> {
                 if (!transaction.foreignTransaction && transaction.fee != null) {
-                    items.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                }
+            }
+
+            is TronTransactionRecord -> {
+                if (!transaction.foreignTransaction && transaction.fee != null) {
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
                 }
             }
 
@@ -780,7 +787,7 @@ class TransactionInfoViewItemFactory(
         return Value(getString(R.string.TransactionInfo_Fee), feeAmountString)
     }
 
-    private fun getEvmFeeItem(
+    private fun getFeeItem(
         transactionValue: TransactionValue,
         rate: CurrencyValue?,
         status: TransactionStatus
