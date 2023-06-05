@@ -37,7 +37,7 @@ class WC1Manager(
 
         return when {
             tmpAccount == null -> SupportState.NotSupportedDueToNoActiveAccount
-            !tmpAccount.isBackedUp -> SupportState.NotSupportedDueToNonBackedUpAccount(tmpAccount)
+            !tmpAccount.isBackedUp && !tmpAccount.isFileBackedUp -> SupportState.NotSupportedDueToNonBackedUpAccount(tmpAccount)
             tmpAccount.type.supportsWalletConnect -> SupportState.Supported
             else -> SupportState.NotSupported(tmpAccount.type.description)
         }

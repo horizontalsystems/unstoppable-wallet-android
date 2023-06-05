@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal
 
+import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.entities.AccountType
 
 object BackupLocalModule {
@@ -15,6 +16,8 @@ object BackupLocalModule {
         val crypto: BackupCrypto,
         val id: String,
         val type: String,
+        @SerializedName("manual_backup")
+        val manualBackup: Boolean,
         val timestamp: Long,
         val version: Int
     )

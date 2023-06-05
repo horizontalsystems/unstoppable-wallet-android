@@ -72,8 +72,10 @@ fun ManageWalletsScreen(
         onBackClick.invoke()
         return
     }
+    val manualBackup = mainViewModel.manualBackup
+    val fileBackup = mainViewModel.fileBackup
 
-    val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType)
+    val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType, manualBackup, fileBackup)
     val viewModel: RestoreBlockchainsViewModel = viewModel(factory = factory)
     val restoreSettingsViewModel: RestoreSettingsViewModel = viewModel(factory = factory)
     val coinSettingsViewModel: CoinSettingsViewModel = viewModel(factory = factory)

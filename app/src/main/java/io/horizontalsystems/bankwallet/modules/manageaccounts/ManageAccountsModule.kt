@@ -33,9 +33,9 @@ object ManageAccountsModule {
         val subtitle: String,
         val selected: Boolean,
         val backupRequired: Boolean,
+        val showAlertIcon: Boolean,
         val isWatchAccount: Boolean,
         val migrationRequired: Boolean,
-        val migrationRecommended: Boolean,
     )
 
     data class ActionViewItem(

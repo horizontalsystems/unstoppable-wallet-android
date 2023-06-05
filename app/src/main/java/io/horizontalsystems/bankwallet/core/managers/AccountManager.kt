@@ -12,7 +12,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.util.*
+import java.util.Optional
 import java.util.concurrent.TimeUnit
 
 class AccountManager(
@@ -83,7 +83,7 @@ class AccountManager(
         accountsSubject.onNext(accounts)
 
         setActiveAccountId(account.id)
-        if (!account.isBackedUp) {
+        if (!account.isBackedUp && !account.isFileBackedUp) {
             _newAccountBackupRequiredFlow.update {
                 account
             }

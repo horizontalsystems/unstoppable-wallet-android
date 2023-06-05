@@ -102,6 +102,11 @@ class BackupLocalPasswordViewModel(
         showButtonSpinner = false
         syncState()
         viewModelScope.launch {
+            account?.let {
+                if (!it.isFileBackedUp) {
+                    accountManager.update(it.copy(isFileBackedUp = true))
+                }
+            }
             delay(1700) //Wait for showing Snackbar (SHORT duration ~ 1500ms)
             closeScreen = true
             syncState()
@@ -125,10 +130,10 @@ class BackupLocalPasswordViewModel(
     }
 
     private fun saveAccount() {
-        val accountType = account?.type ?: return
+        val accountNonNull = account ?: return
         viewModelScope.launch(Dispatchers.IO) {
             val kdfParams = BackupLocalModule.kdfDefault
-            val secretText = BackupLocalModule.getStringForEncryption(accountType)
+            val secretText = BackupLocalModule.getStringForEncryption(accountNonNull.type)
             val id = getId(secretText)
             val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: return@launch
 
@@ -148,7 +153,8 @@ class BackupLocalPasswordViewModel(
             val backup = WalletBackup(
                 crypto = crypto,
                 id = id,
-                type = BackupLocalModule.getAccountTypeString(accountType),
+                type = BackupLocalModule.getAccountTypeString(accountNonNull.type),
+                manualBackup = accountNonNull.isBackedUp,
                 timestamp = System.currentTimeMillis() / 1000,
                 version = 1
             )

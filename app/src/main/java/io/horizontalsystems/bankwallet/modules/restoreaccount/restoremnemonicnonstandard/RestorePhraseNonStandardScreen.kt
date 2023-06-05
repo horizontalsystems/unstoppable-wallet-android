@@ -284,7 +284,7 @@ fun RestorePhraseNonStandard(
     }
 
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName)
+        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
         openSelectCoinsScreen.invoke()
         viewModel.onSelectCoinsShown()
     }
