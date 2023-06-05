@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
@@ -112,7 +111,7 @@ class TronAccountManager(
                         if (event.to == address) {
                             val tokenType = TokenType.Eip20(event.contractAddress.base58)
 
-                            if (true /* TODO for testing only */ || decoration.fromAddress == address) {
+                            if (decoration.fromAddress == address) {
                                 foundTokens.add(FoundToken(tokenType, event.tokenInfo))
                             } else {
                                 suspiciousTokenTypes.add(tokenType)
@@ -138,15 +137,6 @@ class TronAccountManager(
         tronKit: TronKit
     ) {
         if (foundTokens.isEmpty() && suspiciousTokenTypes.isEmpty()) return
-
-        Log.e("e", "FOUND TOKEN TYPES: ${foundTokens.size}: \n ${
-            foundTokens.joinToString(separator = "\n") { "${it.tokenType.id} --- ${it.tokenInfo?.tokenName} --- ${it.tokenInfo?.tokenSymbol} --- ${it.tokenInfo?.tokenDecimal}" }
-        }")
-
-        Log.e(
-            "e",
-            "SUSPICIOUS TOKEN TYPES: ${suspiciousTokenTypes.size}: \n ${suspiciousTokenTypes.joinToString(separator = "\n") { "${it.id} " }}"
-        )
 
         try {
             val queries = (foundTokens.map { it.tokenType } + suspiciousTokenTypes).map { TokenQuery(blockchainType, it) }
@@ -199,13 +189,9 @@ class TronAccountManager(
     }
 
     private suspend fun handle(tokenInfos: List<TokenInfo>, account: Account, tronKit: TronKit) = withContext(Dispatchers.IO) {
-        Log.e("e", "handle tokens ${tokenInfos.size} \n ${tokenInfos.joinToString(separator = " ") { it.type.id }}")
-
         val existingWallets = walletManager.activeWallets
         val existingTokenTypeIds = existingWallets.map { it.token.type.id }
         val newTokenInfos = tokenInfos.filter { !existingTokenTypeIds.contains(it.type.id) }
-
-        Log.e("e", "New Tokens: ${newTokenInfos.size}")
 
         if (newTokenInfos.isEmpty()) return@withContext
 
