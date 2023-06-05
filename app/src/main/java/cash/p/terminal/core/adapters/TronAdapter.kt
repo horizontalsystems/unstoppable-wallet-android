@@ -7,8 +7,8 @@ import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.managers.TronKitWrapper
 import io.horizontalsystems.tronkit.TronKit
 import io.horizontalsystems.tronkit.models.Address
-import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.Network
+import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
@@ -46,8 +46,16 @@ class TronAdapter(kitWrapper: TronKitWrapper) : BaseTronAdapter(kitWrapper, deci
 
     // ISendTronAdapter
 
-    override suspend fun contract(amount: BigInteger, to: Address): Contract {
-        return tronKit.transferContract(amount, to)
+    override suspend fun estimateFee(amount: BigInteger, to: Address): List<Fee> {
+        val contract = tronKit.transferContract(amount, to)
+        return tronKit.estimateFee(contract)
+    }
+
+    override suspend fun send(amount: BigInteger, to: Address, feeLimit: Long?) {
+        if (signer == null) throw Exception()
+        val contract = tronKit.transferContract(amount, to)
+
+        tronKit.send(contract, signer, feeLimit)
     }
 
     private fun convertToAdapterState(syncState: TronKit.SyncState): AdapterState =

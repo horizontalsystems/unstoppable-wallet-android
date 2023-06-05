@@ -40,7 +40,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.solanakit.models.FullTransaction
-import io.horizontalsystems.tronkit.models.Contract
+import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -326,7 +326,8 @@ interface ISendSolanaAdapter {
 interface ISendTronAdapter {
     val balanceData: BalanceData
 
-    suspend fun contract(amount: BigInteger, to: TronAddress): Contract
+    suspend fun estimateFee(amount: BigInteger, to: TronAddress): List<Fee>
+    suspend fun send(amount: BigInteger, to: TronAddress, feeLimit: Long?)
 }
 
 interface IAccountsStorage {

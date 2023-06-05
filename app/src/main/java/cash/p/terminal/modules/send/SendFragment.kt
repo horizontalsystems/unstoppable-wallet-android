@@ -28,6 +28,9 @@ import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewMod
 import cash.p.terminal.modules.send.solana.SendSolanaModule
 import cash.p.terminal.modules.send.solana.SendSolanaScreen
 import cash.p.terminal.modules.send.solana.SendSolanaViewModel
+import cash.p.terminal.modules.send.tron.SendTronModule
+import cash.p.terminal.modules.send.tron.SendTronScreen
+import cash.p.terminal.modules.send.tron.SendTronViewModel
 import cash.p.terminal.modules.send.zcash.SendZCashModule
 import cash.p.terminal.modules.send.zcash.SendZCashScreen
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
@@ -123,6 +126,17 @@ class SendFragment : BaseFragment() {
                             SendSolanaScreen(
                                 findNavController(),
                                 sendSolanaViewModel,
+                                amountInputModeViewModel
+                            )
+                        }
+                    }
+                    BlockchainType.Tron -> {
+                        val factory = SendTronModule.Factory(wallet)
+                        val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
+                        setContent {
+                            SendTronScreen(
+                                findNavController(),
+                                sendTronViewModel,
                                 amountInputModeViewModel
                             )
                         }

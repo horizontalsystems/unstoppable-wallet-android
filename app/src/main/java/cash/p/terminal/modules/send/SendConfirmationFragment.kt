@@ -18,6 +18,8 @@ import cash.p.terminal.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
 import cash.p.terminal.modules.send.solana.SendSolanaConfirmationScreen
 import cash.p.terminal.modules.send.solana.SendSolanaViewModel
+import cash.p.terminal.modules.send.tron.SendTronConfirmationScreen
+import cash.p.terminal.modules.send.tron.SendTronViewModel
 import cash.p.terminal.modules.send.zcash.SendZCashConfirmationScreen
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.core.findNavController
@@ -64,6 +66,14 @@ class SendConfirmationFragment : BaseFragment() {
                             amountInputModeViewModel
                         )
                     }
+                    Type.Tron -> {
+                        val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment)
+                        SendTronConfirmationScreen(
+                            findNavController(),
+                            sendTronViewModel,
+                            amountInputModeViewModel
+                        )
+                    }
                     Type.Solana -> {
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment)
 
@@ -81,7 +91,7 @@ class SendConfirmationFragment : BaseFragment() {
 
     @Parcelize
     enum class Type : Parcelable {
-        Bitcoin, Bep2, ZCash, Solana
+        Bitcoin, Bep2, ZCash, Solana, Tron
     }
 
     companion object {
