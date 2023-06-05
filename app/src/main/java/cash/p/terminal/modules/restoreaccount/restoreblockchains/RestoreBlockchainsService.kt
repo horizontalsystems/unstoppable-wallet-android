@@ -8,7 +8,6 @@ import cash.p.terminal.core.coinSettingType
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
-import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.order
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supportedTokens
@@ -32,6 +31,8 @@ import io.reactivex.subjects.PublishSubject
 class RestoreBlockchainsService(
     private val accountName: String,
     private val accountType: AccountType,
+    private val manualBackup: Boolean,
+    private val fileBackup: Boolean,
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
@@ -192,7 +193,7 @@ class RestoreBlockchainsService(
     }
 
     fun restore() {
-        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true)
+        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, manualBackup, fileBackup)
         accountManager.save(account)
 
         restoreSettingsMap.forEach { (token, settings) ->

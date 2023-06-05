@@ -199,11 +199,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
 
             val icon: Int
             val iconTint: Color
-            if (
-                accountViewItem.backupRequired
-                || accountViewItem.migrationRequired
-                || accountViewItem.migrationRecommended
-            ) {
+            if (accountViewItem.showAlertIcon) {
                 icon = R.drawable.icon_warning_2_20
                 iconTint = ComposeAppTheme.colors.lucian
             } else {

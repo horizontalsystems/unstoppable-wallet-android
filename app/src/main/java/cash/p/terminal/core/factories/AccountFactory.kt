@@ -5,19 +5,20 @@ import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
-import java.util.*
+import java.util.UUID
 
 class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
 
-    override fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account {
+    override fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean, fileBackedUp: Boolean): Account {
         val id = UUID.randomUUID().toString()
 
         return Account(
-                id = id,
-                name = name,
-                type = type,
-                origin = origin,
-                isBackedUp = backedUp
+            id = id,
+            name = name,
+            type = type,
+            origin = origin,
+            isBackedUp = backedUp,
+            isFileBackedUp = fileBackedUp
         )
     }
 

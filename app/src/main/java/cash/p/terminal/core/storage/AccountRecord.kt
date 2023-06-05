@@ -12,6 +12,7 @@ data class AccountRecord(var id: String,
                          var type: String,
                          var origin: String,
                          var isBackedUp: Boolean,
+                         var isFileBackedUp: Boolean,
                          var words: SecretList?,
                          var passphrase: SecretString?,
                          var key: SecretString?) {

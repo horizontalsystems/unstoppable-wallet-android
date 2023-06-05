@@ -161,7 +161,7 @@ private fun RestoreLocalScreen(
     }
 
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName)
+        mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true)
         val keyboardController = LocalSoftwareKeyboardController.current
         coroutineScope.launch {
             keyboardController?.hide()

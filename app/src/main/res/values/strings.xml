@@ -1082,7 +1082,8 @@
     <string name="BackupRecoveryPhrase_ManualBackup">Manual Backup</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Local Backup</string>
     <string name="BackupRecoveryPhrase_Later">Later</string>
-    <string name="BackupRecoveryPhrase_BackupRequiredText">Select and go through one of the recovery phrase backup options to start using the wallet.</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Complete one of the wallet backup options to start using the wallet.</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">It\'s recommended to have a manual backup for each wallet.</string>
 
     <!-- Local Backup -->
     <string name="LocalBackup_Title">Local Backup</string>

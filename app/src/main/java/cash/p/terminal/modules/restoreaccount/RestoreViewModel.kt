@@ -12,14 +12,22 @@ class RestoreViewModel: ViewModel() {
     var accountName: String = ""
         private set
 
+    var manualBackup: Boolean = false
+        private set
+
+    var fileBackup: Boolean = false
+        private set
+
     var zCashConfig: ZCashConfig? = null
         private set
 
     var cancelZCashConfig: Boolean = false
 
-    fun setAccountData(accountType: AccountType, accountName: String) {
+    fun setAccountData(accountType: AccountType, accountName: String, manualBackup: Boolean, fileBackup: Boolean) {
         this.accountType = accountType
         this.accountName = accountName
+        this.manualBackup = manualBackup
+        this.fileBackup = fileBackup
     }
 
     fun setZCashConfig(config: ZCashConfig?) {
