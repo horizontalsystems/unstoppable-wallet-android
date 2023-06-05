@@ -7,7 +7,12 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.order
 import cash.p.terminal.core.supports
-import cash.p.terminal.entities.*
+import cash.p.terminal.entities.AccountType
+import cash.p.terminal.entities.BitcoinCashCoinType
+import cash.p.terminal.entities.CoinSettingType
+import cash.p.terminal.entities.CoinSettings
+import cash.p.terminal.entities.ConfiguredToken
+import cash.p.terminal.entities.derivation
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -29,6 +34,11 @@ class WatchAddressService(
             is AccountType.EvmPrivateKey -> Unit // N/A
             is AccountType.SolanaAddress -> {
                 token(BlockchainType.Solana, accountType)?.let {
+                    add(ConfiguredToken(it))
+                }
+            }
+            is AccountType.TronAddress -> {
+                token(BlockchainType.Tron, accountType)?.let {
                     add(ConfiguredToken(it))
                 }
             }

@@ -2,18 +2,14 @@ package cash.p.terminal.entities
 
 import android.os.Parcelable
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.PassphraseValidator
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.shorten
-import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
@@ -34,6 +30,7 @@ data class Account(
         get() = when (this.type) {
             is AccountType.EvmAddress -> true
             is AccountType.SolanaAddress -> true
+            is AccountType.TronAddress -> true
             is AccountType.HdExtendedKey -> this.type.hdExtendedKey.isPublic
             else -> false
         }
@@ -92,6 +89,9 @@ sealed class AccountType : Parcelable {
 
     @Parcelize
     data class SolanaAddress(val address: String) : AccountType()
+
+    @Parcelize
+    data class TronAddress(val address: String): AccountType()
 
     @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
@@ -185,6 +185,7 @@ sealed class AccountType : Parcelable {
             }
             is EvmAddress -> "EVM Address"
             is SolanaAddress -> "Solana Address"
+            is TronAddress -> "Tron Address"
             is EvmPrivateKey -> "EVM Private Key"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
@@ -219,6 +220,7 @@ sealed class AccountType : Parcelable {
         get() = when (this) {
             is EvmAddress -> this.address.shorten()
             is SolanaAddress -> this.address.shorten()
+            is TronAddress -> this.address.shorten()
             else -> this.description
         }
 

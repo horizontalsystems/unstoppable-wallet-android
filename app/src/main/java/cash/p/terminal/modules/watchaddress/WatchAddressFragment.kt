@@ -191,6 +191,15 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                             onValueChange = viewModel::onEnterAddress
                         )
                     }
+                    WatchAddressViewModel.Type.TronAddress -> {
+                        HSAddressInput(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            tokenQuery = TokenQuery(BlockchainType.Tron, TokenType.Native),
+                            coinCode = "TRX",
+                            navController = navController,
+                            onValueChange = viewModel::onEnterAddress
+                        )
+                    }
                     WatchAddressViewModel.Type.XPubKey -> {
                         FormsInputMultiline(
                             modifier = Modifier.padding(horizontal = 16.dp),

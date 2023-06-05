@@ -319,6 +319,9 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         }
         is AccountType.SolanaAddress ->
             this == BlockchainType.Solana
+
+        is AccountType.TronAddress ->
+            this == BlockchainType.Tron
     }
 }
 

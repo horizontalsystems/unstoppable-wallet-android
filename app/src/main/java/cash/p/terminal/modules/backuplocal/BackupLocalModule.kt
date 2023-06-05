@@ -8,6 +8,7 @@ object BackupLocalModule {
     private const val PRIVATE_KEY = "private_key"
     private const val ADDRESS = "address"
     private const val SOLANA_ADDRESS = "solana_address"
+    private const val TRON_ADDRESS = "tron_address"
     private const val HD_EXTENDED_LEY = "hd_extended_key"
 
     //Backup Json file data structure
@@ -48,6 +49,7 @@ object BackupLocalModule {
         is AccountType.EvmPrivateKey -> PRIVATE_KEY
         is AccountType.EvmAddress -> ADDRESS
         is AccountType.SolanaAddress -> SOLANA_ADDRESS
+        is AccountType.TronAddress -> TRON_ADDRESS
         is AccountType.HdExtendedKey -> HD_EXTENDED_LEY
     }
 
@@ -67,6 +69,7 @@ object BackupLocalModule {
             PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toBigInteger())
             ADDRESS -> AccountType.EvmAddress(data)
             SOLANA_ADDRESS -> AccountType.SolanaAddress(data)
+            TRON_ADDRESS -> AccountType.TronAddress(data)
             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(data)
             else -> throw IllegalStateException("Unknown account type")
         }
@@ -85,6 +88,7 @@ object BackupLocalModule {
         is AccountType.EvmPrivateKey -> accountType.key.toString()
         is AccountType.EvmAddress -> accountType.address
         is AccountType.SolanaAddress -> accountType.address
+        is AccountType.TronAddress -> accountType.address
         is AccountType.HdExtendedKey -> accountType.keySerialized
     }
 

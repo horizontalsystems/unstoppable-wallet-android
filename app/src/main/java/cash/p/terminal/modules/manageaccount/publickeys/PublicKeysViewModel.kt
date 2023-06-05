@@ -34,6 +34,7 @@ class PublicKeysViewModel(
             }
             is AccountType.EvmAddress -> accountType.address
             is AccountType.SolanaAddress -> accountType.address
+            is AccountType.TronAddress -> accountType.address
             else -> null
         }
 
