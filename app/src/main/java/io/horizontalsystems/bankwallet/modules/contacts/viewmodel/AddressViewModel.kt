@@ -68,7 +68,8 @@ class AddressViewModel(
                 BlockchainType.Zcash,
                 BlockchainType.Solana,
                 BlockchainType.BinanceChain,
-                BlockchainType.ECash
+                BlockchainType.ECash,
+                BlockchainType.Tron
             )
             val definedBlockchainTypes = definedAddresses?.map { it.blockchain.type } ?: listOf()
             val availableBlockchainUids = allBlockchainTypes.filter { !definedBlockchainTypes.contains(it) }.map { it.uid }

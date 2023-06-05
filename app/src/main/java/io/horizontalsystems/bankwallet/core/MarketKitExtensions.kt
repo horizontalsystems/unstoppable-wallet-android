@@ -243,6 +243,7 @@ val BlockchainType.order: Int
         BlockchainType.Solana -> 15
         BlockchainType.EthereumGoerli -> 16
         BlockchainType.ECash -> 17
+        BlockchainType.Tron -> 18
         else -> Int.MAX_VALUE
     }
 
