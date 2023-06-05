@@ -30,7 +30,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -69,12 +68,14 @@ import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBarMenuButton
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellMultilineLawrenceSection
 import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
@@ -293,7 +294,9 @@ private fun OptionCell(
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
+        Column(modifier = Modifier
+            .padding(start = 16.dp)
+            .weight(1f)) {
             body_leah(
                 text = title,
                 maxLines = 1,
@@ -327,12 +330,13 @@ private fun OptionCell(
 fun ZcashAppBar(
     onCloseClick: () -> Unit,
 ) {
-    TopAppBar(
-        modifier = Modifier.height(56.dp),
+    AppBar(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    modifier = Modifier.padding(end = 16.dp).size(24.dp),
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .size(24.dp),
                     painter = rememberAsyncImagePainter(
                         model = BlockchainType.Zcash.imageUrl,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
@@ -346,15 +350,13 @@ fun ZcashAppBar(
                 )
             }
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        actions = {
-            AppBarMenuButton(
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = onCloseClick,
-                description = stringResource(R.string.Button_Close)
+                onClick = onCloseClick
             )
-        },
-        elevation = 0.dp
+        )
     )
 }
 

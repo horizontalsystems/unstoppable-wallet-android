@@ -43,7 +43,7 @@ fun SearchBar(
     var searchText by remember { mutableStateOf("") }
 
     TopAppBar(
-        modifier = Modifier.height(56.dp),
+        modifier = Modifier.height(64.dp),
         title = {
             title3_leah(
                 text = if (searchMode) "" else title,

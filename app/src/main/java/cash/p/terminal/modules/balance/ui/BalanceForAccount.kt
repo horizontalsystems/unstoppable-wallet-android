@@ -3,15 +3,16 @@ package cash.p.terminal.modules.balance.ui
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,7 +27,9 @@ import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBarMenuButton
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.title3_leah
 
 @Composable
@@ -36,8 +39,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
     BackupAlert(navController)
 
     Column {
-        TopAppBar(
-            modifier = Modifier.height(56.dp),
+        AppBar(
             title = {
                 Row(
                     modifier = Modifier
@@ -66,17 +68,15 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                     )
                 }
             },
-            actions = {
-                AppBarMenuButton(
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Nfts_Title),
                     icon = R.drawable.ic_nft_24,
                     onClick = {
                         navController.slideFromRight(R.id.nftsFragment)
-                    },
-                    description = stringResource(R.string.Nfts_Title)
+                    }
                 )
-            },
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            elevation = 0.dp
+            )
         )
 
         val uiState = viewModel.uiState
