@@ -3,12 +3,26 @@ package cash.p.terminal.core.providers.nft
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.entities.nft.*
+import cash.p.terminal.entities.nft.NftAddressMetadata
+import cash.p.terminal.entities.nft.NftAssetBriefMetadata
+import cash.p.terminal.entities.nft.NftAssetMetadata
+import cash.p.terminal.entities.nft.NftAssetShortMetadata
+import cash.p.terminal.entities.nft.NftCollectionMetadata
+import cash.p.terminal.entities.nft.NftCollectionShortMetadata
+import cash.p.terminal.entities.nft.NftContractMetadata
+import cash.p.terminal.entities.nft.NftEventMetadata
 import cash.p.terminal.entities.nft.NftEventMetadata.EventType
-import io.horizontalsystems.marketkit.models.*
+import cash.p.terminal.entities.nft.NftUid
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.NftPrice
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class OpenSeaNftProvider(
     private val marketKit: MarketKitWrapper,
@@ -96,10 +110,14 @@ class OpenSeaNftProvider(
 
     override suspend fun assetsBriefMetadata(blockchainType: BlockchainType, nftUids: List<NftUid>): List<NftAssetBriefMetadata> {
         val chunkedNftUids = nftUids.chunked(30)
-        val assetsBriefList =  mutableListOf<NftAssetBriefMetadata>()
+        val assetsBriefList = mutableListOf<NftAssetBriefMetadata>()
         for (nftUidsChunk in chunkedNftUids) {
-            val response = service.assets(contractAddresses = nftUidsChunk.map { it.contractAddress }, tokenIds = nftUidsChunk.map { it.tokenId })
-            assetsBriefList.addAll(assetsBrief(blockchainType, response.assets))
+            try {
+                val response = service.assets(contractAddresses = nftUidsChunk.map { it.contractAddress }, tokenIds = nftUidsChunk.map { it.tokenId })
+                assetsBriefList.addAll(assetsBrief(blockchainType, response.assets))
+            } catch (error: Throwable) {
+                continue
+            }
         }
         return assetsBriefList
     }
