@@ -20,7 +20,7 @@ class TronKitManager(
     private val appConfigProvider: AppConfigProvider,
     backgroundManager: BackgroundManager
 ) : BackgroundManager.Listener {
-    private val network = Network.NileTestnet
+    private val network = Network.Mainnet
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
 
