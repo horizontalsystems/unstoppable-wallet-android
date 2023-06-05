@@ -113,7 +113,6 @@ class BalanceViewItemFactory {
         BlockchainType.Dash,
         BlockchainType.Zcash -> 10
         BlockchainType.Ethereum,
-        BlockchainType.EthereumGoerli,
         BlockchainType.BinanceSmartChain,
         BlockchainType.BinanceChain,
         BlockchainType.Polygon,

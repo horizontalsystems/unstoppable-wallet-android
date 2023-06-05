@@ -19,19 +19,26 @@ import kotlinx.coroutines.withContext
 
 class RestoreLocalViewModel(
     private val backupJsonString: String?,
+    fileName: String?,
     accountFactory: IAccountFactory,
 ) : ViewModel() {
 
     private var passphrase = ""
     private var passphraseState: DataState.Error? = null
     private var showButtonSpinner = false
-    private var closeScreen = false
     private var walletBackup: BackupLocalModule.WalletBackup? = null
     private val encryptDecryptManager = EncryptDecryptManager()
     private var parseError: Exception? = null
     private var accountType: AccountType? = null
+    private var manualBackup = false
 
     val accountName by lazy {
+        fileName?.let { name ->
+            return@lazy name
+                .replace(".json", "")
+                .replace("UW_Backup_", "")
+                .replace("_", " ")
+        }
         accountFactory.getNextAccountName()
     }
 
@@ -39,9 +46,9 @@ class RestoreLocalViewModel(
         RestoreLocalModule.UiState(
             passphraseState = null,
             showButtonSpinner = showButtonSpinner,
-            closeScreen = closeScreen,
             parseError = parseError,
             accountType = accountType,
+            manualBackup = manualBackup
         )
     )
         private set
@@ -50,6 +57,7 @@ class RestoreLocalViewModel(
         viewModelScope.launch {
             try {
                 walletBackup = Gson().fromJson(backupJsonString, BackupLocalModule.WalletBackup::class.java)
+                manualBackup = walletBackup?.manualBackup ?: false
             } catch (e: Exception) {
                 parseError = e
                 syncState()
@@ -87,11 +95,6 @@ class RestoreLocalViewModel(
         }
     }
 
-    fun closeScreenCalled() {
-        closeScreen = false
-        syncState()
-    }
-
     fun onSelectCoinsShown() {
         accountType = null
         syncState()
@@ -101,9 +104,9 @@ class RestoreLocalViewModel(
         uiState = RestoreLocalModule.UiState(
             passphraseState = passphraseState,
             showButtonSpinner = showButtonSpinner,
-            closeScreen = closeScreen,
             parseError = parseError,
             accountType = accountType,
+            manualBackup = manualBackup
         )
     }
 

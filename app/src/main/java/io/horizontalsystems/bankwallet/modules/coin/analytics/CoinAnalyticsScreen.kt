@@ -2,12 +2,17 @@ package io.horizontalsystems.bankwallet.modules.coin.analytics
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
@@ -19,7 +24,13 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
-import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.*
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsBlockHeader
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsChart
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContainer
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContentNumber
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsDataLockedBlockNoSubscription
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsDataLockedBlockNotActivated
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsFooterCell
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
@@ -29,8 +40,15 @@ import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
+import io.horizontalsystems.bankwallet.modules.subscription.ActivateSubscriptionFragment
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
+import io.horizontalsystems.bankwallet.ui.compose.components.StackedBarChart
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
@@ -42,6 +60,7 @@ fun CoinAnalyticsScreen(
     val viewModel = viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
 
     val uiState = viewModel.uiState
+    val context = LocalContext.current
 
     HSSwipeRefresh(
         refreshing = uiState.isRefreshing,
@@ -61,7 +80,17 @@ fun CoinAnalyticsScreen(
                             )
                         }
                         is AnalyticsViewItem.Preview -> {
-                            AnalyticsDataPreview(item.blocks, navController)
+                            AnalyticsDataPreview(
+                                previewBlocks = item.blocks,
+                                subscriptionAddress = item.subscriptionAddress,
+                                onClickLearnMore = {
+                                    LinkHelper.openLinkInAppBrowser(context, viewModel.analyticsLink)
+                                },
+                                onClickActivate = {
+                                    navController.slideFromBottom(R.id.activateSubscription, ActivateSubscriptionFragment.prepareParams(it))
+                                },
+                                navController = navController
+                            )
                         }
                         is AnalyticsViewItem.Analytics -> {
                             AnalyticsData(item.blocks, navController, fragmentManager)
@@ -102,11 +131,24 @@ private fun AnalyticsData(
 @Composable
 private fun AnalyticsDataPreview(
     previewBlocks: List<CoinAnalyticsModule.PreviewBlockViewItem>,
+    subscriptionAddress: String?,
+    onClickLearnMore: () -> Unit,
+    onClickActivate: (String) -> Unit,
     navController: NavController,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
-            AnalyticsDataLockedBlock()
+            if (subscriptionAddress != null) {
+                AnalyticsDataLockedBlockNotActivated(
+                    onClickActivate = {
+                        onClickActivate.invoke(subscriptionAddress)
+                    }
+                )
+            } else {
+                AnalyticsDataLockedBlockNoSubscription(
+                    onClickLearnMore = onClickLearnMore
+                )
+            }
         }
         items(previewBlocks) { block ->
             AnalyticsPreviewBlock(block, navController)

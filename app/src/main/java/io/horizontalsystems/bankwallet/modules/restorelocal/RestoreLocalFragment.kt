@@ -58,6 +58,7 @@ import kotlinx.coroutines.launch
 class RestoreLocalFragment : BaseFragment() {
     companion object{
         const val jsonFileKey = "jsonFileKey"
+        const val fileNameKey = "fileNameKey"
     }
 
     override fun onCreateView(
@@ -72,14 +73,20 @@ class RestoreLocalFragment : BaseFragment() {
             val popUpToInclusiveId =
                 arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
+            val popUpInclusive =
+                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+
             val backupJsonString = arguments?.getString(jsonFileKey)
+            val fileName = arguments?.getString(fileNameKey)
 
             setContent {
                 ComposeAppTheme {
                     RestoreLocalNavHost(
                         backupJsonString,
+                        fileName,
                         findNavController(),
-                        popUpToInclusiveId
+                        popUpToInclusiveId,
+                        popUpInclusive
                     )
                 }
             }
@@ -91,8 +98,10 @@ class RestoreLocalFragment : BaseFragment() {
 @Composable
 private fun RestoreLocalNavHost(
     backupJsonString: String?,
+    fileName: String?,
     fragmentNavController: NavController,
-    popUpToInclusiveId: Int
+    popUpToInclusiveId: Int,
+    popUpInclusive: Boolean
 ) {
     val navController = rememberAnimatedNavController()
     val mainViewModel: RestoreViewModel = viewModel()
@@ -103,17 +112,17 @@ private fun RestoreLocalNavHost(
         composable("restore_local") {
             RestoreLocalScreen(
                 backupJsonString = backupJsonString,
-                navController = navController,
+                fileName = fileName,
                 mainViewModel = mainViewModel,
-                openSelectCoins = { navController.navigate("restore_select_coins") },
-            )
+                onBackClick = { fragmentNavController.popBackStack() },
+            ) { navController.navigate("restore_select_coins") }
         }
         composablePage("restore_select_coins") {
             ManageWalletsScreen(
                 mainViewModel = mainViewModel,
                 openZCashConfigure = { navController.navigate("zcash_configure") },
                 onBackClick = { navController.popBackStack() }
-            ) { fragmentNavController.popBackStack(popUpToInclusiveId, true) }
+            ) { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
         }
         composablePopup("zcash_configure") {
             ZcashConfigureScreen(
@@ -134,11 +143,12 @@ private fun RestoreLocalNavHost(
 @Composable
 private fun RestoreLocalScreen(
     backupJsonString: String?,
-    navController: NavController,
+    fileName: String?,
     mainViewModel: RestoreViewModel,
+    onBackClick: () -> Unit,
     openSelectCoins: () -> Unit,
 ) {
-    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString))
+    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName))
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
@@ -146,17 +156,12 @@ private fun RestoreLocalScreen(
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
             Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
-            navController.popBackStack()
+            onBackClick.invoke()
         }
     }
 
-    if (uiState.closeScreen) {
-        navController.popBackStack()
-        viewModel.closeScreenCalled()
-    }
-
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName)
+        mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true)
         val keyboardController = LocalSoftwareKeyboardController.current
         coroutineScope.launch {
             keyboardController?.hide()
@@ -176,9 +181,7 @@ private fun RestoreLocalScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
-                            onClick = {
-                                navController.popBackStack()
-                            }
+                            onClick = onBackClick
                         )
                     )
                 )

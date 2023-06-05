@@ -55,6 +55,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import java.math.BigDecimal
@@ -332,9 +333,9 @@ fun LegacyFeeSettings(
 
 @Composable
 fun Cautions(cautions: List<CautionViewItem>) {
-    Spacer(modifier = Modifier.height(32.dp))
+    VSpacer(16.dp)
 
-    val modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
+    val modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
 
     Column(
         modifier = Modifier

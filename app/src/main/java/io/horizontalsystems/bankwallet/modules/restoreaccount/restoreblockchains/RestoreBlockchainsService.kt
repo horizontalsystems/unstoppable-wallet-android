@@ -19,12 +19,7 @@ import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsModule.InternalItem
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -32,6 +27,8 @@ import io.reactivex.subjects.PublishSubject
 class RestoreBlockchainsService(
     private val accountName: String,
     private val accountType: AccountType,
+    private val manualBackup: Boolean,
+    private val fileBackup: Boolean,
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
@@ -192,7 +189,7 @@ class RestoreBlockchainsService(
     }
 
     fun restore() {
-        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true)
+        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, manualBackup, fileBackup)
         accountManager.save(account)
 
         restoreSettingsMap.forEach { (token, settings) ->

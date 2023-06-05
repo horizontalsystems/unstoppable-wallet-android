@@ -4,7 +4,13 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.customCoinPrefix
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.SyncInfo
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.HsPeriodType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.MarketInfo
+import io.horizontalsystems.marketkit.models.NftTopCollection
+import io.horizontalsystems.marketkit.models.TokenQuery
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -61,9 +67,9 @@ class MarketKitWrapper(
 
     fun marketInfoDetailsSingle(coinUid: String, currencyCode: String) = marketKit.marketInfoDetailsSingle(coinUid, currencyCode)
 
-    fun analyticsSingle(coinUid: String, currencyCode: String) = marketKit.analyticsSingle(coinUid, currencyCode)
+    fun analyticsSingle(coinUid: String, currencyCode: String, authToken: String) = marketKit.analyticsSingle(coinUid, currencyCode, authToken)
 
-    fun analyticsPreviewSingle(coinUid: String) = marketKit.analyticsPreviewSingle(coinUid)
+    fun analyticsPreviewSingle(coinUid: String, addresses: List<String>) = marketKit.analyticsPreviewSingle(coinUid, addresses)
 
     fun marketInfoTvlSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.marketInfoTvlSingle(coinUid, currencyCode, timePeriod)
@@ -164,6 +170,7 @@ class MarketKitWrapper(
     fun activeAddressRanksSingle(currencyCode: String) = marketKit.activeAddressRanksSingle(currencyCode)
     fun transactionCountsRanksSingle(currencyCode: String) = marketKit.transactionCountsRanksSingle(currencyCode)
     fun revenueRanksSingle(currencyCode: String) = marketKit.revenueRanksSingle(currencyCode)
+    fun holdersRanksSingle(currencyCode: String) = marketKit.holderRanksSingle(currencyCode)
 
     // Overview
 
@@ -195,6 +202,10 @@ class MarketKitWrapper(
 
     suspend fun nftCollections(): List<NftTopCollection> =
         marketKit.nftTopCollections()
+
+    fun authKey(address: String) = marketKit.authKey(address)
+    fun authenticate(signature: String, address: String) =
+        marketKit.authenticate(signature, address)
 
     // Misc
 

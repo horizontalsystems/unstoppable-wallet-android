@@ -49,6 +49,10 @@ sealed class EvmError(message: String? = null) : Throwable(message) {
     class RpcError(message: String?) : EvmError(message)
 }
 
+sealed class PasswordError : Throwable() {
+    object PasswordInvalid : PasswordError()
+}
+
 sealed class EvmAddressError : Throwable() {
     object InvalidAddress : EvmAddressError() {
         override fun getLocalizedMessage(): String {

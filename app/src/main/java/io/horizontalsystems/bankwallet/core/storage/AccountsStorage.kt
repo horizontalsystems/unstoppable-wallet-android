@@ -49,7 +49,14 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             else -> null
                         }
-                        Account(record.id, record.name, accountType!!, AccountOrigin.valueOf(record.origin), record.isBackedUp)
+                        Account(
+                            record.id,
+                            record.name,
+                            accountType!!,
+                            AccountOrigin.valueOf(record.origin),
+                            record.isBackedUp,
+                            record.isFileBackedUp
+                        )
                     } catch (ex: Exception) {
                         null
                     }
@@ -124,6 +131,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 type = accountType,
                 origin = account.origin.value,
                 isBackedUp = account.isBackedUp,
+                isFileBackedUp = account.isFileBackedUp,
                 words = words,
                 passphrase = passphrase,
                 key = key

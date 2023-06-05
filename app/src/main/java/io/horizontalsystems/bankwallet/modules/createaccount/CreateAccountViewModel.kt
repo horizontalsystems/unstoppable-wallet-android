@@ -12,7 +12,11 @@ import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.normalizeNFKD
 import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -62,6 +66,7 @@ class CreateAccountViewModel(
             accountName,
             accountType,
             AccountOrigin.Created,
+            false,
             false
         )
 
@@ -76,7 +81,7 @@ class CreateAccountViewModel(
     }
 
     fun onChangePassphrase(v: String) {
-        if (passphraseValidator.validate(v)) {
+        if (passphraseValidator.containsValidCharacters(v)) {
             passphraseState = null
             passphrase = v
         } else {

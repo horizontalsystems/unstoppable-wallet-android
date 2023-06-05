@@ -40,11 +40,18 @@ class CautionViewItemFactory(
                     CautionViewItem.Type.Warning
                 )
             }
+            is UniswapWarnings.PriceImpactForbidden -> {
+                CautionViewItem(
+                    Translator.getString(R.string.Swap_PriceImpact),
+                    Translator.getString(R.string.Swap_PriceImpactTooHigh, warning.providerName),
+                    CautionViewItem.Type.Error
+                )
+            }
             UniswapWarnings.PriceImpactWarning -> {
                 CautionViewItem(
                     Translator.getString(R.string.Swap_PriceImpact),
-                    Translator.getString(R.string.Swap_PriceImpactTooHigh),
-                    CautionViewItem.Type.Warning
+                    Translator.getString(R.string.Swap_PriceImpactWarning),
+                    CautionViewItem.Type.Error
                 )
             }
             else -> {

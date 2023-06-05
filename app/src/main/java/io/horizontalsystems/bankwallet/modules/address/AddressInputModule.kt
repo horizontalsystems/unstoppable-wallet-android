@@ -27,7 +27,6 @@ object AddressInputModule {
                     addressViewModel.addAddressHandler(AddressHandlerPure())
                 }
                 BlockchainType.Ethereum,
-                BlockchainType.EthereumGoerli,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
                 BlockchainType.Avalanche,
@@ -68,7 +67,6 @@ object AddressInputModule {
                     addressViewModel.addAddressHandler(AddressHandlerPure())
                 }
                 BlockchainType.Ethereum,
-                BlockchainType.EthereumGoerli,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
                 BlockchainType.Avalanche,

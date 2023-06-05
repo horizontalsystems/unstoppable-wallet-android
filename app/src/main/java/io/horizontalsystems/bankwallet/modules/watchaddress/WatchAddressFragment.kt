@@ -62,7 +62,9 @@ class WatchAddressFragment : BaseFragment() {
                 ComposeAppTheme {
                     val popUpToInclusiveId =
                         arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.watchAddressFragment) ?: R.id.watchAddressFragment
-                    WatchAddressScreen(findNavController(), popUpToInclusiveId)
+                    val inclusive =
+                        arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
+                    WatchAddressScreen(findNavController(), popUpToInclusiveId, inclusive)
                 }
             }
         }
@@ -70,7 +72,7 @@ class WatchAddressFragment : BaseFragment() {
 }
 
 @Composable
-fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
+fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, inclusive: Boolean) {
     val view = LocalView.current
 
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
@@ -90,7 +92,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                 iconTint = R.color.white
             )
             delay(300)
-            navController.popBackStack(popUpToInclusiveId, true)
+            navController.popBackStack(popUpToInclusiveId, inclusive)
         }
     }
 
@@ -103,6 +105,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                 SelectBlockchainsModule.accountTypeKey to accountType,
                 SelectBlockchainsModule.accountNameKey to accountName,
                 ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                ManageAccountsModule.popOffInclusiveKey to inclusive,
             )
         )
     }

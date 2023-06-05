@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.importwallet
 
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +37,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
@@ -51,7 +54,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 
 class ImportWalletFragment : BaseFragment() {
 
@@ -65,10 +70,13 @@ class ImportWalletFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             val popUpToInclusiveId =
-                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
+                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.importWalletFragment) ?: R.id.importWalletFragment
+
+            val inclusive =
+                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
 
             setContent {
-                ImportWalletScreen(findNavController(), popUpToInclusiveId)
+                ImportWalletScreen(findNavController(), popUpToInclusiveId, inclusive)
             }
         }
     }
@@ -78,33 +86,40 @@ class ImportWalletFragment : BaseFragment() {
 @Composable
 private fun ImportWalletScreen(
     navController: NavController,
-    popUpToInclusiveId: Int
+    popUpToInclusiveId: Int,
+    inclusive: Boolean
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let {
-            context.contentResolver.openInputStream(it)?.use { inputStream ->
+        uri?.let { uriNonNull ->
+            context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
                 try {
                     inputStream.bufferedReader().use { br ->
                         val jsonString = br.readText()
                         //validate json format
                         val json = Gson().fromJson(jsonString, BackupLocalModule.WalletBackup::class.java)
                         navController.navigateWithTermsAccepted {
+                            val fileName = context.getFileName(uriNonNull)
                             navController.slideFromBottom(
                                 R.id.restoreLocalFragment,
                                 bundleOf(
                                     ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-                                    RestoreLocalFragment.jsonFileKey to jsonString
+                                    ManageAccountsModule.popOffInclusiveKey to inclusive,
+                                    RestoreLocalFragment.jsonFileKey to jsonString,
+                                    RestoreLocalFragment.fileNameKey to fileName
                                 )
                             )
                         }
                     }
                 } catch (e: Throwable) {
                     //show json parsing error
-                    coroutineScope.launch { bottomSheetState.show() }
+                    coroutineScope.launch {
+                        delay(300)
+                        bottomSheetState.show()
+                    }
                 }
             }
         }
@@ -154,6 +169,23 @@ private fun ImportWalletScreen(
                 ) {
                     VSpacer(12.dp)
                     ImportOption(
+                        title = stringResource(R.string.ImportWallet_RecoveryPhrase),
+                        description = stringResource(R.string.ImportWallet_RecoveryPhrase_Description),
+                        icon = R.drawable.ic_edit_24,
+                        onClick = {
+                            navController.navigateWithTermsAccepted {
+                                navController.slideFromBottom(
+                                    R.id.restoreAccountFragment,
+                                    bundleOf(
+                                        ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                                        ManageAccountsModule.popOffInclusiveKey to inclusive,
+                                    )
+                                )
+                            }
+                        }
+                    )
+                    VSpacer(12.dp)
+                    ImportOption(
                         title = stringResource(R.string.ImportWallet_BackupFile),
                         description = stringResource(R.string.ImportWallet_BackupFile_Description),
                         icon = R.drawable.ic_download_24,
@@ -162,31 +194,6 @@ private fun ImportWalletScreen(
                         }
                     )
                     VSpacer(12.dp)
-                    ImportOption(
-                        title = stringResource(R.string.ImportWallet_RecoveryPhrase),
-                        description = stringResource(R.string.ImportWallet_RecoveryPhrase_Description),
-                        icon = R.drawable.ic_edit_24,
-                        onClick = {
-                            navController.navigateWithTermsAccepted {
-                                navController.slideFromBottom(
-                                    R.id.restoreAccountFragment,
-                                    bundleOf(ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId)
-                                )
-                            }
-                        }
-                    )
-                    VSpacer(12.dp)
-                    ImportOption(
-                        title = stringResource(R.string.ImportWallet_WatchAddress),
-                        description = stringResource(R.string.ImportWallet_WatchAddress_Description),
-                        icon = R.drawable.icon_binocule_24,
-                        onClick = {
-                            navController.slideFromRight(
-                                R.id.watchAddressFragment,
-                                bundleOf(ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId)
-                            )
-                        }
-                    )
                 }
             }
         }
@@ -219,3 +226,15 @@ private fun ImportOption(
         }
     }
 }
+
+fun Context.getFileName(uri: Uri): String? = when(uri.scheme) {
+    ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
+    else -> uri.path?.let(::File)?.name
+}
+
+private fun Context.getContentFileName(uri: Uri): String? = runCatching {
+    contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        cursor.moveToFirst()
+        return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
+    }
+}.getOrNull()

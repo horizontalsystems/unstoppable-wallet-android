@@ -68,6 +68,7 @@ interface IAdapterManager {
 interface ILocalStorage {
     var amountInputType: AmountInputType?
     var baseCurrencyCode: String?
+    var authToken: String?
 
     var baseBitcoinProvider: String?
     var baseLitecoinProvider: String?
@@ -151,7 +152,7 @@ interface IBackupManager {
 }
 
 interface IAccountFactory {
-    fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
+    fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean, fileBackup: Boolean): Account
     fun watchAccount(name: String, type: AccountType): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String

@@ -116,10 +116,8 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                     }
 
                     val args = when (mode) {
-                        ManageAccountsModule.Mode.Manage -> null
-                        ManageAccountsModule.Mode.Switcher -> {
-                            ManageAccountsModule.prepareParams(R.id.manageAccountsFragment)
-                        }
+                        ManageAccountsModule.Mode.Manage -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, false)
+                        ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, true)
                     }
 
                     val actions = listOf(
@@ -201,11 +199,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
 
             val icon: Int
             val iconTint: Color
-            if (
-                accountViewItem.backupRequired
-                || accountViewItem.migrationRequired
-                || accountViewItem.migrationRecommended
-            ) {
+            if (accountViewItem.showAlertIcon) {
                 icon = R.drawable.icon_warning_2_20
                 iconTint = ComposeAppTheme.colors.lucian
             } else {

@@ -48,6 +48,7 @@ class CoinAnalyticsViewModel(
     private val code: String
 ) : ViewModel() {
 
+    val analyticsLink by service::analyticsLink
     private val disposables = CompositeDisposable()
 
     private val currency = service.currency
@@ -67,6 +68,7 @@ class CoinAnalyticsViewModel(
                 when (state) {
                     is DataState.Loading -> {
                         viewState = ViewState.Loading
+                        syncState()
                     }
                     is DataState.Success -> {
                         viewState = ViewState.Success
@@ -75,6 +77,7 @@ class CoinAnalyticsViewModel(
                     }
                     is DataState.Error -> {
                         viewState = ViewState.Error(state.error)
+                        syncState()
                     }
                 }
             }
@@ -82,7 +85,9 @@ class CoinAnalyticsViewModel(
                 disposables.add(it)
             }
 
-        service.start()
+        viewModelScope.launch {
+            service.start()
+        }
     }
 
     fun refresh() {
@@ -101,18 +106,25 @@ class CoinAnalyticsViewModel(
     }
 
     private fun syncState() {
-        uiState = CoinAnalyticsModule.UiState(
-            viewState = viewState,
-            viewItem = analyticsViewItem,
-            isRefreshing = isRefreshing
-        )
+        viewModelScope.launch {
+            uiState = CoinAnalyticsModule.UiState(
+                viewState = viewState,
+                viewItem = analyticsViewItem,
+                isRefreshing = isRefreshing
+            )
+        }
     }
 
     private fun viewItem(item: CoinAnalyticsService.AnalyticData): AnalyticsViewItem {
         if (item.analyticsPreview != null) {
             val viewItems = getPreviewViewItems(item.analyticsPreview)
             if (viewItems.isNotEmpty()) {
-                return AnalyticsViewItem.Preview(viewItems)
+                val subscriptionAddress = item.analyticsPreview.subscriptions
+                    ?.sortedByDescending { it.deadline }
+                    ?.firstOrNull()
+                    ?.address
+
+                return AnalyticsViewItem.Preview(viewItems, subscriptionAddress)
             }
         } else if (item.analytics != null) {
             val viewItems = getViewItems(item.analytics)
@@ -245,6 +257,15 @@ class CoinAnalyticsViewModel(
                         )
                     )
                 }
+            }
+            analytics.holdersRank?.let{holdersRank ->
+                footerItems.add(
+                    FooterItem(
+                        title = ResString(R.string.CoinAnalytics_HoldersRank),
+                        value = getRank(holdersRank),
+                        action = CoinAnalyticsModule.ActionType.OpenRank(RankType.HoldersRank)
+                    ),
+                )
             }
             if (footerItems.isEmpty()) {
                 return@let
@@ -464,6 +485,9 @@ class CoinAnalyticsViewModel(
                 PreviewFooterItem(R.string.Coin_Analytics_Blockchain2, true, image = ImageSource.Local(R.drawable.ic_platform_placeholder_32)),
                 PreviewFooterItem(R.string.Coin_Analytics_Blockchain3, true, image = ImageSource.Local(R.drawable.ic_platform_placeholder_32))
             )
+            if (analyticsPreview.holdersRank) {
+                footerItems.add(PreviewFooterItem(R.string.CoinAnalytics_HoldersRank, true))
+            }
             blocks.add(
                 PreviewBlockViewItem(
                     title = R.string.CoinAnalytics_Holders,

@@ -7,6 +7,7 @@ class AppConfigProvider {
 
      val companyWebPageLink: String = "https://horizontalsystems.io"
      val appWebPageLink: String = "https://unstoppable.money"
+     val analyticsLink: String = "https://unstoppable.money/analytics"
      val appGithubLink: String = "https://github.com/horizontalsystems/unstoppable-wallet-android"
      val appTwitterLink: String = "https://twitter.com/UnstoppableByHS"
      val appTelegramLink: String = "https://t.me/unstoppable_announcements"

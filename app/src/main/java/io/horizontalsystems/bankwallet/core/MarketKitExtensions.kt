@@ -102,8 +102,8 @@ val TokenQuery.protocolType: String?
         is TokenType.Eip20 -> {
             when (blockchainType) {
                 BlockchainType.Ethereum -> "ERC20"
-                BlockchainType.EthereumGoerli -> "Goerli ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
+                BlockchainType.Tron -> "TRC20"
                 BlockchainType.Polygon -> "Polygon"
                 BlockchainType.Avalanche -> "Avalanche"
                 BlockchainType.Optimism -> "Optimism"
@@ -135,7 +135,6 @@ val TokenQuery.isSupported: Boolean
             tokenType is TokenType.Native
         }
         BlockchainType.Ethereum,
-        BlockchainType.EthereumGoerli,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
         BlockchainType.Optimism,
@@ -167,7 +166,6 @@ val Blockchain.description: String
         BlockchainType.Dash -> "DASH"
         BlockchainType.BinanceChain -> "BNB, BEP2 tokens"
         BlockchainType.Ethereum -> "ETH, ERC20 tokens"
-        BlockchainType.EthereumGoerli -> "ETH, ERC20 tokens"
         BlockchainType.BinanceSmartChain -> "BNB, BEP20 tokens"
         BlockchainType.Polygon -> "MATIC, ERC20 tokens"
         BlockchainType.Avalanche -> "AVAX, ERC20 tokens"
@@ -241,7 +239,6 @@ val BlockchainType.order: Int
         BlockchainType.ArbitrumOne -> 13
         BlockchainType.Optimism -> 14
         BlockchainType.Solana -> 15
-        BlockchainType.EthereumGoerli -> 16
         BlockchainType.ECash -> 17
         BlockchainType.Tron -> 18
         else -> Int.MAX_VALUE
@@ -250,7 +247,6 @@ val BlockchainType.order: Int
 val BlockchainType.tokenIconPlaceholder: Int
     get() = when (this) {
         BlockchainType.Ethereum -> R.drawable.erc20
-        BlockchainType.EthereumGoerli -> R.drawable.erc20_goerli
         BlockchainType.BinanceSmartChain -> R.drawable.bep20
         BlockchainType.BinanceChain -> R.drawable.bep2
         BlockchainType.Avalanche -> R.drawable.avalanche_erc20
@@ -306,7 +302,6 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         }
         is AccountType.EvmAddress ->
             this == BlockchainType.Ethereum
-                    || this == BlockchainType.EthereumGoerli
                     || this == BlockchainType.BinanceSmartChain
                     || this == BlockchainType.Polygon
                     || this == BlockchainType.Avalanche
