@@ -170,6 +170,7 @@ class MarketKitWrapper(
     fun activeAddressRanksSingle(currencyCode: String) = marketKit.activeAddressRanksSingle(currencyCode)
     fun transactionCountsRanksSingle(currencyCode: String) = marketKit.transactionCountsRanksSingle(currencyCode)
     fun revenueRanksSingle(currencyCode: String) = marketKit.revenueRanksSingle(currencyCode)
+    fun holdersRanksSingle(currencyCode: String) = marketKit.holderRanksSingle(currencyCode)
 
     // Overview
 

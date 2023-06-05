@@ -258,6 +258,15 @@ class CoinAnalyticsViewModel(
                     )
                 }
             }
+            analytics.holdersRank?.let{holdersRank ->
+                footerItems.add(
+                    FooterItem(
+                        title = ResString(R.string.CoinAnalytics_HoldersRank),
+                        value = getRank(holdersRank),
+                        action = CoinAnalyticsModule.ActionType.OpenRank(RankType.HoldersRank)
+                    ),
+                )
+            }
             if (footerItems.isEmpty()) {
                 return@let
             }
@@ -476,6 +485,9 @@ class CoinAnalyticsViewModel(
                 PreviewFooterItem(R.string.Coin_Analytics_Blockchain2, true, image = ImageSource.Local(R.drawable.ic_platform_placeholder_32)),
                 PreviewFooterItem(R.string.Coin_Analytics_Blockchain3, true, image = ImageSource.Local(R.drawable.ic_platform_placeholder_32))
             )
+            if (analyticsPreview.holdersRank) {
+                footerItems.add(PreviewFooterItem(R.string.CoinAnalytics_HoldersRank, true))
+            }
             blocks.add(
                 PreviewBlockViewItem(
                     title = R.string.CoinAnalytics_Holders,
