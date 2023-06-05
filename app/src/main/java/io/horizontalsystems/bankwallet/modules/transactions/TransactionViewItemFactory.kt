@@ -520,7 +520,7 @@ class TransactionViewItemFactory(
         return TransactionViewItem(
             uid = uid,
             progress = progress,
-            title = contract?.javaClass?.simpleName ?: Translator.getString(R.string.Transactions_Unknown),
+            title = contract?.label ?: Translator.getString(R.string.Transactions_Unknown),
             subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
             primaryValue = null,
             secondaryValue = null,

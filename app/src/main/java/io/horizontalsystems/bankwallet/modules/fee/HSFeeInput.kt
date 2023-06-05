@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import java.math.BigDecimal
@@ -39,6 +40,8 @@ fun HSFeeInput(
 
 @Composable
 fun HSFeeInputRaw(
+    title: String = stringResource(R.string.Send_Fee),
+    info: String = stringResource(R.string.Send_Fee_Info),
     coinCode: String,
     coinDecimal: Int,
     fee: BigDecimal?,
@@ -54,10 +57,37 @@ fun HSFeeInputRaw(
     }
 
     FeeCell(
-        title = stringResource(R.string.Send_Fee),
-        info = stringResource(R.string.Send_Fee_Info),
+        title = title,
+        info = info,
         value = formatted,
         viewState = null,
+        navController = navController
+    )
+}
+
+@Composable
+fun HSFeeInputRawWithViewState(
+    title: String = stringResource(R.string.Send_Fee),
+    info: String = stringResource(R.string.Send_Fee_Info),
+    coinCode: String,
+    coinDecimal: Int,
+    fee: BigDecimal?,
+    viewState: ViewState,
+    amountInputType: AmountInputType,
+    rate: CurrencyValue?,
+    navController: NavController
+) {
+    var formatted by remember { mutableStateOf<FeeItem?>(null) }
+
+    LaunchedEffect(fee, amountInputType, rate) {
+        formatted = getFormatted(fee, rate, coinCode, coinDecimal, amountInputType)
+    }
+
+    FeeCell(
+        title = title,
+        info = info,
+        value = formatted,
+        viewState = viewState,
         navController = navController
     )
 }

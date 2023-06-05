@@ -28,6 +28,9 @@ import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.EvmKitWrapp
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
+import io.horizontalsystems.bankwallet.modules.send.tron.SendTronModule
+import io.horizontalsystems.bankwallet.modules.send.tron.SendTronScreen
+import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
@@ -124,6 +127,17 @@ class SendFragment : BaseFragment() {
                             SendSolanaScreen(
                                 findNavController(),
                                 sendSolanaViewModel,
+                                amountInputModeViewModel
+                            )
+                        }
+                    }
+                    BlockchainType.Tron -> {
+                        val factory = SendTronModule.Factory(wallet)
+                        val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
+                        setContent {
+                            SendTronScreen(
+                                findNavController(),
+                                sendTronViewModel,
                                 amountInputModeViewModel
                             )
                         }
