@@ -37,8 +37,8 @@ class CoinRankViewModel(
     private var viewState: ViewState = ViewState.Loading
     private val periodOptions = TimeDuration.values().toList()
     private var selectedPeriod: TimeDuration = periodOptions[2]
-    private val periodMenu: Select<TimeDuration>?
-        get() = if (rankType == RankType.DexLiquidityRank) null else Select(selectedPeriod, periodOptions)
+    private val periodMenu = getPeriodMenu()
+
     private var sortDescending = true
     private val itemsToShow = 300
 
@@ -92,6 +92,7 @@ class CoinRankViewModel(
                                 TimeDuration.ThirtyDay -> anyValue.rankMultiValue.value30d
                             }
                         }
+
                         is RankAnyValue.SingleValue -> anyValue.rankValue.value
                     }
                     resolvedValue?.let {
@@ -164,6 +165,7 @@ class CoinRankViewModel(
             RankType.AddressesRank -> marketKit.activeAddressRanksSingle(currencyCode).await()
             RankType.TransactionCountRank -> marketKit.transactionCountsRanksSingle(currencyCode).await()
             RankType.RevenueRank -> marketKit.revenueRanksSingle(currencyCode).await()
+            RankType.HoldersRank -> marketKit.holdersRanksSingle(currencyCode).await()
         }
     }
 
@@ -172,10 +174,18 @@ class CoinRankViewModel(
             RankType.CexVolumeRank,
             RankType.DexVolumeRank,
             RankType.DexLiquidityRank,
+            RankType.HoldersRank,
             RankType.RevenueRank -> numberFormatter.formatFiatShort(value, currency.symbol, 2)
+
             RankType.AddressesRank,
             RankType.TransactionCountRank -> numberFormatter.formatNumberShort(value, 0)
         }
+    }
+
+    private fun getPeriodMenu(): Select<TimeDuration>? = when (rankType) {
+        RankType.DexLiquidityRank,
+        RankType.HoldersRank -> null
+        else -> Select(selectedPeriod, periodOptions)
     }
 
     fun toggle(period: TimeDuration) {
