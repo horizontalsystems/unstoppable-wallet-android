@@ -91,12 +91,9 @@ class ManageAccountViewModel(
                 KeyAction.PrivateKeys,
                 KeyAction.PublicKeys,
             )
-            is AccountType.EvmAddress -> listOf(
-                KeyAction.PublicKeys
-            )
-            is AccountType.SolanaAddress -> listOf(
-                KeyAction.PublicKeys
-            )
+            is AccountType.EvmAddress -> listOf()
+            is AccountType.SolanaAddress -> listOf()
+            is AccountType.TronAddress -> listOf()
             is AccountType.HdExtendedKey -> {
                 if (account.type.hdExtendedKey.isPublic) {
                     listOf(KeyAction.PublicKeys)

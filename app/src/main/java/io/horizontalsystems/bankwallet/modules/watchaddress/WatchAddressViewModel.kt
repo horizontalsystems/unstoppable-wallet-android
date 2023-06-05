@@ -127,17 +127,20 @@ class WatchAddressViewModel(
             Type.EvmAddress -> SubmitButtonType.Next(address != null)
             Type.XPubKey -> SubmitButtonType.Next(xPubKey != null)
             Type.SolanaAddress -> SubmitButtonType.Watch(address != null)
+            Type.TronAddress -> SubmitButtonType.Watch(address != null)
         }
     }
 
     private fun getAccountType() = when (type) {
         Type.EvmAddress -> address?.let { AccountType.EvmAddress(it.hex) }
         Type.SolanaAddress -> address?.let { AccountType.SolanaAddress(it.hex) }
+        Type.TronAddress -> address?.let { AccountType.TronAddress(it.hex)}
         Type.XPubKey -> xPubKey?.let { AccountType.HdExtendedKey(it) }
     }
 
     enum class Type(val titleResId: Int) {
         EvmAddress(R.string.Watch_TypeEvmAddress),
+        TronAddress(R.string.Watch_TypeTronAddress),
         SolanaAddress(R.string.Watch_TypeSolanaAddress),
         XPubKey(R.string.Watch_TypeXPubKey),
     }

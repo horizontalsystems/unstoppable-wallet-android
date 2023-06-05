@@ -1021,6 +1021,7 @@
     <string name="Watch_WatchBy">Watch By</string>
     <string name="Watch_TypeEvmAddress">EVM Address</string>
     <string name="Watch_TypeSolanaAddress">Solana Address</string>
+    <string name="Watch_TypeTronAddress">Tron Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
 

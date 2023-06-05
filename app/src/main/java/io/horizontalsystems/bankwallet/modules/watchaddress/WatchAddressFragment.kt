@@ -5,7 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -29,7 +33,13 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.ByMenu
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputMultiline
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -174,6 +184,15 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                             modifier = Modifier.padding(horizontal = 16.dp),
                             tokenQuery = TokenQuery(BlockchainType.Solana, TokenType.Native),
                             coinCode = "SOL",
+                            navController = navController,
+                            onValueChange = viewModel::onEnterAddress
+                        )
+                    }
+                    WatchAddressViewModel.Type.TronAddress -> {
+                        HSAddressInput(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            tokenQuery = TokenQuery(BlockchainType.Tron, TokenType.Native),
+                            coinCode = "TRX",
                             navController = navController,
                             onValueChange = viewModel::onEnterAddress
                         )

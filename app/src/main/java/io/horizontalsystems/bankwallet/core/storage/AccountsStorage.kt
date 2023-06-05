@@ -19,6 +19,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val PRIVATE_KEY = "private_key"
         private const val ADDRESS = "address"
         private const val SOLANA_ADDRESS = "solana_address"
+        private const val TRON_ADDRESS = "tron_address"
         private const val HD_EXTENDED_LEY = "hd_extended_key"
     }
 
@@ -44,6 +45,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.toBigInteger())
                             ADDRESS -> AccountType.EvmAddress(record.key!!.value)
                             SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
+                            TRON_ADDRESS -> AccountType.TronAddress(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             else -> null
                         }
@@ -105,6 +107,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.SolanaAddress -> {
                 key = SecretString(account.type.address)
                 accountType = SOLANA_ADDRESS
+            }
+            is AccountType.TronAddress -> {
+                key = SecretString(account.type.address)
+                accountType = TRON_ADDRESS
             }
             is AccountType.HdExtendedKey -> {
                 key = SecretString(account.type.keySerialized)

@@ -7,7 +7,12 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.supports
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
+import io.horizontalsystems.bankwallet.entities.CoinSettingType
+import io.horizontalsystems.bankwallet.entities.CoinSettings
+import io.horizontalsystems.bankwallet.entities.ConfiguredToken
+import io.horizontalsystems.bankwallet.entities.derivation
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -29,6 +34,11 @@ class WatchAddressService(
             is AccountType.EvmPrivateKey -> Unit // N/A
             is AccountType.SolanaAddress -> {
                 token(BlockchainType.Solana, accountType)?.let {
+                    add(ConfiguredToken(it))
+                }
+            }
+            is AccountType.TronAddress -> {
+                token(BlockchainType.Tron, accountType)?.let {
                     add(ConfiguredToken(it))
                 }
             }
