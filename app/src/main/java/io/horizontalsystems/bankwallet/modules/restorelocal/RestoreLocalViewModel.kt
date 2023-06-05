@@ -30,6 +30,7 @@ class RestoreLocalViewModel(
     private val encryptDecryptManager = EncryptDecryptManager()
     private var parseError: Exception? = null
     private var accountType: AccountType? = null
+    private var manualBackup = false
 
     val accountName by lazy {
         fileName?.let { name ->
@@ -47,6 +48,7 @@ class RestoreLocalViewModel(
             showButtonSpinner = showButtonSpinner,
             parseError = parseError,
             accountType = accountType,
+            manualBackup = manualBackup
         )
     )
         private set
@@ -55,6 +57,7 @@ class RestoreLocalViewModel(
         viewModelScope.launch {
             try {
                 walletBackup = Gson().fromJson(backupJsonString, BackupLocalModule.WalletBackup::class.java)
+                manualBackup = walletBackup?.manualBackup ?: false
             } catch (e: Exception) {
                 parseError = e
                 syncState()
@@ -103,6 +106,7 @@ class RestoreLocalViewModel(
             showButtonSpinner = showButtonSpinner,
             parseError = parseError,
             accountType = accountType,
+            manualBackup = manualBackup
         )
     }
 

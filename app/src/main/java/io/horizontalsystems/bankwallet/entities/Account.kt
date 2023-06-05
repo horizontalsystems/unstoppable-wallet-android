@@ -25,7 +25,8 @@ data class Account(
     val name: String,
     val type: AccountType,
     val origin: AccountOrigin,
-    val isBackedUp: Boolean = false
+    val isBackedUp: Boolean = false,
+    val isFileBackedUp: Boolean = false,
 ) : Parcelable {
 
     @IgnoredOnParcel

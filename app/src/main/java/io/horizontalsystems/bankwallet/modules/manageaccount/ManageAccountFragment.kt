@@ -194,7 +194,8 @@ private fun BackupActions(
                     YellowActionItem(
                         title = stringResource(id = R.string.BackupRecoveryPhrase_ManualBackup),
                         icon = painterResource(id = R.drawable.ic_edit_24),
-                        attention = action.showAttention
+                        attention = action.showAttention,
+                        completed = action.completed
                     ) {
                         navController.authorizedAction {
                             navController.slideFromBottom(
@@ -378,6 +379,7 @@ private fun YellowActionItem(
     title: String,
     icon: Painter? = null,
     attention: Boolean = false,
+    completed: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
 
@@ -406,6 +408,14 @@ private fun YellowActionItem(
                 painter = painterResource(id = R.drawable.ic_attention_20),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.lucian
+            )
+            HSpacer(6.dp)
+        } else if(completed) {
+            Icon(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.remus
             )
             HSpacer(6.dp)
         }

@@ -5,19 +5,20 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
-import java.util.*
+import java.util.UUID
 
 class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
 
-    override fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account {
+    override fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean, fileBackedUp: Boolean): Account {
         val id = UUID.randomUUID().toString()
 
         return Account(
-                id = id,
-                name = name,
-                type = type,
-                origin = origin,
-                isBackedUp = backedUp
+            id = id,
+            name = name,
+            type = type,
+            origin = origin,
+            isBackedUp = backedUp,
+            isFileBackedUp = fileBackedUp
         )
     }
 
