@@ -67,6 +67,9 @@ class ManageAccountViewModel(
         if (account.isWatchAccount) {
             return emptyList()
         }
+        if (account.type is AccountType.HdExtendedKey) {
+            return listOf(BackupItem.LocalBackup(false))
+        }
 
         val items = mutableListOf<BackupItem>()
         if (!account.isBackedUp && !account.isFileBackedUp) {
