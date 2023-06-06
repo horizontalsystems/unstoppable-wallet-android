@@ -42,6 +42,8 @@
     <string name="Button_Copy">复制</string>
     <string name="Button_Browser">浏览器</string>
     <string name="Button_Delete">删除</string>
+    <string name="Button_LearnMore">了解更多</string>
+    <string name="Button_Activate">激活</string>
     <string name="Button_Sign">签名</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
@@ -53,6 +55,7 @@
     <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
     <string name="AccountRecovery_MigrationRequired">这是一个不符合标准的钱包。 详情请阅读下文。\n\n点击获取更多信息</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">资产解绑</string>
     <string name="Intro_Wallet_Screen2Description">请勿绑定您自己，也不要让别人对您这样做.</string>
     <string name="Intro_Wallet_Screen3Title">进入无国界</string>
@@ -113,6 +116,7 @@
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">%s 生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
@@ -233,6 +237,14 @@
     <string name="Market_Filter_TimePeriod_1M">1月</string>
     <string name="Market_Filter_TimePeriod_6M">6月</string>
     <string name="Market_Filter_TimePeriod_1Y">1年</string>
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
+    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
+    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
+    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
     <string name="TimePeriod_24h">24小时</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s 市场</string>
@@ -243,6 +255,10 @@
     <string name="TvlRank_Field_LowestTvl">最低锁仓</string>
     <string name="TvlRank_Field_All">所有</string>
     <string name="TvlRank_Field_Eth">Ethreum</string>
+    <string name="TvlRank_Field_Bsc">Binance</string>
+    <string name="TvlRank_Field_Sol">Solana</string>
+    <string name="TvlRank_Field_Ava">Avalanche</string>
+    <string name="TvlRank_Field_Mat">Polygon</string>
     <string name="TvlRank_Filters_PopupTitle">过滤器</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
@@ -253,6 +269,7 @@
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">正在同步...</string>
     <string name="Balance_SearchingTransactions">正在搜索交易…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_AddCoins">添加代币</string>
     <string name="Balance_AddCoin">添加代币</string>
@@ -336,8 +353,11 @@
     <string name="FeeSettings_FeeLegacy_Info">给定交易的最大预计总费用。通常，实际交易费用会更低。</string>
     <string name="FeeSettings_Fee">最大手续费</string>
     <string name="FeeSettings_Fee_Info">需为此交易支付的最高估计交易费用是根据以下燃料限制（gas limit）、最高费率和最高优先级费用价值计算得出。支付的实际费用通常会较低。</string>
+    <string name="FeeSettings_NetworkFee">网络费</string>
+    <string name="FeeSettings_NetworkFee_Info">在网络上发送给定交易的估计费用。</string>
     <string name="FeeSettings_GasLimit">GAS限制</string>
     <string name="FeeSettings_GasLimit_Info">交易复杂度以被称为“gas”（燃料）的单位度量。它将根据被执行的智能合同而变化。Gas Limit（燃料限制）是执行它所需要的估计最大燃料。使用的实际燃料通常会较低。</string>
+    <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">网上交易费用将按燃料单位计量。燃料价格是用户愿意按单位消费的金额。 当网络忙碌时，燃料价格就高，空闲时价格就低。 燃料价格不足常常是交易被长期搁置的一个原因。</string>
     <string name="FeeSettings_BaseFee">基础费用</string>
     <string name="FeeSettings_BaseFee_Info">网络协议将决定每一个区块的每一燃料（gas）的基础价格，称为基础费率。它根据不同区块的网络利用水平而变化。它可能会在下一个区块中增加或减少不多于12.5%，使得费用更具有可预测性。这里显示的值为当前区块的基础费率。</string>
@@ -364,6 +384,7 @@
     <string name="FeeInfo_AverageDescription">通常，此费用范围应足以使比特币（Bitcoin）交易在数分钟/小时、以太币（Ethereum）在数分钟内得到处理。</string>
     <string name="FeeInfo_Fast">快</string>
     <string name="FeeInfo_FastDescription">对于优先级重要的交易，我们建议使用高收费值。预计这将足以在10分钟内完成比特币交易，1-2分钟以内完成Ethereum交易。</string>
+    <string name="FeeInfo_TronFee_Title">费用</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">请求</string>
     <string name="WalletConnect_SendRequest_Title">发送​​</string>
@@ -386,6 +407,7 @@
     <string name="WalletConnect_Disconnecting">正在断开连接</string>
     <string name="WalletConnect_SignMessageRequest_Title">签名请求</string>
     <string name="WalletConnect_SignMessageRequest_Domain">域名</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">请对消息签名以便进行验证</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
@@ -411,6 +433,8 @@
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_Unnamed">未命名</string>
     <string name="WalletConnect_DAppUnknown">未知的 dApp</string>
+    <string name="WalletConnect_Pairings">Pairings</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">全部刪除</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">您想要删除所有配对的 dApps？</string>
     <string name="WalletConnect_Pairings_Delete">删除</string>
@@ -444,6 +468,7 @@
     <string name="Swap_BuyPrice">买入价</string>
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_PriceImpactTooHigh">市场价格与预期结算价格之间的差额太高。</string>
+    <string name="Swap_PriceImpactWarning">重要提示！您正在以极其不利的价格进行交易。这是因为流动性非常低。</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_EstimatedFee">预估费用</string>
     <string name="Swap_MaxFee">最大手续费</string>
@@ -627,6 +652,7 @@
     <string name="Settings_Privacy">隐私保护</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_AppStatus">应用状态</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">评价我们</string>
     <string name="Settings_LaunchScreen">启动屏幕</string>
     <string name="Settings_Appearance">外观</string>
@@ -638,6 +664,7 @@
     <string name="Appearance_BalanceValue">平衡值</string>
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
     <string name="Appearance_MarketsTab">市场选项卡</string>
+    <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
     <string name="BalanceViewType_CoinValue">币值</string>
     <string name="BalanceViewType_FiatValue">纤维值</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
@@ -657,7 +684,9 @@
     <string name="EvmNetwork_AddNew">添加新的</string>
     <string name="EvmNetwork_Added">已添加</string>
     <string name="EvmNetwork_SyncMode">同步模式</string>
+    <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">添加 RPC 源</string>
     <string name="AddEvmSyncSource_Name">名称</string>
     <string name="AddEvmSyncSource_BasicAuthentication">基本认证(可选)</string>
@@ -673,6 +702,11 @@
     <string name="BtcBlockchainSettings_TransactionSettings">交易设置</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">交易输入 / 输出</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">通过改变交易结构的方式使您的BTC、LTC、BCH交易更难被追踪。</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
+\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.
+\n\nThere are two options available to Unstoppable users:
+\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.
+\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
     <!--Info screen-->
     <string name="Info_Title">信息</string>
     <!--Setting_Security-->
@@ -687,6 +721,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">推荐</string>
@@ -707,6 +742,7 @@
     <string name="SettingsTerms_Bugs">这个应用程序的代码可能会出现未发现的软件问题，可能导致应用程序故障。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系信息</string>
     <!--Setting_Notifications-->
@@ -754,6 +790,7 @@
     <string name="Hud_Already_In_Wallet">已经加入钱包</string>
     <string name="Hud_Removed_from_Watchlist">从关注列表移除</string>
     <string name="Hud_Removed">已删除</string>
+    <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理</string>
     <string name="ManageCoins_Search">姓名、代码或合同地址</string>
@@ -777,6 +814,7 @@
     <!-- Import Wallet -->
     <string name="ImportWallet_WatchAddress">观察地址</string>
     <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">请输入密码</string>
     <string name="Watch_Address_Hint">地址或域名</string>
     <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
     <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
@@ -787,6 +825,7 @@
     <string name="Watch_WatchBy">观看者</string>
     <string name="Watch_TypeEvmAddress">EVM 地址</string>
     <string name="Watch_TypeSolanaAddress">Solana 地址</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">无效的 xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
@@ -832,7 +871,10 @@
     <string name="BackupRecoveryPhrase_Title">备份钱包</string>
     <string name="BackupRecoveryPhrase_Description">通过创建一个恢复短语来备份这个钱包。 如果您的手机丢失、被盗、损坏等等，将需要它来访问钱包。</string>
     <string name="BackupRecoveryPhrase_Backup">备份</string>
+    <string name="BackupRecoveryPhrase_ManualBackup">进行手动备份</string>
     <string name="BackupRecoveryPhrase_Later">稍后</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">完成钱包备份选项之一以开始使用钱包。</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">建议为每个钱包提供手动备份。</string>
     <!-- Local Backup -->
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">恢复码</string>
@@ -845,20 +887,29 @@
     <string name="EvmPrivateKey_Warning">此密钥适用于所有EVM兼容的区块链。请不要与任何人分享。</string>
     <string name="EvmPrivateKey_ShowPrivateKey">点击显示私钥</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
     <string name="ExtendedKey_Purpose">目的</string>
     <string name="ExtendedKey_Account">账户</string>
     <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">私钥</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">授予对基于加密货币的EVM的完全控制，即在相应钱包内的以太坊、币安智能链等。</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">授予对相应钱包上的资产的完全控制。</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">授予对比特币和基于加密货币的其他未花费交易输出（UTXO）的完全控制，即在相应钱包内的莱特币、比特币现金、达世币等。</string>
     <string name="PrivateKeys_NeverShareWarning">永远不会与任何人分享您的恢复短语。无法阻止的团队将永远不会要求您的恢复短语。</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">公钥</string>
     <string name="PublicKeys_EvmAddress">EVM 地址</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="PublicKeys_EvmAddress_Description">允许只读监视持有Etherum、 Binance Smart Chain和其他基于 EVM 的区块链的钱包。</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">允许只读监视持有比特币和其他基于 UTXO 的加密钱包(即Liteco、 比特币现金、 破折号等)。</string>
     <!-- Recovery Phrase Verify -->
@@ -902,12 +953,15 @@
     <string name="AddToken_Symbol">标志</string>
     <string name="AddToken_CoinCode">代币代码</string>
     <string name="AddToken_Decimals">小数</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">焦炭类型</string>
     <string name="AddToken_AlreadyAdded">已经加入</string>
     <string name="AddToken_AddressOrSymbol">智能合约地址</string>
     <string name="AddToken_ChooseToken">选择代币</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidContractAddress">请输入正确的合约地址</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
     <string name="AddEvmToken_Bep2NotFound">找不到 BEP2 符号</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">在 %s 区块链中找不到合同地址</string>
     <!-- Address Format Settings List -->
@@ -983,6 +1037,7 @@
     <string name="CoinPage_Categories">分类</string>
     <string name="CoinPage_Contracts">合约</string>
     <string name="CoinPage_Blockchains">区块链</string>
+    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">代币平台选择</string>
     <string name="CoinPage_Links">链接</string>
     <string name="CoinPage_Guide">指南</string>
@@ -998,6 +1053,7 @@
     <string name="CoinPage_DilutedMarketCap">稀释市值</string>
     <string name="CoinPage_inCirculation">流通量</string>
     <string name="CoinPage_TotalSupply">总供应</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
     <string name="CoinPage_MarketCap_Million">百万</string>
     <string name="CoinPage_MarketCap_Billion">十亿</string>
     <string name="CoinPage_MarketCap_Trillion">万亿</string>
@@ -1031,15 +1087,51 @@
     <string name="CoinPage_MajorHolders_InTopWallets">在前10名持有者中</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">持有者总数：%s</string>
     <string name="CoinPage_CoinInvestments_Lead">领投</string>
+    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">通过持有不可阻挡的 NFT 获取高级钱包功能。</string>
     <string name="CoinPage_CoinNotFound">[%s]\n未找到</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">正在追踪的DEX：</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap</string>
+    <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info2">Chart showing variation in available liquidity for the token on leading decentralized exchanges over 1 year period.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">正在追踪的DEX：</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_TransactionCount_Info5">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_Holders_Info1">Total number of unique addresses holding the token on various blockchains.</string>
+    <string name="CoinAnalytics_Holders_Info2">Top 10 wallets holding the token on each blockchain.</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">已追踪区块链：以太坊、币安智能链、Optimism、Arbitrum、Celo、Cronos、Avalanche、Fantom、Polygon</string>
+    <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info4">List of all tokens ranked based on current Total-Value-Locked.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info5">Market Cap / TVL ratio for the project.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info1">Total revenue generated for the token holders over 30-day period. Typically, fees are collected by token stakers or though a token burn mechanism.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_PageLocked">此页面仅对Unstoppable钱包的高级用户开放</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">此项目没有分析数据</string>
     <string name="CoinAnalytics_CexVolume">CEX交易量</string>
+    <string name="CoinAnalytics_CexVolumeRank">CEX交易量排名</string>
     <string name="CoinAnalytics_CexVolumeRank_Description">对中心化交易所的代币按交易量排名的代币。</string>
     <string name="CoinAnalytics_DexVolume">DEX交易量</string>
     <string name="CoinAnalytics_DexVolumeRank">DEX交易量排名</string>
@@ -1060,6 +1152,7 @@
     <string name="CoinAnalytics_ProjectRevenue">项目收入</string>
     <string name="CoinAnalytics_ProjectRevenueRank">项目收入排名</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">按通过如质押或代币销毁等机制为持有者生成的收入排名的代币。</string>
+    <string name="CoinAnalytics_HoldersRank_Description">通过在多个区块链上持有它们的独特地址来排名令牌。</string>
     <string name="CoinAnalytics_OtherData">其它数据</string>
     <string name="CoinAnalytics_Reports">报告</string>
     <string name="CoinAnalytics_Funding">资金支持</string>
@@ -1071,7 +1164,11 @@
     <string name="Coin_Analytics_30DayRank">30天排名</string>
     <string name="Coin_Analytics_30DayUniqueAddress">30天唯一地址</string>
     <string name="Coin_Analytics_30DayVolume">30天交易量</string>
+    <string name="ActivateSubscription_Title">激活</string>
+    <string name="ActivateSubscription_Wallet">钱包</string>
     <string name="ActivateSubscription_Address">地址</string>
+    <string name="ActivateSubscription_MessageToSign">待签名消息</string>
+    <string name="ActivateSubscription_SignMessageDescription">您需要签署此消息以激活您的订阅</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">平均7天</string>
     <string name="Nfts_PriceType_Days_30">平均30天</string>
@@ -1083,6 +1180,7 @@
     <string name="Nfts_PriceMode">价格模式</string>
     <string name="NftAsset_Overview">行情</string>
     <string name="NftAsset_Activity">活动</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">分享</string>
     <string name="NftAsset_Action_Save">保存</string>
     <string name="NftAsset_OwnedCount">拥有数量</string>
@@ -1103,6 +1201,9 @@
     <string name="NftAsset_TokenStandard">代币标准</string>
     <string name="NftAsset_Blockchain">区块链</string>
     <string name="NftAsset_Links_Website">网站</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">由 OpenSea API 提供支持</string>
     <string name="Nft_TopCollections">前列 NFT 收藏</string>
     <string name="Nft_TopCollections_Description">按交易量排列的主要NFT收藏。</string>
@@ -1114,6 +1215,7 @@
     <string name="NftCollection_AveragePrice">全部时间平均值</string>
     <string name="NftCollection_ItemsCount">%d条新闻</string>
     <string name="NftCollection_TodaysSales">今天的卖家</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s 每NFT</string>
     <string name="NftCollection_Royalty">荣耀</string>
     <string name="NftCollection_InceptionDate">起始日期</string>
@@ -1150,6 +1252,7 @@
     <string name="ReleaseNotes_FollowUs">关注我们</string>
     <string name="CoinPage_Chart_Locked">锁住</string>
     <string name="ProUsersInfo_Title">专业用户</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">附加令牌信息</string>
     <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
