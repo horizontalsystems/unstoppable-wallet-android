@@ -40,8 +40,9 @@
     <string name="Button_Search">Buscar</string>
     <string name="Button_Back">Voltar</string>
     <string name="Button_Copy">Copiar</string>
-    <string name="Button_Browser">Browser</string>
+    <string name="Button_Browser">Navegador</string>
     <string name="Button_Delete">Deletar</string>
+    <string name="Button_Sign">Assinar</string>
     <string name="Error">Erro</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Qualquer</string>
@@ -488,7 +489,7 @@
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
-    <string name="Swap_AmountTypeCoin">Coin</string>
+    <string name="Swap_AmountTypeCoin">Moeda</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configurações de troca</string>
     <string name="SwapSettings_Service">Serviço</string>
@@ -661,6 +662,7 @@
     <string name="Appearance_BalanceValue">VALOR DE SALDO</string>
     <string name="Appearance_Warning_CloseApplication">Alterar o ícone fechará o aplicativo</string>
     <string name="Appearance_MarketsTab">Guia de Mercados</string>
+    <string name="Appearance_BalanceAutoHide">Ocultar Saldo</string>
     <string name="BalanceViewType_CoinValue">Valor da Moeda</string>
     <string name="BalanceViewType_FiatValue">Valor Fiat</string>
     <string name="SettingsAboutApp_Title">Sobre o App</string>
@@ -805,6 +807,19 @@
     <string name="ManageAccounts_CreateNewWallet">Criar</string>
     <string name="ManageAccounts_ImportWallet">Restaurar</string>
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">Importar arquivo de Backup</string>
+    <string name="ImportWallet_BackupFile_Description">Importando um arquivo de backup de carteira do armazenamento</string>
+    <string name="ImportWallet_RecoveryPhrase">Importar a partir da Frase de Recuperação ou Chave Privada</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Adicione manualmente uma frase de recuperação ou chave privada para recuperar uma carteira criptografada </string>
+    <string name="ImportWallet_WatchAddress">Ver Endereço</string>
+    <string name="ImportWallet_WatchAddress_Description">Modo de observação de EVM-Chain e BTC, LTC, endereços DASH</string>
+    <string name="ImportWallet_WarningInvalidJson">Arquivo Json Inválido</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Este arquivo não é um backup válido da carteira, ou o arquivo foi corrompido e não pode ser restaurado.</string>
+    <string name="ImportWallet_SelectAnotherFile">Selecione Outro Arquivo</string>
+    <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Digite a senha</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Digite a senha de backup para importar sua carteira.</string>
     <string name="Watch_Address_Hint">Endereço ou Domínio</string>
     <string name="Watch_XPubKey_Hint">Insira a chave pública estendida da conta</string>
     <string name="Watch_Address_Description">Disponível apenas para Ethereum e outras blockchains de EVM suportadas.</string>
@@ -815,7 +830,7 @@
     <string name="Watch_WatchBy">Assistir Por</string>
     <string name="Watch_TypeEvmAddress">Endereço EVM</string>
     <string name="Watch_TypeSolanaAddress">Endereço Solana</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_TypeXPubKey">Conta xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">xPubKey Inválida</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nome</string>
@@ -829,7 +844,7 @@
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta ação irá apagar do dispositivo a carteira selecionada.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Se você não fizer o backup da chave privada desta carteira, perderá o acesso aos seus fundos.</string>
     <string name="ManageAccount_MigrationRequired_Title">Migração Necessária</string>
-    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
+    <string name="ManageAccount_BirthdayHeight">Altura de aniversário</string>
     <string name="ManageAccount_NWords">%s palavras</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s palavras com senha</string>
     <string name="ManageAccount_SwitchWallet_Title">Trocar carteira</string>
@@ -861,7 +876,19 @@
     <string name="BackupRecoveryPhrase_Title">Carteira de Backup</string>
     <string name="BackupRecoveryPhrase_Description">Fazer backup desta carteira criando uma cópia de sua frase de recuperação. Será necessário para acessar a carteira se seu telefone for perdido, roubado, quebrado, etc.</string>
     <string name="BackupRecoveryPhrase_Backup">Backup</string>
+    <string name="BackupRecoveryPhrase_ManualBackup">Backup Manual</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Backup Local</string>
     <string name="BackupRecoveryPhrase_Later">Mais tarde</string>
+    <!-- Local Backup -->
+    <string name="LocalBackup_Title">Backup Local</string>
+    <string name="LocalBackup_SaveAndBackup">Salvar e fazer Backup</string>
+    <string name="LocalBackup_SetPassword">Definir Senha</string>
+    <string name="LocalBackup_BackupSaved">Backup Salvo</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Não se esqueça desta senha e mantenha-a em um lugar seguro! Ela não pode ser recuperada ou redefinida.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Proteja o backup com uma senha para criptografá-lo em seu armazenamento local.</string>
+    <string name="LocalBackup_TermsWarningText">O armazenamento local, como discos rígidos, unidades USB e pastas compartilhadas, é vulnerável a vazamento ou perda de dados devido a danos físicos, roubo ou outras circunstâncias imprevistas. O armazenamento local depende completamente da sua capacidade de proteger e guardar os seus dados. Para evitar a perda de dados, é importante fazer backup de seus arquivos em um dispositivo seguro e armazená-los em um lugar seguro, além de fazer backup de sua carteira manualmente.</string>
+    <string name="LocalBackup_Term1">Entendo que, ao fazer backup no armazenamento local, arrisco perder os backups da minha carteira</string>
+    <string name="LocalBackup_Term2">Eu entendo que se eu perder o backup da minha carteira no dispositivo de armazenamento, eu vou perder o acesso aos meus fundos da carteira</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Frase de Recuperação</string>
     <string name="RecoveryPhrase_Description">Escreva essas palavras na ordem correta e mantenha-as em um lugar seguro</string>
@@ -873,29 +900,29 @@
     <string name="EvmPrivateKey_Warning">Essa chave é para todas as blockchains compatíveis com EVM. Não compartilhe-a com ninguém.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Toque para mostrar a chave privada</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <string name="Bip32RootKey">Chave Raiz BIP32</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_Blockchain">Blockchain</string>
     <string name="ExtendedKey_Purpose">Propósito</string>
     <string name="ExtendedKey_Account">Conta</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Toque para mostrar a chave privada</string>
-    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
-    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+    <string name="AccountExtendedPrivateKey">Chave Privada Estendida da Conta</string>
+    <string name="AccountExtendedPublicKey">Chave Pública Estendida da Conta</string>
+    <string name="AccountExtendedPrivateKey_Short">Conta xPrivKey</string>
+    <string name="AccountExtendedPublicKey_Short">Conta xPubkey</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Chave Privada</string>
     <string name="PrivateKeys_EvmPrivateKey">Chave Privada EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Concede controle total sobre cripto baseado em EVM i.e Ethereum, Binance Smart Chain, etc. dentro da respectiva carteira.</string>
-    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
+    <string name="PrivateKeys_Bip32RootKey">Chave Raiz BIP32</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Concede controle total sobre os ativos da respectiva carteira.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Chave Privada Estendida da Conta</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Concede controle total sobre Bitcoin e outras criptomoedas baseadas em UTXO, ou seja, Litecoin, Bitcoin Cash, Dash etc. dentro da respectiva carteira.</string>
     <string name="PrivateKeys_NeverShareWarning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe Unstoppable nunca pedirá a sua frase de recuperação.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Chaves públicas</string>
     <string name="PublicKeys_EvmAddress">Endereço EVM</string>
-    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Chave Pública Estendida da Conta</string>
     <string name="PublicKeys_EvmAddress_Description">Permite o monitoramento somente leitura de carteiras mantendo ativos na Ethereum, na Binance Smart Chain e em outras blockchains baseadas em EVM.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Permite monitoramento somente leitura das carteiras segurando Bitcoin e outras cripto baseadas em UTXO (ou seja, Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
@@ -977,10 +1004,6 @@
     <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="Tor_TorIsActive">Tor está ativo</string>
     <string name="Tor_PrerequisitesAlert_Content">Ativando TOR irá redefinir a conexão blockchain do Ethereum de volta para o Infura.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Antigo</string>
-    <string name="CoinOption_bip49_Title">Excelente</string>
-    <string name="CoinOption_bip84_Title">Melhor</string>
     <!--Coin Page-->
     <string name="Coin_Info">Inf. sobre moeda</string>
     <string name="Coin_Tab_Overview">Preço</string>
@@ -1077,7 +1100,7 @@
     <string name="CoinPage_MajorHolders_InTopWallets">nos Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Número total de Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Conduzir</string>
-    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
+    <string name="CoinPage_NftBannerTitle">NFT Unstoppable</string>
     <string name="CoinPage_NftBannerDescription">Obtenha acesso aos recursos avançados de carteiraFazendo Holdin NFTs Unstoppable.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNão encontrado</string>
     <string name="CoinAnalytics_CexVolume_Info1">Volume total de trading para o token em corretoras centralizadas durante um período de 30 dias.</string>
@@ -1097,11 +1120,11 @@
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes que estão sendo rastreados:</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Número total de endereços ativos diários únicos em um período de 24 horas.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">Gráfico mostrando a variação na contagem diária de endereços ativos durante o período de 1 ano.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info3">Número total de endereços de blockchain únicos que realizam transações com token em um período de 30 dias.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info4">Classificação do token com base no número de carteiras ativas que realizam transações com o período de 30 dias do token.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">Lista de todos os tokens classificados com base no número de endereços ativos diários que realizam transações com o token em intervalos de 24h / 7D / 1M.</string>
     <string name="CoinAnalytics_TransactionCount_Info1">Número total de transações únicas na blockchain com token em um período de 30 dias.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Gráfico mostrando a variação na contagem de transações no período de 1 ano.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Ranking do token com base no número de transações com o período de 30 dias do token.</string>
@@ -1153,6 +1176,7 @@
     <string name="Coin_Analytics_30DayRank">Classificação 30-Dias</string>
     <string name="Coin_Analytics_30DayUniqueAddress">30 Dias Endereços Únicos</string>
     <string name="Coin_Analytics_30DayVolume">Volume 30 Dias</string>
+    <string name="ActivateSubscription_Address">Endereço</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">média de 7D.</string>
     <string name="Nfts_PriceType_Days_30">média de 30.</string>
