@@ -798,6 +798,7 @@
     <string name="Watch_WatchBy">Regarder par</string>
     <string name="Watch_TypeEvmAddress">Adresse EVM</string>
     <string name="Watch_TypeSolanaAddress">Adresse Solana</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">xPubKey invalide</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
@@ -843,6 +844,7 @@
     <string name="BackupRecoveryPhrase_Title">Sauvegarder le portefeuille</string>
     <string name="BackupRecoveryPhrase_Description">Sauvegarder ce portefeuille en créant une copie de sa phrase de récupération. Il sera nécessaire pour accéder au portefeuille si votre téléphone est perdu, volé, cassé, etc.</string>
     <string name="BackupRecoveryPhrase_Backup">Sauvegarde</string>
+    <string name="BackupRecoveryPhrase_ManualBackup">Sauvegarde manuelle</string>
     <string name="BackupRecoveryPhrase_Later">Plus tard</string>
     <!-- Local Backup -->
     <!-- Recovery Phrase -->
