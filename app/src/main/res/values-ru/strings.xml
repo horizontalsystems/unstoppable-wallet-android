@@ -390,6 +390,8 @@
     <string name="FeeInfo_FastDescription">В случае с приоритетными транзакциями лучше всего использовать настройку высокой комиссии. При выборе этой настройки транзакция Bitcoin будет обработана в течение 10 минут, ну а обработка транзакции Ethereum займет всего лишь 1-2 минуты.</string>
     <string name="FeeInfo_TronFee_Title">Комиссия</string>
     <!--Tron-->
+    <string name="Tron_AddressNotActive_Title">Неактивный адрес</string>
+    <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Запрос</string>
     <string name="WalletConnect_SendRequest_Title">Отправить</string>
@@ -813,8 +815,14 @@
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
+    <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
     <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
+    <string name="ImportWallet_WarningInvalidJson">Недопустимый Json файл</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Этот файл не является действительной резервной копией кошелька, либо же он был поврежден и не может быть восстановлен.</string>
+    <string name="ImportWallet_SelectAnotherFile">Выберите другой файл</string>
     <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Введите пароль</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Введите пароль резервной копии для импорта вашего кошелька.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
     <string name="Watch_Address_Hint">Адрес или домен</string>
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
@@ -874,10 +882,12 @@
     <string name="BackupRecoveryPhrase_Description">Сделайте резервную копию этого кошелька, создав копию его фразы восстановления. Это будет необходимо для доступа к кошельку, если ваш телефон утерян, украден, повреждён и т.д.</string>
     <string name="BackupRecoveryPhrase_Backup">Резервная копия</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Ручное резервное копирование</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Локальное резервное копирование</string>
     <string name="BackupRecoveryPhrase_Later">Позже</string>
     <string name="BackupRecoveryPhrase_BackupRequiredText">Завершите одну из опций резервного копирования кошелька, чтобы начать использовать кошелек.</string>
     <string name="BackupRecoveryPhrase_BackupRecomendedText">Рекомендуется создать ручную резервную копию для каждого кошелька.</string>
     <!-- Local Backup -->
+    <string name="LocalBackup_Title">Локальное резервное копирование</string>
     <string name="LocalBackup_SaveAndBackup">Сохранить и создать резервную копию</string>
     <string name="LocalBackup_SetPassword">Установить пароль</string>
     <string name="LocalBackup_BackupSaved">Резервная копия сохранена</string>
