@@ -15,21 +15,20 @@ class EncryptDecryptManager {
 
     private val cipher: Cipher = Cipher.getInstance(TRANSFORMATION_SYMMETRIC)
 
-    fun encrypt(value: String, key: ByteArray, iv: String): String {
+    fun encrypt(value: ByteArray, key: ByteArray, iv: String): String {
         val keySpec = SecretKeySpec(key, "AES")
         val ivSpec = IvParameterSpec(iv.hexStringToByteArray())
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec)
-        val encrypted = cipher.doFinal(value.toByteArray(Charsets.UTF_8))
+        val encrypted = cipher.doFinal(value)
         return Base64.encodeToString(encrypted, Base64.NO_WRAP)
     }
 
-    fun decrypt(value: String, key: ByteArray, iv: String): String {
+    fun decrypt(value: String, key: ByteArray, iv: String): ByteArray {
         val keySpec = SecretKeySpec(key, "AES")
         val ivSpec = IvParameterSpec(iv.hexStringToByteArray())
         cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec)
         val decoded = Base64.decode(value, Base64.NO_WRAP)
-        val decrypted = cipher.doFinal(decoded)
-        return String(decrypted, Charsets.UTF_8)
+        return cipher.doFinal(decoded)
     }
 
     companion object{

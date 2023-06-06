@@ -94,6 +94,7 @@
     <string name="CreateWallet_Mnemonic">Recovery Phrase</string>
     <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">Passphrase</string>
+    <string name="Password">Password</string>
     <string name="ConfirmPassphrase">Confirm</string>
     <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s words</string>
@@ -1018,6 +1019,7 @@
     <string name="ImportBackupFile_EnterPassword">Enter Password</string>
     <string name="ImportBackupFile_EnterPassword_Description">Enter the backup password to import your wallet.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Invalid Password</string>
+    <string name="ImportBackupFile_BackupPassword">Backup Password</string>
 
     <string name="Watch_Address_Hint">Address or Domain</string>
     <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
@@ -1099,7 +1101,6 @@
     <string name="LocalBackup_ProtextBackupWithPasswordInfo">Password-protect your backup to encrypt it on iCloud. The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one symbol.</string>
     <string name="LocalBackup_TermsWarningText">Storage devices i.e. hard drives, USB drives , storage on smartphone etc. are all vulnerable to loss due to physical damage, theft or other unforeseen circumstances.</string>
     <string name="LocalBackup_Term1">I understand that theft or damage of a backup device will result in loss of a backup to a respective wallet.</string>
-    <string name="LocalBackup_Term2">I understand that if I lose my wallet backup on the storage device, I will lose access to my wallet funds</string>
 
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Recovery Phrase</string>

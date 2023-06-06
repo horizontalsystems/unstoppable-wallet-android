@@ -130,7 +130,7 @@ fun LocalBackupPasswordScreen(
                     VSpacer(24.dp)
                     FormsInputPassword(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        hint = stringResource(R.string.Passphrase),
+                        hint = stringResource(R.string.Password),
                         state = uiState.passphraseState,
                         onValueChange = viewModel::onChangePassphrase,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
