@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">Не задан параметр</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
@@ -42,6 +43,10 @@
     <string name="Button_Copy">Скопировать</string>
     <string name="Button_Browser">Браузер</string>
     <string name="Button_Delete">Удалить</string>
+    <string name="Button_LearnMore">Узнать больше</string>
+    <string name="Button_Activate">Активировать</string>
+    <string name="Button_Sign">Подписать</string>
+    <string name="Button_Activating">Активация</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Any">Любые</string>
@@ -352,6 +357,8 @@
     <string name="FeeSettings_FeeLegacy_Info">Максимальная ожидаемая общая комиссия за данную транзакцию. Обычно, фактическая комиссия будет меньше.</string>
     <string name="FeeSettings_Fee">Макс. комиссия</string>
     <string name="FeeSettings_Fee_Info">Максимальная предполагаемая комиссия за транзакцию, которая будет уплачена за данную транзакцию, рассчитанная на основе значений лимита газа, максимальной ставки комиссии и максимальной приоритетной комиссии, указанных ниже. Фактический размер комиссии обычно ниже.</string>
+    <string name="FeeSettings_NetworkFee">Комиссия сети</string>
+    <string name="FeeSettings_NetworkFee_Info">Ориентировочная стоимость отправки данной транзакции по сети.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Единица сложности транзакций - газ, она варьирует в зависимости от выполняемого смарт-контракта. Лимит газа - это предполагаемый максимальный размер газа, необходимый для выполнения смарт-контракта. Обычно используется меньшее количество газа.</string>
     <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
@@ -365,7 +372,7 @@
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Риски</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">Обработка транзакции может отложиться на некоторое время, или транзакцию могут полностью отклонить.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Риски</string>
-    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Для обеспечения быстрого выполнения транзакции максимальная ставка вознаграждения (вычитаются максимальные чаевые для майнера) должна быть выше текущей базовой ставки вознаграждения. В противном случае транзакция может оставаться на рассмотрении до тех пор, пока не будет выполнено условие.</string>
     <string name="FeeSettings_Overpricing_Title">Слишком высокая комиссия</string>
     <string name="FeeSettings_Overpricing">Установленная комиссия за транзакцию больше чем требуется для обработки этой транзакции.</string>
     <string name="FeeSettings_Info_IUnderstand">Я понимаю</string>
@@ -381,6 +388,10 @@
     <string name="FeeInfo_AverageDescription">Обычно для этого диапазона комиссий характерна обработка транзакций в течение нескольких минут/часа для Bitcoin и в течение нескольких минут для Ethereum.</string>
     <string name="FeeInfo_Fast">Быстро</string>
     <string name="FeeInfo_FastDescription">В случае с приоритетными транзакциями лучше всего использовать настройку высокой комиссии. При выборе этой настройки транзакция Bitcoin будет обработана в течение 10 минут, ну а обработка транзакции Ethereum займет всего лишь 1-2 минуты.</string>
+    <string name="FeeInfo_TronFee_Title">Комиссия</string>
+    <!--Tron-->
+    <string name="Tron_AddressNotActive_Title">Неактивный адрес</string>
+    <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Запрос</string>
     <string name="WalletConnect_SendRequest_Title">Отправить</string>
@@ -464,6 +475,7 @@
     <string name="Swap_BuyPrice">Цена покупки</string>
     <string name="Swap_PriceImpact">Отклонение от рын. цены</string>
     <string name="Swap_PriceImpactTooHigh">Разница между рыночной ценой и ожидаемой расчетной ценой слишком высока.</string>
+    <string name="Swap_PriceImpactWarning">Важно! Вы получаете чрезвычайно неблагоприятную цену. Это связано с крайне низкой ликвидностью.</string>
     <string name="Swap_MinimumReceived">Гарантированная сумма</string>
     <string name="Swap_EstimatedFee">Предполагаемая комиссия</string>
     <string name="Swap_MaxFee">Макс. комиссия</string>
@@ -577,7 +589,7 @@
     <string name="TransactionInfo_Status">Статус</string>
     <string name="TransactionInfo_Status_Confirmed">Подтверждено</string>
     <string name="TransactionInfo_Date">Дата</string>
-    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_Id">ID Транзакции</string>
     <string name="TransactionInfo_Service">Сервис</string>
     <string name="TransactionInfo_RawTransaction">Неподтвержденная транзакция</string>
     <string name="TransactionInfo_ContactName">Имя контакта</string>
@@ -659,6 +671,7 @@
     <string name="Appearance_BalanceValue">ЗНАЧЕНИЕ БАЛАНСА</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_MarketsTab">Вкладка рынки</string>
+    <string name="Appearance_BalanceAutoHide">Автоматическое скрытие баланса</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
@@ -711,7 +724,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Wallet отключены. Чтобы получать уведомления об изменении цен, вам нужно включить уведомления и разрешить запуск приложения в фоновом режиме.</string>
     <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Случайное индексирование</string>
-    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
+    <string name="SettingsSecurity_SortingBip69Short">Детерминированный</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Рекомендовано</string>
@@ -732,7 +745,7 @@
     <string name="SettingsTerms_Bugs">В процессе работы кода могут возникнуть проблемы с программным обеспечением, что может привести к сбоям приложения.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
+    <string name="SettingsShare_Text">Продолжить</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Обратная связь</string>
     <!--Setting_Notifications-->
@@ -801,6 +814,16 @@
     <string name="ManageAccounts_CreateNewWallet">Создать</string>
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
+    <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
+    <string name="ImportWallet_WarningInvalidJson">Недопустимый Json файл</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Этот файл не является действительной резервной копией кошелька, либо же он был поврежден и не может быть восстановлен.</string>
+    <string name="ImportWallet_SelectAnotherFile">Выберите другой файл</string>
+    <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Введите пароль</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Введите пароль резервной копии для импорта вашего кошелька.</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
     <string name="Watch_Address_Hint">Адрес или домен</string>
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
@@ -811,7 +834,8 @@
     <string name="Watch_WatchBy">Смотреть</string>
     <string name="Watch_TypeEvmAddress">EVM адрес</string>
     <string name="Watch_TypeSolanaAddress">Solana адрес</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_TypeTronAddress">Tron адрес</string>
+    <string name="Watch_TypeXPubKey">xPubKey аккаунта</string>
     <string name="Watch_Error_InvalidXPubKey">Неправильный xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Название</string>
@@ -857,7 +881,21 @@
     <string name="BackupRecoveryPhrase_Title">Резервная копия</string>
     <string name="BackupRecoveryPhrase_Description">Сделайте резервную копию этого кошелька, создав копию его фразы восстановления. Это будет необходимо для доступа к кошельку, если ваш телефон утерян, украден, повреждён и т.д.</string>
     <string name="BackupRecoveryPhrase_Backup">Резервная копия</string>
+    <string name="BackupRecoveryPhrase_ManualBackup">Ручное резервное копирование</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Локальное резервное копирование</string>
     <string name="BackupRecoveryPhrase_Later">Позже</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Завершите одну из опций резервного копирования кошелька, чтобы начать использовать кошелек.</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">Рекомендуется создать ручную резервную копию для каждого кошелька.</string>
+    <!-- Local Backup -->
+    <string name="LocalBackup_Title">Локальное резервное копирование</string>
+    <string name="LocalBackup_SaveAndBackup">Сохранить и создать резервную копию</string>
+    <string name="LocalBackup_SetPassword">Установить пароль</string>
+    <string name="LocalBackup_BackupSaved">Резервная копия сохранена</string>
+    <string name="LocalBackup_PasswordInvalid">Не менее 8 символов, включая одну заглавную букву, одну строчную букву, одну цифру и один символ.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Не забывайте этот пароль и храните его в надежном месте! Он не может быть восстановлен или сброшен.</string>
+    <string name="LocalBackup_TermsWarningText">Устройства хранения, такие как жесткие диски, USB-накопители, накопители на смартфоне и т.д., все они подвержены потерям вследствие физических повреждений, кражи или других непредвиденных обстоятельств.</string>
+    <string name="LocalBackup_Term1">Я понимаю, что кража или повреждение устройства резервного копирования приведет к потере резервной копии в соответствующем кошельке.</string>
+    <string name="LocalBackup_Term2">Я понимаю, что если я потеряю резервную копию кошелька, сохраненную на устройстве хранения, то потеряю доступ к средствам, находящимся в кошельке</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Фраза восстановления</string>
     <string name="RecoveryPhrase_Description">Напишите эти слова в правильном порядке и храните их в безопасном месте</string>
@@ -872,26 +910,26 @@
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_Blockchain">Blockchain</string>
-    <string name="ExtendedKey_Purpose">Purpose</string>
-    <string name="ExtendedKey_Account">Account</string>
+    <string name="ExtendedKey_Purpose">Назначение</string>
+    <string name="ExtendedKey_Account">Аккаунт</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
-    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey">Расширенный приватный ключ аккаунта</string>
+    <string name="AccountExtendedPublicKey">Расширенный публичный ключ аккаунта</string>
     <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
-    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+    <string name="AccountExtendedPublicKey_Short">xPubKey аккаунта</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Предоставляет полный контроль над криптовалютами на базе EVM, т.е. Ethereum, Binance Smart Chain и т.д. в пределах соответствующего кошелька.</string>
     <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Предоставляет полный контроль над активами на соответствующем кошельке.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Расширенный приватный ключ аккаунта</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Предоставляет полный контроль над Bitcoin и другими криптовалютами на базе UTXO, такими как Litecoin, Bitcoin Cash, Dash и т.д. в пределах соответствующего кошелька.</string>
     <string name="PrivateKeys_NeverShareWarning">Никогда ни с кем не делитесь вашей фразой восстановления. Команда Unstoppable никогда не запросит вашу фразу восстановления.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Публичные ключи</string>
     <string name="PublicKeys_EvmAddress">EVM адрес</string>
-    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Расширенный публичный ключ аккаунта</string>
     <string name="PublicKeys_EvmAddress_Description">Позволяет отслеживать кошельки с активами на Ethereum, Binance Smart Chain и других блокчейнах на базе EVM, только для чтения.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Позволяет осуществлять мониторинг кошельков, содержащих Bitcoin и другие криптовалюты на основе UTXO (например, Litecoin, Bitcoin Cash, Dash и т.д.), только для чтения.</string>
     <!-- Recovery Phrase Verify -->
@@ -973,10 +1011,6 @@
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
     <string name="Tor_TorIsActive">Tor активен</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Старый</string>
-    <string name="CoinOption_bip49_Title">Новый</string>
-    <string name="CoinOption_bip84_Title">Новейший</string>
     <!--Coin Page-->
     <string name="Coin_Info">Информация о токене</string>
     <string name="Coin_Tab_Overview">Цена</string>
@@ -1115,6 +1149,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info2">Рейтинг токена основан на доходе, полученном стейкерами токенов за 30-дневный период.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Список всех токенов, ранжированных на основе пассивного дохода стейкеров токенов с интервалом 24ч. / 7 дн. / 1 мес.</string>
     <string name="CoinAnalytics_PageLocked">Эта страница доступна только для премиум-пользователей Unstoppable Wallet</string>
+    <string name="CoinAnalytics_ActivateSubscription">Активируйте свою подписку, чтобы получить доступ к аналитике</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Этот проект не имеет аналитических данных</string>
     <string name="CoinAnalytics_CexVolume">Объем CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Рейтинг объема CEX</string>
@@ -1137,6 +1172,7 @@
     <string name="CoinAnalytics_TvlRatio">Рын.кап / Соотношение TVL </string>
     <string name="CoinAnalytics_ProjectRevenue">Доходы по проекту</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Рейтинг доходов</string>
+    <string name="CoinAnalytics_HoldersRank">Рейтинг держателей</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">Токены ранжируются по пассивному доходу владельцев, получаемому через стекинг или сжигание токенов.</string>
     <string name="CoinAnalytics_OtherData">Другие данные</string>
     <string name="CoinAnalytics_Reports">Отчёты</string>
@@ -1149,6 +1185,11 @@
     <string name="Coin_Analytics_30DayRank">Рейтинг на 30д</string>
     <string name="Coin_Analytics_30DayUniqueAddress">Уникальные адреса за 30 дней</string>
     <string name="Coin_Analytics_30DayVolume">Объем за 30д</string>
+    <string name="ActivateSubscription_Title">Активировать</string>
+    <string name="ActivateSubscription_Wallet">Кошелек</string>
+    <string name="ActivateSubscription_Address">Адрес</string>
+    <string name="ActivateSubscription_MessageToSign">Сообщение для подписи</string>
+    <string name="ActivateSubscription_SignMessageDescription">Вам нужно подписать это сообщение, чтобы активировать вашу подписку</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">7Д сред.</string>
     <string name="Nfts_PriceType_Days_30">30Д сред.</string>
