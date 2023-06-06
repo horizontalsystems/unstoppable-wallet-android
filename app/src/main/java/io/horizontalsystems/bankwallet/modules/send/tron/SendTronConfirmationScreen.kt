@@ -190,6 +190,8 @@ fun SendTronConfirmationScreen(
                     val bottomSectionItems = buildList<@Composable () -> Unit> {
                         add {
                             HSFeeInputRawWithViewState(
+                                title =  stringResource(R.string.FeeInfo_TronFee_Title),
+                                info =  stringResource(R.string.FeeInfo_TronFee_Description),
                                 coinCode = feeCoin.code,
                                 coinDecimal = feeCoinMaxAllowedDecimals,
                                 fee = fee,
