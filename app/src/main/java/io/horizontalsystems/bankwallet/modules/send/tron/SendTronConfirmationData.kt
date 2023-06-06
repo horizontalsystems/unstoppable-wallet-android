@@ -14,5 +14,6 @@ data class SendTronConfirmationData(
     val contact: Contact?,
     val coin: Coin,
     val feeCoin: Coin,
+    val isInactiveAddress: Boolean,
     val memo: String? = null,
 )

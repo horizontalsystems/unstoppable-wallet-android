@@ -1,10 +1,15 @@
 package cash.p.terminal.modules.address
 
 import android.os.Parcelable
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -13,6 +18,7 @@ import cash.p.terminal.R
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.ui.compose.components.FormsInputAddress
+import cash.p.terminal.ui.compose.components.FormsInputStateWarning
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -142,7 +148,8 @@ fun HSAddressInput(
 }
 
 private fun getFocusedState(state: DataState<Address>?): DataState<Address>? {
-    return if (state is DataState.Error && state.error !is AddressValidationException.Invalid) {
+    return if (state is DataState.Error &&
+        (state.error !is AddressValidationException.Invalid && state.error !is FormsInputStateWarning)) {
         null
     } else {
         state

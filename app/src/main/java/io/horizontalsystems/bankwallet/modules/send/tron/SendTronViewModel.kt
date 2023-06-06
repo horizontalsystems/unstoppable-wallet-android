@@ -99,7 +99,9 @@ class SendTronViewModel(
     }
 
     fun onEnterAddress(address: Address?) {
-        addressService.setAddress(address)
+        viewModelScope.launch {
+            addressService.setAddress(address)
+        }
     }
 
     fun onNavigateToConfirmation() {
@@ -117,7 +119,8 @@ class SendTronViewModel(
             address = address,
             contact = contact,
             coin = wallet.coin,
-            feeCoin = feeToken.coin
+            feeCoin = feeToken.coin,
+            isInactiveAddress = addressState.isInactiveAddress
         )
 
         estimateFee(decimalAmount, address)

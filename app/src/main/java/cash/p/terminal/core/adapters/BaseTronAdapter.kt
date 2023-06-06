@@ -4,6 +4,7 @@ import cash.p.terminal.core.IAdapter
 import cash.p.terminal.core.IBalanceAdapter
 import cash.p.terminal.core.IReceiveAdapter
 import cash.p.terminal.core.managers.TronKitWrapper
+import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.transaction.Signer
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -23,6 +24,14 @@ abstract class BaseTronAdapter(
 
     override val receiveAddress: String
         get() = tronKit.address.base58
+
+    suspend fun isAddressActive(address: Address): Boolean {
+        return tronKit.isAccountActive(address)
+    }
+
+    fun isOwnAddress(address: Address): Boolean {
+        return address == tronKit.address
+    }
 
     protected fun balanceInBigDecimal(balance: BigInteger?, decimal: Int): BigDecimal {
         balance?.toBigDecimal()?.let {
