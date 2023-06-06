@@ -42,6 +42,9 @@
     <string name="Button_Copy">复制</string>
     <string name="Button_Browser">浏览器</string>
     <string name="Button_Delete">删除</string>
+    <string name="Button_LearnMore">了解更多</string>
+    <string name="Button_Activate">激活</string>
+    <string name="Button_Sign">签名</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
@@ -350,6 +353,8 @@
     <string name="FeeSettings_FeeLegacy_Info">给定交易的最大预计总费用。通常，实际交易费用会更低。</string>
     <string name="FeeSettings_Fee">最大手续费</string>
     <string name="FeeSettings_Fee_Info">需为此交易支付的最高估计交易费用是根据以下燃料限制（gas limit）、最高费率和最高优先级费用价值计算得出。支付的实际费用通常会较低。</string>
+    <string name="FeeSettings_NetworkFee">网络费</string>
+    <string name="FeeSettings_NetworkFee_Info">在网络上发送给定交易的估计费用。</string>
     <string name="FeeSettings_GasLimit">GAS限制</string>
     <string name="FeeSettings_GasLimit_Info">交易复杂度以被称为“gas”（燃料）的单位度量。它将根据被执行的智能合同而变化。Gas Limit（燃料限制）是执行它所需要的估计最大燃料。使用的实际燃料通常会较低。</string>
     <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
@@ -379,6 +384,8 @@
     <string name="FeeInfo_AverageDescription">通常，此费用范围应足以使比特币（Bitcoin）交易在数分钟/小时、以太币（Ethereum）在数分钟内得到处理。</string>
     <string name="FeeInfo_Fast">快</string>
     <string name="FeeInfo_FastDescription">对于优先级重要的交易，我们建议使用高收费值。预计这将足以在10分钟内完成比特币交易，1-2分钟以内完成Ethereum交易。</string>
+    <string name="FeeInfo_TronFee_Title">费用</string>
+    <!--Tron-->
     <!--WalletConnect-->
     <string name="WalletConnect_Request">请求</string>
     <string name="WalletConnect_SendRequest_Title">发送​​</string>
@@ -462,6 +469,7 @@
     <string name="Swap_BuyPrice">买入价</string>
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_PriceImpactTooHigh">市场价格与预期结算价格之间的差额太高。</string>
+    <string name="Swap_PriceImpactWarning">重要提示！您正在以极其不利的价格进行交易。这是因为流动性非常低。</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_EstimatedFee">预估费用</string>
     <string name="Swap_MaxFee">最大手续费</string>
@@ -657,6 +665,7 @@
     <string name="Appearance_BalanceValue">平衡值</string>
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
     <string name="Appearance_MarketsTab">市场选项卡</string>
+    <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
     <string name="BalanceViewType_CoinValue">币值</string>
     <string name="BalanceViewType_FiatValue">纤维值</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
@@ -803,6 +812,10 @@
     <string name="ManageAccounts_CreateNewWallet">创建</string>
     <string name="ManageAccounts_ImportWallet">恢复自</string>
     <string name="ManageAccounts_WatchAddress">观察地址</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">观察地址</string>
+    <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">请输入密码</string>
     <string name="Watch_Address_Hint">地址或域名</string>
     <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
     <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
@@ -859,7 +872,11 @@
     <string name="BackupRecoveryPhrase_Title">备份钱包</string>
     <string name="BackupRecoveryPhrase_Description">通过创建一个恢复短语来备份这个钱包。 如果您的手机丢失、被盗、损坏等等，将需要它来访问钱包。</string>
     <string name="BackupRecoveryPhrase_Backup">备份</string>
+    <string name="BackupRecoveryPhrase_ManualBackup">进行手动备份</string>
     <string name="BackupRecoveryPhrase_Later">稍后</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">完成钱包备份选项之一以开始使用钱包。</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">建议为每个钱包提供手动备份。</string>
+    <!-- Local Backup -->
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">恢复码</string>
     <string name="RecoveryPhrase_Description">按正确顺序写下这些单词，并将其保留在一个安全的地方</string>
@@ -975,10 +992,6 @@
     <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="Tor_TorIsActive">Tor 已激活</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">旧的</string>
-    <string name="CoinOption_bip49_Title">好</string>
-    <string name="CoinOption_bip84_Title">最佳的</string>
     <!--Coin Page-->
     <string name="Coin_Info">硬币信息</string>
     <string name="Coin_Tab_Overview">行情</string>
@@ -1119,7 +1132,7 @@
     <string name="CoinAnalytics_PageLocked">此页面仅对P.CASH钱包的高级用户开放</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">此项目没有分析数据</string>
     <string name="CoinAnalytics_CexVolume">CEX交易量</string>
-    <string name="CoinAnalytics_CexVolumeRank">CEX Volume Rank</string>
+    <string name="CoinAnalytics_CexVolumeRank">CEX交易量排名</string>
     <string name="CoinAnalytics_CexVolumeRank_Description">对中心化交易所的代币按交易量排名的代币。</string>
     <string name="CoinAnalytics_DexVolume">DEX交易量</string>
     <string name="CoinAnalytics_DexVolumeRank">DEX交易量排名</string>
@@ -1140,6 +1153,7 @@
     <string name="CoinAnalytics_ProjectRevenue">项目收入</string>
     <string name="CoinAnalytics_ProjectRevenueRank">项目收入排名</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">按通过如质押或代币销毁等机制为持有者生成的收入排名的代币。</string>
+    <string name="CoinAnalytics_HoldersRank_Description">通过在多个区块链上持有它们的独特地址来排名令牌。</string>
     <string name="CoinAnalytics_OtherData">其它数据</string>
     <string name="CoinAnalytics_Reports">报告</string>
     <string name="CoinAnalytics_Funding">资金支持</string>
@@ -1151,6 +1165,11 @@
     <string name="Coin_Analytics_30DayRank">30天排名</string>
     <string name="Coin_Analytics_30DayUniqueAddress">30天唯一地址</string>
     <string name="Coin_Analytics_30DayVolume">30天交易量</string>
+    <string name="ActivateSubscription_Title">激活</string>
+    <string name="ActivateSubscription_Wallet">钱包</string>
+    <string name="ActivateSubscription_Address">地址</string>
+    <string name="ActivateSubscription_MessageToSign">待签名消息</string>
+    <string name="ActivateSubscription_SignMessageDescription">您需要签署此消息以激活您的订阅</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">平均7天</string>
     <string name="Nfts_PriceType_Days_30">平均30天</string>

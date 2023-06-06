@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">Parameter ist nicht festgelegt</string>
     <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">Abbrechen</string>
     <string name="Alert_Copy">Kopieren</string>
@@ -42,6 +43,10 @@
     <string name="Button_Copy">Kopieren</string>
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Löschen</string>
+    <string name="Button_LearnMore">Learn More</string>
+    <string name="Button_Activate">Activate</string>
+    <string name="Button_Sign">Signieren</string>
+    <string name="Button_Activating">Activating</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">k. A.</string>
     <string name="Any">Beliebig</string>
@@ -351,9 +356,11 @@
     <string name="FeeSettings_FeeLegacy_Info">Die maximal erwartete Gesamtgebühr für die jeweilige Transaktion. In der Regel ist die tatsächliche Transaktionsgebühr niedriger.</string>
     <string name="FeeSettings_Fee">Max Gebühr</string>
     <string name="FeeSettings_Fee_Info">Die geschätzte Transaktionsgebühr, die für diese Transaktion gezahlt werden soll berechnet anhand des Gaslimits, der maximalen Gebührenrate und der unten angegebenen Maximalpriorität. Die tatsächlich gezahlte Gebühr ist in der Regel niedriger.</string>
+    <string name="FeeSettings_NetworkFee">Netzwerkgebühr</string>
+    <string name="FeeSettings_NetworkFee_Info">Die geschätzten Kosten für den Versand der Transaktion im Netzwerk.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Die Transaktionskomplexität wird in Einheiten mit dem Namen \"Gas\" gemessen, die je nach ausgeführten intelligenten Verträgen variieren. Das Gaslimit ist das geschätzte Höchstgas, das benötigt wird, um es auszuführen. Das tatsächliche Gas wird normalerweise niedriger sein.</string>
-    <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
+    <string name="FeeSettings_GasPrice">Gas price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Die Gebühr für Transaktionen im Netzwerk wird in Gaseinheiten gemessen. Der Gaspreis ist der Betrag, den ein Nutzer für eine Einheit Gas auszugeben bereit ist. Wenn das Netzwerk ausgelastet ist, sind die Gaspreise hoch, und niedrig, wenn es nicht genutzt wird. Ein unzureichender Gaspreis ist oft ein Grund dafür, dass eine Transaktion über einen längeren Zeitraum aussteht.</string>
     <string name="FeeSettings_BaseFee">Basisgebühr</string>
     <string name="FeeSettings_BaseFee_Info">Das Netzwerkprotokoll bestimmt den Basispreis pro Gas für jeden Block, sogenannte Basisgebühren. Sie variiert je nach Netzwerkauslastung von Block zu Block. Sie kann im nächsten Block um nicht mehr als 12,5% steigen oder sinken, was die Gebühren berechenbarer macht. Der hier angezeigte Wert ist die Basisgebühr des aktuellen Blocks.</string>
@@ -380,6 +387,9 @@
     <string name="FeeInfo_AverageDescription">Typischerweise sollte diese Gebührenspanne ausreichen, um eine Transaktion innerhalb von Minuten/Stunde für Bitcoin und innerhalb von Minuten für Ethereum zu verarbeiten.</string>
     <string name="FeeInfo_Fast">Schnell</string>
     <string name="FeeInfo_FastDescription">Bei Transaktionen, deren Priorität wichtig ist, empfehlen wir, den hohen Gebührenwert zu verwenden. Es wird erwartet, dass eine Transaktion innerhalb von 10 Minuten für Bitcoin und innerhalb von 1-2 Minuten für Ethereum abgeschlossen wird.</string>
+    <string name="FeeInfo_TronFee_Title">Gebühr</string>
+    <string name="FeeInfo_TronFee_Description">Die geschätzten Kosten für den Versand einer Transaktion im Netzwerk (ohne Energie-, Bandbreiten- und Aktivierungsgebühren)</string>
+    <!--Tron-->
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Anforderung</string>
     <string name="WalletConnect_SendRequest_Title">Senden</string>
@@ -463,6 +473,7 @@
     <string name="Swap_BuyPrice">Kaufpreis</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
     <string name="Swap_PriceImpactTooHigh">Die Differenz zwischen dem Marktpreis und dem erwarteten Abrechnungspreis ist zu hoch.</string>
+    <string name="Swap_PriceImpactWarning">Wichtig! Du bekommst einen extrem ungünstigen Preis. Dies ist auf die extrem niedrige Liquidität zurückzuführen.</string>
     <string name="Swap_MinimumReceived">Garantierter Betrag</string>
     <string name="Swap_EstimatedFee">Geschätzte Gebühren</string>
     <string name="Swap_MaxFee">Max Gebühr</string>
@@ -658,6 +669,7 @@
     <string name="Appearance_BalanceValue">SALDO WERT</string>
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
     <string name="Appearance_MarketsTab">Markt-Tab</string>
+    <string name="Appearance_BalanceAutoHide">Auto-Ausblenden ausgleichen</string>
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
@@ -807,6 +819,20 @@
     <string name="ManageAccounts_CreateNewWallet">Erstellen</string>
     <string name="ManageAccounts_ImportWallet">Wiederherstellen</string>
     <string name="ManageAccounts_WatchAddress">Watch-Adresse</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">aus Datei</string>
+    <string name="ImportWallet_BackupFile_Description">Aus Backup-Datei importieren</string>
+    <string name="ImportWallet_RecoveryPhrase">von Wiederherstellungsphrase</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Importieren Sie mithilfe der Wiederherstellungsphrase oder des privaten Schlüssels.</string>
+    <string name="ImportWallet_WatchAddress">Watch-Adresse</string>
+    <string name="ImportWallet_WatchAddress_Description">Beobachtung der EVM-Kette sowie der BTC-, LTC- und DASH-Adressen</string>
+    <string name="ImportWallet_WarningInvalidJson">Ungültige Json-Datei</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Diese Datei ist kein gültiges Backup der Brieftasche oder die Datei wurde beschädigt und kann nicht wiederhergestellt werden.</string>
+    <string name="ImportWallet_SelectAnotherFile">Wählen Sie eine weitere Datei aus</string>
+    <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Passwort eingeben</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Geben Sie das Sicherungspasswort ein, um Ihre Brieftasche zu importieren.</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">Ungültiges Passwort</string>
     <string name="Watch_Address_Hint">Adresse oder Domäne</string>
     <string name="Watch_XPubKey_Hint">Account Extended Public Key eingeben</string>
     <string name="Watch_Address_Description">Nur für Ethereum und andere unterstützte EVM Blockchains verfügbar.</string>
@@ -817,6 +843,7 @@
     <string name="Watch_WatchBy">Beobachten von</string>
     <string name="Watch_TypeEvmAddress">EVM-Adresse</string>
     <string name="Watch_TypeSolanaAddress">Solana-Adresse</string>
+    <string name="Watch_TypeTronAddress">Tron Adresse</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">Ungültiger xPubKey</string>
     <!--Manage Account-->
@@ -863,7 +890,21 @@
     <string name="BackupRecoveryPhrase_Title">Wallet sichern</string>
     <string name="BackupRecoveryPhrase_Description">Sichern Sie diese Brieftasche durch Erstellen einer Kopie ihrer Wiederherstellungs-Phrase. Es wird benötigt, um auf die Brieftasche zuzugreifen, wenn Ihr Telefon verloren geht, gestohlen, kaputt usw.</string>
     <string name="BackupRecoveryPhrase_Backup">Sicherung</string>
+    <string name="BackupRecoveryPhrase_ManualBackup">Manuelle Sicherung</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Lokale Sicherung</string>
     <string name="BackupRecoveryPhrase_Later">Später</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Füllen Sie eine der Wallet-Sicherungsoptionen aus, um mit der Wallet zu beginnen.</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">Es wird empfohlen, eine manuelle Sicherung für jede Wallet zu haben.</string>
+    <!-- Local Backup -->
+    <string name="LocalBackup_Title">Lokale Sicherung</string>
+    <string name="LocalBackup_SaveAndBackup">Speichern und sichern</string>
+    <string name="LocalBackup_SetPassword">Passwort festlegen</string>
+    <string name="LocalBackup_BackupSaved">Sicherung gespeichert</string>
+    <string name="LocalBackup_PasswordInvalid">Das Passwort muss mindestens 8 Zeichen enthalten, darunter ein Großbuchstabe, ein Kleinbuchstabe, eine Zahl und ein Symbol.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Vergessen Sie dieses Passwort nicht und behalten Sie es an einem sicheren Ort! Es kann nicht wiederhergestellt oder zurückgesetzt werden.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Um Ihre Sicherung in iCloud zu verschlüsseln, müssen Sie ein Passwort erstellen. Dieses Passwort muss mindestens 8 Zeichen enthalten, darunter einen Großbuchstaben, einen Kleinbuchstaben, eine Zahl und ein Symbol.</string>
+    <string name="LocalBackup_TermsWarningText">Speichergeräte wie Festplatten, USB-Laufwerke und Smartphone-Speicher sind alle anfällig für Datenverlust aufgrund von physischen Schäden, Diebstahl oder anderen unvorhergesehenen Umständen.</string>
+    <string name="LocalBackup_Term1">Ich verstehe, dass ein Diebstahl oder eine Beschädigung eines Sicherungsgeräts zum Verlust des Sicherungskopfes an eine entsprechende Brieftasche führen wird.</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Wiederherstellungsphrase</string>
     <string name="RecoveryPhrase_Description">Schreibe diese Wörter in die richtige Reihenfolge und halte sie an einem sicheren Ort</string>
@@ -979,10 +1020,6 @@
     <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
     <string name="Tor_TorIsActive">Tor ist aktiv</string>
     <string name="Tor_PrerequisitesAlert_Content">Durch die Aktivierung von TOR wird die Ethereum-Blockchain-Verbindung wieder auf Infura zurückgesetzt.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Alt</string>
-    <string name="CoinOption_bip49_Title">Gut</string>
-    <string name="CoinOption_bip84_Title">Beste</string>
     <!--Coin Page-->
     <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Preis</string>
@@ -1121,6 +1158,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_PageLocked">This page available only for P.CASH Wallet premium users</string>
+    <string name="CoinAnalytics_ActivateSubscription">Activate your subscription for getting access to analytics</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
     <string name="CoinAnalytics_CexVolume">CEX Volume</string>
     <string name="CoinAnalytics_CexVolumeRank">CEX Volume Rank</string>
@@ -1143,7 +1181,9 @@
     <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Project Revenue</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Project Revenue Rank</string>
+    <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
+    <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
     <string name="CoinAnalytics_OtherData">Other Data</string>
     <string name="CoinAnalytics_Reports">Reports</string>
     <string name="CoinAnalytics_Funding">Funding</string>
@@ -1155,6 +1195,11 @@
     <string name="Coin_Analytics_30DayRank">30-Day Rank</string>
     <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
     <string name="Coin_Analytics_30DayVolume">30-Day Volume</string>
+    <string name="ActivateSubscription_Title">Activate</string>
+    <string name="ActivateSubscription_Wallet">Wallet</string>
+    <string name="ActivateSubscription_Address">Adresse</string>
+    <string name="ActivateSubscription_MessageToSign">Message to Sign</string>
+    <string name="ActivateSubscription_SignMessageDescription">You need to sign this message to activate your subscription</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Durchschnitt 7D</string>
     <string name="Nfts_PriceType_Days_30">Durchschnitt 30D</string>

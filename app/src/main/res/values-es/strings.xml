@@ -42,6 +42,10 @@
     <string name="Button_Copy">Copiar</string>
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Eliminar</string>
+    <string name="Button_LearnMore">Aprender más</string>
+    <string name="Button_Activate">Activar</string>
+    <string name="Button_Sign">Firma</string>
+    <string name="Button_Activating">Activando</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Cualquier</string>
@@ -350,6 +354,8 @@
     <string name="FeeSettings_FeeLegacy_Info">La tarifa máxima total esperada para la transacción dada. Por lo general, la tarifa real de transacción va a ser menor.</string>
     <string name="FeeSettings_Fee">Comisión Máx.</string>
     <string name="FeeSettings_Fee_Info">La cuota máxima estimada de transacción a pagar por esta transacción, calculado en base al límite de gas, tasa máxima de comisión y valores máximos de tarifa de prioridad debajo. La tarifa real pagada normalmente será menor.</string>
+    <string name="FeeSettings_NetworkFee">Cuota de transferencia</string>
+    <string name="FeeSettings_NetworkFee_Info">El coste estimado del envío de una transacción en la red.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">La complejidad de la transacción se mide en unidades llamadas \"gas\". El límite de gas es el máximo estimado de gas necesario para ejecutarlo. El gas utilizado será normalmente más bajo.</string>
     <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
@@ -383,6 +389,11 @@
     <string name="FeeInfo_AverageDescription">Normalmente, el valor de tarifa recomendado debería ser suficiente para que la transacción sea procesada entre un minuto/hora para Bitcoin y dentro de minutos para Ethereum.</string>
     <string name="FeeInfo_Fast">Rápido</string>
     <string name="FeeInfo_FastDescription">Para las transacciones en las que la prioridad sea importante, recomendamos utilizar el valor de una tarifa mayor. Se espera que la selección de un ajuste de una tarifa mayor sea suficiente para que la transacción se complete dentro de 10 minutos para Bitcoin y dentro de unos minutos para Ethereum.</string>
+    <string name="FeeInfo_TronFee_Title">Comisión</string>
+    <string name="FeeInfo_TronFee_Description">El coste estimado del envío de una transacción en la red. (sin excluir Energía, Ancho de Banda y Tarifa Activa)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Tarifa de activación</string>
+    <string name="FeeInfo_TronActivationFee_Description">Transferir tokens TRX o TRC-10 a una dirección de cuenta inactiva activará la cuenta.</string>
+    <!--Tron-->
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Pedido</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
@@ -466,6 +477,7 @@
     <string name="Swap_BuyPrice">Precio de Compra</string>
     <string name="Swap_PriceImpact">Impacto en el precio</string>
     <string name="Swap_PriceImpactTooHigh">La diferencia entre el precio de mercado y el precio esperado de liquidación es demasiado alta.</string>
+    <string name="Swap_PriceImpactWarning">¡Importante! Has obtenido un precio extremadamente desfavorable debido a la baja liquidez del mercado.</string>
     <string name="Swap_MinimumReceived">Cantidad Garantizada</string>
     <string name="Swap_EstimatedFee">Tasa Estimada</string>
     <string name="Swap_MaxFee">Comisión Máx.</string>
@@ -661,6 +673,7 @@
     <string name="Appearance_BalanceValue">VALLA DE BALANZA</string>
     <string name="Appearance_Warning_CloseApplication">Cambiar icono cerrará la aplicación</string>
     <string name="Appearance_MarketsTab">Pestaña de Mercados</string>
+    <string name="Appearance_BalanceAutoHide">Saldo Auto Ocultar</string>
     <string name="BalanceViewType_CoinValue">Valor de la moneda</string>
     <string name="BalanceViewType_FiatValue">Valor Fiat</string>
     <string name="SettingsAboutApp_Title">Sobre la aplicacion</string>
@@ -806,6 +819,20 @@
     <string name="ManageAccounts_CreateNewWallet">Crear</string>
     <string name="ManageAccounts_ImportWallet">Restaurar desde</string>
     <string name="ManageAccounts_WatchAddress">Ver Dirección</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">Desde archivo</string>
+    <string name="ImportWallet_BackupFile_Description">Importar desde un archivo de copia de seguridad</string>
+    <string name="ImportWallet_RecoveryPhrase">de Frase de Recuperación</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Importe utilizando la frase de recuperación o la clave privada.</string>
+    <string name="ImportWallet_WatchAddress">Ver Dirección</string>
+    <string name="ImportWallet_WatchAddress_Description">Modo observatorio de EVM-Chain y BTC, LTC, direcciones DASH</string>
+    <string name="ImportWallet_WarningInvalidJson">Archivo Json inválido</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Este archivo no es una copia de seguridad válida de la cartera, o bien ha sido dañado y no se puede restaurar.</string>
+    <string name="ImportWallet_SelectAnotherFile">Seleccione otro archivo</string>
+    <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Introduzca contraseña</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Introduzca la contraseña de copia de seguridad para importar su cartera.</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">Contraseña no válida</string>
     <string name="Watch_Address_Hint">Dominio o dirección</string>
     <string name="Watch_XPubKey_Hint">Introduzca Account Extended Public Key</string>
     <string name="Watch_Address_Description">Disponible sólo para Ethereum y otras blockchains EVM soportadas.</string>
@@ -816,6 +843,7 @@
     <string name="Watch_WatchBy">Ver por</string>
     <string name="Watch_TypeEvmAddress">Dirección EVM</string>
     <string name="Watch_TypeSolanaAddress">Dirección Solana</string>
+    <string name="Watch_TypeTronAddress">Dirección de Tron</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">Clave xPubKey inválida</string>
     <!--Manage Account-->
@@ -862,7 +890,22 @@
     <string name="BackupRecoveryPhrase_Title">Backup del Monedero</string>
     <string name="BackupRecoveryPhrase_Description">Copia de seguridad de esta cartera creando una copia de su frase de recuperación. Será necesario para acceder al monedero si su teléfono está perdido, robado, roto, etc.</string>
     <string name="BackupRecoveryPhrase_Backup">Copia de seguridad</string>
+    <string name="BackupRecoveryPhrase_ManualBackup">Copia de seguridad manual</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Copia de seguridad local</string>
     <string name="BackupRecoveryPhrase_Later">Más tarde</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Completa una de las opciones de copia de seguridad de la cartera para empezar a utilizarla.</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">Se recomienda tener una copia de seguridad manual para cada cartera.</string>
+    <!-- Local Backup -->
+    <string name="LocalBackup_Title">Copia de seguridad local</string>
+    <string name="LocalBackup_SaveAndBackup">Guardar y hacer una copia de seguridad</string>
+    <string name="LocalBackup_SetPassword">Establecer contraseña</string>
+    <string name="LocalBackup_BackupSaved">Guardado de seguridad</string>
+    <string name="LocalBackup_PasswordInvalid">Al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">¡No olvide esta contraseña y guárdela en un lugar seguro! No se puede recuperar ni restablecer.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Proteja su copia de seguridad con contraseña para cifrarla en iCloud. La contraseña debe contener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.</string>
+    <string name="LocalBackup_TermsWarningText">Los dispositivos de almacenamiento, como los discos duros, los discos USB y el almacenamiento en smartphones, son todos vulnerables a pérdidas debido a daños físicos, robos u otras circunstancias imprevisibles.</string>
+    <string name="LocalBackup_Term1">Entiendo que el robo o daño de un dispositivo de copia de seguridad resultará en la pérdida de una copia de seguridad a una cartera respectiva.</string>
+    <string name="LocalBackup_Term2">Entiendo que si pierdo la copia de seguridad de mi cartera en el dispositivo de almacenamiento, perderé el acceso a mis fondos de cartera</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Frase de Recuperación</string>
     <string name="RecoveryPhrase_Description">Escriba estas palabras en el orden correcto y guárdelas en un lugar seguro</string>
@@ -978,10 +1021,6 @@
     <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="Tor_TorIsActive">Tor está activo</string>
     <string name="Tor_PrerequisitesAlert_Content">Activar TOR restablecerá la conexión del Blockchain de Ethereum de vuelta a Infura.</string>
-    <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Antiguo</string>
-    <string name="CoinOption_bip49_Title">Bueno</string>
-    <string name="CoinOption_bip84_Title">Mejor</string>
     <!--Coin Page-->
     <string name="Coin_Info">Información de Moneda</string>
     <string name="Coin_Tab_Overview">Precio</string>
@@ -1120,6 +1159,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_PageLocked">Esta página sólo está disponible para usuarios premium de Wallet imparables</string>
+    <string name="CoinAnalytics_ActivateSubscription">Activa tu suscripción para obtener acceso a analíticas</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Este proyecto no tiene datos analíticos</string>
     <string name="CoinAnalytics_CexVolume">Volumen CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Rango de Volumen CEX</string>
@@ -1142,7 +1182,9 @@
     <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Ingresos del Proyecto</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Rango de Ingresos del Proyecto</string>
+    <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">Las fichas clasificadas por los ingresos generados para los titulares a través de mecanismos como estocar o quemar fichas.</string>
+    <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
     <string name="CoinAnalytics_OtherData">Otros Datos</string>
     <string name="CoinAnalytics_Reports">Reportar</string>
     <string name="CoinAnalytics_Funding">Fondos</string>
@@ -1154,6 +1196,11 @@
     <string name="Coin_Analytics_30DayRank">Rango de 30 días</string>
     <string name="Coin_Analytics_30DayUniqueAddress">Direcciones únicas de 30 días</string>
     <string name="Coin_Analytics_30DayVolume">Volumen de 30 días</string>
+    <string name="ActivateSubscription_Title">Activar</string>
+    <string name="ActivateSubscription_Wallet">Monedero</string>
+    <string name="ActivateSubscription_Address">Dirección</string>
+    <string name="ActivateSubscription_MessageToSign">Mensaje a firmar</string>
+    <string name="ActivateSubscription_SignMessageDescription">Necesitas firmar este mensaje para activar tu suscripción</string>
     <string name="Nfts_Title">NFTS</string>
     <string name="Nfts_PriceType_Days_7">Promedio 7D.</string>
     <string name="Nfts_PriceType_Days_30">Promedio 30D.</string>
