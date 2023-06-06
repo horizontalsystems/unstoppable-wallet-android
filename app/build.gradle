@@ -69,7 +69,7 @@ android {
             resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
             resValue "string", "walletConnectV2Key", "8b4f41c60880a3e3ad57d82fddb30568"
             resValue "string", "solscanApiKey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE2Nzk0NjQyMTQ4NDAsImVtYWlsIjoiaHJ6c3lzdGVtczEwMUBnbWFpbC5jb20iLCJhY3Rpb24iOiJ0b2tlbi1hcGkiLCJpYXQiOjE2Nzk0NjQyMTR9.BRM7J9RbDpHgd2oMAus00XfWOxTJgV2Tn2_chXZOdtk"
-            resValue "string", "trongridApiKey", "2551eb81-3228-4c8c-889d-127d3bb73ad0"
+            resValue "string", "trongridApiKey", "33374494-8060-447e-8367-90c5efd4ed95"
         }
 
         appcenterdebug {
@@ -107,7 +107,7 @@ android {
             resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
             resValue "string", "walletConnectV2Key", "0c5ca155c2f165a7d0c88686f2113a72"
             resValue "string", "solscanApiKey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE2Nzk0NjQxMTQ0ODUsImVtYWlsIjoiaHNkYW84ODg4QGdtYWlsLmNvbSIsImFjdGlvbiI6InRva2VuLWFwaSIsImlhdCI6MTY3OTQ2NDExNH0.91DUjjjYu86f1ZMMJ5cyJxIKTTw_srhI-vNgYaTCPUU"
-            resValue "string", "trongridApiKey", "2551eb81-3228-4c8c-889d-127d3bb73ad0"
+            resValue "string", "trongridApiKey", "cec10562-8f2f-44a8-a0f6-245842bc6758"
         }
 
         appcenterrelease {
