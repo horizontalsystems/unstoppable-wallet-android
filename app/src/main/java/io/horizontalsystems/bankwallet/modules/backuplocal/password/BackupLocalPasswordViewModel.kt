@@ -133,7 +133,7 @@ class BackupLocalPasswordViewModel(
         val accountNonNull = account ?: return
         viewModelScope.launch(Dispatchers.IO) {
             val kdfParams = BackupLocalModule.kdfDefault
-            val secretText = BackupLocalModule.getStringForEncryption(accountNonNull.type)
+            val secretText = BackupLocalModule.getDataForEncryption(accountNonNull.type)
             val id = getId(secretText)
             val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: return@launch
 
@@ -169,9 +169,9 @@ class BackupLocalPasswordViewModel(
         }
     }
 
-    private fun getId(words: String): String {
+    private fun getId(value: ByteArray): String {
         val md = MessageDigest.getInstance("SHA-512")
-        val digest = md.digest(words.toByteArray())
+        val digest = md.digest(value)
         return digest.toHexString()
     }
 
