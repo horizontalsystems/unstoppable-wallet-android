@@ -212,6 +212,7 @@
     <string name="FeeInfo_AverageDescription">به طور معمول ، این دامنه کارمزد باید کافی باشد تا تراکنش طی چند دقیقه/ساعت برای بیت کوین و در عرض چند دقیقه برای اتریوم پردازش شود.</string>
     <string name="FeeInfo_Fast">بالا</string>
     <string name="FeeInfo_FastDescription">برای تراکنش هایی که اولویت مهم است، استفاده از ارزش کارمزد بالا را توصیه می کنیم. انتظار می رود که یک تراکنش در عرض 10 دقیقه برای بیت کوین و در عرض 1 تا 2 دقیقه برای اتریوم کافی باشد.</string>
+    <string name="FeeInfo_TronFee_Title">هزينه</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">درخواست</string>
     <string name="WalletConnect_SendRequest_Title">ارسال</string>
