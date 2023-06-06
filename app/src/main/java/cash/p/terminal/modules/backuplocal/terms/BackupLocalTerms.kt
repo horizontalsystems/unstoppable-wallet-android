@@ -34,8 +34,7 @@ fun LocalBackupTermsScreen(
     fragmentNavController: NavController,
     navController: NavController,
 ) {
-    var term1Checked by rememberSaveable { mutableStateOf(false) }
-    var term2Checked by rememberSaveable { mutableStateOf(false) }
+    var termChecked by rememberSaveable { mutableStateOf(false) }
 
     ComposeAppTheme {
         Scaffold(
@@ -63,25 +62,15 @@ fun LocalBackupTermsScreen(
                     )
                     VSpacer(24.dp)
                     CellUniversalLawrenceSection(
-                        listOf(
-                            {
-                                LocalBackupTerm(
-                                    text = stringResource(R.string.LocalBackup_Term1),
-                                    checked = term1Checked,
-                                    onCheckedChange = { checked ->
-                                        term1Checked = checked
-                                    }
-                                )
-                            }, {
-                                LocalBackupTerm(
-                                    text = stringResource(R.string.LocalBackup_Term2),
-                                    checked = term2Checked,
-                                    onCheckedChange = { checked ->
-                                        term2Checked = checked
-                                    }
-                                )
-                            }
-                        )
+                        listOf {
+                            LocalBackupTerm(
+                                text = stringResource(R.string.LocalBackup_Term1),
+                                checked = termChecked,
+                                onCheckedChange = { checked ->
+                                    termChecked = checked
+                                }
+                            )
+                        }
                     )
                 }
                 ButtonsGroupWithShade {
@@ -90,7 +79,7 @@ fun LocalBackupTermsScreen(
                             .fillMaxWidth()
                             .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                         title = stringResource(R.string.Button_Continue),
-                        enabled = term1Checked && term2Checked,
+                        enabled = termChecked,
                         onClick = {
                             navController.navigate("password_page")
                         },

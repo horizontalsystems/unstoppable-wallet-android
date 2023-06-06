@@ -2,6 +2,8 @@ package cash.p.terminal.modules.backuplocal
 
 import com.google.gson.annotations.SerializedName
 import cash.p.terminal.entities.AccountType
+import io.horizontalsystems.hdwalletkit.Base58
+import java.math.BigInteger
 
 object BackupLocalModule {
     private const val MNEMONIC = "mnemonic"
@@ -54,10 +56,10 @@ object BackupLocalModule {
     }
 
     @Throws(IllegalStateException::class)
-    fun getAccountTypeFromString(accountType: String, data: String): AccountType {
+    fun getAccountTypeFromData(accountType: String, data: ByteArray): AccountType {
         return when (accountType) {
             MNEMONIC -> {
-                val parts = data.split("@")
+                val parts = String(data, Charsets.UTF_8).split("@")
                 //check for nonstandard mnemonic from iOs app
                 if (parts[0].split("&").size > 1)
                     throw IllegalStateException("Non standard mnemonic")
@@ -66,30 +68,31 @@ object BackupLocalModule {
                 AccountType.Mnemonic(words, passphrase)
             }
 
-            PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toBigInteger())
-            ADDRESS -> AccountType.EvmAddress(data)
-            SOLANA_ADDRESS -> AccountType.SolanaAddress(data)
-            TRON_ADDRESS -> AccountType.TronAddress(data)
-            HD_EXTENDED_LEY -> AccountType.HdExtendedKey(data)
+            PRIVATE_KEY -> AccountType.EvmPrivateKey(BigInteger(data))
+            ADDRESS -> AccountType.EvmAddress(String(data, Charsets.UTF_8))
+            SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
+            TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
+            HD_EXTENDED_LEY -> AccountType.HdExtendedKey(Base58.encode(data))
             else -> throw IllegalStateException("Unknown account type")
         }
     }
 
-    fun getStringForEncryption(accountType: AccountType): String = when (accountType) {
+    fun getDataForEncryption(accountType: AccountType): ByteArray = when (accountType) {
         is AccountType.Mnemonic -> {
             val passphrasePart = if (accountType.passphrase.isNotBlank()) {
                 "@" + accountType.passphrase
             } else {
                 ""
             }
-            accountType.words.joinToString(" ") + passphrasePart
+            val combined = accountType.words.joinToString(" ") + passphrasePart
+            combined.toByteArray(Charsets.UTF_8)
         }
 
-        is AccountType.EvmPrivateKey -> accountType.key.toString()
-        is AccountType.EvmAddress -> accountType.address
-        is AccountType.SolanaAddress -> accountType.address
-        is AccountType.TronAddress -> accountType.address
-        is AccountType.HdExtendedKey -> accountType.keySerialized
+        is AccountType.EvmPrivateKey -> accountType.key.toByteArray()
+        is AccountType.EvmAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.SolanaAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.TronAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
     }
 
     val kdfDefault = KdfParams(

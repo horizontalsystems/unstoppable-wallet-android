@@ -81,7 +81,7 @@ class RestoreLocalViewModel(
             if (EncryptDecryptManager.passwordIsCorrect(backup.crypto.mac, backup.crypto.ciphertext, key)) {
                 val decrypted = encryptDecryptManager.decrypt(backup.crypto.ciphertext, key, backup.crypto.cipherparams.iv)
                 try {
-                    accountType = BackupLocalModule.getAccountTypeFromString(backup.type, decrypted)
+                    accountType = BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
                 } catch (e: IllegalStateException) {
                     parseError = e
                 }
