@@ -10,6 +10,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
@@ -45,6 +46,7 @@ class SendTronViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var feeState: FeeState = FeeState.Loading
+    private var cautions: List<HSCaution> = listOf()
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -123,63 +125,85 @@ class SendTronViewModel(
             isInactiveAddress = addressState.isInactiveAddress
         )
 
-        estimateFee(decimalAmount, address)
+        viewModelScope.launch {
+            estimateFee()
+            validateBalance()
+        }
     }
 
-    private fun estimateFee(amount: BigDecimal, toAddress: Address) {
-        viewModelScope.launch {
-            confirmationData = try {
-                feeState = FeeState.Loading
-                emitState()
+    private fun validateBalance() {
+        val trxAmount = if (sendToken == feeToken) decimalAmount else BigDecimal.ZERO
+        val feeState = feeState as? FeeState.Success ?: return
+        val totalFee = feeState.fees.sumOf { it.feeInSuns }.toBigDecimal().movePointLeft(feeToken.decimals)
 
-                val amountBigInteger = amount.movePointRight(sendToken.decimals).toBigInteger()
-                val tronAddress = TronAddress.fromBase58(toAddress.hex)
-                val fees = adapter.estimateFee(amountBigInteger, tronAddress)
+        cautions = if (trxAmount + totalFee > adapter.balanceData.available) {
+            listOf(
+                HSCaution(
+                    TranslatableString.PlainString(
+                        Translator.getString(
+                            R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
+                            feeToken.coin.code
+                        )
+                    )
+                )
+            )
+        } else {
+            listOf()
+        }
+        emitState()
+    }
 
-                var activationFee: BigDecimal? = null
-                var bandwidth: String? = null
-                var energy: String? = null
+    private suspend fun estimateFee() {
+        try {
+            feeState = FeeState.Loading
+            emitState()
 
-                fees.forEach { fee ->
-                    when (fee) {
-                        is Fee.AccountActivation -> {
-                            activationFee = fee.feeInSuns.toBigDecimal().movePointLeft(feeToken.decimals)
-                        }
+            val amount = amountState.evmAmount!!
+            val tronAddress = TronAddress.fromBase58(addressState.address!!.hex)
+            val fees = adapter.estimateFee(amount, tronAddress)
 
-                        is Fee.Bandwidth -> {
-                            bandwidth = "${fee.points} Bandwidth"
-                        }
+            var activationFee: BigDecimal? = null
+            var bandwidth: String? = null
+            var energy: String? = null
 
-                        is Fee.Energy -> {
-                            val formattedEnergy = App.numberFormatter.formatNumberShort(fee.required.toBigDecimal() + BigDecimal(10_000), 0)
-                            energy = "$formattedEnergy Energy"
-                        }
+            fees.forEach { fee ->
+                when (fee) {
+                    is Fee.AccountActivation -> {
+                        activationFee = fee.feeInSuns.toBigDecimal().movePointLeft(feeToken.decimals)
+                    }
+
+                    is Fee.Bandwidth -> {
+                        bandwidth = "${fee.points} Bandwidth"
+                    }
+
+                    is Fee.Energy -> {
+                        val formattedEnergy = App.numberFormatter.formatNumberShort(fee.required.toBigDecimal() + BigDecimal(10_000), 0)
+                        energy = "$formattedEnergy Energy"
                     }
                 }
-
-                val resourcesConsumed = if (bandwidth != null) {
-                    bandwidth + (energy?.let { " \n + $it" } ?: "")
-                } else {
-                    energy
-                }
-
-                feeState = FeeState.Success(fees)
-                emitState()
-
-                val totalFee = fees.sumOf { it.feeInSuns }.toBigDecimal().movePointLeft(feeToken.decimals)
-                confirmationData?.copy(
-                    fee = totalFee,
-                    activationFee = activationFee,
-                    resourcesConsumed = resourcesConsumed
-                )
-
-
-            } catch (error: Throwable) {
-                feeState = FeeState.Error(error)
-                emitState()
-
-                confirmationData?.copy(fee = null, activationFee = null, resourcesConsumed = null)
             }
+
+            val resourcesConsumed = if (bandwidth != null) {
+                bandwidth + (energy?.let { " \n + $it" } ?: "")
+            } else {
+                energy
+            }
+
+            feeState = FeeState.Success(fees)
+            emitState()
+
+            val totalFee = fees.sumOf { it.feeInSuns }.toBigDecimal().movePointLeft(feeToken.decimals)
+            confirmationData = confirmationData?.copy(
+                fee = totalFee,
+                activationFee = activationFee,
+                resourcesConsumed = resourcesConsumed
+            )
+        } catch (error: Throwable) {
+            cautions = listOf(createCaution(error))
+            feeState = FeeState.Error(error)
+            emitState()
+
+            confirmationData = confirmationData?.copy(fee = null, activationFee = null, resourcesConsumed = null)
         }
     }
 
@@ -225,9 +249,9 @@ class SendTronViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             proceedEnabled = amountState.canBeSend && addressState.canBeSend,
-            sendEnabled = feeState is FeeState.Success,
+            sendEnabled = cautions.isEmpty(),
             feeViewState = feeState.viewState,
-            cautions = (feeState as? FeeState.Error)?.let { listOf(createCaution(it.error)) } ?: listOf()
+            cautions = cautions
         )
     }
 }

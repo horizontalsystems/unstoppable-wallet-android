@@ -29,7 +29,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.fee.HSFeeInputRaw
@@ -211,31 +210,29 @@ fun SendTronConfirmationScreen(
                             )
                         }
 
-                        if (feeViewState == ViewState.Success) {
-                            activationFee?.let {
-                                add {
-                                    HSFeeInputRaw(
-                                        title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
-                                        info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
-                                        coinCode = feeCoin.code,
-                                        coinDecimal = feeCoinMaxAllowedDecimals,
-                                        fee = it,
-                                        amountInputType = amountInputType,
-                                        rate = feeCoinRate,
-                                        navController = navController
-                                    )
-                                }
+                        activationFee?.let {
+                            add {
+                                HSFeeInputRaw(
+                                    title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
+                                    info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
+                                    coinCode = feeCoin.code,
+                                    coinDecimal = feeCoinMaxAllowedDecimals,
+                                    fee = it,
+                                    amountInputType = amountInputType,
+                                    rate = feeCoinRate,
+                                    navController = navController
+                                )
                             }
+                        }
 
-                            resourcesConsumed?.let {
-                                add {
-                                    ResourcesConsumed(
-                                        title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
-                                        value = it,
-                                        info = stringResource(R.string.FeeInfo_TronResourcesConsumed_Description),
-                                        navController = navController
-                                    )
-                                }
+                        resourcesConsumed?.let {
+                            add {
+                                ResourcesConsumed(
+                                    title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
+                                    value = it,
+                                    info = stringResource(R.string.FeeInfo_TronResourcesConsumed_Description),
+                                    navController = navController
+                                )
                             }
                         }
 
