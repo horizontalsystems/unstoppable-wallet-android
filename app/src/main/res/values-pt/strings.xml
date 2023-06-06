@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">Parâmetro não está definido</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
@@ -42,7 +43,10 @@
     <string name="Button_Copy">Copiar</string>
     <string name="Button_Browser">Navegador</string>
     <string name="Button_Delete">Deletar</string>
+    <string name="Button_LearnMore">Saiba Mais</string>
+    <string name="Button_Activate">Ativar</string>
     <string name="Button_Sign">Assinar</string>
+    <string name="Button_Activating">Ativando</string>
     <string name="Error">Erro</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Qualquer</string>
@@ -351,6 +355,8 @@
     <string name="FeeSettings_FeeLegacy_Info">A taxa total máxima esperada para a determinada transação. Normalmente, a taxa de transação real será menor.</string>
     <string name="FeeSettings_Fee">Taxa máxima</string>
     <string name="FeeSettings_Fee_Info">A taxa máxima estimada de transação a ser paga por esta transação, calculado com base no limite do gás, a taxa máxima e os valores da taxa máxima de prioridade abaixo. A taxa real paga normalmente será menor.</string>
+    <string name="FeeSettings_NetworkFee">Taxa de Rede</string>
+    <string name="FeeSettings_NetworkFee_Info">O custo estimado do envio de determinada transação na rede.</string>
     <string name="FeeSettings_GasLimit">Limite de gás</string>
     <string name="FeeSettings_GasLimit_Info">A complexidade da transação é medida em unidades chamadas \"gas\". Ela varia dependendo do contrato inteligente ser executado. O Limite de Gas é estimado o gas máximo necessário para o executar. O gas real utilizado normalmente será mais baixo.</string>
     <string name="FeeSettings_GasPrice">Preço do gas (Gwei)</string>
@@ -385,6 +391,7 @@
     <string name="FeeInfo_Fast">Alto</string>
     <string name="FeeInfo_FastDescription">Para as operações em que a prioridade é importante, recomendamos a utilização do alto valor de taxa. É esperado que seja suficiente para concluir uma transação dentro de 10 minutos para o Bitcoin e dentro de 1 – 2 minutos para o Ethereum.</string>
     <string name="FeeInfo_TronFee_Title">Taxa</string>
+    <!--Tron-->
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Solicitar</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
@@ -468,6 +475,7 @@
     <string name="Swap_BuyPrice">Preço de Compra</string>
     <string name="Swap_PriceImpact">Impacto de preço</string>
     <string name="Swap_PriceImpactTooHigh">A diferença entre o preço de mercado e o preço de liquidação esperado é bastante elevada.</string>
+    <string name="Swap_PriceImpactWarning">Importante! Você está recebendo um preço extremamente desfavorável. Isso se deve a uma liquidez extremamente baixa.</string>
     <string name="Swap_MinimumReceived">Valor garantido</string>
     <string name="Swap_EstimatedFee">Taxa estimada</string>
     <string name="Swap_MaxFee">Taxa máxima</string>
@@ -809,6 +817,10 @@
     <string name="ManageAccounts_ImportWallet">Restaurar</string>
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
     <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">do Arquivo</string>
+    <string name="ImportWallet_BackupFile_Description">Importar de um arquivo de backup</string>
+    <string name="ImportWallet_RecoveryPhrase">da frase de recuperação</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Importar usando frase de recuperação ou chave privada.</string>
     <string name="ImportWallet_WatchAddress">Ver Endereço</string>
     <string name="ImportWallet_WatchAddress_Description">Modo de observação de EVM-Chain e BTC, LTC, endereços DASH</string>
     <string name="ImportWallet_WarningInvalidJson">Arquivo Json Inválido</string>
@@ -817,6 +829,7 @@
     <!-- Import Backup File -->
     <string name="ImportBackupFile_EnterPassword">Digite a senha</string>
     <string name="ImportBackupFile_EnterPassword_Description">Digite a senha de backup para importar sua carteira.</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">Senha inválida</string>
     <string name="Watch_Address_Hint">Endereço ou Domínio</string>
     <string name="Watch_XPubKey_Hint">Insira a chave pública estendida da conta</string>
     <string name="Watch_Address_Description">Disponível apenas para Ethereum e outras blockchains de EVM suportadas.</string>
@@ -827,6 +840,7 @@
     <string name="Watch_WatchBy">Assistir Por</string>
     <string name="Watch_TypeEvmAddress">Endereço EVM</string>
     <string name="Watch_TypeSolanaAddress">Endereço Solana</string>
+    <string name="Watch_TypeTronAddress">Endereço de Tron</string>
     <string name="Watch_TypeXPubKey">Conta xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">xPubKey Inválida</string>
     <!--Manage Account-->
@@ -876,12 +890,17 @@
     <string name="BackupRecoveryPhrase_ManualBackup">Backup Manual</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Backup Local</string>
     <string name="BackupRecoveryPhrase_Later">Mais tarde</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Conclua uma das opções de backup da carteira para começar a usar a carteira.</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">É recomendável ter um backup manual para cada carteira.</string>
     <!-- Local Backup -->
     <string name="LocalBackup_Title">Backup Local</string>
     <string name="LocalBackup_SaveAndBackup">Salvar e fazer Backup</string>
     <string name="LocalBackup_SetPassword">Definir Senha</string>
     <string name="LocalBackup_BackupSaved">Backup Salvo</string>
+    <string name="LocalBackup_PasswordInvalid">Pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um símbolo.</string>
     <string name="LocalBackup_DontForgetPasswordWarning">Não se esqueça desta senha e mantenha-a em um lugar seguro! Ela não pode ser recuperada ou redefinida.</string>
+    <string name="LocalBackup_TermsWarningText">Dispositivos de armazenamento, ou seja, discos rígidos, discos USB, armazenamento em smartphone, etc. são todos vulneráveis a perdas devido a danos físicos, roubo ou outras circunstâncias imprevistas.</string>
+    <string name="LocalBackup_Term1">Eu entendo que o roubo ou dano de um dispositivo de backup resultará na perda de um backup de uma respectiva carteira.</string>
     <string name="LocalBackup_Term2">Eu entendo que se eu perder o backup da minha carteira no dispositivo de armazenamento, eu vou perder o acesso aos meus fundos da carteira</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Frase de Recuperação</string>
@@ -1136,6 +1155,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info2">Classificação do token com base na receita gerada ao longo de um período de 30 dias para stakers do token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Lista de todos os tokens classificados com base na receita gerada para stakers do token em intervalos de 24h / 7D / 1M.</string>
     <string name="CoinAnalytics_PageLocked">Esta página está disponível apenas para usuários premium da Carteira Unstoppable</string>
+    <string name="CoinAnalytics_ActivateSubscription">Ativar sua assinatura para ter acesso ao Analytics</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Este projeto não tem dados analíticos</string>
     <string name="CoinAnalytics_CexVolume">Volume CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Ranking do Volume CEX</string>
@@ -1158,7 +1178,9 @@
     <string name="CoinAnalytics_TvlRatio">Proporção de Capital de M. / TVB</string>
     <string name="CoinAnalytics_ProjectRevenue">Receita do Projeto</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Ranking da Receita do Projeto</string>
+    <string name="CoinAnalytics_HoldersRank">Classificação dos Holders</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens classificados por receitas geradas para os holders através de mecanismos, ou seja, burns por staking ou token.</string>
+    <string name="CoinAnalytics_HoldersRank_Description">Raking de tokens por endereços únicos guardando-os em várias blockchains.</string>
     <string name="CoinAnalytics_OtherData">Outros dados</string>
     <string name="CoinAnalytics_Reports">Relatórios</string>
     <string name="CoinAnalytics_Funding">Financiamento</string>
@@ -1170,7 +1192,11 @@
     <string name="Coin_Analytics_30DayRank">Classificação 30-Dias</string>
     <string name="Coin_Analytics_30DayUniqueAddress">30 Dias Endereços Únicos</string>
     <string name="Coin_Analytics_30DayVolume">Volume 30 Dias</string>
+    <string name="ActivateSubscription_Title">Ativar</string>
+    <string name="ActivateSubscription_Wallet">Carteira</string>
     <string name="ActivateSubscription_Address">Endereço</string>
+    <string name="ActivateSubscription_MessageToSign">Mensagem para Assinar</string>
+    <string name="ActivateSubscription_SignMessageDescription">Você precisa assinar esta mensagem para ativar sua assinatura</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">média de 7D.</string>
     <string name="Nfts_PriceType_Days_30">média de 30.</string>
