@@ -264,6 +264,7 @@
     <string name="FeeInfo_AverageDescription">Genellikle bu ücret, işlemin Bitcoin için dakikalar/saatler içinde ve Ethereum için dakikalar içinde işleme alınması için yeterli olacaktır.</string>
     <string name="FeeInfo_Fast">Hızlı</string>
     <string name="FeeInfo_FastDescription">Önceliğin önemli olduğu işlemler için yüksek ücret değeri kullanmanızı öneririz. Bir işlemin Bitcoin için 10 dakika, Ethereum için 1-2 dakika içerisinde tamamlanması için yeterli olacaktır.</string>
+    <string name="FeeInfo_TronFee_Title">Masraf</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">İstek</string>
     <string name="WalletConnect_SendRequest_Title">Gönder</string>
