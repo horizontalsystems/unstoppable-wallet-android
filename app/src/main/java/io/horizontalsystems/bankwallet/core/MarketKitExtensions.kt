@@ -222,27 +222,34 @@ val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
         else -> listOf()
     }
 
-val BlockchainType.order: Int
-    get() = when (this) {
-        BlockchainType.Bitcoin -> 1
-        BlockchainType.Ethereum -> 2
-        BlockchainType.BinanceSmartChain -> 3
-        BlockchainType.Polygon -> 4
-        BlockchainType.Avalanche -> 5
-        BlockchainType.Zcash -> 6
-        BlockchainType.BitcoinCash -> 7
-        BlockchainType.Litecoin -> 8
-        BlockchainType.Dash -> 9
-        BlockchainType.BinanceChain -> 10
-        BlockchainType.Gnosis -> 11
-        BlockchainType.Fantom -> 12
-        BlockchainType.ArbitrumOne -> 13
-        BlockchainType.Optimism -> 14
-        BlockchainType.Solana -> 15
-        BlockchainType.ECash -> 17
-        BlockchainType.Tron -> 18
-        else -> Int.MAX_VALUE
+private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
+    val map = mutableMapOf<BlockchainType, Int>()
+    listOf(
+        BlockchainType.Bitcoin,
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Tron,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Zcash,
+        BlockchainType.BitcoinCash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash,
+        BlockchainType.BinanceChain,
+        BlockchainType.Gnosis,
+        BlockchainType.Fantom,
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Optimism,
+        BlockchainType.Solana,
+        BlockchainType.ECash,
+    ).forEachIndexed { index, blockchainType ->
+        map[blockchainType] = index
     }
+    map
+}
+
+val BlockchainType.order: Int
+    get() = blockchainOrderMap[this] ?: Int.MAX_VALUE
 
 val BlockchainType.tokenIconPlaceholder: Int
     get() = when (this) {
