@@ -901,7 +901,6 @@
     <string name="LocalBackup_DontForgetPasswordWarning">Não se esqueça desta senha e mantenha-a em um lugar seguro! Ela não pode ser recuperada ou redefinida.</string>
     <string name="LocalBackup_TermsWarningText">Dispositivos de armazenamento, ou seja, discos rígidos, discos USB, armazenamento em smartphone, etc. são todos vulneráveis a perdas devido a danos físicos, roubo ou outras circunstâncias imprevistas.</string>
     <string name="LocalBackup_Term1">Eu entendo que o roubo ou dano de um dispositivo de backup resultará na perda de um backup de uma respectiva carteira.</string>
-    <string name="LocalBackup_Term2">Eu entendo que se eu perder o backup da minha carteira no dispositivo de armazenamento, eu vou perder o acesso aos meus fundos da carteira</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Frase de Recuperação</string>
     <string name="RecoveryPhrase_Description">Escreva essas palavras na ordem correta e mantenha-as em um lugar seguro</string>
