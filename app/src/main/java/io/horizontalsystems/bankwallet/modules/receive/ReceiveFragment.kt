@@ -5,9 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +32,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,12 +41,24 @@ import androidx.core.app.ShareCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString.ResString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.C2
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.D1
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -145,12 +172,44 @@ private fun ReceiveScreen(
                     }
                 }
 
-                D1(
-                    text = addressHint,
+                Row(
                     modifier = Modifier.padding(top = 23.dp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    D1(
+                        text = addressHint,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    if (!viewModel.isAccountActive) {
+                        val infoTitle = stringResource(R.string.Tron_AddressNotActive_Title)
+                        val info = stringResource(R.string.Tron_AddressNotActive_Info)
+                        Row(
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = {
+                                        navController.slideFromBottom(
+                                            R.id.feeSettingsInfoDialog,
+                                            FeeSettingsInfoDialog.prepareParams(infoTitle, info)
+                                        )
+                                    },
+                                    interactionSource = MutableInteractionSource(),
+                                    indication = null
+                                )
+                                .padding(start = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            subhead2_jacob(text = stringResource(R.string.Tron_AddressNotActive_Warning_Short))
+
+                            Image(
+                                modifier = Modifier.padding(start = 4.dp),
+                                painter = painterResource(id = R.drawable.ic_info_20),
+                                contentDescription = ""
+                            )
+                        }
+                    }
+                }
 
                 C2(
                     text = viewModel.receiveAddress,
