@@ -22,6 +22,9 @@ abstract class BaseTronAdapter(
 
     // IReceiveAdapter
 
+    override val isAccountActive: Boolean
+        get() = tronKit.isAccountActive
+
     override val receiveAddress: String
         get() = tronKit.address.base58
 

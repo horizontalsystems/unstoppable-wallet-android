@@ -5,9 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +32,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,12 +41,24 @@ import androidx.core.app.ShareCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.App
+import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString.ResString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
+import cash.p.terminal.ui.compose.components.C2
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.D1
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.subhead2_jacob
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -145,12 +172,44 @@ private fun ReceiveScreen(
                     }
                 }
 
-                D1(
-                    text = addressHint,
+                Row(
                     modifier = Modifier.padding(top = 23.dp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    D1(
+                        text = addressHint,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    if (!viewModel.isAccountActive) {
+                        val infoTitle = stringResource(R.string.Tron_AddressNotActive_Title)
+                        val info = stringResource(R.string.Tron_AddressNotActive_Info)
+                        Row(
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = {
+                                        navController.slideFromBottom(
+                                            R.id.feeSettingsInfoDialog,
+                                            FeeSettingsInfoDialog.prepareParams(infoTitle, info)
+                                        )
+                                    },
+                                    interactionSource = MutableInteractionSource(),
+                                    indication = null
+                                )
+                                .padding(start = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            subhead2_jacob(text = stringResource(R.string.Tron_AddressNotActive_Warning_Short))
+
+                            Image(
+                                modifier = Modifier.padding(start = 4.dp),
+                                painter = painterResource(id = R.drawable.ic_info_20),
+                                contentDescription = ""
+                            )
+                        }
+                    }
+                }
 
                 C2(
                     text = viewModel.receiveAddress,
