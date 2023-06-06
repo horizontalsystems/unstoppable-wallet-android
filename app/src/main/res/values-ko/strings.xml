@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">매개 변수가 설정되지 않았습니다</string>
     <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
@@ -42,6 +43,8 @@
     <string name="Button_Copy">복사</string>
     <string name="Button_Browser">자동</string>
     <string name="Button_Delete">삭제</string>
+    <string name="Button_LearnMore">자세히 보기</string>
+    <string name="Button_Activate">활성화</string>
     <string name="Button_Sign">가입</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
@@ -383,6 +386,7 @@
     <string name="FeeInfo_Fast">빠르게</string>
     <string name="FeeInfo_FastDescription">우선 순위가 중요한 거래의 경우 높은 수수료 값을 사용하는 것이 좋습니다. 비트코인의 경우 10분 이내, 이더리움의 경우 1~2분 이내에 거래가 완료될 것으로 예상됩니다.</string>
     <string name="FeeInfo_TronFee_Title">수수료</string>
+    <!--Tron-->
     <!--WalletConnect-->
     <string name="WalletConnect_Request">요청</string>
     <string name="WalletConnect_SendRequest_Title">전송</string>
@@ -395,6 +399,7 @@
     <string name="WalletConnect_Ready_Hint">브라우저로 이동하십시오. 브라우저에서 상호 작용하는 동안에는 이 페이지를 닫지 마십시오.</string>
     <string name="WalletConnect_Reconnect_Hint">연결을 설정하지 못했습니다. 다시 연결해 보세요.</string>
     <string name="WalletConnect_Error_InvalidUrl">잘못된 주소</string>
+    <string name="WalletConnect_NotSupportedV2">WalletConnect v2는 지원되지 않습니다</string>
     <string name="WalletConnect_Requirement">요구 사항</string>
     <string name="WalletConnect_Alert">알림</string>
     <string name="WalletConnect_Status_Offline">오프라인</string>
@@ -411,6 +416,7 @@
     <string name="WalletConnect_Error_NoWallet">WalletConnect를 사용하려면 먼저 지갑을 생성하거나 가져와야 합니다</string>
     <string name="WalletConnect_Error_NeedBackup">WalletConnect를 사용하려면 %s을(를) 백업해야 합니다.</string>
     <string name="WalletConnect_Error_WatchAccount">이 기능은 시계 전용 지갑에서는 작동하지 않으므로 복원 또는 생성된 지갑으로 전환해야 합니다 </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">지원되지 않는 블록체인입니다</string>
     <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">적합한 evm 키트가 없습니다.</string>
     <string name="WalletConnect_Error_DataParsingError">데이터 파싱 오류</string>
@@ -464,6 +470,7 @@
     <string name="Swap_BuyPrice">구매 가격</string>
     <string name="Swap_PriceImpact">가격 영향</string>
     <string name="Swap_PriceImpactTooHigh">시장 가격과 예상 결제 가격의 차이가 너무 큽니다.</string>
+    <string name="Swap_PriceImpactWarning">중요한 사항입니다! 매우 불리한 가격을 받고 있습니다. 이는 유동성이 극도로 낮기 때문입니다.</string>
     <string name="Swap_MinimumReceived">보증 금액</string>
     <string name="Swap_EstimatedFee">예상 수수료</string>
     <string name="Swap_MaxFee">최대 수수료</string>
@@ -659,6 +666,7 @@
     <string name="Appearance_BalanceValue">균형 가치</string>
     <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
     <string name="Appearance_MarketsTab">시장 탭</string>
+    <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
     <string name="BalanceViewType_FiatValue">법정 가치</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
@@ -805,6 +813,7 @@
     <string name="ManageAccounts_ImportWallet">다음에서 복원하기</string>
     <string name="ManageAccounts_WatchAddress">주소 관찰</string>
     <!-- Import Wallet -->
+    <string name="ImportWallet_RecoveryPhrase_Description">이 문구는 복구 문구 또는 개인 키를 사용하여 가져올 수 있습니다.</string>
     <string name="ImportWallet_WatchAddress">주소 관찰</string>
     <!-- Import Backup File -->
     <string name="Watch_Address_Hint">주소 또는 도메인</string>
@@ -1051,6 +1060,11 @@
     <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
+    <string name="CoinPage_MarketCap_Million">M</string>
+    <string name="CoinPage_MarketCap_Billion">B</string>
+    <string name="CoinPage_MarketCap_Trillion">T</string>
+    <string name="CoinPage_MarketCap_Quadrillion">Q</string>
     <string name="CoinPage_MarketCap_TvlRation">MCap / TVL Ratio</string>
     <string name="CoinPage_MarketCap_TvlRation_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_Volume">Vol</string>
@@ -1122,6 +1136,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_PageLocked">This page available only for Unstoppable Wallet premium users</string>
+    <string name="CoinAnalytics_ActivateSubscription">Activate your subscription for getting access to analytics</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
     <string name="CoinAnalytics_CexVolume">CEX Volume</string>
     <string name="CoinAnalytics_CexVolumeRank">CEX Volume Rank</string>
