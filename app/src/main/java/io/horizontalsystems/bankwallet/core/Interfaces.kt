@@ -256,6 +256,9 @@ data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDe
 
 interface IReceiveAdapter {
     val receiveAddress: String
+
+    val isAccountActive: Boolean
+        get() = true
 }
 
 interface ISendBitcoinAdapter {

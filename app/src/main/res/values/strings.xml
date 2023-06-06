@@ -472,6 +472,7 @@
 
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">This address is not active</string>
+    <string name="Tron_AddressNotActive_Warning_Short">(not active)</string>
     <string name="Tron_AddressNotActive_Title">Not Active Address</string>
     <string name="Tron_AddressNotActive_Info">Newly created accounts on the TRON blockchain are inactive and cannot be queried or explored. They need to be activated.\n\nTransferring TRX or TRC-10 tokens to an inactive account address will activate the account. Activating a new account on the Tron chain requires a fee of 1 TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">Cannot transfer TRX to yourself</string>
