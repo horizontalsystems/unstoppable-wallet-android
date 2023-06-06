@@ -279,6 +279,7 @@
     <string name="FeeInfo_AverageDescription">Typischerweise sollte diese Gebührenspanne ausreichen, um eine Transaktion innerhalb von Minuten/Stunde für Bitcoin und innerhalb von Minuten für Ethereum zu verarbeiten.</string>
     <string name="FeeInfo_Fast">Schnell</string>
     <string name="FeeInfo_FastDescription">Bei Transaktionen, deren Priorität wichtig ist, empfehlen wir, den hohen Gebührenwert zu verwenden. Es wird erwartet, dass eine Transaktion innerhalb von 10 Minuten für Bitcoin und innerhalb von 1-2 Minuten für Ethereum abgeschlossen wird.</string>
+    <string name="FeeInfo_TronFee_Title">Gebühr</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Anforderung</string>
     <string name="WalletConnect_SendRequest_Title">Senden</string>
