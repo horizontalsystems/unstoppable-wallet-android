@@ -328,6 +328,8 @@ interface ISendTronAdapter {
 
     suspend fun estimateFee(amount: BigInteger, to: TronAddress): List<Fee>
     suspend fun send(amount: BigInteger, to: TronAddress, feeLimit: Long?)
+    suspend fun isAddressActive(address: TronAddress): Boolean
+    fun isOwnAddress(address: TronAddress): Boolean
 }
 
 interface IAccountsStorage {

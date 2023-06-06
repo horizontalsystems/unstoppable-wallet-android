@@ -30,7 +30,7 @@ object SendTronModule {
                         wallet.token,
                         amountValidator,
                     )
-                    val addressService = SendTronAddressService()
+                    val addressService = SendTronAddressService(adapter, wallet.token)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
 

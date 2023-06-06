@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.tron
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -52,6 +54,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddr
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -80,6 +83,7 @@ fun SendTronConfirmationScreen(
     val feeCoin = confirmationData.feeCoin
     val amount = confirmationData.amount
     val address = confirmationData.address
+    val isInactiveAddress = confirmationData.isInactiveAddress
     val contact = confirmationData.contact
     val fee = confirmationData.fee
     val activationFee = confirmationData.activationFee
@@ -176,6 +180,11 @@ fun SendTronConfirmationScreen(
                                 navController = navController
                             )
                         }
+                        if (isInactiveAddress) {
+                            add {
+                                InactiveAddressWarningItem(navController)
+                            }
+                        }
                         contact?.let {
                             add {
                                 TransactionInfoContactCell(name = contact.name)
@@ -190,8 +199,8 @@ fun SendTronConfirmationScreen(
                     val bottomSectionItems = buildList<@Composable () -> Unit> {
                         add {
                             HSFeeInputRawWithViewState(
-                                title =  stringResource(R.string.FeeInfo_TronFee_Title),
-                                info =  stringResource(R.string.FeeInfo_TronFee_Description),
+                                title = stringResource(R.string.FeeInfo_TronFee_Title),
+                                info = stringResource(R.string.FeeInfo_TronFee_Description),
                                 coinCode = feeCoin.code,
                                 coinDecimal = feeCoinMaxAllowedDecimals,
                                 fee = fee,
@@ -257,6 +266,35 @@ fun SendTronConfirmationScreen(
             }
         }
 
+    }
+}
+
+@Composable
+private fun InactiveAddressWarningItem(navController: NavController) {
+    val title = stringResource(R.string.Tron_AddressNotActive_Title)
+    val info = stringResource(R.string.Tron_AddressNotActive_Info)
+    RowUniversal(
+        modifier = Modifier
+            .clickable(
+                onClick = {
+                    navController.slideFromBottom(
+                        R.id.feeSettingsInfoDialog,
+                        FeeSettingsInfoDialog.prepareParams(title, info)
+                    )
+                },
+                interactionSource = MutableInteractionSource(),
+                indication = null
+            )
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        subhead2_jacob(text = stringResource(R.string.Tron_AddressNotActive_Warning))
+
+        Image(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            painter = painterResource(id = R.drawable.ic_info_20),
+            contentDescription = ""
+        )
     }
 }
 
