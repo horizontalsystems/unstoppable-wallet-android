@@ -1007,10 +1007,10 @@
     <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
 
     <!-- Import Wallet -->
-    <string name="ImportWallet_BackupFile">Import Backup File</string>
-    <string name="ImportWallet_BackupFile_Description">Importing a wallet backup file from a storage</string>
-    <string name="ImportWallet_RecoveryPhrase">Import from Recovery Phrase or Private Key</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Manually add a recovery phrase or private key to recover a crypto wallet </string>
+    <string name="ImportWallet_BackupFile">from File</string>
+    <string name="ImportWallet_BackupFile_Description">Import from a backup file</string>
+    <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Import using recovery phrase or private key.</string>
     <string name="ImportWallet_WatchAddress">Watch Address</string>
     <string name="ImportWallet_WatchAddress_Description">Observing mode of EVM-Chain and BTC, LTC, DASH addresses</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
@@ -1097,11 +1097,11 @@
     <string name="LocalBackup_SaveAndBackup">Save and Backup</string>
     <string name="LocalBackup_SetPassword">Set Password</string>
     <string name="LocalBackup_BackupSaved">Backup Saved</string>
-    <string name="LocalBackup_PasswordInvalid">Your password should be least 8 characters long, including one uppercase letter, one lowercase letter, one number, and one symbol.</string>
+    <string name="LocalBackup_PasswordInvalid">At least 8 characters, including one uppercase letter, one lowercase letter, one number and one symbol.</string>
     <string name="LocalBackup_DontForgetPasswordWarning">Don\'t forget this password and keep it in a safe place! It cannot be recovered or reset.</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Protect the backup with a password to encrypt it in your local storage.</string>
-    <string name="LocalBackup_TermsWarningText">Local storage, such as hard drives, USB drives and shared folders, are vulnerable to data leakage or loss due to physical damage, theft or other unforeseen circumstances. Local storage is completely dependent on your ability to protect and secure your data. To prevent data loss, it is important to back up your files to a secure device and store them in a safe place, and to back up your wallet manually.</string>
-    <string name="LocalBackup_Term1">I understand that by backing up to local storage, I run the risk of attacking my wallet backups</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Password-protect your backup to encrypt it on iCloud. The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one symbol.</string>
+    <string name="LocalBackup_TermsWarningText">Storage devices i.e. hard drives, USB drives , storage on smartphone etc. are all vulnerable to loss due to physical damage, theft or other unforeseen circumstances.</string>
+    <string name="LocalBackup_Term1">I understand that theft or damage of a backup device will result in loss of a backup to a respective wallet.</string>
     <string name="LocalBackup_Term2">I understand that if I lose my wallet backup on the storage device, I will lose access to my wallet funds</string>
 
     <!-- Recovery Phrase -->
@@ -1413,7 +1413,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
 
     <string name="CoinAnalytics_PageLocked">This page available only for P.CASH Wallet premium users</string>
-    <string name="CoinAnalytics_ActivateSubscription">Activate yor subscription for getting access to analytics</string>
+    <string name="CoinAnalytics_ActivateSubscription">Activate your subscription for getting access to analytics</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
     <string name="CoinAnalytics_ThreeDots" translatable="false">•••</string>
     <string name="CoinAnalytics_CexVolume">CEX Volume</string>
