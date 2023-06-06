@@ -385,6 +385,7 @@
     <string name="FeeInfo_Fast">快</string>
     <string name="FeeInfo_FastDescription">对于优先级重要的交易，我们建议使用高收费值。预计这将足以在10分钟内完成比特币交易，1-2分钟以内完成Ethereum交易。</string>
     <string name="FeeInfo_TronFee_Title">费用</string>
+    <!--Tron-->
     <!--WalletConnect-->
     <string name="WalletConnect_Request">请求</string>
     <string name="WalletConnect_SendRequest_Title">发送​​</string>
