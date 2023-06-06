@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
@@ -211,31 +210,29 @@ fun SendTronConfirmationScreen(
                             )
                         }
 
-                        if (feeViewState == ViewState.Success) {
-                            activationFee?.let {
-                                add {
-                                    HSFeeInputRaw(
-                                        title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
-                                        info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
-                                        coinCode = feeCoin.code,
-                                        coinDecimal = feeCoinMaxAllowedDecimals,
-                                        fee = it,
-                                        amountInputType = amountInputType,
-                                        rate = feeCoinRate,
-                                        navController = navController
-                                    )
-                                }
+                        activationFee?.let {
+                            add {
+                                HSFeeInputRaw(
+                                    title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
+                                    info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
+                                    coinCode = feeCoin.code,
+                                    coinDecimal = feeCoinMaxAllowedDecimals,
+                                    fee = it,
+                                    amountInputType = amountInputType,
+                                    rate = feeCoinRate,
+                                    navController = navController
+                                )
                             }
+                        }
 
-                            resourcesConsumed?.let {
-                                add {
-                                    ResourcesConsumed(
-                                        title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
-                                        value = it,
-                                        info = stringResource(R.string.FeeInfo_TronResourcesConsumed_Description),
-                                        navController = navController
-                                    )
-                                }
+                        resourcesConsumed?.let {
+                            add {
+                                ResourcesConsumed(
+                                    title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
+                                    value = it,
+                                    info = stringResource(R.string.FeeInfo_TronResourcesConsumed_Description),
+                                    navController = navController
+                                )
                             }
                         }
 
