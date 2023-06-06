@@ -325,6 +325,7 @@
     <string name="FeeInfo_AverageDescription">Normalmente, el valor de tarifa recomendado debería ser suficiente para que la transacción sea procesada entre un minuto/hora para Bitcoin y dentro de minutos para Ethereum.</string>
     <string name="FeeInfo_Fast">Rápido</string>
     <string name="FeeInfo_FastDescription">Para las transacciones en las que la prioridad sea importante, recomendamos utilizar el valor de una tarifa mayor. Se espera que la selección de un ajuste de una tarifa mayor sea suficiente para que la transacción se complete dentro de 10 minutos para Bitcoin y dentro de unos minutos para Ethereum.</string>
+    <string name="FeeInfo_TronFee_Title">Comisión</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Pedido</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
