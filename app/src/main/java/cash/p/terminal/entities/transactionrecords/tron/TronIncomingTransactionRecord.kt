@@ -10,8 +10,9 @@ class TronIncomingTransactionRecord(
     baseToken: Token,
     source: TransactionSource,
     val from: String,
-    val value: TransactionValue
-) : TronTransactionRecord(transaction, baseToken, source, true) {
+    val value: TransactionValue,
+    spam: Boolean
+) : TronTransactionRecord(transaction, baseToken, source, true, spam) {
 
     override val mainValue = value
 
