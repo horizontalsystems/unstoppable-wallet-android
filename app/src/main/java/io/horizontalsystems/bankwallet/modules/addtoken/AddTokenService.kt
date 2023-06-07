@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -18,6 +22,7 @@ class AddTokenService(
     private val blockchainTypes = listOf(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
+        BlockchainType.Tron,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.BinanceChain,
@@ -41,6 +46,9 @@ class AddTokenService(
                 blockchain,
                 App.networkManager
             )
+            BlockchainType.Tron -> {
+                AddTronTokenBlockchainService.getInstance(blockchain)
+            }
             else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }
 
