@@ -905,7 +905,6 @@
     <string name="LocalBackup_ProtextBackupWithPasswordInfo">Proteja su copia de seguridad con contraseña para cifrarla en iCloud. La contraseña debe contener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.</string>
     <string name="LocalBackup_TermsWarningText">Los dispositivos de almacenamiento, como los discos duros, los discos USB y el almacenamiento en smartphones, son todos vulnerables a pérdidas debido a daños físicos, robos u otras circunstancias imprevisibles.</string>
     <string name="LocalBackup_Term1">Entiendo que el robo o daño de un dispositivo de copia de seguridad resultará en la pérdida de una copia de seguridad a una cartera respectiva.</string>
-    <string name="LocalBackup_Term2">Entiendo que si pierdo la copia de seguridad de mi cartera en el dispositivo de almacenamiento, perderé el acceso a mis fondos de cartera</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Frase de Recuperación</string>
     <string name="RecoveryPhrase_Description">Escriba estas palabras en el orden correcto y guárdelas en un lugar seguro</string>
