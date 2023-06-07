@@ -30,9 +30,9 @@ import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 class SendTronViewModel(
     val wallet: Wallet,
-    val sendToken: Token,
-    val feeToken: Token,
-    val adapter: ISendTronAdapter,
+    private val sendToken: Token,
+    private val feeToken: Token,
+    private val adapter: ISendTronAdapter,
     private val xRateService: XRateService,
     private val amountService: SendAmountAdvancedService,
     private val addressService: SendTronAddressService,
@@ -135,8 +135,9 @@ class SendTronViewModel(
         val trxAmount = if (sendToken == feeToken) decimalAmount else BigDecimal.ZERO
         val feeState = feeState as? FeeState.Success ?: return
         val totalFee = feeState.fees.sumOf { it.feeInSuns }.toBigDecimal().movePointLeft(feeToken.decimals)
+        val availableBalance = adapter.trxBalanceData.available
 
-        cautions = if (trxAmount + totalFee > adapter.balanceData.available) {
+        cautions = if (trxAmount + totalFee > availableBalance) {
             listOf(
                 HSCaution(
                     TranslatableString.PlainString(
