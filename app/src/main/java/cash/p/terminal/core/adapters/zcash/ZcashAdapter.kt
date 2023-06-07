@@ -29,18 +29,16 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 import kotlin.math.max
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ZcashAdapter(
-        context: Context,
-        private val wallet: Wallet,
-        restoreSettings: RestoreSettings,
+    context: Context,
+    private val wallet: Wallet,
+    restoreSettings: RestoreSettings,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
@@ -111,7 +109,6 @@ class ZcashAdapter(
             }
         }
 
-    @OptIn(FlowPreview::class)
     override fun start() {
         subscribe(synchronizer as SdkSynchronizer)
     }
@@ -194,11 +191,17 @@ class ZcashAdapter(
         "https://blockchair.com/zcash/transaction/$transactionHash"
 
     override val availableBalance: BigDecimal
-        get() = synchronizer.saplingBalances.value
-            ?.available
-            ?.minus(defaultFee())
-            .convertZatoshiToZec(decimalCount)
-            .coerceAtLeast(BigDecimal.ZERO)
+        get() {
+            val available = synchronizer.saplingBalances.value?.available ?: Zatoshi(0)
+            val defaultFee = defaultFee()
+
+            return if (available <= defaultFee) {
+                BigDecimal.ZERO
+            } else {
+                available.minus(defaultFee)
+                    .convertZatoshiToZec(decimalCount)
+            }
+        }
 
     override val fee: BigDecimal
         get() = defaultFee().convertZatoshiToZec(decimalCount)
@@ -213,7 +216,6 @@ class ZcashAdapter(
         }
     }
 
-    @OptIn(FlowPreview::class)
     override fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit> =
             Single.create { emitter ->
                 try {
