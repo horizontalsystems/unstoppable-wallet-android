@@ -52,7 +52,7 @@ class Trc20Adapter(
     // ISendTronAdapter
 
     override val trxBalanceData: BalanceData
-        get() = BalanceData(balanceInBigDecimal(tronKit.trxBalance, decimal))
+        get() = BalanceData(balanceInBigDecimal(tronKit.trxBalance, TronAdapter.decimal))
 
     override suspend fun estimateFee(amount: BigInteger, to: Address): List<Fee> {
         val contract = tronKit.transferTrc20TriggerSmartContract(contractAddress, to, amount)

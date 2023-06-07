@@ -1,7 +1,11 @@
 package cash.p.terminal.modules.addtoken
 
-import cash.p.terminal.core.*
+import cash.p.terminal.core.App
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.ICoinManager
+import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.order
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -18,6 +22,7 @@ class AddTokenService(
     private val blockchainTypes = listOf(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
+        BlockchainType.Tron,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.BinanceChain,
@@ -41,6 +46,9 @@ class AddTokenService(
                 blockchain,
                 App.networkManager
             )
+            BlockchainType.Tron -> {
+                AddTronTokenBlockchainService.getInstance(blockchain)
+            }
             else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }
 
