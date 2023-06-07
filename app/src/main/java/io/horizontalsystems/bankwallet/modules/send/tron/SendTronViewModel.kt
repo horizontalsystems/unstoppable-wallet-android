@@ -178,7 +178,7 @@ class SendTronViewModel(
                     }
 
                     is Fee.Energy -> {
-                        val formattedEnergy = App.numberFormatter.formatNumberShort(fee.required.toBigDecimal() + BigDecimal(10_000), 0)
+                        val formattedEnergy = App.numberFormatter.formatNumberShort(fee.required.toBigDecimal(), 0)
                         energy = "$formattedEnergy Energy"
                     }
                 }
