@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
@@ -203,9 +204,10 @@ private fun ReceiveScreen(
                             subhead2_jacob(text = stringResource(R.string.Tron_AddressNotActive_Warning_Short))
 
                             Image(
-                                modifier = Modifier.padding(start = 4.dp),
+                                modifier = Modifier. padding(start = 4.dp),
                                 painter = painterResource(id = R.drawable.ic_info_20),
-                                contentDescription = ""
+                                contentDescription = "",
+                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
                             )
                         }
                     }
