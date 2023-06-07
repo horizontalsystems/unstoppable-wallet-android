@@ -46,6 +46,9 @@ class TronAdapter(kitWrapper: TronKitWrapper) : BaseTronAdapter(kitWrapper, deci
 
     // ISendTronAdapter
 
+    override val trxBalanceData: BalanceData
+        get() = balanceData
+
     override suspend fun estimateFee(amount: BigInteger, to: Address): List<Fee> {
         val contract = tronKit.transferContract(amount, to)
         return tronKit.estimateFee(contract)

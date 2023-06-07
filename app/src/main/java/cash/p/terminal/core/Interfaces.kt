@@ -328,6 +328,7 @@ interface ISendSolanaAdapter {
 
 interface ISendTronAdapter {
     val balanceData: BalanceData
+    val trxBalanceData: BalanceData
 
     suspend fun estimateFee(amount: BigInteger, to: TronAddress): List<Fee>
     suspend fun send(amount: BigInteger, to: TronAddress, feeLimit: Long?)
