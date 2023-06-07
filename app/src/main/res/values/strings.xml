@@ -314,8 +314,10 @@
 
     <!--Balance-->
 
+    <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
+    <string name="Balance_Deposit">Deposit</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_Address">Address</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>

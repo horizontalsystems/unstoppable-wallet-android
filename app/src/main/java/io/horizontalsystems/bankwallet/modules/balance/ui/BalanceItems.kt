@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -146,63 +147,24 @@ fun BalanceItems(
     Column {
         val context = LocalContext.current
 
-        when (totalState) {
-            TotalUIState.Hidden -> {
-                DoubleText(
-                    title = "*****",
-                    body = "*****",
-                    dimmed = false,
-                    onClickTitle = {
-                        viewModel.toggleBalanceVisibility()
-                        HudHelper.vibrate(context)
-                    },
-                    onClickSubtitle = {
-                        viewModel.toggleTotalType()
-                        HudHelper.vibrate(context)
-                    }
-                )
+        TotalBalanceRow(
+            totalState = totalState,
+            onClickTitle = {
+                viewModel.toggleBalanceVisibility()
+                HudHelper.vibrate(context)
+            },
+            onClickSubtitle = {
+                viewModel.toggleTotalType()
+                HudHelper.vibrate(context)
             }
-            is TotalUIState.Visible -> {
-                DoubleText(
-                    title = totalState.primaryAmountStr,
-                    body = totalState.secondaryAmountStr,
-                    dimmed = totalState.dimmed,
-                    onClickTitle = {
-                        viewModel.toggleBalanceVisibility()
-                        HudHelper.vibrate(context)
-                    },
-                    onClickSubtitle = {
-                        viewModel.toggleTotalType()
-                        HudHelper.vibrate(context)
-                    },
-                )
-            }
-        }
+        )
 
         HeaderSorting(borderTop = true) {
-            var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
-
-            ButtonSecondaryTransparent(
-                title = stringResource(viewModel.sortType.getTitleRes()),
-                iconRight = R.drawable.ic_down_arrow_20,
-                onClick = {
-                    showSortTypeSelectorDialog = true
-                }
-            )
-
-            if (showSortTypeSelectorDialog) {
-                SelectorDialogCompose(
-                    title = stringResource(R.string.Balance_Sort_PopupTitle),
-                    items = viewModel.sortTypes.map {
-                        TabItem(stringResource(it.getTitleRes()), it == viewModel.sortType, it)
-                    },
-                    onDismissRequest = {
-                        showSortTypeSelectorDialog = false
-                    },
-                    onSelectItem = {
-                        viewModel.sortType = it
-                    }
-                )
+            BalanceSortingSelector(
+                sortType = viewModel.sortType,
+                sortTypes = viewModel.sortTypes
+            ) {
+                viewModel.sortType = it
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -256,61 +218,127 @@ fun BalanceItems(
             }
         }
 
-        Wallets(balanceViewItems, viewModel, navController, accountViewItem.id, viewModel.sortType, uiState)
+        var revealedCardId by remember { mutableStateOf<Int?>(null) }
+        Wallets(
+            items = balanceViewItems,
+            key = {
+                it.wallet.hashCode()
+            },
+            accountId = accountViewItem.id,
+            sortType = viewModel.sortType,
+            refreshing = uiState.isRefreshing,
+            onRefresh = {
+                viewModel.onRefresh()
+            }
+        ) { item ->
+            if (item.isWatchAccount) {
+                BalanceCard(item, viewModel, navController)
+            } else {
+                BalanceCardSwipable(
+                    viewItem = item,
+                    viewModel = viewModel,
+                    navController = navController,
+                    revealed = revealedCardId == item.wallet.hashCode(),
+                    onReveal = { walletHashCode ->
+                        if (revealedCardId != walletHashCode) {
+                            revealedCardId = walletHashCode
+                        }
+                    },
+                    onConceal = {
+                        revealedCardId = null
+                    },
+                )
+            }
+        }
     }
 }
 
 @Composable
-fun Wallets(
-    balanceViewItems: List<BalanceViewItem>,
-    viewModel: BalanceViewModel,
-    navController: NavController,
+fun BalanceSortingSelector(
+    sortType: BalanceSortType,
+    sortTypes: List<BalanceSortType>,
+    onSelectSortType: (BalanceSortType) -> Unit
+) {
+    var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
+
+    ButtonSecondaryTransparent(
+        title = stringResource(sortType.getTitleRes()),
+        iconRight = R.drawable.ic_down_arrow_20,
+        onClick = {
+            showSortTypeSelectorDialog = true
+        }
+    )
+
+    if (showSortTypeSelectorDialog) {
+        SelectorDialogCompose(
+            title = stringResource(R.string.Balance_Sort_PopupTitle),
+            items = sortTypes.map {
+                TabItem(stringResource(it.getTitleRes()), it == sortType, it)
+            },
+            onDismissRequest = {
+                showSortTypeSelectorDialog = false
+            },
+            onSelectItem = onSelectSortType
+        )
+    }
+}
+
+@Composable
+fun TotalBalanceRow(
+    totalState: TotalUIState,
+    onClickTitle: () -> Unit,
+    onClickSubtitle: () -> Unit
+) {
+    when (totalState) {
+        TotalUIState.Hidden -> {
+            DoubleText(
+                title = "*****",
+                body = "*****",
+                dimmed = false,
+                onClickTitle = onClickTitle,
+                onClickSubtitle = onClickSubtitle
+            )
+        }
+
+        is TotalUIState.Visible -> {
+            DoubleText(
+                title = totalState.primaryAmountStr,
+                body = totalState.secondaryAmountStr,
+                dimmed = totalState.dimmed,
+                onClickTitle = onClickTitle,
+                onClickSubtitle = onClickSubtitle,
+            )
+        }
+    }
+}
+
+@Composable
+fun <T> Wallets(
+    items: List<T>,
+    key: ((item: T) -> Any)? = null,
     accountId: String,
     sortType: BalanceSortType,
-    uiState: BalanceUiState
+    refreshing: Boolean,
+    onRefresh: () -> Unit,
+    itemContent: @Composable() (LazyItemScope.(item: T) -> Unit),
 ) {
-    var revealedCardId by remember { mutableStateOf<Int?>(null) }
-
-    val listState = rememberSaveable(
-        accountId,
-        sortType,
-        saver = LazyListState.Saver
-    ) {
-        LazyListState()
-    }
-
     HSSwipeRefresh(
-        refreshing = uiState.isRefreshing,
-        onRefresh = {
-            viewModel.onRefresh()
-        }
+        refreshing = refreshing,
+        onRefresh = onRefresh
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = listState,
+            state = rememberSaveable(
+                accountId,
+                sortType,
+                saver = LazyListState.Saver
+            ) {
+                LazyListState()
+            },
             contentPadding = PaddingValues(top = 8.dp, bottom = 18.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(balanceViewItems, key = { item -> item.wallet.hashCode() }) { item ->
-                if (item.isWatchAccount) {
-                    BalanceCard(item, viewModel, navController)
-                } else {
-                    BalanceCardSwipable(
-                        viewItem = item,
-                        viewModel = viewModel,
-                        navController = navController,
-                        revealed = revealedCardId == item.wallet.hashCode(),
-                        onReveal = { walletHashCode ->
-                            if (revealedCardId != walletHashCode) {
-                                revealedCardId = walletHashCode
-                            }
-                        },
-                        onConceal = {
-                            revealedCardId = null
-                        },
-                    )
-                }
-            }
+            items(items = items, key = key, itemContent = itemContent)
         }
     }
 }

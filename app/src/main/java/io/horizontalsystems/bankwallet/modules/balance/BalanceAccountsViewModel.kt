@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
+import io.horizontalsystems.bankwallet.entities.AccountType
 
 class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
@@ -29,7 +30,8 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
                         AccountViewItem(
                             activeAccountState.account.isWatchAccount,
                             activeAccountState.account.name,
-                            activeAccountState.account.id
+                            activeAccountState.account.id,
+                            activeAccountState.account.type
                         )
                     )
                 } else {
@@ -40,7 +42,12 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
     }
 }
 
-data class AccountViewItem(val isWatchAccount: Boolean, val name: String = "", val id: String)
+data class AccountViewItem(
+    val isWatchAccount: Boolean,
+    val name: String = "",
+    val id: String,
+    val type: AccountType
+)
 
 sealed class BalanceScreenState() {
     class HasAccount(val accountViewItem: AccountViewItem) : BalanceScreenState()
