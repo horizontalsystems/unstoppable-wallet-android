@@ -824,11 +824,12 @@
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
-    <string name="ImportWallet_BackupFile">из файла</string>
+    <string name="ImportWallet_BackupFile">Резервный файл</string>
     <string name="ImportWallet_BackupFile_Description">Импортировать из файла резервной копии</string>
     <string name="ImportWallet_RecoveryPhrase">из фразы восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
     <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
+    <string name="ImportWallet_WatchAddress_Description">Режим наблюдения EVM-цепи и BTC, LTC, DASH адресов</string>
     <string name="ImportWallet_WarningInvalidJson">Недопустимый Json файл</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Этот файл не является действительной резервной копией кошелька, либо же он был поврежден и не может быть восстановлен.</string>
     <string name="ImportWallet_SelectAnotherFile">Выберите другой файл</string>
@@ -836,7 +837,7 @@
     <string name="ImportBackupFile_EnterPassword">Введите пароль</string>
     <string name="ImportBackupFile_EnterPassword_Description">Введите пароль резервной копии для импорта вашего кошелька.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
-    <string name="ImportBackupFile_BackupPassword">Резервное копирование пароля</string>
+    <string name="ImportBackupFile_BackupPassword">Пароль для резервной копии</string>
     <string name="Watch_Address_Hint">Адрес или домен</string>
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
@@ -905,7 +906,8 @@
     <string name="LocalBackup_SetPassword">Установить пароль</string>
     <string name="LocalBackup_BackupSaved">Резервная копия сохранена</string>
     <string name="LocalBackup_PasswordInvalid">Не менее 8 символов, включая одну заглавную букву, одну строчную букву, одну цифру и один символ.</string>
-    <string name="LocalBackup_DontForgetPasswordWarning">Не забывайте этот пароль и храните его в надежном месте! Он не может быть восстановлен или сброшен.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Этот пароль используется для шифрования файла резервной копии вашего кошелька. Если он утерян или забыт, его нельзя будет восстановить или сбросить.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Установите пароль разблокировки для своей резервной копии. Пароль должен содержать не менее 8 символов и включать как минимум одну строчную букву, заглавную букву, цифру и специальный символ.</string>
     <string name="LocalBackup_TermsWarningText">Устройства хранения, такие как жесткие диски, USB-накопители, накопители на смартфоне и т.д., все они подвержены потерям вследствие физических повреждений, кражи или других непредвиденных обстоятельств.</string>
     <string name="LocalBackup_Term1">Я понимаю, что кража или повреждение устройства резервного копирования приведет к потере резервной копии в соответствующем кошельке.</string>
     <!-- Recovery Phrase -->
@@ -1186,6 +1188,7 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Рейтинг доходов</string>
     <string name="CoinAnalytics_HoldersRank">Рейтинг держателей</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">Токены ранжируются по пассивному доходу владельцев, получаемому через стекинг или сжигание токенов.</string>
+    <string name="CoinAnalytics_HoldersRank_Description">Рейтинг токенов по уникальным адресам, содержащим их в нескольких блокчейнах.</string>
     <string name="CoinAnalytics_OtherData">Другие данные</string>
     <string name="CoinAnalytics_Reports">Отчёты</string>
     <string name="CoinAnalytics_Funding">Финансирование</string>

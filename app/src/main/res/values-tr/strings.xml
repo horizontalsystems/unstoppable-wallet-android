@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
     <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
@@ -42,7 +43,10 @@
     <string name="Button_Copy">Kopyala</string>
     <string name="Button_Browser">Tarayıcı</string>
     <string name="Button_Delete">Sil</string>
+    <string name="Button_LearnMore">Daha fazla bilgi edin</string>
+    <string name="Button_Activate">Activate</string>
     <string name="Button_Sign">kaydol</string>
+    <string name="Button_Activating">Activating</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Herhangi</string>
@@ -69,6 +73,7 @@
     <string name="CreateWallet_Mnemonic">Kurtarma cümlesi</string>
     <string name="CreateWallet_Wordlist">Kelime Listesi</string>
     <string name="Passphrase">Parola</string>
+    <string name="Password">Şifre</string>
     <string name="ConfirmPassphrase">Onayla</string>
     <string name="CreateWallet_N_WordsRecommended">%s kelimeler (Tavsiye edilen)</string>
     <string name="CreateWallet_N_Words">%s kelime</string>
@@ -136,23 +141,114 @@
     <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
     <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
+    <string name="Market_Field_LowestCap">Lowest Cap</string>
+    <string name="Market_Field_HighestVolume">Highest Volume</string>
+    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
+    <string name="Market_SeeAll">See All</string>
     <string name="Market_PoweredByHorizontalApi">Powered By Horizontal API</string>
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
+    <string name="Market_Tab_Watchlist">Watchlist</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
+    <string name="Market_Category_TopCoins">Top Coins</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Description">Leading blockchain platforms by the cumulative market of projects built on top.</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
     <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_Volume">24h Volume</string>
+    <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of crypto market.</string>
+    <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">Total market value of DeFi projects.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Hepsi</string>
+    <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!--Market Search-->
+    <string name="EmptyResults">No results found</string>
+    <string name="Market_Filters">Filters</string>
+    <string name="Market_AdvancedSearch_Results">Results</string>
     <string name="Market_Search_Hint">Ara</string>
     <string name="Market_Search_BrowseCategories">Browse Categories</string>
+    <string name="Market_Filter_ChooseSet">Choose Set</string>
+    <string name="Market_Filter_MarketCap">Market Cap</string>
+    <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
+    <string name="Market_Filter_PricePeriod">Price Period</string>
+    <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
+    <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
+    <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
+    <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
+    <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
+    <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
+    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
+    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
+    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
+    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
+    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
+    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
+    <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
+    <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
+    <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
+    <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
+    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
+    <string name="Market_Filter_Range_500M_2B">500M - 2B</string>
+    <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
+    <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
+    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
+    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
+    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
+    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
+    <string name="TimePeriod_24h">24h</string>
     <!--Coin Markets-->
+    <string name="CoinMarket_Title">%s Markets</string>
     <!--TVL Rank-->
+    <string name="TvlRank_Title">TVL Rank</string>
+    <string name="TvlRank_MultiChain">Multi-Chain</string>
     <string name="TvlRank_Field_HighestTvl">HIghest TVL</string>
+    <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
     <string name="TvlRank_Field_All">Hepsi</string>
+    <string name="TvlRank_Field_Eth">Ethereum</string>
+    <string name="TvlRank_Field_Bsc">Binance</string>
+    <string name="TvlRank_Field_Sol">Solana</string>
+    <string name="TvlRank_Field_Ava">Avalanche</string>
+    <string name="TvlRank_Field_Mat">Polygon</string>
+    <string name="TvlRank_Filters_PopupTitle">Filters</string>
     <!--Balance-->
     <string name="Balance_Title">Bakiye</string>
     <string name="Balance_Send">Gönder</string>
@@ -162,6 +258,7 @@
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
     <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
     <string name="Balance_AddCoin">Para Ekle</string>
@@ -190,6 +287,7 @@
     <string name="Send_Advanced">İleri düzey</string>
     <string name="Send_Hodler_Description">TimeLock yalnızca BIP44 adreslerine (1 ile başlar) göndermek için çalışır</string>
     <string name="Send_Confirmation_Title">Onayla</string>
+    <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
     <string name="Send_Confirmation_Amount">Tutar</string>
     <string name="Send_Confirmation_To">Alan</string>
@@ -217,6 +315,7 @@
     <string name="Send_TxSpeed_High">Hızlı</string>
     <string name="Send_TxSpeed_Recommended">Tavsiye Edilen</string>
     <string name="Send_TxSpeed_Custom">Özel</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogProceed">İleri</string>
     <string name="Send_LockTime_Off">Kapat</string>
@@ -243,6 +342,7 @@
     <string name="FeeSettings_FeeLegacy_Info">Verilen işlem için beklenen maksimum toplam ücret. Genellikle, gerçek işlem ücreti daha düşük olur.</string>
     <string name="FeeSettings_Fee">Maks. Ücret</string>
     <string name="FeeSettings_Fee_Info">Bu işlem için ödenecek maksimum tahmini işlem ücreti, aşağıdaki gaz limiti, maksimum ücret oranı ve maksimum öncelik ücreti değerlerine göre hesaplanır. Ödenen gerçek ücret normalde daha düşük olacaktır.</string>
+    <string name="FeeSettings_NetworkFee">Ağ Ücreti</string>
     <string name="FeeSettings_NetworkFee_Info">Ağda belirli bir işlemi göndermenin tahmini maliyeti.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">İşlem karmaşıklığı \"gaz\" adı verilen birimlerle ölçülür. Yürütülen akıllı sözleşmeye bağlı olarak değişir. Gaz Limiti, onu yürütmek için gereken tahmini maksimum gazdır. Kullanılan gerçek gaz normalde daha düşük olacaktır.</string>
@@ -278,7 +378,17 @@
     <string name="FeeInfo_Fast">Hızlı</string>
     <string name="FeeInfo_FastDescription">Önceliğin önemli olduğu işlemler için yüksek ücret değeri kullanmanızı öneririz. Bir işlemin Bitcoin için 10 dakika, Ethereum için 1-2 dakika içerisinde tamamlanması için yeterli olacaktır.</string>
     <string name="FeeInfo_TronFee_Title">Masraf</string>
+    <string name="FeeInfo_TronFee_Description">Ağda belirli bir işlemi göndermenin tahmini maliyeti. (Enerji, Bant Genişliği ve Aktivasyon Ücreti hariç)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Aktivasyon ücreti</string>
+    <string name="FeeInfo_TronActivationFee_Description">TRX veya TRC-10 jetonlarını etkin olmayan bir hesap adresine aktarmak, hesabı etkinleştirir.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Tüketilen Kaynaklar</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">Band Width, blockchain veritabanında saklanan işlem baytlarının boyutunu ölçen birimdir. İşlem ne kadar büyük olursa, o kadar fazla bant genişliği kaynağı tüketilir.\n\nEnergy, TRON sanal makinesinin TRON ağında belirli işlemleri gerçekleştirmek için ihtiyaç duyduğu hesaplama miktarını ölçen birimdir.\n\nAkıllı sözleşmeden beri işlemlerin yürütülmesi için bilgi işlem kaynakları gerekir, her akıllı sözleşme işleminin energy ücretini ödemesi gerekir.</string>
     <!--Tron-->
+    <string name="Tron_AddressNotActive_Warning">Bu adres aktif değil</string>
+    <string name="Tron_AddressNotActive_Warning_Short">(aktif değil)</string>
+    <string name="Tron_AddressNotActive_Title">Aktif Adres Değil</string>
+    <string name="Tron_AddressNotActive_Info">TRON blok zincirinde yeni oluşturulan hesaplar etkin değildir ve sorgulanamaz veya araştırılamaz. Etkinleştirilmeleri gerekiyor.\n\nTRX veya TRC-10 jetonlarını etkin olmayan bir hesap adresine aktarmak, hesabı etkinleştirir. Tron zincirinde yeni bir hesabın etkinleştirilmesi 1 TRX ücret gerektirir</string>
+    <string name="Tron_SelfSendTrxNotAllowed">TRX kendinize aktarılamıyor</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">İstek</string>
     <string name="WalletConnect_SendRequest_Title">Gönder</string>
@@ -362,6 +472,7 @@
     <string name="Swap_BuyPrice">Alış Fiyatı</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
     <string name="Swap_PriceImpactTooHigh">Rayiç fiyat ile beklenen uzlaşma fiyatı arasındaki fark çok yüksek.</string>
+    <string name="Swap_PriceImpactWarning">Önemli! Son derece olumsuz bir fiyat alıyorsunuz. Bunun nedeni son derece düşük likiditedir.</string>
     <string name="Swap_MinimumReceived">Garantili Tutar</string>
     <string name="Swap_EstimatedFee">Tahmini Ücret</string>
     <string name="Swap_MaxFee">Maksimum Ücret</string>
@@ -384,6 +495,7 @@
     <string name="Swap_AmountEstimated">(tah)</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
+    <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Ayarları</string>
     <string name="SwapSettings_Service">Hizmet</string>
@@ -444,6 +556,8 @@
     <string name="Transactions_Completed">Tamamlandı</string>
     <string name="Transactions_Processing">İşleniyor</string>
     <string name="Transactions_Send">Gönder</string>
+    <string name="Transactions_Burn">Burn</string>
+    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Onayla</string>
     <string name="Transactions_Swap">Takas</string>
     <string name="Transactions_Failed">Başarısız</string>
@@ -542,6 +656,7 @@
     <string name="Settings_Privacy">Gizlilik</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_AppStatus">Uygulama Durumu</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
     <string name="Settings_Appearance">Görünüm</string>
@@ -553,6 +668,7 @@
     <string name="Appearance_BalanceValue">BAKIYE DEĞERI</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
     <string name="Appearance_MarketsTab">Markets Tab</string>
+    <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
     <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
@@ -567,12 +683,14 @@
     <string name="Privacy_BulletedText3">Bu cüzdan, kullanıcılar hakkında herhangi bir veri paylaşmaz.</string>
     <string name="Privacy_BulletedText4">Kullanıcı verilerini herhangi bir yerde kaida alan hesaplar veya veritabanları yoktur.</string>
     <!-- Security Center -->
+    <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Yeni ekle</string>
     <string name="EvmNetwork_Added">Eklendi</string>
     <string name="EvmNetwork_SyncMode">Senkron Modu</string>
     <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC Kaynağı Ekle</string>
     <string name="AddEvmSyncSource_Name">İsim</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth (optional)</string>
@@ -582,6 +700,7 @@
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Bu değişiklikten sonra cüzdan Bitcoin blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BtcBlockchainSettings_RestoreSource">Geri Yükleme Kaynağı</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">M-cüzdan geri yüklemesi için bir veri kaynağı seçin. Blok zincirinden geri yükleme çok daha fazla zaman alır.</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).\n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Giriş/Çıkış</string>
     <string name="BtcBlockchainSettings_TransactionSettings">İşlem Ayarları</string>
@@ -602,6 +721,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
     <string name="SettingsSecurity_SortingShuffle">Karıştır</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Rastgele Dizinleme</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Dizinleme</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Tavsiye Edilen</string>
@@ -665,8 +785,10 @@
     <string name="Hud_Text_Done">Bitti</string>
     <string name="Hud_Text_Verified">Onaylandı</string>
     <string name="Hud_Text_EmailAddressCopied">E-posta adresi kopyalandı</string>
+    <string name="Hud_Added_To_Watchlist">Added To Watchlist</string>
     <string name="Hud_Added_To_Wallet">Cüzdana Eklendi</string>
     <string name="Hud_Already_In_Wallet">Zaten cüzdana eklendi</string>
+    <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_Removed">Kaldır</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
@@ -695,8 +817,20 @@
     <string name="ManageAccounts_ImportWallet">Geri Yükle</string>
     <string name="ManageAccounts_WatchAddress">Adresi İzle</string>
     <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">Dosyadan</string>
+    <string name="ImportWallet_BackupFile_Description">Bir yedek dosyadan içe aktar</string>
+    <string name="ImportWallet_RecoveryPhrase">Kurtarma İfadesinden</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Kurtarma ifadesini veya özel anahtarı kullanarak içe aktarın.</string>
     <string name="ImportWallet_WatchAddress">Adresi İzle</string>
+    <string name="ImportWallet_WatchAddress_Description">EVM-Chain ve BTC, LTC, DASH adreslerinin gözlem modu</string>
+    <string name="ImportWallet_WarningInvalidJson">Geçersiz Json Dosyası</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Bu dosya, cüzdanın geçerli bir yedeği değil veya dosya bozulmuş ve geri yüklenemez.</string>
+    <string name="ImportWallet_SelectAnotherFile">Başka Bir Dosya Seçin</string>
     <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Parolanı Gir</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Cüzdanınızı içe aktarmak için yedek parolayı girin.</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">Geçersiz şifre</string>
+    <string name="ImportBackupFile_BackupPassword">Yedek Şifre</string>
     <string name="Watch_Address_Hint">Adres veya Domain</string>
     <string name="Watch_XPubKey_Hint">Account Extended Public Key girin</string>
     <string name="Watch_Address_Description">Yalnızca Ethereum ve diğer desteklenen EVM blok zincirleri için kullanılabilir.</string>
@@ -707,6 +841,8 @@
     <string name="Watch_WatchBy">İzle</string>
     <string name="Watch_TypeEvmAddress">EVM Adresi</string>
     <string name="Watch_TypeSolanaAddress">Solana Adresi</string>
+    <string name="Watch_TypeTronAddress">Tron Adresi</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">Geçersiz xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
@@ -752,8 +888,21 @@
     <string name="BackupRecoveryPhrase_Title">Cüzdanı yedekle</string>
     <string name="BackupRecoveryPhrase_Description">Kurtarma ifadesinin bir kopyasını oluşturarak bu cüzdanı yedekleyin. Telefonunuzun kaybolması, çalınması, kırılması vb. durumlarda cüzdana erişmek için gerekli olacaktır.</string>
     <string name="BackupRecoveryPhrase_Backup">Yedekle</string>
+    <string name="BackupRecoveryPhrase_ManualBackup">Manuel Yedekleme</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Yerel Yedekleme</string>
     <string name="BackupRecoveryPhrase_Later">Sonra</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Cüzdanı kullanmaya başlamak için cüzdan yedekleme seçeneklerinden birini tamamlayın.</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">Her cüzdan için manuel bir yedeğin olması önerilir.</string>
     <!-- Local Backup -->
+    <string name="LocalBackup_Title">Yerel Yedekleme</string>
+    <string name="LocalBackup_SaveAndBackup">Kaydet ve Yedekle</string>
+    <string name="LocalBackup_SetPassword">Şifre Ayarla</string>
+    <string name="LocalBackup_BackupSaved">Yedek Kaydedildi</string>
+    <string name="LocalBackup_PasswordInvalid">Bir büyük harf, bir küçük harf, bir rakam ve bir sembol dahil olmak üzere en az 8 karakter.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Bu şifre, cüzdanınızın yedek dosyasını şifrelemek için kullanılır. Kaybolur veya unutulursa kurtarılamaz veya sıfırlanamaz.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Yedeklemeniz için kilit açma parolasını ayarlayın. En az 8 sembolden oluşmalı ve en az bir küçük harf, büyük harf, sayı ve özel karakter içermelidir.</string>
+    <string name="LocalBackup_TermsWarningText">Depolama cihazları, yani sabit sürücüler, USB sürücüler , akıllı telefondaki depolama vb. fiziksel hasar, hırsızlık veya diğer öngörülemeyen durumlar nedeniyle kayba karşı savunmasızdır.</string>
+    <string name="LocalBackup_Term1">Bir yedekleme cihazının çalınmasının veya hasar görmesinin, ilgili cüzdanın yedeğinin kaybolmasına neden olacağını anlıyorum.</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Kurtarma cümlesi</string>
     <string name="RecoveryPhrase_Description">Bu kelimeleri doğru sırayla yazın ve güvenli bir yerde saklayın</string>
@@ -765,19 +914,29 @@
     <string name="EvmPrivateKey_Warning">Bu anahtar, tüm EVM uyumlu blok zincirleri içindir. Onu kimseyle paylaşmayın.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_Blockchain">Blockchains</string>
+    <string name="ExtendedKey_Purpose">Purpose</string>
+    <string name="ExtendedKey_Account">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Gizli Anahtar</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Ilgili cüzdan içinde EVM tabanlı kripto, yani Ethereum, Binance Smart Chain vb. Üzerinde tam kontrol sağlar.</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">İlgili cüzdandaki varlıklar üzerinde tam kontrol sağlar.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Ilgili cüzdan içinde Bitcoin ve diğer UTXO tabanlı kriptolar üzerinde tam kontrol sağlar, yani Litecoin, Bitcoin Cash, Dash vb.</string>
     <string name="PrivateKeys_NeverShareWarning">Kurtarma ifadenizi asla kimseyle paylaşmayın. Unstoppable ekip asla kurtarma ifadenizi istemez.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Genel Anahtarlar</string>
     <string name="PublicKeys_EvmAddress">EVM Adresi</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="PublicKeys_EvmAddress_Description">Ethereum, Binance Smart Chain ve diğer EVM tabanlı blok zincirlerinde varlık tutan cüzdanların salt okunur olarak izlenmesini sağlar.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Bitcoin ve diğer UTXO tabanlı kriptoları (örneğin Litecoin, Bitcoin Cash, Dash vb.) tutan cüzdanların salt okunur olarak izlenmesine izin verir.</string>
     <!-- Recovery Phrase Verify -->
@@ -821,6 +980,7 @@
     <string name="AddToken_Symbol">Sembol</string>
     <string name="AddToken_CoinCode">Coin Kodu</string>
     <string name="AddToken_Decimals">Ondalıklar</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">COIN ÇEŞİTLERİ</string>
     <string name="AddToken_AlreadyAdded">ÇOKTAN EKLENMİŞ GÖRÜNÜYOR</string>
     <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
@@ -859,23 +1019,75 @@
     <string name="Tor_TorIsActive">Tor aktif</string>
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
     <!--Coin Page-->
+    <string name="Coin_Info">Coin Info</string>
     <string name="Coin_Tab_Overview">Fiyat</string>
     <string name="Coin_Tab_Market">Markets</string>
+    <string name="Coin_Tab_Details">Analytics</string>
+    <string name="Coin_Tab_Tweets">Tweets</string>
+    <string name="CoinPage_TimeDuration_Today">TDY</string>
+    <string name="CoinPage_TimeDuration_Day">24H</string>
+    <string name="CoinPage_TimeDuration_Week">7D</string>
+    <string name="CoinPage_TimeDuration_Month">1M</string>
+    <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
+    <string name="CoinPage_TimeDuration_Month3">3M</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
+    <string name="CoinPage_TimeDuration_Year">1Y</string>
+    <string name="CoinPage_TimeDuration_Year2">2Y</string>
     <string name="CoinPage_TimeDuration_All">Hepsi</string>
     <string name="CoinPage_Markets">Markets</string>
+    <string name="CoinPage_TradingVolume">Trading Volume</string>
+    <string name="CoinPage_MajorHolders">Major Holders</string>
+    <string name="CoinPage_MajorHolders_InfoDescription">The number of tokens held by the top 10 wallets. Quality projects typically have a widely distributed token.</string>
+    <string name="CoinPage_Audits">Audits</string>
+    <string name="CoinPage_Audits_Empty">No audit reports</string>
+    <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
+    <string name="CoinPage_Audits_Issues">Issues: %d</string>
+    <string name="CoinPage_InvestorData">Investor Data</string>
+    <string name="CoinPage_Treasuries">Treasuries</string>
+    <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
+    <string name="CoinPage_Reports">Reports</string>
+    <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_SecurityParams_Privacy">Gizlilik</string>
     <string name="CoinPage_SecurityParams_Low">Yavaş</string>
+    <string name="CoinPage_SecurityParams_Medium">Medium</string>
     <string name="CoinPage_SecurityParams_High">Hızlı</string>
+    <string name="CoinPage_SecurityParams_Issuance">Issuance</string>
+    <string name="CoinPage_SecurityParams_Centralized">Centralized</string>
+    <string name="CoinPage_SecurityParams_Decentralized">Decentralized</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance">Confiscation-resistance</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance">Censorship-resistance</string>
+    <string name="CoinPage_SecurityParams_Audits">Audits</string>
+    <string name="CoinPage_Range24">24h Range</string>
+    <string name="CoinPage_About">About</string>
+    <string name="CoinPage_Category">Category</string>
+    <string name="CoinPage_Categories">Categories</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Coin Types</string>
+    <string name="CoinPage_Links">Links</string>
+    <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">Web sitesi</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NoTweets">Henüz tweet yok</string>
+    <string name="CoinPage_MarketCap">Market Cap</string>
+    <string name="CoinPage_MarketCap_TvlRation">MCap / TVL Ratio</string>
+    <string name="CoinPage_MarketCap_TvlRation_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_Volume">Birim</string>
+    <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_AddToWallet">Cüzdana Ekle</string>
     <string name="CoinPage_InWallet">Cüzdanda</string>
+    <string name="CoinPage_Performance_Week">1 Week</string>
+    <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ShowMore">Daha Fazlası</string>
+    <string name="CoinPage_TvlRank">TVL Rank</string>
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
+    <string name="CoinPage_TvlMCapRatio_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_MajorHolders_Description">Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">ilk 10 sahibinde</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Toplam Sahip: %s</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">İzlenen DEX\'ler:</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">İzlenen DEX\'ler:</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">İzlenen blok zincirleri: Ethereum, Binance Smart Chain, İyimserlik, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
@@ -889,7 +1101,14 @@
     <string name="CoinAnalytics_TransactionCountRank">İşlem Sayısı Sıralaması</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Proje TVL (Toplam Değer)</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Proje Gelir Sıralaması</string>
+    <string name="CoinAnalytics_Reports">Reports</string>
+    <string name="CoinAnalytics_Treasuries">Treasuries</string>
+    <string name="Coin_Analytics_Audits">Audits</string>
+    <string name="ActivateSubscription_Title">Activate</string>
+    <string name="ActivateSubscription_Wallet">Wallet</string>
     <string name="ActivateSubscription_Address">Adres</string>
+    <string name="ActivateSubscription_MessageToSign">Message to Sign</string>
+    <string name="ActivateSubscription_SignMessageDescription">You need to sign this message to activate your subscription</string>
     <string name="Nfts_Title">NFT\'ler</string>
     <string name="Nfts_PriceType_Days_7">Ortalama 7G</string>
     <string name="Nfts_PriceType_Days_30">Ortalama 30G</string>
@@ -901,6 +1120,7 @@
     <string name="Nfts_PriceMode">Fiyat Modu</string>
     <string name="NftAsset_Overview">İzleme</string>
     <string name="NftAsset_Activity">Aktivite</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Paylaş</string>
     <string name="NftAsset_Action_Save">Kaydet</string>
     <string name="NftAsset_OwnedCount">Sahip Olunan Sayısı</string>
@@ -921,6 +1141,7 @@
     <string name="NftAsset_TokenStandard">Token Standardı</string>
     <string name="NftAsset_Blockchain">Blockchains</string>
     <string name="NftAsset_Links_Website">Web sitesi</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
     <string name="PoweredBy_OpenSeaAPI">OpenSea API tarafından desteklenmektedir</string>
     <string name="Nft_TopCollections">En İyi NFT Koleksiyonları</string>
     <string name="Nft_TopCollections_Description">İşlem hacmine göre önde gelen NFT koleksiyonları.</string>
@@ -947,6 +1168,7 @@
     <string name="NftCollection_EventType_Custom">Özel</string>
     <string name="NftCollection_EventType_Payout">Ödeme</string>
     <string name="NftCollection_EventType_BulkCancel">Toplu İptal</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
     <string name="RateList_Posts">News</string>

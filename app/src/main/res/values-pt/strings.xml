@@ -910,7 +910,8 @@
     <string name="LocalBackup_SetPassword">Definir Senha</string>
     <string name="LocalBackup_BackupSaved">Backup Salvo</string>
     <string name="LocalBackup_PasswordInvalid">Pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um símbolo.</string>
-    <string name="LocalBackup_DontForgetPasswordWarning">Não se esqueça desta senha e mantenha-a em um lugar seguro! Ela não pode ser recuperada ou redefinida.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Esta senha é usada para criptografar o arquivo de backup da sua carteira. Ela não pode ser recuperada ou redefinida se for perdida ou esquecida.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Defina a senha de desbloqueio para o seu backup. Deve consistir de pelo menos 8 símbolos e incluir pelo menos uma letra minúscula, uma letra maiúscula, um número e um caractere especial.</string>
     <string name="LocalBackup_TermsWarningText">Dispositivos de armazenamento, ou seja, discos rígidos, discos USB, armazenamento em smartphone, etc. são todos vulneráveis a perdas devido a danos físicos, roubo ou outras circunstâncias imprevistas.</string>
     <string name="LocalBackup_Term1">Eu entendo que o roubo ou dano de um dispositivo de backup resultará na perda de um backup de uma respectiva carteira.</string>
     <!-- Recovery Phrase -->

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">Parámetro no establecido</string>
     <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
@@ -72,6 +73,7 @@
     <string name="CreateWallet_Mnemonic">Frase de Recuperación</string>
     <string name="CreateWallet_Wordlist">Lista de palabras</string>
     <string name="Passphrase">Frase de contraseña</string>
+    <string name="Password">Contraseña</string>
     <string name="ConfirmPassphrase">Confirmar</string>
     <string name="CreateWallet_N_WordsRecommended">%s palabras (recomendado)</string>
     <string name="CreateWallet_N_Words">%s palabras</string>
@@ -393,7 +395,14 @@
     <string name="FeeInfo_TronFee_Description">El coste estimado del envío de una transacción en la red. (sin excluir Energía, Ancho de Banda y Tarifa Activa)</string>
     <string name="FeeInfo_TronActivationFee_Title">Tarifa de activación</string>
     <string name="FeeInfo_TronActivationFee_Description">Transferir tokens TRX o TRC-10 a una dirección de cuenta inactiva activará la cuenta.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Recursos consumidos</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">El bandwidth es la unidad que mide el tamaño de los bytes de transacción almacenados en la base de datos de la cadena de bloques. Cuanto más grande sea la transacción, más recursos de ancho de banda se consumirán.\n\nEnerge es la unidad que mide la cantidad de computación requerida por la máquina virtual TRON para realizar operaciones específicas en la red TRON.\n\nDado que las transacciones de contratos inteligentes requieren recursos informáticos para ejecutarse, cada transacción de contrato inteligente debe pagar la tarifa de energy.</string>
     <!--Tron-->
+    <string name="Tron_AddressNotActive_Warning">Esta dirección no está activa</string>
+    <string name="Tron_AddressNotActive_Warning_Short">(no activo)</string>
+    <string name="Tron_AddressNotActive_Title">Dirección no activa</string>
+    <string name="Tron_AddressNotActive_Info">Las cuentas recién creadas en la cadena de bloques TRON están inactivas y no se pueden consultar ni explorar. Necesitan ser activadas.\n\nPara activar una cuenta inactiva, transfiera tokens TRX o TRC-10 a su dirección. Para activar una nueva cuenta en la cadena Tron, se requiere una cuota de 1 TRX</string>
+    <string name="Tron_SelfSendTrxNotAllowed">No se puede transferir TRX a ti mismo</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Pedido</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
@@ -833,6 +842,7 @@
     <string name="ImportBackupFile_EnterPassword">Introduzca contraseña</string>
     <string name="ImportBackupFile_EnterPassword_Description">Introduzca la contraseña de copia de seguridad para importar su cartera.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Contraseña no válida</string>
+    <string name="ImportBackupFile_BackupPassword">Copiar contraseña</string>
     <string name="Watch_Address_Hint">Dominio o dirección</string>
     <string name="Watch_XPubKey_Hint">Introduzca Account Extended Public Key</string>
     <string name="Watch_Address_Description">Disponible sólo para Ethereum y otras blockchains EVM soportadas.</string>
@@ -901,8 +911,8 @@
     <string name="LocalBackup_SetPassword">Establecer contraseña</string>
     <string name="LocalBackup_BackupSaved">Guardado de seguridad</string>
     <string name="LocalBackup_PasswordInvalid">Al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.</string>
-    <string name="LocalBackup_DontForgetPasswordWarning">¡No olvide esta contraseña y guárdela en un lugar seguro! No se puede recuperar ni restablecer.</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Proteja su copia de seguridad con contraseña para cifrarla en iCloud. La contraseña debe contener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Esta contraseña se utiliza para cifrar el archivo de copia de seguridad de su cartera. No se puede recuperar o reiniciar si se pierde u olvida.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Establezca la contraseña de desbloqueo para su copia de seguridad. La contraseña debe contener al menos 8 caracteres, incluyendo una letra minúscula, una letra mayúscula, un número y un carácter especial.</string>
     <string name="LocalBackup_TermsWarningText">Los dispositivos de almacenamiento, como los discos duros, los discos USB y el almacenamiento en smartphones, son todos vulnerables a pérdidas debido a daños físicos, robos u otras circunstancias imprevisibles.</string>
     <string name="LocalBackup_Term1">Entiendo que el robo o daño de un dispositivo de copia de seguridad resultará en la pérdida de una copia de seguridad a una cartera respectiva.</string>
     <!-- Recovery Phrase -->
