@@ -55,7 +55,8 @@ class TronTransactionConverter(
                                 baseToken = baseToken,
                                 source = source,
                                 from = contract.ownerAddress.base58,
-                                value = baseCoinValue(contract.amount, false)
+                                value = baseCoinValue(contract.amount, false),
+                                spam = contract.amount < BigInteger.TEN
                             )
                         } else {
                             TronOutgoingTransactionRecord(
