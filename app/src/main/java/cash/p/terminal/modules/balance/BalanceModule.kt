@@ -6,6 +6,7 @@ import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BalanceData
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.balance.cex.BalanceViewModelCex
 import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
@@ -41,6 +42,24 @@ object BalanceModule {
                 App.balanceViewTypeManager,
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
+            ) as T
+        }
+    }
+
+    class FactoryCex : ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val totalService = TotalService(
+                App.currencyManager,
+                App.marketKit,
+                App.baseTokenManager,
+                App.balanceHiddenManager
+            )
+
+            return BalanceViewModelCex(
+                totalBalance = TotalBalance(totalService, App.balanceHiddenManager),
+                localStorage = App.localStorage
             ) as T
         }
     }
