@@ -824,7 +824,7 @@
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
-    <string name="ImportWallet_BackupFile">из файла</string>
+    <string name="ImportWallet_BackupFile">Резервный файл</string>
     <string name="ImportWallet_BackupFile_Description">Импортировать из файла резервной копии</string>
     <string name="ImportWallet_RecoveryPhrase">из фразы восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
@@ -836,7 +836,7 @@
     <string name="ImportBackupFile_EnterPassword">Введите пароль</string>
     <string name="ImportBackupFile_EnterPassword_Description">Введите пароль резервной копии для импорта вашего кошелька.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
-    <string name="ImportBackupFile_BackupPassword">Резервное копирование пароля</string>
+    <string name="ImportBackupFile_BackupPassword">Пароль для резервной копии</string>
     <string name="Watch_Address_Hint">Адрес или домен</string>
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
