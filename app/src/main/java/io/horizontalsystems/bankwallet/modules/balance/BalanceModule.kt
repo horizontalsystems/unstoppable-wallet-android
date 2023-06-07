@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceViewModelCex
 import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
@@ -41,6 +42,24 @@ object BalanceModule {
                 App.balanceViewTypeManager,
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
+            ) as T
+        }
+    }
+
+    class FactoryCex : ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val totalService = TotalService(
+                App.currencyManager,
+                App.marketKit,
+                App.baseTokenManager,
+                App.balanceHiddenManager
+            )
+
+            return BalanceViewModelCex(
+                totalBalance = TotalBalance(totalService, App.balanceHiddenManager),
+                localStorage = App.localStorage
             ) as T
         }
     }
