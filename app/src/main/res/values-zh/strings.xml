@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">参数未设置</string>
     <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
@@ -45,6 +46,7 @@
     <string name="Button_LearnMore">了解更多</string>
     <string name="Button_Activate">激活</string>
     <string name="Button_Sign">签名</string>
+    <string name="Button_Activating">正在激活</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
@@ -71,6 +73,7 @@
     <string name="CreateWallet_Mnemonic">恢复码</string>
     <string name="CreateWallet_Wordlist">字符列表</string>
     <string name="Passphrase">密码</string>
+    <string name="Password">密码</string>
     <string name="ConfirmPassphrase">确认</string>
     <string name="CreateWallet_N_WordsRecommended">%s 个单词(推荐)</string>
     <string name="CreateWallet_N_Words">%s 个单词</string>
@@ -385,7 +388,17 @@
     <string name="FeeInfo_Fast">快</string>
     <string name="FeeInfo_FastDescription">对于优先级重要的交易，我们建议使用高收费值。预计这将足以在10分钟内完成比特币交易，1-2分钟以内完成Ethereum交易。</string>
     <string name="FeeInfo_TronFee_Title">费用</string>
+    <string name="FeeInfo_TronFee_Description">估算在网络上发送特定交易所需的成本，包括能源、带宽和激活费</string>
+    <string name="FeeInfo_TronActivationFee_Title">激活费</string>
+    <string name="FeeInfo_TronActivationFee_Description">正在将TRX或 TRC-10令牌传输到一个非活动帐户地址将激活帐户。</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">消耗的资源</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 是衡量存储在区块链数据库中的交易字节大小的单位。 交易越大，消耗的带宽资源就越多。\n\nEnergy 是衡量波场虚拟机在波场网络上执行特定操作所需计算量的单位。\n\n自智能合约 交易需要计算资源来执行，每笔智能合约交易都需要支付 energy费用。</string>
     <!--Tron-->
+    <string name="Tron_AddressNotActive_Warning">此地址未激活</string>
+    <string name="Tron_AddressNotActive_Warning_Short">(不活动)</string>
+    <string name="Tron_AddressNotActive_Title">未激活的地址</string>
+    <string name="Tron_AddressNotActive_Info">新创建的 TRON 区块链上的帐户是不活动的，无法查询或探索。它们需要激活。\n\n正在将TRX或 TRC-10令牌传输到一个不活动的帐户地址将激活该帐户。 激活Tron链上的一个新帐户需要1TRX</string>
+    <string name="Tron_SelfSendTrxNotAllowed">无法将 TRX 转移给自己</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">请求</string>
     <string name="WalletConnect_SendRequest_Title">发送​​</string>
@@ -813,9 +826,20 @@
     <string name="ManageAccounts_ImportWallet">恢复自</string>
     <string name="ManageAccounts_WatchAddress">观察地址</string>
     <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">从文件</string>
+    <string name="ImportWallet_BackupFile_Description">从备份文件导入</string>
+    <string name="ImportWallet_RecoveryPhrase">恢复短语</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入。</string>
     <string name="ImportWallet_WatchAddress">观察地址</string>
+    <string name="ImportWallet_WatchAddress_Description">观测 EVM-Chain、BTC、LTC 和 DASH 地址的模式</string>
+    <string name="ImportWallet_WarningInvalidJson">无效的 Json 文件</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">此文件不是钱包的有效备份，或者文件已损坏，无法恢复。</string>
+    <string name="ImportWallet_SelectAnotherFile">Please choose another file.</string>
     <!-- Import Backup File -->
     <string name="ImportBackupFile_EnterPassword">请输入密码</string>
+    <string name="ImportBackupFile_EnterPassword_Description">输入备份密码以导入您的钱包。</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
+    <string name="ImportBackupFile_BackupPassword">备份密码</string>
     <string name="Watch_Address_Hint">地址或域名</string>
     <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
     <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
@@ -826,6 +850,7 @@
     <string name="Watch_WatchBy">观看者</string>
     <string name="Watch_TypeEvmAddress">EVM 地址</string>
     <string name="Watch_TypeSolanaAddress">Solana 地址</string>
+    <string name="Watch_TypeTronAddress">Tron 地址</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">无效的 xPubKey</string>
     <!--Manage Account-->
@@ -873,10 +898,20 @@
     <string name="BackupRecoveryPhrase_Description">通过创建一个恢复短语来备份这个钱包。 如果您的手机丢失、被盗、损坏等等，将需要它来访问钱包。</string>
     <string name="BackupRecoveryPhrase_Backup">备份</string>
     <string name="BackupRecoveryPhrase_ManualBackup">进行手动备份</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">本地备份</string>
     <string name="BackupRecoveryPhrase_Later">稍后</string>
     <string name="BackupRecoveryPhrase_BackupRequiredText">完成钱包备份选项之一以开始使用钱包。</string>
     <string name="BackupRecoveryPhrase_BackupRecomendedText">建议为每个钱包提供手动备份。</string>
     <!-- Local Backup -->
+    <string name="LocalBackup_Title">本地备份</string>
+    <string name="LocalBackup_SaveAndBackup">保存并备份</string>
+    <string name="LocalBackup_SetPassword">设置密码</string>
+    <string name="LocalBackup_BackupSaved">备份已保存</string>
+    <string name="LocalBackup_PasswordInvalid">密码需要至少8个字符，包括一个大写字母、一个小写字母、一个数字和一个符号。</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">不要忘记这个密码并将其保存在一个安全的地方！它无法恢复或重置。</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">密码保护可以加密您在 iCloud 上的备份。密码必须包含至少8个字符，其中包括一个大写字母、一个小写字母、一个数字和一个符号。</string>
+    <string name="LocalBackup_TermsWarningText">存储设备包括硬盘驱动器、USB驱动器以及智能手机上的存储等。由于有形损害、盗窃或其他无法预见的情况，所有人都容易遭受损失。</string>
+    <string name="LocalBackup_Term1">我的理解是，备份设备被盗或损坏将导致备份丢失，进而导致钱包丢失。</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">恢复码</string>
     <string name="RecoveryPhrase_Description">按正确顺序写下这些单词，并将其保留在一个安全的地方</string>
@@ -1130,6 +1165,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_PageLocked">此页面仅对Unstoppable钱包的高级用户开放</string>
+    <string name="CoinAnalytics_ActivateSubscription">请激活您的订阅以获取分析权限</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">此项目没有分析数据</string>
     <string name="CoinAnalytics_CexVolume">CEX交易量</string>
     <string name="CoinAnalytics_CexVolumeRank">CEX交易量排名</string>
@@ -1152,6 +1188,7 @@
     <string name="CoinAnalytics_TvlRatio">市值 / TVL比率</string>
     <string name="CoinAnalytics_ProjectRevenue">项目收入</string>
     <string name="CoinAnalytics_ProjectRevenueRank">项目收入排名</string>
+    <string name="CoinAnalytics_HoldersRank">股東排名</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">按通过如质押或代币销毁等机制为持有者生成的收入排名的代币。</string>
     <string name="CoinAnalytics_HoldersRank_Description">通过在多个区块链上持有它们的独特地址来排名令牌。</string>
     <string name="CoinAnalytics_OtherData">其它数据</string>
