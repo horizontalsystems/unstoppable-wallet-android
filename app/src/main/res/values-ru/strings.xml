@@ -74,6 +74,7 @@
     <string name="CreateWallet_Mnemonic">Фраза восстановления</string>
     <string name="CreateWallet_Wordlist">Список слов</string>
     <string name="Passphrase">Кодовая фраза</string>
+    <string name="Password">Пароль</string>
     <string name="ConfirmPassphrase">Подтвердить</string>
     <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
     <string name="CreateWallet_N_Words">%s слов</string>
@@ -389,8 +390,16 @@
     <string name="FeeInfo_Fast">Быстро</string>
     <string name="FeeInfo_FastDescription">В случае с приоритетными транзакциями лучше всего использовать настройку высокой комиссии. При выборе этой настройки транзакция Bitcoin будет обработана в течение 10 минут, ну а обработка транзакции Ethereum займет всего лишь 1-2 минуты.</string>
     <string name="FeeInfo_TronFee_Title">Комиссия</string>
+    <string name="FeeInfo_TronFee_Description">Ориентировочные затраты на отправку данной транзакции по сети (без учёта energy, Bandwidth и комиссии за активацию) предполагаются</string>
+    <string name="FeeInfo_TronActivationFee_Title">Комиссия за активацию</string>
+    <string name="FeeInfo_TronActivationFee_Description">Передача токенов TRX или TRC-10 на адрес неактивного аккаунта активирует его.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Расходуемые ресурсы</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth - это единица, которая измеряет размер байт транзакции, хранящихся в базе данных блокчейна. Чем больше транзакция, тем больше bandwidth будет потребляться.\n\nEnergy — это единица, измеряющая количество вычислений, требуемых виртуальной машиной TRON для выполнения конкретных операций в сети TRON.\n\nПоскольку транзакции смарт-контракта требуют выполнения вычислительных ресурсов, каждая сделка по контракту требует оплаты energy комиссии.</string>
     <!--Tron-->
+    <string name="Tron_AddressNotActive_Warning">Этот адрес не активен</string>
+    <string name="Tron_AddressNotActive_Warning_Short">(не активен)</string>
     <string name="Tron_AddressNotActive_Title">Неактивный адрес</string>
+    <string name="Tron_AddressNotActive_Info">Недавно созданные учетные записи в блокчейне TRON неактивны и не могут быть запрошены или изучены. Они должны быть активированы.\n\nАктивация новой учетной записи в цепочке Tron требует комиссию в размере 1 TRX. Для активации достаточно просто перевести токены TRX или TRC-10 на неактивный адрес аккаунта</string>
     <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Запрос</string>
@@ -815,6 +824,9 @@
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">из файла</string>
+    <string name="ImportWallet_BackupFile_Description">Импортировать из файла резервной копии</string>
+    <string name="ImportWallet_RecoveryPhrase">из фразы восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
     <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
     <string name="ImportWallet_WarningInvalidJson">Недопустимый Json файл</string>
@@ -824,6 +836,7 @@
     <string name="ImportBackupFile_EnterPassword">Введите пароль</string>
     <string name="ImportBackupFile_EnterPassword_Description">Введите пароль резервной копии для импорта вашего кошелька.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
+    <string name="ImportBackupFile_BackupPassword">Резервное копирование пароля</string>
     <string name="Watch_Address_Hint">Адрес или домен</string>
     <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
     <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
