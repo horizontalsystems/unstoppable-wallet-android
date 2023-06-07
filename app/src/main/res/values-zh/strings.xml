@@ -908,8 +908,8 @@
     <string name="LocalBackup_SetPassword">设置密码</string>
     <string name="LocalBackup_BackupSaved">备份已保存</string>
     <string name="LocalBackup_PasswordInvalid">密码需要至少8个字符，包括一个大写字母、一个小写字母、一个数字和一个符号。</string>
-    <string name="LocalBackup_DontForgetPasswordWarning">不要忘记这个密码并将其保存在一个安全的地方！它无法恢复或重置。</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">密码保护可以加密您在 iCloud 上的备份。密码必须包含至少8个字符，其中包括一个大写字母、一个小写字母、一个数字和一个符号。</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">此密码用于加密您的钱包备份文件。一旦丢失或遗忘，将无法恢复或重置。</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">为您的备份设置解锁密码。密码长度必须至少为8个字符，并且包含至少一个小写字母、大写字母、数字和特殊字符。</string>
     <string name="LocalBackup_TermsWarningText">存储设备包括硬盘驱动器、USB驱动器以及智能手机上的存储等。由于有形损害、盗窃或其他无法预见的情况，所有人都容易遭受损失。</string>
     <string name="LocalBackup_Term1">我的理解是，备份设备被盗或损坏将导致备份丢失，进而导致钱包丢失。</string>
     <!-- Recovery Phrase -->
