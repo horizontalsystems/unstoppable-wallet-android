@@ -73,6 +73,7 @@
     <string name="CreateWallet_Mnemonic">Phrase de récupération</string>
     <string name="CreateWallet_Wordlist">Listes de mots</string>
     <string name="Passphrase">Phrase d\'authentification</string>
+    <string name="Password">Mot de passe</string>
     <string name="ConfirmPassphrase">Confirmer</string>
     <string name="CreateWallet_N_WordsRecommended">%s mots (recommandé)</string>
     <string name="CreateWallet_N_Words">%s mots</string>
@@ -387,7 +388,17 @@
     <string name="FeeInfo_Fast">Rapide</string>
     <string name="FeeInfo_FastDescription">Pour les transactions où la priorité est importante, nous vous recommandons d\'utiliser la valeur élevée des frais. Cela devrait suffire pour qu\'une transaction soit effectuée dans les 10 minutes pour Bitcoin et dans les 1-2 minutes pour Ethereum.</string>
     <string name="FeeInfo_TronFee_Title">Frais</string>
+    <string name="FeeInfo_TronFee_Description">Le coût estimé pour envoyer une transaction donnée sur le réseau (sans exclure les coûts d\'énergie, de bande passante et d\'activation)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Frais d\'activation</string>
+    <string name="FeeInfo_TronActivationFee_Description">Le transfert de jetons TRX ou TRC-10 vers une adresse de compte inactive activera ledit compte.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Ressources consommées</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">La bande passante est l\'unité qui mesure la taille des octets de transaction stockés dans la base de données blockchain. Plus la transaction est grande, plus la bande passante sera consommée.\n\nL\'énergie est l\'unité qui mesure le montant de calcul requis par la machine virtuelle TRON pour effectuer des opérations spécifiques sur le réseau TRON.\n\nÉtant donné que les transactions de contrats intelligents nécessitent des ressources informatiques pour être exécutées, chaque transaction de contrat intelligent nécessite le paiement de frais d\'énergie.</string>
     <!--Tron-->
+    <string name="Tron_AddressNotActive_Warning">Cette adresse n\'est pas active</string>
+    <string name="Tron_AddressNotActive_Warning_Short">(non actif)</string>
+    <string name="Tron_AddressNotActive_Title">Adresse non-active</string>
+    <string name="Tron_AddressNotActive_Info">Les comptes récemment créés sur la blockchain TRON sont inactifs et ne peuvent pas être interrogés ou explorés. Ils doivent être activés.\n\nLe transfert de jetons TRX ou TRC-10 vers une adresse de compte inactive activera le compte. Pour activer un nouveau compte sur la chaîne Tron, des frais de 1 TRX sont nécessaires</string>
+    <string name="Tron_SelfSendTrxNotAllowed">Impossible de transférer des TRX à vous-même</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Requête</string>
     <string name="WalletConnect_SendRequest_Title">Envoyer</string>
@@ -814,6 +825,7 @@
     <string name="ManageAccounts_ImportWallet">Restaurer</string>
     <string name="ManageAccounts_WatchAddress">Adresse à suivre</string>
     <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">À partir du fichier</string>
     <string name="ImportWallet_BackupFile_Description">Importer depuis un fichier de sauvegarde</string>
     <string name="ImportWallet_RecoveryPhrase">Voir la phase de récupération</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Importer à l\'aide de la phrase de récupération ou de la clé privée.</string>
@@ -826,6 +838,7 @@
     <string name="ImportBackupFile_EnterPassword">Entrez le mot de passe</string>
     <string name="ImportBackupFile_EnterPassword_Description">Entrez le mot de passe de sauvegarde pour importer votre portefeuille.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Mot de passe invalide</string>
+    <string name="ImportBackupFile_BackupPassword">Mot de passe de sauvegarde</string>
     <string name="Watch_Address_Hint">Adresse ou domaine</string>
     <string name="Watch_XPubKey_Hint">Entrez Account Extended Public Key</string>
     <string name="Watch_Address_Description">Disponible uniquement pour Ethereum et autres blockchains EVM prises en charge.</string>

@@ -73,6 +73,7 @@
     <string name="CreateWallet_Mnemonic">Frase de Recuperação</string>
     <string name="CreateWallet_Wordlist">Listas de palavras</string>
     <string name="Passphrase">Senha</string>
+    <string name="Password">Senha</string>
     <string name="ConfirmPassphrase">Confirmar</string>
     <string name="CreateWallet_N_WordsRecommended">%s palavras (recomendado)</string>
     <string name="CreateWallet_N_Words">%s palavras</string>
@@ -391,7 +392,17 @@
     <string name="FeeInfo_Fast">Alto</string>
     <string name="FeeInfo_FastDescription">Para as operações em que a prioridade é importante, recomendamos a utilização do alto valor de taxa. É esperado que seja suficiente para concluir uma transação dentro de 10 minutos para o Bitcoin e dentro de 1 – 2 minutos para o Ethereum.</string>
     <string name="FeeInfo_TronFee_Title">Taxa</string>
+    <string name="FeeInfo_TronFee_Description">O custo estimado de envio de determinada transação na rede. (Sem excluir Eneregy, Bandwidth e Taxa de Ativação)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Taxa de ativação</string>
+    <string name="FeeInfo_TronActivationFee_Description">Transferir tokens TRX ou TRC-10 para um endereço de conta inativo ativará a conta.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Recursos consumidos</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">A bandwidth é a unidade que mede o tamanho dos bytes de transação armazenados no banco de dados blockchain. Quanto maior a transação, mais recursos de largura de banda serão consumidos.\n\nEnergy é a unidade que mede a quantidade de computação necessária pela máquina virtual TRON para realizar operações específicas na rede TRON.\n\nComo as transações de contrato inteligente exigem recursos de computação para executar, cada transação de contrato inteligente requer o pagamento da taxa de energy.</string>
     <!--Tron-->
+    <string name="Tron_AddressNotActive_Warning">Este endereço não está ativo</string>
+    <string name="Tron_AddressNotActive_Warning_Short">(não ativo)</string>
+    <string name="Tron_AddressNotActive_Title">Endereço não ativo</string>
+    <string name="Tron_AddressNotActive_Info">Contas recém-criadas no blockchain TRON estão inativas e não podem ser consultadas ou exploradas. Elas precisam ser ativadas.\n\nPara ativar uma nova conta na cadeia Tron, é necessário transferir tokens TRX ou TRC-10 para um endereço de conta inativo, juntamente com uma taxa de ativação de 1 TRX</string>
+    <string name="Tron_SelfSendTrxNotAllowed">Não é possível transferir TRX para si mesmo</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Solicitar</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
@@ -830,6 +841,7 @@
     <string name="ImportBackupFile_EnterPassword">Digite a senha</string>
     <string name="ImportBackupFile_EnterPassword_Description">Digite a senha de backup para importar sua carteira.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Senha inválida</string>
+    <string name="ImportBackupFile_BackupPassword">Fazer Backup da Senha</string>
     <string name="Watch_Address_Hint">Endereço ou Domínio</string>
     <string name="Watch_XPubKey_Hint">Insira a chave pública estendida da conta</string>
     <string name="Watch_Address_Description">Disponível apenas para Ethereum e outras blockchains de EVM suportadas.</string>
@@ -901,7 +913,6 @@
     <string name="LocalBackup_DontForgetPasswordWarning">Não se esqueça desta senha e mantenha-a em um lugar seguro! Ela não pode ser recuperada ou redefinida.</string>
     <string name="LocalBackup_TermsWarningText">Dispositivos de armazenamento, ou seja, discos rígidos, discos USB, armazenamento em smartphone, etc. são todos vulneráveis a perdas devido a danos físicos, roubo ou outras circunstâncias imprevistas.</string>
     <string name="LocalBackup_Term1">Eu entendo que o roubo ou dano de um dispositivo de backup resultará na perda de um backup de uma respectiva carteira.</string>
-    <string name="LocalBackup_Term2">Eu entendo que se eu perder o backup da minha carteira no dispositivo de armazenamento, eu vou perder o acesso aos meus fundos da carteira</string>
     <!-- Recovery Phrase -->
     <string name="RecoveryPhrase_Title">Frase de Recuperação</string>
     <string name="RecoveryPhrase_Description">Escreva essas palavras na ordem correta e mantenha-as em um lugar seguro</string>
