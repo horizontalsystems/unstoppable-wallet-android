@@ -1621,6 +1621,7 @@
     <string name="Unlock_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
     <string name="Unlock_WalletDisabledUntil">Disabled until: %s</string>
+    <string name="Unlock_AttemptsLeft">Attempts left: %s</string>
 
     <!--Set Pin-->
     <string name="PinSet_Title">Set Passcode</string>

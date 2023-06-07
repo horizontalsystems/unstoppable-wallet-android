@@ -27,6 +27,7 @@ class PinUnlockViewModel(
     private val timer: OneTimeTimer
 ) : ViewModel(), OneTimerDelegate {
 
+    private var attemptsLeft: Int? = null
 
     var uiState by mutableStateOf(
         PinUnlockViewState(
@@ -37,7 +38,7 @@ class PinUnlockViewModel(
             unlocked = false,
             canceled = false,
             showShakeAnimation = false,
-            inputState = PinUnlockModule.InputState.Enabled
+            inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
         )
     )
         private set
@@ -117,17 +118,14 @@ class PinUnlockViewModel(
     }
 
     private fun updateLockoutState() {
-        val state = lockoutManager.currentState
-        when (state) {
-            is LockoutState.Locked -> timer.schedule(state.until)
-            is LockoutState.Unlocked -> {}
-        }
-
-        uiState = when (state) {
+        uiState = when (val state = lockoutManager.currentState) {
             is LockoutState.Unlocked -> {
-                uiState.copy(inputState = PinUnlockModule.InputState.Enabled)
+                attemptsLeft = state.attemptsLeft
+                uiState.copy(inputState = PinUnlockModule.InputState.Enabled(attemptsLeft))
             }
+
             is LockoutState.Locked -> {
+                timer.schedule(state.until)
                 uiState.copy(
                     inputState = PinUnlockModule.InputState.Locked(
                         until = DateHelper.getOnlyTime(state.until)
