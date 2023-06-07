@@ -73,6 +73,7 @@
     <string name="CreateWallet_Mnemonic">Wiederherstellungsphrase</string>
     <string name="CreateWallet_Wordlist">Wortliste</string>
     <string name="Passphrase">Passphrase</string>
+    <string name="Password">Passwort</string>
     <string name="ConfirmPassphrase">Bestätigen</string>
     <string name="CreateWallet_N_WordsRecommended">%s Wörter (empfohlen)</string>
     <string name="CreateWallet_N_Words">%s Wörter</string>
@@ -389,7 +390,16 @@
     <string name="FeeInfo_FastDescription">Bei Transaktionen, deren Priorität wichtig ist, empfehlen wir, den hohen Gebührenwert zu verwenden. Es wird erwartet, dass eine Transaktion innerhalb von 10 Minuten für Bitcoin und innerhalb von 1-2 Minuten für Ethereum abgeschlossen wird.</string>
     <string name="FeeInfo_TronFee_Title">Gebühr</string>
     <string name="FeeInfo_TronFee_Description">Die geschätzten Kosten für den Versand einer Transaktion im Netzwerk (ohne Energie-, Bandbreiten- und Aktivierungsgebühren)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Aktivierungsgebühr</string>
+    <string name="FeeInfo_TronActivationFee_Description">Die Übertragung von TRX- oder TRC-10-Token an eine inaktive Konto-Adresse wird das Konto aktivieren.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Verbrauchte Ressourcen</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">Bandbreite ist die Einheit, die die Größe der in der Blockchain-Datenbank gespeicherten Transaktionsbytes misst. Je größer die Transaktion, desto mehr Ressourcen werden verbraucht.\n\nEnergie ist die Einheit, die die Anzahl der Berechnungen misst, die von der virtuellen TRON-Maschine benötigt werden, um bestimmte Operationen im TRON-Netzwerk durchzuführen.\n\nDa intelligente Vertragsabschlüsse die Verwendung von Rechnerressourcen erfordern, muss für jeden Smart Contract eine Energiegebühr bezahlt werden.</string>
     <!--Tron-->
+    <string name="Tron_AddressNotActive_Warning">Diese Adresse ist nicht aktiv</string>
+    <string name="Tron_AddressNotActive_Warning_Short">(nicht aktiv)</string>
+    <string name="Tron_AddressNotActive_Title">Keine aktive Adresse</string>
+    <string name="Tron_AddressNotActive_Info">Neu erstellte Konten in der TRON-Blockchain sind inaktiv und können nicht abgefragt oder untersucht werden. Sie müssen aktiviert werden.\n\nDie Übertragung von TRX- oder TRC-10-Token an eine inaktive Konto-Adresse wird das Konto aktivieren. Zur Aktivierung eines neuen Kontos auf der Tron-Kette ist eine Gebühr von 1 TRX erforderlich</string>
+    <string name="Tron_SelfSendTrxNotAllowed">TRX kann nicht auf sich selbst übertragen werden</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Anforderung</string>
     <string name="WalletConnect_SendRequest_Title">Senden</string>
@@ -833,6 +843,7 @@
     <string name="ImportBackupFile_EnterPassword">Passwort eingeben</string>
     <string name="ImportBackupFile_EnterPassword_Description">Geben Sie das Sicherungspasswort ein, um Ihre Brieftasche zu importieren.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Ungültiges Passwort</string>
+    <string name="ImportBackupFile_BackupPassword">Passwort sichern</string>
     <string name="Watch_Address_Hint">Adresse oder Domäne</string>
     <string name="Watch_XPubKey_Hint">Account Extended Public Key eingeben</string>
     <string name="Watch_Address_Description">Nur für Ethereum und andere unterstützte EVM Blockchains verfügbar.</string>
