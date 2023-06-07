@@ -1107,8 +1107,8 @@
     <string name="LocalBackup_SetPassword">Set Password</string>
     <string name="LocalBackup_BackupSaved">Backup Saved</string>
     <string name="LocalBackup_PasswordInvalid">At least 8 characters, including one uppercase letter, one lowercase letter, one number and one symbol.</string>
-    <string name="LocalBackup_DontForgetPasswordWarning">Don\'t forget this password and keep it in a safe place! It cannot be recovered or reset.</string>
-    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Password-protect your backup to encrypt it on iCloud. The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one symbol.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">This password is used to encrypt backup file of your wallet. It can\'t be recovered or reset if lost or forgotten.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Set unlock password for your backup. It must consist of at least 8 symbols and include at least one lowercase letter, uppercase letter, number and a special character.</string>
     <string name="LocalBackup_TermsWarningText">Storage devices i.e. hard drives, USB drives , storage on smartphone etc. are all vulnerable to loss due to physical damage, theft or other unforeseen circumstances.</string>
     <string name="LocalBackup_Term1">I understand that theft or damage of a backup device will result in loss of a backup to a respective wallet.</string>
 
