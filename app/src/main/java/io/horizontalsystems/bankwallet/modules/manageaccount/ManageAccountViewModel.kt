@@ -67,7 +67,7 @@ class ManageAccountViewModel(
         if (account.isWatchAccount) {
             return emptyList()
         }
-        if (account.type is AccountType.HdExtendedKey) {
+        if (account.type is AccountType.HdExtendedKey || account.type is AccountType.EvmPrivateKey) {
             return listOf(BackupItem.LocalBackup(false))
         }
 
