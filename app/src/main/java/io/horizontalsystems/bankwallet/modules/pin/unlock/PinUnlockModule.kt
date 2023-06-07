@@ -43,7 +43,7 @@ object PinUnlockModule {
     )
 
     sealed class InputState {
-        object Enabled : InputState()
+        class Enabled(val attemptsLeft: Int? = null) : InputState()
         class Locked(val until: String) : InputState()
     }
 

@@ -2,7 +2,16 @@ package io.horizontalsystems.bankwallet.modules.pin.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,8 +27,10 @@ import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule.InputS
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
 @Composable
 fun PinTopBlock(
@@ -28,7 +39,7 @@ fun PinTopBlock(
     enteredCount: Int,
     showCancelButton: Boolean = false,
     showShakeAnimation: Boolean = false,
-    inputState: InputState = InputState.Enabled,
+    inputState: InputState = InputState.Enabled(),
     onShakeAnimationFinish: (() -> Unit)? = null,
     onCancelClick: (() -> Unit)? = null
 ) {
@@ -40,7 +51,7 @@ fun PinTopBlock(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when (inputState) {
-            InputState.Enabled -> {
+            is InputState.Enabled -> {
                 title()
                 Spacer(Modifier.height(16.dp))
                 Row(
@@ -54,8 +65,12 @@ fun PinTopBlock(
                         IndicatorCircle(i <= enteredCount)
                     }
                 }
+                VSpacer(16.dp)
+                subhead2_leah(
+                    text = inputState.attemptsLeft?.let { stringResource(R.string.Unlock_AttemptsLeft, it) } ?: ""
+                )
                 if (showCancelButton) {
-                    Spacer(Modifier.height(24.dp))
+                    VSpacer(16.dp)
                     ButtonSecondaryTransparent(
                         title = stringResource(R.string.Button_Cancel),
                         onClick = { onCancelClick?.invoke() }
