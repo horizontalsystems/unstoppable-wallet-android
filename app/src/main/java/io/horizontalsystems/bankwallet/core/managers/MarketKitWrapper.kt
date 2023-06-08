@@ -203,7 +203,7 @@ class MarketKitWrapper(
     suspend fun nftCollections(): List<NftTopCollection> =
         marketKit.nftTopCollections()
 
-    fun authKey(address: String) =marketKit.authGetSignMessage(address)
+    fun authKey(address: String) = marketKit.authGetSignMessage(address)
     fun authenticate(signature: String, address: String) =
         marketKit.authenticate(signature, address)
 

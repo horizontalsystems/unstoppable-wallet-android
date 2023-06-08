@@ -1,27 +1,37 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestModule.TYPED_MESSAGE
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MessageToSign
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -60,35 +70,33 @@ fun SignMessageRequestScreen(
 
                 when (val message = viewModel.message) {
                     is SignMessage.PersonalMessage -> {
-                        subhead2_grey(
-                            modifier = Modifier.padding(horizontal = 24.dp),
-                            text = message.data,
-                        )
+                        MessageContent(message.data, viewModel.dAppName, viewModel)
                     }
                     is SignMessage.Message -> {
-                        MessageContent(message, viewModel.dAppName, navController, viewModel)
+                        MessageContent(message.data, viewModel.dAppName, viewModel, message.showLegacySignWarning)
                     }
                     is SignMessage.TypedMessage -> {
-                        TypedMessageContent(message, viewModel.dAppName, navController)
+                        TypedMessageContent(message, viewModel.dAppName)
                     }
                 }
 
                 Spacer(Modifier.height(24.dp))
             }
-            Column(Modifier.padding(horizontal = 24.dp)) {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
-                    enabled = viewModel.signEnabled,
-                    onClick = { viewModel.sign() },
-                )
-                Spacer(Modifier.height(16.dp))
-                ButtonPrimaryDefault(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.Button_Reject),
-                    onClick = { viewModel.reject() }
-                )
-                Spacer(Modifier.height(32.dp))
+            ButtonsGroupWithShade {
+                Column(Modifier.padding(horizontal = 24.dp)) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
+                        enabled = viewModel.signEnabled,
+                        onClick = { viewModel.sign() },
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    ButtonPrimaryDefault(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = stringResource(R.string.Button_Reject),
+                        onClick = { viewModel.reject() }
+                    )
+                }
             }
         }
     }
@@ -97,8 +105,7 @@ fun SignMessageRequestScreen(
 @Composable
 private fun TypedMessageContent(
     message: SignMessage.TypedMessage,
-    dAppName: String?,
-    navController: NavController
+    dAppName: String?
 ) {
     val composableItems: MutableList<@Composable () -> Unit> = mutableListOf()
     message.domain?.let { domain ->
@@ -108,13 +115,6 @@ private fun TypedMessageContent(
                 domain
             )
         }
-    }
-    composableItems.add {
-        SignMessageButton(
-            stringResource(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
-            message.data,
-            navController
-        )
     }
     dAppName?.let { name ->
         composableItems.add {
@@ -128,32 +128,27 @@ private fun TypedMessageContent(
     CellUniversalLawrenceSection(
         composableItems
     )
+
+    MessageToSign(message.data)
 }
 
 @Composable
 private fun MessageContent(
-    message: SignMessage.Message,
+    message: String,
     dAppName: String?,
-    navController: NavController,
-    viewModel: WCSignMessageRequestViewModel
+    viewModel: WCSignMessageRequestViewModel,
+    showLegacySignWarning: Boolean = false
 ) {
-    val composableItems: MutableList<@Composable () -> Unit> = mutableListOf({
-        SignMessageButton(
-            stringResource(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
-            message.data,
-            navController
-        )
+    CellUniversalLawrenceSection(buildList {
+        dAppName?.let { dApp ->
+            add { TitleTypedValueCell(stringResource(R.string.WalletConnect_SignMessageRequest_dApp), dApp) }
+        }
     })
-    dAppName?.let { dApp ->
-        composableItems.add { TitleTypedValueCell(stringResource(R.string.WalletConnect_SignMessageRequest_dApp), dApp) }
-    }
 
-    CellUniversalLawrenceSection(
-        composableItems
-    )
+    MessageToSign(message)
 
-    if (message.showLegacySignWarning) {
-        Spacer(Modifier.height(12.dp))
+    if (showLegacySignWarning) {
+        Spacer(Modifier.height(32.dp))
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(R.string.WalletConnect_LegacySignWarning),
@@ -183,48 +178,4 @@ private fun MessageContent(
             }
         )
     }
-}
-
-@Composable
-private fun SignMessageButton(title: String, data: String, navController: NavController) {
-    RowUniversal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        onClick = {
-            navController.slideFromBottom(
-                R.id.wcDisplayTypedMessageFragment,
-                bundleOf(TYPED_MESSAGE to formatJson(data))
-            )
-        }
-    ) {
-        subhead2_grey(text = title)
-        Spacer(Modifier.weight(1f))
-        Image(
-            modifier = Modifier.padding(start = 8.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null
-        )
-    }
-}
-
-private fun formatJson(text: String): String {
-    val json = StringBuilder()
-    var indentString = ""
-    for (element in text) {
-        when (element) {
-            '{', '[' -> {
-                json.append("\n$indentString$element\n")
-                indentString += "\t"
-                json.append(indentString)
-            }
-            '}', ']' -> {
-                indentString = indentString.replaceFirst("\t".toRegex(), "")
-                json.append("\n$indentString$element")
-            }
-            ',' -> json.append("$element\n$indentString")
-            else -> json.append(element)
-        }
-    }
-    return json.toString()
 }

@@ -34,13 +34,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MessageToSign
 import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.caption_leah
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -191,12 +190,5 @@ private fun MessageToSignSection(
             )
         }
     })
-    VSpacer(24.dp)
-    HeaderText(text = stringResource(id = R.string.ActivateSubscription_MessageToSign).uppercase())
-    CellUniversalLawrenceSection(buildList {
-        add {
-            caption_leah(modifier = Modifier.padding(16.dp), text = messageToSign)
-        }
-    })
-    VSpacer(32.dp)
+    MessageToSign(messageToSign)
 }

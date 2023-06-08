@@ -22,9 +22,6 @@
         android:id="@+id/wc2RequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment"/>
     <fragment
-        android:id="@+id/wcDisplayTypedMessageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
-    <fragment
         android:id="@+id/wc2PairingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.pairing.WC2PairingsFragment"/>
 </navigation>
