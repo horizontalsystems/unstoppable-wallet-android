@@ -34,13 +34,12 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.MessageToSign
 import cash.p.terminal.ui.compose.components.TitleAndValueCell
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.caption_leah
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -191,12 +190,5 @@ private fun MessageToSignSection(
             )
         }
     })
-    VSpacer(24.dp)
-    HeaderText(text = stringResource(id = R.string.ActivateSubscription_MessageToSign).uppercase())
-    CellUniversalLawrenceSection(buildList {
-        add {
-            caption_leah(modifier = Modifier.padding(16.dp), text = messageToSign)
-        }
-    })
-    VSpacer(32.dp)
+    MessageToSign(messageToSign)
 }

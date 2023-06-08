@@ -22,9 +22,6 @@
         android:id="@+id/wc2RequestFragment"
         android:name="cash.p.terminal.modules.walletconnect.request.WC2RequestFragment"/>
     <fragment
-        android:id="@+id/wcDisplayTypedMessageFragment"
-        android:name="cash.p.terminal.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
-    <fragment
         android:id="@+id/wc2PairingsFragment"
         android:name="cash.p.terminal.modules.walletconnect.pairing.WC2PairingsFragment"/>
 </navigation>
