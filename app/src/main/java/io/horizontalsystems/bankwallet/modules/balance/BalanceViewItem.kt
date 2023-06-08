@@ -2,18 +2,13 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
@@ -49,53 +44,6 @@ data class DeemedValue<T>(val value: T, val dimmed: Boolean = false, val visible
 data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
 
 class BalanceViewItemFactory {
-
-    private fun coinValue(
-        state: AdapterState?,
-        balance: BigDecimal,
-        visible: Boolean,
-        full: Boolean,
-        coinDecimals: Int
-    ): DeemedValue<String> {
-        val dimmed = state !is AdapterState.Synced
-        val formatted = if (full) {
-            App.numberFormatter.formatCoinFull(balance, null, coinDecimals)
-        } else {
-            App.numberFormatter.formatCoinShort(balance, null, coinDecimals)
-        }
-
-        return DeemedValue(formatted, dimmed, visible)
-    }
-
-    private fun currencyValue(
-        state: AdapterState?,
-        balance: BigDecimal,
-        coinPrice: CoinPrice?,
-        visible: Boolean,
-        fullFormat: Boolean,
-        currency: Currency
-    ): DeemedValue<String> {
-        val dimmed = state !is AdapterState.Synced || coinPrice?.expired ?: false
-        val formatted = coinPrice?.value?.let { rate ->
-            val balanceFiat = balance.multiply(rate)
-
-            if (fullFormat) {
-                App.numberFormatter.formatFiatFull(balanceFiat, currency.symbol)
-            } else {
-                App.numberFormatter.formatFiatShort(balanceFiat, currency.symbol, 8)
-            }
-        } ?: ""
-
-        return DeemedValue(formatted, dimmed, visible)
-    }
-
-    private fun rateValue(coinPrice: CoinPrice?, showSyncing: Boolean, currency: Currency): DeemedValue<String> {
-        val value = coinPrice?.let {
-            App.numberFormatter.formatFiatFull(coinPrice.value, currency.symbol)
-        } ?: ""
-
-        return DeemedValue(value, dimmed = coinPrice?.expired ?: false, visible = !showSyncing)
-    }
 
     private fun getSyncingProgress(state: AdapterState?, blockchainType: BlockchainType): SyncingProgress {
         return when (state) {
@@ -229,34 +177,16 @@ class BalanceViewItemFactory {
         val balanceTotalVisibility = !hideBalance && !showSyncing
         val fiatLockedVisibility = !hideBalance && item.balanceData.locked > BigDecimal.ZERO
 
-        val coinValueStr = coinValue(
-            state,
-            item.balanceData.total,
-            balanceTotalVisibility,
-            expanded,
-            wallet.decimal
+        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
+            balance = item.balanceData.total,
+            visible = balanceTotalVisibility,
+            fullFormat = expanded,
+            coinDecimals = wallet.decimal,
+            dimmed = state !is AdapterState.Synced,
+            coinPrice = latestRate,
+            currency = currency,
+            balanceViewType = balanceViewType
         )
-        val currencyValueStr = currencyValue(
-            state,
-            item.balanceData.total,
-            latestRate,
-            balanceTotalVisibility,
-            expanded,
-            currency
-        )
-
-        val primaryValue: DeemedValue<String>
-        val secondaryValue: DeemedValue<String>
-        when (balanceViewType) {
-            BalanceViewType.CoinThenFiat -> {
-                primaryValue = coinValueStr
-                secondaryValue = currencyValueStr
-            }
-            BalanceViewType.FiatThenCoin -> {
-                primaryValue = currencyValueStr
-                secondaryValue = coinValueStr
-            }
-        }
 
         return BalanceViewItem(
                 wallet = item.wallet,
@@ -274,15 +204,15 @@ class BalanceViewItemFactory {
                     wallet.decimal,
                     wallet.token
                 ),
-                fiatValueLocked = currencyValue(
-                    state,
+                fiatValueLocked = BalanceViewHelper.currencyValue(
                     item.balanceData.locked,
                     latestRate,
                     fiatLockedVisibility,
                     true,
-                    currency
+                    currency,
+                    state !is AdapterState.Synced
                 ),
-                exchangeValue = rateValue(latestRate, showSyncing, currency),
+                exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, !showSyncing),
                 diff = item.coinPrice?.diff,
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,

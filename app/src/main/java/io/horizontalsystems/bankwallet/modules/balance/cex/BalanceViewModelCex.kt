@@ -7,64 +7,175 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
-import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
-import io.horizontalsystems.bankwallet.modules.balance.ITotalBalance
-import io.horizontalsystems.bankwallet.modules.balance.TotalBalance
+import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.modules.balance.*
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.CoinPrice
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.collect
 import java.math.BigDecimal
 
 class BalanceViewModelCex(
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
+    private val balanceViewTypeManager: BalanceViewTypeManager,
+    private val balanceCexRepository: IBalanceCexRepository,
+    private val xRateRepository: BalanceXRateRepository,
 ) : ViewModel(), ITotalBalance by totalBalance {
+
+    private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
 
     val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     var sortType by mutableStateOf(localStorage.sortType)
         private set
 
+    private val currency by xRateRepository::baseCurrency
+
     private var expandedItemId: String? = null
     private var isRefreshing = false
-    private var items: List<BalanceCexViewItem> = listOf(
-        BalanceCexViewItem(
-            coinIconUrl = "",
-            coinIconPlaceholder = R.drawable.coin_placeholder,
-            coinCode = "BTC",
-            badge = null,
-            primaryValue = DeemedValue("primaryValue"),
-            exchangeValue = DeemedValue("exchangeValue"),
-            diff = BigDecimal.ONE,
-            secondaryValue = DeemedValue("secondaryValue"),
-            expanded = false,
-            hasCoinInfo = true,
-            coinUid = ""
-        )
-    )
+    private var viewItems = mutableListOf<BalanceCexViewItem>()
 
     var uiState by mutableStateOf(
         UiState(
             isRefreshing = isRefreshing,
-            items = items
+            viewItems = viewItems
         )
     )
         private set
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            balanceCexRepository.itemsFlow.collect {
+                handleUpdatedItems(it)
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            balanceViewTypeManager.balanceViewTypeFlow.collect {
+                handleUpdatedBalanceViewType(it)
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            xRateRepository.itemObservable.collect {
+                handleXRateUpdate(it)
+            }
+        }
+
         totalBalance.start(viewModelScope)
+        balanceCexRepository.start()
+    }
+
+    private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
+        refreshTotalBalance(xRateRepository.getLatestRates())
+
+        for (i in 0 until viewItems.size) {
+            val balanceItem = viewItems[i]
+
+            if (latestRates.containsKey(balanceItem.coinUid)) {
+                viewItems[i] = createBalanceCexViewItem(viewItems[i].balanceCexItem, latestRates[balanceItem.coinUid])
+            }
+        }
+
+        sortAndEmitItems()
+    }
+
+
+    private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
+        this.balanceViewType = balanceViewType
+        refreshViewItems()
+
+        sortAndEmitItems()
+    }
+
+    private fun refreshViewItems() {
+        val latestRates = xRateRepository.getLatestRates()
+
+        viewItems.replaceAll {
+            createBalanceCexViewItem(it.balanceCexItem, latestRates[it.balanceCexItem.coin.uid])
+        }
+    }
+
+    private fun handleUpdatedItems(items: List<BalanceCexItem>) {
+        xRateRepository.setCoinUids(items.map { it.coin.uid })
+        val latestRates = xRateRepository.getLatestRates()
+
+        refreshTotalBalance(latestRates)
+
+        viewItems = items.map {
+            createBalanceCexViewItem(it, latestRates[it.coin.uid])
+        }.toMutableList()
+
+        sortAndEmitItems()
+    }
+
+    private fun refreshTotalBalance(latestRates: Map<String, CoinPrice?>) {
+        val totalServiceItems = viewItems.map {
+            val balanceCexItem = it.balanceCexItem
+            val latestRate = latestRates[balanceCexItem.coin.uid]
+            TotalService.BalanceItem(
+                balanceCexItem.balance,
+                false,
+                latestRate
+            )
+
+        }
+        totalBalance.setTotalServiceItems(totalServiceItems)
+    }
+
+    private fun createBalanceCexViewItem(
+        balanceCexItem: BalanceCexItem,
+        latestRate: CoinPrice?
+    ): BalanceCexViewItem {
+        val expanded = balanceCexItem.id == expandedItemId
+        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
+            balance = balanceCexItem.balance,
+            visible = !balanceHidden,
+            fullFormat = expanded,
+            coinDecimals = balanceCexItem.decimals,
+            dimmed = false,
+            coinPrice = latestRate,
+            currency = currency,
+            balanceViewType = balanceViewType
+        )
+
+        return BalanceCexViewItem(
+            coinIconUrl = balanceCexItem.coin.imageUrl,
+            coinIconPlaceholder = R.drawable.coin_placeholder,
+            coinCode = balanceCexItem.coin.code,
+            badge = null,
+            primaryValue = primaryValue,
+            exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
+            diff = latestRate?.diff,
+            secondaryValue = secondaryValue,
+            expanded = expanded,
+            hasCoinInfo = true,
+            coinUid = balanceCexItem.coin.uid,
+            id = balanceCexItem.id,
+            balanceCexItem = balanceCexItem
+        )
     }
 
     private fun sortAndEmitItems() {
         viewModelScope.launch {
             uiState = UiState(
                 isRefreshing = isRefreshing,
-                items = items
+                viewItems = viewItems
             )
         }
     }
 
     override fun onCleared() {
         totalBalance.stop()
+    }
+
+    override fun toggleBalanceVisibility() {
+        totalBalance.toggleBalanceVisibility()
+        refreshViewItems()
+
+        sortAndEmitItems()
     }
 
     fun onSelectSortType(sortType: BalanceSortType) {
@@ -75,7 +186,7 @@ class BalanceViewModelCex(
     }
 
     fun onRefresh() {
-
+        xRateRepository.refresh()
     }
 
     fun onClickItem(viewItem: BalanceCexViewItem) {
@@ -84,15 +195,23 @@ class BalanceViewModelCex(
             else -> viewItem.id
         }
 
-        items = items.map {
+        viewItems = viewItems.map {
             it.copy(expanded = it.id == expandedItemId)
-        }
+        }.toMutableList()
 
         sortAndEmitItems()
     }
 }
 
-data class UiState(val isRefreshing: Boolean, val items: List<BalanceCexViewItem>)
+data class BalanceCexItem(
+    val balance: BigDecimal,
+    val coin: Coin,
+    val decimals: Int
+) {
+    val id: String = coin.uid
+}
+
+data class UiState(val isRefreshing: Boolean, val viewItems: List<BalanceCexViewItem>)
 
 data class BalanceCexViewItem(
     val coinIconUrl: String,
@@ -106,6 +225,6 @@ data class BalanceCexViewItem(
     val expanded: Boolean,
     val hasCoinInfo: Boolean,
     val coinUid: String,
-) {
-    val id: String = "uniqId"
-}
+    val id: String,
+    val balanceCexItem: BalanceCexItem
+)
