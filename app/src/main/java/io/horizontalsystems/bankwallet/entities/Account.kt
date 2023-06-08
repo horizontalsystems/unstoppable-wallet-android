@@ -8,11 +8,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
-import io.horizontalsystems.hdwalletkit.HDExtendedKey
-import io.horizontalsystems.hdwalletkit.HDWallet
-import io.horizontalsystems.hdwalletkit.Language
-import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.hdwalletkit.WordList
+import io.horizontalsystems.hdwalletkit.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -87,9 +83,16 @@ data class Account(
 }
 
 @Parcelize
+sealed class CexType : Parcelable {
+    @Parcelize
+    class Coinzix() : CexType()
+    class Binance() : CexType()
+}
+
+@Parcelize
 sealed class AccountType : Parcelable {
     @Parcelize
-    class Cex : AccountType()
+    data class Cex(val cexType: CexType = CexType.Coinzix()) : AccountType()
 
     @Parcelize
     data class EvmAddress(val address: String) : AccountType()

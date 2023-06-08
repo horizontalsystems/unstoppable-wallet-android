@@ -6,4 +6,5 @@ interface IBalanceCexRepository {
     val itemsFlow: StateFlow<List<BalanceCexItem>>
 
     fun start()
+    fun stop()
 }
