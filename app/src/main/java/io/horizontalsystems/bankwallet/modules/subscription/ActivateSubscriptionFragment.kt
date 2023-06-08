@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,17 +27,20 @@ import androidx.navigation.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_leah
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -123,33 +128,39 @@ fun ActivateSubscriptionScreen(navController: NavController, address: String) {
                     }
                 }
                 uiState.subscriptionInfo?.let { subscriptionInfo ->
-                    MessageToSignSection(
-                        subscriptionInfo.walletName,
-                        subscriptionInfo.walletAddress,
-                        subscriptionInfo.messageToSign
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    if (uiState.signButtonState.visible) {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = stringResource(R.string.Button_Sign),
-                            enabled = uiState.signButtonState.enabled,
-                            onClick = {
-                                viewModel.sign()
-                            },
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        MessageToSignSection(
+                            subscriptionInfo.walletName,
+                            subscriptionInfo.walletAddress,
+                            subscriptionInfo.messageToSign
                         )
-                        Spacer(Modifier.height(16.dp))
                     }
-                    ButtonPrimaryDefault(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.Button_Cancel),
-                        onClick = {
-                            navController.popBackStack()
+                }
+                ButtonsGroupWithShade {
+                    Column(Modifier.padding(horizontal = 24.dp)) {
+                        if (uiState.signButtonState.visible) {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier.fillMaxWidth(),
+                                title = stringResource(R.string.Button_Sign),
+                                enabled = uiState.signButtonState.enabled,
+                                onClick = {
+                                    viewModel.sign()
+                                },
+                            )
+                            Spacer(Modifier.height(16.dp))
                         }
-                    )
-                    Spacer(Modifier.height(32.dp))
+                        ButtonPrimaryDefault(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = stringResource(R.string.Button_Cancel),
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -162,6 +173,7 @@ private fun MessageToSignSection(
     walletAddress: String,
     messageToSign: String
 ) {
+    VSpacer(height = 12.dp)
     CellUniversalLawrenceSection(buildList {
         add {
             TitleAndValueCell(
@@ -178,13 +190,13 @@ private fun MessageToSignSection(
                 blockchainType = BlockchainType.Ethereum
             )
         }
-
+    })
+    VSpacer(24.dp)
+    HeaderText(text = stringResource(id = R.string.ActivateSubscription_MessageToSign).uppercase())
+    CellUniversalLawrenceSection(buildList {
         add {
-            TitleAndValueCell(
-                stringResource(R.string.ActivateSubscription_MessageToSign),
-                messageToSign
-            )
+            caption_leah(modifier = Modifier.padding(16.dp), text = messageToSign)
         }
     })
-    InfoText(text = stringResource(id = R.string.ActivateSubscription_SignMessageDescription))
+    VSpacer(32.dp)
 }
