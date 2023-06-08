@@ -75,7 +75,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
             }
 
             Wallets(
-                items = uiState.items,
+                items = uiState.viewItems,
                 key = { it.id },
                 accountId = accountViewItem.id,
                 sortType = viewModel.sortType,
