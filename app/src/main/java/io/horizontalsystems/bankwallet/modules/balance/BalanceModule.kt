@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexSorter
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewModel
-import io.horizontalsystems.bankwallet.modules.balance.cex.CoinzixBalanceCexRepository
 import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
@@ -63,9 +62,9 @@ object BalanceModule {
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
                 App.balanceViewTypeManager,
-                CoinzixBalanceCexRepository(),
                 BalanceXRateRepository(App.currencyManager, App.marketKit),
-                BalanceCexSorter()
+                BalanceCexSorter(),
+                App.accountManager
             ) as T
         }
     }
