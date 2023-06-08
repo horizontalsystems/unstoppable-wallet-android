@@ -6,7 +6,8 @@ import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BalanceData
 import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.balance.cex.BalanceViewModelCex
+import cash.p.terminal.modules.balance.cex.BalanceCexSorter
+import cash.p.terminal.modules.balance.cex.BalanceCexViewModel
 import cash.p.terminal.modules.balance.cex.CoinzixBalanceCexRepository
 import io.horizontalsystems.marketkit.models.CoinPrice
 
@@ -58,12 +59,13 @@ object BalanceModule {
                 App.balanceHiddenManager
             )
 
-            return BalanceViewModelCex(
+            return BalanceCexViewModel(
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
                 App.balanceViewTypeManager,
                 CoinzixBalanceCexRepository(),
-                BalanceXRateRepository(App.currencyManager, App.marketKit)
+                BalanceXRateRepository(App.currencyManager, App.marketKit),
+                BalanceCexSorter()
             ) as T
         }
     }
