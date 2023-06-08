@@ -16,12 +16,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.collect
 import java.math.BigDecimal
 
-class BalanceViewModelCex(
+class BalanceCexViewModel(
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val balanceCexRepository: IBalanceCexRepository,
     private val xRateRepository: BalanceXRateRepository,
+    private val balanceCexSorter: BalanceCexSorter,
 ) : ViewModel(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
@@ -79,7 +80,11 @@ class BalanceViewModelCex(
             }
         }
 
-        sortAndEmitItems()
+        if (sortType is BalanceSortType.Value || sortType is BalanceSortType.PercentGrowth) {
+            sortItems()
+        }
+
+        emitItems()
     }
 
 
@@ -87,7 +92,7 @@ class BalanceViewModelCex(
         this.balanceViewType = balanceViewType
         refreshViewItems()
 
-        sortAndEmitItems()
+        emitItems()
     }
 
     private fun refreshViewItems() {
@@ -108,7 +113,8 @@ class BalanceViewModelCex(
             createBalanceCexViewItem(it, latestRates[it.coin.uid])
         }.toMutableList()
 
-        sortAndEmitItems()
+        sortItems()
+        emitItems()
     }
 
     private fun refreshTotalBalance(latestRates: Map<String, CoinPrice?>) {
@@ -154,11 +160,16 @@ class BalanceViewModelCex(
             hasCoinInfo = true,
             coinUid = balanceCexItem.coin.uid,
             id = balanceCexItem.id,
-            balanceCexItem = balanceCexItem
+            balanceCexItem = balanceCexItem,
+            coinPrice = latestRate
         )
     }
 
-    private fun sortAndEmitItems() {
+    private fun sortItems() {
+        viewItems = balanceCexSorter.sort(viewItems, sortType).toMutableList()
+    }
+
+    private fun emitItems() {
         viewModelScope.launch {
             uiState = UiState(
                 isRefreshing = isRefreshing,
@@ -175,14 +186,15 @@ class BalanceViewModelCex(
         totalBalance.toggleBalanceVisibility()
         refreshViewItems()
 
-        sortAndEmitItems()
+        emitItems()
     }
 
     fun onSelectSortType(sortType: BalanceSortType) {
         this.sortType = sortType
         localStorage.sortType = sortType
 
-        sortAndEmitItems()
+        sortItems()
+        emitItems()
     }
 
     fun onRefresh() {
@@ -199,7 +211,7 @@ class BalanceViewModelCex(
             it.copy(expanded = it.id == expandedItemId)
         }.toMutableList()
 
-        sortAndEmitItems()
+        emitItems()
     }
 }
 
@@ -226,5 +238,9 @@ data class BalanceCexViewItem(
     val hasCoinInfo: Boolean,
     val coinUid: String,
     val id: String,
-    val balanceCexItem: BalanceCexItem
-)
+    val balanceCexItem: BalanceCexItem,
+    val coinPrice: CoinPrice?
+) {
+    val fiatValue get() = coinPrice?.value?.let { balanceCexItem.balance.times(it) }
+
+}

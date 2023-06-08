@@ -36,7 +36,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountViewItem) {
-    val viewModel = viewModel<BalanceViewModelCex>(factory = BalanceModule.FactoryCex())
+    val viewModel = viewModel<BalanceCexViewModel>(factory = BalanceModule.FactoryCex())
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
