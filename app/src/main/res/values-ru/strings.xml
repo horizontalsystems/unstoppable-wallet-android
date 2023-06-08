@@ -857,8 +857,8 @@
     <string name="ManageAccount_RecoveryPhraseBackup">Резервная копия</string>
     <string name="ManageAccount_RecoveryPhraseShow">Показать фразу</string>
     <string name="ManageAccount_NetworkSettings">Настройки сети</string>
-    <string name="ManageAccount_Unlink">Отсоединить</string>
-    <string name="ManageAccount_BackupRequired_Title">Требуется резервная копия</string>
+    <string name="ManageAccount_Unlink">Отключить кошелек</string>
+    <string name="ManageAccount_BackupRequired_Title">Необходима резервная копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию %1$s перед получением %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш кошелек с этого устройства.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
@@ -896,12 +896,12 @@
     <string name="BackupRecoveryPhrase_Description">Сделайте резервную копию этого кошелька, создав копию его фразы восстановления. Это будет необходимо для доступа к кошельку, если ваш телефон утерян, украден, повреждён и т.д.</string>
     <string name="BackupRecoveryPhrase_Backup">Резервная копия</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Ручное резервное копирование</string>
-    <string name="BackupRecoveryPhrase_LocalBackup">Локальное резервное копирование</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Локальное резерв. копирование</string>
     <string name="BackupRecoveryPhrase_Later">Позже</string>
-    <string name="BackupRecoveryPhrase_BackupRequiredText">Завершите одну из опций резервного копирования кошелька, чтобы начать использовать кошелек.</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Выберите опцию резервного копирования кошелька и начните использовать его.</string>
     <string name="BackupRecoveryPhrase_BackupRecomendedText">Рекомендуется создать ручную резервную копию для каждого кошелька.</string>
     <!-- Local Backup -->
-    <string name="LocalBackup_Title">Локальное резервное копирование</string>
+    <string name="LocalBackup_Title">Локальное резерв. копирование</string>
     <string name="LocalBackup_SaveAndBackup">Сохранить и создать резервную копию</string>
     <string name="LocalBackup_SetPassword">Установить пароль</string>
     <string name="LocalBackup_BackupSaved">Резервная копия сохранена</string>
