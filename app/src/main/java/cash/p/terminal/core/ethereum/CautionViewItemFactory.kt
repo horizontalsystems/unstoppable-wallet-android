@@ -101,13 +101,21 @@ class CautionViewItemFactory(
                     )
                 )
             }
-            is EvmError.InsufficientBalanceWithFee,
-            is EvmError.ExecutionReverted -> {
+            is EvmError.InsufficientBalanceWithFee -> {
                 Pair(
                     Translator.getString(R.string.EthereumTransaction_Error_Title),
                     Translator.getString(
                         R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
                         baseCoinService.token.coin.code
+                    )
+                )
+            }
+            is EvmError.ExecutionReverted -> {
+                Pair(
+                    Translator.getString(R.string.EthereumTransaction_Error_Title),
+                    Translator.getString(
+                        R.string.EthereumTransaction_Error_ExecutionReverted,
+                        convertedError.message ?: ""
                     )
                 )
             }

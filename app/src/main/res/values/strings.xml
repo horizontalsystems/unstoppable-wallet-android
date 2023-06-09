@@ -551,6 +551,7 @@
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Estimation Error</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Check balance to ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will auto-retry in 3 sec…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Consider leaving some %s on balance to be able to pay for future transactions.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Unexpected error: %s</string>
 
     <!--Swap-->
 
