@@ -842,11 +842,16 @@ class SendEvmTransactionViewModel(
                         .getFormattedFull()
                 )
             }
-            is EvmError.InsufficientBalanceWithFee,
-            is EvmError.ExecutionReverted -> {
+            is EvmError.InsufficientBalanceWithFee -> {
                 Translator.getString(
                     R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
                     coinServiceFactory.baseCoinService.token.coin.code
+                )
+            }
+            is EvmError.ExecutionReverted -> {
+                Translator.getString(
+                    R.string.EthereumTransaction_Error_ExecutionReverted,
+                    convertedError.message ?: ""
                 )
             }
             is EvmError.CannotEstimateSwap -> {
