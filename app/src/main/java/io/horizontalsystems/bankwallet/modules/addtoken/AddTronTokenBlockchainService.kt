@@ -27,7 +27,7 @@ class AddTronTokenBlockchainService(
     }
 
     override fun tokenQuery(reference: String): TokenQuery {
-        return TokenQuery(blockchain.type, TokenType.Eip20(reference.lowercase()))
+        return TokenQuery(blockchain.type, TokenType.Eip20(reference))
     }
 
     override suspend fun token(reference: String): Token {
