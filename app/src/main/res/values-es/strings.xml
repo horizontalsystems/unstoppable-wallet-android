@@ -860,6 +860,7 @@
     <string name="ManageAccount_Name">Nombre</string>
     <string name="ManageAccount_Save">Guardar</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Frase de copia de seguridad</string>
+    <string name="ManageAccount_LocalBackup">Copia de seguridad local</string>
     <string name="ManageAccount_RecoveryPhraseShow">Mostrar Frase</string>
     <string name="ManageAccount_NetworkSettings">Configuración de Red</string>
     <string name="ManageAccount_Unlink">Desvincular</string>
