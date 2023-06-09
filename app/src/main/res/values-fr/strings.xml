@@ -469,6 +469,7 @@
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Erreur d\'estimation</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Vérifiez le solde pour vous assurer qu\'il y a suffisamment de %s pour couvrir les frais. Vous pouvez également tenter d\'augmenter le montant du glissement de prix et réessayer. Nouvelle tentative automatique dans 3 secondes…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Pensez à laisser quelques %s sur le solde pour payer de futures transactions.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Erreur inattendue : %s</string>
     <!--Swap-->
     <string name="Swap">Echanger</string>
     <string name="Swap_FromAmountTitle">Vous payez</string>
@@ -859,6 +860,7 @@
     <string name="ManageAccount_LocalBackup">Sauvegarde locale</string>
     <string name="ManageAccount_RecoveryPhraseShow">Afficher la phrase</string>
     <string name="ManageAccount_NetworkSettings">Paramètres réseau</string>
+    <string name="ManageAccount_Unlink">Délier le portefeuille</string>
     <string name="ManageAccount_BackupRequired_Title">Sauvegarde requise</string>
     <string name="ManageAccount_BackupRequired_Description">Vous devez sauvegarder %1$s avant de recevoir %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">L\'action va supprimer ce portefeuille de l\'appareil.</string>

@@ -473,6 +473,7 @@
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Tahmin Hatası</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Bakiyeyi kontrol edin ve ücreti karşılayacak kadar %s olduğundan emin olun. Veya fiyat kayma miktarını artırın ve tekrar deneyin. 3 saniye sonra otomatik olarak tekrar denenecektir…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Gelecekteki işlemler için ödeme yapabilmek için bakiyenizde biraz %s bırakmayı göz önünde bulundurun.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Beklenmeyen hata: %s</string>
     <!--Swap-->
     <string name="Swap">Takas</string>
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
@@ -865,6 +866,7 @@
     <string name="ManageAccount_LocalBackup">Yerel Yedekleme</string>
     <string name="ManageAccount_RecoveryPhraseShow">İfadeyi Göster</string>
     <string name="ManageAccount_NetworkSettings">Ağ Ayarları</string>
+    <string name="ManageAccount_Unlink">Cüzdanın bağlantısını kaldır</string>
     <string name="ManageAccount_BackupRequired_Title">Yedekleme Gerekli</string>
     <string name="ManageAccount_BackupRequired_Description">%1$s almadan önce %2$s anahtarlarınızı yedeklemeniz gerekiyor.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Bu işlem Cüzdanını bu cihazdan kaldıracak.</string>
