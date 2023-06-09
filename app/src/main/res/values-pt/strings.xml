@@ -473,6 +473,7 @@
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Erro de Estimativa</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Verifique o saldo para garantir que haja %s suficiente para cobrir a taxa. Ou tente aumentar o preço do slippage e tente novamente. Será possível tentar novamente em 3 seg...</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Considere deixar algum %s no saldo para poder pagar transações futuras.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Erro inesperado: %s</string>
     <!--Swap-->
     <string name="Swap">Trocar</string>
     <string name="Swap_FromAmountTitle">Você Paga</string>
@@ -862,6 +863,7 @@
     <string name="ManageAccount_LocalBackup">Backup Local</string>
     <string name="ManageAccount_RecoveryPhraseShow">Mostrar Frase</string>
     <string name="ManageAccount_NetworkSettings">Configurações de Rede</string>
+    <string name="ManageAccount_Unlink">Desvincular Carteira</string>
     <string name="ManageAccount_BackupRequired_Title">Backup necessário</string>
     <string name="ManageAccount_BackupRequired_Description">Você precisa fazer um backup de %1$s antes de poder receber %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta ação irá apagar do dispositivo a carteira selecionada.</string>
