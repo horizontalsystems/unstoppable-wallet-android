@@ -192,7 +192,7 @@ private fun BackupActions(
             is BackupItem.ManualBackup -> {
                 actionItems.add {
                     YellowActionItem(
-                        title = stringResource(id = R.string.BackupRecoveryPhrase_ManualBackup),
+                        title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
                         icon = painterResource(id = R.drawable.ic_edit_24),
                         attention = action.showAttention,
                         completed = action.completed
@@ -210,7 +210,7 @@ private fun BackupActions(
             is BackupItem.LocalBackup -> {
                 actionItems.add {
                     YellowActionItem(
-                        title = stringResource(id = R.string.BackupRecoveryPhrase_LocalBackup),
+                        title = stringResource(id = R.string.ManageAccount_LocalBackup),
                         icon = painterResource(id = R.drawable.ic_file_24),
                         attention = action.showAttention
                     ) {
