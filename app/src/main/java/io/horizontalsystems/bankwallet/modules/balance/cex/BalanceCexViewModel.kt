@@ -108,8 +108,6 @@ class BalanceCexViewModel(
     }
 
     private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
-        refreshTotalBalance(xRateRepository.getLatestRates())
-
         for (i in 0 until viewItems.size) {
             val balanceItem = viewItems[i]
 
@@ -122,6 +120,7 @@ class BalanceCexViewModel(
             sortItems()
         }
 
+        refreshTotalBalance()
         emitState()
     }
 
@@ -145,24 +144,21 @@ class BalanceCexViewModel(
         xRateRepository.setCoinUids(items.map { it.coin.uid })
         val latestRates = xRateRepository.getLatestRates()
 
-        refreshTotalBalance(latestRates)
-
         viewItems = items.map {
             createBalanceCexViewItem(it, latestRates[it.coin.uid])
         }.toMutableList()
 
         sortItems()
+        refreshTotalBalance()
         emitState()
     }
 
-    private fun refreshTotalBalance(latestRates: Map<String, CoinPrice?>) {
+    private fun refreshTotalBalance() {
         val totalServiceItems = viewItems.map {
-            val balanceCexItem = it.balanceCexItem
-            val latestRate = latestRates[balanceCexItem.coin.uid]
             TotalService.BalanceItem(
-                balanceCexItem.balance,
+                it.balanceCexItem.balance,
                 false,
-                latestRate
+                it.coinPrice
             )
 
         }
@@ -293,6 +289,5 @@ data class BalanceCexViewItem(
     val balanceCexItem: BalanceCexItem,
     val coinPrice: CoinPrice?
 ) {
-    val fiatValue get() = coinPrice?.value?.let { balanceCexItem.balance.times(it) }
-
+    val fiatValue by lazy { coinPrice?.value?.let { balanceCexItem.balance.times(it) } }
 }
