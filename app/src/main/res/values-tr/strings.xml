@@ -862,6 +862,7 @@
     <string name="ManageAccount_Name">İsim</string>
     <string name="ManageAccount_Save">Kaydet</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Yedekleme İfadesi</string>
+    <string name="ManageAccount_LocalBackup">Yerel Yedekleme</string>
     <string name="ManageAccount_RecoveryPhraseShow">İfadeyi Göster</string>
     <string name="ManageAccount_NetworkSettings">Ağ Ayarları</string>
     <string name="ManageAccount_Unlink">Ayır</string>
