@@ -126,7 +126,7 @@
     <string name="Restore_ZCash_BirthdayHeight_Hint">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
     <string name="Restore_ZCash_RestoreAsNew">Восстановить как новый</string>
-    <string name="Restore_ZCash_NewWallet">Создать кошелек</string>
+    <string name="Restore_ZCash_NewWallet">Новый кошелек</string>
     <string name="Restore_ZCash_NewWallet_Description">Нет транзакций</string>
     <string name="Restore_ZCash_OldWallet">Существующий кошелек</string>
     <string name="Restore_ZCash_OldWallet_Description">Есть транзакции</string>
@@ -820,13 +820,13 @@
     <string name="TestnetSettings_Description">Эта опция активирует тестовую сеть Goerli Ethereum только для токена GoerliETH и добавит его в менеджер монет.\n\nЭто действие влияет только на токен GoerliETH, в то время как все остальные токены EVM и Ethereum работают в основной сети. Другими словами, только транзакции в GoerliETH проходят через тестовую сеть Goerli, в то время как все остальные передачи токенов EVM, включая ETH, проходят через основную сеть.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Кошельки</string>
-    <string name="ManageAccounts_CreateNewWallet">Создать</string>
+    <string name="ManageAccounts_CreateNewWallet">Новый кошелек</string>
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">Резервный файл</string>
     <string name="ImportWallet_BackupFile_Description">Импортировать из файла резервной копии</string>
-    <string name="ImportWallet_RecoveryPhrase">из фразы восстановления</string>
+    <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
     <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
     <string name="ImportWallet_WatchAddress_Description">Режим наблюдения EVM-цепи и BTC, LTC, DASH адресов</string>
@@ -855,6 +855,7 @@
     <string name="ManageAccount_Name">Название</string>
     <string name="ManageAccount_Save">Сохранить</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Резервная копия</string>
+    <string name="ManageAccount_LocalBackup">Локальное резерв. копирование</string>
     <string name="ManageAccount_RecoveryPhraseShow">Показать фразу</string>
     <string name="ManageAccount_NetworkSettings">Настройки сети</string>
     <string name="ManageAccount_Unlink">Отключить кошелек</string>
