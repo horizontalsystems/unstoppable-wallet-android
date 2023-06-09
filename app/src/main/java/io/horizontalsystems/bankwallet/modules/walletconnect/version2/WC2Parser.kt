@@ -6,6 +6,7 @@ import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WCAccountData
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.crypto.EIP712Encoder
 import io.horizontalsystems.ethereumkit.models.Chain
 
 object WC2Parser {
@@ -59,22 +60,26 @@ object WC2Parser {
                 )
             }
             "eth_signTypedData" -> {
-                val dataString = params.firstOrNull { it.isJsonObject }?.asJsonObject
-                if (dataString == null) {
-                    return WC2UnsupportedRequest(
+                val dataString = params.firstOrNull { it.isJsonObject }?.asJsonObject?.toString()
+                    ?: return WC2UnsupportedRequest(
                         request.requestId,
                         request.topic,
                         dAppName
                     )
+                val typeData = EIP712Encoder().parseTypedData(dataString)
+                val domain = typeData?.domain?.get("name")?.toString()
+                val sanitizedMessage = try {
+                    typeData?.sanitizedMessage ?: dataString
+                } catch (error: Throwable) {
+                    dataString
                 }
 
-                val domain = dataString.get("domain")?.asJsonObject?.get("name")?.asString
-                val message = SignMessage.TypedMessage(dataString.toString(), domain)
+                val message = SignMessage.TypedMessage(sanitizedMessage, domain)
                 return WC2SignMessageRequest(
                     request.requestId,
                     request.topic,
                     dAppName,
-                    dataString.toString(),
+                    dataString,
                     message
                 )
             }
