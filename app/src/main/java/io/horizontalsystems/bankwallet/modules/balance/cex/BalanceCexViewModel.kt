@@ -17,6 +17,7 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.collect
 import java.math.BigDecimal
@@ -235,7 +236,21 @@ class BalanceCexViewModel(
     }
 
     fun onRefresh() {
-        xRateRepository.refresh()
+        if (isRefreshing) {
+            return
+        }
+
+        viewModelScope.launch {
+            isRefreshing = true
+            emitState()
+
+            xRateRepository.refresh()
+            // A fake 2 seconds 'refresh'
+            delay(2300)
+
+            isRefreshing = false
+            emitState()
+        }
     }
 
     fun onClickItem(viewItem: BalanceCexViewItem) {
