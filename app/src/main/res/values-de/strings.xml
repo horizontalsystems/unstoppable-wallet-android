@@ -470,6 +470,7 @@
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Schätzungsfehler</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Überprüfen Sie Ihr Guthaben und vergewissern Sie sich, dass genügend %s zur Deckung der Gebühr vorhanden sind. Oder versuchen Sie, die Kursdifferenz zu erhöhen und versuchen Sie es erneut. Wird in 3 Sekunden erneut versucht…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Überlegen Sie, ob Sie einige %s auf dem Guthaben belassen wollen, um für zukünftige Transaktionen bezahlen zu können.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Unerwarteter Fehler: %s</string>
     <!--Swap-->
     <string name="Swap">Tauschen</string>
     <string name="Swap_FromAmountTitle">Sie bezahlen</string>
@@ -864,6 +865,7 @@
     <string name="ManageAccount_LocalBackup">Lokale Sicherung</string>
     <string name="ManageAccount_RecoveryPhraseShow">Phrase anzeigen</string>
     <string name="ManageAccount_NetworkSettings">Netzwerkeinstellungen</string>
+    <string name="ManageAccount_Unlink">Wallet entfernen</string>
     <string name="ManageAccount_BackupRequired_Title">Sicherung erforderlich</string>
     <string name="ManageAccount_BackupRequired_Description">Sie müssen %1$s sichern, bevor Sie %2$s empfangen können.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Damit wird das Wallet von diesem Gerät gelöscht.</string>
