@@ -856,6 +856,7 @@
     <string name="ManageAccount_Name">Nom</string>
     <string name="ManageAccount_Save">Sauvegarder</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Sauvegarder la phrase</string>
+    <string name="ManageAccount_LocalBackup">Sauvegarde locale</string>
     <string name="ManageAccount_RecoveryPhraseShow">Afficher la phrase</string>
     <string name="ManageAccount_NetworkSettings">Paramètres réseau</string>
     <string name="ManageAccount_Unlink">Délier</string>
