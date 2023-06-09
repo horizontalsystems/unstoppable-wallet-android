@@ -860,11 +860,10 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Speichern</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Wiederherstellungsphrase</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Manuelle Sicherung</string>
     <string name="ManageAccount_LocalBackup">Lokale Sicherung</string>
     <string name="ManageAccount_RecoveryPhraseShow">Phrase anzeigen</string>
     <string name="ManageAccount_NetworkSettings">Netzwerkeinstellungen</string>
-    <string name="ManageAccount_Unlink">Verknüpfung trennen</string>
     <string name="ManageAccount_BackupRequired_Title">Sicherung erforderlich</string>
     <string name="ManageAccount_BackupRequired_Description">Sie müssen %1$s sichern, bevor Sie %2$s empfangen können.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Damit wird das Wallet von diesem Gerät gelöscht.</string>
