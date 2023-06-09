@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimary
@@ -118,8 +119,8 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 ),
                 onClick = {
                     navController.slideFromBottom(
-                        R.id.backupKeyFragment,
-                        BackupKeyModule.prepareParams(account)
+                        R.id.backupLocalFragment,
+                        BackupLocalFragment.prepareParams(account.id)
                     )
                 }
             )
