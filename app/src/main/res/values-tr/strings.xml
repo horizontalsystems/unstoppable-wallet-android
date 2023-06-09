@@ -861,11 +861,10 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
     <string name="ManageAccount_Save">Kaydet</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Yedekleme İfadesi</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Manuel Yedekleme</string>
     <string name="ManageAccount_LocalBackup">Yerel Yedekleme</string>
     <string name="ManageAccount_RecoveryPhraseShow">İfadeyi Göster</string>
     <string name="ManageAccount_NetworkSettings">Ağ Ayarları</string>
-    <string name="ManageAccount_Unlink">Ayır</string>
     <string name="ManageAccount_BackupRequired_Title">Yedekleme Gerekli</string>
     <string name="ManageAccount_BackupRequired_Description">%1$s almadan önce %2$s anahtarlarınızı yedeklemeniz gerekiyor.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Bu işlem Cüzdanını bu cihazdan kaldıracak.</string>
