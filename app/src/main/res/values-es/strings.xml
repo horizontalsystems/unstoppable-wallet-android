@@ -859,10 +859,10 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>
     <string name="ManageAccount_Save">Guardar</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Frase de copia de seguridad</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Copia de seguridad manual</string>
+    <string name="ManageAccount_LocalBackup">Copia de seguridad local</string>
     <string name="ManageAccount_RecoveryPhraseShow">Mostrar Frase</string>
     <string name="ManageAccount_NetworkSettings">Configuración de Red</string>
-    <string name="ManageAccount_Unlink">Desvincular</string>
     <string name="ManageAccount_BackupRequired_Title">Se requiere una copia de seg</string>
     <string name="ManageAccount_BackupRequired_Description">Necesita una Copia de seguridad %1$s antes de poder recibir %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta acción eliminará los monederos de este dispositivo.</string>
