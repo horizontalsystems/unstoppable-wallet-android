@@ -567,10 +567,8 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">نام</string>
     <string name="ManageAccount_Save">ذخیره</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">عبارت پشتیبان</string>
     <string name="ManageAccount_RecoveryPhraseShow">نمایش عبارت</string>
     <string name="ManageAccount_NetworkSettings">تنظیمات شبکه</string>
-    <string name="ManageAccount_Unlink">جدا کردن</string>
     <string name="ManageAccount_BackupRequired_Title">تهیه نسخه پشتیبان لازم است</string>
     <string name="ManageAccount_BackupRequired_Description">قبل از دریافت بودجه %2$s، باید از کیف پول%1$s نسخه پشتیبان تهیه کنید.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">این عمل کیف پول را از این دستگاه پاک خواهد کرد.</string>

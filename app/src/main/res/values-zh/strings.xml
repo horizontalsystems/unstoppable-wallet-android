@@ -856,10 +856,10 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">备份码</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">进行手动备份</string>
+    <string name="ManageAccount_LocalBackup">本地备份</string>
     <string name="ManageAccount_RecoveryPhraseShow">显示恢复码</string>
     <string name="ManageAccount_NetworkSettings">网络设置</string>
-    <string name="ManageAccount_Unlink">取消链接</string>
     <string name="ManageAccount_BackupRequired_Title">需要备份</string>
     <string name="ManageAccount_BackupRequired_Description">您必须备份%1$s才能收到%2$s。</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">该操作将从此设备删除本钱包。</string>
