@@ -3,7 +3,7 @@ package cash.p.terminal.modules.backuplocal
 import com.google.gson.annotations.SerializedName
 import cash.p.terminal.entities.AccountType
 import io.horizontalsystems.hdwalletkit.Base58
-import java.math.BigInteger
+import io.horizontalsystems.tronkit.toBigInteger
 
 object BackupLocalModule {
     private const val MNEMONIC = "mnemonic"
@@ -68,7 +68,7 @@ object BackupLocalModule {
                 AccountType.Mnemonic(words, passphrase)
             }
 
-            PRIVATE_KEY -> AccountType.EvmPrivateKey(BigInteger(data))
+            PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toBigInteger())
             ADDRESS -> AccountType.EvmAddress(String(data, Charsets.UTF_8))
             SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
             TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
