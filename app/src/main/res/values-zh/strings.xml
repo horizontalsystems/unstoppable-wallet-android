@@ -857,6 +857,7 @@
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
     <string name="ManageAccount_RecoveryPhraseBackup">备份码</string>
+    <string name="ManageAccount_LocalBackup">本地备份</string>
     <string name="ManageAccount_RecoveryPhraseShow">显示恢复码</string>
     <string name="ManageAccount_NetworkSettings">网络设置</string>
     <string name="ManageAccount_Unlink">取消链接</string>
