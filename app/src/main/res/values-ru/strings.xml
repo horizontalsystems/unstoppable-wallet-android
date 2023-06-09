@@ -471,6 +471,7 @@
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Ошибка оценки</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Проверьте баланс и убедитесь, что на нем достаточно %s для покрытия комиссии. Или попробуйте увеличить предел скольжения цены и повторите попытку снова. Следующая попытка через 3 секунды…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Вы можете оставить некоторую сумму в размере %s на балансе, чтобы оплачивать будущие транзакции.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Непредвиденная ошибка: %s</string>
     <!--Swap-->
     <string name="Swap">Обменять</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
@@ -858,6 +859,7 @@
     <string name="ManageAccount_LocalBackup">Локальное резервное \nкопирование</string>
     <string name="ManageAccount_RecoveryPhraseShow">Показать фразу</string>
     <string name="ManageAccount_NetworkSettings">Настройки сети</string>
+    <string name="ManageAccount_Unlink">Отключить кошелек</string>
     <string name="ManageAccount_BackupRequired_Title">Необходима резервная копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию %1$s перед получением %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш кошелек с этого устройства.</string>

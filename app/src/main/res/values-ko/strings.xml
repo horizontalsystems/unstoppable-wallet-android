@@ -473,6 +473,7 @@
     <string name="EthereumTransaction_Error_CannotEstimate_Title">추정 오류</string>
     <string name="EthereumTransaction_Error_CannotEstimate">잔액을 확인하여 수수료를 충당하기에 충분한 %s이 있는지 확인하십시오. 또는 가격 슬리피지 금액을 늘리고 다시 시도하십시오. 3초 후에 자동 재시도합니다</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">향후 거래에 대해 지불할 수 있도록 일부 %s를 잔액으로 남겨두는 것이 좋습니다.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">예기치 못한 오류: %s</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
     <string name="Swap_FromAmountTitle">지불하기</string>
@@ -863,6 +864,7 @@
     <string name="ManageAccount_LocalBackup">로컬 백업</string>
     <string name="ManageAccount_RecoveryPhraseShow">문구 표시</string>
     <string name="ManageAccount_NetworkSettings">네트워크 설정</string>
+    <string name="ManageAccount_Unlink">지갑 연결 해제</string>
     <string name="ManageAccount_BackupRequired_Title">백업이 필요합니다</string>
     <string name="ManageAccount_BackupRequired_Description">%2$s를 받기 전에 %1$s를 백업해야 합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>
