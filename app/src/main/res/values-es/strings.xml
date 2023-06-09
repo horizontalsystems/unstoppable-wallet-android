@@ -473,6 +473,7 @@
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Error de estimación</string>
     <string name="EthereumTransaction_Error_CannotEstimate">¡Error! Comprueba el saldo y asegúrate de que hay suficientes %s para cubrir la comisión. O intente aumentar la cantidad del deslizamiento del precio e intente de nuevo. Volverá a intentarlo en 3 segundos...</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Considere dejar algún %s en el saldo para poder pagar futuras transacciones.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Error inesperado: %s</string>
     <!--Swap-->
     <string name="Swap">Permutar</string>
     <string name="Swap_FromAmountTitle">Usted paga</string>
@@ -863,6 +864,7 @@
     <string name="ManageAccount_LocalBackup">Copia de seguridad local</string>
     <string name="ManageAccount_RecoveryPhraseShow">Mostrar Frase</string>
     <string name="ManageAccount_NetworkSettings">Configuración de Red</string>
+    <string name="ManageAccount_Unlink">Desvincular cartera</string>
     <string name="ManageAccount_BackupRequired_Title">Se requiere una copia de seg</string>
     <string name="ManageAccount_BackupRequired_Description">Necesita una Copia de seguridad %1$s antes de poder recibir %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta acción eliminará los monederos de este dispositivo.</string>
