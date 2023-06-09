@@ -858,11 +858,10 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nome</string>
     <string name="ManageAccount_Save">Salvar</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Manual</string>
     <string name="ManageAccount_LocalBackup">Backup Local</string>
     <string name="ManageAccount_RecoveryPhraseShow">Mostrar Frase</string>
     <string name="ManageAccount_NetworkSettings">Configurações de Rede</string>
-    <string name="ManageAccount_Unlink">Desvincular</string>
     <string name="ManageAccount_BackupRequired_Title">Backup necessário</string>
     <string name="ManageAccount_BackupRequired_Description">Você precisa fazer um backup de %1$s antes de poder receber %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta ação irá apagar do dispositivo a carteira selecionada.</string>
