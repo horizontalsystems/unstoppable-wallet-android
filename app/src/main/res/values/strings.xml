@@ -1046,6 +1046,7 @@
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Backup Recovery Phrase</string>
+    <string name="ManageAccount_LocalBackup">Local Backup</string>
     <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
     <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Unlink</string>
