@@ -859,6 +859,7 @@
     <string name="ManageAccount_Name">Nome</string>
     <string name="ManageAccount_Save">Salvar</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
+    <string name="ManageAccount_LocalBackup">Backup Local</string>
     <string name="ManageAccount_RecoveryPhraseShow">Mostrar Frase</string>
     <string name="ManageAccount_NetworkSettings">Configurações de Rede</string>
     <string name="ManageAccount_Unlink">Desvincular</string>
