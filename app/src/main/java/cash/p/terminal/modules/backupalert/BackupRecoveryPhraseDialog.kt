@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.Account
+import cash.p.terminal.modules.backuplocal.BackupLocalFragment
 import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimary
@@ -118,8 +119,8 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 ),
                 onClick = {
                     navController.slideFromBottom(
-                        R.id.backupKeyFragment,
-                        BackupKeyModule.prepareParams(account)
+                        R.id.backupLocalFragment,
+                        BackupLocalFragment.prepareParams(account.id)
                     )
                 }
             )
