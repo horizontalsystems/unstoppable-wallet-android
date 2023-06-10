@@ -2,7 +2,13 @@ package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,12 +21,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.coin.overview.TokenVariants
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun TokenVariants(
     tokenVariants: TokenVariants,
     onClickAddToWallet: (ConfiguredToken) -> Unit,
+    onClickRemoveWallet: (ConfiguredToken) -> Unit,
     onClickCopy: (String) -> Unit,
     onClickExplorer: (String) -> Unit,
 ) {
@@ -81,12 +93,11 @@ fun TokenVariants(
                 if (tokenVariant.canAddToWallet) {
                     if (tokenVariant.inWallet) {
                         ButtonSecondaryCircle(
-                            icon = R.drawable.ic_in_wallet_dark_24,
+                            icon = R.drawable.ic_wallet_filled_20,
                             contentDescription = stringResource(R.string.CoinPage_InWallet),
-                            enabled = false,
-                            tint = ComposeAppTheme.colors.grey,
+                            tint = ComposeAppTheme.colors.jacob,
                             onClick = {
-//                                HudHelper.showInProcessMessage(view, R.string.Hud_Already_In_Wallet, showProgressBar = false)
+                                onClickRemoveWallet.invoke(tokenVariant.configuredToken)
                             }
                         )
                     } else {

@@ -65,6 +65,16 @@ data class TokenVariant(
 ) {
 }
 
+data class HudMessage(
+    val text: Int,
+    val type: HudMessageType,
+    val iconRes: Int? = null
+)
+
+enum class HudMessageType{
+    Success, Error
+}
+
 data class CoinOverviewViewItem(
     val roi: List<RoiViewItem>,
     val categories: List<String>,
