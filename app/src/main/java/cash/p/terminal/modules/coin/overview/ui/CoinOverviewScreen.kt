@@ -2,7 +2,12 @@ package cash.p.terminal.modules.coin.overview.ui
 
 import android.content.Context
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
@@ -30,6 +35,7 @@ import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinLink
 import cash.p.terminal.modules.coin.overview.CoinOverviewModule
 import cash.p.terminal.modules.coin.overview.CoinOverviewViewModel
+import cash.p.terminal.modules.coin.overview.HudMessageType
 import cash.p.terminal.modules.coin.ui.CoinScreenTitle
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
@@ -65,10 +71,24 @@ fun CoinOverviewScreen(
     val view = LocalView.current
     val context = LocalContext.current
 
-    viewModel.successMessage?.let {
-        HudHelper.showSuccessMessage(view, it)
+    viewModel.showHudMessage?.let {
+        when (it.type) {
+            HudMessageType.Error -> HudHelper.showErrorMessage(
+                contenView = view,
+                resId = it.text,
+                icon = it.iconRes,
+                iconTint = R.color.white
+            )
 
-        viewModel.onSuccessMessageShown()
+            HudMessageType.Success -> HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = it.text,
+                icon = it.iconRes,
+                iconTint = R.color.white
+            )
+        }
+
+        viewModel.onHudMessageShown()
     }
 
     val vmFactory1 = remember { ManageWalletsModule.Factory() }
@@ -135,6 +155,9 @@ fun CoinOverviewScreen(
                                         tokenVariants = tokenVariants,
                                         onClickAddToWallet = {
                                             manageWalletsViewModel.enable(it)
+                                        },
+                                        onClickRemoveWallet = {
+                                            manageWalletsViewModel.disable(it)
                                         },
                                         onClickCopy = {
                                             TextHelper.copyText(it)

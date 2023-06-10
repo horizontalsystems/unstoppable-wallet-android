@@ -7,9 +7,26 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.core.bep2TokenUrl
+import cash.p.terminal.core.coinSettingType
+import cash.p.terminal.core.eip20TokenUrl
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.isSupported
+import cash.p.terminal.core.order
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.*
+import cash.p.terminal.core.shorten
+import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.supports
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.AccountType
+import cash.p.terminal.entities.BitcoinCashCoinType
+import cash.p.terminal.entities.CoinSettingType
+import cash.p.terminal.entities.CoinSettings
+import cash.p.terminal.entities.ConfiguredToken
+import cash.p.terminal.entities.ViewState
+import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.TokenType
@@ -28,11 +45,18 @@ class CoinOverviewViewModel(
 
     var tokenVariants by mutableStateOf<TokenVariants?>(null)
         private set
-    var successMessage by mutableStateOf<Int?>(null)
+    var showHudMessage by mutableStateOf<HudMessage?>(null)
         private set
 
     private val disposables = CompositeDisposable()
 
+    private var hudMessage: HudMessage? = null
+        set(value) {
+            field = value
+            value?.let {
+                showHudMessage = it
+            }
+        }
     private var fullCoin = service.fullCoin
     private var activeAccount = accountManager.activeAccount
     private var activeWallets = walletManager.activeWallets
@@ -59,7 +83,9 @@ class CoinOverviewViewModel(
         walletManager.activeWalletsUpdatedObservable
             .subscribeIO { wallets ->
                 if (wallets.size > activeWallets.size) {
-                    successMessage = R.string.Hud_Added_To_Wallet
+                    hudMessage = HudMessage(R.string.Hud_Added_To_Wallet, HudMessageType.Success, R.drawable.ic_add_to_wallet_2_24)
+                } else if(wallets.size < activeWallets.size) {
+                    hudMessage = HudMessage(R.string.Hud_Removed_From_Wallet, HudMessageType.Error, R.drawable.ic_empty_wallet_24)
                 }
 
                 activeWallets = wallets
@@ -72,8 +98,8 @@ class CoinOverviewViewModel(
         refreshTokensVariants()
     }
 
-    fun onSuccessMessageShown() {
-        successMessage = null
+    fun onHudMessageShown() {
+        hudMessage = null
     }
 
     private fun refreshTokensVariants() {
