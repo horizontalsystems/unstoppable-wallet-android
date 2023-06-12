@@ -6,6 +6,7 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.TokenType
@@ -101,7 +102,13 @@ class BalanceService(
         allBalanceItems.clear()
         allBalanceItems.addAll(sorted)
 
-        _balanceItemsFlow.update { getBalanceItems() }
+        _balanceItemsFlow.update {
+            if (accountManager.activeAccount?.type is AccountType.Cex) {
+                null
+            } else {
+                getBalanceItems()
+            }
+        }
     }
 
     @Synchronized

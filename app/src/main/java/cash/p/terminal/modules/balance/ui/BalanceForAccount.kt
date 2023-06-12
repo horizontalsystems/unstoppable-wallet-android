@@ -75,7 +75,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                     }
                 }
                 ViewState.Loading,
-                is ViewState.Error -> {}
+                is ViewState.Error,
+                null -> {}
             }
         }
     }
