@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.App
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.math.BigDecimal
 
-class CoinzixBalanceCexRepository : IBalanceCexRepository {
+class CoinzixBalanceCexRepository() : IBalanceCexRepository {
     override val itemsFlow = MutableStateFlow(
         listOf(
             BalanceCexItem(

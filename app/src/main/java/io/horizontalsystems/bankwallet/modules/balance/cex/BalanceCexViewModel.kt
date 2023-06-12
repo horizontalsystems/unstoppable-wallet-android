@@ -6,17 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.CexType
 import io.horizontalsystems.bankwallet.modules.balance.*
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.collect
@@ -26,12 +21,11 @@ class BalanceCexViewModel(
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
     private val balanceViewTypeManager: BalanceViewTypeManager,
+    private val balanceCexRepository: IBalanceCexRepository,
     private val xRateRepository: BalanceXRateRepository,
     private val balanceCexSorter: BalanceCexSorter,
-    private val accountManager: IAccountManager,
 ) : ViewModel(), ITotalBalance by totalBalance {
 
-    private var balanceCexRepository: IBalanceCexRepository? = null
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
 
     val sortTypes =
@@ -48,17 +42,15 @@ class BalanceCexViewModel(
     var uiState by mutableStateOf(
         UiState(
             isRefreshing = isRefreshing,
-            viewItems = viewItems
+            viewItems = viewItems,
         )
     )
         private set
 
-    private var collectCexRepoItemsJob: Job? = null
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            accountManager.activeAccountStateFlow.collect {
-                handleActiveAccount(it)
+            balanceCexRepository.itemsFlow.collect {
+                handleUpdatedItems(it)
             }
         }
 
@@ -75,36 +67,7 @@ class BalanceCexViewModel(
         }
 
         totalBalance.start(viewModelScope)
-    }
-
-    private fun handleActiveAccount(activeAccount: ActiveAccountState) {
-        collectCexRepoItemsJob?.cancel()
-        balanceCexRepository?.stop()
-        viewItems.clear()
-        totalBalance.setTotalServiceItems(listOf())
-
-        val accountType = (activeAccount as? ActiveAccountState.ActiveAccount)
-            ?.account
-            ?.type
-
-        val cexType = (accountType as? AccountType.Cex)?.cexType
-        balanceCexRepository = when (cexType) {
-            is CexType.Coinzix -> CoinzixBalanceCexRepository()
-            is CexType.Binance -> TODO()
-            null -> null
-        }
-
-        balanceCexRepository?.let { repo ->
-            collectCexRepoItemsJob = viewModelScope.launch(Dispatchers.IO) {
-                repo.itemsFlow.collect {
-                    handleUpdatedItems(it)
-                }
-            }
-
-            repo.start()
-        }
-
-        emitState()
+        balanceCexRepository.start()
     }
 
     private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
@@ -207,7 +170,7 @@ class BalanceCexViewModel(
         viewModelScope.launch {
             uiState = UiState(
                 isRefreshing = isRefreshing,
-                viewItems = viewItems
+                viewItems = viewItems,
             )
         }
     }
