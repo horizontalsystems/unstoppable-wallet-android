@@ -30,8 +30,7 @@ class BalanceCexViewModel(
 
     val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
-    var sortType by mutableStateOf(localStorage.sortType)
-        private set
+    private var sortType = localStorage.sortType
 
     private val currency by xRateRepository::baseCurrency
 
@@ -43,6 +42,7 @@ class BalanceCexViewModel(
         UiState(
             isRefreshing = isRefreshing,
             viewItems = viewItems,
+            sortType = sortType,
         )
     )
         private set
@@ -171,6 +171,7 @@ class BalanceCexViewModel(
             uiState = UiState(
                 isRefreshing = isRefreshing,
                 viewItems = viewItems,
+                sortType = sortType,
             )
         }
     }
@@ -234,7 +235,11 @@ data class BalanceCexItem(
     val id: String = coin.uid
 }
 
-data class UiState(val isRefreshing: Boolean, val viewItems: List<BalanceCexViewItem>)
+data class UiState(
+    val isRefreshing: Boolean,
+    val viewItems: List<BalanceCexViewItem>,
+    val sortType: BalanceSortType
+)
 
 data class BalanceCexViewItem(
     val coinIconUrl: String,
