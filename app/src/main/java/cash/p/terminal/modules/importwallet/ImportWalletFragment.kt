@@ -14,12 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -34,9 +29,12 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.entities.AccountOrigin
+import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
 import cash.p.terminal.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
@@ -45,14 +43,7 @@ import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.headline2_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -191,6 +182,24 @@ private fun ImportWalletScreen(
                         icon = R.drawable.ic_download_24,
                         onClick = {
                             restoreLauncher.launch(arrayOf("application/json"))
+                        }
+                    )
+                    VSpacer(12.dp)
+                    ImportOption(
+                        title = stringResource(R.string.ImportWallet_ExchangeWallet),
+                        description = stringResource(R.string.ImportWallet_ExchangeWallet_Description),
+                        icon = R.drawable.icon_link_24,
+                        onClick = {
+                            val account = App.accountFactory.account(
+                                name = "Cex Wallet",
+                                type = AccountType.Cex(),
+                                origin = AccountOrigin.Restored,
+                                backedUp = true,
+                                fileBackup = false
+                            )
+
+                            App.accountManager.save(account)
+                            navController.popBackStack()
                         }
                     )
                     VSpacer(12.dp)
