@@ -68,7 +68,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
 
             HeaderSorting(borderTop = true) {
                 BalanceSortingSelector(
-                    sortType = viewModel.sortType,
+                    sortType = uiState.sortType,
                     sortTypes = viewModel.sortTypes,
                     onSelectSortType = viewModel::onSelectSortType
                 )
@@ -78,7 +78,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                 items = uiState.viewItems,
                 key = { it.id },
                 accountId = accountViewItem.id,
-                sortType = viewModel.sortType,
+                sortType = uiState.sortType,
                 refreshing = uiState.isRefreshing,
                 onRefresh = viewModel::onRefresh
             ) { item ->
