@@ -37,12 +37,14 @@ class BalanceCexViewModel(
     private var expandedItemId: String? = null
     private var isRefreshing = false
     private var viewItems = mutableListOf<BalanceCexViewItem>()
+    private var isActiveScreen = false
 
     var uiState by mutableStateOf(
         UiState(
             isRefreshing = isRefreshing,
             viewItems = viewItems,
             sortType = sortType,
+            isActiveScreen = isActiveScreen,
         )
     )
         private set
@@ -103,15 +105,26 @@ class BalanceCexViewModel(
         }
     }
 
-    private fun handleUpdatedItems(items: List<BalanceCexItem>) {
-        xRateRepository.setCoinUids(items.map { it.coin.uid })
-        val latestRates = xRateRepository.getLatestRates()
+    private fun handleUpdatedItems(items: List<BalanceCexItem>?) {
+        if (items != null) {
+            isActiveScreen = true
 
-        viewItems = items.map {
-            createBalanceCexViewItem(it, latestRates[it.coin.uid])
-        }.toMutableList()
+            xRateRepository.setCoinUids(items.map { it.coin.uid })
+            val latestRates = xRateRepository.getLatestRates()
 
-        sortItems()
+            viewItems = items.map {
+                createBalanceCexViewItem(it, latestRates[it.coin.uid])
+            }.toMutableList()
+
+            sortItems()
+        } else {
+            isActiveScreen = false
+
+            xRateRepository.setCoinUids(listOf())
+
+            viewItems.clear()
+        }
+
         refreshTotalBalance()
         emitState()
     }
@@ -172,6 +185,7 @@ class BalanceCexViewModel(
                 isRefreshing = isRefreshing,
                 viewItems = viewItems,
                 sortType = sortType,
+                isActiveScreen = isActiveScreen,
             )
         }
     }
@@ -238,7 +252,8 @@ data class BalanceCexItem(
 data class UiState(
     val isRefreshing: Boolean,
     val viewItems: List<BalanceCexViewItem>,
-    val sortType: BalanceSortType
+    val sortType: BalanceSortType,
+    val isActiveScreen: Boolean
 )
 
 data class BalanceCexViewItem(
