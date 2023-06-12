@@ -92,7 +92,7 @@ sealed class CexType : Parcelable {
 @Parcelize
 sealed class AccountType : Parcelable {
     @Parcelize
-    data class Cex(val cexType: CexType = CexType.Coinzix()) : AccountType()
+    data class Cex(val cexType: CexType = CexType.Binance()) : AccountType()
 
     @Parcelize
     data class EvmAddress(val address: String) : AccountType()

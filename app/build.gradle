@@ -252,6 +252,9 @@ dependencies {
     implementation 'com.github.horizontalsystems:tron-kit-android:e180afb'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.14.0-beta01"
+    implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
+        exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
+    }
 
     // WalletConnect
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
