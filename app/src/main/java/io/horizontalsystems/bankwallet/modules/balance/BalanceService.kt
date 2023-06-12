@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.TokenType
@@ -101,7 +102,13 @@ class BalanceService(
         allBalanceItems.clear()
         allBalanceItems.addAll(sorted)
 
-        _balanceItemsFlow.update { getBalanceItems() }
+        _balanceItemsFlow.update {
+            if (accountManager.activeAccount?.type is AccountType.Cex) {
+                null
+            } else {
+                getBalanceItems()
+            }
+        }
     }
 
     @Synchronized
