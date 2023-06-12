@@ -37,58 +37,60 @@ import io.horizontalsystems.core.helpers.HudHelper
 @Composable
 fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountViewItem) {
     val viewModel = viewModel<BalanceCexViewModel>(factory = BalanceModule.FactoryCex())
+    val uiState = viewModel.uiState
+    val totalState = viewModel.totalUiState
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = {
-                    BalanceTitleRow(navController, accountViewItem.name)
-                }
-            )
-        }
-    ) {
-        Column(Modifier.padding(it)) {
-            val uiState = viewModel.uiState
-            val totalState = viewModel.totalUiState
+    val context = LocalContext.current
 
-            val context = LocalContext.current
-
-            TotalBalanceRow(
-                totalState = totalState,
-                onClickTitle = {
-                    viewModel.toggleBalanceVisibility()
-                    HudHelper.vibrate(context)
-                },
-                onClickSubtitle = {
-                    viewModel.toggleTotalType()
-                    HudHelper.vibrate(context)
-                }
-            )
-
-            HeaderSorting(borderTop = true) {
-                BalanceSortingSelector(
-                    sortType = uiState.sortType,
-                    sortTypes = viewModel.sortTypes,
-                    onSelectSortType = viewModel::onSelectSortType
+    val activeScreen = uiState.isActiveScreen
+    if (activeScreen) {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = {
+                        BalanceTitleRow(navController, accountViewItem.name)
+                    }
                 )
             }
+        ) {
+            Column(Modifier.padding(it)) {
 
-            Wallets(
-                items = uiState.viewItems,
-                key = { it.id },
-                accountId = accountViewItem.id,
-                sortType = uiState.sortType,
-                refreshing = uiState.isRefreshing,
-                onRefresh = viewModel::onRefresh
-            ) { item ->
-                BalanceCardCex(navController, item) {
-                    viewModel.onClickItem(item)
+                TotalBalanceRow(
+                    totalState = totalState,
+                    onClickTitle = {
+                        viewModel.toggleBalanceVisibility()
+                        HudHelper.vibrate(context)
+                    },
+                    onClickSubtitle = {
+                        viewModel.toggleTotalType()
+                        HudHelper.vibrate(context)
+                    }
+                )
+
+                HeaderSorting(borderTop = true) {
+                    BalanceSortingSelector(
+                        sortType = uiState.sortType,
+                        sortTypes = viewModel.sortTypes,
+                        onSelectSortType = viewModel::onSelectSortType
+                    )
+                }
+
+                Wallets(
+                    items = uiState.viewItems,
+                    key = { it.id },
+                    accountId = accountViewItem.id,
+                    sortType = uiState.sortType,
+                    refreshing = uiState.isRefreshing,
+                    onRefresh = viewModel::onRefresh
+                ) { item ->
+                    BalanceCardCex(navController, item) {
+                        viewModel.onClickItem(item)
+                    }
                 }
             }
         }
     }
-
 }
 
 
