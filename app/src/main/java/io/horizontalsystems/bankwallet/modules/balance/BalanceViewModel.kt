@@ -24,7 +24,7 @@ class BalanceViewModel(
 ) : ViewModel(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
-    private var viewState: ViewState = ViewState.Loading
+    private var viewState: ViewState? = null
     private var balanceViewItems = listOf<BalanceViewItem>()
     private var isRefreshing = false
 
@@ -55,7 +55,7 @@ class BalanceViewModel(
                         )
                     })
 
-                    items?.let { refreshViewItems(it) }
+                    refreshViewItems(items)
                 }
         }
 
@@ -98,19 +98,23 @@ class BalanceViewModel(
         return account.headerNote(nonRecommendedDismissed)
     }
 
-    private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>) {
+    private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
         withContext(Dispatchers.IO) {
-            viewState = ViewState.Success
-
-            balanceViewItems = balanceItems.map { balanceItem ->
-                balanceViewItemFactory.viewItem(
-                    balanceItem,
-                    service.baseCurrency,
-                    balanceItem.wallet == expandedWallet,
-                    balanceHidden,
-                    service.isWatchAccount,
-                    balanceViewType
-                )
+            if (balanceItems != null) {
+                viewState = ViewState.Success
+                balanceViewItems = balanceItems.map { balanceItem ->
+                    balanceViewItemFactory.viewItem(
+                        balanceItem,
+                        service.baseCurrency,
+                        balanceItem.wallet == expandedWallet,
+                        balanceHidden,
+                        service.isWatchAccount,
+                        balanceViewType
+                    )
+                }
+            } else {
+                viewState = null
+                balanceViewItems = listOf()
             }
 
             emitState()
@@ -198,7 +202,7 @@ class BackupRequiredError(val account: Account, val coinTitle: String) : Error("
 
 data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem>,
-    val viewState: ViewState,
+    val viewState: ViewState?,
     val isRefreshing: Boolean,
     val headerNote: HeaderNote
 )
