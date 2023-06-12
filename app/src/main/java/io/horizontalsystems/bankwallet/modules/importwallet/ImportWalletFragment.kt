@@ -14,12 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -34,9 +29,12 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
@@ -45,14 +43,7 @@ import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -191,6 +182,24 @@ private fun ImportWalletScreen(
                         icon = R.drawable.ic_download_24,
                         onClick = {
                             restoreLauncher.launch(arrayOf("application/json"))
+                        }
+                    )
+                    VSpacer(12.dp)
+                    ImportOption(
+                        title = stringResource(R.string.ImportWallet_ExchangeWallet),
+                        description = stringResource(R.string.ImportWallet_ExchangeWallet_Description),
+                        icon = R.drawable.icon_link_24,
+                        onClick = {
+                            val account = App.accountFactory.account(
+                                name = "Cex Wallet",
+                                type = AccountType.Cex(),
+                                origin = AccountOrigin.Restored,
+                                backedUp = true,
+                                fileBackup = false
+                            )
+
+                            App.accountManager.save(account)
+                            navController.popBackStack()
                         }
                     )
                     VSpacer(12.dp)
