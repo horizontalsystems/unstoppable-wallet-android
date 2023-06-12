@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 class BalanceCexRepositoryWrapper(
     private val accountManager: IAccountManager,
 ) : IBalanceCexRepository {
-    override val itemsFlow = MutableStateFlow<List<BalanceCexItem>>(listOf())
+    override val itemsFlow = MutableStateFlow<List<BalanceCexItem>?>(null)
 
     private var concreteRepository: IBalanceCexRepository? = null
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -54,6 +54,8 @@ class BalanceCexRepositoryWrapper(
             }
 
             repo.start()
+        } ?: run {
+            itemsFlow.update { null }
         }
     }
 }
