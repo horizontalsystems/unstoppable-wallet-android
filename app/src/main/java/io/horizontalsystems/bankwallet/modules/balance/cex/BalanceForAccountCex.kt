@@ -68,6 +68,28 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                     }
                 )
 
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, top = 4.dp, end = 24.dp, bottom = 16.dp)
+                ) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(R.string.Balance_Withdraw),
+                        onClick = {
+                        },
+                    )
+
+                    HSpacer(width = 8.dp)
+
+                    ButtonPrimaryDefault(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(R.string.Balance_Deposit),
+                        onClick = {
+                        }
+                    )
+                }
+
                 HeaderSorting(borderTop = true) {
                     BalanceSortingSelector(
                         sortType = uiState.sortType,
