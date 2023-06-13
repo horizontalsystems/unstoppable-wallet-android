@@ -29,12 +29,9 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.entities.AccountOrigin
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
@@ -190,16 +187,13 @@ private fun ImportWalletScreen(
                         description = stringResource(R.string.ImportWallet_ExchangeWallet_Description),
                         icon = R.drawable.icon_link_24,
                         onClick = {
-                            val account = App.accountFactory.account(
-                                name = "Cex Wallet",
-                                type = AccountType.Cex(),
-                                origin = AccountOrigin.Restored,
-                                backedUp = true,
-                                fileBackup = false
+                            navController.slideFromBottom(
+                                R.id.importCexAccountFragment,
+                                bundleOf(
+                                    ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                                    ManageAccountsModule.popOffInclusiveKey to inclusive,
+                                )
                             )
-
-                            App.accountManager.save(account)
-                            navController.popBackStack()
                         }
                     )
                     VSpacer(12.dp)

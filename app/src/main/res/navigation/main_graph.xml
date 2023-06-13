@@ -229,6 +229,9 @@
         android:id="@+id/restoreAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountFragment" />
     <fragment
+        android:id="@+id/importCexAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.importcexaccount.ImportCexAccountFragment" />
+    <fragment
         android:id="@+id/importWalletFragment"
         android:name="io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment" />
     <fragment
