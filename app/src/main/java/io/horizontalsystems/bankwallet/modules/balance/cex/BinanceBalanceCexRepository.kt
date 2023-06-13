@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.balance.cex
+package cash.p.terminal.modules.balance.cex
 
 import com.binance.connector.client.impl.SpotClientImpl
 import com.google.gson.Gson
-import io.horizontalsystems.bankwallet.core.customCoinPrefix
+import cash.p.terminal.core.customCoinPrefix
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.flow.MutableStateFlow

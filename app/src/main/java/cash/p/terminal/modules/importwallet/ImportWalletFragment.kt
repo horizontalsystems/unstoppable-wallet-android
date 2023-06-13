@@ -29,12 +29,9 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
 import cash.p.terminal.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
@@ -190,16 +187,13 @@ private fun ImportWalletScreen(
                         description = stringResource(R.string.ImportWallet_ExchangeWallet_Description),
                         icon = R.drawable.icon_link_24,
                         onClick = {
-                            val account = App.accountFactory.account(
-                                name = "Cex Wallet",
-                                type = AccountType.Cex(),
-                                origin = AccountOrigin.Restored,
-                                backedUp = true,
-                                fileBackup = false
+                            navController.slideFromBottom(
+                                R.id.importCexAccountFragment,
+                                bundleOf(
+                                    ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                                    ManageAccountsModule.popOffInclusiveKey to inclusive,
+                                )
                             )
-
-                            App.accountManager.save(account)
-                            navController.popBackStack()
                         }
                     )
                     VSpacer(12.dp)

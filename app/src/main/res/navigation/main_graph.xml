@@ -229,6 +229,9 @@
         android:id="@+id/restoreAccountFragment"
         android:name="cash.p.terminal.modules.restoreaccount.RestoreAccountFragment" />
     <fragment
+        android:id="@+id/importCexAccountFragment"
+        android:name="cash.p.terminal.modules.importcexaccount.ImportCexAccountFragment" />
+    <fragment
         android:id="@+id/importWalletFragment"
         android:name="cash.p.terminal.modules.importwallet.ImportWalletFragment" />
     <fragment
