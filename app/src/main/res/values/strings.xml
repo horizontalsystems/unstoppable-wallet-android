@@ -20,6 +20,7 @@
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">Enable</string>
     <string name="Button_Disable">Disable</string>
+    <string name="Button_ScanQr">Scan QR Code</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Done">Done</string>
@@ -54,6 +55,7 @@
     <string name="Button_Activate">Activate</string>
     <string name="Button_Sign">Sign</string>
     <string name="Button_Activating">Activating</string>
+    <string name="Button_GetApiKeys">Get Api Keys</string>
 
 
     <string name="Error">Error</string>
@@ -157,6 +159,12 @@
     <string name="Restore_ZCash_OldWallet">Existing Wallet</string>
     <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
     <string name="Restore_ZCash_SlowSyncWarningText">The initial synchronization with the blockchain can consume a lot of internet traffic.</string>
+
+    <string name="ImportCexAccount_SelectCex">Select Cex</string>
+    <string name="ImportCexAccount_SelectCexDescription">Select the centralized exchange to which you want to connect.</string>
+    <string name="ImportCexAccountBinance_Description">Please provide the API Keys and API Secret to link your exchange.</string>
+    <string name="ImportCexAccountBinance_ApiKey">Api Key</string>
+    <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
 
     <!--Backup-->
 
