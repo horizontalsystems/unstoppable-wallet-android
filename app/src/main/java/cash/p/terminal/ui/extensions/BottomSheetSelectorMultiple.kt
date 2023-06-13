@@ -62,7 +62,7 @@ fun BottomSheetSelectorMultiple(
     onItemsSelected: (List<Int>) -> Unit,
     onCloseClick: () -> Unit,
 ) {
-    val selected = remember { mutableStateListOf<Int>().apply { addAll(selectedIndexes) } }
+    val selected = remember(selectedIndexes, items) { mutableStateListOf<Int>().apply { addAll(selectedIndexes) } }
 
     ComposeAppTheme {
         BottomSheetHeader(
