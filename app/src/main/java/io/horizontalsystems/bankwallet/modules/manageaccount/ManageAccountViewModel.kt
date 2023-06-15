@@ -64,7 +64,7 @@ class ManageAccountViewModel(
     }
 
     private fun getBackupItems(account: Account): List<BackupItem> {
-        if (account.isWatchAccount) {
+        if (account.isWatchAccount || account.type is AccountType.Cex) {
             return emptyList()
         }
         if (account.type is AccountType.HdExtendedKey || account.type is AccountType.EvmPrivateKey) {
@@ -111,7 +111,7 @@ class ManageAccountViewModel(
                 }
             }
 
-            is AccountType.Cex -> TODO()
+            is AccountType.Cex -> listOf()
         }
     }
 
