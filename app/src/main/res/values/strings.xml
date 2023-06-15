@@ -56,6 +56,8 @@
     <string name="Button_Sign">Sign</string>
     <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">Get Api Keys</string>
+    <string name="Button_Login">Log In</string>
+    <string name="Button_SignUp">Sign Up</string>
 
 
     <string name="Error">Error</string>
@@ -165,6 +167,8 @@
     <string name="ImportCexAccountBinance_Description">Please provide the API Keys and API Secret to link your exchange.</string>
     <string name="ImportCexAccountBinance_ApiKey">Api Key</string>
     <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
+    <string name="ImportCexAccountConzix_Description">This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.</string>
+    <string name="ImportCexAccountConzix_Email">Email</string>
 
     <!--Backup-->
 
