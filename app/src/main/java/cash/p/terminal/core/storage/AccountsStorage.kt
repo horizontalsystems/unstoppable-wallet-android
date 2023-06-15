@@ -1,10 +1,7 @@
 package cash.p.terminal.core.storage
 
 import cash.p.terminal.core.IAccountsStorage
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.ActiveAccount
+import cash.p.terminal.entities.*
 import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
@@ -48,7 +45,11 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
                             TRON_ADDRESS -> AccountType.TronAddress(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
-                            CEX -> AccountType.Cex()
+                            CEX -> {
+                                CexType.deserialize(record.key!!.value)?.let {
+                                    AccountType.Cex(it)
+                                }
+                            }
                             else -> null
                         }
                         Account(
@@ -126,6 +127,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 accountType = HD_EXTENDED_LEY
             }
             is AccountType.Cex -> {
+                key = SecretString(account.type.cexType.serialized())
                 accountType = CEX
             }
         }

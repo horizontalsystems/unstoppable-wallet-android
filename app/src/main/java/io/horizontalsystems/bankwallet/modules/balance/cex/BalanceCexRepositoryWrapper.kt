@@ -40,7 +40,7 @@ class BalanceCexRepositoryWrapper(
         val cexType = (accountType as? AccountType.Cex)?.cexType
         concreteRepository = when (cexType) {
             is CexType.Coinzix -> CoinzixBalanceCexRepository()
-            is CexType.Binance -> BinanceBalanceCexRepository()
+            is CexType.Binance -> BinanceBalanceCexRepository(cexType.apiKey, cexType.secretKey)
             null -> null
         }
 
