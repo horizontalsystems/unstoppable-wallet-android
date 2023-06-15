@@ -2,41 +2,42 @@ package io.horizontalsystems.bankwallet.modules.balance.cex
 
 import com.binance.connector.client.impl.SpotClientImpl
 import com.google.gson.Gson
-import io.horizontalsystems.bankwallet.core.customCoinPrefix
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.bankwallet.core.App
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
 
-class BinanceBalanceCexRepository() : IBalanceCexRepository {
+class BinanceBalanceCexRepository(
+    private val apiKey: String,
+    private val secretKey: String
+) : IBalanceCexRepository {
     override val itemsFlow = MutableStateFlow<List<BalanceCexItem>?>(null)
 
-    private val apiKey = ""
-    private val secretKey = ""
+    private val coinMapper = BinanceCexCoinMapper(App.marketKit)
+
     private val gson = Gson()
 
     override fun start() {
         val client = SpotClientImpl(apiKey, secretKey)
-        val wallet = client.createWallet()
+        val trade = client.createTrade()
+        try {
+            val account = gson.fromJson(trade.account(mutableMapOf()), AccountInfo::class.java)
 
-        val coinInfo = gson.fromJson(wallet.coinInfo(mutableMapOf()), Array<CoinInfo>::class.java)
-
-        val balance = coinInfo.filter { it.free > BigDecimal.ZERO }
-
-        itemsFlow.update {
-            balance.map {
-                BalanceCexItem(
-                    balance = it.free,
-                    coin = Coin(
-                        uid = "${TokenQuery.customCoinPrefix}${it.coin}",
-                        name = it.name,
-                        code = it.coin
-                    ),
-                    decimals = 8
-                )
+            itemsFlow.update {
+                account
+                    .balances
+                    .filter { it.free > BigDecimal.ZERO }
+                    .map {
+                        BalanceCexItem(
+                            balance = it.free,
+                            coin = coinMapper.getCoin(it.asset),
+                            decimals = 8
+                        )
+                    }
             }
+        } catch (e: Exception) {
+
         }
     }
 
@@ -44,6 +45,15 @@ class BinanceBalanceCexRepository() : IBalanceCexRepository {
 
     }
 
+    data class AccountInfo(
+        val balances: List<Balance>
+    ) {
+        data class Balance(
+            val asset: String,
+            val free: BigDecimal,
+            val locked: BigDecimal,
+        )
+    }
     data class CoinInfo(
         val coin: String,
         val name: String,

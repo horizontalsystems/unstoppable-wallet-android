@@ -87,6 +87,26 @@ sealed class CexType : Parcelable {
     @Parcelize
     class Coinzix() : CexType()
     class Binance(val apiKey: String, val secretKey: String) : CexType()
+
+    fun serialized() = when (this) {
+        is Binance -> listOf("binance", apiKey, secretKey).joinToString(dataSeparator)
+        is Coinzix -> listOf("coinzix").joinToString(dataSeparator)
+    }
+
+    companion object {
+        fun deserialize(value: String): CexType? {
+            val parts = value.split(dataSeparator)
+
+            return when (parts[0]) {
+                "binance" -> Binance(parts[1], parts[2])
+                "coinzix" -> Coinzix()
+                else -> null
+            }
+
+        }
+
+        private val dataSeparator = "@"
+    }
 }
 
 @Parcelize
