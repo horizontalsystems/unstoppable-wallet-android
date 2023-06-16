@@ -85,12 +85,12 @@ data class Account(
 @Parcelize
 sealed class CexType : Parcelable {
     @Parcelize
-    class Coinzix() : CexType()
+    class Coinzix(val authToken: String, val secret: String) : CexType()
     class Binance(val apiKey: String, val secretKey: String) : CexType()
 
     fun serialized() = when (this) {
         is Binance -> listOf("binance", apiKey, secretKey).joinToString(dataSeparator)
-        is Coinzix -> listOf("coinzix").joinToString(dataSeparator)
+        is Coinzix -> listOf("coinzix", authToken, secret).joinToString(dataSeparator)
     }
 
     companion object {
@@ -99,7 +99,7 @@ sealed class CexType : Parcelable {
 
             return when (parts[0]) {
                 "binance" -> Binance(parts[1], parts[2])
-                "coinzix" -> Coinzix()
+                "coinzix" -> Coinzix(parts[1], parts[2])
                 else -> null
             }
 
@@ -112,7 +112,7 @@ sealed class CexType : Parcelable {
 @Parcelize
 sealed class AccountType : Parcelable {
     @Parcelize
-    data class Cex(val cexType: CexType = CexType.Coinzix()) : AccountType()
+    data class Cex(val cexType: CexType) : AccountType()
 
     @Parcelize
     data class EvmAddress(val address: String) : AccountType()
