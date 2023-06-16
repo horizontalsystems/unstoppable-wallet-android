@@ -75,7 +75,7 @@ object BackupLocalModule {
             SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
             TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(Base58.encode(data))
-            CEX -> AccountType.Cex()
+            CEX -> TODO()
             else -> throw IllegalStateException("Unknown account type")
         }
     }
