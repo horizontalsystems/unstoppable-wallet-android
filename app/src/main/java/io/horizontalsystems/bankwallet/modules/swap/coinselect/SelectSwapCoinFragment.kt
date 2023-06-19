@@ -96,7 +96,7 @@ fun SelectSwapCoinDialogScreen(
             SearchBar(
                 title = stringResource(R.string.Select_Coins),
                 searchHintText = stringResource(R.string.ManageCoins_Search),
-                navController = navController,
+                onClose = { navController.popBackStack() },
                 onSearchTextChanged = {
                     viewModel.onEnterQuery(it)
                 }
