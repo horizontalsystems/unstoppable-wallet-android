@@ -6,16 +6,21 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.managers.ActiveAccountState
+import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.balance.*
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.collect
 import kotlinx.coroutines.rx2.collect
 import java.math.BigDecimal
+import kotlin.jvm.optionals.getOrNull
 
 class BalanceCexViewModel(
     private val totalBalance: TotalBalance,
@@ -24,6 +29,7 @@ class BalanceCexViewModel(
     private val balanceCexRepository: BalanceCexRepositoryWrapper,
     private val xRateRepository: BalanceXRateRepository,
     private val balanceCexSorter: BalanceCexSorter,
+    private val accountManager: IAccountManager,
 ) : ViewModel(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
@@ -68,8 +74,18 @@ class BalanceCexViewModel(
             }
         }
 
+        viewModelScope.launch(Dispatchers.IO) {
+            accountManager.activeAccountStateFlow.collect {
+                handleActiveAccountUpdate((it as? ActiveAccountState.ActiveAccount)?.account)
+            }
+        }
+
         totalBalance.start(viewModelScope)
         balanceCexRepository.start()
+    }
+
+    private fun handleActiveAccountUpdate(account: Account?) {
+        balanceCexRepository.setActiveAccount(account)
     }
 
     private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {

@@ -63,9 +63,10 @@ object BalanceModule {
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
                 App.balanceViewTypeManager,
-                BalanceCexRepositoryWrapper(App.accountManager),
+                BalanceCexRepositoryWrapper(),
                 BalanceXRateRepository(App.currencyManager, App.marketKit),
-                BalanceCexSorter()
+                BalanceCexSorter(),
+                App.accountManager
             ) as T
         }
     }
