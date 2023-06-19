@@ -29,6 +29,12 @@ class BalanceCexRepositoryWrapper(
         coroutineScope.cancel()
     }
 
+    fun refresh() {
+        concreteRepository?.let {
+            getItems(it)
+        }
+    }
+
     private fun handleActiveAccount(activeAccount: ActiveAccountState) {
         collectCexRepoItemsJob?.cancel()
 
@@ -44,17 +50,21 @@ class BalanceCexRepositoryWrapper(
         }
 
         concreteRepository?.let { repo ->
-            collectCexRepoItemsJob = coroutineScope.launch {
-                try {
-                    itemsFlow.update {
-                        repo.getItems()
-                    }
-                } catch (t: Throwable) {
-
-                }
-            }
+            getItems(repo)
         } ?: run {
             itemsFlow.update { null }
+        }
+    }
+
+    private fun getItems(repo: IBalanceCexRepository) {
+        collectCexRepoItemsJob = coroutineScope.launch {
+            try {
+                itemsFlow.update {
+                    repo.getItems()
+                }
+            } catch (t: Throwable) {
+
+            }
         }
     }
 }
