@@ -1,20 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.importcexaccount
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import android.app.Activity
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -23,16 +19,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
-import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
-import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun ImportCexAccountEnterCexDataScreen(
@@ -89,14 +76,35 @@ fun ImportCexAccountEnterCexDataScreen(
                     EnterCexDataCoinzixForm(paddingValues, onAccountCreate)
                 }
             }
-
         }
     }
-
 }
 
 @Composable
 private fun EnterCexDataCoinzixForm(paddingValues: PaddingValues, onAccountCreate: () -> Unit) {
+    val viewModel = viewModel<EnterCexDataCoinzixViewModel>()
+
+    val intent = Intent(LocalContext.current, HCaptchaActivity::class.java)
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data: Intent? = result.data
+            when (result.resultCode) {
+                Activity.RESULT_OK -> {
+                    val token = data?.extras?.getString("captcha")?: ""
+                    viewModel.onResultCaptchaToken(token)
+                }
+                Activity.RESULT_CANCELED -> {
+                    Log.d("hCaptcha", "hCaptcha failed")
+                }
+            }
+        }
+
+    if (viewModel.accountCreated) {
+        LaunchedEffect(Unit) {
+            onAccountCreate.invoke()
+        }
+    }
+
     var hidePassphrase by remember { mutableStateOf(true) }
     Column(modifier = Modifier.padding(paddingValues)) {
         InfoText(text = stringResource(R.string.ImportCexAccountConzix_Description))
@@ -105,7 +113,7 @@ private fun EnterCexDataCoinzixForm(paddingValues: PaddingValues, onAccountCreat
             modifier = Modifier.padding(horizontal = 16.dp),
             hint = stringResource(R.string.ImportCexAccountConzix_Email)
         ) {
-            //viewModel.onEnterEmail(it)
+            viewModel.onEnterEmail(it)
         }
         VSpacer(height = 16.dp)
         FormsInputPassword(
@@ -113,7 +121,7 @@ private fun EnterCexDataCoinzixForm(paddingValues: PaddingValues, onAccountCreat
             hint = stringResource(R.string.Password),
             //state = uiState.passphraseState,
             onValueChange = {
-                //viewModel::onEnterPassword(it)
+                viewModel.onEnterPassword(it)
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             hide = hidePassphrase,
@@ -130,9 +138,9 @@ private fun EnterCexDataCoinzixForm(paddingValues: PaddingValues, onAccountCreat
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Login),
                     showSpinner = false,
-                    enabled = true,
+                    enabled = viewModel.loginEnabled,
                     onClick = {
-                        //viewModel.onLogin()
+                        launcher.launch(intent)
                     },
                 )
                 Spacer(Modifier.height(16.dp))
