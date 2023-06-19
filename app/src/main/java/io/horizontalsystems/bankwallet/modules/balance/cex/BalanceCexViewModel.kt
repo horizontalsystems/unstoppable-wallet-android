@@ -21,7 +21,7 @@ class BalanceCexViewModel(
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
     private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val balanceCexRepository: IBalanceCexRepository,
+    private val balanceCexRepository: BalanceCexRepositoryWrapper,
     private val xRateRepository: BalanceXRateRepository,
     private val balanceCexSorter: BalanceCexSorter,
 ) : ViewModel(), ITotalBalance by totalBalance {
@@ -192,6 +192,7 @@ class BalanceCexViewModel(
 
     override fun onCleared() {
         totalBalance.stop()
+        balanceCexRepository.stop()
     }
 
     override fun toggleBalanceVisibility() {
