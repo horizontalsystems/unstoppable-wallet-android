@@ -219,6 +219,7 @@ class BalanceCexViewModel(
             isRefreshing = true
             emitState()
 
+            balanceCexRepository.refresh()
             xRateRepository.refresh()
             // A fake 2 seconds 'refresh'
             delay(2300)
