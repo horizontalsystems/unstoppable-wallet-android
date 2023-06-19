@@ -31,17 +31,20 @@ class CoinzixCexApiService(
             "request_id" to System.currentTimeMillis().toString()
         )
 
-        val parametersSignature =
-            parameters.keys.sorted().mapNotNull { parameters[it] }.joinToString("")
-        val signature = parametersSignature + secret
-
         val headers = mapOf(
             "login-token" to authToken,
-            "x-auth-sign" to HashUtils.sha256(signature.toByteArray()).toRawHexString()
+            "x-auth-sign" to xAuthSign(parameters, secret)
         )
 
         val responseString = service.post(path, headers, createJsonRequestBody(parameters))
         return gson.fromJson(responseString, T::class.java)
+    }
+
+    private fun xAuthSign(parameters: Map<String, String>, secret: String): String {
+        val parametersSignature =
+            parameters.keys.sorted().mapNotNull { parameters[it] }.joinToString("")
+        val signature = parametersSignature + secret
+        return HashUtils.sha256(signature.toByteArray()).toRawHexString()
     }
 
     private fun createJsonRequestBody(parameters: Map<String, String>): RequestBody {
@@ -56,6 +59,15 @@ class CoinzixCexApiService(
 }
 
 object Response {
+    data class Login(
+        val data: LoginData,
+        val token: String,
+    )
+    data class LoginData(
+        val email: String,
+        val chat: String,
+        val secret: String,
+    )
     data class Balances(
         val data: BalanceList
     )
