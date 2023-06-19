@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
@@ -32,8 +31,8 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun SearchBar(
     title: String,
     searchHintText: String = "",
-    navController: NavController,
     menuItems: List<MenuItem> = listOf(),
+    onClose: () -> Unit,
     onSearchTextChanged: (String) -> Unit = {},
 ) {
 
@@ -54,22 +53,22 @@ fun SearchBar(
         backgroundColor = ComposeAppTheme.colors.tyler,
         elevation = 0.dp,
         navigationIcon = {
-            HsIconButton(onClick = {
-                if (searchMode) {
-                    searchText = ""
-                    onSearchTextChanged.invoke("")
-                    searchMode = false
-                } else {
-                    navController.popBackStack()
+                HsIconButton(onClick = {
+                    if (searchMode) {
+                        searchText = ""
+                        onSearchTextChanged.invoke("")
+                        searchMode = false
+                    } else {
+                        onClose.invoke()
+                    }
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = stringResource(R.string.Button_Back),
+                        tint = ComposeAppTheme.colors.jacob
+                    )
                 }
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = stringResource(R.string.Button_Back),
-                    tint = ComposeAppTheme.colors.jacob
-                )
-            }
-        },
+            },
         actions = {
             if (searchMode) {
                 val focusRequester = remember { FocusRequester() }
