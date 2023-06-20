@@ -16,6 +16,9 @@ val Token.protocolType: String?
 val Token.isCustom: Boolean
     get() = coin.uid == tokenQuery.customCoinUid
 
+val Coin.isCustom: Boolean
+    get() = uid.startsWith(TokenQuery.customCoinPrefix)
+
 val Token.isSupported: Boolean
     get() = tokenQuery.isSupported
 
