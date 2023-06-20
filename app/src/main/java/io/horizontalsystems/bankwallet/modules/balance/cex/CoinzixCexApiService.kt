@@ -14,19 +14,38 @@ import retrofit2.http.POST
 import retrofit2.http.Url
 import java.math.BigDecimal
 
-class CoinzixCexApiService(
-    private val authToken: String,
-    private val secret: String
-) {
+class CoinzixCexApiService {
     private val service = APIClient.retrofit("https://api.coinzix.com/", 60, true).create(CoinzixAPI::class.java)
     private val gson = Gson()
 
-    suspend fun getBalances(): List<Response.Balance> {
-        val balances = post<Response.Balances>("v1/private/balances")
-        return balances.data.list.filter { it.balance_available > BigDecimal.ZERO }
+    suspend fun login(username: String, password: String, captchaToken: String): Response.Login {
+        val params = mapOf(
+            "username" to username,
+            "password" to password,
+            "g-recaptcha-response" to captchaToken,
+        )
+
+        return service.login(createJsonRequestBody(params))
     }
 
-    private suspend inline fun <reified T> post(path: String, params: Map<String, String> = mapOf()): T {
+    suspend fun getBalances(
+        authToken: String,
+        secret: String,
+    ): List<Response.Balance> {
+        val balances = post<Response.Balances>(
+            path = "v1/private/balances",
+            authToken = authToken,
+            secret = secret
+        )
+        return balances.data.list
+    }
+
+    private suspend inline fun <reified T> post(
+        path: String,
+        authToken: String,
+        secret: String,
+        params: Map<String, String> = mapOf()
+    ): T {
         val parameters = params + mapOf(
             "request_id" to System.currentTimeMillis().toString()
         )
@@ -53,6 +72,9 @@ class CoinzixCexApiService(
     }
 
     interface CoinzixAPI {
+        @POST("api/user/login")
+        suspend fun login(@Body params: RequestBody): Response.Login
+
         @POST
         suspend fun post(@Url path: String, @HeaderMap headers: Map<String, String>, @Body params: RequestBody): String
     }

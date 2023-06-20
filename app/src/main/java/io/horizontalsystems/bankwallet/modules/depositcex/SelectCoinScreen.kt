@@ -1,14 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.depositcex
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
@@ -19,26 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-
-private val coins = listOf(
-    DepositCexModule.CexCoinViewItem(
-        title = "Arbitrum",
-        subtitle = "ARB",
-        imageSource = ImageSource.Local(R.drawable.arbitrum_erc20),
-    ),
-    DepositCexModule.CexCoinViewItem(
-        title = "Avalanche",
-        subtitle = "AVE",
-        imageSource = ImageSource.Local(R.drawable.avalanche_erc20),
-    )
-)
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -47,6 +25,7 @@ fun SelectCoinScreen(
     onClose: () -> Unit,
     openNetworkSelect: (String) -> Unit,
 ) {
+    val uiState = depositViewModel.uiState
 
     BackHandler {
         onClose.invoke()
@@ -67,30 +46,36 @@ fun SelectCoinScreen(
             }
         ) {
             Column(modifier = Modifier.padding(it)) {
-                coins.let { viewItems ->
-                    //todo add loading state
-                    if (viewItems.isEmpty()) {
-                        ListEmptyView(
-                            text = stringResource(R.string.EmptyResults),
-                            icon = R.drawable.ic_not_found
-                        )
+                Crossfade(uiState.loading) {
+                    if (it) {
+                        Loading()
                     } else {
-                        LazyColumn {
-                            item {
-                                Spacer(modifier = Modifier.height(12.dp))
-                                Divider(
-                                    thickness = 1.dp,
-                                    color = ComposeAppTheme.colors.steel10,
+                        uiState.coins?.let { viewItems ->
+                            //todo add loading state
+                            if (viewItems.isEmpty()) {
+                                ListEmptyView(
+                                    text = stringResource(R.string.EmptyResults),
+                                    icon = R.drawable.ic_not_found
                                 )
-                            }
-                            items(viewItems) { viewItem ->
-                                CoinCell(
-                                    viewItem = viewItem,
-                                    onItemClick = {
-                                        depositViewModel.setCoin(viewItem.title)
-                                        openNetworkSelect.invoke(viewItem.title)
-                                    },
-                                )
+                            } else {
+                                LazyColumn {
+                                    item {
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Divider(
+                                            thickness = 1.dp,
+                                            color = ComposeAppTheme.colors.steel10,
+                                        )
+                                    }
+                                    items(viewItems) { viewItem ->
+                                        CoinCell(
+                                            viewItem = viewItem,
+                                            onItemClick = {
+                                                depositViewModel.setCoin(viewItem.title)
+                                                openNetworkSelect.invoke(viewItem.title)
+                                            },
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -111,9 +96,9 @@ private fun CoinCell(
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalPadding = 0.dp
         ) {
-            Image(
-                painter = viewItem.imageSource.painter(),
-                contentDescription = null,
+            CoinImage(
+                iconUrl = viewItem.coinIconUrl,
+                placeholder = viewItem.coinIconPlaceholder,
                 modifier = Modifier
                     .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
                     .size(32.dp)
