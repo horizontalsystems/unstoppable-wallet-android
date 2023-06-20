@@ -71,6 +71,7 @@ fun DepositCexNavHost(
                 coinId = coinId,
                 depositViewModel = depositViewModel,
                 openCoinSelect = { navController.navigate("select-coin") },
+                openQrCode = { navController.navigate("deposit-qrcode") },
                 onNavigateBack = { navController.popBackStack() },
                 onClose = { fragmentNavController.popBackStack() },
             )
@@ -82,6 +83,13 @@ fun DepositCexNavHost(
                 openNetworkSelect = { coinId ->
                     navController.navigate("select-network")
                 },
+            )
+        }
+        composablePage("deposit-qrcode") {
+            DepositQrCodeScreen(
+                depositViewModel = depositViewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onClose = { fragmentNavController.popBackStack() },
             )
         }
     }
