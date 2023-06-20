@@ -48,7 +48,6 @@ fun SelectCoinScreen(
     openNetworkSelect: (String) -> Unit,
 ) {
 
-
     BackHandler {
         onClose.invoke()
     }
@@ -72,7 +71,7 @@ fun SelectCoinScreen(
                     //todo add loading state
                     if (viewItems.isEmpty()) {
                         ListEmptyView(
-                            text = stringResource(R.string.ManageCoins_NoResults),
+                            text = stringResource(R.string.EmptyResults),
                             icon = R.drawable.ic_not_found
                         )
                     } else {
