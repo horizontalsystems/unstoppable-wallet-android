@@ -7,11 +7,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -118,31 +118,35 @@ private fun ImportCoinzixCexAccountScreen(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            InfoText(text = stringResource(R.string.ImportCexAccountConzix_Description))
-            VSpacer(height = 20.dp)
-            FormsInput(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                hint = stringResource(R.string.ImportCexAccountConzix_Email)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
             ) {
-                viewModel.onEnterEmail(it)
-            }
-            VSpacer(height = 16.dp)
-            FormsInputPassword(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                hint = stringResource(R.string.Password),
-                //state = uiState.passphraseState,
-                onValueChange = {
-                    viewModel.onEnterPassword(it)
-                },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                hide = hidePassphrase,
-                onToggleHide = {
-                    hidePassphrase = !hidePassphrase
+                InfoText(text = stringResource(R.string.ImportCexAccountConzix_Description))
+                VSpacer(height = 20.dp)
+                FormsInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.ImportCexAccountConzix_Email)
+                ) {
+                    viewModel.onEnterEmail(it)
                 }
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
+                VSpacer(height = 16.dp)
+                FormsInputPassword(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.Password),
+                    //state = uiState.passphraseState,
+                    onValueChange = {
+                        viewModel.onEnterPassword(it)
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    hide = hidePassphrase,
+                    onToggleHide = {
+                        hidePassphrase = !hidePassphrase
+                    }
+                )
+                VSpacer(height = 32.dp)
+            }
             ButtonsGroupWithShade {
                 Column(Modifier.padding(horizontal = 24.dp)) {
                     ButtonPrimaryYellowWithSpinner(
@@ -154,7 +158,7 @@ private fun ImportCoinzixCexAccountScreen(
                             launcher.launch(intent)
                         },
                     )
-                    Spacer(Modifier.height(16.dp))
+                    VSpacer(16.dp)
                     ButtonPrimaryTransparent(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_SignUp),
@@ -230,25 +234,29 @@ private fun ImportBinanceCexAccountScreen(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            InfoText(text = stringResource(R.string.ImportCexAccountBinance_Description))
-            FormsInput(
-                initial = apiKey,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                hint = stringResource(R.string.ImportCexAccountBinance_ApiKey)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
             ) {
-                viewModel.onEnterApiKey(it)
+                InfoText(text = stringResource(R.string.ImportCexAccountBinance_Description))
+                FormsInput(
+                    initial = apiKey,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.ImportCexAccountBinance_ApiKey)
+                ) {
+                    viewModel.onEnterApiKey(it)
+                }
+                VSpacer(16.dp)
+                FormsInput(
+                    initial = secretKey,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.ImportCexAccountBinance_SecretKey)
+                ) {
+                    viewModel.onEnterSecretKey(it)
+                }
+                VSpacer(32.dp)
             }
-            VSpacer(height = 16.dp)
-            FormsInput(
-                initial = secretKey,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                hint = stringResource(R.string.ImportCexAccountBinance_SecretKey)
-            ) {
-                viewModel.onEnterSecretKey(it)
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
             ButtonsGroupWithShade {
                 Column(Modifier.padding(horizontal = 24.dp)) {
                     ButtonPrimaryYellow(
@@ -259,7 +267,7 @@ private fun ImportBinanceCexAccountScreen(
                             viewModel.onClickConnect()
                         },
                     )
-                    Spacer(Modifier.height(16.dp))
+                    VSpacer(16.dp)
                     ButtonPrimaryTransparent(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_GetApiKeys),
