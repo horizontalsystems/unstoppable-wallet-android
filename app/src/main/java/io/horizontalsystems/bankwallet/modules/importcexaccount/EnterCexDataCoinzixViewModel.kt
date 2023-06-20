@@ -9,12 +9,13 @@ import cash.p.terminal.core.App
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CexType
+import cash.p.terminal.modules.balance.cex.CoinzixCexApiService
 import kotlinx.coroutines.launch
 
 class EnterCexDataCoinzixViewModel : ViewModel() {
     private val accountManager = App.accountManager
     private val accountFactory = App.accountFactory
-    private val coinzixLoginService = CoinzixLoginService()
+    private val coinzixCexApiService = CoinzixCexApiService()
 
     private var email: String? = null
     private var password: String? = null
@@ -43,7 +44,7 @@ class EnterCexDataCoinzixViewModel : ViewModel() {
         val tmpPassword = password ?: return
 
         viewModelScope.launch {
-            val login = coinzixLoginService.login(tmpEmail, tmpPassword, token)
+            val login = coinzixCexApiService.login(tmpEmail, tmpPassword, token)
             val account = accountFactory.account(
                 "Coinzix Wallet",
                 AccountType.Cex(CexType.Coinzix(login.token, login.data.secret)),

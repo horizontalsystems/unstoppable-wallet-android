@@ -16,7 +16,8 @@ object DepositCexModule {
     data class CexCoinViewItem(
         val title: String,
         val subtitle: String,
-        val imageSource: ImageSource,
+        val coinIconUrl: String?,
+        val coinIconPlaceholder: Int,
     )
 
     data class NetworkViewItem(
