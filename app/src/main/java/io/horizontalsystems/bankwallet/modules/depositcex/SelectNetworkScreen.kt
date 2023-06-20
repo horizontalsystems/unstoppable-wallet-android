@@ -43,6 +43,7 @@ fun SelectNetworkScreen(
     coinId: String?,
     depositViewModel: DepositViewModel,
     openCoinSelect: () -> Unit,
+    openQrCode: () -> Unit,
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
 ) {
@@ -89,7 +90,7 @@ fun SelectNetworkScreen(
                             NetworkCell(
                                 viewItem = viewItem,
                                 onItemClick = {
-
+                                    openQrCode.invoke()
                                 },
                             )
                         }
