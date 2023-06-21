@@ -165,13 +165,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         }
 
         torKitManager = TorManager(instance, localStorage)
+        subscriptionManager = SubscriptionManager(localStorage)
 
         marketKit = MarketKitWrapper(
             context = this,
             hsApiBaseUrl = appConfig.marketApiBaseUrl,
             hsApiKey = appConfig.marketApiKey,
             cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
-            defiYieldApiKey = appConfig.defiyieldProviderApiKey
+            defiYieldApiKey = appConfig.defiyieldProviderApiKey,
+            subscriptionManager = App.subscriptionManager
         )
         marketKit.sync()
 
@@ -337,7 +339,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         balanceHiddenManager = BalanceHiddenManager(localStorage, backgroundManager)
 
         contactsRepository = ContactsRepository(marketKit)
-        subscriptionManager = SubscriptionManager(localStorage)
 
         startTasks()
     }

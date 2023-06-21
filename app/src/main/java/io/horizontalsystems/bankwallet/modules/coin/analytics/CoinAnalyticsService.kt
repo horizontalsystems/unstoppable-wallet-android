@@ -9,12 +9,7 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.marketkit.models.Analytics
-import io.horizontalsystems.marketkit.models.AnalyticsPreview
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -72,14 +67,12 @@ class CoinAnalyticsService(
     }
 
     private fun fetch() {
-        val authToken = subscriptionManager.authToken
-
-        if (authToken.isNullOrBlank()) {
+        if (!subscriptionManager.hasSubscription()) {
             preview()
         } else {
             stateSubject.onNext(DataState.Loading)
 
-            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code, authToken)
+            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code)
                 .subscribeIO({ item ->
                     stateSubject.onNext(DataState.Success(AnalyticData(analytics = item)))
                 }, {
