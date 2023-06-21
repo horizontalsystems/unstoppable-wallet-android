@@ -13,7 +13,7 @@ import cash.p.terminal.modules.balance.cex.ICexDepositService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DepositViewModel(coinId: String?) : ViewModel() {
+class DepositViewModel(coinUid: String?) : ViewModel() {
 
     private val account = App.accountManager.activeAccount
     private val depositService: ICexDepositService
@@ -63,12 +63,12 @@ class DepositViewModel(coinId: String?) : ViewModel() {
             emitState()
         }
 
-        if (coinId == null) {
+        if (coinUid == null) {
             openCoinSelect = true
         }
     }
 
-    fun setCoin(coinId: String) {
+    fun setCoinUid(coinUid: String) {
         openCoinSelect = false
     }
 }

@@ -17,15 +17,7 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.*
 
 private val networks = listOf(
     DepositCexModule.NetworkViewItem(
@@ -40,7 +32,7 @@ private val networks = listOf(
 
 @Composable
 fun SelectNetworkScreen(
-    coinId: String?,
+    coinUid: String?,
     depositViewModel: DepositViewModel,
     openCoinSelect: () -> Unit,
     openQrCode: () -> Unit,
@@ -60,7 +52,7 @@ fun SelectNetworkScreen(
                     title = TranslatableString.ResString(R.string.Cex_ChooseNetwork),
                     navigationIcon = {
                         HsBackButton(onClick = {
-                            if (coinId != null)
+                            if (coinUid != null)
                                 onClose.invoke()
                             else
                                 onNavigateBack.invoke()

@@ -24,8 +24,8 @@ import cash.p.terminal.ui.compose.components.*
 class DepositCexFragment : BaseFragment() {
 
     companion object {
-        fun args(blockchainType: String): Bundle {
-            return bundleOf("blockchain_type" to blockchainType)
+        fun args(coinUid: String): Bundle {
+            return bundleOf("coinUid" to coinUid)
         }
     }
 
@@ -35,7 +35,7 @@ class DepositCexFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val blockchainType = arguments?.getString("blockchain_type")
+        val coinUid = arguments?.getString("coinUid")
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -44,7 +44,7 @@ class DepositCexFragment : BaseFragment() {
 
             setContent {
                 ComposeAppTheme {
-                    DepositCexNavHost(findNavController(), blockchainType)
+                    DepositCexNavHost(findNavController(), coinUid)
                 }
             }
         }
@@ -57,9 +57,9 @@ class DepositCexFragment : BaseFragment() {
 @Composable
 fun DepositCexNavHost(
     fragmentNavController: NavController,
-    coinId: String?,
+    coinUid: String?,
 ) {
-    val depositViewModel: DepositViewModel = viewModel(factory = DepositCexModule.Factory(coinId))
+    val depositViewModel: DepositViewModel = viewModel(factory = DepositCexModule.Factory(coinUid))
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(
@@ -68,7 +68,7 @@ fun DepositCexNavHost(
     ) {
         composablePage("select-network") {
             SelectNetworkScreen(
-                coinId = coinId,
+                coinUid = coinUid,
                 depositViewModel = depositViewModel,
                 openCoinSelect = { navController.navigate("select-coin") },
                 openQrCode = { navController.navigate("deposit-qrcode") },
@@ -80,7 +80,7 @@ fun DepositCexNavHost(
             SelectCoinScreen(
                 depositViewModel = depositViewModel,
                 onClose = { fragmentNavController.popBackStack() },
-                openNetworkSelect = { coinId ->
+                openNetworkSelect = { coinUid ->
                     navController.navigate("select-network")
                 },
             )
