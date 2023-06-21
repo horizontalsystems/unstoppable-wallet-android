@@ -23,6 +23,7 @@ class CoinzixCexDepositService(
                     subtitle = it.currency.name,
                     coinIconUrl = coinIconUrl,
                     coinIconPlaceholder = R.drawable.coin_placeholder,
+                    coinUid = coin.uid
                 )
             }
     }

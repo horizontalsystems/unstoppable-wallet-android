@@ -17,15 +17,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 private val networks = listOf(
     DepositCexModule.NetworkViewItem(
@@ -40,7 +32,7 @@ private val networks = listOf(
 
 @Composable
 fun SelectNetworkScreen(
-    coinId: String?,
+    coinUid: String?,
     depositViewModel: DepositViewModel,
     openCoinSelect: () -> Unit,
     openQrCode: () -> Unit,
@@ -60,7 +52,7 @@ fun SelectNetworkScreen(
                     title = TranslatableString.ResString(R.string.Cex_ChooseNetwork),
                     navigationIcon = {
                         HsBackButton(onClick = {
-                            if (coinId != null)
+                            if (coinUid != null)
                                 onClose.invoke()
                             else
                                 onNavigateBack.invoke()
