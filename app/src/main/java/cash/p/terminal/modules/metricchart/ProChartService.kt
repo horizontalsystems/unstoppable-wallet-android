@@ -5,8 +5,6 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
-import cash.p.terminal.modules.profeatures.ProFeaturesAuthorizationManager
-import cash.p.terminal.modules.profeatures.ProNft
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -14,7 +12,6 @@ import io.reactivex.Single
 
 class ProChartService(
     override val currencyManager: CurrencyManager,
-    private val proFeaturesAuthorizationManager: ProFeaturesAuthorizationManager,
     private val marketKit: MarketKitWrapper,
     private val coinUid: String,
     private val chartType: ProChartModule.ChartType
@@ -60,8 +57,6 @@ class ProChartService(
         chartInterval: HsTimePeriod,
         currency: Currency,
     ): Single<ChartPointsWrapper> {
-        val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK)?.key?.value
-
         val chartDataSingle: Single<List<ChartPoint>> = when (chartType) {
             ProChartModule.ChartType.CexVolume ->
                 marketKit.cexVolumesSingle(coinUid, currency.code, chartInterval)
@@ -77,7 +72,7 @@ class ProChartService(
 
 
             ProChartModule.ChartType.DexVolume ->
-                marketKit.dexVolumesSingle(coinUid, currency.code, chartInterval, sessionKey)
+                marketKit.dexVolumesSingle(coinUid, currency.code, chartInterval)
                     .map { response ->
                         response.map { chartPoint ->
                             ChartPoint(
@@ -88,7 +83,7 @@ class ProChartService(
                     }
 
             ProChartModule.ChartType.DexLiquidity ->
-                marketKit.dexLiquiditySingle(coinUid, currency.code, chartInterval, sessionKey)
+                marketKit.dexLiquiditySingle(coinUid, currency.code, chartInterval)
                     .map { response ->
                         response.map { chartPoint ->
                             ChartPoint(
@@ -99,7 +94,7 @@ class ProChartService(
                     }
 
             ProChartModule.ChartType.TxCount ->
-                marketKit.transactionDataSingle(coinUid, chartInterval, null, sessionKey)
+                marketKit.transactionDataSingle(coinUid, chartInterval, null)
                     .map { response ->
                         response.map { chartPoint ->
                             ChartPoint(
@@ -111,7 +106,7 @@ class ProChartService(
                     }
 
             ProChartModule.ChartType.AddressesCount ->
-                marketKit.activeAddressesSingle(coinUid, chartInterval, sessionKey)
+                marketKit.activeAddressesSingle(coinUid, chartInterval)
                     .map { response ->
                         response.map { chartPoint ->
                             ChartPoint(

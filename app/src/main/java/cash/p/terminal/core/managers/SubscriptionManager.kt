@@ -17,4 +17,8 @@ class SubscriptionManager(private val localStorage: ILocalStorage) {
     private val _authTokenFlow = MutableStateFlow(authToken)
     val authTokenFlow: StateFlow<String?> = _authTokenFlow
 
+    fun hasSubscription(): Boolean {
+        return !authToken.isNullOrBlank()
+    }
+
 }
