@@ -68,11 +68,13 @@ class DepositViewModel(private var assetId: String?) : ViewModel() {
         }
     }
 
-    fun onSelectAsset(assetId: String) {
-        this.assetId = assetId
+    fun onSelectAsset(v: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            assetId = v
+            networks = null
+            emitState()
 
-        viewModelScope.launch {
-            networks = depositService.getNetworks(assetId)
+            networks = depositService.getNetworks(v)
             emitState()
         }
     }
