@@ -44,4 +44,8 @@ class CoinzixCexDepositService(
             )
         } ?: listOf()
     }
+
+    override suspend fun getAddress(assetId: String, networkId: String?): String {
+        return api.getAddress(authToken, secret, assetId, 0, networkId)
+    }
 }

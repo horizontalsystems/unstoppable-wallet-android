@@ -23,12 +23,15 @@ class DepositViewModel(private var assetId: String?) : ViewModel() {
     private var coins: List<DepositCexModule.CexCoinViewItem>? = null
     private var loading = false
     private var networks: List<DepositCexModule.NetworkViewItem>? = null
+    private var networkId: String? = null
+    private var address: String? = null
 
     var uiState by mutableStateOf(
         DepositUiState(
             coins = coins,
             loading = loading,
-            networks = networks
+            networks = networks,
+            address = address,
         )
     )
         private set
@@ -38,7 +41,8 @@ class DepositViewModel(private var assetId: String?) : ViewModel() {
             uiState = DepositUiState(
                 coins = coins,
                 loading = loading,
-                networks = networks
+                networks = networks,
+                address = address
             )
         }
     }
@@ -72,9 +76,23 @@ class DepositViewModel(private var assetId: String?) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             assetId = v
             networks = null
+            address = null
             emitState()
 
             networks = depositService.getNetworks(v)
+            emitState()
+        }
+    }
+
+    fun onSelectNetwork(networkViewItem: DepositCexModule.NetworkViewItem) {
+        networkId = networkViewItem.title
+        address = null
+        emitState()
+
+        viewModelScope.launch {
+            address = assetId?.let {
+                depositService.getAddress(it, networkId)
+            }
             emitState()
         }
     }
@@ -83,5 +101,6 @@ class DepositViewModel(private var assetId: String?) : ViewModel() {
 data class DepositUiState(
     val coins: List<DepositCexModule.CexCoinViewItem>?,
     val loading: Boolean,
-    val networks: List<DepositCexModule.NetworkViewItem>?
+    val networks: List<DepositCexModule.NetworkViewItem>?,
+    val address: String?
 )

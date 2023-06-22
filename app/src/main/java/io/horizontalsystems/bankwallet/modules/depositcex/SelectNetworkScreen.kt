@@ -72,6 +72,7 @@ fun SelectNetworkScreen(
                             NetworkCell(
                                 viewItem = viewItem,
                                 onItemClick = {
+                                    depositViewModel.onSelectNetwork(viewItem)
                                     openQrCode.invoke()
                                 },
                             )

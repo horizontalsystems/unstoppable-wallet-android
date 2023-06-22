@@ -1,19 +1,8 @@
 package cash.p.terminal.modules.depositcex
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,15 +20,7 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -49,10 +30,8 @@ fun DepositQrCodeScreen(
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
 ) {
-    val address = "receive address"
-    val qrBitmap = TextHelper.getQrCodeBitmap(address)
-    val view = LocalView.current
-    val context = LocalContext.current
+    val uiState = depositViewModel.uiState
+    val address = uiState.address
 
     ComposeAppTheme {
         Scaffold(
@@ -73,91 +52,101 @@ fun DepositQrCodeScreen(
             }
         ) {
             Column(modifier = Modifier.padding(it)) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    TextImportantWarning(
-                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-                        text = "Please make sure that only CoinCode is deposited to this address. Sending other types of tokens to this address will result in their ultimate loss."
-                    )
-                    VSpacer(40.dp)
-                    Box(
+                if (address != null) {
+                    val qrBitmap = TextHelper.getQrCodeBitmap(address)
+                    val view = LocalView.current
+                    val context = LocalContext.current
+
+                    Column(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(ComposeAppTheme.colors.white)
-                            .size(231.dp),
-                        contentAlignment = Alignment.Center
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        qrBitmap?.let {
-                            Image(
-                                modifier = Modifier
-                                    .clickable {
-                                        TextHelper.copyText(address)
-                                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                                    }
-                                    .padding(8.dp)
-                                    .fillMaxSize(),
-                                bitmap = it.asImageBitmap(),
-                                contentScale = ContentScale.FillWidth,
-                                contentDescription = null
+                        TextImportantWarning(
+                            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+                            text = "Please make sure that only CoinCode is deposited to this address. Sending other types of tokens to this address will result in their ultimate loss."
+                        )
+                        VSpacer(40.dp)
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(ComposeAppTheme.colors.white)
+                                .size(231.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            qrBitmap?.let {
+                                Image(
+                                    modifier = Modifier
+                                        .clickable {
+                                            TextHelper.copyText(address)
+                                            HudHelper.showSuccessMessage(
+                                                view,
+                                                R.string.Hud_Text_Copied
+                                            )
+                                        }
+                                        .padding(8.dp)
+                                        .fillMaxSize(),
+                                    bitmap = it.asImageBitmap(),
+                                    contentScale = ContentScale.FillWidth,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                        VSpacer(24.dp)
+                        subhead2_grey(
+                            modifier = Modifier.padding(horizontal = 32.dp),
+                            text = "Your address for depositing CoinCode into the Coin Network",
+                            textAlign = TextAlign.Center
+                        )
+                        VSpacer(12.dp)
+                        subhead1_leah(
+                            text = address,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp)
+                                .clickable {
+                                    TextHelper.copyText(address)
+                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                                },
+                        )
+                        VSpacer(24.dp)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            ButtonSecondaryDefault(
+                                modifier = Modifier.padding(end = 6.dp),
+                                title = stringResource(R.string.Alert_Copy),
+                                onClick = {
+                                    TextHelper.copyText(address)
+                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                                }
+                            )
+                            ButtonSecondaryDefault(
+                                modifier = Modifier.padding(start = 6.dp),
+                                title = stringResource(R.string.Deposit_Share),
+                                onClick = {
+                                    ShareCompat.IntentBuilder(context)
+                                        .setType("text/plain")
+                                        .setText(address)
+                                        .startChooser()
+                                }
                             )
                         }
+                        VSpacer(24.dp)
                     }
-                    VSpacer(24.dp)
-                    subhead2_grey(
-                        modifier = Modifier.padding(horizontal = 32.dp),
-                        text = "Your address for depositing CoinCode into the Coin Network",
-                        textAlign = TextAlign.Center
-                    )
-                    VSpacer(12.dp)
-                    subhead1_leah(
-                        text = address,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
-                            .clickable {
-                                TextHelper.copyText(address)
-                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                            },
-                    )
-                    VSpacer(24.dp)
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        ButtonSecondaryDefault(
-                            modifier = Modifier.padding(end = 6.dp),
-                            title = stringResource(R.string.Alert_Copy),
-                            onClick = {
-                                TextHelper.copyText(address)
-                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                            }
-                        )
-                        ButtonSecondaryDefault(
-                            modifier = Modifier.padding(start = 6.dp),
-                            title = stringResource(R.string.Deposit_Share),
-                            onClick = {
-                                ShareCompat.IntentBuilder(context)
-                                    .setType("text/plain")
-                                    .setText(address)
-                                    .startChooser()
-                            }
+                    ButtonsGroupWithShade {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                            title = stringResource(R.string.Button_Close),
+                            onClick = onClose,
                         )
                     }
-                    VSpacer(24.dp)
-                }
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                        title = stringResource(R.string.Button_Close),
-                        onClick = onClose,
-                    )
+
                 }
             }
         }
