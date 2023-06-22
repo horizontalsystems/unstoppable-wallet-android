@@ -18,7 +18,8 @@ class CoinzixBalanceCexRepository(
                 BalanceCexItem(
                     balance = it.balance_available.movePointLeft(decimals),
                     coin = coinMapper.getCoin(it.currency),
-                    decimals = decimals
+                    decimals = decimals,
+                    assetId = it.currency.iso3
                 )
             }
     }

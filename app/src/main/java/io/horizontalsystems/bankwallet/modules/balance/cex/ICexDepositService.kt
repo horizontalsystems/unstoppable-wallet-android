@@ -4,5 +4,5 @@ import cash.p.terminal.modules.depositcex.DepositCexModule
 
 interface ICexDepositService {
     suspend fun getCoins(): List<DepositCexModule.CexCoinViewItem>
-    suspend fun getNetworks(coinUid: String): List<DepositCexModule.NetworkViewItem>
+    suspend fun getNetworks(assetId: String): List<DepositCexModule.NetworkViewItem>
 }

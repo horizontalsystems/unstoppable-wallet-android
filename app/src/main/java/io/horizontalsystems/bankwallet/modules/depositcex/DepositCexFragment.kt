@@ -24,8 +24,8 @@ import cash.p.terminal.ui.compose.components.*
 class DepositCexFragment : BaseFragment() {
 
     companion object {
-        fun args(coinUid: String): Bundle {
-            return bundleOf("coinUid" to coinUid)
+        fun args(assetId: String): Bundle {
+            return bundleOf("assetId" to assetId)
         }
     }
 
@@ -35,7 +35,7 @@ class DepositCexFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val coinUid = arguments?.getString("coinUid")
+        val assetId = arguments?.getString("assetId")
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -44,7 +44,7 @@ class DepositCexFragment : BaseFragment() {
 
             setContent {
                 ComposeAppTheme {
-                    DepositCexNavHost(findNavController(), coinUid)
+                    DepositCexNavHost(findNavController(), assetId)
                 }
             }
         }
@@ -57,9 +57,9 @@ class DepositCexFragment : BaseFragment() {
 @Composable
 fun DepositCexNavHost(
     fragmentNavController: NavController,
-    coinUid: String?,
+    assetId: String?,
 ) {
-    val depositViewModel: DepositViewModel = viewModel(factory = DepositCexModule.Factory(coinUid))
+    val depositViewModel = viewModel<DepositViewModel>(factory = DepositCexModule.Factory(assetId))
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(
@@ -68,7 +68,7 @@ fun DepositCexNavHost(
     ) {
         composablePage("select-network") {
             SelectNetworkScreen(
-                coinUid = coinUid,
+                assetId = assetId,
                 depositViewModel = depositViewModel,
                 openCoinSelect = { navController.navigate("select-coin") },
                 openQrCode = { navController.navigate("deposit-qrcode") },
@@ -80,7 +80,7 @@ fun DepositCexNavHost(
             SelectCoinScreen(
                 depositViewModel = depositViewModel,
                 onClose = { fragmentNavController.popBackStack() },
-                openNetworkSelect = { coinUid ->
+                openNetworkSelect = { assetId ->
                     navController.navigate("select-network")
                 },
             )

@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.modules.market.ImageSource
 
 object DepositCexModule {
-    class Factory(private val coinUid: String?) : ViewModelProvider.Factory {
+    class Factory(private val assetId: String?) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DepositViewModel(coinUid) as T
+            return DepositViewModel(assetId) as T
         }
     }
 
@@ -18,7 +18,7 @@ object DepositCexModule {
         val subtitle: String,
         val coinIconUrl: String?,
         val coinIconPlaceholder: Int,
-        val coinUid: String,
+        val assetId: String,
     )
 
     data class NetworkViewItem(
