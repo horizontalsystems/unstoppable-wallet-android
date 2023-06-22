@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.modules.depositcex.DepositCexModule
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 
 class CoinzixCexDepositService(
     private val authToken: String,
@@ -26,5 +27,22 @@ class CoinzixCexDepositService(
                     coinUid = coin.uid
                 )
             }
+    }
+
+    override suspend fun getNetworks(coinUid: String): List<DepositCexModule.NetworkViewItem> {
+        val currency = coinMapper.getCurrencyIso3(coinUid)?.let { iso3 ->
+            api.getBalances(authToken, secret)
+                .find {
+                    it.currency.iso3 == iso3
+                }
+                ?.currency
+        } ?: return listOf()
+
+        return currency.networks.map {
+            DepositCexModule.NetworkViewItem(
+                title = it.value,
+                imageSource = ImageSource.Local(R.drawable.fantom_erc20)
+            )
+        }
     }
 }
