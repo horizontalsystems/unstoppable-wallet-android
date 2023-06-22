@@ -13,19 +13,22 @@ import io.horizontalsystems.bankwallet.modules.balance.cex.ICexDepositService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DepositViewModel(coinUid: String?) : ViewModel() {
+class DepositViewModel(private var coinUid: String?) : ViewModel() {
 
     private val account = App.accountManager.activeAccount
     private val depositService: ICexDepositService
-    var openCoinSelect: Boolean = false
+    val openCoinSelect: Boolean
+        get() = coinUid == null
 
     private var coins: List<DepositCexModule.CexCoinViewItem>? = null
     private var loading = false
+    private var networks: List<DepositCexModule.NetworkViewItem>? = null
 
     var uiState by mutableStateOf(
         DepositUiState(
             coins = coins,
-            loading = loading
+            loading = loading,
+            networks = networks
         )
     )
         private set
@@ -34,7 +37,8 @@ class DepositViewModel(coinUid: String?) : ViewModel() {
         viewModelScope.launch {
             uiState = DepositUiState(
                 coins = coins,
-                loading = loading
+                loading = loading,
+                networks = networks
             )
         }
     }
@@ -62,18 +66,20 @@ class DepositViewModel(coinUid: String?) : ViewModel() {
             loading = false
             emitState()
         }
-
-        if (coinUid == null) {
-            openCoinSelect = true
-        }
     }
 
     fun setCoinUid(coinUid: String) {
-        openCoinSelect = false
+        this.coinUid = coinUid
+
+        viewModelScope.launch {
+            networks = depositService.getNetworks(coinUid)
+            emitState()
+        }
     }
 }
 
 data class DepositUiState(
     val coins: List<DepositCexModule.CexCoinViewItem>?,
-    val loading: Boolean
+    val loading: Boolean,
+    val networks: List<DepositCexModule.NetworkViewItem>?
 )

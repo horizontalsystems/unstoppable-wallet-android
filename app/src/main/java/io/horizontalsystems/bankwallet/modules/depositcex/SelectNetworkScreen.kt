@@ -14,21 +14,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-
-private val networks = listOf(
-    DepositCexModule.NetworkViewItem(
-        title = "Fantom",
-        imageSource = ImageSource.Local(R.drawable.fantom_erc20),
-    ),
-    DepositCexModule.NetworkViewItem(
-        title = "Gnosis",
-        imageSource = ImageSource.Local(R.drawable.gnosis_erc20),
-    )
-)
 
 @Composable
 fun SelectNetworkScreen(
@@ -43,6 +31,8 @@ fun SelectNetworkScreen(
         openCoinSelect.invoke()
         return
     }
+
+    val uiState = depositViewModel.uiState
 
     ComposeAppTheme {
         Scaffold(
@@ -69,7 +59,7 @@ fun SelectNetworkScreen(
             }
         ) {
             Column(modifier = Modifier.padding(it)) {
-                networks.let { viewItems ->
+                uiState.networks?.let { viewItems ->
                     if (viewItems.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.EmptyResults),
