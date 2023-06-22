@@ -29,7 +29,11 @@ class OpenSeaNftProvider(
     appConfigProvider: AppConfigProvider
 ) : INftProvider {
 
-    private val service: OpenSeaService = OpenSeaService(appConfigProvider.marketApiBaseUrl, appConfigProvider.marketApiKey)
+    private val service: OpenSeaService = OpenSeaService(
+        appConfigProvider.marketApiBaseUrl,
+        appConfigProvider.marketApiKey,
+        appConfigProvider.openSeaApiKey
+    )
     private val zeroAddress = "0x0000000000000000000000000000000000000000"
 
     override val title = "OpenSea"
