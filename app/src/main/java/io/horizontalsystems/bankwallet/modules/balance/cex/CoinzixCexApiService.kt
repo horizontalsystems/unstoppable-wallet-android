@@ -40,6 +40,29 @@ class CoinzixCexApiService {
         return balances.data.list
     }
 
+    suspend fun getAddress(
+        authToken: String,
+        secret: String,
+        iso: String,
+        new: Int,
+        network: String?
+    ): String {
+        val params = buildMap {
+            put("iso", iso)
+            put("new", new.toString())
+            network?.let {
+                put("network", it)
+            }
+        }
+        val address = post<Response.Address>(
+            path = "v1/private/get-address",
+            authToken = authToken,
+            secret = secret,
+            params = params
+        )
+        return address.data.address
+    }
+
     private suspend inline fun <reified T> post(
         path: String,
         authToken: String,
@@ -81,6 +104,15 @@ class CoinzixCexApiService {
 }
 
 object Response {
+    data class Address(
+        val data: AddressData,
+        val token: String,
+    )
+
+    data class AddressData(
+        val address: String
+    )
+
     data class Login(
         val data: LoginData,
         val token: String,
