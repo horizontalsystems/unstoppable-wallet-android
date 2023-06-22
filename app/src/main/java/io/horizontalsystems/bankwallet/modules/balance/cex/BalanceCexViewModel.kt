@@ -17,10 +17,8 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.collect
 import kotlinx.coroutines.rx2.collect
 import java.math.BigDecimal
-import kotlin.jvm.optionals.getOrNull
 
 class BalanceCexViewModel(
     private val totalBalance: TotalBalance,
@@ -187,7 +185,8 @@ class BalanceCexViewModel(
             coinUid = balanceCexItem.coin.uid,
             id = balanceCexItem.id,
             balanceCexItem = balanceCexItem,
-            coinPrice = latestRate
+            coinPrice = latestRate,
+            assetId = balanceCexItem.assetId
         )
     }
 
@@ -262,7 +261,8 @@ class BalanceCexViewModel(
 data class BalanceCexItem(
     val balance: BigDecimal,
     val coin: Coin,
-    val decimals: Int
+    val decimals: Int,
+    val assetId: String
 ) {
     val id: String = coin.uid
 }
@@ -288,7 +288,8 @@ data class BalanceCexViewItem(
     val coinUid: String,
     val id: String,
     val balanceCexItem: BalanceCexItem,
-    val coinPrice: CoinPrice?
+    val coinPrice: CoinPrice?,
+    val assetId: String
 ) {
     val fiatValue by lazy { coinPrice?.value?.let { balanceCexItem.balance.times(it) } }
 }

@@ -24,25 +24,24 @@ class CoinzixCexDepositService(
                     subtitle = it.currency.name,
                     coinIconUrl = coinIconUrl,
                     coinIconPlaceholder = R.drawable.coin_placeholder,
-                    coinUid = coin.uid
+                    assetId = it.currency.iso3
                 )
             }
     }
 
-    override suspend fun getNetworks(coinUid: String): List<DepositCexModule.NetworkViewItem> {
-        val currency = coinMapper.getCurrencyIso3(coinUid)?.let { iso3 ->
-            api.getBalances(authToken, secret)
-                .find {
-                    it.currency.iso3 == iso3
-                }
-                ?.currency
-        } ?: return listOf()
+    override suspend fun getNetworks(assetId: String): List<DepositCexModule.NetworkViewItem> {
+        val networks = api.getBalances(authToken, secret)
+            .find {
+                it.currency.iso3 == assetId
+            }
+            ?.currency
+            ?.networks
 
-        return currency.networks.map {
+        return networks?.map {
             DepositCexModule.NetworkViewItem(
                 title = it.value,
                 imageSource = ImageSource.Local(R.drawable.fantom_erc20)
             )
-        }
+        } ?: listOf()
     }
 }

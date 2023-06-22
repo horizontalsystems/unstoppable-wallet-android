@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun SelectNetworkScreen(
-    coinUid: String?,
+    assetId: String?,
     depositViewModel: DepositViewModel,
     openCoinSelect: () -> Unit,
     openQrCode: () -> Unit,
@@ -42,7 +42,7 @@ fun SelectNetworkScreen(
                     title = TranslatableString.ResString(R.string.Cex_ChooseNetwork),
                     navigationIcon = {
                         HsBackButton(onClick = {
-                            if (coinUid != null)
+                            if (assetId != null)
                                 onClose.invoke()
                             else
                                 onNavigateBack.invoke()
