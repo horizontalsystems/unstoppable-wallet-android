@@ -80,6 +80,10 @@ class AppConfigProvider {
         Translator.getString(R.string.marketApiKey)
     }
 
+    val openSeaApiKey by lazy {
+        Translator.getString(R.string.openSeaApiKey)
+    }
+
     val solscanApiKey by lazy {
         Translator.getString(R.string.solscanApiKey)
     }

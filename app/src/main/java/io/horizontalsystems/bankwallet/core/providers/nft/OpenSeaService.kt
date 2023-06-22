@@ -8,12 +8,16 @@ import java.math.BigDecimal
 
 class OpenSeaService(
     hsBaseUrl: String,
-    apiKey: String
+    apiKey: String,
+    openSeaApiKey: String,
 ) {
     private val service by lazy {
         APIClient.build(
             baseUrl = "https://api.opensea.io/api/v1/",
-            headers = mapOf("User-Agent" to "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36")
+            headers = mapOf(
+                "User-Agent" to "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
+                "X-API-KEY" to openSeaApiKey
+            )
         ).create(OpenSeaApi::class.java)
     }
 
