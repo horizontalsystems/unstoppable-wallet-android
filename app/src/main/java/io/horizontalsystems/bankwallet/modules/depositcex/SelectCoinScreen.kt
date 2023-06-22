@@ -70,8 +70,8 @@ fun SelectCoinScreen(
                                         CoinCell(
                                             viewItem = viewItem,
                                             onItemClick = {
-                                                depositViewModel.setCoinUid(viewItem.coinUid)
-                                                openNetworkSelect.invoke(viewItem.coinUid)
+                                                depositViewModel.onSelectAsset(viewItem.assetId)
+                                                openNetworkSelect.invoke(viewItem.assetId)
                                             },
                                         )
                                     }

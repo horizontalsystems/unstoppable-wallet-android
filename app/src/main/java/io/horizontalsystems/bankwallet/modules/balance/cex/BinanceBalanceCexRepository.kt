@@ -22,7 +22,8 @@ class BinanceBalanceCexRepository(apiKey: String, secretKey: String) : IBalanceC
                 BalanceCexItem(
                     balance = it.free,
                     coin = coinMapper.getCoin(it.asset),
-                    decimals = 8
+                    decimals = 8,
+                    assetId = it.asset
                 )
             }
     }

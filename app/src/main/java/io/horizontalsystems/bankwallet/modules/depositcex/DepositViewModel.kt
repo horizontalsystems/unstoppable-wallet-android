@@ -13,12 +13,12 @@ import io.horizontalsystems.bankwallet.modules.balance.cex.ICexDepositService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DepositViewModel(private var coinUid: String?) : ViewModel() {
+class DepositViewModel(private var assetId: String?) : ViewModel() {
 
     private val account = App.accountManager.activeAccount
     private val depositService: ICexDepositService
     val openCoinSelect: Boolean
-        get() = coinUid == null
+        get() = assetId == null
 
     private var coins: List<DepositCexModule.CexCoinViewItem>? = null
     private var loading = false
@@ -68,11 +68,11 @@ class DepositViewModel(private var coinUid: String?) : ViewModel() {
         }
     }
 
-    fun setCoinUid(coinUid: String) {
-        this.coinUid = coinUid
+    fun onSelectAsset(assetId: String) {
+        this.assetId = assetId
 
         viewModelScope.launch {
-            networks = depositService.getNetworks(coinUid)
+            networks = depositService.getNetworks(assetId)
             emitState()
         }
     }

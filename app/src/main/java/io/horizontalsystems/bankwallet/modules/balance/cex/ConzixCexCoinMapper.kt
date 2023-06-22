@@ -19,10 +19,6 @@ class ConzixCexCoinMapper(marketKit: MarketKitWrapper) {
         )
     }
 
-    fun getCurrencyIso3(coinUid: String): String? {
-        return mapCoinToBinanceAsset[coinUid]
-    }
-
     companion object {
         private val mapBinanceAssetToCoin = mapOf(
             "USDT" to "tether",
@@ -39,10 +35,6 @@ class ConzixCexCoinMapper(marketKit: MarketKitWrapper) {
             "QI" to "benqi",
             "BSW" to "biswap",
         )
-
-        private val mapCoinToBinanceAsset =
-            mapBinanceAssetToCoin.entries.associate { (k, v) -> v to k }
-
     }
 
 
