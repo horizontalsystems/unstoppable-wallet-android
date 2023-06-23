@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +46,7 @@ import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
+
 
 class ImportWalletFragment : BaseFragment() {
 
@@ -89,6 +91,10 @@ private fun ImportWalletScreen(
                         val jsonString = br.readText()
                         //validate json format
                         val json = Gson().fromJson(jsonString, BackupLocalModule.WalletBackup::class.java)
+                        //Gson will set field as null if the json file doesn't have the matching field
+                        if (json.version == null || json.crypto == null){
+                            throw Exception("Invalid json format")
+                        }
                         navController.navigateWithTermsAccepted {
                             val fileName = context.getFileName(uriNonNull)
                             navController.slideFromBottom(
@@ -103,6 +109,7 @@ private fun ImportWalletScreen(
                         }
                     }
                 } catch (e: Throwable) {
+                    Log.e("TAG", "ImportWalletScreen: ", e)
                     //show json parsing error
                     coroutineScope.launch {
                         delay(300)
