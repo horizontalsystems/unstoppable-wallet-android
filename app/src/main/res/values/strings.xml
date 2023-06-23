@@ -59,6 +59,7 @@
     <string name="Button_Login">Log In</string>
     <string name="Button_SignUp">Sign Up</string>
     <string name="Button_Submit">Submit</string>
+    <string name="Button_TryAgain">Try Again</string>
 
 
     <string name="Error">Error</string>
