@@ -211,7 +211,7 @@ fun SendConfirmationScreen(
 }
 
 @Composable
-private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> Unit) {
+fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> Unit) {
     when (sendResult) {
         SendResult.Sending -> {
             ButtonPrimaryYellow(

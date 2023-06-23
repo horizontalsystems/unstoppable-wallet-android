@@ -102,6 +102,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                         modifier = Modifier.weight(1f),
                         title = stringResource(R.string.Balance_Withdraw),
                         onClick = {
+                            navController.slideFromBottom(R.id.withdrawCexFragment)
                         },
                     )
 
@@ -315,7 +316,7 @@ private fun ButtonsRowCex(viewItem: BalanceCexViewItem, navController: NavContro
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Withdraw),
             onClick = {
-                navController.slideFromBottom(R.id.sendXFragment)
+                navController.slideFromBottom(R.id.withdrawCexFragment)
             },
         )
         Spacer(modifier = Modifier.width(8.dp))

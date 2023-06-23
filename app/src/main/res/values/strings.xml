@@ -58,6 +58,7 @@
     <string name="Button_GetApiKeys">Get Api Keys</string>
     <string name="Button_Login">Log In</string>
     <string name="Button_SignUp">Sign Up</string>
+    <string name="Button_Submit">Submit</string>
 
 
     <string name="Error">Error</string>
@@ -1663,10 +1664,22 @@
     <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
     <string name="Contacts_Error_DefinedName">The name already exists</string>
 
-    <!--Cex Modules-->
+    <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">Choose Coin</string>
     <string name="Cex_ChooseNetwork">Choose Network</string>
     <string name="Cex_ChooseNetwork_Description">Choose a network and get an address to deposit.</string>
+
+    <!--Cex Withdraw Module-->
+    <string name="CexWithdraw_Title">Withdraw %s</string>
+    <string name="CexWithdraw_Network">Network</string>
+    <string name="CexWithdraw_NetworkDescription">Ensure the network matches the withdrawal address and the deposit platform supports it.</string>
+    <string name="CexWithdraw_SecurityVerification">Security Verification</string>
+    <string name="CexWithdraw_EmailVerificationCode">Email Verification Code</string>
+    <string name="CexWithdraw_GoogleAuthenticationCode">Google Authentication Code</string>
+    <string name="CexWithdraw_GetCode">Get Code</string>
+    <string name="CexWithdraw_GetCodeSeconds">%s sec</string>
+    <string name="CexWithdraw_EmailVerificationInfo">Enter verification code sent to test@gmail.com</string>
+    <string name="CexWithdraw_GoogleAuthenticationInfo">Enter google authentication code from your Google Authenticator App</string>
 
 
 </resources>
