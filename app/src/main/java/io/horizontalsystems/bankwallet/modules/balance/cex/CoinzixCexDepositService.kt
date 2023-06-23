@@ -45,7 +45,19 @@ class CoinzixCexDepositService(
         } ?: listOf()
     }
 
-    override suspend fun getAddress(assetId: String, networkId: String?): String {
-        return api.getAddress(authToken, secret, assetId, 0, networkId)
+    override suspend fun getAddress(assetId: String, networkId: String?): CexAddress {
+        val addressData = api.getAddress(authToken, secret, assetId, 0, networkId)
+
+        return when {
+            addressData.address != null -> {
+                CexAddress(addressData.address, "")
+            }
+            addressData.account != null -> {
+                CexAddress(addressData.account, addressData.memo ?: "")
+            }
+            else -> {
+                throw Exception()
+            }
+        }
     }
 }
