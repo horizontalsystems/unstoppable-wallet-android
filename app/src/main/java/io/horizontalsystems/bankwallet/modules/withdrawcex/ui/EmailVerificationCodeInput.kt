@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.withdrawcex.ui
+package cash.p.terminal.modules.withdrawcex.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,13 +25,13 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexModule
-import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
+import cash.p.terminal.R
+import cash.p.terminal.entities.DataState
+import cash.p.terminal.modules.withdrawcex.WithdrawCexModule
+import cash.p.terminal.ui.compose.ColoredTextStyle
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
+import cash.p.terminal.ui.compose.components.FormsInputStateWarning
 
 @Composable
 fun EmailVerificationCodeInput(

@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.withdrawcex
+package cash.p.terminal.modules.withdrawcex
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import cash.p.terminal.modules.market.ImageSource
 
 object WithdrawCexModule {
     class Factory : ViewModelProvider.Factory {

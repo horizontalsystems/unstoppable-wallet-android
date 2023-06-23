@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.withdrawcex
+package cash.p.terminal.modules.withdrawcex
 
 import androidx.lifecycle.ViewModel
 

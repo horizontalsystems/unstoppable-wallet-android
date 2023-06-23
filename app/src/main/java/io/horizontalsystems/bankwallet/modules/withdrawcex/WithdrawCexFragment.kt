@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.withdrawcex
+package cash.p.terminal.modules.withdrawcex
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,16 +16,16 @@ import androidx.navigation.findNavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
-import io.horizontalsystems.bankwallet.modules.settings.about.*
-import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexConfirmScreen
-import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexScreen
-import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexSecurityVerificationScreen
-import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexSelectNetworkScreen
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.composablePage
+import cash.p.terminal.core.composablePopup
+import cash.p.terminal.modules.settings.about.*
+import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexConfirmScreen
+import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexScreen
+import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexSecurityVerificationScreen
+import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexSelectNetworkScreen
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.*
 
 class WithdrawCexFragment : BaseFragment() {
 
