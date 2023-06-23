@@ -31,7 +31,8 @@ fun DepositQrCodeScreen(
     onClose: () -> Unit,
 ) {
     val uiState = depositViewModel.uiState
-    val address = uiState.address
+    val cexAddress = uiState.address
+    val address = cexAddress?.address
 
     ComposeAppTheme {
         Scaffold(

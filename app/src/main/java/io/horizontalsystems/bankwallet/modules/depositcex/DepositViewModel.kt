@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CexType
+import cash.p.terminal.modules.balance.cex.BinanceCexDepositService
+import cash.p.terminal.modules.balance.cex.CexAddress
 import cash.p.terminal.modules.balance.cex.CoinzixCexDepositService
 import cash.p.terminal.modules.balance.cex.ICexDepositService
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +26,7 @@ class DepositViewModel(private var assetId: String?) : ViewModel() {
     private var loading = false
     private var networks: List<DepositCexModule.NetworkViewItem>? = null
     private var networkId: String? = null
-    private var address: String? = null
+    private var address: CexAddress? = null
 
     var uiState by mutableStateOf(
         DepositUiState(
@@ -51,7 +53,7 @@ class DepositViewModel(private var assetId: String?) : ViewModel() {
     init {
         val cexType = (account?.type as? AccountType.Cex)?.cexType
         depositService = when (cexType) {
-            is CexType.Binance -> TODO()
+            is CexType.Binance -> BinanceCexDepositService(cexType.apiKey, cexType.secretKey)
             is CexType.Coinzix -> {
                 CoinzixCexDepositService(
                     cexType.authToken,
@@ -89,7 +91,7 @@ class DepositViewModel(private var assetId: String?) : ViewModel() {
         address = null
         emitState()
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             address = assetId?.let {
                 depositService.getAddress(it, networkId)
             }
@@ -102,5 +104,5 @@ data class DepositUiState(
     val coins: List<DepositCexModule.CexCoinViewItem>?,
     val loading: Boolean,
     val networks: List<DepositCexModule.NetworkViewItem>?,
-    val address: String?
+    val address: CexAddress?
 )

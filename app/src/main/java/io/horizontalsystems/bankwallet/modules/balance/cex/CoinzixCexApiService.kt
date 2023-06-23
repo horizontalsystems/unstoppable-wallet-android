@@ -46,7 +46,7 @@ class CoinzixCexApiService {
         iso: String,
         new: Int,
         network: String?
-    ): String {
+    ): Response.AddressData {
         val params = buildMap {
             put("iso", iso)
             put("new", new.toString())
@@ -60,7 +60,7 @@ class CoinzixCexApiService {
             secret = secret,
             params = params
         )
-        return address.data.address
+        return address.data
     }
 
     private suspend inline fun <reified T> post(
@@ -110,7 +110,9 @@ object Response {
     )
 
     data class AddressData(
-        val address: String
+        val address: String?,
+        val account: String?,
+        val memo: String?,
     )
 
     data class Login(
