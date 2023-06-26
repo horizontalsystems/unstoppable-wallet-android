@@ -16,15 +16,15 @@ class BalanceCexSorter {
     private fun sortByBalance(items: Iterable<BalanceCexViewItem>): List<BalanceCexViewItem> {
         val comparator =
                 compareByDescending<BalanceCexViewItem> {
-                    it.balanceCexItem.balance > BigDecimal.ZERO
+                    it.cexAsset.freeBalance > BigDecimal.ZERO
                 }.thenByDescending {
                     (it.fiatValue ?: BigDecimal.ZERO) > BigDecimal.ZERO
                 }.thenByDescending {
                     it.fiatValue
                 }.thenByDescending {
-                    it.balanceCexItem.balance
+                    it.cexAsset.freeBalance
                 }.thenBy {
-                    it.balanceCexItem.coin.code
+                    it.coinCode
                 }
 
         return items.sortedWith(comparator)

@@ -54,8 +54,8 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                     }
                 )
             }
-        ) {
-            Column(Modifier.padding(it)) {
+        ) { paddingValues ->
+            Column(Modifier.padding(paddingValues)) {
 
                 TotalBalanceRow(
                     totalState = totalState,
@@ -103,7 +103,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
 
                 Wallets(
                     items = uiState.viewItems,
-                    key = { it.id },
+                    key = { it.assetId },
                     accountId = accountViewItem.id,
                     sortType = uiState.sortType,
                     refreshing = uiState.isRefreshing,
@@ -242,7 +242,7 @@ fun BalanceCardCex(
 
 
 @Composable
-private fun WalletIconCex(iconUrl: String, placeholder: Int) {
+private fun WalletIconCex(iconUrl: String?, placeholder: Int) {
     Box(
         modifier = Modifier
             .width(64.dp)
@@ -307,12 +307,14 @@ private fun ButtonsRowCex(viewItem: BalanceCexViewItem, navController: NavContro
         ButtonPrimaryCircle(
             icon = R.drawable.ic_chart_24,
             contentDescription = stringResource(R.string.Coin_Info),
-            enabled = viewItem.hasCoinInfo,
+            enabled = viewItem.coinUid != null,
             onClick = {
-                navController.slideFromRight(
-                    R.id.coinFragment,
-                    CoinFragment.prepareParams(viewItem.coinUid)
-                )
+                viewItem.coinUid?.let { coinUid ->
+                    navController.slideFromRight(
+                        R.id.coinFragment,
+                        CoinFragment.prepareParams(coinUid)
+                    )
+                }
             },
         )
     }
