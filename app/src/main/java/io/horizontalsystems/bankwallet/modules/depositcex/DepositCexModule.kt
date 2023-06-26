@@ -11,6 +11,8 @@ object DepositCexModule {
         val coinIconUrl: String?,
         val coinIconPlaceholder: Int,
         val cexAsset: CexAsset,
+        val depositEnabled: Boolean,
+        val withdrawEnabled: Boolean,
     )
 
     data class NetworkViewItem(

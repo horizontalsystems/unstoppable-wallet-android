@@ -21,6 +21,8 @@ class SelectCexAssetViewModel(
                     coinIconUrl = cexAsset.coin?.imageUrl,
                     coinIconPlaceholder = R.drawable.coin_placeholder,
                     cexAsset = cexAsset,
+                    depositEnabled = cexAsset.depositEnabled,
+                    withdrawEnabled = cexAsset.withdrawEnabled,
                 )
             }
     } ?: listOf()
