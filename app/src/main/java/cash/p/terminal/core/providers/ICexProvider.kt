@@ -204,29 +204,31 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
             object : TypeToken<List<CoinInfo>>() {}.type
         )
 
-        return coinInfo.map {
-            val assetId = it.coin
-            CexAssetRaw(
-                id = assetId,
-                name = it.name,
-                freeBalance = it.free,
-                lockedBalance = it.freeze,
-                depositEnabled = it.depositAllEnable,
-                withdrawEnabled = it.withdrawAllEnable,
-                networks = it.networkList.map { coinNetwork ->
-                    CexNetworkRaw(
-                        network = coinNetwork.network,
-                        name = coinNetwork.name,
-                        isDefault = coinNetwork.isDefault,
-                        depositEnabled = coinNetwork.depositEnable,
-                        withdrawEnabled = coinNetwork.withdrawEnable,
-                        blockchainUid = blockchainUidMap[coinNetwork.network],
-                    )
-                },
-                coinUid = coinUidMap[assetId],
-                decimals = 8
-            )
-        }
+        return coinInfo
+            .filter { !it.isLegalMoney }
+            .map {
+                val assetId = it.coin
+                CexAssetRaw(
+                    id = assetId,
+                    name = it.name,
+                    freeBalance = it.free,
+                    lockedBalance = it.freeze,
+                    depositEnabled = it.depositAllEnable,
+                    withdrawEnabled = it.withdrawAllEnable,
+                    networks = it.networkList.map { coinNetwork ->
+                        CexNetworkRaw(
+                            network = coinNetwork.network,
+                            name = coinNetwork.name,
+                            isDefault = coinNetwork.isDefault,
+                            depositEnabled = coinNetwork.depositEnable,
+                            withdrawEnabled = coinNetwork.withdrawEnable,
+                            blockchainUid = blockchainUidMap[coinNetwork.network],
+                        )
+                    },
+                    coinUid = coinUidMap[assetId],
+                    decimals = 8
+                )
+            }
     }
 
     data class CoinInfo(
@@ -236,7 +238,8 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
         val freeze: BigDecimal,
         val depositAllEnable: Boolean,
         val withdrawAllEnable: Boolean,
-        val networkList: List<CoinNetwork>
+        val networkList: List<CoinNetwork>,
+        val isLegalMoney: Boolean
     )
 
     data class CoinNetwork(
