@@ -6,12 +6,34 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import androidx.glance.appwidget.unit.ColorProvider
+import androidx.glance.color.ColorProvider
 import androidx.glance.text.FontWeight
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import io.horizontalsystems.bankwallet.ui.compose.*
+import io.horizontalsystems.bankwallet.ui.compose.Black50
+import io.horizontalsystems.bankwallet.ui.compose.Dark
+import io.horizontalsystems.bankwallet.ui.compose.Green50
+import io.horizontalsystems.bankwallet.ui.compose.GreenD
+import io.horizontalsystems.bankwallet.ui.compose.GreenL
+import io.horizontalsystems.bankwallet.ui.compose.Grey
+import io.horizontalsystems.bankwallet.ui.compose.Grey50
+import io.horizontalsystems.bankwallet.ui.compose.Light
+import io.horizontalsystems.bankwallet.ui.compose.LightGrey
+import io.horizontalsystems.bankwallet.ui.compose.Red20
+import io.horizontalsystems.bankwallet.ui.compose.Red50
+import io.horizontalsystems.bankwallet.ui.compose.RedD
+import io.horizontalsystems.bankwallet.ui.compose.RedL
+import io.horizontalsystems.bankwallet.ui.compose.Steel10
+import io.horizontalsystems.bankwallet.ui.compose.Steel20
+import io.horizontalsystems.bankwallet.ui.compose.SteelDark
+import io.horizontalsystems.bankwallet.ui.compose.SteelLight
+import io.horizontalsystems.bankwallet.ui.compose.Yellow20
+import io.horizontalsystems.bankwallet.ui.compose.Yellow50
+import io.horizontalsystems.bankwallet.ui.compose.YellowD
+import io.horizontalsystems.bankwallet.ui.compose.YellowL
+import io.horizontalsystems.bankwallet.ui.compose.darkPalette
+import io.horizontalsystems.bankwallet.ui.compose.lightPalette
 
 object AppWidgetTheme {
     val colors: ColorProviders
