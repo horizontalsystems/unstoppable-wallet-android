@@ -3,15 +3,12 @@ package cash.p.terminal.core.providers
 import com.binance.connector.client.impl.SpotClientImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import cash.p.terminal.core.App
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CexType
-import cash.p.terminal.modules.balance.cex.BinanceCexCoinMapper
 import cash.p.terminal.modules.balance.cex.CoinzixCexApiService
-import cash.p.terminal.modules.balance.cex.ConzixCexCoinMapper
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
@@ -101,7 +98,6 @@ class CoinzixCexProvider(
     override val account: Account
 ) : ICexProvider {
     private val api = CoinzixCexApiService()
-    private val coinMapper = ConzixCexCoinMapper(App.marketKit)
 
     private val coinUidMap = mapOf(
         "USDT" to "tether",
@@ -143,8 +139,6 @@ class CoinzixCexProvider(
 
 
 class BinanceCexProvider(apiKey: String, secretKey: String, override val account: Account) : ICexProvider {
-    private val coinMapper = BinanceCexCoinMapper(App.marketKit)
-
     private val client = SpotClientImpl(apiKey, secretKey)
     private val wallet = client.createWallet()
     private val gson = Gson()
