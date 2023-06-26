@@ -40,8 +40,14 @@ class CexAssetManager(marketKit: MarketKitWrapper) {
         storage.set(account.id, cexAssetRaws)
     }
 
+    fun get(account: Account, assetId: String): CexAsset? {
+        return storage[account.id]
+            ?.find { it.id == assetId }
+            ?.let { buildCexAsset(it) }
+    }
+
     fun getAll(account: Account): List<CexAsset> {
-        return storage.get(account.id)?.map {
+        return storage[account.id]?.map {
             buildCexAsset(it)
         } ?: listOf()
     }

@@ -300,7 +300,7 @@ private fun ButtonsRowCex(viewItem: BalanceCexViewItem, navController: NavContro
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Deposit),
             onClick = {
-                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(viewItem.assetId))
+                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(viewItem.cexAsset))
             },
         )
         Spacer(modifier = Modifier.width(8.dp))

@@ -1,24 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.depositcex
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 
 object DepositCexModule {
-    class Factory(private val assetId: String?) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DepositViewModel(assetId) as T
-        }
-    }
 
     data class CexCoinViewItem(
         val title: String,
         val subtitle: String,
         val coinIconUrl: String?,
         val coinIconPlaceholder: Int,
-        val assetId: String,
+        val cexAsset: CexAsset,
     )
 
     data class NetworkViewItem(

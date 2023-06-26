@@ -20,7 +20,7 @@ class SelectCexAssetViewModel(
                     subtitle = cexAsset.name,
                     coinIconUrl = cexAsset.coin?.imageUrl,
                     coinIconPlaceholder = R.drawable.coin_placeholder,
-                    assetId = cexAsset.id,
+                    cexAsset = cexAsset,
                 )
             }
     } ?: listOf()

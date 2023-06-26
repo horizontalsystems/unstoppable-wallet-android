@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.providers
 
+import android.os.Parcelable
 import com.binance.connector.client.impl.SpotClientImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -8,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CexType
+import io.horizontalsystems.bankwallet.modules.balance.cex.CexAddress
 import io.horizontalsystems.bankwallet.modules.balance.cex.CoinzixCexApiService
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Coin
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class CexProviderManager(private val accountManager: IAccountManager) {
@@ -47,7 +50,9 @@ class CexProviderManager(private val accountManager: IAccountManager) {
 
 interface ICexProvider {
     val account: Account
+
     suspend fun getAssets(): List<CexAssetRaw>
+    suspend fun getAddress(assetId: String, networkId: String?): CexAddress
 }
 
 data class CexAssetRaw(
@@ -62,6 +67,7 @@ data class CexAssetRaw(
     val decimals: Int,
 )
 
+@Parcelize
 data class CexAsset(
     val id: String,
     val name: String,
@@ -72,7 +78,7 @@ data class CexAsset(
     val networks: List<CexNetwork>,
     val coin: Coin?,
     val decimals: Int,
-)
+) : Parcelable
 
 data class CexNetworkRaw(
     val network: String,
@@ -83,6 +89,7 @@ data class CexNetworkRaw(
     val blockchainUid: String?,
 )
 
+@Parcelize
 data class CexNetwork(
     val network: String,
     val name: String,
@@ -90,7 +97,7 @@ data class CexNetwork(
     val depositEnabled: Boolean,
     val withdrawEnabled: Boolean,
     val blockchain: Blockchain?,
-)
+) : Parcelable
 
 class CoinzixCexProvider(
     private val authToken: String,
@@ -115,6 +122,21 @@ class CoinzixCexProvider(
         "BSW" to "biswap",
     )
 
+    override suspend fun getAddress(assetId: String, networkId: String?): CexAddress {
+        val addressData = api.getAddress(authToken, secret, assetId, 0, networkId)
+
+        return when {
+            addressData.address != null -> {
+                CexAddress(addressData.address, "")
+            }
+            addressData.account != null -> {
+                CexAddress(addressData.account, addressData.memo ?: "")
+            }
+            else -> {
+                throw Exception()
+            }
+        }
+    }
 
     override suspend fun getAssets(): List<CexAssetRaw> {
         return api.getBalances(authToken, secret)
@@ -163,6 +185,18 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
         "BSC" to "binance-smart-chain",
         "ETH" to "ethereum",
     )
+
+    override suspend fun getAddress(assetId: String, networkId: String?): CexAddress {
+        val params = buildMap<String, Any> {
+            put("coin", assetId)
+            networkId?.let {
+                put("network", it)
+            }
+        }.toMutableMap()
+
+        val depositAddress = gson.fromJson(wallet.depositAddress(params), BinanceCexProvider.DepositAddress::class.java)
+        return CexAddress(depositAddress.address, depositAddress.tag)
+    }
 
     override suspend fun getAssets(): List<CexAssetRaw> {
         val coinInfo = gson.fromJson<List<CoinInfo>>(
