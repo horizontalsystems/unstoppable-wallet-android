@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.isCustom
+import io.horizontalsystems.bankwallet.core.providers.BinanceCexProvider
 import io.horizontalsystems.bankwallet.modules.depositcex.DepositCexModule
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 
@@ -18,9 +19,9 @@ class BinanceCexDepositService(apiKey: String, secretKey: String) : ICexDepositS
     private val gson = Gson()
 
     override suspend fun getCoins(): List<DepositCexModule.CexCoinViewItem> {
-        val coinInfo = gson.fromJson<List<CoinInfo>>(
+        val coinInfo = gson.fromJson<List<BinanceCexProvider.CoinInfo>>(
             wallet.coinInfo(mutableMapOf()),
-            object : TypeToken<List<CoinInfo>>() {}.type
+            object : TypeToken<List<BinanceCexProvider.CoinInfo>>() {}.type
         )
 
         return coinInfo.map {
@@ -37,9 +38,9 @@ class BinanceCexDepositService(apiKey: String, secretKey: String) : ICexDepositS
     }
 
     override suspend fun getNetworks(assetId: String): List<DepositCexModule.NetworkViewItem> {
-        val coinInfo = gson.fromJson<List<CoinInfo>>(
+        val coinInfo = gson.fromJson<List<BinanceCexProvider.CoinInfo>>(
             wallet.coinInfo(mutableMapOf()),
-            object : TypeToken<List<CoinInfo>>() {}.type
+            object : TypeToken<List<BinanceCexProvider.CoinInfo>>() {}.type
         )
 
         return coinInfo
@@ -62,26 +63,7 @@ class BinanceCexDepositService(apiKey: String, secretKey: String) : ICexDepositS
             }
         }.toMutableMap()
 
-        val depositAddress = gson.fromJson(wallet.depositAddress(params), DepositAddress::class.java)
+        val depositAddress = gson.fromJson(wallet.depositAddress(params), BinanceCexProvider.DepositAddress::class.java)
         return CexAddress(depositAddress.address, depositAddress.tag)
     }
-
-    data class CoinInfo(
-        val coin: String,
-        val name: String,
-        val depositAllEnable: Boolean,
-        val networkList: List<CoinNetwork>
-    )
-
-    data class CoinNetwork(
-        val name: String,
-        val network: String,
-    )
-
-    data class DepositAddress(
-        val address: String,
-        val coin: String,
-        val tag: String,
-        val url: String,
-    )
 }
