@@ -47,6 +47,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
+import io.horizontalsystems.uniswapkit.models.DexType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -98,7 +99,8 @@ class SwapMainViewModel(
     private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchainType).evmKitWrapper?.evmKit!! }
     private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit) }
     private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
-    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit) }
+    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit, DexType.Uniswap) }
+    private val pancakeSwapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit, DexType.PancakeSwap) }
     private var tradeService: SwapMainModule.ISwapTradeService = getTradeService(dex.provider)
     private var tradeView: SwapMainModule.TradeViewX? = null
     private var tradePriceExpiration: Float? = null
@@ -208,15 +210,15 @@ class SwapMainViewModel(
 
     private fun getTradeService(provider: ISwapProvider) = when (provider) {
         SwapMainModule.OneInchProvider -> OneInchTradeService(oneIncKitHelper)
-        SwapMainModule.UniswapV3Provider,
-        SwapMainModule.PancakeSwapV3Provider -> UniswapV3TradeService(uniswapV3Kit)
+        SwapMainModule.UniswapV3Provider -> UniswapV3TradeService(uniswapV3Kit)
+        SwapMainModule.PancakeSwapV3Provider -> UniswapV3TradeService(pancakeSwapV3Kit)
         else -> UniswapV2TradeService(uniswapKit)
     }
 
     private fun getSpenderAddress(provider: ISwapProvider) = when (provider) {
         SwapMainModule.OneInchProvider -> oneIncKitHelper.smartContractAddress
-        SwapMainModule.UniswapV3Provider,
-        SwapMainModule.PancakeSwapV3Provider -> uniswapV3Kit.routerAddress
+        SwapMainModule.UniswapV3Provider -> uniswapV3Kit.routerAddress
+        SwapMainModule.PancakeSwapV3Provider -> pancakeSwapV3Kit.routerAddress
         else -> uniswapKit.routerAddress
     }
 

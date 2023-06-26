@@ -270,8 +270,8 @@ object SwapMainModule {
             BlockchainType.Ethereum,
             BlockchainType.ArbitrumOne,
 //            BlockchainType.Optimism,
-            BlockchainType.Polygon -> true
-
+            BlockchainType.Polygon,
+            BlockchainType.BinanceSmartChain -> true
             else -> false
         }
     }
