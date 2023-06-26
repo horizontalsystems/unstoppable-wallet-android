@@ -21,6 +21,9 @@
         android:id="@+id/depositCexFragment"
         android:name="io.horizontalsystems.bankwallet.modules.depositcex.DepositCexFragment"/>
     <fragment
+        android:id="@+id/depositCexFragmentChooseAsset"
+        android:name="io.horizontalsystems.bankwallet.modules.depositcex.DepositCexChooseAssetFragment"/>
+    <fragment
         android:id="@+id/withdrawCexFragment"
         android:name="io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexFragment"/>
     <fragment
