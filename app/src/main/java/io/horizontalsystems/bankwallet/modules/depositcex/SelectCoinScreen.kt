@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 
@@ -20,7 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 @Composable
 fun SelectCoinScreen(
     onClose: () -> Unit,
-    openNetworkSelect: (String) -> Unit,
+    openNetworkSelect: (CexAsset) -> Unit,
 ) {
     val viewModel = viewModel<SelectCexAssetViewModel>(factory = SelectCexAssetViewModel.Factory())
 
@@ -59,7 +60,7 @@ fun SelectCoinScreen(
                                 CoinCell(
                                     viewItem = viewItem,
                                     onItemClick = {
-                                        openNetworkSelect.invoke(viewItem.assetId)
+                                        openNetworkSelect.invoke(viewItem.cexAsset)
                                     },
                                 )
                             }

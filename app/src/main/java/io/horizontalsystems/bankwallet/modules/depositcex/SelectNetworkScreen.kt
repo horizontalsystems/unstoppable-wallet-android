@@ -20,19 +20,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun SelectNetworkScreen(
-    assetId: String?,
-    depositViewModel: DepositViewModel,
-    openCoinSelect: () -> Unit,
     openQrCode: () -> Unit,
-    onNavigateBack: () -> Unit,
     onClose: () -> Unit,
 ) {
-    if (depositViewModel.openCoinSelect) {
-        openCoinSelect.invoke()
-        return
-    }
-
-    val uiState = depositViewModel.uiState
+    val networks: List<DepositCexModule.NetworkViewItem>? = null
 
     ComposeAppTheme {
         Scaffold(
@@ -42,10 +33,7 @@ fun SelectNetworkScreen(
                     title = TranslatableString.ResString(R.string.Cex_ChooseNetwork),
                     navigationIcon = {
                         HsBackButton(onClick = {
-                            if (assetId != null)
-                                onClose.invoke()
-                            else
-                                onNavigateBack.invoke()
+                            onClose.invoke()
                         })
                     },
                     menuItems = listOf(
@@ -59,7 +47,7 @@ fun SelectNetworkScreen(
             }
         ) {
             Column(modifier = Modifier.padding(it)) {
-                uiState.networks?.let { viewItems ->
+                networks?.let { viewItems ->
                     if (viewItems.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.EmptyResults),
@@ -72,7 +60,6 @@ fun SelectNetworkScreen(
                             NetworkCell(
                                 viewItem = viewItem,
                                 onItemClick = {
-                                    depositViewModel.onSelectNetwork(viewItem)
                                     openQrCode.invoke()
                                 },
                             )

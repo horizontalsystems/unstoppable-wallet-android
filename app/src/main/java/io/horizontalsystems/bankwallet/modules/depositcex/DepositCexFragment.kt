@@ -4,28 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.modules.settings.about.*
+import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.core.helpers.HudHelper
 
 class DepositCexFragment : BaseFragment() {
 
     companion object {
-        fun args(assetId: String): Bundle {
-            return bundleOf("assetId" to assetId)
+        fun args(cexAsset: CexAsset): Bundle {
+            return bundleOf("cexAsset" to cexAsset)
         }
     }
 
@@ -35,7 +30,7 @@ class DepositCexFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val assetId = arguments?.getString("assetId")
+        val cexAsset = arguments?.getParcelable<CexAsset>("cexAsset")
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -44,7 +39,19 @@ class DepositCexFragment : BaseFragment() {
 
             setContent {
                 ComposeAppTheme {
-                    DepositCexNavHost(findNavController(), assetId)
+                    val navController = findNavController()
+
+                    if (cexAsset != null) {
+                        DepositQrCodeScreen(
+                            cexAsset = cexAsset,
+                            onNavigateBack = { navController.popBackStack() },
+                            onClose = { navController.popBackStack() },
+                        )
+                    } else {
+                        val view = LocalView.current
+                        HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
+                        navController.popBackStack()
+                    }
                 }
             }
         }
@@ -52,38 +59,33 @@ class DepositCexFragment : BaseFragment() {
 
 }
 
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun DepositCexNavHost(
-    fragmentNavController: NavController,
-    assetId: String?,
-) {
-    val depositViewModel = viewModel<DepositViewModel>(factory = DepositCexModule.Factory(assetId))
-    val navController = rememberAnimatedNavController()
-
-    AnimatedNavHost(
-        navController = navController,
-        startDestination = "select-network",
-    ) {
-        composablePage("select-network") {
-            SelectNetworkScreen(
-                assetId = assetId,
-                depositViewModel = depositViewModel,
-                openCoinSelect = { navController.navigate("select-coin") },
-                openQrCode = { navController.navigate("deposit-qrcode") },
-                onNavigateBack = { navController.popBackStack() },
-                onClose = { fragmentNavController.popBackStack() },
-            )
-        }
-        composablePage("select-coin") {
-        }
-        composablePage("deposit-qrcode") {
-            DepositQrCodeScreen(
-                depositViewModel = depositViewModel,
-                onNavigateBack = { navController.popBackStack() },
-                onClose = { fragmentNavController.popBackStack() },
-            )
-        }
-    }
-}
+//@OptIn(ExperimentalAnimationApi::class)
+//@Composable
+//fun DepositCexNavHost(
+//    fragmentNavController: NavController,
+//    assetId: String,
+//) {
+//    val depositViewModel = viewModel<DepositViewModel>(factory = DepositCexModule.Factory(assetId))
+//    val navController = rememberAnimatedNavController()
+//
+//    AnimatedNavHost(
+//        navController = navController,
+//        startDestination = "deposit-qrcode",
+//    ) {
+//        composablePage("select-network") {
+//            SelectNetworkScreen(
+//                depositViewModel = depositViewModel,
+//                openQrCode = { navController.navigate("deposit-qrcode") },
+//                onClose = { fragmentNavController.popBackStack() },
+//            )
+//        }
+//
+//        composablePage("deposit-qrcode") {
+//            DepositQrCodeScreen(
+//                depositViewModel = depositViewModel,
+//                onNavigateBack = { navController.popBackStack() },
+//                onClose = { fragmentNavController.popBackStack() },
+//            )
+//        }
+//    }
+//}

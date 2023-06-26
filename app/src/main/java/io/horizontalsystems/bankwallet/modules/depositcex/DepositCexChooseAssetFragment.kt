@@ -38,8 +38,8 @@ fun DepositCexFragmentChooseAssetScreen(navController: NavController) {
     ComposeAppTheme {
         SelectCoinScreen(
             onClose = { navController.popBackStack() },
-            openNetworkSelect = { assetId ->
-                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(assetId))
+            openNetworkSelect = { cexAsset ->
+                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(cexAsset))
             },
         )
     }
