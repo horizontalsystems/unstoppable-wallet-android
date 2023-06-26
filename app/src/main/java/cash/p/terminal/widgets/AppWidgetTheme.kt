@@ -6,12 +6,34 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import androidx.glance.appwidget.unit.ColorProvider
+import androidx.glance.color.ColorProvider
 import androidx.glance.text.FontWeight
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import cash.p.terminal.ui.compose.*
+import cash.p.terminal.ui.compose.Black50
+import cash.p.terminal.ui.compose.Dark
+import cash.p.terminal.ui.compose.Green50
+import cash.p.terminal.ui.compose.GreenD
+import cash.p.terminal.ui.compose.GreenL
+import cash.p.terminal.ui.compose.Grey
+import cash.p.terminal.ui.compose.Grey50
+import cash.p.terminal.ui.compose.Light
+import cash.p.terminal.ui.compose.LightGrey
+import cash.p.terminal.ui.compose.Red20
+import cash.p.terminal.ui.compose.Red50
+import cash.p.terminal.ui.compose.RedD
+import cash.p.terminal.ui.compose.RedL
+import cash.p.terminal.ui.compose.Steel10
+import cash.p.terminal.ui.compose.Steel20
+import cash.p.terminal.ui.compose.SteelDark
+import cash.p.terminal.ui.compose.SteelLight
+import cash.p.terminal.ui.compose.Yellow20
+import cash.p.terminal.ui.compose.Yellow50
+import cash.p.terminal.ui.compose.YellowD
+import cash.p.terminal.ui.compose.YellowL
+import cash.p.terminal.ui.compose.darkPalette
+import cash.p.terminal.ui.compose.lightPalette
 
 object AppWidgetTheme {
     val colors: ColorProviders
