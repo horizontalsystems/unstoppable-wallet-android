@@ -64,10 +64,13 @@ class ManageAccountViewModel(
     }
 
     private fun getBackupItems(account: Account): List<BackupItem> {
-        if (account.isWatchAccount || account.type is AccountType.Cex) {
+        if (account.isWatchAccount) {
             return emptyList()
         }
-        if (account.type is AccountType.HdExtendedKey || account.type is AccountType.EvmPrivateKey) {
+        if (account.type is AccountType.HdExtendedKey
+            || account.type is AccountType.EvmPrivateKey
+            || account.type is AccountType.Cex
+        ) {
             return listOf(BackupItem.LocalBackup(false))
         }
 
@@ -100,6 +103,7 @@ class ManageAccountViewModel(
                 KeyAction.PrivateKeys,
                 KeyAction.PublicKeys,
             )
+
             is AccountType.EvmAddress -> listOf()
             is AccountType.SolanaAddress -> listOf()
             is AccountType.TronAddress -> listOf()
