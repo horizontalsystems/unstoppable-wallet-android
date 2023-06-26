@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.backuplocal
 
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.CexType
 import io.horizontalsystems.hdwalletkit.Base58
 import io.horizontalsystems.tronkit.toBigInteger
 
@@ -75,7 +76,15 @@ object BackupLocalModule {
             SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
             TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(Base58.encode(data))
-            CEX -> TODO()
+            CEX -> {
+                val cexType = CexType.deserialize(String(data, Charsets.UTF_8))
+                if (cexType != null) {
+                    AccountType.Cex(cexType)
+                } else {
+                    throw IllegalStateException("Unknown Cex account type")
+                }
+            }
+
             else -> throw IllegalStateException("Unknown account type")
         }
     }
@@ -96,7 +105,7 @@ object BackupLocalModule {
         is AccountType.SolanaAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.TronAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
-        is AccountType.Cex -> TODO()
+        is AccountType.Cex -> accountType.cexType.serialized().toByteArray(Charsets.UTF_8)
     }
 
     val kdfDefault = KdfParams(
