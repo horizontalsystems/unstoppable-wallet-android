@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
+import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 
@@ -20,7 +21,7 @@ import cash.p.terminal.ui.compose.components.*
 @Composable
 fun SelectCoinScreen(
     onClose: () -> Unit,
-    openNetworkSelect: (String) -> Unit,
+    openNetworkSelect: (CexAsset) -> Unit,
 ) {
     val viewModel = viewModel<SelectCexAssetViewModel>(factory = SelectCexAssetViewModel.Factory())
 
@@ -59,7 +60,7 @@ fun SelectCoinScreen(
                                 CoinCell(
                                     viewItem = viewItem,
                                     onItemClick = {
-                                        openNetworkSelect.invoke(viewItem.assetId)
+                                        openNetworkSelect.invoke(viewItem.cexAsset)
                                     },
                                 )
                             }
