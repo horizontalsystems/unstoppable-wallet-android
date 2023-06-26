@@ -23,7 +23,7 @@ class SwapMainService(
     val providerUpdatedFlow = _providerUpdatedFlow.asSharedFlow()
 
     val availableProviders: List<ISwapProvider>
-        get() = providers.filter { it.supports(dex.blockchainType) }
+        get() = providers.filter { it.supports(dex.blockchainType) }.sortedBy { it.title }
 
     fun setProvider(provider: ISwapProvider) {
         if (dex.provider.id != provider.id) {
