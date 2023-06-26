@@ -8,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
+import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.managers.EncryptDecryptManager
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
@@ -19,8 +21,9 @@ import kotlinx.coroutines.withContext
 
 class RestoreLocalViewModel(
     private val backupJsonString: String?,
+    private val accountManager: IAccountManager,
+    private val accountFactory: IAccountFactory,
     fileName: String?,
-    accountFactory: IAccountFactory,
 ) : ViewModel() {
 
     private var passphrase = ""
@@ -31,6 +34,7 @@ class RestoreLocalViewModel(
     private var parseError: Exception? = null
     private var accountType: AccountType? = null
     private var manualBackup = false
+    private var restored = false
 
     val accountName by lazy {
         fileName?.let { name ->
@@ -48,7 +52,8 @@ class RestoreLocalViewModel(
             showButtonSpinner = showButtonSpinner,
             parseError = parseError,
             accountType = accountType,
-            manualBackup = manualBackup
+            manualBackup = manualBackup,
+            restored = restored
         )
     )
         private set
@@ -81,7 +86,13 @@ class RestoreLocalViewModel(
             if (EncryptDecryptManager.passwordIsCorrect(backup.crypto.mac, backup.crypto.ciphertext, key)) {
                 val decrypted = encryptDecryptManager.decrypt(backup.crypto.ciphertext, key, backup.crypto.cipherparams.iv)
                 try {
-                    accountType = BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
+                    val type = BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
+                    if (type is AccountType.Cex){
+                        restoreCexAccount(type)
+                        return@launch
+                    } else {
+                        accountType = type
+                    }
                 } catch (e: IllegalStateException) {
                     parseError = e
                 }
@@ -95,6 +106,13 @@ class RestoreLocalViewModel(
         }
     }
 
+    private fun restoreCexAccount(accountType: AccountType) {
+        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true, false)
+        accountManager.save(account)
+        restored = true
+        syncState()
+    }
+
     fun onSelectCoinsShown() {
         accountType = null
         syncState()
@@ -106,7 +124,8 @@ class RestoreLocalViewModel(
             showButtonSpinner = showButtonSpinner,
             parseError = parseError,
             accountType = accountType,
-            manualBackup = manualBackup
+            manualBackup = manualBackup,
+            restored = restored
         )
     }
 

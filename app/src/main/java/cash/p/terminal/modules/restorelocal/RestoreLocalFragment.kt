@@ -24,6 +24,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -52,6 +53,7 @@ import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -115,6 +117,7 @@ private fun RestoreLocalNavHost(
                 fileName = fileName,
                 mainViewModel = mainViewModel,
                 onBackClick = { fragmentNavController.popBackStack() },
+                close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
             ) { navController.navigate("restore_select_coins") }
         }
         composablePage("restore_select_coins") {
@@ -146,12 +149,27 @@ private fun RestoreLocalScreen(
     fileName: String?,
     mainViewModel: RestoreViewModel,
     onBackClick: () -> Unit,
+    close: () -> Unit,
     openSelectCoins: () -> Unit,
 ) {
     val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName))
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
+    val view = LocalView.current
+
+    LaunchedEffect(uiState.restored) {
+        if (uiState.restored) {
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_Restored,
+                icon = R.drawable.icon_add_to_wallet_2_24,
+                iconTint = R.color.white
+            )
+            delay(300)
+            close.invoke()
+        }
+    }
 
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
