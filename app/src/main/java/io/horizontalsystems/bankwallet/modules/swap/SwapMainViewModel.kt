@@ -206,13 +206,15 @@ class SwapMainViewModel(
 
     private fun getTradeService(provider: ISwapProvider): SwapMainModule.ISwapTradeService = when (provider) {
         SwapMainModule.OneInchProvider -> OneInchTradeService(oneIncKitHelper)
-        SwapMainModule.UniswapV3Provider -> UniswapV3TradeService(uniswapV3Kit)
+        SwapMainModule.UniswapV3Provider,
+        SwapMainModule.PancakeSwapV3Provider -> UniswapV3TradeService(uniswapV3Kit)
         else -> UniswapV2TradeService(uniswapKit)
     }
 
     private fun getSpenderAddress(provider: ISwapProvider) = when (provider) {
         SwapMainModule.OneInchProvider -> oneIncKitHelper.smartContractAddress
-        SwapMainModule.UniswapV3Provider -> uniswapV3Kit.routerAddress
+        SwapMainModule.UniswapV3Provider,
+        SwapMainModule.PancakeSwapV3Provider -> uniswapV3Kit.routerAddress
         else -> uniswapKit.routerAddress
     }
 

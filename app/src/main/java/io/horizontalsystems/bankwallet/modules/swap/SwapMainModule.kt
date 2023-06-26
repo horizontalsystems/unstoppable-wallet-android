@@ -50,6 +50,7 @@ object SwapMainModule {
             UniswapProvider,
             UniswapV3Provider,
             PancakeSwapProvider,
+            PancakeSwapV3Provider,
             OneInchProvider,
             QuickSwapProvider
         )
@@ -279,6 +280,18 @@ object SwapMainModule {
     object PancakeSwapProvider : ISwapProvider {
         override val id get() = "pancake"
         override val title get() = "PancakeSwap"
+        override val url get() = "https://pancakeswap.finance/"
+        override val supportsExactOut get() = true
+
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.BinanceSmartChain
+        }
+    }
+
+    @Parcelize
+    object PancakeSwapV3Provider : ISwapProvider {
+        override val id get() = "pancake_v3"
+        override val title get() = "PancakeSwap V3"
         override val url get() = "https://pancakeswap.finance/"
         override val supportsExactOut get() = true
 
