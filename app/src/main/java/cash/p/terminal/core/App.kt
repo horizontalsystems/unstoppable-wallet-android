@@ -22,61 +22,9 @@ import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.factories.AdapterFactory
 import cash.p.terminal.core.factories.AddressParserFactory
 import cash.p.terminal.core.factories.EvmAccountManagerFactory
-import cash.p.terminal.core.managers.AccountCleaner
-import cash.p.terminal.core.managers.AccountManager
-import cash.p.terminal.core.managers.AdapterManager
-import cash.p.terminal.core.managers.AppVersionManager
-import cash.p.terminal.core.managers.BackgroundStateChangeListener
-import cash.p.terminal.core.managers.BackupManager
-import cash.p.terminal.core.managers.BalanceHiddenManager
-import cash.p.terminal.core.managers.BaseTokenManager
-import cash.p.terminal.core.managers.BinanceKitManager
-import cash.p.terminal.core.managers.BtcBlockchainManager
-import cash.p.terminal.core.managers.CoinManager
-import cash.p.terminal.core.managers.ConnectivityManager
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.EvmBlockchainManager
-import cash.p.terminal.core.managers.EvmLabelManager
-import cash.p.terminal.core.managers.EvmSyncSourceManager
-import cash.p.terminal.core.managers.KeyStoreCleaner
-import cash.p.terminal.core.managers.LanguageManager
-import cash.p.terminal.core.managers.LocalStorageManager
-import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.managers.NetworkManager
-import cash.p.terminal.core.managers.NftAdapterManager
-import cash.p.terminal.core.managers.NftMetadataManager
-import cash.p.terminal.core.managers.NftMetadataSyncer
-import cash.p.terminal.core.managers.NumberFormatter
-import cash.p.terminal.core.managers.RateAppManager
-import cash.p.terminal.core.managers.ReleaseNotesManager
-import cash.p.terminal.core.managers.RestoreSettingsManager
-import cash.p.terminal.core.managers.SolanaKitManager
-import cash.p.terminal.core.managers.SolanaRpcSourceManager
-import cash.p.terminal.core.managers.SolanaWalletManager
-import cash.p.terminal.core.managers.SystemInfoManager
-import cash.p.terminal.core.managers.TermsManager
-import cash.p.terminal.core.managers.TokenAutoEnableManager
-import cash.p.terminal.core.managers.TorManager
-import cash.p.terminal.core.managers.TransactionAdapterManager
-import cash.p.terminal.core.managers.TronAccountManager
-import cash.p.terminal.core.managers.TronKitManager
-import cash.p.terminal.core.managers.WalletActivator
-import cash.p.terminal.core.managers.WalletManager
-import cash.p.terminal.core.managers.WalletStorage
-import cash.p.terminal.core.managers.WordsManager
-import cash.p.terminal.core.managers.ZcashBirthdayProvider
-import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.core.providers.EvmLabelProvider
-import cash.p.terminal.core.providers.FeeRateProvider
-import cash.p.terminal.core.providers.FeeTokenProvider
-import cash.p.terminal.core.storage.AccountsStorage
-import cash.p.terminal.core.storage.AppDatabase
-import cash.p.terminal.core.storage.BlockchainSettingsStorage
-import cash.p.terminal.core.storage.EnabledWalletsStorage
-import cash.p.terminal.core.storage.EvmSyncSourceStorage
-import cash.p.terminal.core.storage.NftStorage
-import cash.p.terminal.core.storage.RestoreSettingsStorage
+import cash.p.terminal.core.managers.*
+import cash.p.terminal.core.providers.*
+import cash.p.terminal.core.storage.*
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.keystore.KeyStoreActivity
@@ -184,6 +132,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var marketWidgetRepository: MarketWidgetRepository
         lateinit var contactsRepository: ContactsRepository
         lateinit var subscriptionManager: SubscriptionManager
+        lateinit var cexProviderManager: CexProviderManager
     }
 
     override fun onCreate() {
@@ -388,6 +337,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         balanceHiddenManager = BalanceHiddenManager(localStorage, backgroundManager)
 
         contactsRepository = ContactsRepository(marketKit)
+        cexProviderManager = CexProviderManager(accountManager)
 
         startTasks()
     }
