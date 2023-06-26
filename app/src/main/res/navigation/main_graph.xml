@@ -21,6 +21,9 @@
         android:id="@+id/depositCexFragment"
         android:name="cash.p.terminal.modules.depositcex.DepositCexFragment"/>
     <fragment
+        android:id="@+id/depositCexFragmentChooseAsset"
+        android:name="cash.p.terminal.modules.depositcex.DepositCexChooseAssetFragment"/>
+    <fragment
         android:id="@+id/withdrawCexFragment"
         android:name="cash.p.terminal.modules.withdrawcex.WithdrawCexFragment"/>
     <fragment
