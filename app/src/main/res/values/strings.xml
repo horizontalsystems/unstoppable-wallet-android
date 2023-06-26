@@ -13,6 +13,7 @@
     <string name="Alert_Restart">Restart</string>
     <string name="Alert_Skip" translatable="false">SKIP</string>
     <string name="Alert_Select" translatable="false">SELECT</string>
+    <string name="Suspended">SUSPENDED</string>
 
     <string name="Action_Undo">UNDO</string>
 

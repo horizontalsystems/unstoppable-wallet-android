@@ -56,7 +56,7 @@ fun SelectCoinScreen(
                                     color = ComposeAppTheme.colors.steel10,
                                 )
                             }
-                            items(viewItems) { viewItem ->
+                            items(viewItems) { viewItem: DepositCexModule.CexCoinViewItem ->
                                 CoinCell(
                                     viewItem = viewItem,
                                     onItemClick = {
@@ -79,7 +79,7 @@ private fun CoinCell(
 ) {
     Column {
         RowUniversal(
-            onClick = onItemClick,
+            onClick = if (viewItem.depositEnabled) onItemClick else null,
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalPadding = 0.dp
         ) {
@@ -106,6 +106,10 @@ private fun CoinCell(
                     maxLines = 1,
                     modifier = Modifier.padding(top = 1.dp)
                 )
+            }
+            if (!viewItem.depositEnabled) {
+                HSpacer(width = 16.dp)
+                Badge(text = stringResource(R.string.Suspended))
             }
         }
         Divider(
