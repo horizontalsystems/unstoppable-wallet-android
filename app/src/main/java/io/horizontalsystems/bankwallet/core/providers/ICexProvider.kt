@@ -3,15 +3,12 @@ package io.horizontalsystems.bankwallet.core.providers
 import com.binance.connector.client.impl.SpotClientImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CexType
-import io.horizontalsystems.bankwallet.modules.balance.cex.BinanceCexCoinMapper
 import io.horizontalsystems.bankwallet.modules.balance.cex.CoinzixCexApiService
-import io.horizontalsystems.bankwallet.modules.balance.cex.ConzixCexCoinMapper
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
@@ -101,7 +98,6 @@ class CoinzixCexProvider(
     override val account: Account
 ) : ICexProvider {
     private val api = CoinzixCexApiService()
-    private val coinMapper = ConzixCexCoinMapper(App.marketKit)
 
     private val coinUidMap = mapOf(
         "USDT" to "tether",
@@ -143,8 +139,6 @@ class CoinzixCexProvider(
 
 
 class BinanceCexProvider(apiKey: String, secretKey: String, override val account: Account) : ICexProvider {
-    private val coinMapper = BinanceCexCoinMapper(App.marketKit)
-
     private val client = SpotClientImpl(apiKey, secretKey)
     private val wallet = client.createWallet()
     private val gson = Gson()

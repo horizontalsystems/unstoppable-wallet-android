@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
 import io.horizontalsystems.bankwallet.core.providers.ICexProvider
 import io.horizontalsystems.bankwallet.modules.balance.*
-import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -258,15 +257,6 @@ class BalanceCexViewModel(
 
         emitState()
     }
-}
-
-data class BalanceCexItem(
-    val balance: BigDecimal,
-    val coin: Coin,
-    val decimals: Int,
-    val assetId: String
-) {
-    val id: String = coin.uid
 }
 
 data class UiState(

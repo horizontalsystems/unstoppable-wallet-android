@@ -133,6 +133,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var contactsRepository: ContactsRepository
         lateinit var subscriptionManager: SubscriptionManager
         lateinit var cexProviderManager: CexProviderManager
+        lateinit var cexAssetManager: CexAssetManager
     }
 
     override fun onCreate() {
@@ -338,6 +339,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         contactsRepository = ContactsRepository(marketKit)
         cexProviderManager = CexProviderManager(accountManager)
+        cexAssetManager = CexAssetManager(marketKit)
 
         startTasks()
     }
