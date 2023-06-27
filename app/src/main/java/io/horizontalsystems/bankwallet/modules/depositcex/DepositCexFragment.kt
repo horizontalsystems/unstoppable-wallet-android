@@ -45,22 +45,23 @@ class DepositCexFragment : BaseFragment() {
             setContent {
                 ComposeAppTheme {
                     val navController = findNavController()
+                    val navigatedFromMain = navController.previousBackStackEntry?.destination?.id == R.id.mainFragment
+                    val navigateBack: () -> Unit = { navController.popBackStack() }
 
                     if (cexAsset != null) {
                         val networks = cexAsset.networks
                         if (networks.isEmpty() || networkId != null) {
                             DepositQrCodeScreen(
                                 cexAsset = cexAsset,
-                                onNavigateBack = { navController.popBackStack() },
-                                onClose = { navController.popBackStack() },
+                                onNavigateBack = if (navigatedFromMain) null else navigateBack,
+                                onClose = { navController.popBackStack(R.id.mainFragment, false) },
                                 networkId = networkId
                             )
                         } else {
                             SelectNetworkScreen(
                                 networks = networks,
-                                onClose = {
-                                    navController.popBackStack()
-                                },
+                                onNavigateBack = if (navigatedFromMain) null else navigateBack,
+                                onClose = { navController.popBackStack(R.id.mainFragment, false) },
                                 onSelectNetwork = {
                                     navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it.network))
                                 }
