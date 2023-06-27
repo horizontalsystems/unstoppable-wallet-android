@@ -160,6 +160,11 @@ fun DepositQrCodeScreen(
                                 onClick = onClose,
                             )
                         }
+                    } else if (uiState.error != null) {
+                        ListEmptyView(
+                            text = uiState.error.localizedMessage ?: stringResource(R.string.Error),
+                            icon = R.drawable.ic_sync_error
+                        )
                     }
                 }
             }
