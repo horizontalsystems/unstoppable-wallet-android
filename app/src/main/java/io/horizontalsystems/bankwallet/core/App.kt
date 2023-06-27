@@ -339,7 +339,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         contactsRepository = ContactsRepository(marketKit)
         cexProviderManager = CexProviderManager(accountManager)
-        cexAssetManager = CexAssetManager(marketKit)
+        cexAssetManager = CexAssetManager(marketKit, appDatabase.cexAssetsDao())
 
         startTasks()
     }

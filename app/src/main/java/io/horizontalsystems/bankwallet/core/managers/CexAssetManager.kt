@@ -4,13 +4,13 @@ import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexAssetRaw
 import io.horizontalsystems.bankwallet.core.providers.CexNetwork
 import io.horizontalsystems.bankwallet.core.providers.CexNetworkRaw
+import io.horizontalsystems.bankwallet.core.storage.CexAssetsDao
 import io.horizontalsystems.bankwallet.entities.Account
 
-class CexAssetManager(marketKit: MarketKitWrapper) {
+class CexAssetManager(marketKit: MarketKitWrapper, private val cexAssetsDao: CexAssetsDao) {
 
     private val coins = marketKit.allCoins().map { it.uid to it }.toMap()
     private val allBlockchains = marketKit.allBlockchains().map { it.uid to it }.toMap()
-    private val storage = mutableMapOf<String, List<CexAssetRaw>>()
 
     private fun buildCexAsset(cexAssetRaw: CexAssetRaw): CexAsset {
         return CexAsset(
@@ -37,20 +37,21 @@ class CexAssetManager(marketKit: MarketKitWrapper) {
         )
     }
 
-    fun saveAll(cexAssetRaws: List<CexAssetRaw>, account: Account) {
-        storage.set(account.id, cexAssetRaws)
+    fun saveAllForAccount(cexAssetRaws: List<CexAssetRaw>, account: Account) {
+        cexAssetsDao.delete(account.id)
+        cexAssetsDao.insert(cexAssetRaws)
     }
 
     fun get(account: Account, assetId: String): CexAsset? {
-        return storage[account.id]
-            ?.find { it.id == assetId }
+        return cexAssetsDao.get(account.id, assetId)
             ?.let { buildCexAsset(it) }
     }
 
-    fun getAll(account: Account): List<CexAsset> {
-        return storage[account.id]?.map {
-            buildCexAsset(it)
-        } ?: listOf()
+    fun getAllForAccount(account: Account): List<CexAsset> {
+        return cexAssetsDao.getAllForAccount(account.id)
+            .map {
+                buildCexAsset(it)
+            }
     }
 
 }

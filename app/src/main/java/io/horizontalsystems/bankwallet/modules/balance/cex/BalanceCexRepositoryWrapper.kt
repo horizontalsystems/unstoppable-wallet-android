@@ -27,9 +27,9 @@ class BalanceCexRepositoryWrapper(private val cexAssetManager: CexAssetManager) 
 
         collectCexRepoItemsJob = coroutineScope.launch {
             try {
-                cexAssetManager.saveAll(provider.getAssets(), provider.account)
+                cexAssetManager.saveAllForAccount(provider.getAssets(), provider.account)
                 itemsFlow.update {
-                    cexAssetManager.getAll(provider.account)
+                    cexAssetManager.getAllForAccount(provider.account)
                         .filter { it.freeBalance > BigDecimal.ZERO || it.lockedBalance > BigDecimal.ZERO }
                 }
             } catch (t: Throwable) {
@@ -43,7 +43,7 @@ class BalanceCexRepositoryWrapper(private val cexAssetManager: CexAssetManager) 
 
         itemsFlow.update {
             cexProvider?.let {
-                cexAssetManager.getAll(it.account)
+                cexAssetManager.getAllForAccount(it.account)
                     .filter { it.freeBalance > BigDecimal.ZERO || it.lockedBalance > BigDecimal.ZERO }
             }
         }

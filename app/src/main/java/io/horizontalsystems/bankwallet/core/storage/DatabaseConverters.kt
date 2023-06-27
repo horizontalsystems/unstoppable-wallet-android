@@ -2,13 +2,15 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.CexNetworkRaw
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
-import java.util.*
+import java.util.Date
 
 class DatabaseConverters {
 
@@ -116,4 +118,16 @@ class DatabaseConverters {
         return NftUid.fromUid(string)
     }
 
+    @TypeConverter
+    fun fromCexNetworkList(networks: List<CexNetworkRaw>): String {
+        return gson.toJson(networks)
+    }
+
+    @TypeConverter
+    fun toCexNetworkList(json: String): List<CexNetworkRaw>? {
+        return gson.fromJson(
+            json,
+            object : TypeToken<List<CexNetworkRaw>>() {}.type
+        )
+    }
 }
