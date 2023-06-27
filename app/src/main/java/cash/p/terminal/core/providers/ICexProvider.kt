@@ -122,6 +122,15 @@ class CoinzixCexProvider(
         "BSW" to "biswap",
     )
 
+    private val blockchainUidMap = mapOf(
+        "BSC" to "binance-smart-chain",
+        "ETH" to "ethereum",
+        "SOL" to "solana",
+        "BNB" to "binancecoin",
+        "MATIC" to "polygon-pos",
+        "TRX" to "tron",
+    )
+
     override suspend fun getAddress(assetId: String, networkId: String?): CexAddress {
         val addressData = api.getAddress(authToken, secret, assetId, 0, networkId)
 
@@ -140,18 +149,28 @@ class CoinzixCexProvider(
 
     override suspend fun getAssets(): List<CexAssetRaw> {
         return api.getBalances(authToken, secret)
-            .filter { it.balance_available > BigDecimal.ZERO }
             .map {
                 val decimals = 8
                 val assetId = it.currency.iso3
+                val depositEnabled = it.currency.refill == 1
+                val withdrawEnabled = it.currency.withdraw == 1
                 CexAssetRaw(
                     id = assetId,
                     name = it.currency.name,
                     freeBalance = it.balance_available.movePointLeft(decimals),
                     lockedBalance = (it.balance - it.balance_available).movePointLeft(decimals),
-                    depositEnabled = it.currency.refill == 1,
-                    withdrawEnabled = it.currency.withdraw == 1,
-                    networks = listOf(),
+                    depositEnabled = depositEnabled,
+                    withdrawEnabled = withdrawEnabled,
+                    networks = it.currency.networks.map { (_, networkId) ->
+                        CexNetworkRaw(
+                            network = networkId,
+                            name = networkId,
+                            isDefault = false,
+                            depositEnabled = depositEnabled,
+                            withdrawEnabled = withdrawEnabled,
+                            blockchainUid = blockchainUidMap[networkId],
+                        )
+                    },
                     coinUid = coinUidMap[assetId],
                     decimals = decimals
                 )
