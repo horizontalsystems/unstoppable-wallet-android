@@ -21,12 +21,14 @@ class DepositAddressViewModel(
     private val cexProvider = cexProviderManager.cexProviderFlow.value
 
     private var address: CexAddress? = null
+    private var error: Throwable? = null
     private var loading = false
 
     var uiState by mutableStateOf(
         DepositAddress(
             loading = loading,
-            address = address
+            address = address,
+            error = error
         )
     )
 
@@ -35,7 +37,11 @@ class DepositAddressViewModel(
         emitState()
 
         viewModelScope.launch(Dispatchers.IO) {
-            address = cexProvider?.getAddress(cexAsset.id, networkId)
+            try {
+                address = cexProvider?.getAddress(cexAsset.id, networkId)
+            } catch (t: Throwable) {
+                error = t
+            }
             loading = false
             emitState()
         }
@@ -44,7 +50,8 @@ class DepositAddressViewModel(
     private fun emitState() {
         uiState = DepositAddress(
             loading = loading,
-            address = address
+            address = address,
+            error = error
         )
     }
 
@@ -56,4 +63,4 @@ class DepositAddressViewModel(
     }
 }
 
-data class DepositAddress(val loading: Boolean, val address: CexAddress?)
+data class DepositAddress(val loading: Boolean, val address: CexAddress?, val error: Throwable?)
