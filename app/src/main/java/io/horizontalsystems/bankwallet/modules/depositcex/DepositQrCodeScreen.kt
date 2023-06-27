@@ -30,7 +30,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun DepositQrCodeScreen(
-    onNavigateBack: () -> Unit,
+    onNavigateBack: (() -> Unit)?,
     onClose: () -> Unit,
     cexAsset: CexAsset,
     networkId: String?
@@ -45,11 +45,14 @@ fun DepositQrCodeScreen(
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
+                val navigationIcon: @Composable (() -> Unit)? = onNavigateBack?.let {
+                    {
+                        HsBackButton(onClick = onNavigateBack)
+                    }
+                }
                 AppBar(
                     title = TranslatableString.PlainString(cexAsset.id),
-                    navigationIcon = {
-                        HsBackButton(onClick = onNavigateBack)
-                    },
+                    navigationIcon = navigationIcon,
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Done),

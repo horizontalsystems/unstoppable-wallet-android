@@ -20,19 +20,22 @@ import cash.p.terminal.ui.compose.components.*
 fun SelectNetworkScreen(
     networks: List<CexNetwork>,
     onSelectNetwork: (CexNetwork) -> Unit,
+    onNavigateBack: (() -> Unit)?,
     onClose: () -> Unit,
 ) {
     ComposeAppTheme {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
+                val navigationIcon: @Composable (() -> Unit)? = onNavigateBack?.let {
+                    {
+                        HsBackButton(onClick = onNavigateBack)
+                    }
+                }
+
                 AppBar(
                     title = TranslatableString.ResString(R.string.Cex_ChooseNetwork),
-                    navigationIcon = {
-                        HsBackButton(onClick = {
-                            onClose.invoke()
-                        })
-                    },
+                    navigationIcon = navigationIcon,
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),
