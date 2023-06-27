@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.CexNetwork
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -74,7 +75,7 @@ private fun NetworkCell(
         verticalPadding = 0.dp
     ) {
         CoinImage(
-            iconUrl = null,
+            iconUrl = item.blockchain?.type?.imageUrl,
             placeholder = R.drawable.ic_platform_placeholder_24,
             modifier = Modifier
                 .padding(vertical = 12.dp)
