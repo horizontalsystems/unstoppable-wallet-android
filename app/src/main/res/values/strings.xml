@@ -1673,6 +1673,7 @@
     <string name="Cex_ChooseCoin">Choose Coin</string>
     <string name="Cex_ChooseNetwork">Choose Network</string>
     <string name="Cex_ChooseNetwork_Description">Choose a network and get an address to deposit.</string>
+    <string name="Cex_SelectCoin_Search">Name or code</string>
 
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Title">Withdraw %s</string>
