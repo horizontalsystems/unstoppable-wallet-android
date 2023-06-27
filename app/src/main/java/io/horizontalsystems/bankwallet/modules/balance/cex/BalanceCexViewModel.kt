@@ -11,7 +11,15 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
 import io.horizontalsystems.bankwallet.core.providers.ICexProvider
-import io.horizontalsystems.bankwallet.modules.balance.*
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewHelper
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
+import io.horizontalsystems.bankwallet.modules.balance.ITotalBalance
+import io.horizontalsystems.bankwallet.modules.balance.TotalBalance
+import io.horizontalsystems.bankwallet.modules.balance.TotalService
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -74,6 +82,13 @@ class BalanceCexViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             cexProviderManager.cexProviderFlow.collect {
                 handleCexProvider(it)
+            }
+        }
+
+        viewModelScope.launch {
+            totalBalance.stateFlow.collect {
+                refreshViewItems()
+                emitState()
             }
         }
 
@@ -211,13 +226,6 @@ class BalanceCexViewModel(
     override fun onCleared() {
         totalBalance.stop()
         balanceCexRepository.stop()
-    }
-
-    override fun toggleBalanceVisibility() {
-        totalBalance.toggleBalanceVisibility()
-        refreshViewItems()
-
-        emitState()
     }
 
     fun onSelectSortType(sortType: BalanceSortType) {
