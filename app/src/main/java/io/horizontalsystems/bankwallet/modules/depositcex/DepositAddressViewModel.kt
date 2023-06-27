@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 
 class DepositAddressViewModel(
     private val cexAsset: CexAsset,
+    private val networkId: String?,
     private val cexProviderManager: CexProviderManager
 ) : ViewModel() {
     private val cexProvider = cexProviderManager.cexProviderFlow.value
@@ -34,7 +35,7 @@ class DepositAddressViewModel(
         emitState()
 
         viewModelScope.launch(Dispatchers.IO) {
-            address = cexProvider?.getAddress(cexAsset.id, null)
+            address = cexProvider?.getAddress(cexAsset.id, networkId)
             loading = false
             emitState()
         }
@@ -47,10 +48,10 @@ class DepositAddressViewModel(
         )
     }
 
-    class Factory(private val cexAsset: CexAsset) : ViewModelProvider.Factory {
+    class Factory(private val cexAsset: CexAsset, private val networkId: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DepositAddressViewModel(cexAsset, App.cexProviderManager) as T
+            return DepositAddressViewModel(cexAsset, networkId, App.cexProviderManager) as T
         }
     }
 }
