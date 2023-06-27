@@ -6,12 +6,14 @@ import androidx.compose.runtime.setValue
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
 interface ITotalBalance {
     val balanceHidden: Boolean
     val totalUiState: TotalUIState
+    val stateFlow: StateFlow<TotalService.State>
 
     fun toggleBalanceVisibility()
     fun toggleTotalType()
@@ -28,6 +30,9 @@ class TotalBalance(
 
     override var totalUiState by mutableStateOf(createTotalUIState())
         private set
+
+    override val stateFlow: StateFlow<TotalService.State>
+        get() = totalService.stateFlow
 
     fun start(viewModelScope: CoroutineScope) {
         viewModelScope.launch {

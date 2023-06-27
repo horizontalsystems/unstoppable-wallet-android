@@ -60,6 +60,12 @@ class BalanceViewModel(
         }
 
         viewModelScope.launch {
+            totalBalance.stateFlow.collect {
+                refreshViewItems(service.balanceItemsFlow.value)
+            }
+        }
+
+        viewModelScope.launch {
             balanceViewTypeManager.balanceViewTypeFlow.collect {
                 handleUpdatedBalanceViewType(it)
             }
@@ -124,17 +130,6 @@ class BalanceViewModel(
     override fun onCleared() {
         totalBalance.stop()
         service.clear()
-    }
-
-    override fun toggleBalanceVisibility() {
-        totalBalance.toggleBalanceVisibility()
-        viewModelScope.launch {
-            service.balanceItemsFlow.value?.let { refreshViewItems(it) }
-        }
-    }
-
-    override fun toggleTotalType() {
-        totalBalance.toggleTotalType()
     }
 
     fun onItem(viewItem: BalanceViewItem) {
