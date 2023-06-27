@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.providers
 
 import android.os.Parcelable
+import androidx.room.Entity
 import com.binance.connector.client.impl.SpotClientImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -55,8 +56,10 @@ interface ICexProvider {
     suspend fun getAddress(assetId: String, networkId: String?): CexAddress
 }
 
+@Entity(primaryKeys = ["id", "accountId"])
 data class CexAssetRaw(
     val id: String,
+    val accountId: String,
     val name: String,
     val freeBalance: BigDecimal,
     val lockedBalance: BigDecimal,
@@ -156,6 +159,7 @@ class CoinzixCexProvider(
                 val withdrawEnabled = it.currency.withdraw == 1
                 CexAssetRaw(
                     id = assetId,
+                    accountId = account.id,
                     name = it.currency.name,
                     freeBalance = it.balance_available.movePointLeft(decimals),
                     lockedBalance = (it.balance - it.balance_available).movePointLeft(decimals),
@@ -229,6 +233,7 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
                 val assetId = it.coin
                 CexAssetRaw(
                     id = assetId,
+                    accountId = account.id,
                     name = it.name,
                     freeBalance = it.free,
                     lockedBalance = it.freeze,
