@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.providers.ICexProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import java.math.BigDecimal
 
 class BalanceCexRepositoryWrapper(private val cexAssetManager: CexAssetManager) {
     val itemsFlow = MutableStateFlow<List<CexAsset>?>(null)
@@ -29,6 +30,7 @@ class BalanceCexRepositoryWrapper(private val cexAssetManager: CexAssetManager) 
                 cexAssetManager.saveAll(provider.getAssets(), provider.account)
                 itemsFlow.update {
                     cexAssetManager.getAll(provider.account)
+                        .filter { it.freeBalance > BigDecimal.ZERO || it.lockedBalance > BigDecimal.ZERO }
                 }
             } catch (t: Throwable) {
 
@@ -42,6 +44,7 @@ class BalanceCexRepositoryWrapper(private val cexAssetManager: CexAssetManager) 
         itemsFlow.update {
             cexProvider?.let {
                 cexAssetManager.getAll(it.account)
+                    .filter { it.freeBalance > BigDecimal.ZERO || it.lockedBalance > BigDecimal.ZERO }
             }
         }
 
