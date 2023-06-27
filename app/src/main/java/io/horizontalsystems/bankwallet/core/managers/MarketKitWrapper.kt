@@ -51,6 +51,8 @@ class MarketKitWrapper(
 
     fun tokens(blockchainType: BlockchainType, filter: String, limit: Int = 20) = marketKit.tokens(blockchainType, filter, limit)
 
+    fun allBlockchains() = marketKit.allBlockchains()
+
     fun blockchains(uids: List<String>) = marketKit.blockchains(uids)
 
     fun blockchain(uid: String) = marketKit.blockchain(uid)
