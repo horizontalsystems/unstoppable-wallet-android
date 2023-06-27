@@ -188,6 +188,8 @@ class BalanceCexViewModel(
             assetId = cexAsset.id,
             cexAsset = cexAsset,
             coinPrice = latestRate,
+            depositEnabled = cexAsset.depositEnabled,
+            withdrawEnabled = cexAsset.withdrawEnabled,
         )
     }
 
@@ -279,7 +281,9 @@ data class BalanceCexViewItem(
     val coinUid: String?,
     val assetId: String,
     val coinPrice: CoinPrice?,
-    val cexAsset: CexAsset
+    val cexAsset: CexAsset,
+    val depositEnabled: Boolean,
+    val withdrawEnabled: Boolean
 ) {
     val fiatValue by lazy { coinPrice?.value?.let { cexAsset.freeBalance.times(it) } }
 }
