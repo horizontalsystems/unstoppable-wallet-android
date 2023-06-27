@@ -33,9 +33,10 @@ fun DepositQrCodeScreen(
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
     cexAsset: CexAsset,
+    networkId: String?
 ) {
     val viewModel =
-        viewModel<DepositAddressViewModel>(factory = DepositAddressViewModel.Factory(cexAsset))
+        viewModel<DepositAddressViewModel>(factory = DepositAddressViewModel.Factory(cexAsset, networkId))
 
     val uiState = viewModel.uiState
 

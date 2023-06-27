@@ -13,14 +13,18 @@ import androidx.navigation.findNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.providers.CexAsset
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 class DepositCexFragment : BaseFragment() {
 
     companion object {
-        fun args(cexAsset: CexAsset): Bundle {
-            return bundleOf("cexAsset" to cexAsset)
+        fun args(cexAsset: CexAsset, networkId: String? = null): Bundle {
+            return bundleOf(
+                "cexAsset" to cexAsset,
+                "cexNetworkId" to networkId,
+            )
         }
     }
 
@@ -31,6 +35,7 @@ class DepositCexFragment : BaseFragment() {
     ): View {
 
         val cexAsset = arguments?.getParcelable<CexAsset>("cexAsset")
+        val networkId = arguments?.getString("cexNetworkId")
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -42,11 +47,26 @@ class DepositCexFragment : BaseFragment() {
                     val navController = findNavController()
 
                     if (cexAsset != null) {
-                        DepositQrCodeScreen(
-                            cexAsset = cexAsset,
-                            onNavigateBack = { navController.popBackStack() },
-                            onClose = { navController.popBackStack() },
-                        )
+                        val networks = cexAsset.networks
+                        if (networks.isEmpty() || networkId != null) {
+                            DepositQrCodeScreen(
+                                cexAsset = cexAsset,
+                                onNavigateBack = { navController.popBackStack() },
+                                onClose = { navController.popBackStack() },
+                                networkId = networkId
+                            )
+                        } else {
+                            SelectNetworkScreen(
+                                networks = networks,
+                                onClose = {
+                                    navController.popBackStack()
+                                },
+                                onSelectNetwork = {
+                                    navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it.network))
+                                }
+                            )
+                        }
+
                     } else {
                         val view = LocalView.current
                         HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
