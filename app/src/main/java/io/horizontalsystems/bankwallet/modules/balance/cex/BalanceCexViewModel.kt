@@ -11,7 +11,15 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.ICexProvider
-import cash.p.terminal.modules.balance.*
+import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.modules.balance.BalanceViewHelper
+import cash.p.terminal.modules.balance.BalanceViewType
+import cash.p.terminal.modules.balance.BalanceViewTypeManager
+import cash.p.terminal.modules.balance.BalanceXRateRepository
+import cash.p.terminal.modules.balance.DeemedValue
+import cash.p.terminal.modules.balance.ITotalBalance
+import cash.p.terminal.modules.balance.TotalBalance
+import cash.p.terminal.modules.balance.TotalService
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -74,6 +82,13 @@ class BalanceCexViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             cexProviderManager.cexProviderFlow.collect {
                 handleCexProvider(it)
+            }
+        }
+
+        viewModelScope.launch {
+            totalBalance.stateFlow.collect {
+                refreshViewItems()
+                emitState()
             }
         }
 
@@ -211,13 +226,6 @@ class BalanceCexViewModel(
     override fun onCleared() {
         totalBalance.stop()
         balanceCexRepository.stop()
-    }
-
-    override fun toggleBalanceVisibility() {
-        totalBalance.toggleBalanceVisibility()
-        refreshViewItems()
-
-        emitState()
     }
 
     fun onSelectSortType(sortType: BalanceSortType) {
