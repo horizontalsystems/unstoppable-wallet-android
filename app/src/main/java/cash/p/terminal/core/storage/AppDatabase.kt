@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import cash.p.terminal.core.providers.CexAssetRaw
 import cash.p.terminal.core.storage.migrations.*
 import cash.p.terminal.entities.*
 import cash.p.terminal.entities.nft.NftAssetBriefMetadataRecord
@@ -18,7 +19,7 @@ import cash.p.terminal.modules.walletconnect.entity.WalletConnectV2Session
 import cash.p.terminal.modules.walletconnect.storage.WC1SessionDao
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 51, exportSchema = false, entities = [
+@Database(version = 53, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -38,12 +39,14 @@ import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
     EvmAddressLabel::class,
     EvmMethodLabel::class,
     SyncerState::class,
-    TokenAutoEnabledBlockchain::class
+    TokenAutoEnabledBlockchain::class,
+    CexAssetRaw::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun cexAssetsDao(): CexAssetsDao
     abstract fun walletsDao(): EnabledWalletsDao
     abstract fun enabledWalletsCacheDao(): EnabledWalletsCacheDao
     abstract fun accountsDao(): AccountsDao
@@ -97,6 +100,8 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_48_49,
                             Migration_49_50,
                             Migration_50_51,
+                            Migration_51_52,
+                            Migration_52_53,
                     )
                     .build()
         }

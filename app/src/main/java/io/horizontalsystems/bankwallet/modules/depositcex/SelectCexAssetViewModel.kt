@@ -37,7 +37,7 @@ class SelectCexAssetViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             allItems = accountManager.activeAccount?.let {
-                cexAssetManager.getAll(it)
+                cexAssetManager.getAllForAccount(it)
                     .map { cexAsset ->
                         DepositCexModule.CexCoinViewItem(
                             title = cexAsset.id,
