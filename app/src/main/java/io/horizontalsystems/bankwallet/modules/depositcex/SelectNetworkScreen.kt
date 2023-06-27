@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexNetwork
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -74,7 +75,7 @@ private fun NetworkCell(
         verticalPadding = 0.dp
     ) {
         CoinImage(
-            iconUrl = null,
+            iconUrl = item.blockchain?.type?.imageUrl,
             placeholder = R.drawable.ic_platform_placeholder_24,
             modifier = Modifier
                 .padding(vertical = 12.dp)

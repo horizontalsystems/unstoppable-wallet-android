@@ -9,6 +9,7 @@ import cash.p.terminal.entities.Account
 class CexAssetManager(marketKit: MarketKitWrapper) {
 
     private val coins = marketKit.allCoins().map { it.uid to it }.toMap()
+    private val allBlockchains = marketKit.allBlockchains().map { it.uid to it }.toMap()
     private val storage = mutableMapOf<String, List<CexAssetRaw>>()
 
     private fun buildCexAsset(cexAssetRaw: CexAssetRaw): CexAsset {
@@ -32,7 +33,7 @@ class CexAssetManager(marketKit: MarketKitWrapper) {
             isDefault = cexNetworkRaw.isDefault,
             depositEnabled = cexNetworkRaw.depositEnabled,
             withdrawEnabled = cexNetworkRaw.withdrawEnabled,
-            blockchain = null,
+            blockchain = allBlockchains[cexNetworkRaw.blockchainUid],
         )
     }
 
