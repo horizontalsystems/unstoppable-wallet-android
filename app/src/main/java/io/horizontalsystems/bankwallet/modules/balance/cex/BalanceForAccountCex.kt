@@ -291,6 +291,7 @@ private fun ButtonsRowCex(viewItem: BalanceCexViewItem, navController: NavContro
         ButtonPrimaryYellow(
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Withdraw),
+            enabled = viewItem.withdrawEnabled,
             onClick = {
                 navController.slideFromBottom(R.id.withdrawCexFragment)
             },
@@ -299,6 +300,7 @@ private fun ButtonsRowCex(viewItem: BalanceCexViewItem, navController: NavContro
         ButtonPrimaryDefault(
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Deposit),
+            enabled = viewItem.depositEnabled,
             onClick = {
                 navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(viewItem.cexAsset))
             },
