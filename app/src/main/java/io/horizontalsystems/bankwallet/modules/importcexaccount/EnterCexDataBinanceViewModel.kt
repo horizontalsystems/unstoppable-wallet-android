@@ -69,8 +69,9 @@ class EnterCexDataBinanceViewModel : ViewModel() {
         val tmpApiKey = apiKey ?: return
         val tmpSecretKey = secretKey ?: return
         val cexType = CexType.Binance(tmpApiKey, tmpSecretKey)
+        val name = accountFactory.getNextCexAccountName(cexType)
 
-        val account = accountFactory.account("Binance Wallet", AccountType.Cex(cexType = cexType), AccountOrigin.Restored, true, false)
+        val account = accountFactory.account(name, AccountType.Cex(cexType = cexType), AccountOrigin.Restored, true, false)
 
         accountManager.save(account)
 

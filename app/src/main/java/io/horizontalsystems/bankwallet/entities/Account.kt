@@ -8,7 +8,11 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
-import io.horizontalsystems.hdwalletkit.*
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
+import io.horizontalsystems.hdwalletkit.HDWallet
+import io.horizontalsystems.hdwalletkit.Language
+import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.hdwalletkit.WordList
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -91,6 +95,20 @@ sealed class CexType : Parcelable {
     fun serialized() = when (this) {
         is Binance -> listOf("binance", apiKey, secretKey).joinToString(dataSeparator)
         is Coinzix -> listOf("coinzix", authToken, secret).joinToString(dataSeparator)
+    }
+
+    fun sameType(other: CexType): Boolean {
+        return when (this) {
+            is Binance -> other is Binance
+            is Coinzix -> other is Coinzix
+        }
+    }
+
+    fun name(): String {
+        return when (this) {
+            is Binance -> "Binance"
+            is Coinzix -> "Coinzix"
+        }
     }
 
     companion object {
