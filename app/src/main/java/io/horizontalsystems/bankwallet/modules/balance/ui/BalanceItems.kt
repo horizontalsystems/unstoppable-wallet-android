@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,9 +9,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -127,6 +130,7 @@ fun Note(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BalanceItems(
     balanceViewItems: List<BalanceViewItem>,
@@ -144,110 +148,132 @@ fun BalanceItems(
         }
     }
 
-    Column {
-        val context = LocalContext.current
+    val context = LocalContext.current
+    var revealedCardId by remember { mutableStateOf<Int?>(null) }
 
-        TotalBalanceRow(
-            totalState = totalState,
-            onClickTitle = {
-                viewModel.toggleBalanceVisibility()
-                HudHelper.vibrate(context)
-            },
-            onClickSubtitle = {
-                viewModel.toggleTotalType()
-                HudHelper.vibrate(context)
-            }
-        )
-
-        HeaderSorting(borderTop = true) {
-            BalanceSortingSelector(
-                sortType = viewModel.sortType,
-                sortTypes = viewModel.sortTypes
+    HSSwipeRefresh(
+        refreshing = uiState.isRefreshing,
+        onRefresh = viewModel::onRefresh
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = rememberSaveable(
+                accountViewItem.id,
+                viewModel.sortType,
+                saver = LazyListState.Saver
             ) {
-                viewModel.sortType = it
+                LazyListState()
             }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            if (accountViewItem.isWatchAccount) {
-                Image(
-                    painter = painterResource(R.drawable.icon_binocule_24),
-                    contentDescription = "binoculars icon"
-                )
-            } else {
-                ButtonSecondaryCircle(
-                    icon = R.drawable.ic_manage_2,
-                    contentDescription = stringResource(R.string.ManageCoins_title),
-                    onClick = {
-                        navController.slideFromRight(R.id.manageWalletsFragment)
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-        }
-
-        when (uiState.headerNote) {
-            HeaderNote.None -> Unit
-            HeaderNote.NonStandardAccount -> {
-                NoteError(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
-                    text = stringResource(R.string.AccountRecovery_MigrationRequired),
-                    onClick = {
-                        FaqManager.showFaqPage(
-                            navController,
-                            FaqManager.faqPathMigrationRequired
-                        )
-                    }
-                )
-            }
-            HeaderNote.NonRecommendedAccount -> {
-                NoteWarning(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
-                    text = stringResource(R.string.AccountRecovery_MigrationRecommended),
-                    onClick = {
-                        FaqManager.showFaqPage(
-                            navController,
-                            FaqManager.faqPathMigrationRecommended
-                        )
+        ) {
+            item {
+                TotalBalanceRow(
+                    totalState = totalState,
+                    onClickTitle = {
+                        viewModel.toggleBalanceVisibility()
+                        HudHelper.vibrate(context)
                     },
-                    onClose = {
-                        viewModel.onCloseHeaderNote(HeaderNote.NonRecommendedAccount)
+                    onClickSubtitle = {
+                        viewModel.toggleTotalType()
+                        HudHelper.vibrate(context)
                     }
                 )
             }
-        }
 
-        var revealedCardId by remember { mutableStateOf<Int?>(null) }
-        Wallets(
-            items = balanceViewItems,
-            key = {
-                it.wallet.hashCode()
-            },
-            accountId = accountViewItem.id,
-            sortType = viewModel.sortType,
-            refreshing = uiState.isRefreshing,
-            onRefresh = {
-                viewModel.onRefresh()
+            item {
+                Divider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                )
             }
-        ) { item ->
-            if (item.isWatchAccount) {
-                BalanceCard(item, viewModel, navController)
-            } else {
-                BalanceCardSwipable(
-                    viewItem = item,
-                    viewModel = viewModel,
-                    navController = navController,
-                    revealed = revealedCardId == item.wallet.hashCode(),
-                    onReveal = { walletHashCode ->
-                        if (revealedCardId != walletHashCode) {
-                            revealedCardId = walletHashCode
+
+            stickyHeader {
+                HeaderSorting {
+                    BalanceSortingSelector(
+                        sortType = viewModel.sortType,
+                        sortTypes = viewModel.sortTypes
+                    ) {
+                        viewModel.sortType = it
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    if (accountViewItem.isWatchAccount) {
+                        Image(
+                            painter = painterResource(R.drawable.icon_binocule_24),
+                            contentDescription = "binoculars icon"
+                        )
+                    } else {
+                        ButtonSecondaryCircle(
+                            icon = R.drawable.ic_manage_2,
+                            contentDescription = stringResource(R.string.ManageCoins_title),
+                            onClick = {
+                                navController.slideFromRight(R.id.manageWalletsFragment)
+                            }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
+            }
+
+            item {
+                when (uiState.headerNote) {
+                    HeaderNote.None -> Unit
+                    HeaderNote.NonStandardAccount -> {
+                        NoteError(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                            text = stringResource(R.string.AccountRecovery_MigrationRequired),
+                            onClick = {
+                                FaqManager.showFaqPage(
+                                    navController,
+                                    FaqManager.faqPathMigrationRequired
+                                )
+                            }
+                        )
+                    }
+
+                    HeaderNote.NonRecommendedAccount -> {
+                        NoteWarning(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                            text = stringResource(R.string.AccountRecovery_MigrationRecommended),
+                            onClick = {
+                                FaqManager.showFaqPage(
+                                    navController,
+                                    FaqManager.faqPathMigrationRecommended
+                                )
+                            },
+                            onClose = {
+                                viewModel.onCloseHeaderNote(HeaderNote.NonRecommendedAccount)
+                            }
+                        )
+                    }
+                }
+            }
+
+            wallets(
+                items = balanceViewItems,
+                key = {
+                    it.wallet.hashCode()
+                }
+            ) { item ->
+                if (item.isWatchAccount) {
+                    BalanceCard(item, viewModel, navController)
+                } else {
+                    BalanceCardSwipable(
+                        viewItem = item,
+                        viewModel = viewModel,
+                        navController = navController,
+                        revealed = revealedCardId == item.wallet.hashCode(),
+                        onReveal = { walletHashCode ->
+                            if (revealedCardId != walletHashCode) {
+                                revealedCardId = walletHashCode
+                            }
+                        },
+                        onConceal = {
+                            revealedCardId = null
                         }
-                    },
-                    onConceal = {
-                        revealedCardId = null
-                    },
-                )
+                    )
+                }
             }
         }
     }
@@ -312,34 +338,21 @@ fun TotalBalanceRow(
     }
 }
 
-@Composable
-fun <T> Wallets(
+fun <T> LazyListScope.wallets(
     items: List<T>,
     key: ((item: T) -> Any)? = null,
-    accountId: String,
-    sortType: BalanceSortType,
-    refreshing: Boolean,
-    onRefresh: () -> Unit,
-    itemContent: @Composable() (LazyItemScope.(item: T) -> Unit),
+    itemContent: @Composable (LazyItemScope.(item: T) -> Unit),
 ) {
-    HSSwipeRefresh(
-        refreshing = refreshing,
-        onRefresh = onRefresh
-    ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = rememberSaveable(
-                accountId,
-                sortType,
-                saver = LazyListState.Saver
-            ) {
-                LazyListState()
-            },
-            contentPadding = PaddingValues(top = 8.dp, bottom = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(items = items, key = key, itemContent = itemContent)
+    item {
+        VSpacer(height = 8.dp)
+    }
+    items(items = items, key = key, itemContent = {
+        Row(modifier = Modifier.padding(bottom = 8.dp)) {
+            itemContent(it)
         }
+    })
+    item {
+        VSpacer(height = 10.dp)
     }
 }
 

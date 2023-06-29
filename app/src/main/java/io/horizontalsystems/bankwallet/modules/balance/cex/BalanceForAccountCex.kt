@@ -1,16 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.balance.cex
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,13 +47,25 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceSortingSelector
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceTitleRow
 import io.horizontalsystems.bankwallet.modules.balance.ui.TotalBalanceRow
-import io.horizontalsystems.bankwallet.modules.balance.ui.Wallets
+import io.horizontalsystems.bankwallet.modules.balance.ui.wallets
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.depositcex.DepositCexFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.RateColor
+import io.horizontalsystems.bankwallet.ui.compose.components.RateText
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.core.helpers.HudHelper
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountViewItem) {
     val viewModel = viewModel<BalanceCexViewModel>(factory = BalanceModule.FactoryCex())
@@ -57,60 +88,85 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
         ) { paddingValues ->
             Column(Modifier.padding(paddingValues)) {
 
-                TotalBalanceRow(
-                    totalState = totalState,
-                    onClickTitle = {
-                        viewModel.toggleBalanceVisibility()
-                        HudHelper.vibrate(context)
-                    },
-                    onClickSubtitle = {
-                        viewModel.toggleTotalType()
-                        HudHelper.vibrate(context)
-                    }
-                )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, top = 4.dp, end = 24.dp, bottom = 16.dp)
-                ) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier.weight(1f),
-                        title = stringResource(R.string.Balance_Withdraw),
-                        onClick = {
-                            navController.slideFromBottom(R.id.withdrawCexFragment)
-                        },
-                    )
-
-                    HSpacer(width = 8.dp)
-
-                    ButtonPrimaryDefault(
-                        modifier = Modifier.weight(1f),
-                        title = stringResource(R.string.Balance_Deposit),
-                        onClick = {
-                            navController.slideFromRight(R.id.depositCexFragmentChooseAsset)
-                        }
-                    )
-                }
-
-                HeaderSorting(borderTop = true) {
-                    BalanceSortingSelector(
-                        sortType = uiState.sortType,
-                        sortTypes = viewModel.sortTypes,
-                        onSelectSortType = viewModel::onSelectSortType
-                    )
-                }
-
-                Wallets(
-                    items = uiState.viewItems,
-                    key = { it.assetId },
-                    accountId = accountViewItem.id,
-                    sortType = uiState.sortType,
+                HSSwipeRefresh(
                     refreshing = uiState.isRefreshing,
                     onRefresh = viewModel::onRefresh
-                ) { item ->
-                    BalanceCardCex(navController, item) {
-                        viewModel.onClickItem(item)
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = rememberSaveable(
+                            accountViewItem.id,
+                            uiState.sortType,
+                            saver = LazyListState.Saver
+                        ) {
+                            LazyListState()
+                        }
+                    ) {
+                        item {
+                            TotalBalanceRow(
+                                totalState = totalState,
+                                onClickTitle = {
+                                    viewModel.toggleBalanceVisibility()
+                                    HudHelper.vibrate(context)
+                                },
+                                onClickSubtitle = {
+                                    viewModel.toggleTotalType()
+                                    HudHelper.vibrate(context)
+                                }
+                            )
+                        }
+
+                        item {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 24.dp, top = 4.dp, end = 24.dp, bottom = 16.dp)
+                            ) {
+                                ButtonPrimaryYellow(
+                                    modifier = Modifier.weight(1f),
+                                    title = stringResource(R.string.Balance_Withdraw),
+                                    onClick = {
+                                        navController.slideFromBottom(R.id.withdrawCexFragment)
+                                    },
+                                )
+
+                                HSpacer(width = 8.dp)
+
+                                ButtonPrimaryDefault(
+                                    modifier = Modifier.weight(1f),
+                                    title = stringResource(R.string.Balance_Deposit),
+                                    onClick = {
+                                        navController.slideFromRight(R.id.depositCexFragmentChooseAsset)
+                                    }
+                                )
+                            }
+                        }
+
+                        item {
+                            Divider(
+                                thickness = 1.dp,
+                                color = ComposeAppTheme.colors.steel10,
+                            )
+                        }
+
+                        stickyHeader {
+                            HeaderSorting {
+                                BalanceSortingSelector(
+                                    sortType = uiState.sortType,
+                                    sortTypes = viewModel.sortTypes,
+                                    onSelectSortType = viewModel::onSelectSortType
+                                )
+                            }
+                        }
+
+                        wallets(
+                            items = uiState.viewItems,
+                            key = { it.assetId },
+                        ) { item ->
+                            BalanceCardCex(navController, item) {
+                                viewModel.onClickItem(item)
+                            }
+                        }
                     }
                 }
             }
