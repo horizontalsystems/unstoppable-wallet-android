@@ -2,14 +2,27 @@ package cash.p.terminal.modules.withdrawcex
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cash.p.terminal.core.App
+import cash.p.terminal.core.providers.CexAsset
+import cash.p.terminal.modules.amount.AmountValidator
+import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.modules.xrate.XRateService
 
 object WithdrawCexModule {
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val cexAsset: CexAsset) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WithdrawCexViewModel() as T
+            val amountValidator = AmountValidator()
+            val amountService = SendAmountService(amountValidator, cexAsset.id, cexAsset.freeBalance)
+
+            return WithdrawCexViewModel(
+                cexAsset,
+                XRateService(App.marketKit, App.currencyManager.baseCurrency),
+                amountService,
+                SendAddressService()
+            ) as T
         }
     }
 

@@ -1669,6 +1669,8 @@
     <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
     <string name="Contacts_Error_DefinedName">The name already exists</string>
 
+    <string name="Hud_Text_Connected">Connected</string>
+
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">Choose Coin</string>
     <string name="Cex_ChooseNetwork">Choose Network</string>
