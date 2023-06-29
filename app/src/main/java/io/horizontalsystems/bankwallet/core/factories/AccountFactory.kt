@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.CexType
 import java.util.UUID
 
 class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
@@ -43,5 +44,12 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
         val nonWatchAccountsCount = accountManager.accounts.count { !it.isWatchAccount }
 
         return "Wallet ${nonWatchAccountsCount + 1}"
+    }
+
+    override fun getNextCexAccountName(cexType: CexType): String {
+        val cexAccountsCount = accountManager.accounts.count {
+            it.type is AccountType.Cex && cexType.sameType(it.type.cexType) }
+
+        return "${cexType.name()} Wallet ${cexAccountsCount + 1}"
     }
 }
