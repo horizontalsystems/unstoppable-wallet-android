@@ -11,6 +11,7 @@ import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.AddressData
 import cash.p.terminal.entities.AppVersion
+import cash.p.terminal.entities.CexType
 import cash.p.terminal.entities.EnabledWallet
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.LaunchPage
@@ -156,6 +157,7 @@ interface IAccountFactory {
     fun watchAccount(name: String, type: AccountType): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
+    fun getNextCexAccountName(cexType: CexType): String
 }
 
 interface IWalletStorage {

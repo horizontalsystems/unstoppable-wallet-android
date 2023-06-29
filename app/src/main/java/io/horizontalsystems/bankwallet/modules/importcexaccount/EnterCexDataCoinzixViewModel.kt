@@ -45,9 +45,11 @@ class EnterCexDataCoinzixViewModel : ViewModel() {
 
         viewModelScope.launch {
             val login = coinzixCexApiService.login(tmpEmail, tmpPassword, token)
+            val cexType = CexType.Coinzix(login.token, login.data.secret)
+            val name = accountFactory.getNextCexAccountName(cexType)
             val account = accountFactory.account(
-                "Coinzix Wallet",
-                AccountType.Cex(CexType.Coinzix(login.token, login.data.secret)),
+                name,
+                AccountType.Cex(cexType),
                 AccountOrigin.Restored,
                 true,
                 false
