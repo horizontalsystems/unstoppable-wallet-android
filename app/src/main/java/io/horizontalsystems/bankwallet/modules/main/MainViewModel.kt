@@ -6,10 +6,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IBackupManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.IRateAppManager
+import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
@@ -35,7 +40,7 @@ class MainViewModel(
     private val disposables = CompositeDisposable()
     private var wc2PendingRequestsCount = 0
     private var marketsTabEnabled = localStorage.marketsTabEnabledFlow.value
-    private var transactionsEnabled = !accountManager.isAccountsEmpty
+    private var transactionsEnabled = isTransactionsTabEnabled()
     private var settingsBadge: MainModule.BadgeType? = null
     private val launchPage: LaunchPage
         get() = localStorage.launchPage ?: LaunchPage.Auto
@@ -130,6 +135,9 @@ class MainViewModel(
             updateSettingsBadge()
         })
 
+        disposables.add(accountManager.activeAccountObservable.subscribe {
+            updateTransactionsTabEnabled()
+        })
 
         wcDeepLink?.let {
             wcSupportState = wc1Manager.getWalletConnectSupportState()
@@ -147,6 +155,10 @@ class MainViewModel(
         updateTransactionsTabEnabled()
         showWhatsNew()
     }
+
+    private fun isTransactionsTabEnabled(): Boolean =
+        !accountManager.isAccountsEmpty && accountManager.activeAccount?.type !is AccountType.Cex
+
 
     override fun onCleared() {
         disposables.clear()
@@ -181,8 +193,8 @@ class MainViewModel(
         syncNavigation()
     }
 
-    fun updateTransactionsTabEnabled() {
-        transactionsEnabled = !accountManager.isAccountsEmpty
+    private fun updateTransactionsTabEnabled() {
+        transactionsEnabled = isTransactionsTabEnabled()
         syncNavigation()
     }
 
