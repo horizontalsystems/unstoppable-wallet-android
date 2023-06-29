@@ -14,33 +14,21 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
-import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessorImpl
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
-
-private val usd = Currency("USD", "$", 2, R.drawable.icon_32_flag_usa)
-private val currencyValue = CurrencyValue(usd, BigDecimal.ONE)
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -50,6 +38,13 @@ fun WithdrawCexScreen(
     openNetworkSelect: () -> Unit,
     openConfirm: () -> Unit,
 ) {
+    val amountInputModeViewModel = mainViewModel.cexAsset.coin?.uid?.let {
+        viewModel<AmountInputModeViewModel>(factory = AmountInputModeModule.Factory(it))
+    }
+
+    val amountInputType = amountInputModeViewModel?.inputType ?: AmountInputType.COIN
+    val cexAsset = mainViewModel.cexAsset
+    val uiState = mainViewModel.uiState
 
     val focusRequester = remember { FocusRequester() }
     val navController = rememberAnimatedNavController()
@@ -59,10 +54,10 @@ fun WithdrawCexScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.CexWithdraw_Title, "ETH"),
+                    title = TranslatableString.ResString(R.string.CexWithdraw_Title, cexAsset.id),
                     navigationIcon = {
                         CoinImage(
-                            iconUrl = "fullCoin.coin.imageUrl",
+                            iconUrl = cexAsset.coin?.imageUrl,
                             placeholder = R.drawable.coin_placeholder,
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
@@ -81,37 +76,39 @@ fun WithdrawCexScreen(
         ) {
             Column(modifier = Modifier.padding(it)) {
                 AvailableBalance(
-                    coinCode = "wallet.coin.code",
-                    coinDecimal = 18,
-                    fiatDecimal = 2,
-                    availableBalance = BigDecimal.TEN,
-                    amountInputType = AmountInputType.COIN,
-                    rate = currencyValue,
+                    coinCode = cexAsset.id,
+                    coinDecimal = mainViewModel.coinMaxAllowedDecimals,
+                    fiatDecimal = mainViewModel.fiatMaxAllowedDecimals,
+                    availableBalance = uiState.availableBalance,
+                    amountInputType = amountInputType,
+                    rate = mainViewModel.coinRate,
                 )
                 VSpacer(8.dp)
                 HSAmountInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     focusRequester = focusRequester,
-                    availableBalance = BigDecimal.TEN,
-                    caution = null,
-                    coinCode = "wallet.coin.code",
-                    coinDecimal = 18,
-                    fiatDecimal = 2,
+                    availableBalance = uiState.availableBalance ?: BigDecimal.ZERO,
+                    caution = uiState.amountCaution,
+                    coinCode = cexAsset.id,
+                    coinDecimal = mainViewModel.coinMaxAllowedDecimals,
+                    fiatDecimal = mainViewModel.fiatMaxAllowedDecimals,
                     onClickHint = {
-                        //amountInputModeViewModel.onToggleInputType()
+                        amountInputModeViewModel?.onToggleInputType()
                     },
                     onValueChange = {
-                        // viewModel.onEnterAmount(it)
+                         mainViewModel.onEnterAmount(it)
                     },
-                    inputType = AmountInputType.COIN,
-                    rate = currencyValue,
+                    inputType = amountInputType,
+                    rate = mainViewModel.coinRate,
                     amountUnique = null
                 )
-                VSpacer(16.dp)
-                NetworkInput(
-                    title = "Ethereum",
-                    onClick = openNetworkSelect
-                )
+                uiState.networkName?.let { networkName ->
+                    VSpacer(16.dp)
+                    NetworkInput(
+                        title = networkName,
+                        onClick = openNetworkSelect
+                    )
+                }
                 VSpacer(16.dp)
                 FormsInputAddress(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -126,7 +123,7 @@ fun WithdrawCexScreen(
                     chooseContactEnable = false,
                     blockchainType = BlockchainType.Ethereum,
                 ) {
-                    //viewModel.onEnterAddress(it)
+                    mainViewModel.onEnterAddress(it)
                 }
                 VSpacer(16.dp)
                 TextImportantWarning(
@@ -142,7 +139,7 @@ fun WithdrawCexScreen(
                     onClick = {
                         openConfirm.invoke()
                     },
-                    enabled = true
+                    enabled = uiState.canBeSend
                 )
                 VSpacer(24.dp)
             }
