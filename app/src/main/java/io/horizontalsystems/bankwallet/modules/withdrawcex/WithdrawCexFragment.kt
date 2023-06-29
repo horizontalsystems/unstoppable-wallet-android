@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -16,9 +19,11 @@ import androidx.navigation.findNavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
+import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.modules.settings.about.*
 import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexConfirmScreen
 import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexScreen
@@ -26,13 +31,12 @@ import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexSecurit
 import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexSelectNetworkScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.core.helpers.HudHelper
 
 class WithdrawCexFragment : BaseFragment() {
 
     companion object {
-        fun args(blockchainType: String): Bundle {
-            return bundleOf("blockchain_type" to blockchainType)
-        }
+        fun args(cexAsset: CexAsset) = bundleOf("cexAsset" to cexAsset)
     }
 
     override fun onCreateView(
@@ -40,8 +44,7 @@ class WithdrawCexFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val blockchainType = arguments?.getString("blockchain_type")
+        val cexAsset = arguments?.getParcelable<CexAsset>("cexAsset")
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -50,7 +53,18 @@ class WithdrawCexFragment : BaseFragment() {
 
             setContent {
                 ComposeAppTheme {
-                    WithdrawCexNavHost(findNavController(), blockchainType)
+                    val navController = findNavController()
+
+                    if (cexAsset != null) {
+                        WithdrawCexNavHost(navController, cexAsset)
+                    } else {
+                        val view = LocalView.current
+                        HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
+
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack()
+                        }
+                    }
                 }
             }
         }
@@ -63,9 +77,9 @@ class WithdrawCexFragment : BaseFragment() {
 @Composable
 fun WithdrawCexNavHost(
     fragmentNavController: NavController,
-    blockchainType: String?,
+    cexAsset: CexAsset,
 ) {
-    val viewModel: WithdrawCexViewModel = viewModel(factory = WithdrawCexModule.Factory())
+    val viewModel: WithdrawCexViewModel = viewModel(factory = WithdrawCexModule.Factory(cexAsset))
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(
