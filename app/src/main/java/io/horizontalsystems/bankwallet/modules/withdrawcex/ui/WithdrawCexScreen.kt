@@ -106,6 +106,7 @@ fun WithdrawCexScreen(
                     VSpacer(16.dp)
                     NetworkInput(
                         title = networkName,
+                        networkSelectionEnabled = mainViewModel.networkSelectionEnabled,
                         onClick = openNetworkSelect
                     )
                 }
@@ -150,6 +151,7 @@ fun WithdrawCexScreen(
 @Composable
 private fun NetworkInput(
     title: String,
+    networkSelectionEnabled: Boolean,
     onClick: () -> Unit
 ) {
     CellUniversalLawrenceSection(
@@ -158,7 +160,7 @@ private fun NetworkInput(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                onClick = onClick
+                onClick = if (networkSelectionEnabled) onClick else null
             ) {
                 subhead2_grey(
                     text = stringResource(R.string.CexWithdraw_Network),
@@ -168,11 +170,13 @@ private fun NetworkInput(
                     text = title,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
-                )
+                if (networkSelectionEnabled) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_down_arrow_20),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.grey
+                    )
+                }
             }
         }
     )

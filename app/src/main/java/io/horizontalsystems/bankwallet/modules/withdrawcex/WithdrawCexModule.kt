@@ -6,7 +6,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
-import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.xrate.XRateService
 
 object WithdrawCexModule {
@@ -25,12 +24,6 @@ object WithdrawCexModule {
             ) as T
         }
     }
-
-    data class NetworkViewItem(
-        val title: String,
-        val imageSource: ImageSource,
-        val selected: Boolean,
-    )
 
     sealed class CodeGetButtonState{
         object Active : CodeGetButtonState()
