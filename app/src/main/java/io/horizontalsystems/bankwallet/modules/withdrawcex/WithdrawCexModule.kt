@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object WithdrawCexModule {
@@ -25,12 +24,6 @@ object WithdrawCexModule {
             ) as T
         }
     }
-
-    data class NetworkViewItem(
-        val title: String,
-        val imageSource: ImageSource,
-        val selected: Boolean,
-    )
 
     sealed class CodeGetButtonState{
         object Active : CodeGetButtonState()

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
+import io.horizontalsystems.bankwallet.core.providers.CexNetwork
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -20,24 +21,23 @@ class WithdrawCexViewModel(
     private val amountService: SendAmountService,
     private val addressService: SendAddressService
 ) : ViewModel() {
-    private var address: String? = null
-
     private val coinUid = cexAsset.coin?.uid
 
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val coinMaxAllowedDecimals = cexAsset.decimals
-
-    private var networkName = cexAsset.networks.firstOrNull()?.name
+    val networks = cexAsset.networks.filter { it.withdrawEnabled }
+    val networkSelectionEnabled = networks.size > 1
 
     var coinRate by mutableStateOf(coinUid?.let { xRateService.getRate(it) })
         private set
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
+    private var network: CexNetwork? = networks.firstOrNull()
 
     var uiState by mutableStateOf(
         WithdrawCexUiState(
-            networkName = networkName,
+            networkName = network?.name,
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
@@ -83,7 +83,7 @@ class WithdrawCexViewModel(
     private fun emitState() {
         viewModelScope.launch {
             uiState = WithdrawCexUiState(
-                networkName = networkName,
+                networkName = network?.name,
                 availableBalance = amountState.availableBalance,
                 amountCaution = amountState.amountCaution,
                 addressError = addressState.addressError,
@@ -98,6 +98,12 @@ class WithdrawCexViewModel(
 
     fun onEnterAddress(v: String) {
         addressService.setAddress(Address(v))
+    }
+
+    fun onSelectNetwork(network: CexNetwork) {
+        this.network = network
+
+        emitState()
     }
 }
 
