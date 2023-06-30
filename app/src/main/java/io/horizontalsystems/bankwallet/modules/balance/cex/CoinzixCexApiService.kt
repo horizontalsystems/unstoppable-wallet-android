@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bitcoincore.utils.HashUtils
+import kotlinx.coroutines.delay
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -62,6 +63,34 @@ class CoinzixCexApiService {
         )
         return address.data
     }
+
+    suspend fun withdraw(
+        authToken: String,
+        secret: String,
+        iso: String,
+        network: String?,
+        address: String,
+        amount: BigDecimal
+    ): String {
+        delay(300)
+
+        return "1"
+//        val params = buildMap {
+//            put("iso", iso)
+//            put("to_address", address)
+//            put("amount", amount.toPlainString())
+//            network?.let {
+//                put("network", it)
+//            }
+//        }
+//        val address = post<Response.Address>(
+//            path = "/v1/withdraw",
+//            authToken = authToken,
+//            secret = secret,
+//            params = params
+//        )
+    }
+
 
     private suspend inline fun <reified T> post(
         path: String,
