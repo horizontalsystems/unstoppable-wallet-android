@@ -16,11 +16,13 @@ object WithdrawCexModule {
             val amountValidator = AmountValidator()
             val amountService = SendAmountService(amountValidator, cexAsset.id, cexAsset.freeBalance)
 
+            val cexProvider = App.cexProviderManager.cexProviderFlow.value
             return WithdrawCexViewModel(
                 cexAsset,
                 XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 amountService,
-                SendAddressService()
+                SendAddressService(),
+                cexProvider
             ) as T
         }
     }

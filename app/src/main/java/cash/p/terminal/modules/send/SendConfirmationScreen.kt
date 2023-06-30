@@ -1,14 +1,7 @@
 package cash.p.terminal.modules.send
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -31,20 +24,7 @@ import cash.p.terminal.modules.fee.HSFeeInputRaw
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.SectionTitleCell
-import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
-import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
-import cash.p.terminal.ui.compose.components.subhead1Italic_leah
-import cash.p.terminal.ui.compose.components.subhead1_grey
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hodler.LockTimeInterval
@@ -149,7 +129,7 @@ fun SendConfirmationScreen(
                                     .getFormattedFull()
                             }
 
-                            ConfirmAmountCell(currencyAmount, coinAmount, coin)
+                            ConfirmAmountCell(currencyAmount, coinAmount, coin.imageUrl)
                         }
                         add {
                             TransactionInfoAddressCell(
@@ -241,12 +221,12 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
 }
 
 @Composable
-fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
+fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, iconUrl: String?) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
-            iconUrl = coin.imageUrl,
+            iconUrl = iconUrl,
             placeholder = R.drawable.coin_placeholder,
             modifier = Modifier.size(32.dp)
         )

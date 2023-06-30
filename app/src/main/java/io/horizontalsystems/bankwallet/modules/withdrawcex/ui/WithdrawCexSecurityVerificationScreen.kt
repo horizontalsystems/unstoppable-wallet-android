@@ -7,34 +7,29 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.withdrawcex.WithdrawCexModule.CodeGetButtonState
-import cash.p.terminal.modules.withdrawcex.WithdrawCexViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.*
 
 @Composable
 fun WithdrawCexSecurityVerificationScreen(
-    mainViewModel: WithdrawCexViewModel,
+    withdrawId: String,
     onNavigateBack: () -> Unit,
     onClose: () -> Unit
 ) {
+    val viewModel = viewModel {
+        CexWithdrawVerificationViewModel(withdrawId)
+    }
+
     var actionButtonState by remember { mutableStateOf<CodeGetButtonState>(CodeGetButtonState.Active) }
     ComposeAppTheme {
         Scaffold(
@@ -70,7 +65,7 @@ fun WithdrawCexSecurityVerificationScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         actionButtonState = actionButtonState,
                         onValueChange = {
-                            /*TODO*/
+                            viewModel.onEnterEmailCode(it)
                         },
                         actionButtonClick = {
                             actionButtonState = CodeGetButtonState.Pending(30)
@@ -87,7 +82,7 @@ fun WithdrawCexSecurityVerificationScreen(
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
-                            /*TODO*/
+                            viewModel.onEnter2FaCode(it)
                         },
                     )
                     InfoText(
@@ -103,9 +98,9 @@ fun WithdrawCexSecurityVerificationScreen(
                             .padding(horizontal = 16.dp),
                         title = stringResource(R.string.Button_Submit),
                         onClick = {
-                            //openConfirm.invoke()
+                            viewModel.submit()
                         },
-                        enabled = true
+                        enabled = viewModel.submitEnabled
                     )
                 }
             }
