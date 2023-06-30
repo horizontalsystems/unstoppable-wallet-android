@@ -108,18 +108,22 @@ fun WithdrawCexNavHost(
             WithdrawCexConfirmScreen(
                 mainViewModel = viewModel,
                 openVerification = {
-                    navController.navigate("withdraw-verification")
+                    navController.navigate("withdraw-verification/$it")
                 },
                 onNavigateBack = { navController.popBackStack() },
                 onClose = { fragmentNavController.popBackStack() },
             )
         }
-        composablePage("withdraw-verification") {
-            WithdrawCexSecurityVerificationScreen(
-                mainViewModel = viewModel,
-                onNavigateBack = { navController.popBackStack() },
-                onClose = { fragmentNavController.popBackStack() },
-            )
+        composablePage("withdraw-verification/{withdrawId}") { backStackEntry ->
+            val withdrawId = backStackEntry.arguments?.getString("withdrawId")
+
+            withdrawId?.let {
+                WithdrawCexSecurityVerificationScreen(
+                    withdrawId = withdrawId,
+                    onNavigateBack = { navController.popBackStack() }
+                ) { fragmentNavController.popBackStack() }
+            }
+
         }
     }
 }
