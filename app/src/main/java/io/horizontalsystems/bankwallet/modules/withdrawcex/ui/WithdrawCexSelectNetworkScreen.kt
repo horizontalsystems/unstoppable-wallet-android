@@ -48,6 +48,7 @@ fun WithdrawCexSelectNetworkScreen(
                         iconUrl = network.blockchain?.type?.imageUrl,
                         title = network.network,
                         selected = network.name == mainViewModel.uiState.networkName,
+                        enabled = network.withdrawEnabled
                     ) {
                         mainViewModel.onSelectNetwork(network)
                         onNavigateBack.invoke()
@@ -64,10 +65,11 @@ private fun NetworkCell(
     iconUrl: String?,
     title: String,
     selected: Boolean,
+    enabled: Boolean,
     onItemClick: () -> Unit,
 ) {
     RowUniversal(
-        onClick = onItemClick,
+        onClick = if (enabled) onItemClick else null,
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalPadding = 0.dp
     ) {
@@ -96,6 +98,9 @@ private fun NetworkCell(
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.jacob
             )
+        }
+        if (!enabled) {
+            Badge(text = stringResource(R.string.Suspended))
         }
     }
 }
