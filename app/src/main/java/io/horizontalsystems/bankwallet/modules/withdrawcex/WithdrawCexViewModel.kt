@@ -29,7 +29,7 @@ class WithdrawCexViewModel(
 
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val coinMaxAllowedDecimals = cexAsset.decimals
-    val networks = cexAsset.networks.filter { it.withdrawEnabled }
+    val networks = cexAsset.networks
     val networkSelectionEnabled = networks.size > 1
 
     var coinRate by mutableStateOf(coinUid?.let { xRateService.getRate(it) })
@@ -37,7 +37,7 @@ class WithdrawCexViewModel(
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-    private var network: CexNetwork? = networks.firstOrNull()
+    private var network = networks.find { it.withdrawEnabled }
 
     var uiState by mutableStateOf(
         WithdrawCexUiState(
