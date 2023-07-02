@@ -793,4 +793,9 @@
     <!--Contacts-->
     <string name="Contacts_NameHint">نام</string>
     <string name="Contacts_AddressHint">آدرس یا دامنه</string>
+    <!--Cex Deposit Module-->
+    <string name="Cex_ChooseCoin">سکه را انتخاب کنید</string>
+    <string name="CexDeposit_Network">خالص</string>
+    <!--Cex Withdraw Module-->
+    <string name="CexWithdraw_Network">خالص</string>
 </resources>
