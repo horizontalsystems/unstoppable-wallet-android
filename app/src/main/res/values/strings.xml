@@ -1681,6 +1681,7 @@
     <string name="CexDeposit_MemoWarning">Memo (tag) is required, or your will lose your coins.\n\nSend only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
     <string name="CexDeposit_Important">Important</string>
     <string name="CexDeposit_MemoAlertText">Both a memo (tag) and the address are needed to ensure that assets are received. Otherwise your funds will be lost.</string>
+    <string name="Cex_Error_FailedToConnectApiKey">Failed to connect your Api Key</string>
 
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Title">Withdraw %s</string>
