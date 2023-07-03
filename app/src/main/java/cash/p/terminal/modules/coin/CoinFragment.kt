@@ -26,7 +26,6 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsScreen
 import cash.p.terminal.modules.coin.coinmarkets.CoinMarketsScreen
 import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen
-import cash.p.terminal.modules.coin.tweets.CoinTweetsScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
@@ -144,7 +143,7 @@ fun CoinTabs(
         val tabItems = tabs.map {
             TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
         }
-        ScrollableTabs(tabItems, onClick = {
+        Tabs(tabItems, onClick = {
             coroutineScope.launch {
                 pagerState.scrollToPage(it.ordinal)
             }
@@ -172,9 +171,9 @@ fun CoinTabs(
                         fragmentManager = fragmentManager
                     )
                 }
-                CoinModule.Tab.Tweets -> {
-                    CoinTweetsScreen(fullCoin = viewModel.fullCoin)
-                }
+//                CoinModule.Tab.Tweets -> {
+//                    CoinTweetsScreen(fullCoin = viewModel.fullCoin)
+//                }
             }
         }
 
