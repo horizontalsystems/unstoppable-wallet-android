@@ -102,7 +102,7 @@ fun TokenVariants(
                         )
                     } else {
                         ButtonSecondaryCircle(
-                            icon = R.drawable.ic_add_to_wallet_2_24,
+                            icon = R.drawable.ic_add_to_wallet_20,
                             contentDescription = stringResource(R.string.CoinPage_AddToWallet),
                             onClick = {
                                 onClickAddToWallet.invoke(tokenVariant.configuredToken)
