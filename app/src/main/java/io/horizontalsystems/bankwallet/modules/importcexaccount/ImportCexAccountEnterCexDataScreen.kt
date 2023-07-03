@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -188,6 +189,7 @@ private fun ImportBinanceCexAccountScreen(
     val secretKey = uiState.secretKey
     val errorMessage = uiState.errorMessage
     val connectEnabled = uiState.connectEnabled
+    val uriHandler = LocalUriHandler.current
 
     if (accountCreated) {
         LaunchedEffect(Unit) {
@@ -272,7 +274,7 @@ private fun ImportBinanceCexAccountScreen(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_GetApiKeys),
                         onClick = {
-
+                            uriHandler.openUri("https://www.binance.com/en/my/settings/api-management")
                         }
                     )
                 }
