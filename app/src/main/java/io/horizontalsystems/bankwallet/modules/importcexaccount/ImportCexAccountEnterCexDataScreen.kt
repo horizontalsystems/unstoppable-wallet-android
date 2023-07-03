@@ -35,7 +35,6 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui.compose.components.FormsInputPassword
@@ -261,10 +260,11 @@ private fun ImportBinanceCexAccountScreen(
             }
             ButtonsGroupWithShade {
                 Column(Modifier.padding(horizontal = 24.dp)) {
-                    ButtonPrimaryYellow(
+                    ButtonPrimaryYellowWithSpinner(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
                         enabled = connectEnabled,
+                        showSpinner = uiState.showSpinner,
                         onClick = {
                             viewModel.onClickConnect()
                         },

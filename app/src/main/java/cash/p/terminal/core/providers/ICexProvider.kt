@@ -2,6 +2,7 @@ package cash.p.terminal.core.providers
 
 import android.os.Parcelable
 import androidx.room.Entity
+import com.binance.connector.client.exceptions.BinanceClientException
 import com.binance.connector.client.impl.SpotClientImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -143,9 +144,11 @@ class CoinzixCexProvider(
             addressData.address != null -> {
                 CexAddress(addressData.address, "")
             }
+
             addressData.account != null -> {
                 CexAddress(addressData.account, addressData.memo ?: "")
             }
+
             else -> {
                 throw Exception()
             }
@@ -316,5 +319,14 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
         val tag: String,
         val url: String,
     )
+
+    companion object {
+        @Throws(BinanceClientException::class)
+        fun validate(apiKey: String, secretKey: String) {
+            val client = SpotClientImpl(apiKey, secretKey)
+            val wallet = client.createWallet()
+            wallet.coinInfo(mutableMapOf())
+        }
+    }
 
 }
