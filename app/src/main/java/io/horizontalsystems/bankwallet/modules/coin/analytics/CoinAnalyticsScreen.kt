@@ -12,7 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
@@ -48,7 +48,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.bankwallet.ui.compose.components.StackedBarChart
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
@@ -60,7 +59,7 @@ fun CoinAnalyticsScreen(
     val viewModel = viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
 
     val uiState = viewModel.uiState
-    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     HSSwipeRefresh(
         refreshing = uiState.isRefreshing,
@@ -84,7 +83,7 @@ fun CoinAnalyticsScreen(
                                 previewBlocks = item.blocks,
                                 subscriptionAddress = item.subscriptionAddress,
                                 onClickLearnMore = {
-                                    LinkHelper.openLinkInAppBrowser(context, viewModel.analyticsLink)
+                                    uriHandler.openUri(viewModel.analyticsLink)
                                 },
                                 onClickActivate = {
                                     navController.slideFromBottom(R.id.activateSubscription, ActivateSubscriptionFragment.prepareParams(it))
