@@ -72,7 +72,7 @@ class CoinzixCexApiService {
         address: String,
         amount: BigDecimal
     ): String {
-        delay(300)
+        delay(1000)
 
         return "1"
 //        val params = buildMap {
@@ -91,6 +91,9 @@ class CoinzixCexApiService {
 //        )
     }
 
+    suspend fun confirmWithdraw(withdrawId: String, emailCode: String, twoFactorCode: String?) {
+        delay(1000)
+    }
 
     private suspend inline fun <reified T> post(
         path: String,
