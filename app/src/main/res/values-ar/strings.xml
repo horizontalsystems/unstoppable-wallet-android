@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Common-->
+    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <!--Intro-->
+    <!--Rooted Device-->
+    <!--Welcome-->
+    <!--Create Wallet-->
+    <!--Languages-->
+    <!--Rate App-->
+    <!--Restore-->
+    <!--Backup-->
+    <!--Market-->
+    <!--Market Overview-->
+    <!--Market Top Platforms-->
+    <!--Market Global Metrics-->
+    <!--Market Search-->
+    <!--Coin Markets-->
+    <!--TVL Rank-->
+    <!--Balance-->
+    <!--Send NFT-->
+    <!--Send-->
+    <!-- Send Evm Settings -->
+    <!-- Fee Settings -->
+    <!--Fee Info -->
+    <!--Tron-->
+    <!--WalletConnect-->
+    <!--EthereumTransaction-->
+    <!--Swap-->
+    <!-- Swap Settings -->
+    <!-- Swap Confirmation -->
+    <!--Approve-->
+    <!--Uniswap Info -->
+    <!--Deposit-->
+    <!--Transactions-->
+    <!--Transaction Info-->
+    <!-- Transaction Info Options -->
+    <!-- Info -->
+    <!--Guides-->
+    <!--Markdown-->
+    <!--Setting_Currency-->
+    <!--Settings-->
+    <!-- Blockchain Settings  -->
+    <!-- Privacy  -->
+    <!-- Security Center -->
+    <!--Evm Network-->
+    <!--Add RPC Source-->
+    <!--Btc Blockchain Settings -->
+    <!--Info screen-->
+    <!--Setting_Security-->
+    <!--Setting_Terms-->
+    <!--Setting_Tell Friends-->
+    <!--Setting_Contact-->
+    <!--Setting_Notifications-->
+    <!-- Settings Launch Screen -->
+    <!--Settings-->
+    <!--Errors-->
+    <!--Hud texts-->
+    <!--Manage Coins-->
+    <!-- Experimental Feature -->
+    <!-- Bitcoin Hodling -->
+    <!-- Testnet Settings -->
+    <!--Manage Accounts-->
+    <!-- Import Wallet -->
+    <!-- Import Backup File -->
+    <!--Manage Account-->
+    <!--Network Settings-->
+    <!-- Show Key -->
+    <!-- Backup Recovery Phrase -->
+    <!-- Local Backup -->
+    <!-- Recovery Phrase -->
+    <!-- Evm Private Key -->
+    <!-- Bip32 Root Key -->
+    <!-- Account Extended Keys -->
+    <!-- Private Keys -->
+    <!-- Public Keys -->
+    <!-- Recovery Phrase Verify -->
+    <!-- Backup Key -->
+    <!--Manage Keys Delete Alert-->
+    <!-- Manage Keys Alert -->
+    <!-- Add Token Dialog-->
+    <!-- Enable Token -->
+    <!-- Add Token -->
+    <!-- Address Format Settings List -->
+    <!-- Coin Platforms -->
+    <!-- Blockchain Settings -->
+    <!-- Tor -->
+    <!--Coin Page-->
+    <!-- NFT Collection -->
+    <!-- NFT Collection Events -->
+    <!--Rate list-->
+    <!-- Balance Sync Error -->
+    <!--Release notes-->
+    <!--Widget-->
+    <!--Alert-->
+    <!--OS Pin-->
+    <!--Unlock-->
+    <!--Set Pin-->
+    <!--Edit Pin-->
+    <!--Biometric Auth texts-->
+    <!--Contacts-->
+    <!--Cex Deposit Module-->
+    <!--Cex Withdraw Module-->
+</resources>
