@@ -1696,6 +1696,7 @@
     <string name="CexWithdraw_EmailVerificationInfo">Enter verification code sent to test@gmail.com</string>
     <string name="CexWithdraw_GoogleAuthenticationInfo">Enter google authentication code from your Google Authenticator App</string>
     <string name="CexWithdraw_Withdraw">Withdraw</string>
+    <string name="CexWithdraw_WithdrawSuccess">Success</string>
 
 
 </resources>

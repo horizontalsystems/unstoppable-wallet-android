@@ -113,7 +113,7 @@ fun WithdrawCexConfirmScreen(
                 var confirmEnabled by remember { mutableStateOf(true) }
 
                 ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
+                    ButtonPrimaryYellowWithSpinner(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
@@ -128,6 +128,7 @@ fun WithdrawCexConfirmScreen(
                                 confirmEnabled = true
                             }
                         },
+                        showSpinner = !confirmEnabled,
                         enabled = confirmEnabled
                     )
                 }
