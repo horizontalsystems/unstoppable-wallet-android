@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import cash.p.terminal.modules.withdrawcex.WithdrawCexModule.CodeGetButtonState
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
+import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun WithdrawCexSecurityVerificationScreen(
@@ -26,8 +28,22 @@ fun WithdrawCexSecurityVerificationScreen(
     onNavigateBack: () -> Unit,
     onClose: () -> Unit
 ) {
-    val viewModel = viewModel {
-        CexWithdrawVerificationViewModel(withdrawId)
+    val viewModel = viewModel<CexWithdrawVerificationViewModel>(factory = CexWithdrawVerificationViewModel.Factory(withdrawId))
+    val view = LocalView.current
+    val uiState = viewModel.uiState
+    val error = uiState.error
+
+    LaunchedEffect(error) {
+        error?.let {
+            HudHelper.showErrorMessage(view, it.message ?: it.javaClass.simpleName)
+        }
+    }
+
+    if (uiState.success) {
+        LaunchedEffect(uiState.success) {
+            HudHelper.showSuccessMessage(view, R.string.CexWithdraw_WithdrawSuccess)
+            onClose.invoke()
+        }
     }
 
     var actionButtonState by remember { mutableStateOf<CodeGetButtonState>(CodeGetButtonState.Active) }
@@ -82,7 +98,7 @@ fun WithdrawCexSecurityVerificationScreen(
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
-                            viewModel.onEnter2FaCode(it)
+                            viewModel.onEnterTwoFactorCode(it)
                         },
                     )
                     InfoText(
@@ -100,7 +116,7 @@ fun WithdrawCexSecurityVerificationScreen(
                         onClick = {
                             viewModel.submit()
                         },
-                        enabled = viewModel.submitEnabled
+                        enabled = uiState.submitEnabled
                     )
                 }
             }

@@ -55,6 +55,7 @@ interface ICexProvider {
     suspend fun getAssets(): List<CexAssetRaw>
     suspend fun getAddress(assetId: String, networkId: String?): CexAddress
     suspend fun withdraw(assetId: String, networkId: String?, address: String, amount: BigDecimal): String
+    suspend fun confirmWithdraw(withdrawId: String, emailCode: String, twoFactorCode: String?)
 }
 
 @Entity(primaryKeys = ["id", "accountId"])
@@ -158,6 +159,14 @@ class CoinzixCexProvider(
         amount: BigDecimal
     ): String {
         return api.withdraw(authToken, secret, assetId, networkId, address, amount)
+    }
+
+    override suspend fun confirmWithdraw(
+        withdrawId: String,
+        emailCode: String,
+        twoFactorCode: String?
+    ) {
+        return api.confirmWithdraw(withdrawId, emailCode, twoFactorCode)
     }
 
     override suspend fun getAssets(): List<CexAssetRaw> {
@@ -271,6 +280,14 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
         address: String,
         amount: BigDecimal
     ): String {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun confirmWithdraw(
+        withdrawId: String,
+        emailCode: String,
+        twoFactorCode: String?
+    ) {
         TODO("Not yet implemented")
     }
 
