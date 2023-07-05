@@ -1279,6 +1279,7 @@
     <string name="Contacts_ActionMore">Mais</string>
     <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
     <string name="Contacts_Error_DefinedName">O nome já existe</string>
+    <string name="Hud_Text_Connected">Conectado</string>
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">Escolher Moedas</string>
     <string name="CexDeposit_Network">Rede</string>
