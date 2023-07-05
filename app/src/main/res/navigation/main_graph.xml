@@ -21,14 +21,14 @@
         android:id="@+id/depositCexFragment"
         android:name="cash.p.terminal.modules.depositcex.DepositCexFragment"/>
     <fragment
-        android:id="@+id/depositCexFragmentChooseAsset"
+        android:id="@+id/depositCexChooseAssetFragment"
         android:name="cash.p.terminal.modules.depositcex.DepositCexChooseAssetFragment"/>
     <fragment
         android:id="@+id/withdrawCexFragment"
         android:name="cash.p.terminal.modules.withdrawcex.WithdrawCexFragment"/>
     <fragment
-        android:id="@+id/withdrawCexFragmentChooseAsset"
-        android:name="io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexChooseAssetFragment"/>
+        android:id="@+id/withdrawCexChooseAssetFragment"
+        android:name="cash.p.terminal.modules.withdrawcex.WithdrawCexChooseAssetFragment"/>
     <fragment
         android:id="@+id/wc2SessionFragment"
         android:name="cash.p.terminal.modules.walletconnect.session.v2.WC2SessionFragment"/>

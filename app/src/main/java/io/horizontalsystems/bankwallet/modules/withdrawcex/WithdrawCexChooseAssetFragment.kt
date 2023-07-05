@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.withdrawcex
+package cash.p.terminal.modules.withdrawcex
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,11 +9,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.depositcex.SelectCoinScreen
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import cash.p.terminal.R
+import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.depositcex.SelectCoinScreen
+import cash.p.terminal.ui.compose.ComposeAppTheme
 
 class WithdrawCexChooseAssetFragment : BaseFragment() {
 
@@ -28,7 +28,7 @@ class WithdrawCexChooseAssetFragment : BaseFragment() {
             )
 
             setContent {
-                WithdrawCexFragmentChooseAssetScreen(findNavController())
+                WithdrawCexChooseAssetScreen(findNavController())
             }
         }
     }
@@ -36,7 +36,7 @@ class WithdrawCexChooseAssetFragment : BaseFragment() {
 }
 
 @Composable
-fun WithdrawCexFragmentChooseAssetScreen(navController: NavController) {
+fun WithdrawCexChooseAssetScreen(navController: NavController) {
     ComposeAppTheme {
         SelectCoinScreen(
             onClose = { navController.popBackStack() },
