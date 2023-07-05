@@ -1278,6 +1278,7 @@
     <string name="Contacts_ActionMore">更多</string>
     <string name="Contacts_Error_DefinedAddress">此地址已用于 %s</string>
     <string name="Contacts_Error_DefinedName">该名称已存在</string>
+    <string name="Hud_Text_Connected">已连接</string>
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">选择代币</string>
     <string name="CexDeposit_Network">網絡</string>
