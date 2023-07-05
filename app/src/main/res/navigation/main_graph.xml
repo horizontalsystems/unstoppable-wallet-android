@@ -27,6 +27,9 @@
         android:id="@+id/withdrawCexFragment"
         android:name="io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexFragment"/>
     <fragment
+        android:id="@+id/withdrawCexFragmentChooseAsset"
+        android:name="io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexChooseAssetFragment"/>
+    <fragment
         android:id="@+id/wc2SessionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionFragment"/>
     <fragment

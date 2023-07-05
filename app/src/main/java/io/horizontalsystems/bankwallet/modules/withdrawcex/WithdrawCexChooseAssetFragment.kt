@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.depositcex
+package io.horizontalsystems.bankwallet.modules.withdrawcex
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +12,10 @@ import androidx.navigation.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.depositcex.SelectCoinScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
-class DepositCexChooseAssetFragment : BaseFragment() {
+class WithdrawCexChooseAssetFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,20 +28,21 @@ class DepositCexChooseAssetFragment : BaseFragment() {
             )
 
             setContent {
-                DepositCexFragmentChooseAssetScreen(findNavController())
+                WithdrawCexFragmentChooseAssetScreen(findNavController())
             }
         }
     }
+
 }
 
 @Composable
-fun DepositCexFragmentChooseAssetScreen(navController: NavController) {
+fun WithdrawCexFragmentChooseAssetScreen(navController: NavController) {
     ComposeAppTheme {
         SelectCoinScreen(
             onClose = { navController.popBackStack() },
-            itemIsSuspended = { !it.depositEnabled },
+            itemIsSuspended = { !it.withdrawEnabled },
             openNetworkSelect = { cexAsset ->
-                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(cexAsset))
+                navController.slideFromRight(R.id.withdrawCexFragment, WithdrawCexFragment.args(cexAsset))
             },
         )
     }
