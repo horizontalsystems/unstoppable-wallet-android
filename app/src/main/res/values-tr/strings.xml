@@ -1041,6 +1041,7 @@
     <string name="Contacts_ActionMore">Daha fazla</string>
     <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
     <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>
+    <string name="Hud_Text_Connected">Bağlandı</string>
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">Kripto Parayı Seç</string>
     <string name="CexDeposit_Network">Ağ</string>
