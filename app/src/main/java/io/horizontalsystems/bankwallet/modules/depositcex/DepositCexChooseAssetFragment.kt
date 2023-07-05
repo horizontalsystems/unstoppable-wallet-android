@@ -27,14 +27,14 @@ class DepositCexChooseAssetFragment : BaseFragment() {
             )
 
             setContent {
-                DepositCexFragmentChooseAssetScreen(findNavController())
+                DepositCexChooseAssetScreen(findNavController())
             }
         }
     }
 }
 
 @Composable
-fun DepositCexFragmentChooseAssetScreen(navController: NavController) {
+fun DepositCexChooseAssetScreen(navController: NavController) {
     ComposeAppTheme {
         SelectCoinScreen(
             onClose = { navController.popBackStack() },
