@@ -793,6 +793,7 @@
     <!--Contacts-->
     <string name="Contacts_NameHint">نام</string>
     <string name="Contacts_AddressHint">آدرس یا دامنه</string>
+    <string name="Hud_Text_Connected">ارتباط برقرار شد</string>
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">سکه را انتخاب کنید</string>
     <string name="CexDeposit_Network">خالص</string>
