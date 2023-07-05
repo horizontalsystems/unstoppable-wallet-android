@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
-import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -144,7 +143,7 @@ fun CoinTabs(
         val tabItems = tabs.map {
             TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
         }
-        ScrollableTabs(tabItems, onClick = {
+        Tabs(tabItems, onClick = {
             coroutineScope.launch {
                 pagerState.scrollToPage(it.ordinal)
             }
@@ -172,9 +171,9 @@ fun CoinTabs(
                         fragmentManager = fragmentManager
                     )
                 }
-                CoinModule.Tab.Tweets -> {
-                    CoinTweetsScreen(fullCoin = viewModel.fullCoin)
-                }
+//                CoinModule.Tab.Tweets -> {
+//                    CoinTweetsScreen(fullCoin = viewModel.fullCoin)
+//                }
             }
         }
 

@@ -9,8 +9,10 @@ import io.horizontalsystems.tronkit.TronKit.SyncState
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
+import kotlinx.coroutines.withContext
 import java.math.BigInteger
 
 class Trc20Adapter(
@@ -54,9 +56,9 @@ class Trc20Adapter(
     override val trxBalanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(tronKit.trxBalance, TronAdapter.decimal))
 
-    override suspend fun estimateFee(amount: BigInteger, to: Address): List<Fee> {
+    override suspend fun estimateFee(amount: BigInteger, to: Address): List<Fee> = withContext(Dispatchers.IO) {
         val contract = tronKit.transferTrc20TriggerSmartContract(contractAddress, to, amount)
-        return tronKit.estimateFee(contract)
+        tronKit.estimateFee(contract)
     }
 
     override suspend fun send(amount: BigInteger, to: Address, feeLimit: Long?) {
