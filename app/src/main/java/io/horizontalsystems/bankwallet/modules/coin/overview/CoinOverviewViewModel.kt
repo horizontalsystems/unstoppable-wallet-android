@@ -253,7 +253,21 @@ class CoinOverviewViewModel(
                         )
                     }
                 }
-                is TokenType.Unsupported -> Unit
+                is TokenType.Unsupported -> {
+                    val configuredToken = ConfiguredToken(token)
+                    items.add(
+                        TokenVariant(
+                            value = tokenType.reference?.shorten() ?: "",
+                            copyValue = tokenType.reference,
+                            imgUrl = token.blockchainType.imageUrl,
+                            explorerUrl = null,
+                            name = token.blockchain.name,
+                            configuredToken = configuredToken,
+                            canAddToWallet = false,
+                            inWallet = false
+                        )
+                    )
+                }
             }
         }
 
