@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 @Composable
 fun SelectCoinScreen(
     onClose: () -> Unit,
+    itemIsSuspended: (DepositCexModule.CexCoinViewItem) -> Boolean,
     openNetworkSelect: (CexAsset) -> Unit,
 ) {
     val viewModel = viewModel<SelectCexAssetViewModel>(factory = SelectCexAssetViewModel.Factory())
@@ -66,6 +67,7 @@ fun SelectCoinScreen(
                                     items(viewItems) { viewItem: DepositCexModule.CexCoinViewItem ->
                                         CoinCell(
                                             viewItem = viewItem,
+                                            suspended = itemIsSuspended.invoke(viewItem),
                                             onItemClick = {
                                                 openNetworkSelect.invoke(viewItem.cexAsset)
                                             },
@@ -84,11 +86,12 @@ fun SelectCoinScreen(
 @Composable
 private fun CoinCell(
     viewItem: DepositCexModule.CexCoinViewItem,
+    suspended: Boolean,
     onItemClick: () -> Unit,
 ) {
     Column {
         RowUniversal(
-            onClick = if (viewItem.depositEnabled) onItemClick else null,
+            onClick = if (suspended) null else onItemClick,
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalPadding = 0.dp
         ) {
@@ -116,7 +119,7 @@ private fun CoinCell(
                     modifier = Modifier.padding(top = 1.dp)
                 )
             }
-            if (!viewItem.depositEnabled) {
+            if (suspended) {
                 HSpacer(width = 16.dp)
                 Badge(text = stringResource(R.string.Suspended))
             }
