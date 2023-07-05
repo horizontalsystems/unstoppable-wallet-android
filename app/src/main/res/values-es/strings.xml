@@ -1213,6 +1213,7 @@
     <string name="Contacts_ActionMore">Más</string>
     <string name="Contacts_Error_DefinedAddress">Esta dirección ya está en uso para %s</string>
     <string name="Contacts_Error_DefinedName">El nombre ya existe</string>
+    <string name="Hud_Text_Connected">Conectado</string>
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">Elegir moneda</string>
     <string name="CexDeposit_Network">La red</string>
