@@ -1012,6 +1012,7 @@
     <string name="Contacts_ActionMore">Mehr</string>
     <string name="Contacts_Error_DefinedAddress">Diese Adresse wird bereits für %s verwendet</string>
     <string name="Contacts_Error_DefinedName">Dieser Name existiert bereits</string>
+    <string name="Hud_Text_Connected">Verbunden</string>
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">Coins auswählen</string>
     <string name="CexDeposit_Network">Netzwerk</string>
