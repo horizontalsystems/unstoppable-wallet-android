@@ -1321,6 +1321,7 @@
     <string name="Contacts_ActionMore">Ещё</string>
     <string name="Contacts_Error_DefinedAddress">Этот адрес уже используется для %s</string>
     <string name="Contacts_Error_DefinedName">Такое имя уже существует</string>
+    <string name="Hud_Text_Connected">Подключен</string>
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">Выберите токен</string>
     <string name="CexDeposit_Network">Сеть</string>
