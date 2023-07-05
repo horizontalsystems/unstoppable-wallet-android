@@ -28,7 +28,7 @@ class WithdrawCexChooseAssetFragment : BaseFragment() {
             )
 
             setContent {
-                WithdrawCexFragmentChooseAssetScreen(findNavController())
+                WithdrawCexChooseAssetScreen(findNavController())
             }
         }
     }
@@ -36,7 +36,7 @@ class WithdrawCexChooseAssetFragment : BaseFragment() {
 }
 
 @Composable
-fun WithdrawCexFragmentChooseAssetScreen(navController: NavController) {
+fun WithdrawCexChooseAssetScreen(navController: NavController) {
     ComposeAppTheme {
         SelectCoinScreen(
             onClose = { navController.popBackStack() },
