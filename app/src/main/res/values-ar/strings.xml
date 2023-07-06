@@ -1,44 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">لم يتم تحديد الإعدادات</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="Alert_Cancel">إلغاء</string>
+    <string name="Alert_Copy">نسخ</string>
+    <string name="Alert_Close">إغلاق</string>
+    <string name="Alert_Loading">جاري التحميل...</string>
+    <string name="Alert_Restart">إعادة التشغيل</string>
+    <string name="Suspended">معلق</string>
+    <string name="Action_Undo">تراجع</string>
+    <string name="Button_Cancel">إلغاء</string>
+    <string name="Button_Next">التالي</string>
+    <string name="Button_Enable">تمكين</string>
+    <string name="Button_Disable">تعطيل</string>
+    <string name="Button_ScanQr">فحص رمز QR</string>
+    <string name="Button_Close">إغلاق</string>
+    <string name="Button_Ok">حسنًا</string>
+    <string name="Button_Done">تم</string>
+    <string name="Button_Retry">إعادة المحاولة</string>
+    <string name="Button_Change">تغيير</string>
+    <string name="Button_Add">إضافة</string>
+    <string name="Button_Approve">قبول</string>
+    <string name="Button_Confirm">تأكيد</string>
+    <string name="Button_Connect">اتصال</string>
+    <string name="Button_Reject">رفض</string>
+    <string name="Button_Disconnect">قطع الاتصال</string>
+    <string name="Button_Start">البداية</string>
+    <string name="Button_Create">إنشاء</string>
+    <string name="Button_Advanced">إعدادات متقدمة</string>
+    <string name="Button_Restore">استيراد</string>
+    <string name="Button_WatchAddress">تابع عنوانًا</string>
+    <string name="Button_Reset">إعادة تعيين</string>
+    <string name="Button_Reconnect">إعادة الاتصال</string>
+    <string name="Button_Understand">فهمت</string>
+    <string name="Button_Switch">تبديل</string>
+    <string name="Button_Remove">إزالة</string>
+    <string name="Button_Save">حفظ</string>
+    <string name="Button_IAgree">أنا أوافق</string>
+    <string name="Button_Continue">متابعة</string>
+    <string name="Button_Send">إرسال</string>
+    <string name="Button_Search">بحث</string>
+    <string name="Button_Back">رجوع</string>
+    <string name="Button_Copy">نسخ</string>
+    <string name="Button_Browser">المتصفح</string>
+    <string name="Button_Delete">حذف</string>
+    <string name="Button_LearnMore">اعرف المزيد</string>
+    <string name="Button_Activate">تفعيل</string>
+    <string name="Button_Sign">توقيع</string>
+    <string name="Button_Activating">تفعيل</string>
+    <string name="Button_GetApiKeys">الحصول على مفاتيح Api</string>
+    <string name="Button_Login">تسجيل دخول</string>
+    <string name="Button_SignUp">إنشاء حساب</string>
     <!--Intro-->
     <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">فهمت</string>
     <!--Welcome-->
     <!--Create Wallet-->
+    <string name="CreateWallet_Advanced_Title">إعدادات متقدمة</string>
+    <string name="ConfirmPassphrase">تأكيد</string>
+    <string name="CreateWallet_PassphraseConfirm">تأكيد</string>
     <!--Languages-->
     <!--Rate App-->
     <!--Restore-->
+    <string name="Restore_Advanced_Title">إعدادات متقدمة</string>
+    <string name="Restore_Key">المفتاح</string>
+    <string name="Restore_By">استيراد بواسطة</string>
+    <string name="Restore_RestoreBy">استيراد بواسطة</string>
+    <string name="Restore_RecoveryPhrase">كلمات الاسترجاع</string>
+    <string name="Restore_PrivateKey">المفتاح الخاص</string>
+    <string name="Restore_PrivateKeyHint">أدخل مفتاح EVM الخاص، أو مفتاح روت BIP32 أو المفتاح الخاص الموسع للحساب</string>
+    <string name="Restore_PhraseHint">أدخل كلمات الاسترجاع الخاصة بك</string>
     <!--Backup-->
     <!--Market-->
+    <string name="Market_Search">بحث</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
     <!--Market Global Metrics-->
     <!--Market Search-->
+    <string name="Market_Search_Hint">بحث</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <!--Balance-->
+    <string name="Balance_Send">إرسال</string>
     <!--Send NFT-->
+    <string name="SendNft_Title">إرسال</string>
     <!--Send-->
+    <string name="Send_Advanced">إعدادات متقدمة</string>
+    <string name="Send_Confirmation_Title">تأكيد</string>
+    <string name="Send_Confirmation_Send_Button">إرسال</string>
+    <string name="Send_DialogProceed">التالي</string>
     <!-- Send Evm Settings -->
+    <string name="SendEvmSettings_Title">إعدادات متقدمة</string>
     <!-- Fee Settings -->
+    <string name="FeeSettings_Reset">إعادة تعيين</string>
+    <string name="FeeSettings_Info_IUnderstand">فهمت</string>
     <!--Fee Info -->
     <!--Tron-->
     <!--WalletConnect-->
+    <string name="WalletConnect_SendRequest_Title">إرسال</string>
+    <string name="WalletConnect_ApproveRequest_Title">قبول</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">توقيع</string>
+    <string name="WalletConnect_Pairings_Delete">حذف</string>
     <!--EthereumTransaction-->
     <!--Swap-->
+    <string name="Swap_Proceed">التالي</string>
+    <string name="Swap_Approve">قبول</string>
     <!-- Swap Settings -->
     <!-- Swap Confirmation -->
     <!--Approve-->
+    <string name="Approve_ButtonApprove">قبول</string>
     <!--Uniswap Info -->
     <!--Deposit-->
     <!--Transactions-->
+    <string name="Transactions_Send">إرسال</string>
+    <string name="Transactions_Approve">قبول</string>
     <!--Transaction Info-->
+    <string name="TransactionInfo_Cancel">إلغاء</string>
     <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_Cancel_Title">إلغاء</string>
     <!-- Info -->
     <!--Guides-->
     <!--Markdown-->
     <!--Setting_Currency-->
+    <string name="SettingsCurrency_Understand">فهمت</string>
     <!--Settings-->
     <!-- Blockchain Settings  -->
     <!-- Privacy  -->
@@ -56,16 +141,22 @@
     <!--Settings-->
     <!--Errors-->
     <!--Hud texts-->
+    <string name="Hud_Text_Done">تم</string>
     <!--Manage Coins-->
     <!-- Experimental Feature -->
     <!-- Bitcoin Hodling -->
     <!-- Testnet Settings -->
     <!--Manage Accounts-->
     <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">تابع عنوانًا</string>
     <!-- Import Backup File -->
     <!--Manage Account-->
+    <string name="ManageAccount_Save">حفظ</string>
     <!--Network Settings-->
     <!-- Show Key -->
+    <string name="ShowKey_Title">المفتاح</string>
+    <string name="ShowKey_ButtonClose">إغلاق</string>
+    <string name="ShowKey_TabPrivateKey">المفتاح الخاص</string>
     <!-- Backup Recovery Phrase -->
     <!-- Local Backup -->
     <!-- Recovery Phrase -->
@@ -78,24 +169,33 @@
     <!-- Backup Key -->
     <!--Manage Keys Delete Alert-->
     <!-- Manage Keys Alert -->
+    <string name="AddCoin_CreateKey">إنشاء</string>
     <!-- Add Token Dialog-->
     <!-- Enable Token -->
+    <string name="EnalbeToken_EnableKey">تمكين</string>
     <!-- Add Token -->
     <!-- Address Format Settings List -->
     <!-- Coin Platforms -->
     <!-- Blockchain Settings -->
     <!-- Tor -->
     <!--Coin Page-->
+    <string name="ActivateSubscription_Title">تفعيل</string>
+    <string name="NftAsset_Action_Save">حفظ</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
+    <string name="NftCollection_EventType_Cancelled">إلغاء</string>
+    <string name="NftCollection_EventType_Approve">قبول</string>
     <!--Rate list-->
     <!-- Balance Sync Error -->
+    <string name="BalanceSyncError_ButtonRetry">إعادة المحاولة</string>
     <!--Release notes-->
+    <string name="Hud_Text_Activate">تفعيل</string>
     <!--Widget-->
     <!--Alert-->
     <!--OS Pin-->
     <!--Unlock-->
     <!--Set Pin-->
+    <string name="PinSet_ConfirmInfo">تأكيد</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->
     <!--Contacts-->
