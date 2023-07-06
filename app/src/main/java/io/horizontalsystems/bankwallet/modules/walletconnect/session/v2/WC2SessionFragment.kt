@@ -6,7 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,13 +35,19 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -161,9 +174,6 @@ private fun ColumnScope.WCSessionListContent(
                     stringResource(R.string.WalletConnect_ActiveWallet),
                     uiState.peerMeta?.accountName ?: ""
                 )
-            }
-            uiState.blockchains.forEach {
-                add { BlockchainCell(it.name, it.address) }
             }
         }
 

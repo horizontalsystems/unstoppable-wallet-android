@@ -19,7 +19,7 @@ object WC2Parser {
         return null
     }
 
-    fun parseTransactionRequest(
+    fun parseRequest(
         request: Sign.Model.PendingRequest,
         address: String,
         dAppName: String

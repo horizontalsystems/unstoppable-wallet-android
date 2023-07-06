@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessag
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestChain
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v1.WC1SignMessageRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
@@ -54,6 +55,7 @@ object WCSignMessageRequestModule {
     interface RequestAction {
         val dAppName: String?
         val message: SignMessage
+        val chain: WCRequestChain
         val isLegacySignRequest: Boolean
         fun sign()
         fun reject()
