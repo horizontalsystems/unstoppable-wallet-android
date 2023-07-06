@@ -19,6 +19,7 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
+import cash.p.terminal.modules.walletconnect.request.WCRequestChain
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestService
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestService
 import cash.p.terminal.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
@@ -82,7 +83,7 @@ object WCRequestModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName))
+        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName, service.chain))
         private val nonceService by lazy { SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce) }
         private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
         private val sendService by lazy {
@@ -168,7 +169,7 @@ object WCRequestModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName))
+        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName, service.chain))
         private val nonceService by lazy { SendEvmNonceService(service.evmKitWrapper.evmKit, transaction.nonce) }
         private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
 
@@ -245,6 +246,8 @@ object WCRequestModule {
     }
 
     interface RequestAction {
+        val chain: WCRequestChain?
+
         fun approve(transactionHash: ByteArray)
         fun reject()
     }

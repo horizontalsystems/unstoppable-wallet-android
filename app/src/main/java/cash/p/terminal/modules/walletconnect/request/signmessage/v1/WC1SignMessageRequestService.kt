@@ -2,6 +2,8 @@ package cash.p.terminal.modules.walletconnect.request.signmessage.v1
 
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage.WCSignType
+import cash.p.terminal.core.shorten
+import cash.p.terminal.modules.walletconnect.request.WCRequestChain
 import cash.p.terminal.modules.walletconnect.request.signmessage.SignMessage
 import cash.p.terminal.modules.walletconnect.request.signmessage.WCSignMessageRequestModule
 import cash.p.terminal.modules.walletconnect.version1.WC1Service
@@ -15,6 +17,12 @@ class WC1SignMessageRequestService(
     private val baseService: WC1Service,
     private val signer: Signer
 ) : WCSignMessageRequestModule.RequestAction {
+
+    override val chain: WCRequestChain by lazy {
+        val blockchainName = baseService.selectedBlockchain.name
+        val address = baseService.evmKitWrapper?.evmKit?.receiveAddress?.eip55?.shorten() ?: ""
+        WCRequestChain(blockchainName, address)
+    }
 
     override val isLegacySignRequest =
         request.message.type == WCSignType.MESSAGE && request.message.data.hexStringToByteArray().size == 32

@@ -1,5 +1,7 @@
 package cash.p.terminal.modules.walletconnect.request.sendtransaction.v2
 
+import cash.p.terminal.core.shorten
+import cash.p.terminal.modules.walletconnect.request.WCRequestChain
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCRequestModule
 import cash.p.terminal.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
 import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
@@ -16,6 +18,13 @@ class WC2SendEthereumTransactionRequestService(
 
     val transactionRequest by lazy {
         (requestData.pendingRequest as WC2SendEthereumTransactionRequest)
+    }
+
+    override val chain: WCRequestChain by lazy {
+        val evmKit = evmKitWrapper.evmKit
+        val chainName = evmKit.chain.name
+        val address = evmKit.receiveAddress.eip55.shorten()
+        WCRequestChain(chainName, address)
     }
 
     override fun approve(transactionHash: ByteArray) {

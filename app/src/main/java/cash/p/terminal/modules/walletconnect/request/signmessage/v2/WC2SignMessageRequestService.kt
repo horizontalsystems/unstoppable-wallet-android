@@ -1,6 +1,8 @@
 package cash.p.terminal.modules.walletconnect.request.signmessage.v2
 
+import cash.p.terminal.core.shorten
 import cash.p.terminal.core.toHexString
+import cash.p.terminal.modules.walletconnect.request.WCRequestChain
 import cash.p.terminal.modules.walletconnect.request.signmessage.SignMessage
 import cash.p.terminal.modules.walletconnect.request.signmessage.WCSignMessageRequestModule
 import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
@@ -19,6 +21,12 @@ class WC2SignMessageRequestService(
 
     val evmKitWrapper by lazy {
         requestData.evmKitWrapper
+    }
+
+    override val chain: WCRequestChain by lazy {
+        val evmKit = evmKitWrapper.evmKit
+        val chain = evmKit.chain
+        WCRequestChain(chain.name, evmKit.receiveAddress.eip55.shorten())
     }
 
     private val pendingRequest by lazy {

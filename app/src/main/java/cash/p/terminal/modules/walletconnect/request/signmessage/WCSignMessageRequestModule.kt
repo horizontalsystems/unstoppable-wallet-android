@@ -3,6 +3,7 @@ package cash.p.terminal.modules.walletconnect.request.signmessage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.modules.walletconnect.request.WCRequestChain
 import cash.p.terminal.modules.walletconnect.request.signmessage.v1.WC1SignMessageRequestService
 import cash.p.terminal.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestService
 import cash.p.terminal.modules.walletconnect.version1.WC1Service
@@ -54,6 +55,7 @@ object WCSignMessageRequestModule {
     interface RequestAction {
         val dAppName: String?
         val message: SignMessage
+        val chain: WCRequestChain
         val isLegacySignRequest: Boolean
         fun sign()
         fun reject()

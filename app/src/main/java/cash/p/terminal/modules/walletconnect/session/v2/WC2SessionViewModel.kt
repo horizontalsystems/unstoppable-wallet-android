@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.walletconnect.session.v2
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,9 +14,19 @@ import cash.p.terminal.core.shorten
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.walletconnect.session.v1.WCSessionModule
 import cash.p.terminal.modules.walletconnect.session.v1.WCSessionViewModel
-import cash.p.terminal.modules.walletconnect.session.v2.WC2SessionServiceState.*
-import cash.p.terminal.modules.walletconnect.version2.*
-import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager.RequestDataError.*
+import cash.p.terminal.modules.walletconnect.session.v2.WC2SessionServiceState.Invalid
+import cash.p.terminal.modules.walletconnect.session.v2.WC2SessionServiceState.Killed
+import cash.p.terminal.modules.walletconnect.session.v2.WC2SessionServiceState.Ready
+import cash.p.terminal.modules.walletconnect.session.v2.WC2SessionServiceState.WaitingForApproveSession
+import cash.p.terminal.modules.walletconnect.version2.WC2Manager
+import cash.p.terminal.modules.walletconnect.version2.WC2Parser
+import cash.p.terminal.modules.walletconnect.version2.WC2RequestViewItem
+import cash.p.terminal.modules.walletconnect.version2.WC2Service
+import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
+import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager.RequestDataError.NoSuitableAccount
+import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager.RequestDataError.NoSuitableEvmKit
+import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager.RequestDataError.RequestNotFoundError
+import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager.RequestDataError.UnsupportedChainId
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
@@ -298,7 +307,6 @@ class WC2SessionViewModel(
         state: WC2SessionServiceState,
         connection: Boolean?
     ) {
-        Log.e(TAG, "setButtons: ${state}, ${connection}")
         buttonStates = WCSessionButtonStates(
             connect = getConnectButtonState(state, connection),
             disconnect = getDisconnectButtonState(state, connection),
@@ -384,14 +392,17 @@ class WC2SessionViewModel(
 //  session service
 
     private fun getBlockchainsByProposal(proposal: Sign.Model.SessionProposal): List<WCBlockchain> {
-        val account = accountManager.activeAccount
-            ?: throw NoSuitableAccount
-        val chains = proposal.requiredNamespaces.values.map { it.chains }.flatten()
+        val account = accountManager.activeAccount ?: throw NoSuitableAccount
+        val chains = proposal.requiredNamespaces.values.mapNotNull { it.chains }.flatten()
         val blockchains = getBlockchains(chains, account)
         if (blockchains.size < chains.size) {
             throw UnsupportedChainId
         }
-        return blockchains
+
+        val optionalChains = proposal.optionalNamespaces.values.mapNotNull { it.chains }.flatten()
+        val optionalBlockchains = getBlockchains(optionalChains, account)
+
+        return (blockchains + optionalBlockchains).distinct()
     }
 
     private fun getBlockchainsBySession(session: Sign.Model.Session): List<WCBlockchain> {
@@ -403,11 +414,9 @@ class WC2SessionViewModel(
     private fun getBlockchains(accounts: List<String>, account: Account): List<WCBlockchain> {
         val sessionAccountData = accounts.mapNotNull { WC2Parser.getAccountData(it) }
         return sessionAccountData.mapNotNull { data ->
-            wcManager.getEvmKitWrapper(data.chain.id, account)?.let { evmKitWrapper ->
-                val address = evmKitWrapper.evmKit.receiveAddress.eip55
-                val chainName =
-                    evmBlockchainManager.getBlockchain(data.chain.id)?.name ?: data.chain.name
-                WCBlockchain(data.chain.id, chainName, address)
+            val address = wcManager.getEvmAddress(account, data.chain).eip55
+            evmBlockchainManager.getBlockchain(data.chain.id)?.let { supportedBlockchain ->
+                WCBlockchain(data.chain.id, supportedBlockchain.name, address)
             }
         }
     }

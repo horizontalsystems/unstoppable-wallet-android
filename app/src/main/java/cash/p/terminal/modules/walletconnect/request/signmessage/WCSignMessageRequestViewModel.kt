@@ -14,6 +14,8 @@ class WCSignMessageRequestViewModel(
 
     val dAppName by service::dAppName
 
+    val chain by service::chain
+
     var trustCheckmarkChecked: Boolean by mutableStateOf(false)
         private set
 

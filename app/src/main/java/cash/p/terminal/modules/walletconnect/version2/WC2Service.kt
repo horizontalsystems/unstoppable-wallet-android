@@ -109,8 +109,7 @@ class WC2Service : SignClient.WalletDelegate {
                 Sign.Model.Namespace.Session(
                     accounts = blockchains.map(WCBlockchain::getAccount),
                     methods = methods,
-                    events = events,
-                    extensions = null
+                    events = events
                 )
             }
             .toMap()
@@ -209,12 +208,12 @@ class WC2Service : SignClient.WalletDelegate {
         return sessionProposals.removeFirstOrNull()
     }
 
-    override fun onSessionProposal(sessionProposal: Sign.Model.SessionProposal) {
+    override fun onSessionProposal(sessionProposal: Sign.Model.SessionProposal, verifyContext: Sign.Model.VerifyContext) {
         sessionProposals.add(sessionProposal)
         event = Event.WaitingForApproveSession
     }
 
-    override fun onSessionRequest(sessionRequest: Sign.Model.SessionRequest) {
+    override fun onSessionRequest(sessionRequest: Sign.Model.SessionRequest, verifyContext: Sign.Model.VerifyContext) {
         sessionsRequestReceivedSubject.onNext(sessionRequest)
         pendingRequestUpdatedSubject.onNext(Unit)
     }

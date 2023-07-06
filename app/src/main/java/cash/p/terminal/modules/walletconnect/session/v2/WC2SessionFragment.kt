@@ -6,7 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,13 +35,19 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.walletconnect.request.WC2RequestFragment
-import cash.p.terminal.modules.walletconnect.session.ui.BlockchainCell
 import cash.p.terminal.modules.walletconnect.session.ui.StatusCell
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell
 import cash.p.terminal.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui.compose.components.ButtonPrimaryRed
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -161,9 +174,6 @@ private fun ColumnScope.WCSessionListContent(
                     stringResource(R.string.WalletConnect_ActiveWallet),
                     uiState.peerMeta?.accountName ?: ""
                 )
-            }
-            uiState.blockchains.forEach {
-                add { BlockchainCell(it.name, it.address) }
             }
         }
 
