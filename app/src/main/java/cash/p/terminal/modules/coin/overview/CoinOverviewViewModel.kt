@@ -260,7 +260,7 @@ class CoinOverviewViewModel(
                             value = tokenType.reference?.shorten() ?: "",
                             copyValue = tokenType.reference,
                             imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = null,
+                            explorerUrl = tokenType.reference?.let { token.blockchain.eip20TokenUrl(it) },
                             name = token.blockchain.name,
                             configuredToken = configuredToken,
                             canAddToWallet = false,
