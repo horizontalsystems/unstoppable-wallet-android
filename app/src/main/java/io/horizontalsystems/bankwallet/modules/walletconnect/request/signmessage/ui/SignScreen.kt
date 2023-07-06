@@ -17,9 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestChain
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -70,13 +72,13 @@ fun SignMessageRequestScreen(
 
                 when (val message = viewModel.message) {
                     is SignMessage.PersonalMessage -> {
-                        MessageContent(message.data, viewModel.dAppName, viewModel)
+                        MessageContent(message.data, viewModel.dAppName, viewModel.chain, viewModel)
                     }
                     is SignMessage.Message -> {
-                        MessageContent(message.data, viewModel.dAppName, viewModel, message.showLegacySignWarning)
+                        MessageContent(message.data, viewModel.dAppName, viewModel.chain, viewModel, message.showLegacySignWarning)
                     }
                     is SignMessage.TypedMessage -> {
-                        TypedMessageContent(message, viewModel.dAppName)
+                        TypedMessageContent(message, viewModel.dAppName, viewModel.chain)
                     }
                 }
 
@@ -105,17 +107,21 @@ fun SignMessageRequestScreen(
 @Composable
 private fun TypedMessageContent(
     message: SignMessage.TypedMessage,
-    dAppName: String?
+    dAppName: String?,
+    chain: WCRequestChain
 ) {
-    val composableItems: MutableList<@Composable () -> Unit> = mutableListOf()
     message.domain?.let { domain ->
-        composableItems.add {
-            TitleTypedValueCell(
-                stringResource(R.string.WalletConnect_SignMessageRequest_Domain),
-                domain
-            )
-        }
+        CellUniversalLawrenceSection(
+            listOf {
+                TitleTypedValueCell(
+                    stringResource(R.string.WalletConnect_SignMessageRequest_Domain),
+                    domain
+                )
+            }
+        )
     }
+
+    val composableItems: MutableList<@Composable () -> Unit> = mutableListOf()
     dAppName?.let { name ->
         composableItems.add {
             TitleTypedValueCell(
@@ -123,6 +129,9 @@ private fun TypedMessageContent(
                 name
             )
         }
+    }
+    composableItems.add {
+        BlockchainCell(chain.name, chain.address)
     }
 
     CellUniversalLawrenceSection(
@@ -136,12 +145,16 @@ private fun TypedMessageContent(
 private fun MessageContent(
     message: String,
     dAppName: String?,
+    chain: WCRequestChain,
     viewModel: WCSignMessageRequestViewModel,
     showLegacySignWarning: Boolean = false
 ) {
     CellUniversalLawrenceSection(buildList {
         dAppName?.let { dApp ->
             add { TitleTypedValueCell(stringResource(R.string.WalletConnect_SignMessageRequest_dApp), dApp) }
+        }
+        add {
+            BlockchainCell(chain.name, chain.address)
         }
     })
 

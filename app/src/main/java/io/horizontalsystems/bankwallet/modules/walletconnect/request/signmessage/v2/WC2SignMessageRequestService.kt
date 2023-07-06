@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2
 
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestChain
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
@@ -19,6 +21,12 @@ class WC2SignMessageRequestService(
 
     val evmKitWrapper by lazy {
         requestData.evmKitWrapper
+    }
+
+    override val chain: WCRequestChain by lazy {
+        val evmKit = evmKitWrapper.evmKit
+        val chain = evmKit.chain
+        WCRequestChain(chain.name, evmKit.receiveAddress.eip55.shorten())
     }
 
     private val pendingRequest by lazy {

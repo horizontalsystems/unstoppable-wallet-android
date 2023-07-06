@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessag
 
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage.WCSignType
+import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestChain
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
@@ -15,6 +17,12 @@ class WC1SignMessageRequestService(
     private val baseService: WC1Service,
     private val signer: Signer
 ) : WCSignMessageRequestModule.RequestAction {
+
+    override val chain: WCRequestChain by lazy {
+        val blockchainName = baseService.selectedBlockchain.name
+        val address = baseService.evmKitWrapper?.evmKit?.receiveAddress?.eip55?.shorten() ?: ""
+        WCRequestChain(blockchainName, address)
+    }
 
     override val isLegacySignRequest =
         request.message.type == WCSignType.MESSAGE && request.message.data.hexStringToByteArray().size == 32

@@ -94,14 +94,12 @@ class WC2SessionManager(
             .firstOrNull { it.requestId == requestId }
             ?: throw RequestDataError.RequestNotFoundError
         val chainId = request.chainId?.split(":")?.last()?.toInt() ?: throw RequestDataError.UnsupportedChainId
-        val evmKitWrapper =
-            wcManager.getEvmKitWrapper(chainId, account) ?: throw RequestDataError.NoSuitableEvmKit
+        val evmKitWrapper = wcManager.getEvmKitWrapper(chainId, account) ?: throw RequestDataError.NoSuitableEvmKit
         val dAppName = sessionByTopic(request.topic)?.metaData?.name ?: ""
         val receiveAddress = evmKitWrapper.evmKit.receiveAddress.eip55
-        val transactionRequest =
-            WC2Parser.parseTransactionRequest(request, receiveAddress, dAppName)
+        val wc2Request = WC2Parser.parseRequest(request, receiveAddress, dAppName)
 
-        return RequestData(transactionRequest, evmKitWrapper)
+        return RequestData(wc2Request, evmKitWrapper)
     }
 
     private fun syncSessions() {
