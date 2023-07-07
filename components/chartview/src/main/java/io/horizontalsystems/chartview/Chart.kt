@@ -9,6 +9,7 @@ import io.horizontalsystems.chartview.databinding.ViewChartBinding
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 
 class Chart @JvmOverloads constructor(
@@ -20,6 +21,7 @@ class Chart @JvmOverloads constructor(
     lateinit var chartViewType: ChartViewType
 
     private val binding = ViewChartBinding.inflate(LayoutInflater.from(context), this)
+    private val indicatorAnimatedCurves = mutableMapOf<ChartIndicator, AnimatedCurve>()
 
     interface Listener {
         fun onTouchDown()
@@ -54,8 +56,6 @@ class Chart @JvmOverloads constructor(
         config.horizontalOffset,
     )
 
-    private val dominanceCurve = ChartCurve2(config)
-
     private var mainCurveAnimator: CurveAnimator? = null
     private var dominanceCurveAnimator: CurveAnimator? = null
 
@@ -63,6 +63,10 @@ class Chart @JvmOverloads constructor(
         animatorMain.addUpdateListener {
             mainCurveAnimator?.nextFrame(animatorMain.animatedFraction)
             dominanceCurveAnimator?.nextFrame(animatorMain.animatedFraction)
+
+            indicatorAnimatedCurves.forEach { (_, animatedCurve) ->
+                animatedCurve.animator.nextFrame(animatorMain.animatedFraction)
+            }
         }
     }
 
@@ -151,6 +155,7 @@ class Chart @JvmOverloads constructor(
             PointConverter.coordinates(data, binding.chartMain.shape, 0f, config.horizontalOffset)
 
         //Dominance
+        val dominanceCurve = ChartCurve2(config)
         val dominanceValues = data.dominanceByTimestamp()
         if (dominanceValues.isNotEmpty()) {
             dominanceCurveAnimator = CurveAnimator(
@@ -170,8 +175,34 @@ class Chart @JvmOverloads constructor(
             dominanceCurve.setShape(binding.chartMain.shape)
             dominanceCurve.setCurveAnimator(dominanceCurveAnimator!!)
             dominanceCurve.setColor(config.curveSlowColor)
+        }
 
-            dominanceCurve.isVisible = true
+        val indicators = data.indicatorsByTimestamp()
+        val tmpIndicatorAnimatedCurves = LinkedHashMap(indicatorAnimatedCurves)
+        indicatorAnimatedCurves.clear()
+        indicators.forEach { (chartIndicator, values) ->
+            val indicatorAnimatedCurve = tmpIndicatorAnimatedCurves.remove(chartIndicator)
+
+            val animator = CurveAnimator(
+                values,
+                data.startTimestamp,
+                data.endTimestamp,
+                values.values.minOrNull() ?: 0f,
+                values.values.maxOrNull() ?: 0f,
+                indicatorAnimatedCurve?.animator,
+                binding.chartMain.shape.right,
+                binding.chartMain.shape.bottom,
+                0f,
+                0f,
+                config.horizontalOffset,
+            )
+
+            val curve = ChartCurve2(config)
+            curve.setShape(binding.chartMain.shape)
+            curve.setCurveAnimator(animator)
+            curve.setColor(config.curveSlowColor)
+
+            indicatorAnimatedCurves[chartIndicator] = AnimatedCurve(animator, curve)
         }
 
         binding.chartTouch.configure(config, 0f)
@@ -200,6 +231,10 @@ class Chart @JvmOverloads constructor(
         binding.chartMain.clear()
         binding.chartMain.add(mainCurve, mainGradient)
         binding.chartMain.add(dominanceCurve)
+
+        indicatorAnimatedCurves.forEach { (_, animatedCurve) ->
+            binding.chartMain.add(animatedCurve.curve)
+        }
 
         binding.topLowRange.clear()
         binding.topLowRange.add(mainRange)

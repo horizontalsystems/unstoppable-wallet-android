@@ -2,14 +2,8 @@ package cash.p.terminal.modules.coin.overview.ui
 
 import android.content.Context
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +11,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -45,9 +40,7 @@ import cash.p.terminal.modules.markdown.MarkdownFragment
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.CellFooter
-import cash.p.terminal.ui.compose.components.ListErrorView
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.getNavigationResult
@@ -138,6 +131,58 @@ fun CoinOverviewScreen(
                                 )
 
                                 Chart(chartViewModel = chartViewModel)
+
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                CellUniversalLawrenceSection {
+                                    RowUniversal(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp),
+                                        verticalPadding = 0.dp
+                                    ) {
+                                        subhead2_grey(text = stringResource(R.string.CoinPage_Indicators))
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Box(
+                                            modifier = Modifier
+                                                .height(28.dp)
+                                                .width(10.dp)
+                                                .background(
+                                                    Color.Green
+                                                )
+                                        )
+
+                                        val uiState = chartViewModel.uiState
+
+
+                                        if (uiState.indicatorsEnabled) {
+                                            ButtonSecondaryDefault(
+                                                title = stringResource(id = R.string.Button_Hide),
+                                                onClick = {
+                                                    chartViewModel.disableIndicators()
+                                                }
+                                            )
+                                        } else {
+                                            ButtonSecondaryDefault(
+                                                title = stringResource(id = R.string.Button_Show),
+                                                onClick = {
+                                                    chartViewModel.enableIndicators()
+
+                                                }
+                                            )
+                                        }
+
+                                        HSpacer(width = 8.dp)
+                                        ButtonSecondaryCircle(
+                                            icon = R.drawable.ic_setting_20
+                                        ) {
+
+                                        }
+                                    }
+
+                                }
+
+
 
                                 if (overview.marketData.isNotEmpty()) {
                                     Spacer(modifier = Modifier.height(12.dp))

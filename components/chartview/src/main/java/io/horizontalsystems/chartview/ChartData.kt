@@ -2,6 +2,7 @@ package io.horizontalsystems.chartview
 
 import android.util.Range
 import androidx.compose.runtime.Immutable
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import java.math.BigDecimal
 
@@ -49,6 +50,22 @@ data class ChartData(
                 }
             }.toMap()
         )
+    }
+
+    fun indicatorsByTimestamp(): Map<ChartIndicator, LinkedHashMap<Long, Float>> {
+        val r = mutableMapOf<ChartIndicator, LinkedHashMap<Long, Float>>()
+
+        items.forEach { chartPoint ->
+            chartPoint.indicators.forEach { (chartIndicator, indicatorValue) ->
+                if (!r.containsKey(chartIndicator)) {
+                    r[chartIndicator] = LinkedHashMap()
+                }
+                r[chartIndicator]?.set(chartPoint.timestamp, indicatorValue)
+            }
+        }
+
+        return r
+
     }
 
     fun diff(): BigDecimal {
