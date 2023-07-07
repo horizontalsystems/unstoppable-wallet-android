@@ -150,6 +150,9 @@
         android:id="@+id/coinAnalyticsInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment" />
     <fragment
+        android:id="@+id/ratingScaleInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.RatingScaleInfoFragment" />
+    <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment" />
     <fragment
