@@ -150,6 +150,9 @@
         android:id="@+id/coinAnalyticsInfoFragment"
         android:name="cash.p.terminal.modules.info.CoinAnalyticsInfoFragment" />
     <fragment
+        android:id="@+id/ratingScaleInfoFragment"
+        android:name="cash.p.terminal.modules.info.RatingScaleInfoFragment" />
+    <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment" />
     <fragment

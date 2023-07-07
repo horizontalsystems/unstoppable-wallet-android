@@ -53,9 +53,8 @@ object CoinAnalyticsModule {
     )
 
     data class FooterItem(
-        val title: TranslatableString,
-        val value: String? = null,
-        val image: ImageSource? = null,
+        val title: BoxItem,
+        val value: BoxItem? = null,
         val action: ActionType? = null
     )
 
@@ -69,6 +68,21 @@ object CoinAnalyticsModule {
         class Line(val data: ChartData) : AnalyticChart()
         class Bars(val data: ChartData) : AnalyticChart()
         class StackedBars(val data: List<StackBarSlice>) : AnalyticChart()
+    }
+
+    enum class Rating(val title: Int, val icon: Int, val percent: Int) {
+        Excellent(R.string.Coin_Analytics_RatingExcellent, R.drawable.ic_rating_excellent_24, R.string.Coin_Analytics_RatingExcellentPercent),
+        Good(R.string.Coin_Analytics_RatingGood, R.drawable.ic_rating_good_24, R.string.Coin_Analytics_RatingGoodPercent),
+        Fair(R.string.Coin_Analytics_RatingFair, R.drawable.ic_rating_fair_24, R.string.Coin_Analytics_RatingFairPercent),
+        Poor(R.string.Coin_Analytics_RatingPoor, R.drawable.ic_rating_poor_24, R.string.Coin_Analytics_RatingPoorPercent),
+    }
+
+    sealed class BoxItem {
+        class Title(val text: TranslatableString) : BoxItem()
+        class TitleWithInfo(val text: TranslatableString, val action: ActionType) : BoxItem()
+        class IconTitle(val image: ImageSource, val text: TranslatableString) : BoxItem()
+        class Value(val text: String) : BoxItem()
+        class RatingValue(val rating: Rating) : BoxItem()
     }
 
     data class PreviewBlockViewItem(
@@ -85,7 +99,6 @@ object CoinAnalyticsModule {
         val title: Int,
         val clickable: Boolean,
         val hasValue: Boolean = true,
-        val image: ImageSource? = null
     )
 
     enum class PreviewChartType {
@@ -93,7 +106,7 @@ object CoinAnalyticsModule {
     }
 
     @Parcelize
-    enum class AnalyticInfo(val title: Int): Parcelable {
+    enum class AnalyticInfo(val title: Int) : Parcelable {
         CexVolumeInfo(R.string.CoinAnalytics_CexVolume),
         DexVolumeInfo(R.string.CoinAnalytics_DexVolume),
         DexLiquidityInfo(R.string.CoinAnalytics_DexLiquidity),
@@ -105,8 +118,8 @@ object CoinAnalyticsModule {
     }
 
     @Parcelize
-    enum class RankType(val title: Int, val description: Int, val headerIconName: String): Parcelable {
-        CexVolumeRank(R.string.CoinAnalytics_CexVolumeRank, R.string.CoinAnalytics_CexVolumeRank_Description, "cex_volume" ),
+    enum class RankType(val title: Int, val description: Int, val headerIconName: String) : Parcelable {
+        CexVolumeRank(R.string.CoinAnalytics_CexVolumeRank, R.string.CoinAnalytics_CexVolumeRank_Description, "cex_volume"),
         DexVolumeRank(R.string.CoinAnalytics_DexVolumeRank, R.string.CoinAnalytics_DexVolumeRank_Description, "dex_volume"),
         DexLiquidityRank(R.string.CoinAnalytics_DexLiquidityRank, R.string.CoinAnalytics_DexLiquidityRank_Description, "dex_liquidity"),
         AddressesRank(R.string.CoinAnalytics_ActiveAddressesRank, R.string.CoinAnalytics_ActiveAddressesRank_Description, "active_addresses"),
@@ -131,7 +144,9 @@ object CoinAnalyticsModule {
     }
 
     sealed class ActionType {
+        object Preview : ActionType()
         object OpenTvl : ActionType()
+        object OpenRatingScaleInfo : ActionType()
         class OpenRank(val type: RankType) : ActionType()
         class OpenReports(val coinUid: String) : ActionType()
         class OpenInvestors(val coinUid: String) : ActionType()
