@@ -17,6 +17,8 @@
 
     <string name="Action_Undo">UNDO</string>
 
+    <string name="Button_Show">Show</string>
+    <string name="Button_Hide">Hide</string>
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">Enable</string>
@@ -1400,6 +1402,7 @@
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
+    <string name="CoinPage_Indicators">Indicators</string>
 
     // Coin Page -> Analytics
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
