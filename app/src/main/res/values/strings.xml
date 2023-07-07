@@ -1481,6 +1481,16 @@
     <string name="Coin_Analytics_Blockchain1" translatable="false">Blockchain 1</string>
     <string name="Coin_Analytics_Blockchain2" translatable="false">Blockchain 2</string>
     <string name="Coin_Analytics_Blockchain3" translatable="false">Blockchain 3</string>
+    <string name="Coin_Analytics_RatingScale">Rating Scale</string>
+    <string name="Coin_Analytics_RatingExcellent">Excellent</string>
+    <string name="Coin_Analytics_RatingGood">Good</string>
+    <string name="Coin_Analytics_RatingFair">Fair</string>
+    <string name="Coin_Analytics_RatingPoor">Poor</string>
+    <string name="Coin_Analytics_RatingScaleDescription">The rating scale is derived from the top 250 tokens by market capitalisation and is proportionally adjusted by percentage to obtain the final rating scale.</string>
+    <string name="Coin_Analytics_RatingExcellentPercent">25%</string>
+    <string name="Coin_Analytics_RatingGoodPercent">25%-50%</string>
+    <string name="Coin_Analytics_RatingFairPercent">50%-75%</string>
+    <string name="Coin_Analytics_RatingPoorPercent">75%-100%</string>
 
     <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Wallet">Wallet</string>
