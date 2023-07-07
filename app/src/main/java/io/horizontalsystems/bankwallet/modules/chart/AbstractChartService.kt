@@ -10,7 +10,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
-import java.util.*
+import java.util.Optional
 
 abstract class AbstractChartService {
     open val hasVolumes = false
@@ -35,6 +35,9 @@ abstract class AbstractChartService {
     val chartTypeObservable = BehaviorSubject.create<Optional<HsTimePeriod>>()
 
     val chartPointsWrapperObservable = BehaviorSubject.create<Result<ChartPointsWrapper>>()
+
+    var indicatorsEnabled = false
+        private set
 
     private var fetchItemsDisposable: Disposable? = null
     private val disposables = CompositeDisposable()
@@ -87,6 +90,16 @@ abstract class AbstractChartService {
             }, {
                 chartPointsWrapperObservable.onNext(Result.failure(it))
             })
+    }
+
+    fun disableIndicators() {
+        indicatorsEnabled = false
+        fetchItems()
+    }
+
+    fun enableIndicators() {
+        indicatorsEnabled = true
+        fetchItems()
     }
 
 }

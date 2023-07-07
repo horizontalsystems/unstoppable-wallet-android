@@ -387,6 +387,13 @@ fun RowUniversal(
 
 @Composable
 fun CellUniversalLawrenceSection(
+    content: @Composable () -> Unit
+) {
+    CellUniversalLawrenceSection(listOf(content))
+}
+
+@Composable
+fun CellUniversalLawrenceSection(
     composableItems: List<@Composable () -> Unit>
 ) {
     Column(

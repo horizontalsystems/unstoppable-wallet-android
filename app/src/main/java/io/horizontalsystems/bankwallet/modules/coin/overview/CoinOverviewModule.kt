@@ -36,7 +36,13 @@ object CoinOverviewModule {
                     ) as T
                 }
                 ChartViewModel::class.java -> {
-                    val chartService = CoinOverviewChartService(App.marketKit, App.currencyManager, fullCoin.coin.uid)
+                    val indicatorsManager = IndicatorsManager()
+                    val chartService = CoinOverviewChartService(
+                        App.marketKit,
+                        App.currencyManager,
+                        fullCoin.coin.uid,
+                        indicatorsManager
+                    )
                     val chartNumberFormatter = ChartCurrencyValueFormatterSignificant()
                     ChartModule.createViewModel(chartService, chartNumberFormatter) as T
                 }

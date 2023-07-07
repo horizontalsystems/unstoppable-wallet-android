@@ -24,7 +24,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Date
 
 open class ChartViewModel(
     private val service: AbstractChartService,
@@ -36,6 +36,7 @@ open class ChartViewModel(
     private var chartInfoData: ChartInfoData? = null
     private var loading = false
     private var viewState: ViewState = ViewState.Success
+    private var indicatorsEnabled = service.indicatorsEnabled
 
     var uiState by mutableStateOf(
         ChartUiState(
@@ -45,7 +46,8 @@ open class ChartViewModel(
             loading = loading,
             viewState = viewState,
             hasVolumes = service.hasVolumes,
-            chartViewType = service.chartViewType
+            chartViewType = service.chartViewType,
+            indicatorsEnabled = indicatorsEnabled
         )
     )
         private set
@@ -101,6 +103,7 @@ open class ChartViewModel(
                 viewState = viewState,
                 hasVolumes = service.hasVolumes,
                 chartViewType = service.chartViewType,
+                indicatorsEnabled = indicatorsEnabled,
             )
         }
     }
@@ -242,6 +245,22 @@ open class ChartViewModel(
             )
             else -> null
         }
+    }
+
+    fun disableIndicators() {
+        indicatorsEnabled = false
+        loading = true
+        emitState()
+
+        service.disableIndicators()
+    }
+
+    fun enableIndicators() {
+        indicatorsEnabled = true
+        loading = true
+        emitState()
+
+        service.enableIndicators()
     }
 }
 
