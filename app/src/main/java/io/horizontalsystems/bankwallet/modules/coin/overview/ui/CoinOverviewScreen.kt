@@ -21,7 +21,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -156,21 +155,12 @@ fun CoinOverviewScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(horizontal = 16.dp),
-                                        verticalPadding = 0.dp
+                                        verticalPadding = 12.dp
                                     ) {
                                         subhead2_grey(text = stringResource(R.string.CoinPage_Indicators))
                                         Spacer(modifier = Modifier.weight(1f))
-                                        Box(
-                                            modifier = Modifier
-                                                .height(28.dp)
-                                                .width(10.dp)
-                                                .background(
-                                                    Color.Green
-                                                )
-                                        )
 
                                         val uiState = chartViewModel.uiState
-
 
                                         if (uiState.indicatorsEnabled) {
                                             ButtonSecondaryDefault(
