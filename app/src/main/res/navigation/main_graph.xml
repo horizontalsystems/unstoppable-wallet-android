@@ -147,6 +147,18 @@
             app:uri="unstoppable://coin-page?uid={coinUid}" />
     </fragment>
     <fragment
+        android:id="@+id/indicatorsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsFragment" />
+    <fragment
+        android:id="@+id/emaSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.indicators.EmaSettingsFragment" />
+    <fragment
+        android:id="@+id/rsiSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.indicators.RsiSettingsFragment"/>
+    <fragment
+        android:id="@+id/macdSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.indicators.MacdSettingsFragment"/>
+    <fragment
         android:id="@+id/activateSubscription"
         android:name="io.horizontalsystems.bankwallet.modules.subscription.ActivateSubscriptionFragment" />
     <fragment
@@ -334,6 +346,9 @@
     <dialog
         android:id="@+id/backupRecoveryPhraseDialog"
         android:name="io.horizontalsystems.bankwallet.modules.backupalert.BackupRecoveryPhraseDialog" />
+    <dialog
+        android:id="@+id/indicatorsAlertDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsAlertDialog" />
     <dialog
         android:id="@+id/syncErrorDialog"
         android:name="io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog" />
