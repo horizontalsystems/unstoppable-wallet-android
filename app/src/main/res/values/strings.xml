@@ -1403,6 +1403,20 @@
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="CoinPage_Indicators">Indicators</string>
+    <string name="CoinPage_MovingAverages">Moving Averages</string>
+    <string name="CoinPage_OscillatorsSettings">Oscillators Settings</string>
+    <string name="CoinPage_EmaSettingsDescription">The EMA, SMA, and WMA are moving averages used in technical analysis:\n\nEMA emphasizes recent prices for quicker reactions.\nSMA averages price data for a general trend view.\nWMA balances sensitivity and noise reduction by linearly weighting recent data.The stochastic oscillator is a After the exchange operation, the </string>
+    <string name="CoinPage_RsiSettingsDescription">The Relative Strength Index (RSI) is a momentum oscillator that measures price speed and change, identifying overbought (above 70) or oversold (below 30) market conditions. It can also detect price reversals through divergences.The stochastic oscillator </string>
+    <string name="CoinPage_MacdSettingsDescription">The Moving Average Convergence Divergence (MACD) is a momentum indicator that tracks the relationship between two EMAs of a security\'s price. It signals buying or selling opportunities when the MACD line (12-period EMA minus 26-period EMA) crosses the 9-period EMA, known as the signal line.</string>
+    <string name="CoinPage_InsufficientData">Insufficient Data</string>
+    <string name="CoinPage_InsufficientDataError">There are not enough data points to display the EMA 1 indicator. Please adjust the time period to generate a view of the moving average line.Not enough point to display EMA 1 </string>
+    <string name="CoinPage_Type">Type</string>
+    <string name="CoinPage_Period">Period</string>
+    <string name="CoinPage_RsiLength">Rsi Length</string>
+    <string name="CoinPage_FastLength">Fast Length</string>
+    <string name="CoinPage_SlowLength">Slow Length</string>
+    <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
+    <string name="CoinPage_IndicatorsAlertText">Indicators available only for Unstoppable Wallet premium users The minimum amount</string>
 
     // Coin Page -> Analytics
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
