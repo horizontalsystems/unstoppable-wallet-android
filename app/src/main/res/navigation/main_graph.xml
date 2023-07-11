@@ -147,6 +147,18 @@
             app:uri="pcash://coin-page?uid={coinUid}" />
     </fragment>
     <fragment
+        android:id="@+id/indicatorsFragment"
+        android:name="cash.p.terminal.modules.coin.indicators.IndicatorsFragment" />
+    <fragment
+        android:id="@+id/emaSettingsFragment"
+        android:name="cash.p.terminal.modules.coin.indicators.EmaSettingsFragment" />
+    <fragment
+        android:id="@+id/rsiSettingsFragment"
+        android:name="cash.p.terminal.modules.coin.indicators.RsiSettingsFragment"/>
+    <fragment
+        android:id="@+id/macdSettingsFragment"
+        android:name="cash.p.terminal.modules.coin.indicators.MacdSettingsFragment"/>
+    <fragment
         android:id="@+id/activateSubscription"
         android:name="cash.p.terminal.modules.subscription.ActivateSubscriptionFragment" />
     <fragment
@@ -334,6 +346,9 @@
     <dialog
         android:id="@+id/backupRecoveryPhraseDialog"
         android:name="cash.p.terminal.modules.backupalert.BackupRecoveryPhraseDialog" />
+    <dialog
+        android:id="@+id/indicatorsAlertDialog"
+        android:name="cash.p.terminal.modules.coin.indicators.IndicatorsAlertDialog" />
     <dialog
         android:id="@+id/syncErrorDialog"
         android:name="cash.p.terminal.modules.syncerror.SyncErrorDialog" />

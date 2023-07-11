@@ -2,8 +2,18 @@ package cash.p.terminal.modules.coin.overview.ui
 
 import android.content.Context
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +50,14 @@ import cash.p.terminal.modules.markdown.MarkdownFragment
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
+import cash.p.terminal.ui.compose.components.CellFooter
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.getNavigationResult
@@ -167,7 +184,8 @@ fun CoinOverviewScreen(
                                                 title = stringResource(id = R.string.Button_Show),
                                                 onClick = {
                                                     chartViewModel.enableIndicators()
-
+                                                    //todo move it to appropriate place
+                                                    navController.slideFromBottom(R.id.indicatorsAlertDialog)
                                                 }
                                             )
                                         }
@@ -176,7 +194,7 @@ fun CoinOverviewScreen(
                                         ButtonSecondaryCircle(
                                             icon = R.drawable.ic_setting_20
                                         ) {
-
+                                            navController.slideFromRight(R.id.indicatorsFragment)
                                         }
                                     }
 
