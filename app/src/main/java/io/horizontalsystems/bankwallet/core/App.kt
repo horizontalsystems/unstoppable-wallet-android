@@ -342,7 +342,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         contactsRepository = ContactsRepository(marketKit)
         cexProviderManager = CexProviderManager(accountManager)
         cexAssetManager = CexAssetManager(marketKit, appDatabase.cexAssetsDao())
-        chartIndicatorManager = ChartIndicatorManager()
+        chartIndicatorManager = ChartIndicatorManager(localStorage)
 
         startTasks()
     }

@@ -77,6 +77,16 @@ class LocalStorageManager(
 
     private val gson by lazy { Gson() }
 
+    override var enabledChartIndicatorIds: Set<String>
+        get() {
+            val idsString = preferences.getString("enabledChartIndicatorIds", null) ?: return setOf()
+            return idsString.split(",").toSet()
+        }
+        set(value) {
+            val idsString = value.joinToString(",")
+            preferences.edit().putString("enabledChartIndicatorIds", idsString).apply()
+        }
+
     override var amountInputType: AmountInputType?
         get() = preferences.getString(SEND_INPUT_TYPE, null)?.let {
             try {
