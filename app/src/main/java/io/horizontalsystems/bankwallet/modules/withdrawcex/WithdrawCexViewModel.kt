@@ -9,7 +9,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexAsset
-import cash.p.terminal.core.providers.CexNetwork
+import cash.p.terminal.core.providers.CexWithdrawNetwork
 import cash.p.terminal.core.providers.ICexProvider
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.SendAmountService
@@ -29,7 +29,7 @@ class WithdrawCexViewModel(
 
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val coinMaxAllowedDecimals = cexAsset.decimals
-    val networks = cexAsset.networks
+    val networks = cexAsset.withdrawNetworks
     val networkSelectionEnabled = networks.size > 1
 
     var coinRate by mutableStateOf(coinUid?.let { xRateService.getRate(it) })
@@ -37,7 +37,7 @@ class WithdrawCexViewModel(
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-    private var network = networks.find { it.withdrawEnabled }
+    private var network = networks.find { it.enabled }
 
     var uiState by mutableStateOf(
         WithdrawCexUiState(
@@ -104,7 +104,7 @@ class WithdrawCexViewModel(
         addressService.setAddress(Address(v))
     }
 
-    fun onSelectNetwork(network: CexNetwork) {
+    fun onSelectNetwork(network: CexWithdrawNetwork) {
         this.network = network
 
         emitState()
@@ -136,7 +136,7 @@ class WithdrawCexViewModel(
     suspend fun confirm(): String? {
         return cexProvider?.withdraw(
             cexAsset.id,
-            network?.network,
+            network?.id,
             addressState.address!!.hex,
             amountState.amount!!
         )
