@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bitcoincore.utils.HashUtils
-import kotlinx.coroutines.delay
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -72,27 +71,65 @@ class CoinzixCexApiService {
         address: String,
         amount: BigDecimal
     ): String {
-        delay(1000)
+        val params = buildMap {
+            put("iso", iso)
+            put("to_address", address)
+            put("amount", amount.toPlainString())
+            network?.let {
+                put("network", it)
+            }
+        }
+        val response = post<Response.Withdraw>(
+            path = "/v1/withdraw",
+            authToken = authToken,
+            secret = secret,
+            params = params
+        )
 
-        return "1"
-//        val params = buildMap {
-//            put("iso", iso)
-//            put("to_address", address)
-//            put("amount", amount.toPlainString())
-//            network?.let {
-//                put("network", it)
-//            }
-//        }
-//        val address = post<Response.Address>(
-//            path = "/v1/withdraw",
-//            authToken = authToken,
-//            secret = secret,
-//            params = params
-//        )
+        check(response.status) { response.message }
+
+        return response.data.id.toString()
     }
 
-    suspend fun confirmWithdraw(withdrawId: String, emailCode: String, twoFactorCode: String?) {
-        delay(1000)
+    suspend fun confirmWithdraw(
+        authToken: String,
+        secret: String,
+        withdrawId: String,
+        emailCode: String,
+        twoFactorCode: String?
+    ) {
+        val params = buildMap {
+            put("id", withdrawId)
+            put("email_pin", emailCode)
+            twoFactorCode?.let {
+                put("google_pin", it)
+            }
+        }
+        val response = post<Response.Withdraw>(
+            path = "/v1/withdraw/confirm-code",
+            authToken = authToken,
+            secret = secret,
+            params = params
+        )
+
+        check(response.status) { response.message }
+    }
+
+    suspend fun sendWithdrawPin(
+        authToken: String,
+        secret: String,
+        withdrawId: String
+    ) {
+        val params = mapOf("id" to withdrawId)
+
+        val response = post<Response.Withdraw>(
+            path = "/v1/withdraw/send-pin",
+            authToken = authToken,
+            secret = secret,
+            params = params
+        )
+
+        check(response.status) { response.message }
     }
 
     private suspend inline fun <reified T> post(
@@ -151,11 +188,13 @@ object Response {
         val data: LoginData,
         val token: String,
     )
+
     data class LoginData(
         val email: String,
         val chat: String,
         val secret: String,
     )
+
     data class Balances(
         val data: BalanceList
     )
@@ -177,4 +216,12 @@ object Response {
         val withdraw: Int,
         val networks: Map<Int, String>,
     )
+
+    data class Withdraw(
+        val status: Boolean,
+        val message: String,
+        val data: Data
+    ) {
+        data class Data(val id: Int)
+    }
 }
