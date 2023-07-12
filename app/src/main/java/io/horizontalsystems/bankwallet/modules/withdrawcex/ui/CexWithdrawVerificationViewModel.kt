@@ -57,14 +57,31 @@ class CexWithdrawVerificationViewModel(
 
     fun submit() {
         viewModelScope.launch {
-            val tmpEmailCode = emailCode
-            val tmpCexProvider = cexProvider
+            try {
+                val tmpEmailCode = emailCode
+                val tmpCexProvider = cexProvider
 
-            if (tmpEmailCode == null || tmpCexProvider == null) {
-                error = IllegalStateException()
-            } else {
-                tmpCexProvider.confirmWithdraw(withdrawId, tmpEmailCode, twoFactorCode)
-                success = true
+                if (tmpEmailCode == null || tmpCexProvider == null) {
+                    throw IllegalStateException()
+                } else {
+                    tmpCexProvider.confirmWithdraw(withdrawId, tmpEmailCode, twoFactorCode)
+                    success = true
+                }
+            } catch (err: Throwable) {
+                error = err
+            }
+
+            emitState()
+        }
+    }
+
+    fun onResendEmailVerificationCode() {
+        viewModelScope.launch {
+            try {
+                val provider = cexProvider ?: throw IllegalStateException()
+                provider.sendWithdrawPin(withdrawId)
+            } catch (err: Throwable) {
+                error = err
             }
 
             emitState()
