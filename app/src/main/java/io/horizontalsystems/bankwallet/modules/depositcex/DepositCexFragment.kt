@@ -49,7 +49,7 @@ class DepositCexFragment : BaseFragment() {
                     val navigateBack: () -> Unit = { navController.popBackStack() }
 
                     if (cexAsset != null) {
-                        val networks = cexAsset.networks
+                        val networks = cexAsset.depositNetworks
                         if (networks.isEmpty() || networkId != null) {
                             DepositQrCodeScreen(
                                 cexAsset = cexAsset,
@@ -63,7 +63,7 @@ class DepositCexFragment : BaseFragment() {
                                 onNavigateBack = if (navigatedFromMain) null else navigateBack,
                                 onClose = { navController.popBackStack(R.id.mainFragment, false) },
                                 onSelectNetwork = {
-                                    navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it.network))
+                                    navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it.id))
                                 }
                             )
                         }

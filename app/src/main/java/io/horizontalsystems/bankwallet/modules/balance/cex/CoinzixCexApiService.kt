@@ -9,6 +9,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.POST
 import retrofit2.http.Url
@@ -38,6 +39,10 @@ class CoinzixCexApiService {
             secret = secret
         )
         return balances.data.list
+    }
+
+    suspend fun getConfig(): Response.Config {
+        return service.config()
     }
 
     suspend fun getAddress(
@@ -169,6 +174,9 @@ class CoinzixCexApiService {
 
         @POST
         suspend fun post(@Url path: String, @HeaderMap headers: Map<String, String>, @Body params: RequestBody): String
+
+        @GET("api/default/config")
+        suspend fun config(): Response.Config
     }
 }
 
@@ -224,4 +232,47 @@ object Response {
     ) {
         data class Data(val id: Int)
     }
+
+    data class Config(
+        val status: Boolean,
+        val data: Data
+    ) {
+        fun withdrawNetworks(id: String): List<WithdrawNetwork> =
+            data.commission[id]?.let { network ->
+                listOf(network) + network.networks
+            } ?: listOf()
+
+        fun depositNetworks(id: String): List<DepositNetwork> =
+            data.commission_refill[id]?.let { network ->
+                listOf(network) + network.networks
+            } ?: listOf()
+
+        data class Data(
+            val currency_withdraw: List<String>,
+            val currency_deposit: List<String>,
+            val commission: Map<String, WithdrawNetwork>,
+            val commission_refill: Map<String, DepositNetwork>,
+            val demo_currency: Map<String, String>,
+            val fiat_currencies: List<String>
+        )
+
+        data class WithdrawNetwork(
+            val fixed: BigDecimal,
+            val percent: BigDecimal,
+            val min_commission: BigDecimal,
+            val max_withdraw: BigDecimal,
+            val min_withdraw: BigDecimal,
+            val network_type: Int,
+            val networks: List<WithdrawNetwork>
+        )
+
+        data class DepositNetwork(
+            val fixed: BigDecimal,
+            val min_commission: BigDecimal,
+            val min_refill: BigDecimal,
+            val network_type: Int,
+            val networks: List<DepositNetwork>
+        )
+    }
+
 }

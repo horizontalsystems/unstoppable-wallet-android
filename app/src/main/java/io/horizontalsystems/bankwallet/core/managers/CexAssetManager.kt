@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexAssetRaw
-import io.horizontalsystems.bankwallet.core.providers.CexNetwork
-import io.horizontalsystems.bankwallet.core.providers.CexNetworkRaw
 import io.horizontalsystems.bankwallet.core.storage.CexAssetsDao
 import io.horizontalsystems.bankwallet.entities.Account
 
@@ -20,20 +18,10 @@ class CexAssetManager(marketKit: MarketKitWrapper, private val cexAssetsDao: Cex
             lockedBalance = cexAssetRaw.lockedBalance,
             depositEnabled = cexAssetRaw.depositEnabled,
             withdrawEnabled = cexAssetRaw.withdrawEnabled,
-            networks = cexAssetRaw.networks.map { buildCexNetwork(it) },
+            depositNetworks = cexAssetRaw.depositNetworks.map { it.cexDepositNetwork(allBlockchains[it.blockchainUid]) },
+            withdrawNetworks = cexAssetRaw.withdrawNetworks.map { it.cexWithdrawNetwork(allBlockchains[it.blockchainUid]) },
             coin = coins[cexAssetRaw.coinUid],
             decimals = cexAssetRaw.decimals
-        )
-    }
-
-    private fun buildCexNetwork(cexNetworkRaw: CexNetworkRaw): CexNetwork {
-        return CexNetwork(
-            network = cexNetworkRaw.network,
-            name = cexNetworkRaw.name,
-            isDefault = cexNetworkRaw.isDefault,
-            depositEnabled = cexNetworkRaw.depositEnabled,
-            withdrawEnabled = cexNetworkRaw.withdrawEnabled,
-            blockchain = allBlockchains[cexNetworkRaw.blockchainUid],
         )
     }
 

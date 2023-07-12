@@ -69,7 +69,8 @@ data class CexAssetRaw(
     val lockedBalance: BigDecimal,
     val depositEnabled: Boolean,
     val withdrawEnabled: Boolean,
-    val networks: List<CexNetworkRaw>,
+    val depositNetworks: List<CexDepositNetworkRaw>,
+    val withdrawNetworks: List<CexWithdrawNetworkRaw>,
     val coinUid: String?,
     val decimals: Int,
 )
@@ -82,29 +83,85 @@ data class CexAsset(
     val lockedBalance: BigDecimal,
     val depositEnabled: Boolean,
     val withdrawEnabled: Boolean,
-    val networks: List<CexNetwork>,
+    val depositNetworks: List<CexDepositNetwork>,
+    val withdrawNetworks: List<CexWithdrawNetwork>,
     val coin: Coin?,
     val decimals: Int,
 ) : Parcelable
 
-data class CexNetworkRaw(
-    val network: String,
+data class CexDepositNetworkRaw(
+    val id: String,
     val name: String,
     val isDefault: Boolean,
-    val depositEnabled: Boolean,
-    val withdrawEnabled: Boolean,
+    val enabled: Boolean,
+    val minAmount: BigDecimal,
     val blockchainUid: String?,
-)
+) {
+    fun cexDepositNetwork(blockchain: Blockchain?) =
+        CexDepositNetwork(
+            id = id,
+            name = name,
+            isDefault = isDefault,
+            enabled = enabled,
+            minAmount = minAmount,
+            blockchain = blockchain
+        )
+}
 
 @Parcelize
-data class CexNetwork(
-    val network: String,
+data class CexDepositNetwork(
+    val id: String,
     val name: String,
     val isDefault: Boolean,
-    val depositEnabled: Boolean,
-    val withdrawEnabled: Boolean,
+    val enabled: Boolean,
+    val minAmount: BigDecimal,
     val blockchain: Blockchain?,
-) : Parcelable
+) : Parcelable {
+    val networkName get() = blockchain?.name ?: name
+}
+
+data class CexWithdrawNetworkRaw(
+    val id: String,
+    val name: String,
+    val isDefault: Boolean,
+    val enabled: Boolean,
+    val minAmount: BigDecimal,
+    val maxAmount: BigDecimal,
+    val fixedFee: BigDecimal,
+    val feePercent: BigDecimal,
+    val minFee: BigDecimal,
+    val blockchainUid: String?,
+) {
+    fun cexWithdrawNetwork(blockchain: Blockchain?) =
+        CexWithdrawNetwork(
+            id = id,
+            name = name,
+            isDefault = isDefault,
+            enabled = enabled,
+            minAmount = minAmount,
+            maxAmount = maxAmount,
+            fixedFee = fixedFee,
+            feePercent = feePercent,
+            minFee = minFee,
+            blockchain = blockchain
+        )
+}
+
+@Parcelize
+data class CexWithdrawNetwork(
+    val id: String,
+    val name: String,
+    val isDefault: Boolean,
+    val enabled: Boolean,
+    val minAmount: BigDecimal,
+    val maxAmount: BigDecimal,
+    val fixedFee: BigDecimal,
+    val feePercent: BigDecimal,
+    val minFee: BigDecimal,
+    val blockchain: Blockchain?,
+) : Parcelable {
+    val networkName get() = blockchain?.name ?: name
+}
 
 class CoinzixCexProvider(
     private val authToken: String,
@@ -114,19 +171,77 @@ class CoinzixCexProvider(
     private val api = CoinzixCexApiService()
 
     private val coinUidMap = mapOf(
-        "USDT" to "tether",
-        "BUSD" to "binance-usd",
-        "AGIX" to "singularitynet",
-        "SUSHI" to "sushi",
-        "GMT" to "stepn",
-        "CAKE" to "pancakeswap-token",
-        "ETH" to "ethereum",
-        "ETHW" to "ethereum-pow-iou",
-        "BTC" to "bitcoin",
+        "1INCH" to "1inch",
+        "AAVE" to "aave",
+        "ADA" to "cardano",
+        "ALGO" to "algorand",
+        "AMP" to "amp-token",
+        "APE" to "apecoin-ape",
+        "ARB" to "arbitrum",
+        "ATOM" to "cosmos",
+        "AVAX" to "avalanche-2",
+        "AXS" to "axie-infinity",
+        "BAKE" to "bakerytoken",
+        "BCH" to "bitcoin-cash",
         "BNB" to "binancecoin",
+        "BTC" to "bitcoin",
+        "BUSD" to "binance-usd",
+        "CAKE" to "pancakeswap-token",
+        "CHZ" to "chiliz",
+        "COMP" to "compound-governance-token",
+        "DENT" to "dent",
+        "DOGE" to "dogecoin",
+        "DOT" to "polkadot",
+        "EGLD" to "elrond-erd-2",
+        "ENJ" to "enjincoin",
+        "EOS" to "eos",
+        "ETC" to "ethereum-classic",
+        "ETH" to "ethereum",
+        "FIL" to "filecoin",
+        "FLOKI" to "floki",
+        "FTM" to "fantom",
+        "GALA" to "gala",
+        "GMT" to "stepn",
+        "GRT" to "the-graph",
+        "HOT" to "holotoken",
+        "IOTA" to "iota",
+        "LINK" to "chainlink",
+        "LTC" to "litecoin",
+        "LUNA" to "terra-luna-2",
+        "LUNC" to "terra-luna",
+        "MANA" to "decentraland",
+        "MATIC" to "matic-network",
+        "MKR" to "maker",
+        "NEAR" to "near",
+        "ONE" to "harmony",
+        "PEPE" to "pepe",
+        "QNT" to "quant-network",
+        "QTUM" to "qtum",
+        "REEF" to "reef",
+        "RNDR" to "render-token",
+        "RUNE" to "thorchain",
+        "SAND" to "the-sandbox",
+        "SC" to "siacoin",
+        "SHIB" to "shiba-inu",
         "SOL" to "solana",
-        "QI" to "benqi",
-        "BSW" to "biswap",
+        "SUI" to "sui",
+        "SUSHI" to "sushi",
+        "TFUEL" to "theta-fuel",
+        "THETA" to "theta-token",
+        "TRX" to "tron",
+        "UNI" to "uniswap",
+        "USDT" to "tether",
+        "VET" to "vechain",
+        "WIN" to "wink",
+        "WISTA" to "wistaverse",
+        "XLM" to "stellar",
+        "XMR" to "monero",
+        "XRP" to "ripple",
+        "XTZ" to "tezos",
+        "XVG" to "verge",
+        "YFI" to "yearn-finance",
+        "ZIL" to "zilliqa",
+        "ZIX" to "coinzix-token",
     )
 
     private val blockchainUidMap = mapOf(
@@ -137,6 +252,47 @@ class CoinzixCexProvider(
         "MATIC" to "polygon-pos",
         "TRX" to "tron",
     )
+
+    private val networkTypeToBlockchainUidMap = mapOf(
+        1 to "ethereum",
+        2 to "tron",
+        3 to "binancecoin",
+        4 to "binance-smart-chain",
+        6 to "solana",
+        8 to "polygon-pos",
+        9 to "arbitrum-one",
+    )
+
+    private val isoToBlockchainUidMap = mapOf(
+        "ADA" to "cardano",
+        "ALGO" to "algorand",
+        "ATOM" to "cosmos",
+        "BCH" to "bitcoin-cash",
+        "BTC" to "bitcoin",
+        "DOGE" to "dogecoin",
+        "DOT" to "polkadot",
+        "EGLD" to "elrond-erd-2",
+        "EOS" to "eos",
+        "ETH" to "ethereum",
+        "LTC" to "litecoin",
+        "LUNA" to "terra-luna-2",
+        "LUNC" to "terra-luna",
+        "MATIC" to "polygon-pos",
+        "ONE" to "harmony",
+        "QTUM" to "qtum",
+        "RUNE" to "thorchain",
+        "SC" to "siacoin",
+        "SOL" to "solana",
+        "SUI" to "sui",
+        "THETA" to "theta-token",
+        "TRX" to "tron",
+        "VET" to "vechain",
+        "XLM" to "stellar",
+        "XMR" to "monero",
+        "XRP" to "ripple",
+        "ZIL" to "zilliqa",
+    )
+
 
     override suspend fun getAddress(assetId: String, networkId: String?): CexAddress {
         val addressData = api.getAddress(authToken, secret, assetId, 0, networkId)
@@ -180,12 +336,19 @@ class CoinzixCexProvider(
     }
 
     override suspend fun getAssets(): List<CexAssetRaw> {
+        val configResponse = api.getConfig()
+        val ignoredIds = configResponse.data.fiat_currencies + configResponse.data.demo_currency.values
+
         return api.getBalances(authToken, secret)
-            .map {
-                val decimals = 8
+            .mapNotNull {
                 val assetId = it.currency.iso3
-                val depositEnabled = it.currency.refill == 1
-                val withdrawEnabled = it.currency.withdraw == 1
+
+                if (ignoredIds.contains(assetId)) return@mapNotNull null
+
+                val decimals = 8
+                val depositEnabled = configResponse.data.currency_deposit.contains(assetId)
+                val withdrawEnabled = configResponse.data.currency_withdraw.contains(assetId)
+
                 CexAssetRaw(
                     id = assetId,
                     accountId = account.id,
@@ -194,14 +357,34 @@ class CoinzixCexProvider(
                     lockedBalance = (it.balance - it.balance_available).movePointLeft(decimals),
                     depositEnabled = depositEnabled,
                     withdrawEnabled = withdrawEnabled,
-                    networks = it.currency.networks.map { (_, networkId) ->
-                        CexNetworkRaw(
-                            network = networkId,
-                            name = networkId,
-                            isDefault = false,
-                            depositEnabled = depositEnabled,
-                            withdrawEnabled = withdrawEnabled,
-                            blockchainUid = blockchainUidMap[networkId],
+                    depositNetworks = configResponse.depositNetworks(assetId).mapIndexed { index, depositNetwork ->
+                        CexDepositNetworkRaw(
+                            id = depositNetwork.network_type.toString(),
+                            name = depositNetwork.network_type.toString(),
+                            isDefault = index == 0,
+                            enabled = depositEnabled,
+                            minAmount = depositNetwork.min_refill,
+                            blockchainUid = if (depositNetwork.network_type == 0)
+                                isoToBlockchainUidMap[assetId]
+                            else
+                                networkTypeToBlockchainUidMap[depositNetwork.network_type]
+                        )
+                    },
+                    withdrawNetworks = configResponse.withdrawNetworks(assetId).mapIndexed { index, withdrawNetwork ->
+                        CexWithdrawNetworkRaw(
+                            id = withdrawNetwork.network_type.toString(),
+                            name = withdrawNetwork.network_type.toString(),
+                            isDefault = index == 0,
+                            enabled = withdrawEnabled,
+                            minAmount = withdrawNetwork.min_withdraw,
+                            maxAmount = withdrawNetwork.max_withdraw,
+                            fixedFee = withdrawNetwork.fixed,
+                            feePercent = withdrawNetwork.percent,
+                            minFee = withdrawNetwork.min_commission,
+                            blockchainUid = if (withdrawNetwork.network_type == 0)
+                                isoToBlockchainUidMap[assetId]
+                            else
+                                networkTypeToBlockchainUidMap[withdrawNetwork.network_type]
                         )
                     },
                     coinUid = coinUidMap[assetId],
@@ -268,14 +451,28 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
                     lockedBalance = it.freeze,
                     depositEnabled = it.depositAllEnable,
                     withdrawEnabled = it.withdrawAllEnable,
-                    networks = it.networkList.map { coinNetwork ->
-                        CexNetworkRaw(
-                            network = coinNetwork.network,
+                    depositNetworks = it.networkList.map { coinNetwork ->
+                        CexDepositNetworkRaw(
+                            id = coinNetwork.network,
                             name = coinNetwork.name,
                             isDefault = coinNetwork.isDefault,
-                            depositEnabled = coinNetwork.depositEnable,
-                            withdrawEnabled = coinNetwork.withdrawEnable,
-                            blockchainUid = blockchainUidMap[coinNetwork.network],
+                            enabled = coinNetwork.depositEnable,
+                            minAmount = BigDecimal.ZERO,
+                            blockchainUid = blockchainUidMap[coinNetwork.network]
+                        )
+                    },
+                    withdrawNetworks = it.networkList.map { coinNetwork ->
+                        CexWithdrawNetworkRaw(
+                            id = coinNetwork.network,
+                            name = coinNetwork.name,
+                            isDefault = coinNetwork.isDefault,
+                            enabled = coinNetwork.withdrawEnable,
+                            minAmount = coinNetwork.withdrawMin,
+                            maxAmount = coinNetwork.withdrawMax,
+                            fixedFee = coinNetwork.withdrawFee,
+                            feePercent = BigDecimal.ZERO,
+                            minFee = BigDecimal.ZERO,
+                            blockchainUid = blockchainUidMap[coinNetwork.network]
                         )
                     },
                     coinUid = coinUidMap[assetId],
@@ -322,6 +519,9 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
         val isDefault: Boolean,
         val depositEnable: Boolean,
         val withdrawEnable: Boolean,
+        val withdrawFee: BigDecimal,
+        val withdrawMin: BigDecimal,
+        val withdrawMax: BigDecimal,
     )
 
     data class DepositAddress(
