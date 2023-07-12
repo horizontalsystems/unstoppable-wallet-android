@@ -14,5 +14,4 @@ data class ChartUiState(
     val viewState: ViewState,
     val hasVolumes: Boolean,
     val chartViewType: ChartViewType,
-    val indicatorsEnabled: Boolean
 )

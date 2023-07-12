@@ -26,6 +26,7 @@ import cash.p.terminal.core.managers.*
 import cash.p.terminal.core.providers.*
 import cash.p.terminal.core.storage.*
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
+import cash.p.terminal.modules.coin.overview.ChartIndicatorManager
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.keystore.KeyStoreActivity
 import cash.p.terminal.modules.launcher.LauncherActivity
@@ -134,6 +135,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var subscriptionManager: SubscriptionManager
         lateinit var cexProviderManager: CexProviderManager
         lateinit var cexAssetManager: CexAssetManager
+        lateinit var chartIndicatorManager: ChartIndicatorManager
     }
 
     override fun onCreate() {
@@ -340,6 +342,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         contactsRepository = ContactsRepository(marketKit)
         cexProviderManager = CexProviderManager(accountManager)
         cexAssetManager = CexAssetManager(marketKit, appDatabase.cexAssetsDao())
+        chartIndicatorManager = ChartIndicatorManager()
 
         startTasks()
     }
