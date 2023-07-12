@@ -2,16 +2,7 @@ package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import android.content.Context
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
@@ -49,14 +40,7 @@ import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.getNavigationResult
@@ -76,6 +60,7 @@ fun CoinOverviewScreen(
     val refreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val overview by viewModel.overviewLiveData.observeAsState()
     val viewState by viewModel.viewStateLiveData.observeAsState()
+    val chartIndicatorsState = viewModel.chartIndicatorsState
 
     val view = LocalView.current
     val context = LocalContext.current
@@ -160,34 +145,30 @@ fun CoinOverviewScreen(
                                         subhead2_grey(text = stringResource(R.string.CoinPage_Indicators))
                                         Spacer(modifier = Modifier.weight(1f))
 
-                                        val uiState = chartViewModel.uiState
+                                        if (chartIndicatorsState.hasActiveSubscription) {
+                                            if (chartIndicatorsState.enabled) {
+                                                ButtonSecondaryDefault(
+                                                    title = stringResource(id = R.string.Button_Hide),
+                                                    onClick = {
+                                                        viewModel.disableChartIndicators()
+                                                    }
+                                                )
+                                            } else {
+                                                ButtonSecondaryDefault(
+                                                    title = stringResource(id = R.string.Button_Show),
+                                                    onClick = {
+                                                        viewModel.enableChartIndicators()
+                                                    }
+                                                )
+                                            }
+                                            HSpacer(width = 8.dp)
+                                            ButtonSecondaryCircle(
+                                                icon = R.drawable.ic_setting_20
+                                            ) {
 
-                                        if (uiState.indicatorsEnabled) {
-                                            ButtonSecondaryDefault(
-                                                title = stringResource(id = R.string.Button_Hide),
-                                                onClick = {
-                                                    chartViewModel.disableIndicators()
-                                                }
-                                            )
-                                        } else {
-                                            ButtonSecondaryDefault(
-                                                title = stringResource(id = R.string.Button_Show),
-                                                onClick = {
-                                                    chartViewModel.enableIndicators()
-                                                    //todo move it to appropriate place
-                                                    navController.slideFromBottom(R.id.indicatorsAlertDialog)
-                                                }
-                                            )
-                                        }
-
-                                        HSpacer(width = 8.dp)
-                                        ButtonSecondaryCircle(
-                                            icon = R.drawable.ic_setting_20
-                                        ) {
-                                            navController.slideFromRight(R.id.indicatorsFragment)
+                                            }
                                         }
                                     }
-
                                 }
 
 

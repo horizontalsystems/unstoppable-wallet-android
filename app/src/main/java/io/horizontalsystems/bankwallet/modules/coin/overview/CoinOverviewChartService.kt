@@ -13,6 +13,10 @@ import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
 import java.io.IOException
 import io.horizontalsystems.marketkit.models.ChartPoint as MarketKitChartPoint
@@ -21,7 +25,7 @@ class CoinOverviewChartService(
     private val marketKit: MarketKitWrapper,
     override val currencyManager: CurrencyManager,
     private val coinUid: String,
-    private val indicatorsManager: IndicatorsManager,
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : AbstractChartService() {
     override val hasVolumes = true
     override val initialChartInterval = HsTimePeriod.Day1
@@ -34,6 +38,10 @@ class CoinOverviewChartService(
 
     private var chartStartTime: Long = 0
     private val cache = mutableMapOf<String, Pair<Long, List<MarketKitChartPoint>>>()
+
+    private val scope = CoroutineScope(Dispatchers.IO)
+
+    private var indicatorsEnabled = chartIndicatorManager.isEnabledFlow.value
 
     override suspend fun start() {
         try {
@@ -49,12 +57,21 @@ class CoinOverviewChartService(
             it.range <= mostPeriodSeconds
         } + listOf<HsTimePeriod?>(null)
 
+        scope.launch {
+            chartIndicatorManager.isEnabledFlow.collect {
+                indicatorsEnabled = it
+                dataInvalidated()
+            }
+        }
+
+
         super.start()
     }
 
     override fun stop() {
         super.stop()
         unsubscribeFromUpdates()
+        scope.cancel()
     }
 
     override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
@@ -141,7 +158,7 @@ class CoinOverviewChartService(
         if (points.isEmpty()) return ChartPointsWrapper(listOf())
 
         val indicatorsData = if (indicatorsEnabled) {
-            indicatorsManager.calculateIndicators(points)
+            chartIndicatorManager.calculateIndicators(points)
         } else {
             mutableMapOf()
         }
