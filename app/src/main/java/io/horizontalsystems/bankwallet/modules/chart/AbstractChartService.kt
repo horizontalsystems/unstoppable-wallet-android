@@ -36,9 +36,6 @@ abstract class AbstractChartService {
 
     val chartPointsWrapperObservable = BehaviorSubject.create<Result<ChartPointsWrapper>>()
 
-    var indicatorsEnabled = false
-        private set
-
     private var fetchItemsDisposable: Disposable? = null
     private val disposables = CompositeDisposable()
 
@@ -91,16 +88,5 @@ abstract class AbstractChartService {
                 chartPointsWrapperObservable.onNext(Result.failure(it))
             })
     }
-
-    fun disableIndicators() {
-        indicatorsEnabled = false
-        fetchItems()
-    }
-
-    fun enableIndicators() {
-        indicatorsEnabled = true
-        fetchItems()
-    }
-
 }
 

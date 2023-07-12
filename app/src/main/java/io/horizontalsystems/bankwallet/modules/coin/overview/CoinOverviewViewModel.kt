@@ -19,7 +19,8 @@ class CoinOverviewViewModel(
     private val service: CoinOverviewService,
     private val factory: CoinViewFactory,
     private val walletManager: IWalletManager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val chartIndicatorManager: ChartIndicatorManager
 ) : ViewModel() {
 
     val isRefreshingLiveData = MutableLiveData<Boolean>(false)
@@ -30,6 +31,13 @@ class CoinOverviewViewModel(
         private set
     var showHudMessage by mutableStateOf<HudMessage?>(null)
         private set
+
+    var chartIndicatorsState by mutableStateOf(
+        ChartIndicatorsState(
+            hasActiveSubscription = true,
+            enabled = chartIndicatorManager.isEnabledFlow.value
+        )
+    )
 
     private val disposables = CompositeDisposable()
 
@@ -79,6 +87,16 @@ class CoinOverviewViewModel(
             }
 
         refreshTokensVariants()
+    }
+
+    fun enableChartIndicators() {
+        chartIndicatorManager.enable()
+        chartIndicatorsState = chartIndicatorsState.copy(enabled = true)
+    }
+
+    fun disableChartIndicators() {
+        chartIndicatorManager.disable()
+        chartIndicatorsState = chartIndicatorsState.copy(enabled = false)
     }
 
     fun onHudMessageShown() {
@@ -261,6 +279,8 @@ class CoinOverviewViewModel(
     }
 
 }
+
+data class ChartIndicatorsState(val hasActiveSubscription: Boolean, val enabled: Boolean)
 
 data class TokenVariants(val items: List<TokenVariant>, val type: Type) {
     enum class Type(@StringRes val titleResId: Int) {

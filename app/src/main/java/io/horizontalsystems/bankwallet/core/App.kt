@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.*
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
+import io.horizontalsystems.bankwallet.modules.coin.overview.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
@@ -134,6 +135,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var subscriptionManager: SubscriptionManager
         lateinit var cexProviderManager: CexProviderManager
         lateinit var cexAssetManager: CexAssetManager
+        lateinit var chartIndicatorManager: ChartIndicatorManager
     }
 
     override fun onCreate() {
@@ -340,6 +342,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         contactsRepository = ContactsRepository(marketKit)
         cexProviderManager = CexProviderManager(accountManager)
         cexAssetManager = CexAssetManager(marketKit, appDatabase.cexAssetsDao())
+        chartIndicatorManager = ChartIndicatorManager()
 
         startTasks()
     }
