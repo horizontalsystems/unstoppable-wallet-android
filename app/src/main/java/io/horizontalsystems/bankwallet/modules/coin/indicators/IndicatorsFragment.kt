@@ -10,11 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -22,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
@@ -30,17 +27,7 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.TextImportantError
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.*
 
 class IndicatorsFragment : BaseFragment() {
 
@@ -55,7 +42,7 @@ class IndicatorsFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    Indicators(
+                    IndicatorsScreen(
                         navController = findNavController(),
                     )
                 }
@@ -65,8 +52,18 @@ class IndicatorsFragment : BaseFragment() {
 }
 
 @Composable
-fun Indicators(navController: NavController) {
+fun IndicatorsScreen(navController: NavController) {
+    val chartIndicatorsViewModel = viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
     var showDataError by remember { mutableStateOf(true) }
+
+    val uiState = chartIndicatorsViewModel.uiState
+    val toggleIndicator = { indicatorId: String, checked: Boolean ->
+        if (checked) {
+            chartIndicatorsViewModel.enable(indicatorId)
+        } else {
+            chartIndicatorsViewModel.disable(indicatorId)
+        }
+    }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -83,58 +80,25 @@ fun Indicators(navController: NavController) {
             HeaderText(
                 stringResource(R.string.CoinPage_MovingAverages).uppercase()
             )
-            CellUniversalLawrenceSection(
-                listOf(
-                    {
-                        IndicatorCell(
-                            title = "EMA 1",
-                            checked = true,
-                            leftIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_chart_type_2_24),
-                                    tint = ComposeAppTheme.colors.jacob,
-                                    contentDescription = null,
-                                )
-                            },
-                            onEditClick = {
-                                navController.slideFromRight(R.id.emaSettingsFragment)
-                            }
+            CellUniversalLawrenceSection(uiState.maIndicators) { indicator ->
+                IndicatorCell(
+                    title = indicator.name,
+                    checked = indicator.enabled,
+                    leftIcon = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_chart_type_2_24),
+                            tint = ComposeAppTheme.colors.jacob,
+                            contentDescription = null,
                         )
                     },
-                    {
-                        IndicatorCell(
-                            title = "EMA 2",
-                            checked = true,
-                            leftIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_chart_type_2_24),
-                                    tint = ComposeAppTheme.colors.laguna,
-                                    contentDescription = null,
-                                )
-                            },
-                            onEditClick = {
-                                navController.slideFromRight(R.id.emaSettingsFragment)
-                            }
-                        )
+                    onCheckedChange = {
+                        toggleIndicator.invoke(indicator.id, it)
                     },
-                    {
-                        IndicatorCell(
-                            title = "EMA 3",
-                            checked = true,
-                            leftIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_chart_type_2_24),
-                                    tint = ComposeAppTheme.colors.purple,
-                                    contentDescription = null,
-                                )
-                            },
-                            onEditClick = {
-                                navController.slideFromRight(R.id.emaSettingsFragment)
-                            }
-                        )
+                    onEditClick = {
+                        navController.slideFromRight(R.id.emaSettingsFragment)
                     }
                 )
-            )
+            }
             if (showDataError) {
                 VSpacer(12.dp)
                 TextImportantError(
@@ -148,28 +112,18 @@ fun Indicators(navController: NavController) {
             HeaderText(
                 stringResource(R.string.CoinPage_OscillatorsSettings).uppercase()
             )
-            CellUniversalLawrenceSection(
-                listOf(
-                    {
-                        IndicatorCell(
-                            title = "RSI",
-                            checked = true,
-                            onEditClick = {
-                                navController.slideFromRight(R.id.rsiSettingsFragment)
-                            }
-                        )
+            CellUniversalLawrenceSection(uiState.oscillatorIndicators) { indicator ->
+                IndicatorCell(
+                    title = indicator.name,
+                    checked = indicator.enabled,
+                    onCheckedChange = {
+                        toggleIndicator.invoke(indicator.id, it)
                     },
-                    {
-                        IndicatorCell(
-                            title = "MACD",
-                            checked = true,
-                            onEditClick = {
-                                navController.slideFromRight(R.id.macdSettingsFragment)
-                            }
-                        )
+                    onEditClick = {
+                        navController.slideFromRight(R.id.rsiSettingsFragment)
                     }
                 )
-            )
+            }
         }
     }
 }
@@ -179,6 +133,7 @@ private fun IndicatorCell(
     title: String,
     checked: Boolean,
     leftIcon: (@Composable () -> Unit)? = null,
+    onCheckedChange: (Boolean) -> Unit,
     onEditClick: () -> Unit
 ) {
     RowUniversal(
@@ -206,7 +161,7 @@ private fun IndicatorCell(
         HsSwitch(
             modifier = Modifier.padding(0.dp),
             checked = checked,
-            onCheckedChange = {}
+            onCheckedChange = onCheckedChange
         )
     }
 }
@@ -216,6 +171,6 @@ private fun IndicatorCell(
 private fun Preview_Indicators() {
     val navController = rememberNavController()
     ComposeAppTheme {
-        Indicators(navController)
+        IndicatorsScreen(navController)
     }
 }

@@ -165,7 +165,7 @@ fun CoinOverviewScreen(
                                             ButtonSecondaryCircle(
                                                 icon = R.drawable.ic_setting_20
                                             ) {
-
+                                                navController.slideFromRight(R.id.indicatorsFragment)
                                             }
                                         }
                                     }

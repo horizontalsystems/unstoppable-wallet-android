@@ -9,7 +9,7 @@ import io.horizontalsystems.chartview.databinding.ViewChartBinding
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
-import io.horizontalsystems.chartview.models.ChartIndicator
+import io.horizontalsystems.chartview.models.ChartIndicatorType
 import io.horizontalsystems.chartview.models.ChartPoint
 
 class Chart @JvmOverloads constructor(
@@ -21,7 +21,7 @@ class Chart @JvmOverloads constructor(
     lateinit var chartViewType: ChartViewType
 
     private val binding = ViewChartBinding.inflate(LayoutInflater.from(context), this)
-    private val indicatorAnimatedCurves = mutableMapOf<ChartIndicator, AnimatedCurve>()
+    private val indicatorAnimatedCurves = mutableMapOf<ChartIndicatorType, AnimatedCurve>()
 
     interface Listener {
         fun onTouchDown()
