@@ -6,7 +6,8 @@ import com.google.gson.reflect.TypeToken
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.CexNetworkRaw
+import io.horizontalsystems.bankwallet.core.providers.CexDepositNetworkRaw
+import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetworkRaw
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
@@ -119,15 +120,28 @@ class DatabaseConverters {
     }
 
     @TypeConverter
-    fun fromCexNetworkList(networks: List<CexNetworkRaw>): String {
+    fun fromCexDepositNetworkList(networks: List<CexDepositNetworkRaw>): String {
         return gson.toJson(networks)
     }
 
     @TypeConverter
-    fun toCexNetworkList(json: String): List<CexNetworkRaw>? {
+    fun toCexDepositNetworkList(json: String): List<CexDepositNetworkRaw>? {
         return gson.fromJson(
             json,
-            object : TypeToken<List<CexNetworkRaw>>() {}.type
+            object : TypeToken<List<CexDepositNetworkRaw>>() {}.type
+        )
+    }
+
+    @TypeConverter
+    fun fromCexWithdrawNetworkList(networks: List<CexWithdrawNetworkRaw>): String {
+        return gson.toJson(networks)
+    }
+
+    @TypeConverter
+    fun toCexWithdrawNetworkList(json: String): List<CexWithdrawNetworkRaw>? {
+        return gson.fromJson(
+            json,
+            object : TypeToken<List<CexWithdrawNetworkRaw>>() {}.type
         )
     }
 }

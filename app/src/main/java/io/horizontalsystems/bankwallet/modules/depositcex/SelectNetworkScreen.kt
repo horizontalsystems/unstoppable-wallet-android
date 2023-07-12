@@ -12,15 +12,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.providers.CexNetwork
+import io.horizontalsystems.bankwallet.core.providers.CexDepositNetwork
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 @Composable
 fun SelectNetworkScreen(
-    networks: List<CexNetwork>,
-    onSelectNetwork: (CexNetwork) -> Unit,
+    networks: List<CexDepositNetwork>,
+    onSelectNetwork: (CexDepositNetwork) -> Unit,
     onNavigateBack: (() -> Unit)?,
     onClose: () -> Unit,
 ) {
@@ -66,11 +76,11 @@ fun SelectNetworkScreen(
 
 @Composable
 private fun NetworkCell(
-    item: CexNetwork,
+    item: CexDepositNetwork,
     onItemClick: () -> Unit,
 ) {
     RowUniversal(
-        onClick = if (item.depositEnabled) onItemClick else null,
+        onClick = if (item.enabled) onItemClick else null,
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalPadding = 0.dp
     ) {
@@ -84,11 +94,11 @@ private fun NetworkCell(
         HSpacer(width = 16.dp)
         body_leah(
             modifier = Modifier.weight(1f),
-            text = item.name,
+            text = item.networkName,
             maxLines = 1,
         )
         HSpacer(width = 16.dp)
-        if (item.depositEnabled) {
+        if (item.enabled) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = null,

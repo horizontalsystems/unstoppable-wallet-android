@@ -17,7 +17,15 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 @Composable
 fun WithdrawCexSelectNetworkScreen(
@@ -46,9 +54,9 @@ fun WithdrawCexSelectNetworkScreen(
                 CellUniversalLawrenceSection(mainViewModel.networks) { network ->
                     NetworkCell(
                         iconUrl = network.blockchain?.type?.imageUrl,
-                        title = network.network,
+                        title = network.networkName,
                         selected = network.name == mainViewModel.uiState.networkName,
-                        enabled = network.withdrawEnabled
+                        enabled = network.enabled
                     ) {
                         mainViewModel.onSelectNetwork(network)
                         onNavigateBack.invoke()
