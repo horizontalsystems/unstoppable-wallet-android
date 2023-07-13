@@ -137,7 +137,7 @@ open class ChartViewModel(
             return
         }
 
-        val chartData = ChartData(chartPointsWrapper.items, chartPointsWrapper.isMovementChart, false)
+        val chartData = ChartData(chartPointsWrapper.items, chartPointsWrapper.isMovementChart, false, chartPointsWrapper.indicators)
 
         val headerView = if (!chartPointsWrapper.isMovementChart) {
             val value = valueFormatter.formatValue(service.currency, chartData.sum())

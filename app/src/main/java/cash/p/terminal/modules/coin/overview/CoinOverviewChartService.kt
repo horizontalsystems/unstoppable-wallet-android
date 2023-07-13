@@ -63,7 +63,13 @@ class CoinOverviewChartService(
                 dataInvalidated()
             }
         }
-
+        scope.launch {
+            chartIndicatorManager.allIndicatorsFlow.collect {
+                if (indicatorsEnabled) {
+                    dataInvalidated()
+                }
+            }
+        }
 
         super.start()
     }
@@ -87,7 +93,7 @@ class CoinOverviewChartService(
         currency: Currency,
     ): Single<ChartPointsWrapper> {
         val periodType = if (indicatorsEnabled) {
-            val pointsCount = 20
+            val pointsCount = chartIndicatorManager.getExtraPointsCount()
             HsPeriodType.ByCustomPoints(chartInterval, pointsCount)
         } else {
             HsPeriodType.ByPeriod(chartInterval)
@@ -158,7 +164,7 @@ class CoinOverviewChartService(
         if (points.isEmpty()) return ChartPointsWrapper(listOf())
 
         val indicatorsData = if (indicatorsEnabled) {
-            chartIndicatorManager.calculateIndicators(points)
+            chartIndicatorManager.calculateIndicators(LinkedHashMap(points.associate { it.timestamp to it.value.toFloat() }))
         } else {
             mutableMapOf()
         }
@@ -170,7 +176,6 @@ class CoinOverviewChartService(
                         value = chartPoint.value.toFloat(),
                         timestamp = chartPoint.timestamp,
                         volume = chartPoint.volume?.toFloat(),
-                        indicators = indicatorsData[chartPoint.timestamp] ?: mapOf()
                     )
                 } else {
                     null
@@ -197,7 +202,7 @@ class CoinOverviewChartService(
             }
         }
 
-        return ChartPointsWrapper(items)
+        return ChartPointsWrapper(items, indicators = indicatorsData)
     }
 
 }
