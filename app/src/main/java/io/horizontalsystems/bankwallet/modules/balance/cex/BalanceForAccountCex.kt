@@ -101,6 +101,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                 ButtonPrimaryYellow(
                                     modifier = Modifier.weight(1f),
                                     title = stringResource(R.string.Balance_Withdraw),
+                                    enabled = uiState.withdrawEnabled,
                                     onClick = {
                                         navController.slideFromBottom(R.id.withdrawCexChooseAssetFragment)
                                     },
@@ -111,6 +112,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                 ButtonPrimaryDefault(
                                     modifier = Modifier.weight(1f),
                                     title = stringResource(R.string.Balance_Deposit),
+                                    enabled = uiState.depositEnabled,
                                     onClick = {
                                         navController.slideFromRight(R.id.depositCexChooseAssetFragment)
                                     }
