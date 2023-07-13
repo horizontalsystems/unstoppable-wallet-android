@@ -244,15 +244,6 @@ class CoinzixCexProvider(
         "ZIX" to "coinzix-token",
     )
 
-    private val blockchainUidMap = mapOf(
-        "BSC" to "binance-smart-chain",
-        "ETH" to "ethereum",
-        "SOL" to "solana",
-        "BNB" to "binancecoin",
-        "MATIC" to "polygon-pos",
-        "TRX" to "tron",
-    )
-
     private val networkTypeToBlockchainUidMap = mapOf(
         1 to "ethereum",
         2 to "tron",
@@ -450,7 +441,7 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
                     freeBalance = it.free,
                     lockedBalance = it.freeze,
                     depositEnabled = it.depositAllEnable,
-                    withdrawEnabled = it.withdrawAllEnable,
+                    withdrawEnabled = false, /*it.withdrawAllEnable*/
                     depositNetworks = it.networkList.map { coinNetwork ->
                         CexDepositNetworkRaw(
                             id = coinNetwork.network,
@@ -466,7 +457,7 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
                             id = coinNetwork.network,
                             name = coinNetwork.name,
                             isDefault = coinNetwork.isDefault,
-                            enabled = coinNetwork.withdrawEnable,
+                            enabled = false, /*coinNetwork.withdrawEnable*/
                             minAmount = coinNetwork.withdrawMin,
                             maxAmount = coinNetwork.withdrawMax,
                             fixedFee = coinNetwork.withdrawFee,

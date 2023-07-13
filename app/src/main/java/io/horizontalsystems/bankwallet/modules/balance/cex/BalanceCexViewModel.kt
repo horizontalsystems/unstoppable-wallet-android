@@ -49,6 +49,8 @@ class BalanceCexViewModel(
     private var isRefreshing = false
     private var viewItems = mutableListOf<BalanceCexViewItem>()
     private var isActiveScreen = false
+    private var withdrawEnabled = false
+    private var depositEnabled = false
 
     var uiState by mutableStateOf(
         UiState(
@@ -56,6 +58,8 @@ class BalanceCexViewModel(
             viewItems = viewItems,
             sortType = sortType,
             isActiveScreen = isActiveScreen,
+            withdrawEnabled = withdrawEnabled,
+            depositEnabled = depositEnabled,
         )
     )
         private set
@@ -157,6 +161,9 @@ class BalanceCexViewModel(
             viewItems.clear()
         }
 
+        withdrawEnabled = items?.any { it.withdrawEnabled } ?: false
+        depositEnabled = items?.any { it.depositEnabled } ?: false
+
         refreshTotalBalance()
         emitState()
     }
@@ -219,6 +226,8 @@ class BalanceCexViewModel(
                 viewItems = viewItems,
                 sortType = sortType,
                 isActiveScreen = isActiveScreen,
+                withdrawEnabled = withdrawEnabled,
+                depositEnabled = depositEnabled,
             )
         }
     }
@@ -273,7 +282,9 @@ data class UiState(
     val isRefreshing: Boolean,
     val viewItems: List<BalanceCexViewItem>,
     val sortType: BalanceSortType,
-    val isActiveScreen: Boolean
+    val isActiveScreen: Boolean,
+    val withdrawEnabled: Boolean,
+    val depositEnabled: Boolean
 )
 
 data class BalanceCexViewItem(
