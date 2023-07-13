@@ -74,6 +74,9 @@ private fun ImportCoinzixCexAccountScreen(
     onAccountCreate: () -> Unit
 ) {
     val viewModel = viewModel<EnterCexDataCoinzixViewModel>()
+    val view = LocalView.current
+    val uiState = viewModel.uiState
+    val error = uiState.error
 
     val intent = Intent(LocalContext.current, HCaptchaActivity::class.java)
     val launcher =
@@ -91,9 +94,15 @@ private fun ImportCoinzixCexAccountScreen(
             }
         }
 
-    if (viewModel.accountCreated) {
+    if (uiState.accountCreated) {
         LaunchedEffect(Unit) {
             onAccountCreate.invoke()
+        }
+    }
+
+    LaunchedEffect(error) {
+        error?.let {
+            HudHelper.showErrorMessage(view, it.message ?: it.javaClass.simpleName)
         }
     }
 
@@ -125,9 +134,13 @@ private fun ImportCoinzixCexAccountScreen(
             ) {
                 InfoText(text = stringResource(R.string.ImportCexAccountConzix_Description))
                 VSpacer(height = 20.dp)
+                val inputsEnabled = !uiState.loading
+                val textColor = if (inputsEnabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey50
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    hint = stringResource(R.string.ImportCexAccountConzix_Email)
+                    hint = stringResource(R.string.ImportCexAccountConzix_Email),
+                    textColor = textColor,
+                    enabled = inputsEnabled
                 ) {
                     viewModel.onEnterEmail(it)
                 }
@@ -135,6 +148,8 @@ private fun ImportCoinzixCexAccountScreen(
                 FormsInputPassword(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     hint = stringResource(R.string.Password),
+                    textColor = textColor,
+                    enabled = inputsEnabled,
                     //state = uiState.passphraseState,
                     onValueChange = {
                         viewModel.onEnterPassword(it)
@@ -152,8 +167,8 @@ private fun ImportCoinzixCexAccountScreen(
                     ButtonPrimaryYellowWithSpinner(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Login),
-                        showSpinner = false,
-                        enabled = viewModel.loginEnabled,
+                        showSpinner = uiState.loading,
+                        enabled = uiState.loginEnabled,
                         onClick = {
                             launcher.launch(intent)
                         },
@@ -162,6 +177,7 @@ private fun ImportCoinzixCexAccountScreen(
                     ButtonPrimaryTransparent(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_SignUp),
+                        enabled = false,
                         onClick = {
                             //viewModel.onSignUp()
                         }
