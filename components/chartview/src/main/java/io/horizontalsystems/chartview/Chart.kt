@@ -1,6 +1,7 @@
 package io.horizontalsystems.chartview
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -177,32 +178,34 @@ class Chart @JvmOverloads constructor(
             dominanceCurve.setColor(config.curveSlowColor)
         }
 
-        val indicators = data.indicatorsByTimestamp()
+        val indicators = data.indicators
         val tmpIndicatorAnimatedCurves = LinkedHashMap(indicatorAnimatedCurves)
         indicatorAnimatedCurves.clear()
-        indicators.forEach { (chartIndicator, values) ->
-            val indicatorAnimatedCurve = tmpIndicatorAnimatedCurves.remove(chartIndicator)
+        indicators.forEach { (chartIndicatorType, values) ->
+            if (chartIndicatorType is ChartIndicatorType.MovingAverage) {
+                val indicatorAnimatedCurve = tmpIndicatorAnimatedCurves.remove(chartIndicatorType)
 
-            val animator = CurveAnimator(
-                values,
-                data.startTimestamp,
-                data.endTimestamp,
-                values.values.minOrNull() ?: 0f,
-                values.values.maxOrNull() ?: 0f,
-                indicatorAnimatedCurve?.animator,
-                binding.chartMain.shape.right,
-                binding.chartMain.shape.bottom,
-                0f,
-                0f,
-                config.horizontalOffset,
-            )
+                val animator = CurveAnimator(
+                    values,
+                    data.startTimestamp,
+                    data.endTimestamp,
+                    values.values.minOrNull() ?: 0f,
+                    values.values.maxOrNull() ?: 0f,
+                    indicatorAnimatedCurve?.animator,
+                    binding.chartMain.shape.right,
+                    binding.chartMain.shape.bottom,
+                    0f,
+                    0f,
+                    config.horizontalOffset,
+                )
 
-            val curve = ChartCurve2(config)
-            curve.setShape(binding.chartMain.shape)
-            curve.setCurveAnimator(animator)
-            curve.setColor(config.curveSlowColor)
+                val curve = ChartCurve2(config)
+                curve.setShape(binding.chartMain.shape)
+                curve.setCurveAnimator(animator)
+                curve.setColor(Color.parseColor(chartIndicatorType.color))
 
-            indicatorAnimatedCurves[chartIndicator] = AnimatedCurve(animator, curve)
+                indicatorAnimatedCurves[chartIndicatorType] = AnimatedCurve(animator, curve)
+            }
         }
 
         binding.chartTouch.configure(config, 0f)

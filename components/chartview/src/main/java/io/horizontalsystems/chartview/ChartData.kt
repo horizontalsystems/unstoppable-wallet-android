@@ -10,7 +10,8 @@ import java.math.BigDecimal
 data class ChartData(
     val items: List<ChartPoint>,
     val isMovementChart: Boolean,
-    val disabled: Boolean = false
+    val disabled: Boolean = false,
+    val indicators: Map<ChartIndicatorType, LinkedHashMap<Long, Float>> = mapOf()
 ) {
     val valueRange: Range<Float> by lazy {
         Range(items.minOf { it.value }, items.maxOf { it.value })
@@ -50,22 +51,6 @@ data class ChartData(
                 }
             }.toMap()
         )
-    }
-
-    fun indicatorsByTimestamp(): Map<ChartIndicatorType, LinkedHashMap<Long, Float>> {
-        val r = mutableMapOf<ChartIndicatorType, LinkedHashMap<Long, Float>>()
-
-        items.forEach { chartPoint ->
-            chartPoint.indicators.forEach { (chartIndicator, indicatorValue) ->
-                if (!r.containsKey(chartIndicator)) {
-                    r[chartIndicator] = LinkedHashMap()
-                }
-                r[chartIndicator]?.set(chartPoint.timestamp, indicatorValue)
-            }
-        }
-
-        return r
-
     }
 
     fun diff(): BigDecimal {
