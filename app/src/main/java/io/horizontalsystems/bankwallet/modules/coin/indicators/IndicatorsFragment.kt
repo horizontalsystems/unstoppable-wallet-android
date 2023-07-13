@@ -12,6 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -25,9 +26,11 @@ import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.coin.overview.ChartIndicator
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.chartview.models.ChartIndicatorType
 
 class IndicatorsFragment : BaseFragment() {
 
@@ -80,14 +83,15 @@ fun IndicatorsScreen(navController: NavController) {
             HeaderText(
                 stringResource(R.string.CoinPage_MovingAverages).uppercase()
             )
-            CellUniversalLawrenceSection(uiState.maIndicators) { indicator ->
+            CellUniversalLawrenceSection(uiState.maIndicators) { indicator: ChartIndicator ->
+                val movingAverage = indicator.indicatorType as ChartIndicatorType.MovingAverage
                 IndicatorCell(
                     title = indicator.name,
                     checked = indicator.enabled,
                     leftIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_chart_type_2_24),
-                            tint = ComposeAppTheme.colors.jacob,
+                            tint = Color(android.graphics.Color.parseColor(movingAverage.color)),
                             contentDescription = null,
                         )
                     },

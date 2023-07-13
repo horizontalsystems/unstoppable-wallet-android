@@ -3,11 +3,9 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.chartview.models.ChartIndicatorType
 import io.horizontalsystems.chartview.models.MovingAverageType
-import io.horizontalsystems.marketkit.models.ChartPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlin.random.Random
 
 class ChartIndicatorManager(private val localStorage: ILocalStorage) {
     private val _isEnabledFlow = MutableStateFlow(false)
@@ -25,19 +23,19 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
             ChartIndicator(
                 id = "ma1",
                 name = "EMA 1",
-                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.SMA),
+                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.SMA, "#FFA800"),
                 enabled = enabledIds.contains("ma1"),
             ),
             ChartIndicator(
                 id = "ma2",
                 name = "EMA 2",
-                indicatorType = ChartIndicatorType.MovingAverage(10, MovingAverageType.SMA),
+                indicatorType = ChartIndicatorType.MovingAverage(10, MovingAverageType.SMA, "#4A98E9"),
                 enabled = enabledIds.contains("ma2")
             ),
             ChartIndicator(
                 id = "ma3",
                 name = "EMA 3",
-                indicatorType = ChartIndicatorType.MovingAverage(30, MovingAverageType.SMA),
+                indicatorType = ChartIndicatorType.MovingAverage(30, MovingAverageType.SMA, "#BF5AF2"),
                 enabled = enabledIds.contains("ma3")
             ),
             ChartIndicator(
@@ -55,14 +53,40 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
         )
     }
 
-    fun calculateIndicators(points: List<ChartPoint>): Map<Long, Map<ChartIndicatorType, Float>> {
-        val chartIndicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.SMA)
+    fun calculateIndicators(points: LinkedHashMap<Long, Float>): Map<ChartIndicatorType, LinkedHashMap<Long, Float>> {
+        return getEnabledIndicators()
+            .map {
+                val indicatorType = it.indicatorType
+                val indicatorValues = when (indicatorType) {
+                    is ChartIndicatorType.MovingAverage -> {
+                        calculateMovingAverage(indicatorType, points)
+                    }
 
-        return points.map {
-            it.timestamp to mapOf<ChartIndicatorType, Float>(
-                chartIndicatorType to Random.nextDouble(18.0, 20.0).toFloat()
-            )
-        }.toMap()
+                    ChartIndicatorType.Macd -> {
+                        LinkedHashMap()
+                    }
+
+                    ChartIndicatorType.Rsi -> {
+                        LinkedHashMap()
+                    }
+                }
+                indicatorType to indicatorValues
+            }
+            .toMap()
+    }
+
+    private fun calculateMovingAverage(
+        movingAverage: ChartIndicatorType.MovingAverage,
+        points: LinkedHashMap<Long, Float>
+    ): LinkedHashMap<Long, Float> {
+        val period = movingAverage.period
+        val pointsList = points.toList()
+
+        return LinkedHashMap(
+            pointsList.windowed(period, 1) {
+                it.last().first to it.map { it.second }.average().toFloat()
+            }.toMap()
+        )
     }
 
     fun enable() {
@@ -88,6 +112,13 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
             getAllIndicators()
         }
     }
+
+    fun getExtraPointsCount(): Int {
+        val maxPointsCount = getEnabledIndicators().maxOf { it.indicatorType.pointsCount }
+        return maxPointsCount - 1
+    }
+
+    private fun getEnabledIndicators() = allIndicatorsFlow.value.filter { it.enabled }
 }
 
 data class ChartIndicator(
