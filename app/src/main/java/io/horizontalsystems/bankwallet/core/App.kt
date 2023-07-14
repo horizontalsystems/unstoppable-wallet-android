@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.*
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
-import io.horizontalsystems.bankwallet.modules.coin.overview.ChartIndicatorManager
+import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity

@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.coin.overview.ChartIndicator
-import io.horizontalsystems.bankwallet.modules.coin.overview.ChartIndicatorManager
+import io.horizontalsystems.bankwallet.modules.chart.ChartIndicator
+import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.chartview.models.ChartIndicatorType
 import kotlinx.coroutines.launch
 
