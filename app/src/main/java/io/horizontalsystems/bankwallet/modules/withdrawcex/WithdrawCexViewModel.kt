@@ -41,7 +41,7 @@ class WithdrawCexViewModel(
 
     var uiState by mutableStateOf(
         WithdrawCexUiState(
-            networkName = network?.name,
+            networkName = network?.networkName,
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
@@ -87,7 +87,7 @@ class WithdrawCexViewModel(
     private fun emitState() {
         viewModelScope.launch {
             uiState = WithdrawCexUiState(
-                networkName = network?.name,
+                networkName = network?.networkName,
                 availableBalance = amountState.availableBalance,
                 amountCaution = amountState.amountCaution,
                 addressError = addressState.addressError,

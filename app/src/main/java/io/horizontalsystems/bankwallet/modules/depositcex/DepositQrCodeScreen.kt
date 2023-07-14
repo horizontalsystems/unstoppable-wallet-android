@@ -39,6 +39,7 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.CexAsset
+import cash.p.terminal.core.providers.CexDepositNetwork
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -69,10 +70,10 @@ fun DepositQrCodeScreen(
     onNavigateBack: (() -> Unit)?,
     onClose: () -> Unit,
     cexAsset: CexAsset,
-    networkId: String?
+    network: CexDepositNetwork?
 ) {
     val viewModel =
-        viewModel<DepositAddressViewModel>(factory = DepositAddressViewModel.Factory(cexAsset, networkId))
+        viewModel<DepositAddressViewModel>(factory = DepositAddressViewModel.Factory(cexAsset, network?.id))
 
     val uiState = viewModel.uiState
     val address = uiState.address
@@ -181,11 +182,11 @@ fun DepositQrCodeScreen(
                                         value = address.address,
                                     )
                                 }
-                                networkId?.let { networkId ->
+                                network?.let { network ->
                                     composableItems.add {
                                         DetailCell(
                                             title = stringResource(R.string.CexDeposit_Network),
-                                            value = networkId,
+                                            value = network.networkName,
                                         )
                                     }
                                 }
