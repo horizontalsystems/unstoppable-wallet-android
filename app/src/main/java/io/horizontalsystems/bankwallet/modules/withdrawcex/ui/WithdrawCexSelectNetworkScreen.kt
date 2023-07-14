@@ -55,7 +55,7 @@ fun WithdrawCexSelectNetworkScreen(
                     NetworkCell(
                         iconUrl = network.blockchain?.type?.imageUrl,
                         title = network.networkName,
-                        selected = network.name == mainViewModel.uiState.networkName,
+                        selected = network.networkName == mainViewModel.uiState.networkName,
                         enabled = network.enabled
                     ) {
                         mainViewModel.onSelectNetwork(network)

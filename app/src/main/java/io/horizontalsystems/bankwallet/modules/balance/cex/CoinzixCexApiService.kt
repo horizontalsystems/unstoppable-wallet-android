@@ -56,7 +56,7 @@ class CoinzixCexApiService {
             put("iso", iso)
             put("new", new.toString())
             network?.let {
-                put("network", it)
+                put("network_type", it)
             }
         }
         val address = post<Response.Address>(

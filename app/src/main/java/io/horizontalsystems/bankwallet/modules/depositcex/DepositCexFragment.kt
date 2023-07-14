@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
+import io.horizontalsystems.bankwallet.core.providers.CexDepositNetwork
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
@@ -20,10 +21,10 @@ import io.horizontalsystems.core.helpers.HudHelper
 class DepositCexFragment : BaseFragment() {
 
     companion object {
-        fun args(cexAsset: CexAsset, networkId: String? = null): Bundle {
+        fun args(cexAsset: CexAsset, network: CexDepositNetwork? = null): Bundle {
             return bundleOf(
                 "cexAsset" to cexAsset,
-                "cexNetworkId" to networkId,
+                "cexDepositNetwork" to network,
             )
         }
     }
@@ -35,7 +36,7 @@ class DepositCexFragment : BaseFragment() {
     ): View {
 
         val cexAsset = arguments?.getParcelable<CexAsset>("cexAsset")
-        val networkId = arguments?.getString("cexNetworkId")
+        val network = arguments?.getParcelable<CexDepositNetwork>("cexDepositNetwork")
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -50,12 +51,12 @@ class DepositCexFragment : BaseFragment() {
 
                     if (cexAsset != null) {
                         val networks = cexAsset.depositNetworks
-                        if (networks.isEmpty() || networkId != null) {
+                        if (networks.isEmpty() || network != null) {
                             DepositQrCodeScreen(
                                 cexAsset = cexAsset,
                                 onNavigateBack = if (navigatedFromMain) null else navigateBack,
                                 onClose = { navController.popBackStack(R.id.mainFragment, false) },
-                                networkId = networkId
+                                network = network
                             )
                         } else {
                             SelectNetworkScreen(
@@ -63,7 +64,7 @@ class DepositCexFragment : BaseFragment() {
                                 onNavigateBack = if (navigatedFromMain) null else navigateBack,
                                 onClose = { navController.popBackStack(R.id.mainFragment, false) },
                                 onSelectNetwork = {
-                                    navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it.id))
+                                    navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it))
                                 }
                             )
                         }
