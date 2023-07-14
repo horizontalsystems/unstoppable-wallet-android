@@ -9,8 +9,8 @@ object PointConverter {
         val width = shape.width() - horizontalOffset * 2
         val height = shape.height() - verticalPadding * 2
 
-        var valueMin = data.valueRange.lower
-        var valueMax = data.valueRange.upper
+        var valueMin = data.minValue
+        var valueMax = data.maxValue
 
         if (valueMin == valueMax) {
             valueMin *= 0.9f
@@ -41,6 +41,13 @@ object PointConverter {
                     x = x + horizontalOffset,
                     y = shape.height() - verticalPadding - y,
                     item = item,
+                    indicators = data.indicators
+                        .mapNotNull { (indicatorType, values) ->
+                            values[item.timestamp]?.let {
+                                indicatorType to it
+                            }
+                        }.toMap()
+
                 )
             )
         }

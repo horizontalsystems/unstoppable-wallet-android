@@ -27,7 +27,7 @@ class Chart @JvmOverloads constructor(
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchSelect(item: ChartPoint)
+        fun onTouchSelect(item: ChartPoint, indicators: Map<ChartIndicatorType, Float>)
     }
 
     private val config = ChartConfig(context, attrs)
@@ -93,8 +93,11 @@ class Chart @JvmOverloads constructor(
                 listener.onTouchUp()
             }
 
-            override fun onTouchSelect(item: ChartPoint) {
-                listener.onTouchSelect(item)
+            override fun onTouchSelect(
+                item: ChartPoint,
+                indicators: Map<ChartIndicatorType, Float>
+            ) {
+                listener.onTouchSelect(item, indicators)
             }
         })
     }
@@ -133,8 +136,8 @@ class Chart @JvmOverloads constructor(
         animatorMain.cancel()
 
         val candleValues = data.valuesByTimestamp()
-        val minCandleValue = candleValues.values.minOrNull() ?: 0f
-        val maxCandleValue = candleValues.values.maxOrNull() ?: 0f
+        val minCandleValue = data.minValue
+        val maxCandleValue = data.maxValue
 
         mainCurveAnimator = CurveAnimator(
             candleValues,
@@ -189,8 +192,8 @@ class Chart @JvmOverloads constructor(
                     values,
                     data.startTimestamp,
                     data.endTimestamp,
-                    values.values.minOrNull() ?: 0f,
-                    values.values.maxOrNull() ?: 0f,
+                    minCandleValue,
+                    maxCandleValue,
                     indicatorAnimatedCurve?.animator,
                     binding.chartMain.shape.right,
                     binding.chartMain.shape.bottom,
@@ -267,7 +270,13 @@ class Chart @JvmOverloads constructor(
 
         // Candles
         mainBars.setShape(binding.chartMain.shape)
-        mainBars.setValues(data.valuesByTimestamp(), data.startTimestamp, data.endTimestamp)
+        mainBars.setValues(
+            data.valuesByTimestamp(),
+            data.startTimestamp,
+            data.endTimestamp,
+            data.minValue,
+            data.maxValue,
+        )
 
         mainRange.setShape(binding.topLowRange.shape)
         mainRange.setValues(maxValue, minValue)

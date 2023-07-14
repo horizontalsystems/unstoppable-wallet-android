@@ -45,12 +45,18 @@ class ChartBars(
         shape = rect
     }
 
-    fun setValues(values: LinkedHashMap<Long, Float>, minKey: Long, maxKey: Long) {
+    fun setValues(
+        values: LinkedHashMap<Long, Float>,
+        minKey: Long,
+        maxKey: Long,
+        minValue: Float = values.minOfOrNull { it.value } ?: 0f,
+        maxValue: Float = values.maxOfOrNull { it.value } ?: 0f,
+    ) {
         targetValues = values
         targetMinKey = minKey
         targetMaxKey = maxKey
-        targetMinValue = targetValues.values.minOrNull() ?: 0f
-        targetMaxValue = targetValues.values.maxOrNull() ?: 0f
+        targetMinValue = minValue
+        targetMaxValue = maxValue
 
         fromValues = frameValues
         fromMinKey = frameMinKey

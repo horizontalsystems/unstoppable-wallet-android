@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
-import android.util.Range
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.models.ChartIndicatorType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -175,7 +175,7 @@ open class ChartViewModel(
             )
         }
 
-        val (minValue, maxValue) = getMinMax(chartData.valueRange)
+        val (minValue, maxValue) = getMinMax(chartData.minValue, chartData.maxValue)
 
         val chartInfoData = ChartInfoData(
             chartData,
@@ -188,19 +188,19 @@ open class ChartViewModel(
     }
 
     private val noChangesLimitPercent = 0.2f
-    private fun getMinMax(range: Range<Float>): Pair<String?, String?> {
-        var max = range.upper
-        var min = range.lower
+    private fun getMinMax(minValue: Float, maxValue: Float): Pair<String?, String?> {
+        var max = maxValue
+        var min = minValue
 
-        if (max!= null && min != null && max == min){
+        if (max == min){
             min *= (1 - noChangesLimitPercent)
             max *= (1 + noChangesLimitPercent)
         }
 
-        val maxValue = max?.let { getFormattedValue(it, service.currency) }
-        val minValue = min?.let { getFormattedValue(it, service.currency) }
+        val maxValueStr = getFormattedValue(max, service.currency)
+        val minValueStr = getFormattedValue(min, service.currency)
 
-        return Pair(minValue, maxValue)
+        return Pair(minValueStr, maxValueStr)
 
     }
 
@@ -213,7 +213,7 @@ open class ChartViewModel(
         service.stop()
     }
 
-    fun getSelectedPoint(item: ChartPoint): ChartModule.ChartHeaderView {
+    fun getSelectedPoint(item: ChartPoint, indicators: Map<ChartIndicatorType, Float>): ChartModule.ChartHeaderView {
         val value = valueFormatter.formatValue(service.currency, item.value.toBigDecimal())
         val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
 
@@ -222,15 +222,18 @@ open class ChartViewModel(
             valueHint = null,
             date = dayAndTime,
             diff = null,
-            extraData = getItemExtraData(item)
+            extraData = getItemExtraData(item, indicators)
         )
     }
 
-    private fun getItemExtraData(item: ChartPoint): ChartModule.ChartHeaderExtraData? {
+    private fun getItemExtraData(item: ChartPoint, indicators: Map<ChartIndicatorType, Float>): ChartModule.ChartHeaderExtraData? {
         val dominance = item.dominance
         val volume = item.volume
 
         return when {
+            indicators.isNotEmpty() -> {
+                ChartModule.ChartHeaderExtraData.Indicators(indicators)
+            }
             dominance != null -> {
                 ChartModule.ChartHeaderExtraData.Dominance(
                     App.numberFormatter.format(dominance, 0, 2, suffix = "%"),
