@@ -160,12 +160,17 @@ class CoinOverviewChartService(
         points: List<MarketKitChartPoint>,
         chartInterval: HsTimePeriod?
     ): ChartPointsWrapper {
-        val lastCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: return ChartPointsWrapper(listOf())
-
+        val latestCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: return ChartPointsWrapper(listOf())
         if (points.isEmpty()) return ChartPointsWrapper(listOf())
 
+        val latestCoinPriceIsNewer = latestCoinPrice.timestamp > points.last().timestamp
+
         val indicatorsData = if (indicatorsEnabled) {
-            chartIndicatorManager.calculateIndicators(LinkedHashMap(points.associate { it.timestamp to it.value.toFloat() }))
+            val pointsForIndicators = LinkedHashMap(points.associate { it.timestamp to it.value.toFloat() })
+            if (latestCoinPriceIsNewer) {
+                pointsForIndicators[latestCoinPrice.timestamp] = latestCoinPrice.value.toFloat()
+            }
+            chartIndicatorManager.calculateIndicators(pointsForIndicators)
         } else {
             mutableMapOf()
         }
@@ -184,18 +189,18 @@ class CoinOverviewChartService(
             }
             .toMutableList()
 
-        if (lastCoinPrice.timestamp > items.last().timestamp) {
-            items.add(ChartPoint(lastCoinPrice.value.toFloat(), timestamp = lastCoinPrice.timestamp))
+        if (latestCoinPriceIsNewer) {
+            items.add(ChartPoint(latestCoinPrice.value.toFloat(), timestamp = latestCoinPrice.timestamp))
 
             if (chartInterval == HsTimePeriod.Day1) {
-                val adjustedStartTimestamp = lastCoinPrice.timestamp - 24 * 60 * 60
-                val diff = lastCoinPrice.diff
+                val adjustedStartTimestamp = latestCoinPrice.timestamp - 24 * 60 * 60
+                val diff = latestCoinPrice.diff
                 if (diff == null) {
                     items.removeIf { it.timestamp < adjustedStartTimestamp }
                 } else {
                     items.removeIf { it.timestamp <= adjustedStartTimestamp }
 
-                    val startValue = (lastCoinPrice.value * 100.toBigDecimal()) / (diff + 100.toBigDecimal())
+                    val startValue = (latestCoinPrice.value * 100.toBigDecimal()) / (diff + 100.toBigDecimal())
                     val startItem = ChartPoint(startValue.toFloat(), adjustedStartTimestamp)
 
                     items.add(0, startItem)
