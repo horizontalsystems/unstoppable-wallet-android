@@ -2,6 +2,7 @@ package cash.p.terminal.modules.chart
 
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.market.Value
+import io.horizontalsystems.chartview.models.ChartIndicatorType
 import java.math.BigDecimal
 
 object ChartModule {
@@ -28,6 +29,7 @@ object ChartModule {
     sealed class ChartHeaderExtraData {
         class Volume(val volume: String) : ChartHeaderExtraData()
         class Dominance(val dominance: String, val diff: Value.Percent?) : ChartHeaderExtraData()
+        class Indicators(val indicators: Map<ChartIndicatorType, Float>) : ChartHeaderExtraData()
     }
 
 }

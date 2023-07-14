@@ -23,20 +23,20 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
         return listOf(
             ChartIndicator(
                 id = "ma1",
-                name = "EMA 1",
+                name = "SMA",
                 indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.SMA, "#FFA800"),
                 enabled = enabledIds.contains("ma1"),
             ),
             ChartIndicator(
                 id = "ma2",
-                name = "EMA 2",
-                indicatorType = ChartIndicatorType.MovingAverage(10, MovingAverageType.SMA, "#4A98E9"),
+                name = "WMA",
+                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.WMA, "#4A98E9"),
                 enabled = enabledIds.contains("ma2")
             ),
             ChartIndicator(
                 id = "ma3",
-                name = "WMA 3",
-                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.WMA, "#BF5AF2"),
+                name = "EMA",
+                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.EMA, "#BF5AF2"),
                 enabled = enabledIds.contains("ma3")
             ),
             ChartIndicator(

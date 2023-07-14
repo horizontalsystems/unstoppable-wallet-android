@@ -160,8 +160,8 @@ class CoinOverviewChartService(
         points: List<MarketKitChartPoint>,
         chartInterval: HsTimePeriod?
     ): ChartPointsWrapper {
-        val latestCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: return ChartPointsWrapper(listOf())
         if (points.isEmpty()) return ChartPointsWrapper(listOf())
+        val latestCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: return ChartPointsWrapper(listOf())
 
         val latestCoinPriceIsNewer = latestCoinPrice.timestamp > points.last().timestamp
 

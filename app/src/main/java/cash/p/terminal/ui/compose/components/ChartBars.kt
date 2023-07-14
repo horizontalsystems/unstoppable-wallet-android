@@ -26,8 +26,8 @@ fun ChartBars(
 
             val valuesByTimestamp = chartData.valuesByTimestamp()
 
-            var valueMin = valuesByTimestamp.values.minOrNull() ?: 0f
-            val valueMax = valuesByTimestamp.values.maxOrNull() ?: 0f
+            var valueMin = chartData.minValue
+            val valueMax = chartData.maxValue
             if (valueMin == valueMax) {
                 valueMin *= 0.9f
             }

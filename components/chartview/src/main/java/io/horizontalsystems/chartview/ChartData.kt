@@ -1,9 +1,10 @@
 package io.horizontalsystems.chartview
 
-import android.util.Range
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.chartview.models.ChartIndicatorType
 import io.horizontalsystems.chartview.models.ChartPoint
+import java.lang.Float.max
+import java.lang.Float.min
 import java.math.BigDecimal
 
 @Immutable
@@ -13,8 +14,27 @@ data class ChartData(
     val disabled: Boolean = false,
     val indicators: Map<ChartIndicatorType, LinkedHashMap<Long, Float>> = mapOf()
 ) {
-    val valueRange: Range<Float> by lazy {
-        Range(items.minOf { it.value }, items.maxOf { it.value })
+    val minValue: Float by lazy {
+        var valuesMin = items.minOf { it.value }
+        indicators
+            .mapNotNull { it.value.minOfOrNull { it.value } }
+            .minOrNull()
+            ?.let { indicatorsMin ->
+                valuesMin = min(valuesMin, indicatorsMin)
+            }
+
+        valuesMin
+    }
+
+    val maxValue: Float by lazy {
+        var valuesMax = items.maxOf { it.value }
+        indicators
+            .mapNotNull { it.value.maxOfOrNull { it.value } }
+            .maxOrNull()
+            ?.let { indicatorsMax ->
+                valuesMax = max(valuesMax, indicatorsMax)
+            }
+        valuesMax
     }
 
     val startTimestamp: Long by lazy {
