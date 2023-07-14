@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.LocalizedException
@@ -39,6 +40,8 @@ class SendTronViewModel(
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository
 ) : ViewModel() {
+    val logger: AppLogger = AppLogger("send-tron")
+
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -200,6 +203,8 @@ class SendTronViewModel(
                 resourcesConsumed = resourcesConsumed
             )
         } catch (error: Throwable) {
+            logger.warning("estimate error", error)
+
             cautions = listOf(createCaution(error))
             feeState = FeeState.Error(error)
             emitState()
@@ -209,6 +214,8 @@ class SendTronViewModel(
     }
 
     fun onClickSend() {
+        logger.info("click send button")
+
         viewModelScope.launch {
             send()
         }
@@ -217,12 +224,15 @@ class SendTronViewModel(
     private suspend fun send() = withContext(Dispatchers.IO) {
         try {
             sendResult = SendResult.Sending
+            logger.info("sending tx")
 
             adapter.send(amountState.evmAmount!!, addressState.tronAddress!!, feeState.feeLimit)
 
             sendResult = SendResult.Sent
+            logger.info("success")
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
+            logger.warning("failed", e)
         }
     }
 
