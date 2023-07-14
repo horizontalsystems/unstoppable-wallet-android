@@ -39,6 +39,7 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
+import io.horizontalsystems.bankwallet.core.providers.CexDepositNetwork
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -69,10 +70,10 @@ fun DepositQrCodeScreen(
     onNavigateBack: (() -> Unit)?,
     onClose: () -> Unit,
     cexAsset: CexAsset,
-    networkId: String?
+    network: CexDepositNetwork?
 ) {
     val viewModel =
-        viewModel<DepositAddressViewModel>(factory = DepositAddressViewModel.Factory(cexAsset, networkId))
+        viewModel<DepositAddressViewModel>(factory = DepositAddressViewModel.Factory(cexAsset, network?.id))
 
     val uiState = viewModel.uiState
     val address = uiState.address
@@ -181,11 +182,11 @@ fun DepositQrCodeScreen(
                                         value = address.address,
                                     )
                                 }
-                                networkId?.let { networkId ->
+                                network?.let { network ->
                                     composableItems.add {
                                         DetailCell(
                                             title = stringResource(R.string.CexDeposit_Network),
-                                            value = networkId,
+                                            value = network.networkName,
                                         )
                                     }
                                 }
