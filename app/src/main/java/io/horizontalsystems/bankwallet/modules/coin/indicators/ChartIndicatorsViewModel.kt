@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.coin.overview.ChartIndicator
-import cash.p.terminal.modules.coin.overview.ChartIndicatorManager
+import cash.p.terminal.modules.chart.ChartIndicator
+import cash.p.terminal.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.chartview.models.ChartIndicatorType
 import kotlinx.coroutines.launch
 

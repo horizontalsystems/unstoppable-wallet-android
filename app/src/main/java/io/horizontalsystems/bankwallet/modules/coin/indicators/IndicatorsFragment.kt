@@ -26,7 +26,7 @@ import androidx.navigation.fragment.findNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.coin.overview.ChartIndicator
+import cash.p.terminal.modules.chart.ChartIndicator
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*

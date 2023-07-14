@@ -26,7 +26,7 @@ import cash.p.terminal.core.managers.*
 import cash.p.terminal.core.providers.*
 import cash.p.terminal.core.storage.*
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
-import cash.p.terminal.modules.coin.overview.ChartIndicatorManager
+import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.keystore.KeyStoreActivity
 import cash.p.terminal.modules.launcher.LauncherActivity

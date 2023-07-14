@@ -6,6 +6,7 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
+import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint

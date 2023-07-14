@@ -1,4 +1,5 @@
-package cash.p.terminal.modules.coin.overview
+package cash.p.terminal.modules.chart
+>>>>>>>> 0ac546280 (All calculation of EMA and WMA):app/src/main/java/cash/p/terminal/modules/chart/ChartIndicatorManager.kt
 
 import cash.p.terminal.core.ILocalStorage
 import io.horizontalsystems.chartview.models.ChartIndicatorType
@@ -34,8 +35,8 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
             ),
             ChartIndicator(
                 id = "ma3",
-                name = "EMA 3",
-                indicatorType = ChartIndicatorType.MovingAverage(30, MovingAverageType.SMA, "#BF5AF2"),
+                name = "WMA 3",
+                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.WMA, "#BF5AF2"),
                 enabled = enabledIds.contains("ma3")
             ),
             ChartIndicator(
@@ -80,13 +81,52 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
         points: LinkedHashMap<Long, Float>
     ): LinkedHashMap<Long, Float> {
         val period = movingAverage.period
+        if (points.size < period) return LinkedHashMap()
+
         val pointsList = points.toList()
 
-        return LinkedHashMap(
-            pointsList.windowed(period, 1) {
-                it.last().first to it.map { it.second }.average().toFloat()
-            }.toMap()
-        )
+        return when (movingAverage.type) {
+            MovingAverageType.SMA -> {
+                LinkedHashMap(
+                    pointsList.windowed(period, 1) {
+                        it.last().first to it.map { it.second }.average().toFloat()
+                    }.toMap()
+                )
+            }
+
+            MovingAverageType.EMA -> {
+                val subListForFirstSma = pointsList.subList(0, period)
+                val firstSma = subListForFirstSma.map { it.second }.average().toFloat()
+
+                val res = LinkedHashMap<Long, Float>()
+                res[subListForFirstSma.last().first] = firstSma
+
+                var prevEma = firstSma
+
+                val k = 2f / (period + 1) // multiplier for weighting the EMA
+                pointsList.subList(period, points.size).forEach { (key, value) ->
+                    val ema = value * k + prevEma * (1 - k)
+                    res[key] = ema
+
+                    prevEma = ema
+                }
+                res
+            }
+
+            MovingAverageType.WMA -> {
+                LinkedHashMap(
+                    pointsList.windowed(period, 1) { window ->
+                        val n = period
+                        val sumOfWeights = (n + 1) * n / 2
+                        val wma = window.mapIndexed { i, (_, value) ->
+                            value * (i + 1)
+                        }.sum() / sumOfWeights
+
+                        window.last().first to wma
+                    }.toMap()
+                )
+            }
+        }
     }
 
     fun enable() {
@@ -114,7 +154,9 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
     }
 
     fun getExtraPointsCount(): Int {
-        val maxPointsCount = getEnabledIndicators().maxOf { it.indicatorType.pointsCount }
+        val enabledIndicators = getEnabledIndicators()
+        if (enabledIndicators.isEmpty()) return 0
+        val maxPointsCount = enabledIndicators.maxOf { it.indicatorType.pointsCount }
         return maxPointsCount - 1
     }
 

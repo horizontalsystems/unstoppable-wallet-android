@@ -10,6 +10,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.*
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.*
+import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.TokenType
