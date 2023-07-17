@@ -82,50 +82,64 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
         val period = movingAverage.period
         if (points.size < period) return LinkedHashMap()
 
-        val pointsList = points.toList()
-
         return when (movingAverage.type) {
-            MovingAverageType.SMA -> {
-                LinkedHashMap(
-                    pointsList.windowed(period, 1) {
-                        it.last().first to it.map { it.second }.average().toFloat()
-                    }.toMap()
-                )
-            }
-
-            MovingAverageType.EMA -> {
-                val subListForFirstSma = pointsList.subList(0, period)
-                val firstSma = subListForFirstSma.map { it.second }.average().toFloat()
-
-                val res = LinkedHashMap<Long, Float>()
-                res[subListForFirstSma.last().first] = firstSma
-
-                var prevEma = firstSma
-
-                val k = 2f / (period + 1) // multiplier for weighting the EMA
-                pointsList.subList(period, points.size).forEach { (key, value) ->
-                    val ema = value * k + prevEma * (1 - k)
-                    res[key] = ema
-
-                    prevEma = ema
-                }
-                res
-            }
-
-            MovingAverageType.WMA -> {
-                LinkedHashMap(
-                    pointsList.windowed(period, 1) { window ->
-                        val n = period
-                        val sumOfWeights = (n + 1) * n / 2
-                        val wma = window.mapIndexed { i, (_, value) ->
-                            value * (i + 1)
-                        }.sum() / sumOfWeights
-
-                        window.last().first to wma
-                    }.toMap()
-                )
-            }
+            MovingAverageType.SMA -> calculateSMA(points, period)
+            MovingAverageType.EMA -> calculateEMA(points, period)
+            MovingAverageType.WMA -> calculateWMA(points, period)
         }
+    }
+
+    private fun calculateWMA(
+        points: LinkedHashMap<Long, Float>,
+        period: Int
+    ): LinkedHashMap<Long, Float> {
+        val pointsList = points.toList()
+        return LinkedHashMap(
+            pointsList.windowed(period, 1) { window ->
+                val n = period
+                val sumOfWeights = (n + 1) * n / 2
+                val wma = window.mapIndexed { i, (_, value) ->
+                    value * (i + 1)
+                }.sum() / sumOfWeights
+
+                window.last().first to wma
+            }.toMap()
+        )
+    }
+
+    private fun calculateEMA(
+        points: LinkedHashMap<Long, Float>,
+        period: Int
+    ): LinkedHashMap<Long, Float> {
+        val pointsList = points.toList()
+        val subListForFirstSma = pointsList.subList(0, period)
+        val firstSma = subListForFirstSma.map { it.second }.average().toFloat()
+
+        val res = LinkedHashMap<Long, Float>()
+        res[subListForFirstSma.last().first] = firstSma
+
+        var prevEma = firstSma
+
+        val k = 2f / (period + 1) // multiplier for weighting the EMA
+        pointsList.subList(period, pointsList.size).forEach { (key, value) ->
+            val ema = value * k + prevEma * (1 - k)
+            res[key] = ema
+
+            prevEma = ema
+        }
+        return res
+    }
+
+    private fun calculateSMA(
+        points: LinkedHashMap<Long, Float>,
+        period: Int
+    ): LinkedHashMap<Long, Float> {
+        val pointsList = points.toList()
+        return LinkedHashMap(
+            pointsList.windowed(period, 1) {
+                it.last().first to it.map { it.second }.average().toFloat()
+            }.toMap()
+        )
     }
 
     fun enable() {
