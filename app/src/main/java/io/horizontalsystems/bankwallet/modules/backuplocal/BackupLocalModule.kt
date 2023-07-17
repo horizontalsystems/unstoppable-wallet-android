@@ -59,7 +59,7 @@ object BackupLocalModule {
     fun getAccountTypeFromData(accountType: String, data: ByteArray): AccountType {
         return when (accountType) {
             MNEMONIC -> {
-                val parts = String(data, Charsets.UTF_8).split("@")
+                val parts = String(data, Charsets.UTF_8).split("@", limit = 2)
                 //check for nonstandard mnemonic from iOs app
                 if (parts[0].split("&").size > 1)
                     throw IllegalStateException("Non standard mnemonic")
