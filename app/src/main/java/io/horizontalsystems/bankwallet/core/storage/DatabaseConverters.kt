@@ -144,4 +144,14 @@ class DatabaseConverters {
             object : TypeToken<List<CexWithdrawNetworkRaw>>() {}.type
         )
     }
+
+    @TypeConverter
+    fun fromMap(v: Map<String, String>): String {
+        return gson.toJson(v)
+    }
+
+    @TypeConverter
+    fun toMap(v: String): Map<String, String> {
+        return gson.fromJson(v, object : TypeToken<Map<String, String>>() {}.type)
+    }
 }

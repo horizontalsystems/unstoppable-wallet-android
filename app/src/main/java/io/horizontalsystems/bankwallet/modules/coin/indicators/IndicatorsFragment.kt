@@ -26,11 +26,10 @@ import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.chart.ChartIndicator
+import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.models.ChartIndicatorType
 
 class IndicatorsFragment : BaseFragment() {
 
@@ -83,15 +82,14 @@ fun IndicatorsScreen(navController: NavController) {
             HeaderText(
                 stringResource(R.string.CoinPage_MovingAverages).uppercase()
             )
-            CellUniversalLawrenceSection(uiState.maIndicators) { indicator: ChartIndicator ->
-                val movingAverage = indicator.indicatorType as ChartIndicatorType.MovingAverage
+            CellUniversalLawrenceSection(uiState.maIndicators) { indicator: ChartIndicatorSetting ->
                 IndicatorCell(
                     title = indicator.name,
                     checked = indicator.enabled,
                     leftIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_chart_type_2_24),
-                            tint = Color(android.graphics.Color.parseColor(movingAverage.color)),
+                            tint = Color(android.graphics.Color.parseColor(indicator.extraData["color"])),
                             contentDescription = null,
                         )
                     },
