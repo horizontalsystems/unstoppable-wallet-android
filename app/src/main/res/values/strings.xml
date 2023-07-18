@@ -1713,6 +1713,7 @@
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Title">Withdraw %s</string>
     <string name="CexWithdraw_Network">Network</string>
+    <string name="CexWithdraw_FeeFromAmount">Fee from amount</string>
     <string name="CexWithdraw_NetworkDescription">Ensure the network matches the withdrawal address and the deposit platform supports it.</string>
     <string name="CexWithdraw_SecurityVerification">Security Verification</string>
     <string name="CexWithdraw_EmailVerificationCode">Email Verification Code</string>

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendAddressService {
+class CexWithdrawAddressService {
 
     private var address: Address? = null
     private var addressError: Throwable? = null

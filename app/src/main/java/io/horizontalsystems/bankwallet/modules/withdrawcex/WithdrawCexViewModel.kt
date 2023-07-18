@@ -12,7 +12,9 @@ import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
 import io.horizontalsystems.bankwallet.core.providers.ICexProvider
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
+import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
@@ -20,10 +22,12 @@ import java.math.BigDecimal
 
 class WithdrawCexViewModel(
     val cexAsset: CexAsset,
+    private var network: CexWithdrawNetwork,
     private val xRateService: XRateService,
-    private val amountService: SendAmountService,
-    private val addressService: SendAddressService,
-    private val cexProvider: ICexProvider?
+    private val amountService: CexWithdrawAmountService,
+    private val addressService: CexWithdrawAddressService,
+    private val cexProvider: ICexProvider,
+    private val contactsRepository: ContactsRepository
 ) : ViewModel() {
     private val coinUid = cexAsset.coin?.uid
 
@@ -32,19 +36,27 @@ class WithdrawCexViewModel(
     val networks = cexAsset.withdrawNetworks
     val networkSelectionEnabled = networks.size > 1
 
+    val blockchainType get() = network.blockchain?.type
+    fun hasContacts() = blockchainType?.let { blockchainType ->
+        contactsRepository.getContactsFiltered(blockchainType).isNotEmpty()
+    } ?: false
+
     var coinRate by mutableStateOf(coinUid?.let { xRateService.getRate(it) })
         private set
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-    private var network = networks.find { it.enabled }
+    private var feeItem = FeeItem("", null)
+    private var feeFromAmount = false
 
     var uiState by mutableStateOf(
         WithdrawCexUiState(
-            networkName = network?.networkName,
+            networkName = network.networkName,
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
+            feeItem = feeItem,
+            feeFromAmount = feeFromAmount,
             canBeSend = amountState.canBeSend && addressState.canBeSend
         )
     )
@@ -72,13 +84,27 @@ class WithdrawCexViewModel(
         }
     }
 
-    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
+    private fun handleUpdatedAmountState(amountState: CexWithdrawAmountService.State) {
         this.amountState = amountState
+        feeItem = feeItem(amountState)
 
         emitState()
     }
 
-    private fun handleUpdatedAddressState(addressState: SendAddressService.State) {
+    private fun feeItem(amountState: CexWithdrawAmountService.State): FeeItem {
+        val coinAmount = App.numberFormatter.formatCoinFull(
+            amountState.fee,
+            cexAsset.id,
+            coinMaxAllowedDecimals
+        )
+        val currencyAmount = coinRate?.let { rate ->
+            rate.copy(value = amountState.fee.times(rate.value)).getFormattedFull()
+        }
+
+        return FeeItem(coinAmount, currencyAmount)
+    }
+
+    private fun handleUpdatedAddressState(addressState: CexWithdrawAddressService.State) {
         this.addressState = addressState
 
         emitState()
@@ -87,10 +113,12 @@ class WithdrawCexViewModel(
     private fun emitState() {
         viewModelScope.launch {
             uiState = WithdrawCexUiState(
-                networkName = network?.networkName,
+                networkName = network.networkName,
                 availableBalance = amountState.availableBalance,
                 amountCaution = amountState.amountCaution,
                 addressError = addressState.addressError,
+                feeItem = feeItem,
+                feeFromAmount = feeFromAmount,
                 canBeSend = amountState.canBeSend && addressState.canBeSend
             )
         }
@@ -106,8 +134,12 @@ class WithdrawCexViewModel(
 
     fun onSelectNetwork(network: CexWithdrawNetwork) {
         this.network = network
+        amountService.setNetwork(network)
+    }
 
-        emitState()
+    fun onSelectFeeFromAmount(feeFromAmount: Boolean) {
+        this.feeFromAmount = feeFromAmount
+        amountService.setFeeFromAmount(feeFromAmount)
     }
 
     fun getConfirmationData(): ConfirmationData {
@@ -122,21 +154,29 @@ class WithdrawCexViewModel(
                 .getFormattedFull()
         }
 
+        val address = addressState.address!!
+        val contact = contactsRepository.getContactsFiltered(
+            blockchainType,
+            addressQuery = address.hex
+        ).firstOrNull()
+
         return ConfirmationData(
             assetName = cexAsset.name,
             coinAmount = coinAmount,
             currencyAmount = currencyAmount,
             coinIconUrl = cexAsset.coin?.imageUrl,
-            address = addressState.address!!,
+            address = address,
+            contact = contact,
             blockchainType = null,
-            networkName = network?.name
+            networkName = network.networkName,
+            feeItem = feeItem
         )
     }
 
-    suspend fun confirm(): String? {
-        return cexProvider?.withdraw(
+    suspend fun confirm(): String {
+        return cexProvider.withdraw(
             cexAsset.id,
-            network?.id,
+            network.id,
             addressState.address!!.hex,
             amountState.amount!!
         )
@@ -149,14 +189,18 @@ data class ConfirmationData(
     val currencyAmount: String?,
     val coinIconUrl: String?,
     val address: Address,
+    val contact: Contact?,
     val blockchainType: BlockchainType?,
     val networkName: String?,
+    val feeItem: FeeItem
 )
 
 data class WithdrawCexUiState(
     val networkName: String?,
     val availableBalance: BigDecimal?,
     val amountCaution: HSCaution?,
+    val feeItem: FeeItem,
+    val feeFromAmount: Boolean,
     val addressError: Throwable?,
     val canBeSend: Boolean
 )

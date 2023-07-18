@@ -62,7 +62,7 @@ fun FormsInputAddress(
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     onChangeFocus: (Boolean) -> Unit,
     navController: NavController,
-    blockchainType: BlockchainType,
+    blockchainType: BlockchainType?,
     chooseContactEnable: Boolean,
     onValueChange: (String) -> Unit,
 ) {
@@ -177,7 +177,7 @@ fun FormsInputAddress(
                     }
                 )
             } else {
-                if (chooseContactEnable) {
+                if (chooseContactEnable && blockchainType != null) {
                     ButtonSecondaryCircle(
                         modifier = Modifier.padding(end = 8.dp),
                         icon = R.drawable.ic_user_20,
