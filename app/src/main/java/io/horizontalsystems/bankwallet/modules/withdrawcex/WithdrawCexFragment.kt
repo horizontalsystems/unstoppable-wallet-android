@@ -20,10 +20,13 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.providers.CexAsset
+import cash.p.terminal.core.providers.CexWithdrawNetwork
+import cash.p.terminal.core.providers.ICexProvider
 import cash.p.terminal.modules.settings.about.*
 import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexConfirmScreen
 import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexScreen
@@ -45,6 +48,8 @@ class WithdrawCexFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val cexAsset = arguments?.getParcelable<CexAsset>("cexAsset")
+        val network = cexAsset?.withdrawNetworks?.find { it.isDefault }
+        val cexProvider = App.cexProviderManager.cexProviderFlow.value
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -55,8 +60,8 @@ class WithdrawCexFragment : BaseFragment() {
                 ComposeAppTheme {
                     val navController = findNavController()
 
-                    if (cexAsset != null) {
-                        WithdrawCexNavHost(navController, cexAsset)
+                    if (cexAsset != null && network != null && cexProvider != null) {
+                        WithdrawCexNavHost(navController, cexAsset, network, cexProvider)
                     } else {
                         val view = LocalView.current
                         HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
@@ -78,8 +83,10 @@ class WithdrawCexFragment : BaseFragment() {
 fun WithdrawCexNavHost(
     fragmentNavController: NavController,
     cexAsset: CexAsset,
+    network: CexWithdrawNetwork,
+    cexProvider: ICexProvider,
 ) {
-    val viewModel: WithdrawCexViewModel = viewModel(factory = WithdrawCexModule.Factory(cexAsset))
+    val viewModel: WithdrawCexViewModel = viewModel(factory = WithdrawCexModule.Factory(cexAsset, network, cexProvider))
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(
@@ -89,6 +96,7 @@ fun WithdrawCexNavHost(
         composable("withdraw") {
             WithdrawCexScreen(
                 mainViewModel = viewModel,
+                fragmentNavController = fragmentNavController,
                 onClose = { fragmentNavController.popBackStack() },
                 openNetworkSelect = {
                     navController.navigate("withdraw-select-network")

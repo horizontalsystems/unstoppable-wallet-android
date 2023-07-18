@@ -6,18 +6,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.modules.fee.FeeCell
 import cash.p.terminal.modules.send.ConfirmAmountCell
 import cash.p.terminal.modules.withdrawcex.WithdrawCexViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.SectionTitleCell
+import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
+import cash.p.terminal.ui.compose.components.TransactionInfoCell
+import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
+import cash.p.terminal.ui.compose.components.VSpacer
 import kotlinx.coroutines.launch
 
 @Composable
@@ -38,8 +53,10 @@ fun WithdrawCexConfirmScreen(
         val currencyAmount = confirmationData.currencyAmount
         val coinIconUrl = confirmationData.coinIconUrl
         val address = confirmationData.address
+        val contact = confirmationData.contact
         val blockchainType = confirmationData.blockchainType
         val networkName = confirmationData.networkName
+        val fee = confirmationData.feeItem
 
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -86,11 +103,11 @@ fun WithdrawCexConfirmScreen(
                                 navController = navController
                             )
                         }
-//                        contact?.let {
-//                            add {
-//                                TransactionInfoContactCell(name = contact.name)
-//                            }
-//                        }
+                        contact?.let {
+                            add {
+                                TransactionInfoContactCell(name = contact.name)
+                            }
+                        }
                     }
 
                     CellUniversalLawrenceSection(topSectionItems)
@@ -108,6 +125,18 @@ fun WithdrawCexConfirmScreen(
                         )
                     }
                     VSpacer(16.dp)
+
+                    CellUniversalLawrenceSection(
+                        listOf {
+                            FeeCell(
+                                title = stringResource(R.string.FeeSettings_NetworkFee),
+                                info = "",
+                                value = fee,
+                                viewState = null,
+                                navController = null
+                            )
+                        }
+                    )
                 }
 
                 var confirmEnabled by remember { mutableStateOf(true) }
@@ -122,9 +151,7 @@ fun WithdrawCexConfirmScreen(
                             coroutineScope.launch {
                                 confirmEnabled = false
                                 val withdrawId = mainViewModel.confirm()
-                                if (withdrawId != null) {
-                                    openVerification.invoke(withdrawId)
-                                }
+                                openVerification.invoke(withdrawId)
                                 confirmEnabled = true
                             }
                         },
