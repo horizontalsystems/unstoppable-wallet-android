@@ -64,7 +64,7 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
                     }
 
                     ChartIndicatorType.Macd -> {
-                        LinkedHashMap()
+                        calculateMacd(points)
                     }
 
                     ChartIndicatorType.Rsi -> {
@@ -74,6 +74,30 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
                 indicatorType to indicatorValues
             }
             .toMap()
+    }
+
+    private fun calculateMacd(points: LinkedHashMap<Long, Float>): LinkedHashMap<Long, Float> {
+        val ema12 = calculateEMA(points, 12)
+        val ema26 = calculateEMA(points, 26)
+
+        val macdLine = LinkedHashMap(
+            ema26.mapNotNull { (key, value) ->
+                ema12[key]?.minus(value)?.let {
+                    key to it
+                }
+            }.toMap()
+        )
+        val signalLine = calculateEMA(macdLine, 9)
+
+        val histogram = LinkedHashMap(
+            signalLine.mapNotNull { (key, value) ->
+                macdLine[key]?.minus(value)?.let {
+                    key to it
+                }
+            }.toMap()
+        )
+
+        TODO()
     }
 
     private fun calculateMovingAverage(
