@@ -200,6 +200,10 @@ private fun BoxItemCell(
         is BoxItem.Value -> {
             subhead1_leah(text = boxItem.text)
         }
+
+        BoxItem.Dots -> {
+            subhead1_leah(text = stringResource(R.string.CoinAnalytics_ThreeDots))
+        }
     }
 }
 

@@ -24,8 +24,6 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.BoxItem.Title
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.BoxItem.Value
 import cash.p.terminal.modules.coin.analytics.ui.AnalyticsBlockHeader
 import cash.p.terminal.modules.coin.analytics.ui.AnalyticsChart
 import cash.p.terminal.modules.coin.analytics.ui.AnalyticsContainer
@@ -44,7 +42,6 @@ import cash.p.terminal.modules.info.CoinAnalyticsInfoFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
 import cash.p.terminal.modules.subscription.ActivateSubscriptionFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.TranslatableString.PlainString
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.StackBarSlice
@@ -197,58 +194,7 @@ private fun AnalyticsBlock(
         },
         bottomRows = {
             block.footerItems.forEachIndexed { index, item ->
-                AnalyticsFooterCell(
-                    title = item.title,
-                    value = item.value,
-                    showTopDivider = index != 0,
-                    cellAction = item.action,
-                    onActionClick = { action ->
-                        when (action) {
-                            is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
-                                val arguments =
-                                    CoinMajorHoldersFragment.prepareParams(action.coin.uid, action.blockchain)
-                                navController.slideFromBottom(R.id.coinMajorHoldersFragment, arguments)
-                            }
-
-                            is CoinAnalyticsModule.ActionType.OpenAudits -> {
-                                val arguments = CoinAuditsFragment.prepareParams(action.auditAddresses)
-                                navController.slideFromRight(R.id.coinAuditsFragment, arguments)
-                            }
-
-                            is CoinAnalyticsModule.ActionType.OpenTreasuries -> {
-                                val arguments = CoinTreasuriesFragment.prepareParams(action.coin)
-                                navController.slideFromRight(R.id.coinTreasuriesFragment, arguments)
-                            }
-
-                            is CoinAnalyticsModule.ActionType.OpenReports -> {
-                                val arguments = CoinReportsFragment.prepareParams(action.coinUid)
-                                navController.slideFromRight(R.id.coinReportsFragment, arguments)
-                            }
-
-                            is CoinAnalyticsModule.ActionType.OpenInvestors -> {
-                                val arguments = CoinInvestmentsFragment.prepareParams(action.coinUid)
-                                navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
-                            }
-
-                            is CoinAnalyticsModule.ActionType.OpenRank -> {
-                                val arguments = CoinRankFragment.prepareParams(action.type)
-                                navController.slideFromBottom(R.id.coinRankFragment, arguments)
-                            }
-
-                            CoinAnalyticsModule.ActionType.OpenTvl -> {
-                                navController.slideFromBottom(R.id.tvlFragment)
-                            }
-
-                            CoinAnalyticsModule.ActionType.OpenRatingScaleInfo -> {
-                                navController.slideFromRight(R.id.ratingScaleInfoFragment)
-                            }
-
-                            CoinAnalyticsModule.ActionType.Preview -> {
-
-                            }
-                        }
-                    }
-                )
+                FooterCell(item, index, navController)
             }
         }
     ) {
@@ -284,6 +230,66 @@ private fun AnalyticsBlock(
 }
 
 @Composable
+private fun FooterCell(
+    item: CoinAnalyticsModule.FooterItem,
+    index: Int,
+    navController: NavController
+) {
+    AnalyticsFooterCell(
+        title = item.title,
+        value = item.value,
+        showTopDivider = index != 0,
+        cellAction = item.action,
+        onActionClick = { action ->
+            when (action) {
+                is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
+                    val arguments =
+                        CoinMajorHoldersFragment.prepareParams(action.coin.uid, action.blockchain)
+                    navController.slideFromBottom(R.id.coinMajorHoldersFragment, arguments)
+                }
+
+                is CoinAnalyticsModule.ActionType.OpenAudits -> {
+                    val arguments = CoinAuditsFragment.prepareParams(action.auditAddresses)
+                    navController.slideFromRight(R.id.coinAuditsFragment, arguments)
+                }
+
+                is CoinAnalyticsModule.ActionType.OpenTreasuries -> {
+                    val arguments = CoinTreasuriesFragment.prepareParams(action.coin)
+                    navController.slideFromRight(R.id.coinTreasuriesFragment, arguments)
+                }
+
+                is CoinAnalyticsModule.ActionType.OpenReports -> {
+                    val arguments = CoinReportsFragment.prepareParams(action.coinUid)
+                    navController.slideFromRight(R.id.coinReportsFragment, arguments)
+                }
+
+                is CoinAnalyticsModule.ActionType.OpenInvestors -> {
+                    val arguments = CoinInvestmentsFragment.prepareParams(action.coinUid)
+                    navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
+                }
+
+                is CoinAnalyticsModule.ActionType.OpenRank -> {
+                    val arguments = CoinRankFragment.prepareParams(action.type)
+                    navController.slideFromBottom(R.id.coinRankFragment, arguments)
+                }
+
+                CoinAnalyticsModule.ActionType.OpenTvl -> {
+                    navController.slideFromBottom(R.id.tvlFragment)
+                }
+
+                CoinAnalyticsModule.ActionType.OpenRatingScaleInfo -> {
+                    navController.slideFromRight(R.id.ratingScaleInfoFragment)
+                }
+
+                CoinAnalyticsModule.ActionType.Preview -> {
+
+                }
+            }
+        }
+    )
+}
+
+@Composable
 private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewItem, navController: NavController) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -310,17 +316,7 @@ private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewIte
         },
         bottomRows = {
             block.footerItems.forEachIndexed { index, item ->
-                AnalyticsFooterCell(
-                    title = Title(PlainString(stringResource(item.title))),
-                    value = if (item.hasValue) Value(stringResource(R.string.CoinAnalytics_ThreeDots)) else null,
-                    showTopDivider = index != 0,
-                    cellAction = if (item.clickable) {
-                        CoinAnalyticsModule.ActionType.Preview
-                    } else {
-                        null
-                    },
-                    onActionClick = {}
-                )
+                FooterCell(item, index, navController)
             }
         }
     ) {
