@@ -74,7 +74,17 @@ object CoinAnalyticsModule {
         Excellent(R.string.Coin_Analytics_RatingExcellent, R.drawable.ic_rating_excellent_24, R.string.Coin_Analytics_RatingExcellentPercent),
         Good(R.string.Coin_Analytics_RatingGood, R.drawable.ic_rating_good_24, R.string.Coin_Analytics_RatingGoodPercent),
         Fair(R.string.Coin_Analytics_RatingFair, R.drawable.ic_rating_fair_24, R.string.Coin_Analytics_RatingFairPercent),
-        Poor(R.string.Coin_Analytics_RatingPoor, R.drawable.ic_rating_poor_24, R.string.Coin_Analytics_RatingPoorPercent),
+        Poor(R.string.Coin_Analytics_RatingPoor, R.drawable.ic_rating_poor_24, R.string.Coin_Analytics_RatingPoorPercent);
+
+        companion object {
+            fun fromString(value: String?): Rating? = when(value) {
+                "excellent" -> Excellent
+                "good" -> Good
+                "fair" -> Fair
+                "poor" -> Poor
+                else -> null
+            }
+        }
     }
 
     sealed class BoxItem {
@@ -83,22 +93,17 @@ object CoinAnalyticsModule {
         class IconTitle(val image: ImageSource, val text: TranslatableString) : BoxItem()
         class Value(val text: String) : BoxItem()
         class RatingValue(val rating: Rating) : BoxItem()
+        object Dots : BoxItem()
     }
 
     data class PreviewBlockViewItem(
         val title: Int?,
         val info: AnalyticInfo?,
         val chartType: PreviewChartType?,
-        val footerItems: List<PreviewFooterItem>,
+        val footerItems: List<FooterItem>,
         val sectionTitle: Int? = null,
         val showValueDots: Boolean = true,
         val showFooterDivider: Boolean = true,
-    )
-
-    data class PreviewFooterItem(
-        val title: Int,
-        val clickable: Boolean,
-        val hasValue: Boolean = true,
     )
 
     enum class PreviewChartType {
