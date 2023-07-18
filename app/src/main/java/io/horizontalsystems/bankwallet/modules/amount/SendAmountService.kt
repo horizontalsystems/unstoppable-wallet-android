@@ -9,7 +9,7 @@ import java.math.BigDecimal
 class SendAmountService(
     private val amountValidator: AmountValidator,
     private val coinCode: String,
-    private var availableBalance: BigDecimal
+    private val availableBalance: BigDecimal
 ) {
     private var amount: BigDecimal? = null
     private var amountCaution: HSCaution? = null

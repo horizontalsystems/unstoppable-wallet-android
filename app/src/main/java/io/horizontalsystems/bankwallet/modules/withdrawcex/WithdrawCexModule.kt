@@ -4,30 +4,36 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
+import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
+import io.horizontalsystems.bankwallet.core.providers.ICexProvider
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
-import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object WithdrawCexModule {
-    class Factory(private val cexAsset: CexAsset) : ViewModelProvider.Factory {
+    class Factory(
+        private val cexAsset: CexAsset,
+        private val network: CexWithdrawNetwork,
+        private val cexProvider: ICexProvider
+    ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val amountValidator = AmountValidator()
-            val amountService = SendAmountService(amountValidator, cexAsset.id, cexAsset.freeBalance)
+            val amountService = CexWithdrawAmountService(amountValidator, cexAsset.id, cexAsset.freeBalance, network, cexAsset.decimals)
 
-            val cexProvider = App.cexProviderManager.cexProviderFlow.value
             return WithdrawCexViewModel(
                 cexAsset,
+                network,
                 XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 amountService,
-                SendAddressService(),
-                cexProvider
+                CexWithdrawAddressService(),
+                cexProvider,
+                App.contactsRepository
             ) as T
         }
     }
 
-    sealed class CodeGetButtonState{
+    sealed class CodeGetButtonState {
         object Active : CodeGetButtonState()
         class Pending(val secondsLeft: Int) : CodeGetButtonState()
     }
