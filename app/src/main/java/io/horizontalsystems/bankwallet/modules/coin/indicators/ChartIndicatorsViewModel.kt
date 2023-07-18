@@ -7,16 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.chart.ChartIndicator
 import cash.p.terminal.modules.chart.ChartIndicatorManager
-import io.horizontalsystems.chartview.models.ChartIndicatorType
+import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import kotlinx.coroutines.launch
 
 class ChartIndicatorsViewModel(
     private val chartIndicatorManager: ChartIndicatorManager
 ) : ViewModel() {
-    private var maIndicators: List<ChartIndicator> = listOf()
-    private var oscillatorIndicators: List<ChartIndicator> = listOf()
+    private var maIndicators: List<ChartIndicatorSetting> = listOf()
+    private var oscillatorIndicators: List<ChartIndicatorSetting> = listOf()
 
     var uiState by mutableStateOf(
         ChartIndicatorsUiState(
@@ -29,8 +28,8 @@ class ChartIndicatorsViewModel(
     init {
         viewModelScope.launch {
             chartIndicatorManager.allIndicatorsFlow.collect {
-                maIndicators = it.filter { it.indicatorType is ChartIndicatorType.MovingAverage }
-                oscillatorIndicators = it.filter { it.indicatorType is ChartIndicatorType.Rsi || it.indicatorType is ChartIndicatorType.Macd }
+                maIndicators = it.filter { it.type == ChartIndicatorSetting.IndicatorType.MA }
+                oscillatorIndicators = it.filter { it.type == ChartIndicatorSetting.IndicatorType.RSI || it.type == ChartIndicatorSetting.IndicatorType.MACD }
 
                 emitState()
             }
@@ -65,6 +64,6 @@ class ChartIndicatorsViewModel(
 
 
 data class ChartIndicatorsUiState(
-    val maIndicators: List<ChartIndicator>,
-    val oscillatorIndicators: List<ChartIndicator>
+    val maIndicators: List<ChartIndicatorSetting>,
+    val oscillatorIndicators: List<ChartIndicatorSetting>
 )

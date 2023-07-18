@@ -1,79 +1,52 @@
 package cash.p.terminal.modules.chart
 >>>>>>>> 0ac546280 (All calculation of EMA and WMA):app/src/main/java/cash/p/terminal/modules/chart/ChartIndicatorManager.kt
 
-import cash.p.terminal.core.ILocalStorage
 import io.horizontalsystems.chartview.models.ChartIndicatorType
 import io.horizontalsystems.chartview.models.MovingAverageType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class ChartIndicatorManager(private val localStorage: ILocalStorage) {
+class ChartIndicatorManager(
+    private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao
+) {
     private val _isEnabledFlow = MutableStateFlow(false)
     val isEnabledFlow: StateFlow<Boolean>
         get() = _isEnabledFlow
 
-    private val _allIndicatorsFlow = MutableStateFlow(getAllIndicators())
-    val allIndicatorsFlow: StateFlow<List<ChartIndicator>>
-        get() = _allIndicatorsFlow
+    val allIndicatorsFlow = chartIndicatorSettingsDao.getAll()
 
-    private fun getAllIndicators(): List<ChartIndicator> {
-        val enabledIds = localStorage.enabledChartIndicatorIds
+    init {
+        if (chartIndicatorSettingsDao.getCount() == 0) {
+            insertDefaultData()
+        }
+    }
 
-        return listOf(
-            ChartIndicator(
-                id = "ma1",
-                name = "SMA",
-                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.SMA, "#FFA800"),
-                enabled = enabledIds.contains("ma1"),
-            ),
-            ChartIndicator(
-                id = "ma2",
-                name = "WMA",
-                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.WMA, "#4A98E9"),
-                enabled = enabledIds.contains("ma2")
-            ),
-            ChartIndicator(
-                id = "ma3",
-                name = "EMA",
-                indicatorType = ChartIndicatorType.MovingAverage(20, MovingAverageType.EMA, "#BF5AF2"),
-                enabled = enabledIds.contains("ma3")
-            ),
-            ChartIndicator(
-                id = "rsi",
-                name = "RSI",
-                indicatorType = ChartIndicatorType.Rsi,
-                enabled = enabledIds.contains("rsi")
-            ),
-            ChartIndicator(
-                id = "macd",
-                name = "MACD",
-                indicatorType = ChartIndicatorType.Macd,
-                enabled = enabledIds.contains("macd")
-            ),
-        )
+    private fun insertDefaultData() {
+        chartIndicatorSettingsDao.insertAll(ChartIndicatorSettingsDao.defaultData())
     }
 
     fun calculateIndicators(points: LinkedHashMap<Long, Float>): Map<ChartIndicatorType, LinkedHashMap<Long, Float>> {
-        return getEnabledIndicators()
-            .map {
-                val indicatorType = it.indicatorType
-                val indicatorValues = when (indicatorType) {
-                    is ChartIndicatorType.MovingAverage -> {
-                        calculateMovingAverage(indicatorType, points)
-                    }
-
-                    ChartIndicatorType.Macd -> {
-                        calculateMacd(points)
-                    }
-
-                    ChartIndicatorType.Rsi -> {
-                        LinkedHashMap()
-                    }
-                }
-                indicatorType to indicatorValues
-            }
-            .toMap()
+        return mapOf()
+//        return getEnabledIndicators()
+//            .map {
+//                val indicatorType = it.indicatorType
+//                val indicatorValues = when (indicatorType) {
+//                    is ChartIndicatorType.MovingAverage -> {
+//                        calculateMovingAverage(indicatorType, points)
+//                    }
+//
+//                    ChartIndicatorType.Macd -> {
+//                        calculateMacd(points)
+//                    }
+//
+//                    ChartIndicatorType.Rsi -> {
+//                        LinkedHashMap()
+//                    }
+//                }
+//                indicatorType to indicatorValues
+//            }
+//            .toMap()
     }
 
     private fun calculateMacd(points: LinkedHashMap<Long, Float>): LinkedHashMap<Long, Float> {
@@ -176,34 +149,21 @@ class ChartIndicatorManager(private val localStorage: ILocalStorage) {
     }
 
     fun enableIndicator(indicatorId: String) {
-        localStorage.enabledChartIndicatorIds += indicatorId
-
-        _allIndicatorsFlow.update {
-            getAllIndicators()
-        }
+        chartIndicatorSettingsDao.enableIndicator(indicatorId)
     }
 
     fun disableIndicator(indicatorId: String) {
-        localStorage.enabledChartIndicatorIds -= indicatorId
-
-        _allIndicatorsFlow.update {
-            getAllIndicators()
-        }
+        chartIndicatorSettingsDao.disableIndicator(indicatorId)
     }
 
     fun getExtraPointsCount(): Int {
         val enabledIndicators = getEnabledIndicators()
         if (enabledIndicators.isEmpty()) return 0
-        val maxPointsCount = enabledIndicators.maxOf { it.indicatorType.pointsCount }
+        val maxPointsCount = enabledIndicators.maxOf { it.pointsCount }
         return maxPointsCount - 1
     }
 
-    private fun getEnabledIndicators() = allIndicatorsFlow.value.filter { it.enabled }
+    private fun getEnabledIndicators(): List<ChartIndicatorSetting> {
+        return chartIndicatorSettingsDao.getEnabled()
+    }
 }
-
-data class ChartIndicator(
-    val id: String,
-    val name: String,
-    val indicatorType: ChartIndicatorType,
-    val enabled: Boolean
-)

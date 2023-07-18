@@ -12,6 +12,8 @@ import cash.p.terminal.entities.nft.NftAssetBriefMetadataRecord
 import cash.p.terminal.entities.nft.NftAssetRecord
 import cash.p.terminal.entities.nft.NftCollectionRecord
 import cash.p.terminal.entities.nft.NftMetadataSyncRecord
+import cash.p.terminal.modules.chart.ChartIndicatorSetting
+import cash.p.terminal.modules.chart.ChartIndicatorSettingsDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
 import cash.p.terminal.modules.walletconnect.entity.WalletConnectSession
@@ -19,7 +21,7 @@ import cash.p.terminal.modules.walletconnect.entity.WalletConnectV2Session
 import cash.p.terminal.modules.walletconnect.storage.WC1SessionDao
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 53, exportSchema = false, entities = [
+@Database(version = 54, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -41,11 +43,13 @@ import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
     SyncerState::class,
     TokenAutoEnabledBlockchain::class,
     CexAssetRaw::class,
+    ChartIndicatorSetting::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun chartIndicatorSettingsDao(): ChartIndicatorSettingsDao
     abstract fun cexAssetsDao(): CexAssetsDao
     abstract fun walletsDao(): EnabledWalletsDao
     abstract fun enabledWalletsCacheDao(): EnabledWalletsCacheDao
@@ -102,6 +106,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_50_51,
                             Migration_51_52,
                             Migration_52_53,
+                            Migration_53_54,
                     )
                     .build()
         }

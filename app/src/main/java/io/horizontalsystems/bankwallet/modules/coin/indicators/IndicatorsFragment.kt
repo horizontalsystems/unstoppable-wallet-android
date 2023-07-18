@@ -26,11 +26,10 @@ import androidx.navigation.fragment.findNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.chart.ChartIndicator
+import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.chartview.models.ChartIndicatorType
 
 class IndicatorsFragment : BaseFragment() {
 
@@ -83,15 +82,14 @@ fun IndicatorsScreen(navController: NavController) {
             HeaderText(
                 stringResource(R.string.CoinPage_MovingAverages).uppercase()
             )
-            CellUniversalLawrenceSection(uiState.maIndicators) { indicator: ChartIndicator ->
-                val movingAverage = indicator.indicatorType as ChartIndicatorType.MovingAverage
+            CellUniversalLawrenceSection(uiState.maIndicators) { indicator: ChartIndicatorSetting ->
                 IndicatorCell(
                     title = indicator.name,
                     checked = indicator.enabled,
                     leftIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_chart_type_2_24),
-                            tint = Color(android.graphics.Color.parseColor(movingAverage.color)),
+                            tint = Color(android.graphics.Color.parseColor(indicator.extraData["color"])),
                             contentDescription = null,
                         )
                     },
