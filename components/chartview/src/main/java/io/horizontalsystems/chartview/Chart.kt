@@ -10,7 +10,7 @@ import io.horizontalsystems.chartview.databinding.ViewChartBinding
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
-import io.horizontalsystems.chartview.models.ChartIndicatorType
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 
 class Chart @JvmOverloads constructor(
@@ -22,12 +22,12 @@ class Chart @JvmOverloads constructor(
     lateinit var chartViewType: ChartViewType
 
     private val binding = ViewChartBinding.inflate(LayoutInflater.from(context), this)
-    private val indicatorAnimatedCurves = mutableMapOf<ChartIndicatorType, AnimatedCurve>()
+    private val indicatorAnimatedCurves = mutableMapOf<String, AnimatedCurve>()
 
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchSelect(item: ChartPoint, indicators: Map<ChartIndicatorType, Float>)
+        fun onTouchSelect(item: ChartPoint)
     }
 
     private val config = ChartConfig(context, attrs)
@@ -93,11 +93,8 @@ class Chart @JvmOverloads constructor(
                 listener.onTouchUp()
             }
 
-            override fun onTouchSelect(
-                item: ChartPoint,
-                indicators: Map<ChartIndicatorType, Float>
-            ) {
-                listener.onTouchSelect(item, indicators)
+            override fun onTouchSelect(item: ChartPoint) {
+                listener.onTouchSelect(item)
             }
         })
     }
@@ -181,15 +178,15 @@ class Chart @JvmOverloads constructor(
             dominanceCurve.setColor(config.curveSlowColor)
         }
 
-        val indicators = data.indicators
         val tmpIndicatorAnimatedCurves = LinkedHashMap(indicatorAnimatedCurves)
         indicatorAnimatedCurves.clear()
-        indicators.forEach { (chartIndicatorType, values) ->
-            if (chartIndicatorType is ChartIndicatorType.MovingAverage) {
-                val indicatorAnimatedCurve = tmpIndicatorAnimatedCurves.remove(chartIndicatorType)
+
+        data.indicators.forEach { (id, movingAverage) ->
+            if (movingAverage is ChartIndicator.MovingAverage) {
+                val indicatorAnimatedCurve = tmpIndicatorAnimatedCurves.remove(id)
 
                 val animator = CurveAnimator(
-                    values,
+                    movingAverage.line,
                     data.startTimestamp,
                     data.endTimestamp,
                     minCandleValue,
@@ -205,9 +202,9 @@ class Chart @JvmOverloads constructor(
                 val curve = ChartCurve2(config)
                 curve.setShape(binding.chartMain.shape)
                 curve.setCurveAnimator(animator)
-                curve.setColor(Color.parseColor(chartIndicatorType.color))
+                curve.setColor(Color.parseColor(movingAverage.color))
 
-                indicatorAnimatedCurves[chartIndicatorType] = AnimatedCurve(animator, curve)
+                indicatorAnimatedCurves[id] = AnimatedCurve(animator, curve)
             }
         }
 

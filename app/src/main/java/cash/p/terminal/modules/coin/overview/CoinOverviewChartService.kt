@@ -165,14 +165,14 @@ class CoinOverviewChartService(
 
         val latestCoinPriceIsNewer = latestCoinPrice.timestamp > points.last().timestamp
 
-        val indicatorsData = if (indicatorsEnabled) {
+        val indicators = if (indicatorsEnabled) {
             val pointsForIndicators = LinkedHashMap(points.associate { it.timestamp to it.value.toFloat() })
             if (latestCoinPriceIsNewer) {
                 pointsForIndicators[latestCoinPrice.timestamp] = latestCoinPrice.value.toFloat()
             }
             chartIndicatorManager.calculateIndicators(pointsForIndicators)
         } else {
-            mutableMapOf()
+            mapOf()
         }
 
         val items = points
@@ -208,7 +208,7 @@ class CoinOverviewChartService(
             }
         }
 
-        return ChartPointsWrapper(items, indicators = indicatorsData)
+        return ChartPointsWrapper(items, indicators = indicators)
     }
 
 }

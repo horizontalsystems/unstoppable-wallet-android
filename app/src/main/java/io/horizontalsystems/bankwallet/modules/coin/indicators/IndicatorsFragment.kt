@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -56,7 +56,6 @@ class IndicatorsFragment : BaseFragment() {
 @Composable
 fun IndicatorsScreen(navController: NavController) {
     val chartIndicatorsViewModel = viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
-    var showDataError by remember { mutableStateOf(true) }
 
     val uiState = chartIndicatorsViewModel.uiState
     val toggleIndicator = { indicatorId: String, checked: Boolean ->
@@ -100,15 +99,6 @@ fun IndicatorsScreen(navController: NavController) {
                     onEditClick = {
                         navController.slideFromRight(R.id.emaSettingsFragment, EmaSettingsFragment.params(indicator.id))
                     }
-                )
-            }
-            if (showDataError) {
-                VSpacer(12.dp)
-                TextImportantError(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.CoinPage_InsufficientData),
-                    text = stringResource(R.string.CoinPage_InsufficientDataError),
-                    icon = R.drawable.ic_attention_20
                 )
             }
             VSpacer(24.dp)

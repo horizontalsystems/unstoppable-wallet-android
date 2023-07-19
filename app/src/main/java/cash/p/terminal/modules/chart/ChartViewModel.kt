@@ -16,7 +16,6 @@ import cash.p.terminal.modules.coin.ChartInfoData
 import cash.p.terminal.modules.market.Value
 import cash.p.terminal.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.models.ChartIndicatorType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -213,7 +212,7 @@ open class ChartViewModel(
         service.stop()
     }
 
-    fun getSelectedPoint(item: ChartPoint, indicators: Map<ChartIndicatorType, Float>): ChartModule.ChartHeaderView {
+    fun getSelectedPoint(item: ChartPoint): ChartModule.ChartHeaderView {
         val value = valueFormatter.formatValue(service.currency, item.value.toBigDecimal())
         val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
 
@@ -222,18 +221,15 @@ open class ChartViewModel(
             valueHint = null,
             date = dayAndTime,
             diff = null,
-            extraData = getItemExtraData(item, indicators)
+            extraData = getItemExtraData(item)
         )
     }
 
-    private fun getItemExtraData(item: ChartPoint, indicators: Map<ChartIndicatorType, Float>): ChartModule.ChartHeaderExtraData? {
+    private fun getItemExtraData(item: ChartPoint): ChartModule.ChartHeaderExtraData? {
         val dominance = item.dominance
         val volume = item.volume
 
         return when {
-            indicators.isNotEmpty() -> {
-                ChartModule.ChartHeaderExtraData.Indicators(indicators)
-            }
             dominance != null -> {
                 ChartModule.ChartHeaderExtraData.Dominance(
                     App.numberFormatter.format(dominance, 0, 2, suffix = "%"),

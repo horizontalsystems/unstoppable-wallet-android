@@ -27,7 +27,6 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartViewType
-import io.horizontalsystems.chartview.models.ChartIndicatorType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -130,32 +129,6 @@ fun HsChartLineHeader(
                         }
                     }
                 }
-
-                is ChartModule.ChartHeaderExtraData.Indicators -> {
-                    Row(
-                        modifier = Modifier.width(IntrinsicSize.Max),
-                        horizontalArrangement = Arrangement.End,
-                    ) {
-                        extraData.indicators.forEach { (indicatorType, value) ->
-                            when (indicatorType) {
-                                is ChartIndicatorType.MovingAverage -> {
-                                    Text(
-                                        text = value.toString(),
-                                        style = ComposeAppTheme.typography.subhead2,
-                                        color = ComposeAppTheme.colors.jacob,
-                                    )
-                                    HSpacer(width = 4.dp)
-                                }
-                                ChartIndicatorType.Macd -> {
-
-                                }
-                                ChartIndicatorType.Rsi -> {
-
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
     }
@@ -213,8 +186,8 @@ fun Chart(
                             hasVolumes = uiState.hasVolumes,
                             chartViewType = uiState.chartViewType,
                         ) { item ->
-                            selectedPoint = item?.let { (chartPoint, indicators) ->
-                                chartViewModel.getSelectedPoint(chartPoint, indicators)
+                            selectedPoint = item?.let { chartPoint ->
+                                chartViewModel.getSelectedPoint(chartPoint)
                             }
                         }
                     }
@@ -238,7 +211,7 @@ fun PriceVolChart(
     loading: Boolean,
     hasVolumes: Boolean,
     chartViewType: ChartViewType,
-    onSelectPoint: (Pair<ChartPoint, Map<ChartIndicatorType, Float>>?) -> Unit,
+    onSelectPoint: (ChartPoint?) -> Unit,
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
@@ -258,11 +231,8 @@ fun PriceVolChart(
                         onSelectPoint.invoke(null)
                     }
 
-                    override fun onTouchSelect(
-                        item: ChartPoint,
-                        indicators: Map<ChartIndicatorType, Float>
-                    ) {
-                        onSelectPoint.invoke(Pair(item, indicators))
+                    override fun onTouchSelect(item: ChartPoint) {
+                        onSelectPoint.invoke(item)
                         HudHelper.vibrate(context)
                     }
                 })

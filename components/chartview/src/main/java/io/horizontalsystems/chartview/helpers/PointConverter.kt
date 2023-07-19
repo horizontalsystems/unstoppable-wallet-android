@@ -41,13 +41,6 @@ object PointConverter {
                     x = x + horizontalOffset,
                     y = shape.height() - verticalPadding - y,
                     item = item,
-                    indicators = data.indicators
-                        .mapNotNull { (indicatorType, values) ->
-                            values[item.timestamp]?.let {
-                                indicatorType to it
-                            }
-                        }.toMap()
-
                 )
             )
         }
