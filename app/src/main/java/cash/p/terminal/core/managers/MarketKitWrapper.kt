@@ -5,7 +5,13 @@ import cash.p.terminal.core.NoAuthTokenException
 import cash.p.terminal.core.customCoinPrefix
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.SyncInfo
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.HsPeriodType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.MarketInfo
+import io.horizontalsystems.marketkit.models.NftTopCollection
+import io.horizontalsystems.marketkit.models.TokenQuery
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -187,6 +193,9 @@ class MarketKitWrapper(
 
     fun revenueRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.revenueRanksSingle(it, currencyCode) }
+
+    fun feeRanksSingle(currencyCode: String) =
+        requestWithAuthToken { marketKit.feeRanksSingle(it, currencyCode) }
 
     fun holdersRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.holderRanksSingle(it, currencyCode) }

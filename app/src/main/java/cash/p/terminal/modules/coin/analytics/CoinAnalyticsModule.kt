@@ -49,6 +49,7 @@ object CoinAnalyticsModule {
         val analyticChart: ChartViewItem?,
         val footerItems: List<FooterItem>,
         val sectionTitle: Int? = null,
+        val sectionDescription: String? = null,
         val showFooterDivider: Boolean = true,
     )
 
@@ -119,7 +120,6 @@ object CoinAnalyticsModule {
         TransactionCountInfo(R.string.CoinAnalytics_TransactionCount),
         HoldersInfo(R.string.CoinAnalytics_Holders),
         TvlInfo(R.string.CoinAnalytics_ProjectTvl_FullTitle),
-        RevenueInfo(R.string.CoinAnalytics_ProjectRevenue),
     }
 
     @Parcelize
@@ -130,6 +130,7 @@ object CoinAnalyticsModule {
         AddressesRank(R.string.CoinAnalytics_ActiveAddressesRank, R.string.CoinAnalytics_ActiveAddressesRank_Description, "active_addresses"),
         TransactionCountRank(R.string.CoinAnalytics_TransactionCountRank, R.string.CoinAnalytics_TransactionCountRank, "trx_count"),
         RevenueRank(R.string.CoinAnalytics_ProjectRevenueRank, R.string.CoinAnalytics_ProjectRevenueRank_Description, "revenue"),
+        FeeRank(R.string.CoinAnalytics_ProjectFeeRank, R.string.CoinAnalytics_ProjectFeeRank_Description, "fee"),
         HoldersRank(R.string.CoinAnalytics_HoldersRank, R.string.CoinAnalytics_HoldersRank_Description, "holders");
 
         val headerIcon: ImageSource

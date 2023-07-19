@@ -42,6 +42,7 @@ import cash.p.terminal.modules.info.CoinAnalyticsInfoFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
 import cash.p.terminal.modules.subscription.ActivateSubscriptionFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.StackBarSlice
@@ -190,6 +191,11 @@ private fun AnalyticsBlock(
                         }
                     }
                 )
+            }
+        },
+        sectionDescription = {
+            block.sectionDescription?.let {
+                InfoText(it)
             }
         },
         bottomRows = {
