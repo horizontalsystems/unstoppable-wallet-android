@@ -7,14 +7,22 @@ import kotlinx.coroutines.flow.Flow
 data class ChartIndicatorSetting(
     @PrimaryKey
     val id: String,
-    val name: String,
     val type: IndicatorType,
-    val extraData: Map<String, String>,
+    val index: Int = 1,
+    val extraData: Map<String, String?>,
+    val defaultData: Map<String, String?>,
     val enabled: Boolean
 ) {
     enum class IndicatorType {
         MA, RSI, MACD
     }
+
+    val name: String
+        get() = when (type) {
+            IndicatorType.MA -> "MA $index"
+            IndicatorType.RSI -> "RSI"
+            IndicatorType.MACD -> "MACD"
+        }
 
     val pointsCount: Int
         get() = when (type) {
@@ -22,7 +30,23 @@ data class ChartIndicatorSetting(
             IndicatorType.RSI -> 0
             IndicatorType.MACD -> 0
         }
+
+    fun getTypedDataMA(): ChartIndicatorDataMa {
+        check(type == IndicatorType.MA)
+
+        val period = extraData["period"] ?: defaultData["period"] ?: "20"
+        val maType = extraData["maType"] ?: defaultData["maType"] ?: "SMA"
+        val color = extraData["color"] ?: defaultData["color"] ?: "#FFA800"
+
+        return ChartIndicatorDataMa(
+            period = period.toInt(),
+            maType = maType,
+            color = color
+        )
+    }
 }
+
+data class ChartIndicatorDataMa(val period: Int, val maType: String, val color: String)
 
 @Dao
 interface ChartIndicatorSettingsDao {
@@ -44,37 +68,46 @@ interface ChartIndicatorSettingsDao {
     @Query("UPDATE ChartIndicatorSetting SET enabled = 0 WHERE id = :indicatorId")
     fun disableIndicator(indicatorId: String)
 
+    @Query("SELECT * FROM ChartIndicatorSetting WHERE id = :id")
+    fun get(id: String): ChartIndicatorSetting?
+
+    @Update
+    fun update(chartIndicatorSetting: ChartIndicatorSetting)
+
     companion object {
         fun defaultData(): List<ChartIndicatorSetting> {
             return listOf(
                 ChartIndicatorSetting(
                     id = "ma1",
-                    name = "SMA",
                     type = ChartIndicatorSetting.IndicatorType.MA,
-                    extraData = mapOf(
-                        "period" to "20",
-                        "maType" to "SMA",
+                    index = 1,
+                    extraData = mapOf(),
+                    defaultData = mapOf(
+                        "period" to "9",
+                        "maType" to "EMA",
                         "color" to "#FFA800",
                     ),
                     enabled = true,
                 ),
                 ChartIndicatorSetting(
                     id = "ma2",
-                    name = "WMA",
                     type = ChartIndicatorSetting.IndicatorType.MA,
-                    extraData = mapOf(
-                        "period" to "20",
-                        "maType" to "WMA",
+                    index = 2,
+                    extraData = mapOf(),
+                    defaultData = mapOf(
+                        "period" to "25",
+                        "maType" to "EMA",
                         "color" to "#4A98E9",
                     ),
                     enabled = true,
                 ),
                 ChartIndicatorSetting(
                     id = "ma3",
-                    name = "EMA",
                     type = ChartIndicatorSetting.IndicatorType.MA,
-                    extraData = mapOf(
-                        "period" to "20",
+                    index = 3,
+                    extraData = mapOf(),
+                    defaultData = mapOf(
+                        "period" to "50",
                         "maType" to "EMA",
                         "color" to "#BF5AF2",
                     ),
@@ -82,16 +115,22 @@ interface ChartIndicatorSettingsDao {
                 ),
                 ChartIndicatorSetting(
                     id = "rsi",
-                    name = "RSI",
                     type = ChartIndicatorSetting.IndicatorType.RSI,
                     extraData = mapOf(),
+                    defaultData = mapOf(
+                        "period" to "12",
+                    ),
                     enabled = true,
                 ),
                 ChartIndicatorSetting(
                     id = "macd",
-                    name = "MACD",
                     type = ChartIndicatorSetting.IndicatorType.MACD,
                     extraData = mapOf(),
+                    defaultData = mapOf(
+                        "fast" to "12",
+                        "slow" to "26",
+                        "signal" to "9",
+                    ),
                     enabled = false
                 ),
             )

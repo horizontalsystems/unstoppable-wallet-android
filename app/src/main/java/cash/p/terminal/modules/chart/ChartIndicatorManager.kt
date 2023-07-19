@@ -166,4 +166,12 @@ class ChartIndicatorManager(
     private fun getEnabledIndicators(): List<ChartIndicatorSetting> {
         return chartIndicatorSettingsDao.getEnabled()
     }
+
+    fun getChartIndicatorSetting(id: String): ChartIndicatorSetting? {
+        return chartIndicatorSettingsDao.get(id)
+    }
+
+    fun update(chartIndicatorSetting: ChartIndicatorSetting) {
+        chartIndicatorSettingsDao.update(chartIndicatorSetting)
+    }
 }

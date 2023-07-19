@@ -83,13 +83,14 @@ fun IndicatorsScreen(navController: NavController) {
                 stringResource(R.string.CoinPage_MovingAverages).uppercase()
             )
             CellUniversalLawrenceSection(uiState.maIndicators) { indicator: ChartIndicatorSetting ->
+                val indicatorDataMa = indicator.getTypedDataMA()
                 IndicatorCell(
                     title = indicator.name,
                     checked = indicator.enabled,
                     leftIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_chart_type_2_24),
-                            tint = Color(android.graphics.Color.parseColor(indicator.extraData["color"])),
+                            tint = Color(android.graphics.Color.parseColor(indicatorDataMa.color)),
                             contentDescription = null,
                         )
                     },
@@ -97,7 +98,7 @@ fun IndicatorsScreen(navController: NavController) {
                         toggleIndicator.invoke(indicator.id, it)
                     },
                     onEditClick = {
-                        navController.slideFromRight(R.id.emaSettingsFragment)
+                        navController.slideFromRight(R.id.emaSettingsFragment, EmaSettingsFragment.params(indicator.id))
                     }
                 )
             }
