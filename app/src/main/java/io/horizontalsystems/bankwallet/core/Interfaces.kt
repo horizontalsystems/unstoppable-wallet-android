@@ -55,7 +55,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
-    var enabledChartIndicatorIds: Set<String>
+    var chartIndicatorsEnabled: Boolean
     var amountInputType: AmountInputType?
     var baseCurrencyCode: String?
     var authToken: String?
