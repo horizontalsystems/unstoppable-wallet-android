@@ -163,50 +163,44 @@ class CoinOverviewChartService(
         if (points.isEmpty()) return ChartPointsWrapper(listOf())
         val latestCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: return ChartPointsWrapper(listOf())
 
-        val latestCoinPriceIsNewer = latestCoinPrice.timestamp > points.last().timestamp
+        val pointsAdjusted = points.toMutableList()
+        var startTimestampAdjusted = startTimestamp
+
+        if (latestCoinPrice.timestamp > pointsAdjusted.last().timestamp) {
+            pointsAdjusted.add(
+                MarketKitChartPoint(latestCoinPrice.value, latestCoinPrice.timestamp, null)
+            )
+
+            if (chartInterval == HsTimePeriod.Day1) {
+                startTimestampAdjusted = latestCoinPrice.timestamp - 24 * 60 * 60
+                val diff = latestCoinPrice.diff
+                if (diff != null) {
+                    val startValue =
+                        (latestCoinPrice.value * 100.toBigDecimal()) / (diff + 100.toBigDecimal())
+                    val startPoint = MarketKitChartPoint(startValue, startTimestampAdjusted, null)
+                    val indexOfLast =
+                        pointsAdjusted.indexOfLast { it.timestamp < startTimestampAdjusted }
+                    pointsAdjusted.add(indexOfLast + 1, startPoint)
+                }
+            }
+        }
 
         val indicators = if (indicatorsEnabled) {
-            val pointsForIndicators = LinkedHashMap(points.associate { it.timestamp to it.value.toFloat() })
-            if (latestCoinPriceIsNewer) {
-                pointsForIndicators[latestCoinPrice.timestamp] = latestCoinPrice.value.toFloat()
-            }
+            val pointsForIndicators = LinkedHashMap(pointsAdjusted.associate { it.timestamp to it.value.toFloat() })
             chartIndicatorManager.calculateIndicators(pointsForIndicators)
         } else {
             mapOf()
         }
 
-        val items = points
-            .mapNotNull { chartPoint ->
-                if (chartPoint.timestamp >= startTimestamp) {
-                    ChartPoint(
-                        value = chartPoint.value.toFloat(),
-                        timestamp = chartPoint.timestamp,
-                        volume = chartPoint.volume?.toFloat(),
-                    )
-                } else {
-                    null
-                }
+        val items = pointsAdjusted
+            .filter { it.timestamp >= startTimestampAdjusted}
+            .map { chartPoint ->
+                ChartPoint(
+                    value = chartPoint.value.toFloat(),
+                    timestamp = chartPoint.timestamp,
+                    volume = chartPoint.volume?.toFloat(),
+                )
             }
-            .toMutableList()
-
-        if (latestCoinPriceIsNewer) {
-            items.add(ChartPoint(latestCoinPrice.value.toFloat(), timestamp = latestCoinPrice.timestamp))
-
-            if (chartInterval == HsTimePeriod.Day1) {
-                val adjustedStartTimestamp = latestCoinPrice.timestamp - 24 * 60 * 60
-                val diff = latestCoinPrice.diff
-                if (diff == null) {
-                    items.removeIf { it.timestamp < adjustedStartTimestamp }
-                } else {
-                    items.removeIf { it.timestamp <= adjustedStartTimestamp }
-
-                    val startValue = (latestCoinPrice.value * 100.toBigDecimal()) / (diff + 100.toBigDecimal())
-                    val startItem = ChartPoint(startValue.toFloat(), adjustedStartTimestamp)
-
-                    items.add(0, startItem)
-                }
-            }
-        }
 
         return ChartPointsWrapper(items, indicators = indicators)
     }
