@@ -94,8 +94,7 @@ class CoinOverviewChartService(
         currency: Currency,
     ): Single<ChartPointsWrapper> {
         val periodType = if (indicatorsEnabled) {
-            val pointsCount = chartIndicatorManager.getExtraPointsCount()
-            HsPeriodType.ByCustomPoints(chartInterval, pointsCount)
+            HsPeriodType.ByCustomPoints(chartInterval, chartIndicatorManager.getPointsCount())
         } else {
             HsPeriodType.ByPeriod(chartInterval)
         }
@@ -187,7 +186,7 @@ class CoinOverviewChartService(
 
         val indicators = if (indicatorsEnabled) {
             val pointsForIndicators = LinkedHashMap(pointsAdjusted.associate { it.timestamp to it.value.toFloat() })
-            chartIndicatorManager.calculateIndicators(pointsForIndicators)
+            chartIndicatorManager.calculateIndicators(pointsForIndicators, startTimestampAdjusted)
         } else {
             mapOf()
         }

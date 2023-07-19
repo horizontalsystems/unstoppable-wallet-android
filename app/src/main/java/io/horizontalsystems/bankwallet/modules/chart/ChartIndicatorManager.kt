@@ -26,13 +26,13 @@ class ChartIndicatorManager(
         chartIndicatorSettingsDao.insertAll(ChartIndicatorSettingsDao.defaultData())
     }
 
-    fun calculateIndicators(points: LinkedHashMap<Long, Float>): Map<String, ChartIndicator> {
+    fun calculateIndicators(points: LinkedHashMap<Long, Float>, startTimestamp: Long): Map<String, ChartIndicator> {
         return getEnabledIndicators()
             .mapNotNull { chartIndicatorSetting: ChartIndicatorSetting ->
                 when (chartIndicatorSetting.type) {
                     ChartIndicatorSetting.IndicatorType.MA -> {
                         val typedDataMA = chartIndicatorSetting.getTypedDataMA()
-                        calculateMovingAverage(points, typedDataMA)
+                        calculateMovingAverage(points, typedDataMA, startTimestamp)
                     }
                     ChartIndicatorSetting.IndicatorType.RSI -> {
                         null
@@ -73,7 +73,8 @@ class ChartIndicatorManager(
 
     private fun calculateMovingAverage(
         points: LinkedHashMap<Long, Float>,
-        typedDataMA: ChartIndicatorDataMa
+        typedDataMA: ChartIndicatorDataMa,
+        startTimestamp: Long
     ): ChartIndicator.MovingAverage? {
         val period = typedDataMA.period
         val maType = typedDataMA.maType
@@ -86,7 +87,7 @@ class ChartIndicatorManager(
             else -> return null
         }
 
-        return ChartIndicator.MovingAverage(line, typedDataMA.color)
+        return ChartIndicator.MovingAverage(LinkedHashMap(line.filter { it.key >= startTimestamp }), typedDataMA.color)
     }
 
     private fun calculateWMA(
@@ -160,11 +161,8 @@ class ChartIndicatorManager(
         chartIndicatorSettingsDao.disableIndicator(indicatorId)
     }
 
-    fun getExtraPointsCount(): Int {
-        val enabledIndicators = getEnabledIndicators()
-        if (enabledIndicators.isEmpty()) return 0
-        val maxPointsCount = enabledIndicators.maxOf { it.pointsCount }
-        return maxPointsCount - 1
+    fun getPointsCount(): Int {
+        return getEnabledIndicators().maxOfOrNull { it.pointsCount } ?: 0
     }
 
     private fun getEnabledIndicators(): List<ChartIndicatorSetting> {
