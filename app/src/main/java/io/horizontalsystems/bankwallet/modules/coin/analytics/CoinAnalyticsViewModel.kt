@@ -364,14 +364,34 @@ class CoinAnalyticsViewModel(
                 )
             )
         }
+        analytics.fee?.let { data ->
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_ProjectFee,
+                    info = null,
+                    value = data.value30d?.let { getFormattedSum(listOf(it), currency) },
+                    valuePeriod = getValuePeriod(false),
+                    analyticChart = null,
+                    sectionDescription = data.description,
+                    footerItems = listOf(
+                        FooterItem(
+                            title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
+                            value = data.rank30d?.let { Value(getRank(it)) },
+                            action = ActionType.OpenRank(RankType.FeeRank)
+                        ),
+                    )
+                )
+            )
+        }
         analytics.revenue?.let { data ->
             blocks.add(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_ProjectRevenue,
-                    info = AnalyticInfo.RevenueInfo,
+                    info = null,
                     value = data.value30d?.let { getFormattedSum(listOf(it), currency) },
                     valuePeriod = getValuePeriod(false),
                     analyticChart = null,
+                    sectionDescription = data.description,
                     footerItems = listOf(
                         FooterItem(
                             title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
@@ -668,6 +688,32 @@ class CoinAnalyticsViewModel(
                 )
             )
         }
+        analyticsPreview.fee?.let { revenue ->
+            if (revenue.value30d || revenue.rank30d) {
+                val footerItems = mutableListOf<FooterItem>()
+                if (revenue.rating) {
+                    footerItems.add(ratingPreviewFooterItem)
+                }
+                if (revenue.rank30d) {
+                    footerItems.add(
+                        FooterItem(
+                            title = Title(ResString(R.string.Coin_Analytics_30DayRank)),
+                            value = BoxItem.Dots,
+                            action = ActionType.Preview
+                        )
+                    )
+                }
+                blocks.add(
+                    PreviewBlockViewItem(
+                        title = R.string.CoinAnalytics_ProjectFee,
+                        info = null,
+                        chartType = null,
+                        footerItems = footerItems,
+                        showFooterDivider = revenue.rank30d
+                    )
+                )
+            }
+        }
         analyticsPreview.revenue?.let { revenue ->
             if (revenue.value30d || revenue.rank30d) {
                 val footerItems = mutableListOf<FooterItem>()
@@ -686,7 +732,7 @@ class CoinAnalyticsViewModel(
                 blocks.add(
                     PreviewBlockViewItem(
                         title = R.string.CoinAnalytics_ProjectRevenue,
-                        info = AnalyticInfo.RevenueInfo,
+                        info = null,
                         chartType = null,
                         footerItems = footerItems,
                         showFooterDivider = revenue.rank30d

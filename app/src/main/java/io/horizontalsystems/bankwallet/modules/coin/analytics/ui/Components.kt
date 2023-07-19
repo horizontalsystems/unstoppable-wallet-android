@@ -232,6 +232,7 @@ fun AnalyticsContainer(
     showFooterDivider: Boolean = true,
     sectionTitle: @Composable (RowScope.() -> Unit)? = null,
     titleRow: @Composable (() -> Unit)? = null,
+    sectionDescription: @Composable (() -> Unit)? = null,
     bottomRows: @Composable ColumnScope.() -> Unit = {},
     content: @Composable () -> Unit,
 ) {
@@ -264,6 +265,7 @@ fun AnalyticsContainer(
             content = bottomRows
         )
     }
+    sectionDescription?.invoke()
 }
 
 @Composable

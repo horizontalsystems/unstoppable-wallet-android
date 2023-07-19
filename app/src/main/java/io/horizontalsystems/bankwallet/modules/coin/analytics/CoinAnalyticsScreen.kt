@@ -42,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
 import io.horizontalsystems.bankwallet.modules.subscription.ActivateSubscriptionFragment
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
@@ -190,6 +191,11 @@ private fun AnalyticsBlock(
                         }
                     }
                 )
+            }
+        },
+        sectionDescription = {
+            block.sectionDescription?.let {
+                InfoText(it)
             }
         },
         bottomRows = {
