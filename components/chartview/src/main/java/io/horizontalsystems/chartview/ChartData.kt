@@ -1,7 +1,7 @@
 package io.horizontalsystems.chartview
 
 import androidx.compose.runtime.Immutable
-import io.horizontalsystems.chartview.models.ChartIndicatorType
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import java.lang.Float.max
 import java.lang.Float.min
@@ -12,12 +12,12 @@ data class ChartData(
     val items: List<ChartPoint>,
     val isMovementChart: Boolean,
     val disabled: Boolean = false,
-    val indicators: Map<ChartIndicatorType, LinkedHashMap<Long, Float>> = mapOf()
+    val indicators: Map<String, ChartIndicator> = mapOf(),
 ) {
     val minValue: Float by lazy {
         var valuesMin = items.minOf { it.value }
-        indicators
-            .mapNotNull { it.value.minOfOrNull { it.value } }
+        indicators.values.filterIsInstance<ChartIndicator.MovingAverage>()
+            .mapNotNull { it.line.minOfOrNull { it.value } }
             .minOrNull()
             ?.let { indicatorsMin ->
                 valuesMin = min(valuesMin, indicatorsMin)
@@ -28,8 +28,8 @@ data class ChartData(
 
     val maxValue: Float by lazy {
         var valuesMax = items.maxOf { it.value }
-        indicators
-            .mapNotNull { it.value.maxOfOrNull { it.value } }
+        indicators.values.filterIsInstance<ChartIndicator.MovingAverage>()
+            .mapNotNull { it.line.maxOfOrNull { it.value } }
             .maxOrNull()
             ?.let { indicatorsMax ->
                 valuesMax = max(valuesMax, indicatorsMax)

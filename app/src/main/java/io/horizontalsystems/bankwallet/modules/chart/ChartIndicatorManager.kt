@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
-import io.horizontalsystems.chartview.models.ChartIndicatorType
-import io.horizontalsystems.chartview.models.MovingAverageType
+import io.horizontalsystems.chartview.models.ChartIndicator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -25,30 +24,28 @@ class ChartIndicatorManager(
         chartIndicatorSettingsDao.insertAll(ChartIndicatorSettingsDao.defaultData())
     }
 
-    fun calculateIndicators(points: LinkedHashMap<Long, Float>): Map<ChartIndicatorType, LinkedHashMap<Long, Float>> {
-        return mapOf()
-//        return getEnabledIndicators()
-//            .map {
-//                val indicatorType = it.indicatorType
-//                val indicatorValues = when (indicatorType) {
-//                    is ChartIndicatorType.MovingAverage -> {
-//                        calculateMovingAverage(indicatorType, points)
-//                    }
-//
-//                    ChartIndicatorType.Macd -> {
-//                        calculateMacd(points)
-//                    }
-//
-//                    ChartIndicatorType.Rsi -> {
-//                        LinkedHashMap()
-//                    }
-//                }
-//                indicatorType to indicatorValues
-//            }
-//            .toMap()
+    fun calculateIndicators(points: LinkedHashMap<Long, Float>): Map<String, ChartIndicator> {
+        return getEnabledIndicators()
+            .mapNotNull { chartIndicatorSetting: ChartIndicatorSetting ->
+                when (chartIndicatorSetting.type) {
+                    ChartIndicatorSetting.IndicatorType.MA -> {
+                        val typedDataMA = chartIndicatorSetting.getTypedDataMA()
+                        calculateMovingAverage(points, typedDataMA)
+                    }
+                    ChartIndicatorSetting.IndicatorType.RSI -> {
+                        null
+                    }
+                    ChartIndicatorSetting.IndicatorType.MACD -> {
+                        calculateMacd(points)
+                    }
+                }?.let {
+                    chartIndicatorSetting.id to it
+                }
+            }
+            .toMap()
     }
 
-    private fun calculateMacd(points: LinkedHashMap<Long, Float>): LinkedHashMap<Long, Float> {
+    private fun calculateMacd(points: LinkedHashMap<Long, Float>): ChartIndicator.Macd {
         val ema12 = calculateEMA(points, 12)
         val ema26 = calculateEMA(points, 26)
 
@@ -69,21 +66,25 @@ class ChartIndicatorManager(
             }.toMap()
         )
 
-        TODO()
+        return ChartIndicator.Macd(macdLine, signalLine, histogram)
     }
 
     private fun calculateMovingAverage(
-        movingAverage: ChartIndicatorType.MovingAverage,
-        points: LinkedHashMap<Long, Float>
-    ): LinkedHashMap<Long, Float> {
-        val period = movingAverage.period
-        if (points.size < period) return LinkedHashMap()
+        points: LinkedHashMap<Long, Float>,
+        typedDataMA: ChartIndicatorDataMa
+    ): ChartIndicator.MovingAverage? {
+        val period = typedDataMA.period
+        val maType = typedDataMA.maType
+        if (points.size < period) return null
 
-        return when (movingAverage.type) {
-            MovingAverageType.SMA -> calculateSMA(points, period)
-            MovingAverageType.EMA -> calculateEMA(points, period)
-            MovingAverageType.WMA -> calculateWMA(points, period)
+        val line = when (maType) {
+            "SMA" -> calculateSMA(points, period)
+            "EMA" -> calculateEMA(points, period)
+            "WMA" -> calculateWMA(points, period)
+            else -> return null
         }
+
+        return ChartIndicator.MovingAverage(line, typedDataMA.color)
     }
 
     private fun calculateWMA(
