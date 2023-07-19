@@ -165,6 +165,7 @@ class CoinRankViewModel(
             RankType.AddressesRank -> marketKit.activeAddressRanksSingle(currencyCode).await()
             RankType.TransactionCountRank -> marketKit.transactionCountsRanksSingle(currencyCode).await()
             RankType.RevenueRank -> marketKit.revenueRanksSingle(currencyCode).await()
+            RankType.FeeRank -> marketKit.feeRanksSingle(currencyCode).await()
             RankType.HoldersRank -> marketKit.holdersRanksSingle(currencyCode).await()
         }
     }
@@ -175,7 +176,8 @@ class CoinRankViewModel(
             RankType.DexVolumeRank,
             RankType.DexLiquidityRank,
             RankType.HoldersRank,
-            RankType.RevenueRank -> numberFormatter.formatFiatShort(value, currency.symbol, 2)
+            RankType.RevenueRank,
+            RankType.FeeRank -> numberFormatter.formatFiatShort(value, currency.symbol, 2)
 
             RankType.AddressesRank,
             RankType.TransactionCountRank -> numberFormatter.formatNumberShort(value, 0)

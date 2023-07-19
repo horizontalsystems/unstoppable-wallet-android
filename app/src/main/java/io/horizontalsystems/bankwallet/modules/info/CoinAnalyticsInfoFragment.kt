@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
@@ -159,11 +163,6 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info3)
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info4)
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info5)
-        }
-        AnalyticInfo.RevenueInfo -> {
-            BulletedText(R.string.CoinAnalytics_ProjectRevenue_Info1)
-            BulletedText(R.string.CoinAnalytics_ProjectRevenue_Info2)
-            BulletedText(R.string.CoinAnalytics_ProjectRevenue_Info3)
         }
     }
 }
