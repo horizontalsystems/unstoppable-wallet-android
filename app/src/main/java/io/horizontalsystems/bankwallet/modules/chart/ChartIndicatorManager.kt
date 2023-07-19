@@ -1,14 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.chartview.models.ChartIndicator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class ChartIndicatorManager(
-    private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao
+    private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao,
+    private val localStorage: ILocalStorage
 ) {
-    private val _isEnabledFlow = MutableStateFlow(false)
+    private val _isEnabledFlow = MutableStateFlow(localStorage.chartIndicatorsEnabled)
     val isEnabledFlow: StateFlow<Boolean>
         get() = _isEnabledFlow
 
@@ -141,10 +143,12 @@ class ChartIndicatorManager(
     }
 
     fun enable() {
+        localStorage.chartIndicatorsEnabled = true
         _isEnabledFlow.update { true }
     }
 
     fun disable() {
+        localStorage.chartIndicatorsEnabled = false
         _isEnabledFlow.update { false }
     }
 
