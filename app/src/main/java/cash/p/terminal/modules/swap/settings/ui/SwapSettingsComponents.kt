@@ -2,19 +2,12 @@ package cash.p.terminal.modules.swap.settings.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,12 +26,7 @@ import cash.p.terminal.modules.swap.settings.SwapDeadlineViewModel
 import cash.p.terminal.modules.swap.settings.SwapSlippageViewModel
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.FormsInputStateWarning
-import cash.p.terminal.ui.compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.body_grey50
+import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -154,6 +142,12 @@ fun InputWithButtons(
         ) {
             var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(initial ?: ""))
+            }
+
+            LaunchedEffect(initial) {
+                if (textState.text != initial) {
+                    textState = textState.copy(text = initial ?: "")
+                }
             }
 
             BasicTextField(
