@@ -26,7 +26,9 @@ data class ChartIndicatorSetting(
 
     val pointsCount: Int
         get() = when (type) {
-            IndicatorType.MA -> extraData["period"]?.toInt() ?: 0
+            IndicatorType.MA -> {
+                getTypedDataMA().period
+            }
             IndicatorType.RSI -> 0
             IndicatorType.MACD -> 0
         }

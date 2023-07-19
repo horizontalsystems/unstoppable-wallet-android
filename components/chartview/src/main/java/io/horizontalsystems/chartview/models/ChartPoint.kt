@@ -7,16 +7,12 @@ class ChartPoint(
     val dominance: Float? = null,
 )
 
-sealed class ChartIndicatorType(val pointsCount: Int) {
-    data class MovingAverage(
-        val period: Int,
-        val type: MovingAverageType,
-        val color: String
-    ) : ChartIndicatorType(period)
-    object Rsi : ChartIndicatorType(1)
-    object Macd : ChartIndicatorType(1)
-}
-
-enum class MovingAverageType {
-    SMA, EMA, WMA
+sealed class ChartIndicator {
+    data class MovingAverage(val line: LinkedHashMap<Long, Float>, val color: String) : ChartIndicator()
+    data class Rsi(val points: LinkedHashMap<Long, Float>) : ChartIndicator()
+    data class Macd(
+        val macdLine: LinkedHashMap<Long, Float>,
+        val signalLine: LinkedHashMap<Long, Float>,
+        val histogram: LinkedHashMap<Long, Float>
+    ) : ChartIndicator()
 }
