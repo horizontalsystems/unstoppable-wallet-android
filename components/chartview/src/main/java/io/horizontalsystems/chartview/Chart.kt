@@ -12,6 +12,8 @@ import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
+import java.lang.Float.max
+import java.lang.Float.min
 
 class Chart @JvmOverloads constructor(
     context: Context,
@@ -223,9 +225,87 @@ class Chart @JvmOverloads constructor(
         mainRange.setShape(binding.topLowRange.shape)
         mainRange.setValues(maxValue, minValue)
 
-        // Volume
-        bottomVolume.setValues(data.volumeByTimestamp(), data.startTimestamp, data.endTimestamp)
-        bottomVolume.setShape(binding.chartBottom.shape)
+        val bottoms = mutableListOf<ChartDraw>()
+        val macd = data.macd
+
+        if (macd != null) {
+            val macdLine = macd.macdLine
+            val signalLine = macd.signalLine
+            val histogram = macd.histogram
+
+            val min = min(
+                macdLine.minOfOrNull { it.value } ?: 0f,
+                signalLine.minOfOrNull { it.value } ?: 0f,
+            )
+
+            val max = max(
+                macdLine.maxOfOrNull { it.value } ?: 0f,
+                signalLine.maxOfOrNull { it.value } ?: 0f,
+            )
+
+            val animatorMacdLine = CurveAnimator(
+                macdLine,
+                data.startTimestamp,
+                data.endTimestamp,
+                min,
+                max,
+                null,
+                binding.chartBottom.shape.right,
+                binding.chartBottom.shape.bottom,
+                0f,
+                0f,
+                config.horizontalOffset,
+            )
+
+            val animatorSignalLine = CurveAnimator(
+                signalLine,
+                data.startTimestamp,
+                data.endTimestamp,
+                min,
+                max,
+                null,
+                binding.chartBottom.shape.right,
+                binding.chartBottom.shape.bottom,
+                0f,
+                0f,
+                config.horizontalOffset,
+            )
+
+            val curveMacdLine = ChartCurve2(config)
+            curveMacdLine.setShape(binding.chartBottom.shape)
+            curveMacdLine.setCurveAnimator(animatorMacdLine)
+//            curveMacdLine.setColor()
+
+            val curveSignalLine = ChartCurve2(config)
+            curveSignalLine.setShape(binding.chartBottom.shape)
+            curveSignalLine.setCurveAnimator(animatorSignalLine)
+//            curveSignalLine.setColor()
+
+            bottoms.add(curveMacdLine)
+            bottoms.add(curveSignalLine)
+
+            val macdHistogram = ChartBars(
+                animatorBottom,
+                config.trendUpColor,
+                0f,
+                config.volumeWidth,
+                config.horizontalOffset,
+            )
+
+            macdHistogram.setValues(
+                histogram,
+                data.startTimestamp,
+                data.endTimestamp
+            )
+            macdHistogram.setShape(binding.chartBottom.shape)
+            bottoms.add(macdHistogram)
+        } else {
+            // Volume
+            bottomVolume.setValues(data.volumeByTimestamp(), data.startTimestamp, data.endTimestamp)
+            bottomVolume.setShape(binding.chartBottom.shape)
+
+            bottoms.add(bottomVolume)
+        }
 
         // ---------------------------
         // *********
@@ -243,7 +323,9 @@ class Chart @JvmOverloads constructor(
         binding.topLowRange.add(mainRange)
 
         binding.chartBottom.clear()
-        binding.chartBottom.add(bottomVolume)
+        bottoms.forEach {
+            binding.chartBottom.add(it)
+        }
 
         animatorMain.start()
         animatorTopBottomRange.start()
