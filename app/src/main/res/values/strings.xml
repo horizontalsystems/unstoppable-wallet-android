@@ -64,7 +64,8 @@
     <string name="Button_Submit">Submit</string>
     <string name="Button_TryAgain">Try Again</string>
 
-
+    <string name="Error_OutOfRange">Can\'t be less than %s or more than %s</string>
+    <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Any</string>

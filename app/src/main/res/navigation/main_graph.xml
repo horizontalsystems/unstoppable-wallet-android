@@ -150,14 +150,8 @@
         android:id="@+id/indicatorsFragment"
         android:name="cash.p.terminal.modules.coin.indicators.IndicatorsFragment" />
     <fragment
-        android:id="@+id/emaSettingsFragment"
-        android:name="cash.p.terminal.modules.coin.indicators.EmaSettingsFragment" />
-    <fragment
-        android:id="@+id/rsiSettingsFragment"
-        android:name="cash.p.terminal.modules.coin.indicators.RsiSettingsFragment"/>
-    <fragment
-        android:id="@+id/macdSettingsFragment"
-        android:name="cash.p.terminal.modules.coin.indicators.MacdSettingsFragment"/>
+        android:id="@+id/indicatorSettingsFragment"
+        android:name="cash.p.terminal.modules.coin.indicators.IndicatorSettingsFragment" />
     <fragment
         android:id="@+id/activateSubscription"
         android:name="cash.p.terminal.modules.subscription.ActivateSubscriptionFragment" />

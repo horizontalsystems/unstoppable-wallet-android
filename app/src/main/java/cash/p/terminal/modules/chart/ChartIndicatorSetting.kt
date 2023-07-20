@@ -36,12 +36,12 @@ data class ChartIndicatorSetting(
     fun getTypedDataMA(): ChartIndicatorDataMa {
         check(type == IndicatorType.MA)
 
-        val period = extraData["period"] ?: defaultData["period"] ?: "20"
+        val period = extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 20
         val maType = extraData["maType"] ?: defaultData["maType"] ?: "SMA"
         val color = extraData["color"] ?: defaultData["color"] ?: "#FFA800"
 
         return ChartIndicatorDataMa(
-            period = period.toInt(),
+            period = period,
             maType = maType,
             color = color
         )
