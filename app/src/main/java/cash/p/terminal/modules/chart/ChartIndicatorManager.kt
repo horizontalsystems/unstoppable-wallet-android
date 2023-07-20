@@ -39,7 +39,7 @@ class ChartIndicatorManager(
                         null
                     }
                     ChartIndicatorSetting.IndicatorType.MACD -> {
-                        calculateMacd(points)
+                        calculateMacd(points, startTimestamp)
                     }
                 }?.let {
                     chartIndicatorSetting.id to it
@@ -48,7 +48,7 @@ class ChartIndicatorManager(
             .toMap()
     }
 
-    private fun calculateMacd(points: LinkedHashMap<Long, Float>): ChartIndicator.Macd {
+    private fun calculateMacd(points: LinkedHashMap<Long, Float>, startTimestamp: Long): ChartIndicator.Macd {
         val ema12 = calculateEMA(points, 12)
         val ema26 = calculateEMA(points, 26)
 
@@ -69,7 +69,11 @@ class ChartIndicatorManager(
             }.toMap()
         )
 
-        return ChartIndicator.Macd(macdLine, signalLine, histogram)
+        return ChartIndicator.Macd(
+            macdLine.filterByTimestamp(startTimestamp),
+            signalLine.filterByTimestamp(startTimestamp),
+            histogram.filterByTimestamp(startTimestamp)
+        )
     }
 
     private fun calculateMovingAverage(
@@ -88,7 +92,11 @@ class ChartIndicatorManager(
             else -> return null
         }
 
-        return ChartIndicator.MovingAverage(LinkedHashMap(line.filter { it.key >= startTimestamp }), typedDataMA.color)
+        return ChartIndicator.MovingAverage(line.filterByTimestamp(startTimestamp), typedDataMA.color)
+    }
+
+    private fun LinkedHashMap<Long, Float>.filterByTimestamp(startTimestamp: Long): LinkedHashMap<Long, Float> {
+        return LinkedHashMap(filter { it.key >= startTimestamp })
     }
 
     private fun calculateWMA(

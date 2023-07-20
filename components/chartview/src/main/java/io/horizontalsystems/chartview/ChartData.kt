@@ -14,6 +14,17 @@ data class ChartData(
     val disabled: Boolean = false,
     val indicators: Map<String, ChartIndicator> = mapOf(),
 ) {
+    var macd: ChartIndicator.Macd? = null
+
+    init {
+        for (indicator in indicators.values) {
+            if (indicator is ChartIndicator.Macd) {
+                macd = indicator
+                break
+            }
+        }
+    }
+
     val minValue: Float by lazy {
         var valuesMin = items.minOf { it.value }
         indicators.values.filterIsInstance<ChartIndicator.MovingAverage>()
