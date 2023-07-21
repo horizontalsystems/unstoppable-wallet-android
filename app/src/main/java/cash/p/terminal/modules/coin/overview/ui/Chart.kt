@@ -1,17 +1,37 @@
 package cash.p.terminal.modules.coin.overview.ui
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +44,17 @@ import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.ChartInfoData
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.TabButtonSecondaryTransparent
+import cash.p.terminal.ui.compose.components.TabItem
+import cash.p.terminal.ui.compose.components.TabPeriod
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.diffColor
+import cash.p.terminal.ui.compose.components.formatValueAsDiff
+import cash.p.terminal.ui.compose.components.subhead1_grey
+import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
@@ -215,6 +245,8 @@ fun PriceVolChart(
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
+    ChartLine(chartInfoData)
+
     AndroidView(
         modifier = Modifier
             .height(height)
@@ -255,6 +287,77 @@ fun PriceVolChart(
                         chartInfoData.minValue
                     )
                 }
+            }
+        }
+    )
+}
+
+@Composable
+fun ChartLine(chartInfoData: ChartInfoData?) {
+    val chartData = chartInfoData?.chartData
+
+    Canvas(
+        modifier = Modifier
+            .height(120.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        onDraw = {
+            chartData ?: return@Canvas
+
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+
+            val valuesByTimestamp = chartData.valuesByTimestamp()
+
+            var valueMin = chartData.minValue
+            val valueMax = chartData.maxValue
+            if (valueMin == valueMax) {
+                valueMin *= 0.9f
+            }
+            var timestampMin = chartData.startTimestamp
+            var timestampMax = chartData.endTimestamp
+            if (timestampMin == timestampMax) {
+                timestampMin = (timestampMin * 0.9).toLong()
+                timestampMax = (timestampMax * 1.1).toLong()
+            }
+
+            val xRatio = canvasWidth / (timestampMax - timestampMin)
+            val yRatio = canvasHeight / (valueMax - valueMin)
+
+            val linePath = Path()
+            var pathStarted = false
+            valuesByTimestamp.forEach { (timestamp, value) ->
+                val x = (timestamp - timestampMin) * xRatio
+                val y = (value - valueMin) * yRatio
+
+                if (!pathStarted) {
+                    linePath.moveTo(x, y)
+                    pathStarted = true
+                } else {
+                    linePath.lineTo(x, y)
+                }
+            }
+
+            val gradientPath = Path()
+            gradientPath.addPath(linePath)
+
+            gradientPath.lineTo(canvasWidth, 0f)
+            gradientPath.lineTo(0f, 0f)
+            gradientPath.close()
+
+            scale(scaleX = 1f, scaleY = -1f) {
+                drawPath(
+                    linePath,
+                    Color(0xFF05C46B),
+                    style = Stroke(1.dp.toPx())
+                )
+                drawPath(
+                    gradientPath,
+                    Brush.verticalGradient(
+                        0.00f to Color(0x00416BFF),
+                        1.00f to Color(0x8013D670)
+                    ),
+                )
             }
         }
     )
