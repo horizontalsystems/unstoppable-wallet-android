@@ -11,7 +11,7 @@ import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import kotlinx.coroutines.launch
 
-class IndicatorSettingViewModel(
+class RsiSettingViewModel(
     private var indicatorSetting: ChartIndicatorSetting,
     private val chartIndicatorManager: ChartIndicatorManager
 ) : ViewModel() {
@@ -90,7 +90,7 @@ class IndicatorSettingViewModel(
     class Factory(private val indicatorSetting: ChartIndicatorSetting) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return IndicatorSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
+            return RsiSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
         }
     }
 }
