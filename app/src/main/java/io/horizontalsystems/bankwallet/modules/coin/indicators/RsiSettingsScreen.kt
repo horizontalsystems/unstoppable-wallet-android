@@ -25,8 +25,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun RsiSettingsScreen(navController: NavController, indicatorSetting: ChartIndicatorSetting) {
-    val viewModel = viewModel<IndicatorSettingViewModel>(
-        factory = IndicatorSettingViewModel.Factory(indicatorSetting)
+    val viewModel = viewModel<RsiSettingViewModel>(
+        factory = RsiSettingViewModel.Factory(indicatorSetting)
     )
     val uiState = viewModel.uiState
 
