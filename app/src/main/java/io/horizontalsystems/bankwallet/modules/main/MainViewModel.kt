@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.LaunchPage
@@ -34,6 +35,7 @@ class MainViewModel(
     private val localStorage: ILocalStorage,
     wc2SessionManager: WC2SessionManager,
     private val wc1Manager: WC1Manager,
+    subscriptionManager: SubscriptionManager,
     private val wcDeepLink: String?
 ) : ViewModel() {
 
@@ -76,6 +78,7 @@ class MainViewModel(
     private var selectedPageIndex = getPageIndexToOpen()
     private var mainNavItems = navigationItems()
     private var showRateAppDialog = false
+    private var showPremiumFeatureWarningDialog = false
     private var contentHidden = pinComponent.isLocked
     private var showWhatsNew = false
     private var activeWallet = accountManager.activeAccount
@@ -97,6 +100,7 @@ class MainViewModel(
             showWhatsNew = showWhatsNew,
             activeWallet = activeWallet,
             wcSupportState = wcSupportState,
+            showPremiumFeatureWarningDialog = showPremiumFeatureWarningDialog,
             torEnabled = torEnabled
         )
     )
@@ -119,6 +123,11 @@ class MainViewModel(
 
         rateAppManager.showRateAppFlow.collectWith(viewModelScope) {
             showRateAppDialog = it
+            syncState()
+        }
+
+        subscriptionManager.showPremiumFeatureWarningFlow.collectWith(viewModelScope) {
+            showPremiumFeatureWarningDialog = true
             syncState()
         }
 
@@ -169,6 +178,11 @@ class MainViewModel(
         syncState()
     }
 
+    fun premiumFeatureWarningShown() {
+        showPremiumFeatureWarningDialog = false
+        syncState()
+    }
+
     fun closeRateDialog() {
         showRateAppDialog = false
         syncState()
@@ -212,6 +226,7 @@ class MainViewModel(
             showWhatsNew = showWhatsNew,
             activeWallet = activeWallet,
             wcSupportState = wcSupportState,
+            showPremiumFeatureWarningDialog = showPremiumFeatureWarningDialog,
             torEnabled = torEnabled
         )
     }

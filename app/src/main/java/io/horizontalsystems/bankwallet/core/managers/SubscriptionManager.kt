@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class SubscriptionManager(private val localStorage: ILocalStorage) {
+
+    val showPremiumFeatureWarningFlow = MutableSharedFlow<Unit>()
 
     var authToken: String?
         get() = localStorage.authToken
@@ -19,6 +22,10 @@ class SubscriptionManager(private val localStorage: ILocalStorage) {
 
     fun hasSubscription(): Boolean {
         return !authToken.isNullOrBlank()
+    }
+
+    suspend fun showPremiumFeatureWarning() {
+        showPremiumFeatureWarningFlow.emit(Unit)
     }
 
 }

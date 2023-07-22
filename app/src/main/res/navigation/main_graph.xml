@@ -119,6 +119,9 @@
         android:id="@+id/baseCurrencySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment" />
     <fragment
+        android:id="@+id/personalSupportFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.support.PersonalSupportFragment" />
+    <fragment
         android:id="@+id/languageSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsFragment" />
     <fragment
@@ -322,6 +325,9 @@
     <dialog
         android:id="@+id/wcAccountTypeNotSupportedDialog"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
+    <dialog
+        android:id="@+id/premiumFeatureWarningDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.support.PremiumFeatureWarningDialog" />
     <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />

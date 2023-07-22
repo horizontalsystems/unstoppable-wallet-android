@@ -14,7 +14,9 @@ import io.horizontalsystems.marketkit.models.NftTopCollection
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.reactivex.Observable
 import io.reactivex.Single
+import retrofit2.Response
 import java.math.BigDecimal
+
 class MarketKitWrapper(
     context: Context,
     hsApiBaseUrl: String,
@@ -240,5 +242,8 @@ class MarketKitWrapper(
     fun syncInfo(): SyncInfo {
         return marketKit.syncInfo()
     }
+
+    fun requestPersonalSupport(username: String): Single<Response<Void>> =
+        requestWithAuthToken { marketKit.requestPersonalSupport(it, username) }
 
 }
