@@ -107,6 +107,7 @@ interface ILocalStorage {
     var marketsTabEnabled: Boolean
     val marketsTabEnabledFlow: StateFlow<Boolean>
     var nonRecommendedAccountAlertDismissedAccounts: Set<String>
+    var personalSupportEnabled: Boolean
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
