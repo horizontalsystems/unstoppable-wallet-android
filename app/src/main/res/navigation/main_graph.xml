@@ -119,6 +119,9 @@
         android:id="@+id/baseCurrencySettingsFragment"
         android:name="cash.p.terminal.modules.basecurrency.BaseCurrencySettingsFragment" />
     <fragment
+        android:id="@+id/personalSupportFragment"
+        android:name="cash.p.terminal.modules.settings.support.PersonalSupportFragment" />
+    <fragment
         android:id="@+id/languageSettingsFragment"
         android:name="cash.p.terminal.modules.settings.language.LanguageSettingsFragment" />
     <fragment
@@ -322,6 +325,9 @@
     <dialog
         android:id="@+id/wcAccountTypeNotSupportedDialog"
         android:name="cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
+    <dialog
+        android:id="@+id/premiumFeatureWarningDialog"
+        android:name="cash.p.terminal.modules.settings.support.PremiumFeatureWarningDialog" />
     <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog" />

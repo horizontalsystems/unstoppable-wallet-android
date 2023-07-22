@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <queries>
+        <package android:name="org.telegram.messenger" />
+    </queries>
+
     <application
         android:name=".core.App"
         android:allowBackup="false"

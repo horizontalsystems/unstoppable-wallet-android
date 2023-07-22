@@ -73,6 +73,7 @@ class LocalStorageManager(
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
+    private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
 
     private val gson by lazy { Gson() }
 
@@ -420,6 +421,12 @@ class LocalStorageManager(
             _marketsTabEnabledFlow.update {
                 value
             }
+        }
+
+    override var personalSupportEnabled: Boolean
+        get() = preferences.getBoolean(PERSONAL_SUPPORT_ENABLED, false)
+        set(enabled) {
+            preferences.edit().putBoolean(PERSONAL_SUPPORT_ENABLED, enabled).apply()
         }
 
     private val _marketsTabEnabledFlow = MutableStateFlow(marketsTabEnabled)

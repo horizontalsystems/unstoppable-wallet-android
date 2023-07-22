@@ -28,6 +28,7 @@ object MainModule {
                 App.localStorage,
                 App.wc2SessionManager,
                 App.wc1Manager,
+                App.subscriptionManager,
                 wcDeepLink
             ) as T
         }
@@ -81,6 +82,7 @@ object MainModule {
         val showWhatsNew: Boolean,
         val activeWallet: Account?,
         val torEnabled: Boolean,
+        val showPremiumFeatureWarningDialog: Boolean,
         val wcSupportState: WC1Manager.SupportState?
     )
 }
