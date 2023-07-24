@@ -32,10 +32,4 @@ object WithdrawCexModule {
             ) as T
         }
     }
-
-    sealed class CodeGetButtonState {
-        object Active : CodeGetButtonState()
-        class Pending(val secondsLeft: Int) : CodeGetButtonState()
-    }
-
 }
