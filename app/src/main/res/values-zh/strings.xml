@@ -651,6 +651,8 @@
     <string name="Settings_RateUs">评价我们</string>
     <string name="Settings_LaunchScreen">启动屏幕</string>
     <string name="Settings_Appearance">外观</string>
+    <string name="Settings_PersonalSupport_Account">账户</string>
+    <string name="Settings_PersonalSupport_Request">请求</string>
     <string name="Appearance_Theme">主题</string>
     <string name="Appearance_Tab">TAB设置</string>
     <string name="Appearance_LaunchScreen">局域网SCREEN</string>
