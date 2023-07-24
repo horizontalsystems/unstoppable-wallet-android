@@ -442,6 +442,7 @@
     <string name="Settings_RateUs">به ما امتیاز بدهید</string>
     <string name="Settings_LaunchScreen">صفحه شروع</string>
     <string name="Settings_Appearance">ظاهر</string>
+    <string name="Settings_PersonalSupport_Request">درخواست</string>
     <string name="Appearance_Theme">موضوع</string>
     <string name="Appearance_LaunchScreen">صفحه راه اندازی</string>
     <string name="Appearance_AppIcon">نماد برنامه</string>
