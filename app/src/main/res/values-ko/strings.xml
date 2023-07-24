@@ -546,6 +546,7 @@
     <string name="Settings_RateUs">앱 평가</string>
     <string name="Settings_LaunchScreen">시작 화면</string>
     <string name="Settings_Appearance">모양</string>
+    <string name="Settings_PersonalSupport_Request">요청</string>
     <string name="Appearance_Theme">주제</string>
     <string name="Appearance_Tab">탭 설정</string>
     <string name="Appearance_LaunchScreen">시작 화면</string>
