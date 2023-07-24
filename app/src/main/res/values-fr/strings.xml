@@ -612,6 +612,8 @@
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
+    <string name="Settings_PersonalSupport_Account">Compte</string>
+    <string name="Settings_PersonalSupport_Request">Requête</string>
     <string name="Appearance_Theme">Thème</string>
     <string name="Appearance_Tab">PARAMÈTRES DES TAB</string>
     <string name="Appearance_LaunchScreen">ÉCRAN DE LÉCHARGEMENT</string>
