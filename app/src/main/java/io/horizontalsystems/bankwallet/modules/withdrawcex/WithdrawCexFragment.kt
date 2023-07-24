@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.withdrawcex
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,13 +25,16 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
+import io.horizontalsystems.bankwallet.core.providers.BinanceCexProvider
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
-import io.horizontalsystems.bankwallet.core.providers.ICexProvider
+import io.horizontalsystems.bankwallet.core.providers.CoinzixCexProvider
+import io.horizontalsystems.bankwallet.modules.coinzixverify.CoinzixVerificationViewModel
+import io.horizontalsystems.bankwallet.modules.coinzixverify.TwoFactorType
+import io.horizontalsystems.bankwallet.modules.coinzixverify.ui.CoinzixVerificationScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.*
 import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexConfirmScreen
 import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexScreen
-import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexSecurityVerificationScreen
 import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexSelectNetworkScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -61,7 +65,18 @@ class WithdrawCexFragment : BaseFragment() {
                     val navController = findNavController()
 
                     if (cexAsset != null && network != null && cexProvider != null) {
-                        WithdrawCexNavHost(navController, cexAsset, network, cexProvider)
+                        when (cexProvider) {
+                            is BinanceCexProvider -> {
+                                LaunchedEffect(Unit) {
+                                    navController.popBackStack()
+                                }
+                            }
+
+                            is CoinzixCexProvider -> {
+                                CoinzixWithdrawNavHost(navController, cexAsset, network, cexProvider)
+                            }
+                        }
+
                     } else {
                         val view = LocalView.current
                         HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
@@ -80,13 +95,13 @@ class WithdrawCexFragment : BaseFragment() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun WithdrawCexNavHost(
+fun CoinzixWithdrawNavHost(
     fragmentNavController: NavController,
     cexAsset: CexAsset,
     network: CexWithdrawNetwork,
-    cexProvider: ICexProvider,
+    coinzixCexProvider: CoinzixCexProvider,
 ) {
-    val viewModel: WithdrawCexViewModel = viewModel(factory = WithdrawCexModule.Factory(cexAsset, network, cexProvider))
+    val viewModel: WithdrawCexViewModel = viewModel(factory = WithdrawCexModule.Factory(cexAsset, network, coinzixCexProvider))
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(
@@ -115,22 +130,36 @@ fun WithdrawCexNavHost(
         composablePage("withdraw-confirm") {
             WithdrawCexConfirmScreen(
                 mainViewModel = viewModel,
-                openVerification = {
-                    navController.navigate("withdraw-verification/$it")
+                openVerification = { withdraw ->
+                    navController.navigate("withdraw-verification/${withdraw.withdrawId}?steps=${withdraw.twoFactorTypes.joinToString { "${it.code}" }}")
                 },
                 onNavigateBack = { navController.popBackStack() },
                 onClose = { fragmentNavController.popBackStack() },
             )
         }
-        composablePage("withdraw-verification/{withdrawId}") { backStackEntry ->
-            val withdrawId = backStackEntry.arguments?.getString("withdrawId")
+        composablePage("withdraw-verification/{withdrawId}?steps={steps}") { backStackEntry ->
+            val withdrawId = backStackEntry.arguments?.getString("withdrawId") ?: return@composablePage
+            val steps: List<Int> = backStackEntry.arguments?.getString("steps")?.split(",")?.mapNotNull { it.toIntOrNull() } ?: listOf()
 
-            withdrawId?.let {
-                WithdrawCexSecurityVerificationScreen(
-                    withdrawId = withdrawId,
-                    onNavigateBack = { navController.popBackStack() }
-                ) { fragmentNavController.popBackStack() }
-            }
+            Log.e("e", "withdraw-verification: withdrawId=$withdrawId, steps= ${steps.joinToString { it.toString() }}")
+
+            val coinzixVerificationViewModel = viewModel<CoinzixVerificationViewModel>(
+                factory = CoinzixVerificationViewModel.FactoryForWithdraw(
+                    withdrawId,
+                    steps.mapNotNull { TwoFactorType.fromCode(it) },
+                    coinzixCexProvider
+                )
+            )
+            val view = LocalView.current
+            CoinzixVerificationScreen(
+                viewModel = coinzixVerificationViewModel,
+                onSuccess = {
+                    HudHelper.showSuccessMessage(view, R.string.CexWithdraw_WithdrawSuccess)
+                    fragmentNavController.popBackStack()
+                },
+                onNavigateBack = { navController.popBackStack() },
+                onClose = { fragmentNavController.popBackStack() }
+            )
 
         }
     }

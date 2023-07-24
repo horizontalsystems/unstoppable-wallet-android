@@ -10,8 +10,9 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
-import io.horizontalsystems.bankwallet.core.providers.ICexProvider
+import io.horizontalsystems.bankwallet.core.providers.CoinzixCexProvider
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.coinzixverify.CoinzixVerificationMode
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
@@ -26,7 +27,7 @@ class WithdrawCexViewModel(
     private val xRateService: XRateService,
     private val amountService: CexWithdrawAmountService,
     private val addressService: CexWithdrawAddressService,
-    private val cexProvider: ICexProvider,
+    private val cexProvider: CoinzixCexProvider,
     private val contactsRepository: ContactsRepository
 ) : ViewModel() {
     private val coinUid = cexAsset.coin?.uid
@@ -173,7 +174,7 @@ class WithdrawCexViewModel(
         )
     }
 
-    suspend fun confirm(): String {
+    suspend fun confirm(): CoinzixVerificationMode.Withdraw {
         return cexProvider.withdraw(
             cexAsset.id,
             network.id,
