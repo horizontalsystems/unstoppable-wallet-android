@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexWithdrawNetwork
-import cash.p.terminal.core.providers.ICexProvider
+import cash.p.terminal.core.providers.CoinzixCexProvider
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.xrate.XRateService
 
@@ -13,7 +13,7 @@ object WithdrawCexModule {
     class Factory(
         private val cexAsset: CexAsset,
         private val network: CexWithdrawNetwork,
-        private val cexProvider: ICexProvider
+        private val cexProvider: CoinzixCexProvider
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")

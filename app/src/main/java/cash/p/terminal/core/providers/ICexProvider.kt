@@ -13,6 +13,9 @@ import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CexType
 import cash.p.terminal.modules.balance.cex.CexAddress
 import cash.p.terminal.modules.balance.cex.CoinzixCexApiService
+import cash.p.terminal.modules.balance.cex.Response
+import cash.p.terminal.modules.coinzixverify.CoinzixVerificationMode
+import cash.p.terminal.modules.coinzixverify.TwoFactorType
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
@@ -55,9 +58,6 @@ interface ICexProvider {
 
     suspend fun getAssets(): List<CexAssetRaw>
     suspend fun getAddress(assetId: String, networkId: String?): CexAddress
-    suspend fun withdraw(assetId: String, networkId: String?, address: String, amount: BigDecimal): String
-    suspend fun confirmWithdraw(withdrawId: String, emailCode: String, twoFactorCode: String?)
-    suspend fun sendWithdrawPin(withdrawId: String)
 }
 
 @Entity(primaryKeys = ["id", "accountId"])
@@ -303,27 +303,37 @@ class CoinzixCexProvider(
         }
     }
 
-    override suspend fun withdraw(
+    suspend fun withdraw(
         assetId: String,
         networkId: String?,
         address: String,
         amount: BigDecimal
-    ): String {
-        return api.withdraw(authToken, secret, assetId, networkId, address, amount)
+    ): CoinzixVerificationMode.Withdraw {
+        val response = api.withdraw(authToken, secret, assetId, networkId, address, amount)
+        val data = response.data ?: throw IllegalStateException("Withdraw response data is null")
+        validate(response)
+
+        return CoinzixVerificationMode.Withdraw(data.id, data.step.mapNotNull { TwoFactorType.fromCode(it) })
     }
 
-    override suspend fun confirmWithdraw(
+    suspend fun confirmWithdraw(
         withdrawId: String,
-        emailCode: String,
+        emailCode: String?,
         twoFactorCode: String?
     ) {
-        api.confirmWithdraw(authToken, secret, withdrawId, emailCode, twoFactorCode)
+        val response = api.confirmWithdraw(authToken, secret, withdrawId, emailCode, twoFactorCode)
+        validate(response)
     }
 
-    override suspend fun sendWithdrawPin(
+    suspend fun sendWithdrawPin(
         withdrawId: String
     ) {
-        api.sendWithdrawPin(authToken, secret, withdrawId)
+        val response = api.sendWithdrawPin(authToken, secret, withdrawId)
+        validate(response)
+    }
+
+    private fun validate(response: Response.Withdraw) {
+        check(response.status) { response.errors?.joinToString { it } ?: response.message ?: "Unknown error" }
     }
 
     override suspend fun getAssets(): List<CexAssetRaw> {
@@ -470,27 +480,6 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
                     decimals = 8
                 )
             }
-    }
-
-    override suspend fun withdraw(
-        assetId: String,
-        networkId: String?,
-        address: String,
-        amount: BigDecimal
-    ): String {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun confirmWithdraw(
-        withdrawId: String,
-        emailCode: String,
-        twoFactorCode: String?
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun sendWithdrawPin(withdrawId: String) {
-        TODO("not implemented")
     }
 
     data class CoinInfo(

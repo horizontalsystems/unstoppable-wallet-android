@@ -8,6 +8,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import retrofit2.HttpException
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HeaderMap
@@ -19,14 +20,32 @@ class CoinzixCexApiService {
     private val service = APIClient.retrofit("https://api.coinzix.com/", 60, true).create(CoinzixAPI::class.java)
     private val gson = Gson()
 
-    suspend fun login(username: String, password: String, captchaToken: String): Response.Login {
+    suspend fun login(username: String, password: String): Response.Login {
         val params = mapOf(
             "username" to username,
-            "password" to password,
-            "g-recaptcha-response" to captchaToken,
+            "password" to password
         )
 
-        return service.login(createJsonRequestBody(params))
+        try {
+            return service.login(createJsonRequestBody(params))
+        } catch (exception: HttpException) {
+            val message = parseHttpExceptionError(exception) ?: exception.message ?: exception.javaClass.simpleName
+            throw IllegalStateException(message)
+        }
+    }
+
+    suspend fun validateCode(token: String, code: String): Response.Login {
+        val params = mapOf(
+            "login_token" to token,
+            "code" to code
+        )
+
+        try {
+            return service.validateCode(createJsonRequestBody(params))
+        } catch (exception: HttpException) {
+            val message = parseHttpExceptionError(exception) ?: exception.message ?: exception.javaClass.simpleName
+            throw IllegalStateException(message)
+        }
     }
 
     suspend fun getBalances(
@@ -75,7 +94,7 @@ class CoinzixCexApiService {
         network: String?,
         address: String,
         amount: BigDecimal
-    ): String {
+    ): Response.Withdraw {
         val params = buildMap {
             put("iso", iso)
             put("to_address", address)
@@ -84,57 +103,51 @@ class CoinzixCexApiService {
                 put("network", it)
             }
         }
-        val response = post<Response.Withdraw>(
+        return post(
             path = "/v1/withdraw",
             authToken = authToken,
             secret = secret,
             params = params
         )
-
-        check(response.status) { response.message }
-
-        return response.data.id.toString()
     }
 
     suspend fun confirmWithdraw(
         authToken: String,
         secret: String,
         withdrawId: String,
-        emailCode: String,
+        emailCode: String?,
         twoFactorCode: String?
-    ) {
+    ): Response.Withdraw {
         val params = buildMap {
             put("id", withdrawId)
-            put("email_pin", emailCode)
+            emailCode?.let {
+                put("email_pin", emailCode)
+            }
             twoFactorCode?.let {
-                put("google_pin", it)
+                put("google_pin", twoFactorCode)
             }
         }
-        val response = post<Response.Withdraw>(
+        return post(
             path = "/v1/withdraw/confirm-code",
             authToken = authToken,
             secret = secret,
             params = params
         )
-
-        check(response.status) { response.message }
     }
 
     suspend fun sendWithdrawPin(
         authToken: String,
         secret: String,
         withdrawId: String
-    ) {
+    ): Response.Withdraw {
         val params = mapOf("id" to withdrawId)
 
-        val response = post<Response.Withdraw>(
+        return post(
             path = "/v1/withdraw/send-pin",
             authToken = authToken,
             secret = secret,
             params = params
         )
-
-        check(response.status) { response.message }
     }
 
     private suspend inline fun <reified T> post(
@@ -152,9 +165,24 @@ class CoinzixCexApiService {
             "x-auth-sign" to xAuthSign(parameters, secret)
         )
 
-        val responseString = service.post(path, headers, createJsonRequestBody(parameters))
-        return gson.fromJson(responseString, T::class.java)
+        try {
+            val responseString = service.post(path, headers, createJsonRequestBody(parameters))
+            return gson.fromJson(responseString, T::class.java)
+        } catch (exception: HttpException) {
+            val message = parseHttpExceptionError(exception) ?: exception.message ?: exception.javaClass.simpleName
+            throw IllegalStateException(message)
+        }
     }
+
+    private fun parseHttpExceptionError(exception: HttpException) =
+        exception.response()?.errorBody()?.string()?.let {
+            try {
+                val jsonObject = gson.fromJson(it, Map::class.java)
+                jsonObject["error"]?.toString()
+            } catch (exception: Exception) {
+                null
+            }
+        }
 
     private fun xAuthSign(parameters: Map<String, String>, secret: String): String {
         val parametersSignature =
@@ -169,8 +197,11 @@ class CoinzixCexApiService {
     }
 
     interface CoinzixAPI {
-        @POST("api/user/login")
+        @POST("api/user/init-app")
         suspend fun login(@Body params: RequestBody): Response.Login
+
+        @POST("api/user/validate-code")
+        suspend fun validateCode(@Body params: RequestBody): Response.Login
 
         @POST
         suspend fun post(@Url path: String, @HeaderMap headers: Map<String, String>, @Body params: RequestBody): String
@@ -193,14 +224,20 @@ object Response {
     )
 
     data class Login(
-        val data: LoginData,
-        val token: String,
+        val status: Boolean,
+        val data: LoginData?,
+        val token: String?,
+        val is_login: Boolean,
+        val required_code: Boolean,
+        val errors: List<String>?
     )
 
     data class LoginData(
-        val email: String,
-        val chat: String,
-        val secret: String,
+        val required: Int?,
+        val email: String?,
+        val secret: String?,
+        val left_attempt: Int?,
+        val time_expire: Int?
     )
 
     data class Balances(
@@ -227,10 +264,11 @@ object Response {
 
     data class Withdraw(
         val status: Boolean,
-        val message: String,
-        val data: Data
+        val message: String?,
+        val data: Data?,
+        val errors: List<String>?
     ) {
-        data class Data(val id: Int)
+        data class Data(val id: String, val step: List<Int>)
     }
 
     data class Config(

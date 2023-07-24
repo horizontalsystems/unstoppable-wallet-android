@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.withdrawcex
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,13 +25,16 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
+import cash.p.terminal.core.providers.BinanceCexProvider
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexWithdrawNetwork
-import cash.p.terminal.core.providers.ICexProvider
+import cash.p.terminal.core.providers.CoinzixCexProvider
+import cash.p.terminal.modules.coinzixverify.CoinzixVerificationViewModel
+import cash.p.terminal.modules.coinzixverify.TwoFactorType
+import cash.p.terminal.modules.coinzixverify.ui.CoinzixVerificationScreen
 import cash.p.terminal.modules.settings.about.*
 import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexConfirmScreen
 import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexScreen
-import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexSecurityVerificationScreen
 import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexSelectNetworkScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
@@ -61,7 +65,18 @@ class WithdrawCexFragment : BaseFragment() {
                     val navController = findNavController()
 
                     if (cexAsset != null && network != null && cexProvider != null) {
-                        WithdrawCexNavHost(navController, cexAsset, network, cexProvider)
+                        when (cexProvider) {
+                            is BinanceCexProvider -> {
+                                LaunchedEffect(Unit) {
+                                    navController.popBackStack()
+                                }
+                            }
+
+                            is CoinzixCexProvider -> {
+                                CoinzixWithdrawNavHost(navController, cexAsset, network, cexProvider)
+                            }
+                        }
+
                     } else {
                         val view = LocalView.current
                         HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
@@ -80,13 +95,13 @@ class WithdrawCexFragment : BaseFragment() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun WithdrawCexNavHost(
+fun CoinzixWithdrawNavHost(
     fragmentNavController: NavController,
     cexAsset: CexAsset,
     network: CexWithdrawNetwork,
-    cexProvider: ICexProvider,
+    coinzixCexProvider: CoinzixCexProvider,
 ) {
-    val viewModel: WithdrawCexViewModel = viewModel(factory = WithdrawCexModule.Factory(cexAsset, network, cexProvider))
+    val viewModel: WithdrawCexViewModel = viewModel(factory = WithdrawCexModule.Factory(cexAsset, network, coinzixCexProvider))
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(
@@ -115,22 +130,36 @@ fun WithdrawCexNavHost(
         composablePage("withdraw-confirm") {
             WithdrawCexConfirmScreen(
                 mainViewModel = viewModel,
-                openVerification = {
-                    navController.navigate("withdraw-verification/$it")
+                openVerification = { withdraw ->
+                    navController.navigate("withdraw-verification/${withdraw.withdrawId}?steps=${withdraw.twoFactorTypes.joinToString { "${it.code}" }}")
                 },
                 onNavigateBack = { navController.popBackStack() },
                 onClose = { fragmentNavController.popBackStack() },
             )
         }
-        composablePage("withdraw-verification/{withdrawId}") { backStackEntry ->
-            val withdrawId = backStackEntry.arguments?.getString("withdrawId")
+        composablePage("withdraw-verification/{withdrawId}?steps={steps}") { backStackEntry ->
+            val withdrawId = backStackEntry.arguments?.getString("withdrawId") ?: return@composablePage
+            val steps: List<Int> = backStackEntry.arguments?.getString("steps")?.split(",")?.mapNotNull { it.toIntOrNull() } ?: listOf()
 
-            withdrawId?.let {
-                WithdrawCexSecurityVerificationScreen(
-                    withdrawId = withdrawId,
-                    onNavigateBack = { navController.popBackStack() }
-                ) { fragmentNavController.popBackStack() }
-            }
+            Log.e("e", "withdraw-verification: withdrawId=$withdrawId, steps= ${steps.joinToString { it.toString() }}")
+
+            val coinzixVerificationViewModel = viewModel<CoinzixVerificationViewModel>(
+                factory = CoinzixVerificationViewModel.FactoryForWithdraw(
+                    withdrawId,
+                    steps.mapNotNull { TwoFactorType.fromCode(it) },
+                    coinzixCexProvider
+                )
+            )
+            val view = LocalView.current
+            CoinzixVerificationScreen(
+                viewModel = coinzixVerificationViewModel,
+                onSuccess = {
+                    HudHelper.showSuccessMessage(view, R.string.CexWithdraw_WithdrawSuccess)
+                    fragmentNavController.popBackStack()
+                },
+                onNavigateBack = { navController.popBackStack() },
+                onClose = { fragmentNavController.popBackStack() }
+            )
 
         }
     }

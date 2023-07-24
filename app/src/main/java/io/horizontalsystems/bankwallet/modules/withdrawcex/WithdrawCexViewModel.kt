@@ -10,8 +10,9 @@ import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexWithdrawNetwork
-import cash.p.terminal.core.providers.ICexProvider
+import cash.p.terminal.core.providers.CoinzixCexProvider
 import cash.p.terminal.entities.Address
+import cash.p.terminal.modules.coinzixverify.CoinzixVerificationMode
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.fee.FeeItem
@@ -26,7 +27,7 @@ class WithdrawCexViewModel(
     private val xRateService: XRateService,
     private val amountService: CexWithdrawAmountService,
     private val addressService: CexWithdrawAddressService,
-    private val cexProvider: ICexProvider,
+    private val cexProvider: CoinzixCexProvider,
     private val contactsRepository: ContactsRepository
 ) : ViewModel() {
     private val coinUid = cexAsset.coin?.uid
@@ -173,7 +174,7 @@ class WithdrawCexViewModel(
         )
     }
 
-    suspend fun confirm(): String {
+    suspend fun confirm(): CoinzixVerificationMode.Withdraw {
         return cexProvider.withdraw(
             cexAsset.id,
             network.id,

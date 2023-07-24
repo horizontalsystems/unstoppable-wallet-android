@@ -1723,7 +1723,7 @@
     <string name="CexWithdraw_GoogleAuthenticationCode">Google Authentication Code</string>
     <string name="CexWithdraw_GetCode">Get Code</string>
     <string name="CexWithdraw_GetCodeSeconds">%s sec</string>
-    <string name="CexWithdraw_EmailVerificationInfo">Enter verification code sent to test@gmail.com</string>
+    <string name="CexWithdraw_EmailVerificationInfo">Enter verification code sent to your email.</string>
     <string name="CexWithdraw_GoogleAuthenticationInfo">Enter google authentication code from your Google Authenticator App</string>
     <string name="CexWithdraw_Withdraw">Withdraw</string>
     <string name="CexWithdraw_WithdrawSuccess">Success</string>

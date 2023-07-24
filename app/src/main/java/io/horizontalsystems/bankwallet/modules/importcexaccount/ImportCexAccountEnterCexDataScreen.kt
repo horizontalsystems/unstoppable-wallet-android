@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.importcexaccount
 
 import android.app.Activity
-import android.content.Intent
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,8 +28,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cash.p.terminal.R
+import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.utils.ModuleField
+import cash.p.terminal.modules.coinzixverify.CoinzixVerificationMode
+import cash.p.terminal.modules.coinzixverify.CoinzixVerificationViewModel
+import cash.p.terminal.modules.coinzixverify.TwoFactorType
+import cash.p.terminal.modules.coinzixverify.ui.CoinzixVerificationScreen
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -43,6 +52,7 @@ import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
 
 @Composable
 fun ImportCexAccountEnterCexDataScreen(
@@ -59,10 +69,56 @@ fun ImportCexAccountEnterCexDataScreen(
         }
 
         is CexCoinzix -> {
-            ImportCoinzixCexAccountScreen(cex, onNavigateBack, onClose, onAccountCreate)
+            ImportCoinzixCexAccountNavHost(cex, onNavigateBack, onClose, onAccountCreate)
         }
 
         else -> Unit
+    }
+}
+
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun ImportCoinzixCexAccountNavHost(
+    cex: CexCoinzix,
+    onNavigateBack: () -> Unit,
+    onClose: () -> Unit,
+    onAccountCreate: () -> Unit
+) {
+    val navController = rememberAnimatedNavController()
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = "import-coinzix-account",
+    ) {
+        composable("import-coinzix-account") {
+            ImportCoinzixCexAccountScreen(
+                cex = cex,
+                onNavigateBack = onNavigateBack,
+                onClose = onClose,
+                openVerification = { login: CoinzixVerificationMode.Login ->
+                    navController.navigate("login-verification/${login.token}/${login.secret}/?steps=${login.twoFactorTypes.joinToString { "${it.code}" }}")
+                }
+            )
+        }
+
+        composablePage("login-verification/{token}/{secret}/?steps={steps}") { backStackEntry ->
+            val token = backStackEntry.arguments?.getString("token") ?: return@composablePage
+            val secret = backStackEntry.arguments?.getString("secret") ?: return@composablePage
+            val steps: List<Int> = backStackEntry.arguments?.getString("steps")?.split(",")?.mapNotNull { it.toIntOrNull() } ?: listOf()
+
+            Log.e("e", "login-verification: token=$token, secret=$secret, steps= ${steps.joinToString { it.toString() }}")
+
+            val coinzixVerificationViewModel = viewModel<CoinzixVerificationViewModel>(
+                factory = CoinzixVerificationViewModel.FactoryForLogin(token, secret, steps.mapNotNull { TwoFactorType.fromCode(it) })
+            )
+
+            CoinzixVerificationScreen(
+                viewModel = coinzixVerificationViewModel,
+                onSuccess = onAccountCreate,
+                onNavigateBack = { navController.popBackStack() },
+                onClose = onClose
+            )
+        }
     }
 }
 
@@ -71,34 +127,13 @@ private fun ImportCoinzixCexAccountScreen(
     cex: CexCoinzix,
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
-    onAccountCreate: () -> Unit
+    openVerification: (CoinzixVerificationMode.Login) -> Unit
 ) {
     val viewModel = viewModel<EnterCexDataCoinzixViewModel>()
     val view = LocalView.current
+    val coroutineScope = rememberCoroutineScope()
     val uiState = viewModel.uiState
     val error = uiState.error
-
-    val intent = Intent(LocalContext.current, HCaptchaActivity::class.java)
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val data: Intent? = result.data
-            when (result.resultCode) {
-                Activity.RESULT_OK -> {
-                    val token = data?.extras?.getString("captcha") ?: ""
-                    viewModel.onResultCaptchaToken(token)
-                }
-
-                Activity.RESULT_CANCELED -> {
-                    Log.d("hCaptcha", "hCaptcha failed")
-                }
-            }
-        }
-
-    if (uiState.accountCreated) {
-        LaunchedEffect(Unit) {
-            onAccountCreate.invoke()
-        }
-    }
 
     LaunchedEffect(error) {
         error?.let {
@@ -107,6 +142,7 @@ private fun ImportCoinzixCexAccountScreen(
     }
 
     var hidePassphrase by remember { mutableStateOf(true) }
+    var loading by remember { mutableStateOf(false) }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -134,7 +170,7 @@ private fun ImportCoinzixCexAccountScreen(
             ) {
                 InfoText(text = stringResource(R.string.ImportCexAccountConzix_Description))
                 VSpacer(height = 20.dp)
-                val inputsEnabled = !uiState.loading
+                val inputsEnabled = !loading
                 val textColor = if (inputsEnabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey50
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -167,10 +203,19 @@ private fun ImportCoinzixCexAccountScreen(
                     ButtonPrimaryYellowWithSpinner(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Login),
-                        showSpinner = uiState.loading,
-                        enabled = uiState.loginEnabled,
+                        showSpinner = loading,
+                        enabled = uiState.loginEnabled && !loading,
                         onClick = {
-                            launcher.launch(intent)
+                            coroutineScope.launch {
+                                loading = true
+                                try {
+                                    val login = viewModel.login()
+                                    openVerification.invoke(login)
+                                } catch (error: Throwable) {
+                                    HudHelper.showErrorMessage(view, error.message ?: error.javaClass.simpleName)
+                                }
+                                loading = false
+                            }
                         },
                     )
                     VSpacer(16.dp)
