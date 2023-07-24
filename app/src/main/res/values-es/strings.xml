@@ -605,6 +605,7 @@
     <string name="Settings_RateUs">Califícanos</string>
     <string name="Settings_LaunchScreen">Pantalla de lanzamiento</string>
     <string name="Settings_Appearance">Apariencia</string>
+    <string name="Settings_PersonalSupport_Request">Pedido</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">ESPECIALES DE OBJETO</string>
     <string name="Appearance_LaunchScreen">ACTUALIZAR SCREEN</string>
