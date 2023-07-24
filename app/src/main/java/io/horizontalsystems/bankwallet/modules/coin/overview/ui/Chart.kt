@@ -36,10 +36,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.Chart
-import io.horizontalsystems.chartview.ChartViewType
-import io.horizontalsystems.chartview.CurveAnimator2
-import io.horizontalsystems.chartview.CurveAnimatorBars
+import io.horizontalsystems.chartview.*
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.HudHelper
@@ -230,6 +227,8 @@ fun PriceVolChart(
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
+    val listeners = mutableListOf<AnimatedFrameListener>()
+
     if (chartInfoData == null) {
         Box(modifier = Modifier.height(height))
         return
@@ -258,6 +257,7 @@ fun PriceVolChart(
             maxValue
         )
     }
+    listeners.add(mainCurve)
 
     mainCurve.setTo(
         chartData.valuesByTimestamp(),
@@ -294,34 +294,12 @@ fun PriceVolChart(
         )
     }
 
-    val movingAverageCurveStates = movingAverageCurves.map { (t, u) ->
-        u.state
+    movingAverageCurves.forEach { _, curve ->
+        listeners.add(curve)
     }
 
-    val volumeBars: CurveAnimatorBars?
-    if (hasVolumes) {
-        val volumeByTimestamp = chartData.volumeByTimestamp()
-        val volumeMin = volumeByTimestamp.minOf { it.value }
-        val volumeMax = volumeByTimestamp.maxOf { it.value }
-        volumeBars = remember {
-            CurveAnimatorBars(
-                volumeByTimestamp,
-                minKey,
-                maxKey,
-                volumeMin,
-                volumeMax
-            )
-        }
-
-        volumeBars.setValues(
-            volumeByTimestamp,
-            minKey,
-            maxKey,
-            volumeMin,
-            volumeMax
-        )
-    } else {
-        volumeBars = null
+    val movingAverageCurveStates = movingAverageCurves.map { (t, u) ->
+        u.state
     }
 
     Row(
@@ -399,7 +377,30 @@ fun PriceVolChart(
         )
     }
 
-    volumeBars?.let {
+    if (hasVolumes) {
+        val volumeByTimestamp = chartData.volumeByTimestamp()
+        val volumeMin = volumeByTimestamp.minOf { it.value }
+        val volumeMax = volumeByTimestamp.maxOf { it.value }
+        val volumeBars = remember {
+            CurveAnimatorBars(
+                volumeByTimestamp,
+                minKey,
+                maxKey,
+                volumeMin,
+                volumeMax
+            )
+        }
+
+        listeners.add(volumeBars)
+
+        volumeBars.setValues(
+            volumeByTimestamp,
+            minKey,
+            maxKey,
+            volumeMin,
+            volumeMax
+        )
+
         Box(
             modifier = Modifier
                 .height(44.dp)
@@ -426,11 +427,9 @@ fun PriceVolChart(
                 targetValue = 1f,
                 animationSpec = tween(1000, easing = LinearEasing),
             ) { value, _ ->
-                mainCurve.nextFrame(value)
-                movingAverageCurves.forEach { (_, u) ->
-                    u.nextFrame(value)
+                listeners.forEach {
+                    it.onNextFrame(value)
                 }
-                volumeBars?.nextFrame(value)
             }
         }
 
