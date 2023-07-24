@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
-import io.horizontalsystems.bankwallet.core.providers.ICexProvider
+import io.horizontalsystems.bankwallet.core.providers.CoinzixCexProvider
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
@@ -13,7 +13,7 @@ object WithdrawCexModule {
     class Factory(
         private val cexAsset: CexAsset,
         private val network: CexWithdrawNetwork,
-        private val cexProvider: ICexProvider
+        private val cexProvider: CoinzixCexProvider
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")

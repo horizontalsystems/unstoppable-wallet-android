@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.withdrawcex.ui
+package io.horizontalsystems.bankwallet.modules.coinzixverify.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,24 +20,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexModule
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
 
 @Composable
-fun AuthenticationCodeInput(
+fun EmailVerificationCodeInput(
     modifier: Modifier = Modifier,
     hint: String,
     state: DataState<Any>? = null,
     singleLine: Boolean = false,
     maxLength: Int? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    actionButtonState: WithdrawCexModule.CodeGetButtonState,
     onValueChange: (String) -> Unit,
+    actionButtonClick: () -> Unit,
 ) {
 
     val borderColor = when (state) {
@@ -50,6 +56,11 @@ fun AuthenticationCodeInput(
         }
 
         else -> ComposeAppTheme.colors.steel20
+    }
+
+    val actionButtonText = when (actionButtonState) {
+        WithdrawCexModule.CodeGetButtonState.Active -> stringResource(R.string.CexWithdraw_GetCode)
+        is WithdrawCexModule.CodeGetButtonState.Pending -> stringResource(R.string.CexWithdraw_GetCodeSeconds, actionButtonState.secondsLeft)
     }
 
     Column(modifier) {
@@ -101,6 +112,13 @@ fun AuthenticationCodeInput(
                     innerTextField()
                 },
                 keyboardOptions = keyboardOptions,
+            )
+
+            ButtonSecondaryDefault(
+                modifier = Modifier.padding(end = 16.dp),
+                title = actionButtonText,
+                enabled = actionButtonState == WithdrawCexModule.CodeGetButtonState.Active,
+                onClick = actionButtonClick,
             )
         }
     }

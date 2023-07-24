@@ -13,10 +13,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.coinzixverify.CoinzixVerificationMode
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.fee.FeeCell
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
@@ -33,17 +35,19 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddr
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 @Composable
 fun WithdrawCexConfirmScreen(
     mainViewModel: WithdrawCexViewModel,
-    openVerification: (String) -> Unit,
+    openVerification: (CoinzixVerificationMode.Withdraw) -> Unit,
     onNavigateBack: () -> Unit,
     onClose: () -> Unit
 ) {
     val navController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()
+    val view = LocalView.current
 
     ComposeAppTheme {
         val confirmationData = mainViewModel.getConfirmationData()
@@ -150,8 +154,13 @@ fun WithdrawCexConfirmScreen(
                         onClick = {
                             coroutineScope.launch {
                                 confirmEnabled = false
-                                val withdrawId = mainViewModel.confirm()
-                                openVerification.invoke(withdrawId)
+                                try {
+                                    val withdraw = mainViewModel.confirm()
+                                    openVerification.invoke(withdraw)
+                                } catch (error: Throwable) {
+
+                                    HudHelper.showErrorMessage(view, error.message ?: it.javaClass.simpleName)
+                                }
                                 confirmEnabled = true
                             }
                         },
