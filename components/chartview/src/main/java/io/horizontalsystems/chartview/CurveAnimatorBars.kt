@@ -10,7 +10,7 @@ class CurveAnimatorBars(
     private var targetMaxKey: Long,
     private var targetMinValue: Float,
     private var targetMaxValue: Float,
-) {
+) : AnimatedFrameListener {
     private var fromValues: LinkedHashMap<Long, Float> = targetValues
     private var fromMinKey: Long = targetMinKey
     private var fromMaxKey: Long = targetMaxKey
@@ -82,7 +82,7 @@ class CurveAnimatorBars(
         combinedKeys = (fromValues.keys + targetValues.keys).distinct().sorted()
     }
 
-    fun nextFrame(animatedFraction: Float) {
+    override fun onNextFrame(animatedFraction: Float) {
         if (fromValues.isEmpty() || animatedFraction == 1f) {
             frameValues = targetValues
             frameMinKey = targetMinKey
