@@ -329,13 +329,28 @@ fun PriceVolChart(
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
     ) {
-        ChartLineWithGradient(
-            mainCurveState.values,
-            mainCurveState.startTimestamp,
-            mainCurveState.endTimestamp,
-            mainCurveState.minValue,
-            mainCurveState.maxValue
-        )
+        when (chartViewType) {
+            ChartViewType.Line -> {
+                ChartLineWithGradient(
+                    mainCurveState.values,
+                    mainCurveState.startTimestamp,
+                    mainCurveState.endTimestamp,
+                    mainCurveState.minValue,
+                    mainCurveState.maxValue
+                )
+            }
+            ChartViewType.Bar -> {
+                GraphicBars(
+                    modifier = Modifier.fillMaxSize(),
+                    data = mainCurveState.values,
+                    minKey = mainCurveState.startTimestamp,
+                    maxKey = mainCurveState.endTimestamp,
+                    minValue = mainCurveState.minValue,
+                    maxValue = mainCurveState.maxValue,
+                    color = Color.Red
+                )
+            }
+        }
 
         movingAverageCurveStates.forEach {
             val color = try {
