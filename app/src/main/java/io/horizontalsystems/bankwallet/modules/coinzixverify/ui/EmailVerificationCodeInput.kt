@@ -27,11 +27,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.withdrawcex.WithdrawCexModule
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.FormsInputStateWarning
+
+sealed class CodeGetButtonState {
+    object Active : CodeGetButtonState()
+    class Pending(val secondsLeft: Int) : CodeGetButtonState()
+}
 
 @Composable
 fun EmailVerificationCodeInput(
@@ -41,7 +45,7 @@ fun EmailVerificationCodeInput(
     singleLine: Boolean = false,
     maxLength: Int? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    actionButtonState: WithdrawCexModule.CodeGetButtonState,
+    actionButtonState: CodeGetButtonState,
     onValueChange: (String) -> Unit,
     actionButtonClick: () -> Unit,
 ) {
@@ -59,8 +63,8 @@ fun EmailVerificationCodeInput(
     }
 
     val actionButtonText = when (actionButtonState) {
-        WithdrawCexModule.CodeGetButtonState.Active -> stringResource(R.string.CexWithdraw_GetCode)
-        is WithdrawCexModule.CodeGetButtonState.Pending -> stringResource(R.string.CexWithdraw_GetCodeSeconds, actionButtonState.secondsLeft)
+        CodeGetButtonState.Active -> stringResource(R.string.CexWithdraw_GetCode)
+        is CodeGetButtonState.Pending -> stringResource(R.string.CexWithdraw_GetCodeSeconds, actionButtonState.secondsLeft)
     }
 
     Column(modifier) {
@@ -117,7 +121,7 @@ fun EmailVerificationCodeInput(
             ButtonSecondaryDefault(
                 modifier = Modifier.padding(end = 16.dp),
                 title = actionButtonText,
-                enabled = actionButtonState == WithdrawCexModule.CodeGetButtonState.Active,
+                enabled = actionButtonState == CodeGetButtonState.Active,
                 onClick = actionButtonClick,
             )
         }

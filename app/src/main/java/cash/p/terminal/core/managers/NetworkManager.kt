@@ -148,7 +148,7 @@ object ServiceChangeLogs {
 object APIClient {
 
     private val logger = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        level = HttpLoggingInterceptor.Level.BASIC
     }
 
     private fun buildClient(headers: Map<String, String>): OkHttpClient {

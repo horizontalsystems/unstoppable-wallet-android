@@ -9,7 +9,10 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.CoinzixCexProvider
 import cash.p.terminal.modules.balance.cex.CoinzixCexApiService
+import cash.p.terminal.modules.coinzixverify.ui.CodeGetButtonState
 import kotlinx.coroutines.launch
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class CoinzixVerificationViewModel(
     twoFactorTypes: List<TwoFactorType>,
@@ -26,6 +29,16 @@ class CoinzixVerificationViewModel(
     private val emailCodeRequired = twoFactorTypes.contains(TwoFactorType.Email)
     private val googleCodeRequired = twoFactorTypes.contains(TwoFactorType.Authenticator)
 
+    private var pinResendTimeIntervalInSeconds = 5
+    private var pinResendTimeout = pinResendTimeIntervalInSeconds
+    private var resendButtonState: CodeGetButtonState = CodeGetButtonState.Pending(pinResendTimeIntervalInSeconds)
+
+    private var timer: Timer? = null
+
+    init {
+        startTimer()
+    }
+
     var uiState by mutableStateOf(
         CoinzixVerificationUiState(
             submitEnabled = getSubmitEnabled(),
@@ -33,7 +46,8 @@ class CoinzixVerificationViewModel(
             googleCodeEnabled = googleCodeRequired,
             success = success,
             loading = loading,
-            error = error
+            error = error,
+            resendButtonState = resendButtonState
         )
     )
         private set
@@ -50,7 +64,43 @@ class CoinzixVerificationViewModel(
         emitState()
     }
 
+    private fun startTimer() {
+        pinResendTimeout = pinResendTimeIntervalInSeconds
+
+        timer = Timer().apply {
+            schedule(1000, 1000) {
+                onFireTimer()
+            }
+        }
+    }
+
+    private fun stopTimer() {
+        timer?.cancel()
+        timer = null
+    }
+
+    private fun resetTimer() {
+        stopTimer()
+        startTimer()
+    }
+
+    private fun onFireTimer() {
+        pinResendTimeout = pinResendTimeout.dec().coerceAtLeast(0)
+
+        if (pinResendTimeout == 0) {
+            stopTimer()
+        }
+
+        emitState()
+    }
+
     private fun emitState() {
+        resendButtonState = if (pinResendTimeout > 0) {
+            CodeGetButtonState.Pending(pinResendTimeout)
+        } else {
+            CodeGetButtonState.Active
+        }
+
         viewModelScope.launch {
             uiState = CoinzixVerificationUiState(
                 submitEnabled = getSubmitEnabled(),
@@ -58,7 +108,8 @@ class CoinzixVerificationViewModel(
                 googleCodeEnabled = googleCodeRequired,
                 success = success,
                 loading = loading,
-                error = error
+                error = error,
+                resendButtonState = resendButtonState
             )
         }
     }
@@ -93,10 +144,16 @@ class CoinzixVerificationViewModel(
 
     fun onResendEmailCode() {
         viewModelScope.launch {
+            resetTimer()
+            emitState()
+
             try {
                 verifyService.resendPin()
             } catch (err: Throwable) {
                 error = err
+
+                stopTimer()
+                pinResendTimeout = 0
             }
 
             emitState()
@@ -135,4 +192,5 @@ data class CoinzixVerificationUiState(
     val success: Boolean,
     val loading: Boolean,
     val error: Throwable?,
+    val resendButtonState: CodeGetButtonState
 )

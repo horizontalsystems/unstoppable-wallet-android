@@ -9,10 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -21,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.coinzixverify.CoinzixVerificationViewModel
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.withdrawcex.WithdrawCexModule.CodeGetButtonState
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -55,7 +50,6 @@ fun CoinzixVerificationScreen(
         }
     }
 
-    var actionButtonState by remember { mutableStateOf<CodeGetButtonState>(CodeGetButtonState.Active) }
     ComposeAppTheme {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -89,12 +83,11 @@ fun CoinzixVerificationScreen(
                             state = null,
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            actionButtonState = actionButtonState,
+                            actionButtonState = uiState.resendButtonState,
                             onValueChange = {
                                 viewModel.onEnterEmailCode(it)
                             },
                             actionButtonClick = {
-                                actionButtonState = CodeGetButtonState.Pending(30)
                                 viewModel.onResendEmailCode()
                             }
                         )
