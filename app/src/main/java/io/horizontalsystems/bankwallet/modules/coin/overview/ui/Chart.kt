@@ -6,6 +6,8 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -23,12 +25,13 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.doOnLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
@@ -36,7 +39,6 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.HudHelper
@@ -257,6 +259,7 @@ fun PriceVolChart(
     val mainCurveState = chartHelper.getMainCurveState()
     val movingAverageCurveStates = chartHelper.getMovingAverageCurveStates()
     val volumeBarsState = chartHelper.getVolumeBarsState()
+    val selectedItem = chartHelper.selectedItem
 
     Row(
         modifier = Modifier
@@ -279,133 +282,140 @@ fun PriceVolChart(
         )
     }
 
-    Box(
-        modifier = Modifier
-            .height(120.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-    ) {
-        when (chartViewType) {
-            ChartViewType.Line -> {
-                ChartLineWithGradient(
-                    mainCurveState.values,
-                    mainCurveState.startTimestamp,
-                    mainCurveState.endTimestamp,
-                    mainCurveState.minValue,
-                    mainCurveState.maxValue
-                )
-            }
-            ChartViewType.Bar -> {
-                GraphicBars(
-                    modifier = Modifier.fillMaxSize(),
-                    data = mainCurveState.values,
-                    minKey = mainCurveState.startTimestamp,
-                    maxKey = mainCurveState.endTimestamp,
-                    minValue = mainCurveState.minValue,
-                    maxValue = mainCurveState.maxValue,
-                    color = Color.Red
-                )
-            }
-        }
+    Box {
+        Column {
+            Box(
+                modifier = Modifier
+                    .height(120.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            ) {
+                when (chartViewType) {
+                    ChartViewType.Line -> {
+                        ChartLineWithGradient(
+                            mainCurveState.values,
+                            mainCurveState.startTimestamp,
+                            mainCurveState.endTimestamp,
+                            mainCurveState.minValue,
+                            mainCurveState.maxValue,
+                            selectedItem?.key
+                        )
+                    }
+                    ChartViewType.Bar -> {
+                        GraphicBars(
+                            modifier = Modifier.fillMaxSize(),
+                            data = mainCurveState.values,
+                            minKey = mainCurveState.startTimestamp,
+                            maxKey = mainCurveState.endTimestamp,
+                            minValue = mainCurveState.minValue,
+                            maxValue = mainCurveState.maxValue,
+                            color = Color.Red
+                        )
+                    }
+                }
 
-        movingAverageCurveStates.forEach {
-            val color = try {
-                Color(android.graphics.Color.parseColor(it.color))
-            } catch (e: Exception) {
-                Color.Gray
-            }
-
-            CraphicLine(
-                Modifier.fillMaxSize(),
-                it.values,
-                it.startTimestamp,
-                it.endTimestamp,
-                it.minValue,
-                it.maxValue,
-                color
-            )
-        }
-    }
-
-    Row(
-        modifier = Modifier
-            .height(20.dp)
-            .fillMaxWidth()
-            .drawBehind {
-                val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-                drawLine(
-                    color = Color(0x1A6E7899),
-                    start = Offset(0f, 0f),
-                    end = Offset(size.width, 0f),
-                    pathEffect = pathEffect
-                )
-            }
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        micro_grey(
-            text = chartInfoData.minValue ?: "",
-        )
-    }
-
-    volumeBarsState?.let {
-        GraphicBars(
-            modifier = Modifier
-                .height(44.dp)
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            data = volumeBarsState.values,
-            minKey = volumeBarsState.startTimestamp,
-            maxKey = volumeBarsState.endTimestamp,
-            minValue = volumeBarsState.minValue,
-            maxValue = volumeBarsState.maxValue,
-            color = Color(0x336E7899)
-        )
-    }
-
-    AndroidView(
-        modifier = Modifier
-            .height(height)
-            .fillMaxWidth(),
-        factory = {
-            Chart(it).apply {
-                this.chartViewType = chartViewType
-
-                setListener(object : Chart.Listener {
-                    override fun onTouchDown() {
+                movingAverageCurveStates.forEach {
+                    val color = try {
+                        Color(android.graphics.Color.parseColor(it.color))
+                    } catch (e: Exception) {
+                        Color.Gray
                     }
 
-                    override fun onTouchUp() {
-                        onSelectPoint.invoke(null)
-                    }
-
-                    override fun onTouchSelect(item: ChartPoint) {
-                        onSelectPoint.invoke(item)
-                        HudHelper.vibrate(context)
-                    }
-                })
-            }
-        },
-        update = { chart ->
-            if (loading) {
-                chart.showSpinner()
-            } else {
-                chart.hideSpinner()
-            }
-
-            chart.setIndicatorLineVisible(hasVolumes)
-
-            chartInfoData?.let { chartInfoData ->
-                chart.doOnLayout {
-                    chart.setData(
-                        chartInfoData.chartData,
-                        chartInfoData.maxValue,
-                        chartInfoData.minValue
+                    CraphicLine(
+                        Modifier.fillMaxSize(),
+                        it.values,
+                        it.startTimestamp,
+                        it.endTimestamp,
+                        it.minValue,
+                        it.maxValue,
+                        color
                     )
                 }
             }
+
+            Row(
+                modifier = Modifier
+                    .height(20.dp)
+                    .fillMaxWidth()
+                    .drawBehind {
+                        val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                        drawLine(
+                            color = Color(0x1A6E7899),
+                            start = Offset(0f, 0f),
+                            end = Offset(size.width, 0f),
+                            pathEffect = pathEffect
+                        )
+                    }
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                micro_grey(
+                    text = chartInfoData.minValue ?: "",
+                )
+            }
+
+            volumeBarsState?.let {
+                GraphicBars(
+                    modifier = Modifier
+                        .height(44.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    data = volumeBarsState.values,
+                    minKey = volumeBarsState.startTimestamp,
+                    maxKey = volumeBarsState.endTimestamp,
+                    minValue = volumeBarsState.minValue,
+                    maxValue = volumeBarsState.maxValue,
+                    color = Color(0x336E7899)
+                )
+            }
         }
-    )
+
+        var selectedX by remember {
+            mutableStateOf<Float?>(null)
+        }
+
+        val context = LocalContext.current
+        LaunchedEffect(selectedItem) {
+            if (selectedItem != null) {
+                HudHelper.vibrate(context)
+            }
+        }
+        Canvas(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(horizontal = 8.dp)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onPress = { offset ->
+                            selectedX = offset.x
+                        },
+                        onTap = { offset ->
+                            selectedX = null
+                        }
+                    )
+                }
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDrag = { change: PointerInputChange, dragAmount: Offset ->
+                            selectedX = change.position.x
+                        },
+                        onDragEnd = {
+                            selectedX = null
+                        }
+                    )
+                },
+            onDraw = {
+                val canvasWidth = size.width
+                chartHelper.setSelectedPercentagePositionX(selectedX?.div(canvasWidth))
+
+                selectedItem?.let {
+                    val x = it.percentagePositionX * canvasWidth
+
+                    drawLine(Color.White, Offset(x, 0f), Offset(x, size.height))
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -414,13 +424,16 @@ fun ChartLineWithGradient(
     minKey: Long,
     maxKey: Long,
     minValue: Float,
-    maxValue: Float
+    maxValue: Float,
+    selectedItemKey: Long?
 ) {
     Canvas(
         modifier = Modifier
             .height(120.dp)
             .fillMaxWidth(),
         onDraw = {
+            var dotPosition: Offset? = null
+
             val canvasWidth = size.width
             val canvasHeight = size.height
 
@@ -438,6 +451,10 @@ fun ChartLineWithGradient(
                     pathStarted = true
                 } else {
                     linePath.lineTo(x, y)
+                }
+
+                if (selectedItemKey == timestamp) {
+                    dotPosition = Offset(x, y)
                 }
             }
 
@@ -461,6 +478,9 @@ fun ChartLineWithGradient(
                         1.00f to Color(0x8013D670)
                     ),
                 )
+                dotPosition?.let {
+                    drawCircle(Color.White, 5.dp.toPx(), center = it)
+                }
             }
         }
     )
