@@ -291,37 +291,33 @@ fun PriceVolChart(
     )
     val mainCurveState = mainCurve.state
 
-    val indicatorCurves = remember(chartData.indicators.keys) {
-        val curves = mutableMapOf<String, CurveAnimator2>()
-        chartData.indicators.forEach { (id, u: ChartIndicator) ->
-            if (u is ChartIndicator.MovingAverage) {
-                curves[id] = CurveAnimator2(
-                    u.line,
+    val movingAverageCurves = remember(chartData.movingAverages.keys) {
+        chartData.movingAverages
+            .map { (id, movingAverage: ChartIndicator) ->
+                id to CurveAnimator2(
+                    movingAverage.line,
                     minKey,
                     maxKey,
                     minValue,
                     maxValue
                 ).apply {
-                    color = u.color
+                    color = movingAverage.color
                 }
             }
-        }
-        curves
+            .toMap()
     }
 
-    chartData.indicators.forEach { (id, u: ChartIndicator) ->
-        if (u is ChartIndicator.MovingAverage) {
-            indicatorCurves[id]?.setTo(
-                u.line,
-                minKey,
-                maxKey,
-                minValue,
-                maxValue,
-            )
-        }
+    chartData.movingAverages.forEach { (id, u: ChartIndicator) ->
+        movingAverageCurves[id]?.setTo(
+            u.line,
+            minKey,
+            maxKey,
+            minValue,
+            maxValue,
+        )
     }
 
-    val indicatorCurveStates = indicatorCurves.map { (t, u) ->
+    val movingAverageCurveStates = movingAverageCurves.map { (t, u) ->
         u.state
     }
 
@@ -360,7 +356,7 @@ fun PriceVolChart(
             mainCurveState.maxValue
         )
 
-        indicatorCurveStates.forEach {
+        movingAverageCurveStates.forEach {
             val color = try {
                 Color(android.graphics.Color.parseColor(it.color))
             } catch (e: Exception) {
@@ -427,7 +423,7 @@ fun PriceVolChart(
                 animationSpec = tween(1000, easing = LinearEasing),
             ) { value, _ ->
                 mainCurve.nextFrame(value)
-                indicatorCurves.forEach { (t, u) ->
+                movingAverageCurves.forEach { (t, u) ->
                     u.nextFrame(value)
                 }
                 volumeBars.nextFrame(value)
