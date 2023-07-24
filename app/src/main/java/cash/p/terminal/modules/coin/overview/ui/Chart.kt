@@ -36,8 +36,8 @@ import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.ChartInfoData
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.chartview.*
-import io.horizontalsystems.chartview.models.ChartIndicator
+import io.horizontalsystems.chartview.Chart
+import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -227,8 +227,6 @@ fun PriceVolChart(
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
-    val listeners = mutableListOf<AnimatedFrameListener>()
-
     if (chartInfoData == null) {
         Box(modifier = Modifier.height(height))
         return
@@ -236,71 +234,29 @@ fun PriceVolChart(
 
     val chartData = chartInfoData.chartData
 
-    var minValue = chartData.minValue
-    val maxValue = chartData.maxValue
-    if (minValue == maxValue) {
-        minValue *= 0.9f
-    }
-    var minKey = chartData.startTimestamp
-    var maxKey = chartData.endTimestamp
-    if (minKey == maxKey) {
-        minKey = (minKey * 0.9).toLong()
-        maxKey = (maxKey * 1.1).toLong()
-    }
+    val chartHelper = remember { ChartHelper(chartData, hasVolumes) }
+    chartHelper.setTarget(chartData, hasVolumes)
 
-    val mainCurve = remember {
-        CurveAnimator2(
-            chartData.valuesByTimestamp(),
-            minKey,
-            maxKey,
-            minValue,
-            maxValue
-        )
-    }
-    listeners.add(mainCurve)
-
-    mainCurve.setTo(
-        chartData.valuesByTimestamp(),
-        minKey,
-        maxKey,
-        minValue,
-        maxValue
-    )
-    val mainCurveState = mainCurve.state
-
-    val movingAverageCurves = remember(chartData.movingAverages.keys) {
-        chartData.movingAverages
-            .map { (id, movingAverage: ChartIndicator) ->
-                id to CurveAnimator2(
-                    movingAverage.line,
-                    minKey,
-                    maxKey,
-                    minValue,
-                    maxValue
-                ).apply {
-                    color = movingAverage.color
-                }
+    val scope = rememberCoroutineScope()
+    DisposableEffect(chartData) {
+        val animationJob = scope.launch {
+            animate(
+                initialValue = 0f,
+                targetValue = 1f,
+                animationSpec = tween(1000, easing = LinearEasing),
+            ) { value, _ ->
+                chartHelper.onNextFrame(value)
             }
-            .toMap()
+        }
+
+        onDispose {
+            animationJob.cancel()
+        }
     }
 
-    chartData.movingAverages.forEach { (id, u: ChartIndicator) ->
-        movingAverageCurves[id]?.setTo(
-            u.line,
-            minKey,
-            maxKey,
-            minValue,
-            maxValue,
-        )
-    }
-
-    movingAverageCurves.forEach { _, curve ->
-        listeners.add(curve)
-    }
-
-    val movingAverageCurveStates = movingAverageCurves.map { (t, u) ->
-        u.state
-    }
+    val mainCurveState = chartHelper.getMainCurveState()
+    val movingAverageCurveStates = chartHelper.getMovingAverageCurveStates()
+    val volumeBarsState = chartHelper.getVolumeBarsState()
 
     Row(
         modifier = Modifier
@@ -392,31 +348,7 @@ fun PriceVolChart(
         )
     }
 
-    if (hasVolumes) {
-        val volumeByTimestamp = chartData.volumeByTimestamp()
-        val volumeMin = volumeByTimestamp.minOf { it.value }
-        val volumeMax = volumeByTimestamp.maxOf { it.value }
-        val volumeBars = remember {
-            CurveAnimatorBars(
-                volumeByTimestamp,
-                minKey,
-                maxKey,
-                volumeMin,
-                volumeMax
-            )
-        }
-
-        listeners.add(volumeBars)
-
-        volumeBars.setValues(
-            volumeByTimestamp,
-            minKey,
-            maxKey,
-            volumeMin,
-            volumeMax
-        )
-
-        val volumeBarsState = volumeBars.state
+    volumeBarsState?.let {
         GraphicBars(
             modifier = Modifier
                 .height(44.dp)
@@ -429,25 +361,6 @@ fun PriceVolChart(
             maxValue = volumeBarsState.maxValue,
             color = Color(0x336E7899)
         )
-    }
-
-    val scope = rememberCoroutineScope()
-    DisposableEffect(chartData) {
-        val animationJob = scope.launch {
-            animate(
-                initialValue = 0f,
-                targetValue = 1f,
-                animationSpec = tween(1000, easing = LinearEasing),
-            ) { value, _ ->
-                listeners.forEach {
-                    it.onNextFrame(value)
-                }
-            }
-        }
-
-        onDispose {
-            animationJob.cancel()
-        }
     }
 
     AndroidView(
