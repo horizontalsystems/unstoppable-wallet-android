@@ -10,7 +10,7 @@ class CurveAnimator2(
     private var toEndTimestamp: Long,
     private var toMinValue: Float,
     private var toMaxValue: Float,
-) {
+) : AnimatedFrameListener {
     var color: String? = null
 
     private var fromValues: LinkedHashMap<Long, Float> = toValues
@@ -73,7 +73,7 @@ class CurveAnimator2(
         toValuesFilled = fillWith(this.toValues, fromValues)
     }
 
-    fun nextFrame(animatedFraction: Float) {
+    override fun onNextFrame(animatedFraction: Float) {
         if (fromValues.isEmpty() || animatedFraction == 1f) {
             frameStartTimestamp = toStartTimestamp
             frameEndTimestamp = toEndTimestamp
