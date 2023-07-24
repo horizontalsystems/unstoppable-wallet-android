@@ -52,7 +52,7 @@ class WithdrawCexFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val cexAsset = arguments?.getParcelable<CexAsset>("cexAsset")
-        val network = cexAsset?.withdrawNetworks?.find { it.isDefault }
+        val network = cexAsset?.withdrawNetworks?.find { it.isDefault } ?: cexAsset?.withdrawNetworks?.firstOrNull()
         val cexProvider = App.cexProviderManager.cexProviderFlow.value
 
         return ComposeView(requireContext()).apply {
