@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.withdrawcex
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
@@ -95,7 +94,6 @@ class CexWithdrawAmountService(
 
     private fun refreshFee() {
         fee = calculateFee(amount, feeFromAmount, network)
-        Log.e("e", "refreshFee: amount= $amount, decimals= $decimals, fee: $fee, feeScale: ${fee.scale()}")
     }
 
     private fun refreshAvailableBalance() {
@@ -105,8 +103,6 @@ class CexWithdrawAmountService(
             val balance = (freeBalance - fixedFee).scaledDivide(BigDecimal(1) + feePercent.scaledDivide(BigDecimal(100)))
             balance.coerceAtLeast(BigDecimal.ZERO)
         }
-
-        Log.e("e", "refreshAvailableBalance: fee=$fee, availableBalance=$availableBalance")
     }
 
     private fun validateAmount() {
@@ -116,7 +112,6 @@ class CexWithdrawAmountService(
             minAmount
         }
 
-        Log.e("e", "validateAmount: minAmount=${this.minAmount}  calcMinAmount=$minAmount, maxAmount=$maxAmount")
         amountCaution = amountValidator.validate(amount, coinCode, availableBalance, minAmount?.stripTrailingZeros(), maxAmount?.stripTrailingZeros())
     }
 
