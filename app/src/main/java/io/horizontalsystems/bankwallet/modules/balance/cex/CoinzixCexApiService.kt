@@ -34,6 +34,19 @@ class CoinzixCexApiService {
         }
     }
 
+    suspend fun resendLoginPin(token: String): Response.Login {
+        val params = mapOf(
+            "login_token" to token
+        )
+
+        try {
+            return service.resendLoginPin(createJsonRequestBody(params))
+        } catch (exception: HttpException) {
+            val message = parseHttpExceptionError(exception) ?: exception.message ?: exception.javaClass.simpleName
+            throw IllegalStateException(message)
+        }
+    }
+
     suspend fun validateCode(token: String, code: String): Response.Login {
         val params = mapOf(
             "login_token" to token,
@@ -75,7 +88,7 @@ class CoinzixCexApiService {
             put("iso", iso)
             put("new", new.toString())
             network?.let {
-                put("network_type", it)
+                put("network", it)
             }
         }
         val address = post<Response.Address>(
@@ -199,6 +212,9 @@ class CoinzixCexApiService {
     interface CoinzixAPI {
         @POST("api/user/init-app")
         suspend fun login(@Body params: RequestBody): Response.Login
+
+        @POST("api/user/send-two-fa")
+        suspend fun resendLoginPin(@Body params: RequestBody): Response.Login
 
         @POST("api/user/validate-code")
         suspend fun validateCode(@Body params: RequestBody): Response.Login

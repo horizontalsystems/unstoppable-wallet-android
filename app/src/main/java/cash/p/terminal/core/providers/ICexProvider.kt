@@ -284,9 +284,12 @@ class CoinzixCexProvider(
         "ZIL" to "zilliqa",
     )
 
+    private val nativeNetworkId = "NATIVE"
+
 
     override suspend fun getAddress(assetId: String, networkId: String?): CexAddress {
-        val addressData = api.getAddress(authToken, secret, assetId, 0, networkId)
+        val network = if (networkId == nativeNetworkId) null else networkId
+        val addressData = api.getAddress(authToken, secret, assetId, 0, network)
 
         return when {
             addressData.address != null -> {
@@ -309,9 +312,12 @@ class CoinzixCexProvider(
         address: String,
         amount: BigDecimal
     ): CoinzixVerificationMode.Withdraw {
-        val response = api.withdraw(authToken, secret, assetId, networkId, address, amount)
-        val data = response.data ?: throw IllegalStateException("Withdraw response data is null")
+        val network = if (networkId == nativeNetworkId) null else networkId
+
+        val response = api.withdraw(authToken, secret, assetId, network, address, amount)
         validate(response)
+
+        val data = response.data ?: throw IllegalStateException("Withdraw response data is null")
 
         return CoinzixVerificationMode.Withdraw(data.id, data.step.mapNotNull { TwoFactorType.fromCode(it) })
     }
@@ -358,35 +364,50 @@ class CoinzixCexProvider(
                     lockedBalance = (it.balance - it.balance_available).movePointLeft(decimals),
                     depositEnabled = depositEnabled,
                     withdrawEnabled = withdrawEnabled,
-                    depositNetworks = configResponse.depositNetworks(assetId).mapIndexed { index, depositNetwork ->
-                        CexDepositNetworkRaw(
-                            id = depositNetwork.network_type.toString(),
-                            name = depositNetwork.network_type.toString(),
-                            isDefault = index == 0,
-                            enabled = depositEnabled,
-                            minAmount = depositNetwork.min_refill,
-                            blockchainUid = if (depositNetwork.network_type == 0)
-                                isoToBlockchainUidMap[assetId]
-                            else
-                                networkTypeToBlockchainUidMap[depositNetwork.network_type]
-                        )
+                    depositNetworks = configResponse.depositNetworks(assetId).mapIndexedNotNull { index, depositNetwork ->
+                        val networkId = if (depositNetwork.network_type == 0) {
+                            nativeNetworkId
+                        } else {
+                            it.currency.networks[depositNetwork.network_type]
+                        }
+                        networkId?.let {
+                            CexDepositNetworkRaw(
+                                id = networkId,
+                                name = networkId,
+                                isDefault = index == 0,
+                                enabled = depositEnabled,
+                                minAmount = depositNetwork.min_refill,
+                                blockchainUid = if (depositNetwork.network_type == 0)
+                                    isoToBlockchainUidMap[assetId]
+                                else
+                                    networkTypeToBlockchainUidMap[depositNetwork.network_type]
+                            )
+                        }
                     },
-                    withdrawNetworks = configResponse.withdrawNetworks(assetId).mapIndexed { index, withdrawNetwork ->
-                        CexWithdrawNetworkRaw(
-                            id = withdrawNetwork.network_type.toString(),
-                            name = withdrawNetwork.network_type.toString(),
-                            isDefault = index == 0,
-                            enabled = withdrawEnabled,
-                            minAmount = withdrawNetwork.min_withdraw,
-                            maxAmount = withdrawNetwork.max_withdraw,
-                            fixedFee = withdrawNetwork.fixed,
-                            feePercent = withdrawNetwork.percent,
-                            minFee = withdrawNetwork.min_commission,
-                            blockchainUid = if (withdrawNetwork.network_type == 0)
-                                isoToBlockchainUidMap[assetId]
-                            else
-                                networkTypeToBlockchainUidMap[withdrawNetwork.network_type]
-                        )
+                    withdrawNetworks = configResponse.withdrawNetworks(assetId).mapIndexedNotNull { index, withdrawNetwork ->
+                        val networkId = if (withdrawNetwork.network_type == 0) {
+                            nativeNetworkId
+                        } else {
+                            it.currency.networks[withdrawNetwork.network_type]
+                        }
+
+                        networkId?.let {
+                            CexWithdrawNetworkRaw(
+                                id = networkId,
+                                name = networkId,
+                                isDefault = index == 0,
+                                enabled = withdrawEnabled,
+                                minAmount = withdrawNetwork.min_withdraw,
+                                maxAmount = withdrawNetwork.max_withdraw,
+                                fixedFee = withdrawNetwork.fixed,
+                                feePercent = withdrawNetwork.percent,
+                                minFee = withdrawNetwork.min_commission,
+                                blockchainUid = if (withdrawNetwork.network_type == 0)
+                                    isoToBlockchainUidMap[assetId]
+                                else
+                                    networkTypeToBlockchainUidMap[withdrawNetwork.network_type]
+                            )
+                        }
                     },
                     coinUid = coinUidMap[assetId],
                     decimals = decimals

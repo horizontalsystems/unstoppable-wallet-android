@@ -32,8 +32,8 @@ class LoginCoinzixVerifyService(
     }
 
     override suspend fun resendPin() {
-        // check(response.status) { response.errors?.joinToString { it } ?: "Unknown error" }
+        val response = api.resendLoginPin(token)
 
-        TODO("not implemented")
+        check(response.status) { response.errors?.joinToString { it } ?: "Unknown error" }
     }
 }
