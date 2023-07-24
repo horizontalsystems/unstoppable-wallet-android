@@ -6,36 +6,21 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.res.painterResource
@@ -50,20 +35,11 @@ import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.ChartInfoData
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.TabButtonSecondaryTransparent
-import cash.p.terminal.ui.compose.components.TabItem
-import cash.p.terminal.ui.compose.components.TabPeriod
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.diffColor
-import cash.p.terminal.ui.compose.components.formatValueAsDiff
-import cash.p.terminal.ui.compose.components.subhead1_grey
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_jacob
+import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.CurveAnimator2
+import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.HudHelper
@@ -254,128 +230,214 @@ fun PriceVolChart(
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
+    if (chartInfoData == null) {
+        Box(modifier = Modifier.height(height))
+        return
+    }
+
+    val chartData = chartInfoData.chartData
+
+    var minValue = chartData.minValue
+    val maxValue = chartData.maxValue
+    if (minValue == maxValue) {
+        minValue *= 0.9f
+    }
+    var minKey = chartData.startTimestamp
+    var maxKey = chartData.endTimestamp
+    if (minKey == maxKey) {
+        minKey = (minKey * 0.9).toLong()
+        maxKey = (maxKey * 1.1).toLong()
+    }
+
+    val mainCurve = remember {
+        CurveAnimator2(
+            chartData.valuesByTimestamp(),
+            minKey,
+            maxKey,
+            minValue,
+            maxValue
+        )
+    }
+
+    val volumeByTimestamp = chartData.volumeByTimestamp()
+    val volumeMin = volumeByTimestamp.minOf { it.value }
+    val volumeMax = volumeByTimestamp.maxOf { it.value }
+    val volumeBars = remember {
+        CurveAnimatorBars(
+            volumeByTimestamp,
+            minKey,
+            maxKey,
+            volumeMin,
+            volumeMax
+        )
+    }
+
+    volumeBars.setValues(
+        volumeByTimestamp,
+        minKey,
+        maxKey,
+        volumeMin,
+        volumeMax
+    )
+
+    val volumeBarsState = volumeBars.state
+
+    mainCurve.setTo(
+        chartData.valuesByTimestamp(),
+        minKey,
+        maxKey,
+        minValue,
+        maxValue
+    )
+    val mainCurveState = mainCurve.state
+
+    val indicatorCurves = remember(chartData.indicators.keys) {
+        val curves = mutableMapOf<String, CurveAnimator2>()
+        chartData.indicators.forEach { (id, u: ChartIndicator) ->
+            if (u is ChartIndicator.MovingAverage) {
+                curves[id] = CurveAnimator2(
+                    u.line,
+                    minKey,
+                    maxKey,
+                    minValue,
+                    maxValue
+                ).apply {
+                    color = u.color
+                }
+            }
+        }
+        curves
+    }
+
+    chartData.indicators.forEach { (id, u: ChartIndicator) ->
+        if (u is ChartIndicator.MovingAverage) {
+            indicatorCurves[id]?.setTo(
+                u.line,
+                minKey,
+                maxKey,
+                minValue,
+                maxValue,
+            )
+        }
+    }
+
+    val indicatorCurveStates = indicatorCurves.map { (t, u) ->
+        u.state
+    }
+
+    Row(
+        modifier = Modifier
+            .height(20.dp)
+            .fillMaxWidth()
+            .drawBehind {
+                val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                drawLine(
+                    color = Color(0x1A6E7899),
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    pathEffect = pathEffect
+                )
+            }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        micro_grey(
+            text = chartInfoData.maxValue ?: "",
+        )
+    }
+
     Box(
         modifier = Modifier
             .height(120.dp)
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
     ) {
-        chartInfoData?.let {
-            val chartData = it.chartData
-            var minValue = chartData.minValue
-            val maxValue = chartData.maxValue
-            if (minValue == maxValue) {
-                minValue *= 0.9f
-            }
-            var minKey = chartData.startTimestamp
-            var maxKey = chartData.endTimestamp
-            if (minKey == maxKey) {
-                minKey = (minKey * 0.9).toLong()
-                maxKey = (maxKey * 1.1).toLong()
+        ChartLineWithGradient(
+            mainCurveState.values,
+            mainCurveState.startTimestamp,
+            mainCurveState.endTimestamp,
+            mainCurveState.minValue,
+            mainCurveState.maxValue
+        )
+
+        indicatorCurveStates.forEach {
+            val color = try {
+                Color(android.graphics.Color.parseColor(it.color))
+            } catch (e: Exception) {
+                Color.Gray
             }
 
-            val mainCurve = remember {
-                CurveAnimator2(
-                    chartData.valuesByTimestamp(),
-                    minKey,
-                    maxKey,
-                    minValue,
-                    maxValue
-                )
-            }
-
-            val curves = remember(chartData.indicators.keys) {
-                val curves = mutableMapOf<String, CurveAnimator2>()
-                chartData.indicators.forEach { (id, u: ChartIndicator) ->
-                    if (u is ChartIndicator.MovingAverage) {
-                        curves[id] = CurveAnimator2(
-                            u.line,
-                            minKey,
-                            maxKey,
-                            minValue,
-                            maxValue
-                        ).apply {
-                            color = u.color
-                        }
-                    }
-                }
-                curves
-            }
-
-            chartData.indicators.forEach { (id, u: ChartIndicator) ->
-                if (u is ChartIndicator.MovingAverage) {
-                    curves[id]?.setTo(
-                        u.line,
-                        minKey,
-                        maxKey,
-                        minValue,
-                        maxValue,
-                    )
-                }
-            }
-
-            mainCurve.setTo(
-                chartData.valuesByTimestamp(),
-                minKey,
-                maxKey,
-                minValue,
-                maxValue
+            CraphicLine(
+                Modifier.fillMaxSize(),
+                it.values,
+                it.startTimestamp,
+                it.endTimestamp,
+                it.minValue,
+                it.maxValue,
+                color
             )
-
-            val mainCurveState = mainCurve.state
-
-            val curveStates = curves.map { (t, u) ->
-                t to u.state
-            }.toMap()
-
-            val scope = rememberCoroutineScope()
-            DisposableEffect(chartData) {
-                val animationJob = scope.launch {
-                    animate(
-                        initialValue = 0f,
-                        targetValue = 1f,
-                        animationSpec = tween(1000, easing = LinearEasing),
-                    ) { value, _ ->
-                        mainCurve.nextFrame(value)
-                        curves.forEach { (t, u) ->
-                            u.nextFrame(value)
-                        }
-                    }
-                }
-
-                onDispose {
-                    animationJob.cancel()
-                }
-            }
-
-            ChartLineWithGradient(
-                mainCurveState.values,
-                mainCurveState.startTimestamp,
-                mainCurveState.endTimestamp,
-                mainCurveState.minValue,
-                mainCurveState.maxValue
-            )
-
-            curveStates.forEach { (id, it) ->
-                val color = try {
-                    Color(android.graphics.Color.parseColor(it.color))
-                } catch (e: Exception) {
-                    Color.Gray
-                }
-
-                ChartLine(
-                    Modifier.fillMaxSize(),
-                    it.values,
-                    it.startTimestamp,
-                    it.endTimestamp,
-                    it.minValue,
-                    it.maxValue,
-                    color
-                )
-            }
         }
     }
 
+    Row(
+        modifier = Modifier
+            .height(20.dp)
+            .fillMaxWidth()
+            .drawBehind {
+                val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                drawLine(
+                    color = Color(0x1A6E7899),
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    pathEffect = pathEffect
+                )
+            }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        micro_grey(
+            text = chartInfoData.minValue ?: "",
+        )
+    }
+
+    if (hasVolumes) {
+        Box(
+            modifier = Modifier
+                .height(44.dp)
+                .padding(horizontal = 8.dp)
+        ) {
+            GraphicBars(
+                modifier = Modifier.fillMaxSize(),
+                data = volumeBarsState.values,
+                minKey = volumeBarsState.startTimestamp,
+                maxKey = volumeBarsState.endTimestamp,
+                minValue = volumeBarsState.minValue,
+                maxValue = volumeBarsState.maxValue,
+                color = Color(0x336E7899)
+            )
+        }
+    }
+
+    val scope = rememberCoroutineScope()
+    DisposableEffect(chartData) {
+        val animationJob = scope.launch {
+            animate(
+                initialValue = 0f,
+                targetValue = 1f,
+                animationSpec = tween(1000, easing = LinearEasing),
+            ) { value, _ ->
+                mainCurve.nextFrame(value)
+                indicatorCurves.forEach { (t, u) ->
+                    u.nextFrame(value)
+                }
+                volumeBars.nextFrame(value)
+            }
+        }
+
+        onDispose {
+            animationJob.cancel()
+        }
+    }
 
     AndroidView(
         modifier = Modifier
@@ -481,7 +543,7 @@ fun ChartLineWithGradient(
 }
 
 @Composable
-fun ChartLine(
+fun CraphicLine(
     modifier: Modifier,
     data: LinkedHashMap<Long, Float>,
     minKey: Long,
