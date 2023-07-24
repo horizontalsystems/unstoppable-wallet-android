@@ -16,6 +16,16 @@ data class ChartData(
 ) {
     var macd: ChartIndicator.Macd? = null
 
+    val movingAverages by lazy {
+        buildMap {
+            indicators.forEach { (id, indicator) ->
+                if (indicator is ChartIndicator.MovingAverage) {
+                    put(id, indicator)
+                }
+            }
+        }
+    }
+
     init {
         for (indicator in indicators.values) {
             if (indicator is ChartIndicator.Macd) {
@@ -27,8 +37,8 @@ data class ChartData(
 
     val minValue: Float by lazy {
         var valuesMin = items.minOf { it.value }
-        indicators.values.filterIsInstance<ChartIndicator.MovingAverage>()
-            .mapNotNull { it.line.minOfOrNull { it.value } }
+        movingAverages
+            .mapNotNull { it.value.line.minOfOrNull { it.value } }
             .minOrNull()
             ?.let { indicatorsMin ->
                 valuesMin = min(valuesMin, indicatorsMin)
@@ -39,8 +49,8 @@ data class ChartData(
 
     val maxValue: Float by lazy {
         var valuesMax = items.maxOf { it.value }
-        indicators.values.filterIsInstance<ChartIndicator.MovingAverage>()
-            .mapNotNull { it.line.maxOfOrNull { it.value } }
+        movingAverages
+            .mapNotNull { it.value.line.maxOfOrNull { it.value } }
             .maxOrNull()
             ?.let { indicatorsMax ->
                 valuesMax = max(valuesMax, indicatorsMax)
