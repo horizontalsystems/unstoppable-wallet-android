@@ -259,29 +259,6 @@ fun PriceVolChart(
         )
     }
 
-    val volumeByTimestamp = chartData.volumeByTimestamp()
-    val volumeMin = volumeByTimestamp.minOf { it.value }
-    val volumeMax = volumeByTimestamp.maxOf { it.value }
-    val volumeBars = remember {
-        CurveAnimatorBars(
-            volumeByTimestamp,
-            minKey,
-            maxKey,
-            volumeMin,
-            volumeMax
-        )
-    }
-
-    volumeBars.setValues(
-        volumeByTimestamp,
-        minKey,
-        maxKey,
-        volumeMin,
-        volumeMax
-    )
-
-    val volumeBarsState = volumeBars.state
-
     mainCurve.setTo(
         chartData.valuesByTimestamp(),
         minKey,
@@ -319,6 +296,32 @@ fun PriceVolChart(
 
     val movingAverageCurveStates = movingAverageCurves.map { (t, u) ->
         u.state
+    }
+
+    val volumeBars: CurveAnimatorBars?
+    if (hasVolumes) {
+        val volumeByTimestamp = chartData.volumeByTimestamp()
+        val volumeMin = volumeByTimestamp.minOf { it.value }
+        val volumeMax = volumeByTimestamp.maxOf { it.value }
+        volumeBars = remember {
+            CurveAnimatorBars(
+                volumeByTimestamp,
+                minKey,
+                maxKey,
+                volumeMin,
+                volumeMax
+            )
+        }
+
+        volumeBars.setValues(
+            volumeByTimestamp,
+            minKey,
+            maxKey,
+            volumeMin,
+            volumeMax
+        )
+    } else {
+        volumeBars = null
     }
 
     Row(
@@ -396,12 +399,13 @@ fun PriceVolChart(
         )
     }
 
-    if (hasVolumes) {
+    volumeBars?.let {
         Box(
             modifier = Modifier
                 .height(44.dp)
                 .padding(horizontal = 8.dp)
         ) {
+            val volumeBarsState = volumeBars.state
             GraphicBars(
                 modifier = Modifier.fillMaxSize(),
                 data = volumeBarsState.values,
@@ -423,10 +427,10 @@ fun PriceVolChart(
                 animationSpec = tween(1000, easing = LinearEasing),
             ) { value, _ ->
                 mainCurve.nextFrame(value)
-                movingAverageCurves.forEach { (t, u) ->
+                movingAverageCurves.forEach { (_, u) ->
                     u.nextFrame(value)
                 }
-                volumeBars.nextFrame(value)
+                volumeBars?.nextFrame(value)
             }
         }
 
