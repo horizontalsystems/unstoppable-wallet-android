@@ -653,6 +653,8 @@
     <string name="Settings_RateUs">Оцените наше приложение</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="Settings_Appearance">Оформление</string>
+    <string name="Settings_PersonalSupport_Account">Аккаунт</string>
+    <string name="Settings_PersonalSupport_Request">Запрос</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
