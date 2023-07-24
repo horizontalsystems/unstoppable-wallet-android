@@ -401,22 +401,19 @@ fun PriceVolChart(
             volumeMax
         )
 
-        Box(
+        val volumeBarsState = volumeBars.state
+        GraphicBars(
             modifier = Modifier
                 .height(44.dp)
-                .padding(horizontal = 8.dp)
-        ) {
-            val volumeBarsState = volumeBars.state
-            GraphicBars(
-                modifier = Modifier.fillMaxSize(),
-                data = volumeBarsState.values,
-                minKey = volumeBarsState.startTimestamp,
-                maxKey = volumeBarsState.endTimestamp,
-                minValue = volumeBarsState.minValue,
-                maxValue = volumeBarsState.maxValue,
-                color = Color(0x336E7899)
-            )
-        }
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            data = volumeBarsState.values,
+            minKey = volumeBarsState.startTimestamp,
+            maxKey = volumeBarsState.endTimestamp,
+            minValue = volumeBarsState.minValue,
+            maxValue = volumeBarsState.maxValue,
+            color = Color(0x336E7899)
+        )
     }
 
     val scope = rememberCoroutineScope()
