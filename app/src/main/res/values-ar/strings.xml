@@ -166,6 +166,7 @@
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Understand">فهمت</string>
     <!--Settings-->
+    <string name="Settings_PersonalSupport_Account">Account</string>
     <!-- Blockchain Settings  -->
     <!-- Privacy  -->
     <!-- Security Center -->
