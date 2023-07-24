@@ -628,6 +628,8 @@
     <string name="Settings_RateUs">Avalie-Nos</string>
     <string name="Settings_LaunchScreen">Tela Inicial</string>
     <string name="Settings_Appearance">Aparência</string>
+    <string name="Settings_PersonalSupport_Account">Conta</string>
+    <string name="Settings_PersonalSupport_Request">Solicitar</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">DEFINIÇÕES DO TAB</string>
     <string name="Appearance_LaunchScreen">TELA DE INÍCIO</string>
