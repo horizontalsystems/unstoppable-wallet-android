@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.importcexaccount
 
 import android.app.Activity
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -76,7 +75,6 @@ fun ImportCexAccountEnterCexDataScreen(
     }
 }
 
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ImportCoinzixCexAccountNavHost(
@@ -105,8 +103,6 @@ private fun ImportCoinzixCexAccountNavHost(
             val token = backStackEntry.arguments?.getString("token") ?: return@composablePage
             val secret = backStackEntry.arguments?.getString("secret") ?: return@composablePage
             val steps: List<Int> = backStackEntry.arguments?.getString("steps")?.split(",")?.mapNotNull { it.toIntOrNull() } ?: listOf()
-
-            Log.e("e", "login-verification: token=$token, secret=$secret, steps= ${steps.joinToString { it.toString() }}")
 
             val coinzixVerificationViewModel = viewModel<CoinzixVerificationViewModel>(
                 factory = CoinzixVerificationViewModel.FactoryForLogin(token, secret, steps.mapNotNull { TwoFactorType.fromCode(it) })

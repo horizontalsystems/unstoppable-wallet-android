@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.withdrawcex
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -140,8 +139,6 @@ fun CoinzixWithdrawNavHost(
         composablePage("withdraw-verification/{withdrawId}?steps={steps}") { backStackEntry ->
             val withdrawId = backStackEntry.arguments?.getString("withdrawId") ?: return@composablePage
             val steps: List<Int> = backStackEntry.arguments?.getString("steps")?.split(",")?.mapNotNull { it.toIntOrNull() } ?: listOf()
-
-            Log.e("e", "withdraw-verification: withdrawId=$withdrawId, steps= ${steps.joinToString { it.toString() }}")
 
             val coinzixVerificationViewModel = viewModel<CoinzixVerificationViewModel>(
                 factory = CoinzixVerificationViewModel.FactoryForWithdraw(
