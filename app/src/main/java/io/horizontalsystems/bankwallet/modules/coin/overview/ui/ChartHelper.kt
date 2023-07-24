@@ -1,9 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
+import kotlin.math.abs
 
 class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
 
@@ -138,4 +142,22 @@ class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
         volumeBars?.onNextFrame(value)
     }
 
+    var selectedItem by mutableStateOf<SelectedItem?>(null)
+        private set
+
+    fun setSelectedPercentagePositionX(percentagePositionX: Float?) {
+        selectedItem = if (percentagePositionX == null) {
+            null
+        } else {
+            val interval = maxKey - minKey
+            val timestamp = minKey + interval * percentagePositionX
+            val nearestKey = target.valuesByTimestamp().keys.minByOrNull { abs(it - timestamp) }!!
+            val nearestPercentagePositionX = (nearestKey - minKey) / interval.toFloat()
+
+            SelectedItem(percentagePositionX = nearestPercentagePositionX, key = nearestKey)
+        }
+    }
+
 }
+
+data class SelectedItem(val percentagePositionX: Float, val key: Long)
