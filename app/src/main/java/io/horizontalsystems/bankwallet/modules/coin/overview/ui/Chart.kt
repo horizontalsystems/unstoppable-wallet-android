@@ -262,6 +262,7 @@ fun PriceVolChart(
     val rsiCurveState = chartHelper.getRsiCurveState()
     val macdLineCurveState = chartHelper.getMacdLineCurveState()
     val macdSignalCurveState = chartHelper.getMacdSignalCurveState()
+    val macdHistogramBarsState = chartHelper.getMacdHistogramBarsState()
     val selectedItem = chartHelper.selectedItem
     val context = LocalContext.current
     LaunchedEffect(selectedItem) {
@@ -378,7 +379,8 @@ fun PriceVolChart(
                                 .fillMaxHeight(0.3f)
                                 .fillMaxWidth()
                                 .drawBehind {
-                                    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                                    val pathEffect =
+                                        PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                                     drawLine(
                                         color = Color(0x1A6E7899),
                                         start = Offset(0f, size.height),
@@ -412,7 +414,8 @@ fun PriceVolChart(
                                 .fillMaxHeight(0.3f)
                                 .fillMaxWidth()
                                 .drawBehind {
-                                    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                                    val pathEffect =
+                                        PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                                     drawLine(
                                         color = Color(0x1A6E7899),
                                         start = Offset(0f, 0f),
@@ -427,7 +430,19 @@ fun PriceVolChart(
                                 text = "30",
                             )
                         }
-                    } else if (macdLineCurveState != null && macdSignalCurveState != null) {
+                    } else if (macdLineCurveState != null && macdSignalCurveState != null && macdHistogramBarsState != null) {
+                        GraphicBarsWithNegative(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp),
+                            data = macdHistogramBarsState.values,
+                            minKey = macdHistogramBarsState.startTimestamp,
+                            maxKey = macdHistogramBarsState.endTimestamp,
+                            minValue = macdHistogramBarsState.minValue,
+                            maxValue = macdHistogramBarsState.maxValue,
+                            color = ComposeAppTheme.colors.green50,
+                            colorNegative = ComposeAppTheme.colors.red50
+                        )
                         GraphicLine(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -437,7 +452,7 @@ fun PriceVolChart(
                             maxKey = macdLineCurveState.endTimestamp,
                             minValue = macdLineCurveState.minValue,
                             maxValue = macdLineCurveState.maxValue,
-                            color = ComposeAppTheme.colors.issykBlue
+                            color = ComposeAppTheme.colors.yellow50
                         )
                         GraphicLine(
                             modifier = Modifier
@@ -448,7 +463,7 @@ fun PriceVolChart(
                             maxKey = macdSignalCurveState.endTimestamp,
                             minValue = macdSignalCurveState.minValue,
                             maxValue = macdSignalCurveState.maxValue,
-                            color = ComposeAppTheme.colors.yellow50
+                            color = ComposeAppTheme.colors.issykBlue
                         )
                     } else if (volumeBarsState != null) {
                         GraphicBars(

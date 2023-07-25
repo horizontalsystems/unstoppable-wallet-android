@@ -80,3 +80,46 @@ fun GraphicBars(
         }
     )
 }
+
+@Composable
+fun GraphicBarsWithNegative(
+    modifier: Modifier = Modifier,
+    data: LinkedHashMap<Long, Float>,
+    minKey: Long,
+    maxKey: Long,
+    minValue: Float,
+    maxValue: Float,
+    color: Color,
+    colorNegative: Color
+) {
+    Canvas(
+        modifier = modifier,
+        onDraw = {
+            val barWidth = 2.dp.toPx()
+
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+
+            val xRatio = (canvasWidth - barWidth) / (maxKey - minKey)
+            val yRatio = canvasHeight / (maxValue - minValue)
+
+            val zeroY = (0f - minValue) * yRatio
+
+            scale(scaleX = 1f, scaleY = -1f) {
+                for ((timestamp, value) in data) {
+                    if (value < minValue) continue
+
+                    val x = (timestamp - minKey) * xRatio + barWidth / 2
+                    val y = (value - minValue) * yRatio
+
+                    drawLine(
+                        start = Offset(x = x, y = zeroY),
+                        end = Offset(x = x, y = y),
+                        color = if (y > zeroY) color else colorNegative,
+                        strokeWidth = barWidth
+                    )
+                }
+            }
+        }
+    )
+}
