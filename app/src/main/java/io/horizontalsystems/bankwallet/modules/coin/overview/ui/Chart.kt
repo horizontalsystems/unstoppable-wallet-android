@@ -259,6 +259,7 @@ fun PriceVolChart(
     val mainCurveState = chartHelper.getMainCurveState()
     val movingAverageCurveStates = chartHelper.getMovingAverageCurveStates()
     val volumeBarsState = chartHelper.getVolumeBarsState()
+    val rsiCurveState = chartHelper.getRsiCurveState()
     val selectedItem = chartHelper.selectedItem
     val context = LocalContext.current
     LaunchedEffect(selectedItem) {
@@ -363,19 +364,79 @@ fun PriceVolChart(
                 )
             }
 
-            volumeBarsState?.let {
-                GraphicBars(
+            if (chartHelper.hasVolumes) {
+                Box(
                     modifier = Modifier
                         .height(44.dp)
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    data = volumeBarsState.values,
-                    minKey = volumeBarsState.startTimestamp,
-                    maxKey = volumeBarsState.endTimestamp,
-                    minValue = volumeBarsState.minValue,
-                    maxValue = volumeBarsState.maxValue,
-                    color = Color(0x336E7899)
-                )
+                ) {
+                    if (rsiCurveState != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight(0.3f)
+                                .fillMaxWidth()
+                                .drawBehind {
+                                    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                                    drawLine(
+                                        color = Color(0x1A6E7899),
+                                        start = Offset(0f, size.height),
+                                        end = Offset(size.width, size.height),
+                                        pathEffect = pathEffect
+                                    )
+                                }
+                                .padding(horizontal = 16.dp),
+                        ) {
+                            micro_grey(
+                                modifier = Modifier.align(Alignment.CenterStart),
+                                text = "70",
+                            )
+                        }
+
+                        CraphicLine(
+                            modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp),
+                            data = rsiCurveState.values,
+                            minKey = rsiCurveState.startTimestamp,
+                            maxKey = rsiCurveState.endTimestamp,
+                            minValue = 0f,
+                            maxValue = 100f,
+                            color = ComposeAppTheme.colors.yellow50
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .fillMaxHeight(0.3f)
+                                .fillMaxWidth()
+                                .drawBehind {
+                                    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                                    drawLine(
+                                        color = Color(0x1A6E7899),
+                                        start = Offset(0f, 0f),
+                                        end = Offset(size.width, 0f),
+                                        pathEffect = pathEffect
+                                    )
+                                }
+                                .padding(horizontal = 16.dp),
+                        ) {
+                            micro_grey(
+                                modifier = Modifier.align(Alignment.CenterStart),
+                                text = "30",
+                            )
+                        }
+                    } else if (volumeBarsState != null) {
+                        GraphicBars(
+                            modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp),
+                            data = volumeBarsState.values,
+                            minKey = volumeBarsState.startTimestamp,
+                            maxKey = volumeBarsState.endTimestamp,
+                            minValue = volumeBarsState.minValue,
+                            maxValue = volumeBarsState.maxValue,
+                            color = Color(0x336E7899)
+                        )
+                    }
+                }
+
+
             }
         }
 
