@@ -8,6 +8,8 @@ import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
+import java.lang.Float.max
+import java.lang.Float.min
 import kotlin.math.abs
 
 class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
@@ -21,6 +23,9 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
     private val movingAverageCurves = mutableMapOf<String, CurveAnimator2>()
     private var volumeBars: CurveAnimatorBars? = null
     private var rsiCurve: CurveAnimator2? = null
+    private var macdLineCurve: CurveAnimator2? = null
+    private var macdSignalCurve: CurveAnimator2? = null
+    private var macdHistogramBars: CurveAnimatorBars? = null
 
     init {
         setExtremum()
@@ -36,6 +41,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
         initMovingAverages()
 
         initRsiCurve()
+        initMacdCurves()
 
         if (hasVolumes) {
             val volumeByTimestamp = target.volumeByTimestamp()
@@ -47,6 +53,39 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
                 maxKey,
                 volumeMin,
                 volumeMax
+            )
+        }
+    }
+
+    private fun initMacdCurves() {
+        val macd = target.macd
+        if (macd != null) {
+            val macdLine = macd.macdLine
+            val signalLine = macd.signalLine
+
+            val min = min(
+                macdLine.minOfOrNull { it.value } ?: 0f,
+                signalLine.minOfOrNull { it.value } ?: 0f
+            )
+
+            val max = max(
+                macdLine.maxOfOrNull { it.value } ?: 0f,
+                signalLine.maxOfOrNull { it.value } ?: 0f
+            )
+
+            macdLineCurve = CurveAnimator2(
+                macdLine,
+                minKey,
+                maxKey,
+                min,
+                max
+            )
+            macdSignalCurve = CurveAnimator2(
+                signalLine,
+                minKey,
+                maxKey,
+                min,
+                max
             )
         }
     }
@@ -96,6 +135,14 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
 
     fun getRsiCurveState(): CurveAnimator2.UiState? {
         return rsiCurve?.state
+    }
+
+    fun getMacdLineCurveState(): CurveAnimator2.UiState? {
+        return macdLineCurve?.state
+    }
+
+    fun getMacdSignalCurveState(): CurveAnimator2.UiState? {
+        return macdSignalCurve?.state
     }
 
     private fun setExtremum() {
@@ -159,6 +206,43 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
             }
         }
 
+        if (target.macd == null) {
+            macdLineCurve = null
+            macdSignalCurve = null
+        } else if (macdLineCurve == null || macdSignalCurve == null) {
+            initMacdCurves()
+        } else {
+            target.macd?.let { macd ->
+                val macdLine = macd.macdLine
+                val signalLine = macd.signalLine
+
+                val min = min(
+                    macdLine.minOfOrNull { it.value } ?: 0f,
+                    signalLine.minOfOrNull { it.value } ?: 0f
+                )
+
+                val max = max(
+                    macdLine.maxOfOrNull { it.value } ?: 0f,
+                    signalLine.maxOfOrNull { it.value } ?: 0f
+                )
+
+                macdLineCurve?.setTo(
+                    macdLine,
+                    minKey,
+                    maxKey,
+                    min,
+                    max
+                )
+                macdSignalCurve?.setTo(
+                    signalLine,
+                    minKey,
+                    maxKey,
+                    min,
+                    max
+                )
+            }
+        }
+
         if (hasVolumes) {
             val volumeByTimestamp = target.volumeByTimestamp()
             val volumeMin = volumeByTimestamp.minOf { it.value }
@@ -180,6 +264,8 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
         }
         volumeBars?.onNextFrame(value)
         rsiCurve?.onNextFrame(value)
+        macdLineCurve?.onNextFrame(value)
+        macdSignalCurve?.onNextFrame(value)
     }
 
     var selectedItem by mutableStateOf<SelectedItem?>(null)
