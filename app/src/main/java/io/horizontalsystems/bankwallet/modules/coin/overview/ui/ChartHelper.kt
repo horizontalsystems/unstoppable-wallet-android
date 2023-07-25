@@ -8,9 +8,8 @@ import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
-import java.lang.Float.max
-import java.lang.Float.min
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
 
@@ -63,29 +62,38 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
             val macdLine = macd.macdLine
             val signalLine = macd.signalLine
 
-            val min = min(
-                macdLine.minOfOrNull { it.value } ?: 0f,
-                signalLine.minOfOrNull { it.value } ?: 0f
+            val extremum = listOf(
+                macdLine.minOfOrNull { it.value },
+                macdLine.maxOfOrNull { it.value },
+                signalLine.minOfOrNull { it.value },
+                signalLine.maxOfOrNull { it.value },
             )
-
-            val max = max(
-                macdLine.maxOfOrNull { it.value } ?: 0f,
-                signalLine.maxOfOrNull { it.value } ?: 0f
-            )
+            val absMax = extremum.mapNotNull { it?.absoluteValue }.maxOrNull() ?: 0f
+            val absMin = absMax * -1
 
             macdLineCurve = CurveAnimator2(
                 macdLine,
                 minKey,
                 maxKey,
-                min,
-                max
+                absMin,
+                absMax
             )
             macdSignalCurve = CurveAnimator2(
                 signalLine,
                 minKey,
                 maxKey,
-                min,
-                max
+                absMin,
+                absMax
+            )
+            val histogram = macd.histogram
+            val histogramAbsMax = histogram.values.maxOfOrNull { it.absoluteValue } ?: 0f
+            val histogramAbsMin = histogramAbsMax * -1
+            macdHistogramBars = CurveAnimatorBars(
+                histogram,
+                minKey,
+                maxKey,
+                histogramAbsMin,
+                histogramAbsMax
             )
         }
     }
@@ -143,6 +151,10 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
 
     fun getMacdSignalCurveState(): CurveAnimator2.UiState? {
         return macdSignalCurve?.state
+    }
+
+    fun getMacdHistogramBarsState(): CurveAnimatorBars.UiState? {
+        return macdHistogramBars?.state
     }
 
     private fun setExtremum() {
@@ -209,36 +221,46 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
         if (target.macd == null) {
             macdLineCurve = null
             macdSignalCurve = null
-        } else if (macdLineCurve == null || macdSignalCurve == null) {
+            macdHistogramBars = null
+        } else if (macdLineCurve == null || macdSignalCurve == null || macdHistogramBars == null) {
             initMacdCurves()
         } else {
             target.macd?.let { macd ->
                 val macdLine = macd.macdLine
                 val signalLine = macd.signalLine
 
-                val min = min(
-                    macdLine.minOfOrNull { it.value } ?: 0f,
-                    signalLine.minOfOrNull { it.value } ?: 0f
+                val extremum = listOf(
+                    macdLine.minOfOrNull { it.value },
+                    macdLine.maxOfOrNull { it.value },
+                    signalLine.minOfOrNull { it.value },
+                    signalLine.maxOfOrNull { it.value },
                 )
-
-                val max = max(
-                    macdLine.maxOfOrNull { it.value } ?: 0f,
-                    signalLine.maxOfOrNull { it.value } ?: 0f
-                )
+                val absMax = extremum.mapNotNull { it?.absoluteValue }.maxOrNull() ?: 0f
+                val absMin = absMax * -1
 
                 macdLineCurve?.setTo(
                     macdLine,
                     minKey,
                     maxKey,
-                    min,
-                    max
+                    absMin,
+                    absMax
                 )
                 macdSignalCurve?.setTo(
                     signalLine,
                     minKey,
                     maxKey,
-                    min,
-                    max
+                    absMin,
+                    absMax
+                )
+                val histogram = macd.histogram
+                val histogramAbsMax = histogram.values.maxOfOrNull { it.absoluteValue } ?: 0f
+                val histogramAbsMin = histogramAbsMax * -1
+                macdHistogramBars?.setValues(
+                    histogram,
+                    minKey,
+                    maxKey,
+                    histogramAbsMin,
+                    histogramAbsMax
                 )
             }
         }
@@ -266,6 +288,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
         rsiCurve?.onNextFrame(value)
         macdLineCurve?.onNextFrame(value)
         macdSignalCurve?.onNextFrame(value)
+        macdHistogramBars?.onNextFrame(value)
     }
 
     var selectedItem by mutableStateOf<SelectedItem?>(null)
