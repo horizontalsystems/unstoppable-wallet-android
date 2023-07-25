@@ -19,12 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -236,7 +232,9 @@ fun PriceVolChart(
 
     val chartData = chartInfoData.chartData
 
-    val chartHelper = remember { ChartHelper(chartData, hasVolumes) }
+    val colors = ComposeAppTheme.colors
+
+    val chartHelper = remember { ChartHelper(chartData, hasVolumes, colors) }
     chartHelper.setTarget(chartData, hasVolumes)
 
     val scope = rememberCoroutineScope()
@@ -305,13 +303,15 @@ fun PriceVolChart(
             ) {
                 when (chartViewType) {
                     ChartViewType.Line -> {
-                        ChartLineWithGradient(
+                        GraphicLineWithGradient(
                             mainCurveState.values,
                             mainCurveState.startTimestamp,
                             mainCurveState.endTimestamp,
                             mainCurveState.minValue,
                             mainCurveState.maxValue,
-                            selectedItem?.chartPoint?.timestamp
+                            chartHelper.mainCurveColor,
+                            chartHelper.mainCurveGradientColors,
+                            selectedItem?.chartPoint?.timestamp,
                         )
                     }
                     ChartViewType.Bar -> {
@@ -524,118 +524,6 @@ fun PriceVolChart(
             }
         )
     }
-}
-
-@Composable
-fun ChartLineWithGradient(
-    valuesByTimestamp: LinkedHashMap<Long, Float>,
-    minKey: Long,
-    maxKey: Long,
-    minValue: Float,
-    maxValue: Float,
-    selectedItemKey: Long?
-) {
-    Canvas(
-        modifier = Modifier
-            .height(120.dp)
-            .fillMaxWidth(),
-        onDraw = {
-            var dotPosition: Offset? = null
-
-            val canvasWidth = size.width
-            val canvasHeight = size.height
-
-            val xRatio = canvasWidth / (maxKey - minKey)
-            val yRatio = canvasHeight / (maxValue - minValue)
-
-            val linePath = Path()
-            var pathStarted = false
-            valuesByTimestamp.forEach { (timestamp, value) ->
-                val x = (timestamp - minKey) * xRatio
-                val y = (value - minValue) * yRatio
-
-                if (!pathStarted) {
-                    linePath.moveTo(x, y)
-                    pathStarted = true
-                } else {
-                    linePath.lineTo(x, y)
-                }
-
-                if (selectedItemKey == timestamp) {
-                    dotPosition = Offset(x, y)
-                }
-            }
-
-            val gradientPath = Path()
-            gradientPath.addPath(linePath)
-
-            gradientPath.lineTo(canvasWidth, 0f)
-            gradientPath.lineTo(0f, 0f)
-            gradientPath.close()
-
-            scale(scaleX = 1f, scaleY = -1f) {
-                drawPath(
-                    linePath,
-                    Color(0xFF05C46B),
-                    style = Stroke(1.dp.toPx())
-                )
-                drawPath(
-                    gradientPath,
-                    Brush.verticalGradient(
-                        0.00f to Color(0x00416BFF),
-                        1.00f to Color(0x8013D670)
-                    ),
-                )
-                dotPosition?.let {
-                    drawCircle(Color.White, 5.dp.toPx(), center = it)
-                }
-            }
-        }
-    )
-}
-
-@Composable
-fun GraphicLine(
-    modifier: Modifier,
-    data: LinkedHashMap<Long, Float>,
-    minKey: Long,
-    maxKey: Long,
-    minValue: Float,
-    maxValue: Float,
-    color: Color
-) {
-    Canvas(
-        modifier = modifier,
-        onDraw = {
-            val canvasWidth = size.width
-            val canvasHeight = size.height
-
-            val xRatio = canvasWidth / (maxKey - minKey)
-            val yRatio = canvasHeight / (maxValue - minValue)
-
-            val linePath = Path()
-            var pathStarted = false
-            data.forEach { (key, value) ->
-                val x = (key - minKey) * xRatio
-                val y = (value - minValue) * yRatio
-
-                if (!pathStarted) {
-                    linePath.moveTo(x, y)
-                    pathStarted = true
-                } else {
-                    linePath.lineTo(x, y)
-                }
-            }
-
-            scale(scaleX = 1f, scaleY = -1f) {
-                drawPath(
-                    linePath,
-                    color,
-                    style = Stroke(1.dp.toPx())
-                )
-            }
-        }
-    )
 }
 
 @Composable

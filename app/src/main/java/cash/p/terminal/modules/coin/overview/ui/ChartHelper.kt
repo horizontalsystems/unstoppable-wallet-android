@@ -3,15 +3,18 @@ package cash.p.terminal.modules.coin.overview.ui
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import cash.p.terminal.ui.compose.Colors
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
+import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
-class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
+class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, private val colors: Colors) {
 
     private var minValue: Float = 0.0f
     private var maxValue: Float = 0.0f
@@ -25,6 +28,9 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
     private var macdLineCurve: CurveAnimator2? = null
     private var macdSignalCurve: CurveAnimator2? = null
     private var macdHistogramBars: CurveAnimatorBars? = null
+
+    var mainCurveColor: Color = colors.greenD
+    var mainCurveGradientColors: Pair<Color, Color> = Pair(Color(0x00416BFF), Color(0x8013D670))
 
     init {
         setExtremum()
@@ -53,6 +59,34 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
                 volumeMin,
                 volumeMax
             )
+        }
+
+        defineColors()
+    }
+
+    private fun defineColors() {
+        val chartData = target
+
+        when {
+            chartData.disabled -> {
+                mainCurveColor = colors.grey
+                mainCurveGradientColors = Pair(colors.grey50.copy(alpha = 0f), colors.grey50.copy(alpha = 0.5f))
+            }
+
+            !chartData.isMovementChart -> {
+                mainCurveColor = colors.jacob
+                mainCurveGradientColors = Pair(Color(0x00FFA800), Color(0x80FFA800))
+            }
+
+            chartData.diff() < BigDecimal.ZERO -> {
+                mainCurveColor = colors.redD
+                mainCurveGradientColors = Pair(Color(0x007413D6), Color(0x80FF0303))
+            }
+
+            else -> {
+                mainCurveColor = colors.greenD
+                mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
+            }
         }
     }
 
@@ -277,6 +311,8 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
                 volumeMax
             )
         }
+
+        defineColors()
     }
 
     fun onNextFrame(value: Float) {
