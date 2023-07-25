@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun GraphicLine(
@@ -69,6 +70,7 @@ fun GraphicLineWithGradient(
     gradientColors: Pair<Color, Color>,
     selectedItemKey: Long?
 ) {
+    val dotColor = ComposeAppTheme.colors.leah
     Canvas(
         modifier = Modifier
             .height(120.dp)
@@ -122,7 +124,7 @@ fun GraphicLineWithGradient(
                     ),
                 )
                 dotPosition?.let {
-                    drawCircle(Color.White, 5.dp.toPx(), center = it)
+                    drawCircle(dotColor, 5.dp.toPx(), center = it)
                 }
             }
         }
