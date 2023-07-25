@@ -29,8 +29,10 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     private var macdSignalCurve: CurveAnimator2? = null
     private var macdHistogramBars: CurveAnimatorBars? = null
 
-    var mainCurveColor: Color = colors.greenD
-    var mainCurveGradientColors: Pair<Color, Color> = Pair(Color(0x00416BFF), Color(0x8013D670))
+    var mainCurveColor = colors.greenD
+    var mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
+    var mainCurvePressedColor = colors.leah
+    var mainCurveGradientPressedColors = Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
 
     init {
         setExtremum()
