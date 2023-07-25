@@ -3,15 +3,16 @@ package io.horizontalsystems.bankwallet.modules.address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 object AddressInputModule {
 
-    class FactoryToken(private val tokenQuery: TokenQuery, private val coinCode: String) : ViewModelProvider.Factory {
+    class FactoryToken(private val tokenQuery: TokenQuery, private val coinCode: String, private val initial: Address?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val addressViewModel = AddressViewModel(tokenQuery.blockchainType, App.contactsRepository)
+            val addressViewModel = AddressViewModel(tokenQuery.blockchainType, App.contactsRepository, initial)
 
             addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
             addressViewModel.addAddressHandler(AddressHandlerUdn(tokenQuery, coinCode))
@@ -52,7 +53,7 @@ object AddressInputModule {
     class FactoryNft(private val blockchainType: BlockchainType) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val addressViewModel = AddressViewModel(blockchainType, App.contactsRepository)
+            val addressViewModel = AddressViewModel(blockchainType, App.contactsRepository, null)
 
             addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
 

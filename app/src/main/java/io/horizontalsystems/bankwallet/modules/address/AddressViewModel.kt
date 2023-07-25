@@ -1,17 +1,30 @@
 package io.horizontalsystems.bankwallet.modules.address
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AddressViewModel(
     val blockchainType: BlockchainType,
-    private val contactsRepository: ContactsRepository
+    private val contactsRepository: ContactsRepository,
+    initial: Address?
 ) : ViewModel() {
 
+    var address by mutableStateOf<Address?>(initial)
+        private set
+    var inputState by mutableStateOf<DataState<Address>?>(null)
+        private set
+    var value by mutableStateOf(initial?.hex ?: "")
+        private set
     private val addressHandlers = mutableListOf<IAddressHandler>()
 
     fun addAddressHandler(handler: IAddressHandler) {
@@ -21,24 +34,48 @@ class AddressViewModel(
     fun hasContacts() =
         contactsRepository.getContactsFiltered(blockchainType).isNotEmpty()
 
-    @Throws(AddressValidationException::class)
-    suspend fun parseAddress(value: String): Address = withContext(Dispatchers.IO) {
-        if (value.isBlank()) throw AddressValidationException.Blank()
+    fun parseAddressX(value: String) {
+        this.value = value
+
+        if (value.isBlank()) {
+            inputState = null
+            address = null
+            return
+        }
 
         val vTrimmed = value.trim()
 
-        val handler = addressHandlers.firstOrNull {
-            try {
-                it.isSupported(vTrimmed)
-            } catch (t: Throwable) {
-                false
-            }
-        } ?: throw AddressValidationException.Unsupported()
+        inputState = DataState.Loading
 
-        try {
-            handler.parseAddress(vTrimmed)
-        } catch (t: Throwable) {
-            throw AddressValidationException.Invalid(t)
+        viewModelScope.launch(Dispatchers.IO) {
+            val handler = addressHandlers.firstOrNull {
+                try {
+                    it.isSupported(vTrimmed)
+                } catch (t: Throwable) {
+                    false
+                }
+            } ?: run {
+                inputState = DataState.Error(AddressValidationException.Unsupported())
+                return@launch
+            }
+
+            try {
+                val parsedAddress = handler.parseAddress(vTrimmed)
+                withContext(Dispatchers.Main) {
+                    address = parsedAddress
+                    inputState = DataState.Success(parsedAddress)
+                }
+            } catch (t: Throwable) {
+                withContext(Dispatchers.Main) {
+                    inputState = DataState.Error(t)
+                }
+            }
+        }
+    }
+
+    fun onAddressError(addressError: Throwable?) {
+        addressError?.let {
+            inputState = DataState.Error(addressError)
         }
     }
 }

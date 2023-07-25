@@ -102,12 +102,12 @@ fun RecipientAddress(
             tokenQuery = token.tokenQuery,
             coinCode = token.coin.code,
             navController = navController,
-            onStateChange = {
-                recipientAddressViewModel.setAddressWithError(
-                    it?.dataOrNull,
-                    it?.errorOrNull
-                )
-            }
+            onError = {
+                recipientAddressViewModel.updateError(it)
+            },
+            onValueChange = {
+                recipientAddressViewModel.onChangeAddress(it)
+            },
         )
         InfoText(
             text = stringResource(R.string.SwapSettings_RecipientAddressDescription),
