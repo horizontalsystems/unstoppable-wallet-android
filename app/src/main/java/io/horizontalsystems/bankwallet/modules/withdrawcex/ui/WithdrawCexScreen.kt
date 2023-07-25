@@ -132,7 +132,7 @@ fun WithdrawCexScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     initial = null,
                     hint = stringResource(id = R.string.Watch_Address_Hint),
-                    state = null,
+                    state = uiState.addressState,
                     textPreprocessor = TextPreprocessorImpl,
                     onChangeFocus = {
                         //isFocused = it
