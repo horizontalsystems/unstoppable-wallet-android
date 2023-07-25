@@ -18,8 +18,8 @@ interface IRecipientAddressService {
     val recipientAddressState: Observable<DataState<Unit>>
 
     fun setRecipientAddress(address: Address?)
-    fun setRecipientAddressWithError(address: Address?, error: Throwable?) = Unit
     fun setRecipientAmount(amount: BigDecimal)
+    fun updateRecipientError(error: Throwable?)
 }
 
 class RecipientAddressViewModel(private val service: IRecipientAddressService) : ViewModel() {
@@ -50,7 +50,11 @@ class RecipientAddressViewModel(private val service: IRecipientAddressService) :
         service.setRecipientAddress(address)
     }
 
-    fun setAddressWithError(address: Address?, error: Throwable?) {
-        service.setRecipientAddressWithError(address, error)
+    fun onChangeAddress(address: Address?) {
+        service.setRecipientAddress(address)
+    }
+
+    fun updateError(error: Throwable?) {
+        service.updateRecipientError(error)
     }
 }

@@ -45,6 +45,8 @@ class WithdrawCexViewModel(
 
     var coinRate by mutableStateOf(coinUid?.let { xRateService.getRate(it) })
         private set
+    var value by mutableStateOf("")
+        private set
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
@@ -131,6 +133,7 @@ class WithdrawCexViewModel(
     }
 
     fun onEnterAddress(v: String) {
+        value = v
         viewModelScope.launch {
             addressService.setAddress(v)
         }
