@@ -324,6 +324,11 @@ fun PriceVolChart(
                         )
                     }
                     ChartViewType.Bar -> {
+                        val color = if (selectedItem == null) {
+                            chartHelper.mainBarsColor
+                        } else {
+                            chartHelper.mainBarsPressedColor
+                        }
                         GraphicBars(
                             modifier = Modifier.fillMaxSize(),
                             data = mainCurveState.values,
@@ -331,7 +336,8 @@ fun PriceVolChart(
                             maxKey = mainCurveState.endTimestamp,
                             minValue = mainCurveState.minValue,
                             maxValue = mainCurveState.maxValue,
-                            color = Color.Red
+                            color = color,
+                            selectedItemKey = selectedItem?.chartPoint?.timestamp
                         )
                     }
                 }
@@ -484,7 +490,8 @@ fun PriceVolChart(
                             maxKey = volumeBarsState.endTimestamp,
                             minValue = volumeBarsState.minValue,
                             maxValue = volumeBarsState.maxValue,
-                            color = Color(0x336E7899)
+                            color = Color(0x336E7899),
+                            selectedItemKey = null
                         )
                     }
                 }
@@ -496,6 +503,8 @@ fun PriceVolChart(
         var selectedX by remember {
             mutableStateOf<Float?>(null)
         }
+
+        val dotColor = ComposeAppTheme.colors.leah
 
         Canvas(
             modifier = Modifier
@@ -528,7 +537,7 @@ fun PriceVolChart(
                 selectedItem?.let {
                     val x = it.percentagePositionX * canvasWidth
 
-                    drawLine(Color.White, Offset(x, 0f), Offset(x, size.height))
+                    drawLine(dotColor, Offset(x, 0f), Offset(x, size.height))
                 }
             }
         )
