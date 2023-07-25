@@ -40,7 +40,8 @@ class ChartIndicatorManager(
                         calculateRsi(points, typedDataRsi, startTimestamp)
                     }
                     ChartIndicatorSetting.IndicatorType.MACD -> {
-                        calculateMacd(points, startTimestamp)
+                        val typedDataMacd = chartIndicatorSetting.getTypedDataMacd()
+                        calculateMacd(points, typedDataMacd, startTimestamp)
                     }
                 }?.let {
                     chartIndicatorSetting.id to it
@@ -109,18 +110,22 @@ class ChartIndicatorManager(
         return ChartIndicator.Rsi(LinkedHashMap(rsi).filterByTimestamp(startTimestamp))
     }
 
-    private fun calculateMacd(points: LinkedHashMap<Long, Float>, startTimestamp: Long): ChartIndicator.Macd {
-        val ema12 = calculateEMA(points, 12)
-        val ema26 = calculateEMA(points, 26)
+    private fun calculateMacd(
+        points: LinkedHashMap<Long, Float>,
+        typedDataMacd: ChartIndicatorDataMacd,
+        startTimestamp: Long
+    ): ChartIndicator.Macd {
+        val emaFast = calculateEMA(points, typedDataMacd.fast)
+        val emaSlow = calculateEMA(points, typedDataMacd.slow)
 
         val macdLine = LinkedHashMap(
-            ema26.mapNotNull { (key, value) ->
-                ema12[key]?.minus(value)?.let {
+            emaSlow.mapNotNull { (key, value) ->
+                emaFast[key]?.minus(value)?.let {
                     key to it
                 }
             }.toMap()
         )
-        val signalLine = calculateEMA(macdLine, 9)
+        val signalLine = calculateEMA(macdLine, typedDataMacd.signal)
 
         val histogram = LinkedHashMap(
             signalLine.mapNotNull { (key, value) ->
