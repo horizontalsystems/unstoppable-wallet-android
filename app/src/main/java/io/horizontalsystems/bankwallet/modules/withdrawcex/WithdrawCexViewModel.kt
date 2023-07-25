@@ -12,6 +12,7 @@ import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexWithdrawNetwork
 import cash.p.terminal.core.providers.CoinzixCexProvider
 import cash.p.terminal.entities.Address
+import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.coinzixverify.CoinzixVerificationMode
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
@@ -55,10 +56,10 @@ class WithdrawCexViewModel(
             networkName = network.networkName,
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
+            addressState = addressState,
             feeItem = feeItem,
             feeFromAmount = feeFromAmount,
-            canBeSend = amountState.canBeSend && addressState.canBeSend
+            canBeSend = amountState.canBeSend && addressState?.dataOrNull != null
         )
     )
         private set
@@ -105,7 +106,7 @@ class WithdrawCexViewModel(
         return FeeItem(coinAmount, currencyAmount)
     }
 
-    private fun handleUpdatedAddressState(addressState: CexWithdrawAddressService.State) {
+    private fun handleUpdatedAddressState(addressState: DataState<Address>?) {
         this.addressState = addressState
 
         emitState()
@@ -117,10 +118,10 @@ class WithdrawCexViewModel(
                 networkName = network.networkName,
                 availableBalance = amountState.availableBalance,
                 amountCaution = amountState.amountCaution,
-                addressError = addressState.addressError,
+                addressState = addressState,
                 feeItem = feeItem,
                 feeFromAmount = feeFromAmount,
-                canBeSend = amountState.canBeSend && addressState.canBeSend
+                canBeSend = amountState.canBeSend && addressState?.dataOrNull != null
             )
         }
     }
@@ -130,12 +131,17 @@ class WithdrawCexViewModel(
     }
 
     fun onEnterAddress(v: String) {
-        addressService.setAddress(Address(v))
+        viewModelScope.launch {
+            addressService.setAddress(v)
+        }
     }
 
     fun onSelectNetwork(network: CexWithdrawNetwork) {
         this.network = network
         amountService.setNetwork(network)
+        viewModelScope.launch {
+            addressService.setBlockchain(network.blockchain)
+        }
     }
 
     fun onSelectFeeFromAmount(feeFromAmount: Boolean) {
@@ -155,7 +161,7 @@ class WithdrawCexViewModel(
                 .getFormattedFull()
         }
 
-        val address = addressState.address!!
+        val address = addressState?.dataOrNull!!
         val contact = contactsRepository.getContactsFiltered(
             blockchainType,
             addressQuery = address.hex
@@ -178,7 +184,7 @@ class WithdrawCexViewModel(
         return cexProvider.withdraw(
             cexAsset.id,
             network.id,
-            addressState.address!!.hex,
+            addressState?.dataOrNull!!.hex,
             amountState.amount!!
         )
     }
@@ -202,6 +208,6 @@ data class WithdrawCexUiState(
     val amountCaution: HSCaution?,
     val feeItem: FeeItem,
     val feeFromAmount: Boolean,
-    val addressError: Throwable?,
+    val addressState: DataState<Address>?,
     val canBeSend: Boolean
 )
