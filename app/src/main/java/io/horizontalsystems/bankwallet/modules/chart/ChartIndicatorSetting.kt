@@ -63,7 +63,7 @@ data class ChartIndicatorSetting(
     }
 
     fun getTypedDataMacd(): ChartIndicatorDataMacd {
-        check(type == IndicatorType.RSI)
+        check(type == IndicatorType.MACD)
 
         val fast = extraData["fast"]?.toIntOrNull() ?: defaultData["fast"]?.toIntOrNull() ?: 12
         val slow = extraData["slow"]?.toIntOrNull() ?: defaultData["slow"]?.toIntOrNull() ?: 26
