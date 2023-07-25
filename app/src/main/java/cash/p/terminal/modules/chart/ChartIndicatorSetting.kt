@@ -50,16 +50,31 @@ data class ChartIndicatorSetting(
     fun getTypedDataRsi(): ChartIndicatorDataRsi {
         check(type == IndicatorType.RSI)
 
-        val period = extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 20
+        val period = extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 12
 
         return ChartIndicatorDataRsi(
             period = period
+        )
+    }
+
+    fun getTypedDataMacd(): ChartIndicatorDataMacd {
+        check(type == IndicatorType.RSI)
+
+        val fast = extraData["fast"]?.toIntOrNull() ?: defaultData["fast"]?.toIntOrNull() ?: 12
+        val slow = extraData["slow"]?.toIntOrNull() ?: defaultData["slow"]?.toIntOrNull() ?: 26
+        val signal = extraData["signal"]?.toIntOrNull() ?: defaultData["signal"]?.toIntOrNull() ?: 9
+
+        return ChartIndicatorDataMacd(
+            fast = fast,
+            slow = slow,
+            signal = signal,
         )
     }
 }
 
 data class ChartIndicatorDataMa(val period: Int, val maType: String, val color: String)
 data class ChartIndicatorDataRsi(val period: Int)
+data class ChartIndicatorDataMacd(val fast: Int, val slow: Int, val signal: Int)
 
 @Dao
 interface ChartIndicatorSettingsDao {
