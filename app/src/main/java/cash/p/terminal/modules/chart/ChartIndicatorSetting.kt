@@ -2,7 +2,6 @@ package cash.p.terminal.modules.chart
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import java.lang.Integer.max
 
 @Entity
 data class ChartIndicatorSetting(
@@ -34,7 +33,7 @@ data class ChartIndicatorSetting(
                 getTypedDataRsi().period
             }
             IndicatorType.MACD -> {
-                max(getTypedDataMacd().slow, getTypedDataMacd().fast)
+                getTypedDataMacd().slow + getTypedDataMacd().signal
             }
         }
 
