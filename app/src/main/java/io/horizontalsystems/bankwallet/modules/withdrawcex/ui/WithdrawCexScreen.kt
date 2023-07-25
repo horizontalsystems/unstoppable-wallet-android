@@ -130,13 +130,10 @@ fun WithdrawCexScreen(
                 VSpacer(12.dp)
                 FormsInputAddress(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = null,
+                    value = mainViewModel.value,
                     hint = stringResource(id = R.string.Watch_Address_Hint),
                     state = uiState.addressState,
                     textPreprocessor = TextPreprocessorImpl,
-                    onChangeFocus = {
-                        //isFocused = it
-                    },
                     navController = fragmentNavController,
                     chooseContactEnable = mainViewModel.hasContacts(),
                     blockchainType = mainViewModel.blockchainType,

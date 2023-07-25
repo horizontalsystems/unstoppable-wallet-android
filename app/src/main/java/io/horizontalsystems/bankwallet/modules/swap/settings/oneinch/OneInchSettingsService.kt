@@ -58,9 +58,8 @@ class OneInchSettingsService(
         sync()
     }
 
-    override fun setRecipientAddressWithError(address: Address?, error: Throwable?) {
+    override fun updateRecipientError(error: Throwable?) {
         recipientError = error
-        recipient = address
         sync()
     }
 
