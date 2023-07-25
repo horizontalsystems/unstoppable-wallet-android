@@ -36,7 +36,8 @@ fun ChartBars(
         timestampMax,
         valueMin,
         valueMax,
-        color
+        color,
+        null
     )
 }
 
@@ -48,8 +49,11 @@ fun GraphicBars(
     maxKey: Long,
     minValue: Float,
     maxValue: Float,
-    color: Color
+    color: Color,
+    selectedItemKey: Long?
 ) {
+    val dotColor = ComposeAppTheme.colors.leah
+
     Canvas(
         modifier = modifier,
         onDraw = {
@@ -62,6 +66,8 @@ fun GraphicBars(
             val xRatio = (canvasWidth - barWidth) / (maxKey - minKey)
             val yRatio = (canvasHeight - barMinHeight) / (maxValue - minValue)
 
+            var dotPosition: Offset? = null
+
             scale(scaleX = 1f, scaleY = -1f) {
                 for ((timestamp, value) in data) {
                     if (value < minValue) continue
@@ -69,12 +75,19 @@ fun GraphicBars(
                     val x = (timestamp - minKey) * xRatio + barWidth / 2
                     val y = ((value - minValue) * yRatio + barMinHeight)
 
+                    if (selectedItemKey == timestamp) {
+                        dotPosition = Offset(x, y)
+                    }
+
                     drawLine(
                         start = Offset(x = x, y = 0f),
                         end = Offset(x = x, y = y),
                         color = color,
                         strokeWidth = barWidth
                     )
+                }
+                dotPosition?.let {
+                    drawCircle(dotColor, 5.dp.toPx(), center = it)
                 }
             }
         }

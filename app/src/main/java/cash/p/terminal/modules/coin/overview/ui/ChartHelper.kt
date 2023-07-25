@@ -33,6 +33,8 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     var mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
     var mainCurvePressedColor = colors.leah
     var mainCurveGradientPressedColors = Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
+    var mainBarsColor = colors.jacob
+    var mainBarsPressedColor = colors.grey50
 
     init {
         setExtremum()
