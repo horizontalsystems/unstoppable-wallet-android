@@ -260,6 +260,8 @@ fun PriceVolChart(
     val movingAverageCurveStates = chartHelper.getMovingAverageCurveStates()
     val volumeBarsState = chartHelper.getVolumeBarsState()
     val rsiCurveState = chartHelper.getRsiCurveState()
+    val macdLineCurveState = chartHelper.getMacdLineCurveState()
+    val macdSignalCurveState = chartHelper.getMacdSignalCurveState()
     val selectedItem = chartHelper.selectedItem
     val context = LocalContext.current
     LaunchedEffect(selectedItem) {
@@ -331,7 +333,7 @@ fun PriceVolChart(
                         Color.Gray
                     }
 
-                    CraphicLine(
+                    GraphicLine(
                         Modifier.fillMaxSize(),
                         it.values,
                         it.startTimestamp,
@@ -392,8 +394,10 @@ fun PriceVolChart(
                             )
                         }
 
-                        CraphicLine(
-                            modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp),
+                        GraphicLine(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp),
                             data = rsiCurveState.values,
                             minKey = rsiCurveState.startTimestamp,
                             maxKey = rsiCurveState.endTimestamp,
@@ -423,9 +427,34 @@ fun PriceVolChart(
                                 text = "30",
                             )
                         }
+                    } else if (macdLineCurveState != null && macdSignalCurveState != null) {
+                        GraphicLine(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp),
+                            data = macdLineCurveState.values,
+                            minKey = macdLineCurveState.startTimestamp,
+                            maxKey = macdLineCurveState.endTimestamp,
+                            minValue = macdLineCurveState.minValue,
+                            maxValue = macdLineCurveState.maxValue,
+                            color = ComposeAppTheme.colors.issykBlue
+                        )
+                        GraphicLine(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp),
+                            data = macdSignalCurveState.values,
+                            minKey = macdSignalCurveState.startTimestamp,
+                            maxKey = macdSignalCurveState.endTimestamp,
+                            minValue = macdSignalCurveState.minValue,
+                            maxValue = macdSignalCurveState.maxValue,
+                            color = ComposeAppTheme.colors.yellow50
+                        )
                     } else if (volumeBarsState != null) {
                         GraphicBars(
-                            modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp),
                             data = volumeBarsState.values,
                             minKey = volumeBarsState.startTimestamp,
                             maxKey = volumeBarsState.endTimestamp,
@@ -551,7 +580,7 @@ fun ChartLineWithGradient(
 }
 
 @Composable
-fun CraphicLine(
+fun GraphicLine(
     modifier: Modifier,
     data: LinkedHashMap<Long, Float>,
     minKey: Long,
