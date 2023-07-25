@@ -7,6 +7,7 @@ import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
+import io.horizontalsystems.chartview.models.ChartPoint
 import kotlin.math.abs
 
 class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
@@ -146,18 +147,26 @@ class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
         private set
 
     fun setSelectedPercentagePositionX(percentagePositionX: Float?) {
-        selectedItem = if (percentagePositionX == null) {
-            null
-        } else {
-            val interval = maxKey - minKey
-            val timestamp = minKey + interval * percentagePositionX
-            val nearestKey = target.valuesByTimestamp().keys.minByOrNull { abs(it - timestamp) }!!
-            val nearestPercentagePositionX = (nearestKey - minKey) / interval.toFloat()
-
-            SelectedItem(percentagePositionX = nearestPercentagePositionX, key = nearestKey)
+        if (percentagePositionX == null) {
+            selectedItem = null
+            return
         }
+
+        val interval = maxKey - minKey
+        val timestamp = minKey + interval * percentagePositionX
+
+        val nearestChartPoint = target.items.minByOrNull {
+            abs(it.timestamp - timestamp)
+        } ?: return
+
+        val nearestPercentagePositionX = (nearestChartPoint.timestamp - minKey) / interval.toFloat()
+
+        selectedItem = SelectedItem(
+            percentagePositionX = nearestPercentagePositionX,
+            chartPoint = nearestChartPoint
+        )
     }
 
 }
 
-data class SelectedItem(val percentagePositionX: Float, val key: Long)
+data class SelectedItem(val percentagePositionX: Float, val chartPoint: ChartPoint)

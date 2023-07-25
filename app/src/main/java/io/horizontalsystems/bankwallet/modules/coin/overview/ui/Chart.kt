@@ -260,6 +260,15 @@ fun PriceVolChart(
     val movingAverageCurveStates = chartHelper.getMovingAverageCurveStates()
     val volumeBarsState = chartHelper.getVolumeBarsState()
     val selectedItem = chartHelper.selectedItem
+    val context = LocalContext.current
+    LaunchedEffect(selectedItem) {
+        if (selectedItem != null) {
+            HudHelper.vibrate(context)
+        }
+
+        onSelectPoint.invoke(selectedItem?.chartPoint)
+    }
+
 
     Row(
         modifier = Modifier
@@ -298,7 +307,7 @@ fun PriceVolChart(
                             mainCurveState.endTimestamp,
                             mainCurveState.minValue,
                             mainCurveState.maxValue,
-                            selectedItem?.key
+                            selectedItem?.chartPoint?.timestamp
                         )
                     }
                     ChartViewType.Bar -> {
@@ -374,12 +383,6 @@ fun PriceVolChart(
             mutableStateOf<Float?>(null)
         }
 
-        val context = LocalContext.current
-        LaunchedEffect(selectedItem) {
-            if (selectedItem != null) {
-                HudHelper.vibrate(context)
-            }
-        }
         Canvas(
             modifier = Modifier
                 .matchParentSize()
