@@ -15,6 +15,7 @@ data class ChartData(
     val indicators: Map<String, ChartIndicator> = mapOf(),
 ) {
     var macd: ChartIndicator.Macd? = null
+    var rsi: ChartIndicator.Rsi? = null
 
     val movingAverages by lazy {
         buildMap {
@@ -28,9 +29,18 @@ data class ChartData(
 
     init {
         for (indicator in indicators.values) {
-            if (indicator is ChartIndicator.Macd) {
-                macd = indicator
-                break
+            when (indicator) {
+                is ChartIndicator.Macd -> {
+                    macd = indicator
+                }
+
+                is ChartIndicator.Rsi -> {
+                    rsi = indicator
+                }
+
+                is ChartIndicator.MovingAverage -> {
+
+                }
             }
         }
     }

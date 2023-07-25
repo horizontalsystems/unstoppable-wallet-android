@@ -46,9 +46,20 @@ data class ChartIndicatorSetting(
             color = color
         )
     }
+
+    fun getTypedDataRsi(): ChartIndicatorDataRsi {
+        check(type == IndicatorType.RSI)
+
+        val period = extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 20
+
+        return ChartIndicatorDataRsi(
+            period = period
+        )
+    }
 }
 
 data class ChartIndicatorDataMa(val period: Int, val maType: String, val color: String)
+data class ChartIndicatorDataRsi(val period: Int)
 
 @Dao
 interface ChartIndicatorSettingsDao {

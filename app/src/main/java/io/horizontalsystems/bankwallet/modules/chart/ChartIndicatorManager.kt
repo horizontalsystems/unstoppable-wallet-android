@@ -5,6 +5,7 @@ import io.horizontalsystems.chartview.models.ChartIndicator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlin.math.abs
 
 class ChartIndicatorManager(
     private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao,
@@ -35,7 +36,8 @@ class ChartIndicatorManager(
                         calculateMovingAverage(points, typedDataMA, startTimestamp)
                     }
                     ChartIndicatorSetting.IndicatorType.RSI -> {
-                        null
+                        val typedDataRsi = chartIndicatorSetting.getTypedDataRsi()
+                        calculateRsi(points, typedDataRsi, startTimestamp)
                     }
                     ChartIndicatorSetting.IndicatorType.MACD -> {
                         calculateMacd(points, startTimestamp)
@@ -45,6 +47,66 @@ class ChartIndicatorManager(
                 }
             }
             .toMap()
+    }
+
+    private fun calculateRsi(
+        points: LinkedHashMap<Long, Float>,
+        typedDataRsi: ChartIndicatorDataRsi,
+        startTimestamp: Long
+    ): ChartIndicator.Rsi {
+        val period = typedDataRsi.period
+
+        val upMove = mutableMapOf<Long, Float>()
+        val downMove = mutableMapOf<Long, Float>()
+
+        val pointsList = points.toList()
+
+        pointsList.windowed(2).forEach {
+            val first = it.first()
+            val last = it.last()
+            val change = last.second - first.second
+            val key = last.first
+            upMove[key] = if (change > 0) change else 0f
+            downMove[key] = if (change < 0) abs(change) else 0f
+        }
+
+        val rsi =  mutableMapOf<Long, Float>()
+
+        var maUp = 0f
+        var maDown = 0f
+        var rStrength: Float
+
+        var i = -1
+
+        for (key in upMove.keys) {
+            i++
+
+            val up = upMove[key]!!
+            val down = downMove[key]!!
+
+            // SMA
+            if (i < period) {
+                maUp += up
+                maDown += down
+                if (i + 1 == period) {
+                    maUp /= period
+                    maDown /= period
+                    rStrength = maUp / maDown
+
+                    rsi[key] = 100 - 100 / (rStrength + 1)
+                }
+                continue
+            }
+
+            // EMA
+            maUp = (maUp * (period - 1) + up) / period
+            maDown = (maDown * (period - 1) + down) / period
+            rStrength = maUp / maDown
+
+            rsi[key] = 100 - 100 / (rStrength + 1)
+        }
+
+        return ChartIndicator.Rsi(LinkedHashMap(rsi).filterByTimestamp(startTimestamp))
     }
 
     private fun calculateMacd(points: LinkedHashMap<Long, Float>, startTimestamp: Long): ChartIndicator.Macd {
