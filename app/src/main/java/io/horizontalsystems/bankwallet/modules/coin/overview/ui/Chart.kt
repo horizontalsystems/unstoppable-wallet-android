@@ -303,14 +303,23 @@ fun PriceVolChart(
             ) {
                 when (chartViewType) {
                     ChartViewType.Line -> {
+                        val curveColor: Color
+                        val gradientColors: Pair<Color, Color>
+                        if (selectedItem == null) {
+                            curveColor = chartHelper.mainCurveColor
+                            gradientColors = chartHelper.mainCurveGradientColors
+                        } else {
+                            curveColor = chartHelper.mainCurvePressedColor
+                            gradientColors = chartHelper.mainCurveGradientPressedColors
+                        }
                         GraphicLineWithGradient(
                             mainCurveState.values,
                             mainCurveState.startTimestamp,
                             mainCurveState.endTimestamp,
                             mainCurveState.minValue,
                             mainCurveState.maxValue,
-                            chartHelper.mainCurveColor,
-                            chartHelper.mainCurveGradientColors,
+                            curveColor,
+                            gradientColors,
                             selectedItem?.chartPoint?.timestamp,
                         )
                     }
