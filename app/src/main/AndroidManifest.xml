@@ -56,9 +56,6 @@
             android:name=".modules.qrscanner.QRScannerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.importcexaccount.HCaptchaActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity
