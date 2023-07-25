@@ -92,10 +92,6 @@ class AppConfigProvider {
         Translator.getString(R.string.trongridApiKey)
     }
 
-    val coinzixHCaptchaSiteKey by lazy {
-        Translator.getString(R.string.coinzixHCaptchaSiteKey)
-    }
-
      val fiatDecimal: Int = 2
      val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
