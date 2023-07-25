@@ -10,7 +10,7 @@ import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import kotlin.math.abs
 
-class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
+class ChartHelper(private var target: ChartData, var hasVolumes: Boolean) {
 
     private var minValue: Float = 0.0f
     private var maxValue: Float = 0.0f
@@ -20,6 +20,7 @@ class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
     private val mainCurve: CurveAnimator2
     private val movingAverageCurves = mutableMapOf<String, CurveAnimator2>()
     private var volumeBars: CurveAnimatorBars? = null
+    private var rsiCurve: CurveAnimator2? = null
 
     init {
         setExtremum()
@@ -34,6 +35,8 @@ class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
 
         initMovingAverages()
 
+        initRsiCurve()
+
         if (hasVolumes) {
             val volumeByTimestamp = target.volumeByTimestamp()
             val volumeMin = volumeByTimestamp.minOf { it.value }
@@ -44,6 +47,19 @@ class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
                 maxKey,
                 volumeMin,
                 volumeMax
+            )
+        }
+    }
+
+    private fun initRsiCurve() {
+        rsiCurve = target.rsi?.let { chartIndicatorRsi ->
+            val values = chartIndicatorRsi.points
+            CurveAnimator2(
+                values,
+                minKey,
+                maxKey,
+                values.minOf { it.value },
+                values.maxOf { it.value }
             )
         }
     }
@@ -78,6 +94,10 @@ class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
         return movingAverageCurves.map { it.value.state }
     }
 
+    fun getRsiCurveState(): CurveAnimator2.UiState? {
+        return rsiCurve?.state
+    }
+
     private fun setExtremum() {
         minValue = target.minValue
         maxValue = target.maxValue
@@ -97,28 +117,46 @@ class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
 
     fun setTarget(chartData: ChartData, hasVolumes: Boolean) {
         target = chartData
+        this.hasVolumes = hasVolumes
         setExtremum()
 
         mainCurve.setTo(
-            chartData.valuesByTimestamp(),
+            target.valuesByTimestamp(),
             minKey,
             maxKey,
             minValue,
             maxValue
         )
 
-        if (chartData.movingAverages.keys != movingAverageCurves.keys) {
+        if (target.movingAverages.keys != movingAverageCurves.keys) {
             initMovingAverages()
+        } else {
+            target.movingAverages.forEach { (id, u: ChartIndicator) ->
+                movingAverageCurves[id]?.setTo(
+                    u.line,
+                    minKey,
+                    maxKey,
+                    minValue,
+                    maxValue,
+                )
+            }
         }
 
-        chartData.movingAverages.forEach { (id, u: ChartIndicator) ->
-            movingAverageCurves[id]?.setTo(
-                u.line,
-                minKey,
-                maxKey,
-                minValue,
-                maxValue,
-            )
+        if (target.rsi == null) {
+            rsiCurve = null
+        } else if (rsiCurve == null) {
+            initRsiCurve()
+        } else {
+            target.rsi?.let { chartIndicatorRsi ->
+                val values = chartIndicatorRsi.points
+                rsiCurve?.setTo(
+                    values,
+                    minKey,
+                    maxKey,
+                    values.minOf { it.value },
+                    values.maxOf { it.value }
+                )
+            }
         }
 
         if (hasVolumes) {
@@ -141,6 +179,7 @@ class ChartHelper(private var target: ChartData, hasVolumes: Boolean) {
             curve.onNextFrame(value)
         }
         volumeBars?.onNextFrame(value)
+        rsiCurve?.onNextFrame(value)
     }
 
     var selectedItem by mutableStateOf<SelectedItem?>(null)
