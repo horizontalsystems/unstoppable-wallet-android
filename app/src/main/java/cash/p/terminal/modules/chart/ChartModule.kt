@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.chart
 
 import cash.p.terminal.entities.Currency
+import cash.p.terminal.modules.coin.overview.ui.SelectedItem
 import cash.p.terminal.modules.market.Value
 import java.math.BigDecimal
 
@@ -28,6 +29,11 @@ object ChartModule {
     sealed class ChartHeaderExtraData {
         class Volume(val volume: String) : ChartHeaderExtraData()
         class Dominance(val dominance: String, val diff: Value.Percent?) : ChartHeaderExtraData()
+        class Indicators(
+            val movingAverages: List<SelectedItem.MA>,
+            val rsi: Float?,
+            val macd: SelectedItem.Macd?
+        ) : ChartHeaderExtraData()
     }
 
 }

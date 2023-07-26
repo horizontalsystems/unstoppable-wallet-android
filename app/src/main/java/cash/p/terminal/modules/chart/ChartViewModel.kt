@@ -13,10 +13,10 @@ import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.viewState
 import cash.p.terminal.modules.coin.ChartInfoData
+import cash.p.terminal.modules.coin.overview.ui.SelectedItem
 import cash.p.terminal.modules.market.Value
 import cash.p.terminal.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.disposables.CompositeDisposable
@@ -212,24 +212,30 @@ open class ChartViewModel(
         service.stop()
     }
 
-    fun getSelectedPoint(item: ChartPoint): ChartModule.ChartHeaderView {
-        val value = valueFormatter.formatValue(service.currency, item.value.toBigDecimal())
-        val dayAndTime = DateHelper.getFullDate(Date(item.timestamp * 1000))
+    fun getSelectedPoint(selectedItem: SelectedItem): ChartModule.ChartHeaderView {
+        val value = valueFormatter.formatValue(service.currency, selectedItem.mainValue.toBigDecimal())
+        val dayAndTime = DateHelper.getFullDate(Date(selectedItem.timestamp * 1000))
 
         return ChartModule.ChartHeaderView(
             value = value,
             valueHint = null,
             date = dayAndTime,
             diff = null,
-            extraData = getItemExtraData(item)
+            extraData = getItemExtraData(selectedItem)
         )
     }
 
-    private fun getItemExtraData(item: ChartPoint): ChartModule.ChartHeaderExtraData? {
+    private fun getItemExtraData(item: SelectedItem): ChartModule.ChartHeaderExtraData? {
+        val movingAverages = item.movingAverages
+        val rsi = item.rsi
+        val macd = item.macd
         val dominance = item.dominance
         val volume = item.volume
 
         return when {
+            movingAverages.isNotEmpty() || rsi != null || macd != null -> {
+                ChartModule.ChartHeaderExtraData.Indicators(movingAverages, rsi, macd)
+            }
             dominance != null -> {
                 ChartModule.ChartHeaderExtraData.Dominance(
                     App.numberFormatter.format(dominance, 0, 2, suffix = "%"),

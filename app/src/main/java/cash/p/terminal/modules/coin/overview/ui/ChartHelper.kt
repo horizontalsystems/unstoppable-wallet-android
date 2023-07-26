@@ -9,7 +9,6 @@ import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.chartview.models.ChartPoint
 import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
@@ -347,14 +346,54 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             abs(it.timestamp - timestamp)
         } ?: return
 
+        val selectedTimestamp = nearestChartPoint.timestamp
+
+        val selectedMovingAverages = mutableListOf<SelectedItem.MA>()
+        target.movingAverages.forEach { _, movingAverage ->
+            movingAverage.line[selectedTimestamp]?.let {
+                selectedMovingAverages.add(SelectedItem.MA(movingAverage.color, it))
+            }
+        }
+        val selectedRsi = target.rsi?.let {
+            it.points[selectedTimestamp]
+        }
+        val selectedMacd = target.macd?.let {
+            val macd = it.macdLine[selectedTimestamp]
+            val signal = it.signalLine[selectedTimestamp]
+            val histogram = it.histogram[selectedTimestamp]
+            if (macd != null) {
+                SelectedItem.Macd(macd, signal, histogram)
+            } else {
+                null
+            }
+        }
+
         val nearestPercentagePositionX = (nearestChartPoint.timestamp - minKey) / interval.toFloat()
 
         selectedItem = SelectedItem(
             percentagePositionX = nearestPercentagePositionX,
-            chartPoint = nearestChartPoint
+            timestamp = selectedTimestamp,
+            mainValue = nearestChartPoint.value,
+            dominance = nearestChartPoint.dominance,
+            volume = nearestChartPoint.volume,
+            movingAverages = selectedMovingAverages,
+            rsi = selectedRsi,
+            macd = selectedMacd,
         )
     }
 
 }
 
-data class SelectedItem(val percentagePositionX: Float, val chartPoint: ChartPoint)
+data class SelectedItem(
+    val percentagePositionX: Float,
+    val timestamp: Long,
+    val mainValue: Float,
+    val dominance: Float?,
+    val volume: Float?,
+    val movingAverages: List<MA>,
+    val rsi: Float?,
+    val macd: Macd?
+) {
+    data class MA(val color: Long, val value: Float)
+    data class Macd(val macdValue: Float, val signalValue: Float?, val histogramValue: Float?)
+}
