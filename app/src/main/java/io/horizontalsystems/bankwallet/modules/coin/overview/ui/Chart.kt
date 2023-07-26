@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
@@ -34,7 +35,6 @@ import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.ChartViewType
-import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.launch
@@ -137,9 +137,55 @@ fun HsChartLineHeader(
                         }
                     }
                 }
+
+                is ChartModule.ChartHeaderExtraData.Indicators -> {
+                    Column(modifier = Modifier.width(IntrinsicSize.Max), horizontalAlignment = Alignment.End) {
+                        Row {
+                            extraData.movingAverages.forEach {
+                                HSpacer(width = 4.dp)
+                                Text(
+                                    text = App.numberFormatter.formatFiatShort(it.value.toBigDecimal(), "", 8),
+                                    color = Color(it.color),
+                                    style = ComposeAppTheme.typography.subhead2
+                                )
+                            }
+                        }
+
+                        if (extraData.rsi != null) {
+                            subhead2_jacob(text = App.numberFormatter.formatFiatShort(extraData.rsi.toBigDecimal(), "", 8))
+                        } else if (extraData.macd != null) {
+                            val macd = extraData.macd
+                            Row {
+                                macd.histogramValue?.let { value ->
+                                    val color = if (value >= 0) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
+                                    HSpacer(width = 4.dp)
+                                    Text(
+                                        text = value.plainString(),
+                                        color = color,
+                                        style = ComposeAppTheme.typography.subhead2
+                                    )
+                                }
+                                macd.signalValue?.let { value ->
+                                    HSpacer(width = 4.dp)
+                                    subhead2_issykBlue(
+                                        text = value.plainString()
+                                    )
+                                }
+                                HSpacer(width = 4.dp)
+                                subhead2_jacob(
+                                    text = macd.macdValue.plainString()
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+fun Float.plainString() : String {
+    return App.numberFormatter.format(this, 0, 8)
 }
 
 @Composable
@@ -195,8 +241,8 @@ fun Chart(
                                 hasVolumes = uiState.hasVolumes,
                                 chartViewType = uiState.chartViewType,
                             ) { item ->
-                                selectedPoint = item?.let { chartPoint ->
-                                    chartViewModel.getSelectedPoint(chartPoint)
+                                selectedPoint = item?.let { selectedItem ->
+                                    chartViewModel.getSelectedPoint(selectedItem)
                                 }
                             }
 
@@ -230,7 +276,7 @@ fun PriceVolChart(
     chartInfoData: ChartInfoData?,
     hasVolumes: Boolean,
     chartViewType: ChartViewType,
-    onSelectPoint: (ChartPoint?) -> Unit,
+    onSelectPoint: (SelectedItem?) -> Unit,
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
 
@@ -277,7 +323,7 @@ fun PriceVolChart(
             HudHelper.vibrate(context)
         }
 
-        onSelectPoint.invoke(selectedItem?.chartPoint)
+        onSelectPoint.invoke(selectedItem)
     }
 
     Column {
@@ -329,7 +375,7 @@ fun PriceVolChart(
                                 mainCurveState.maxValue,
                                 curveColor,
                                 gradientColors,
-                                selectedItem?.chartPoint?.timestamp,
+                                selectedItem?.timestamp,
                             )
                         }
                         ChartViewType.Bar -> {
@@ -346,7 +392,7 @@ fun PriceVolChart(
                                 minValue = mainCurveState.minValue,
                                 maxValue = mainCurveState.maxValue,
                                 color = color,
-                                selectedItemKey = selectedItem?.chartPoint?.timestamp
+                                selectedItemKey = selectedItem?.timestamp
                             )
                         }
                     }
