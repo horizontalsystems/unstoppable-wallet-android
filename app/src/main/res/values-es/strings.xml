@@ -9,6 +9,7 @@
     <string name="Alert_Loading">Cargando...</string>
     <string name="Alert_Restart">Reiniciar</string>
     <string name="Action_Undo">DESHACER</string>
+    <string name="Button_Show">Mostrar</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Next">Siguiente</string>
     <string name="Button_Enable">Habilitar</string>
