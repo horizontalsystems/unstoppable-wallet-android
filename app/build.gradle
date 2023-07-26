@@ -1,3 +1,10 @@
+// NB: Android Studio can't find the imports; this does not affect the
+// actual build since Gradle can find them just fine.
+// remove after upgrading to 'com.android.tools.build:gradle:8.1.0' (AGP 8.1)
+import com.android.tools.profgen.ArtProfileKt
+import com.android.tools.profgen.ArtProfileSerializer
+import com.android.tools.profgen.DexFile
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
@@ -10,7 +17,7 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 83
+        versionCode 84
         versionName "0.34.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -245,13 +252,13 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:4adf8ca'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:f7a7142'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:04bd4ff'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1.0.0'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:7e4d7c0'
     implementation 'com.github.horizontalsystems:market-kit-android:df64a1f'
     implementation 'com.github.horizontalsystems:solana-kit-android:97dcdba'
-    implementation 'com.github.horizontalsystems:tron-kit-android:60b3e43'
+    implementation 'com.github.horizontalsystems:tron-kit-android:1cc0ebe'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.14.0-beta01"
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
@@ -332,4 +339,33 @@ dependencies {
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+// fixes reproducible builds (fixes difference in assets/dexopt/baseline.profm)
+// more info https://issuetracker.google.com/issues/231837768
+// remove after upgrading to 'com.android.tools.build:gradle:8.1.0' (AGP 8.1)
+project.afterEvaluate {
+    tasks.each { task ->
+        if (task.name.startsWith("compile") && task.name.endsWith("ReleaseArtProfile")) {
+            task.doLast {
+                outputs.files.each { file ->
+                    if (file.name.endsWith(".profm")) {
+                        println("Sorting ${file} ...")
+                        def version = ArtProfileSerializer.valueOf("METADATA_0_0_2")
+                        def profile = ArtProfileKt.ArtProfile(file)
+                        def keys = new ArrayList(profile.profileData.keySet())
+                        def sortedData = new LinkedHashMap()
+                        // xxx ignore not resolved classes; gradle can manage
+                        Collections.sort keys, new DexFile.Companion()
+                        keys.each { key -> sortedData[key] = profile.profileData[key] }
+                        new FileOutputStream(file).with {
+                            write(version.magicBytes$profgen)
+                            write(version.versionBytes$profgen)
+                            version.write$profgen(it, sortedData, "")
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
