@@ -8,6 +8,7 @@
     <string name="Alert_Loading">Загрузка...</string>
     <string name="Alert_Restart">Перезапустить</string>
     <string name="Action_Undo">Отмена</string>
+    <string name="Button_Show">Показать</string>
     <string name="Button_Cancel">Отменить</string>
     <string name="Button_Next">Далее</string>
     <string name="Button_Enable">Активировать</string>
