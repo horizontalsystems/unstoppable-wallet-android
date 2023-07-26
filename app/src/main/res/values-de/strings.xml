@@ -9,6 +9,7 @@
     <string name="Alert_Loading">Wird geladen ...</string>
     <string name="Alert_Restart">Neustart</string>
     <string name="Action_Undo">Rückgängig</string>
+    <string name="Button_Show">Anzeigen</string>
     <string name="Button_Cancel">Abbrechen</string>
     <string name="Button_Next">Weiter</string>
     <string name="Button_Enable">Aktivieren</string>
