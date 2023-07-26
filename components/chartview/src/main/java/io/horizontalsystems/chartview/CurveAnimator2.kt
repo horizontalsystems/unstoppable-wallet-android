@@ -11,7 +11,7 @@ class CurveAnimator2(
     private var toMinValue: Float,
     private var toMaxValue: Float,
 ) {
-    var color: String? = null
+    var color: Long? = null
 
     private var fromValues: LinkedHashMap<Long, Float> = toValues
     private var fromStartTimestamp: Long = toStartTimestamp
@@ -34,7 +34,7 @@ class CurveAnimator2(
         val endTimestamp: Long,
         val minValue: Float,
         val maxValue: Float,
-        val color: String?
+        val color: Long?
     )
 
     var state by mutableStateOf(

@@ -42,7 +42,7 @@ data class ChartIndicatorSetting(
 
         val period = extraData["period"]?.toIntOrNull() ?: defaultData["period"]?.toIntOrNull() ?: 20
         val maType = extraData["maType"] ?: defaultData["maType"] ?: "SMA"
-        val color = extraData["color"] ?: defaultData["color"] ?: "#FFA800"
+        val color = extraData["color"]?.toLongOrNull() ?: defaultData["color"]?.toLongOrNull() ?: 0xFFFFA800
 
         return ChartIndicatorDataMa(
             period = period,
@@ -76,7 +76,7 @@ data class ChartIndicatorSetting(
     }
 }
 
-data class ChartIndicatorDataMa(val period: Int, val maType: String, val color: String)
+data class ChartIndicatorDataMa(val period: Int, val maType: String, val color: Long)
 data class ChartIndicatorDataRsi(val period: Int)
 data class ChartIndicatorDataMacd(val fast: Int, val slow: Int, val signal: Int)
 
@@ -117,7 +117,7 @@ interface ChartIndicatorSettingsDao {
                     defaultData = mapOf(
                         "period" to "9",
                         "maType" to "EMA",
-                        "color" to "#FFA800",
+                        "color" to 0xFFFFA800.toString(),
                     ),
                     enabled = true,
                 ),
@@ -129,7 +129,7 @@ interface ChartIndicatorSettingsDao {
                     defaultData = mapOf(
                         "period" to "25",
                         "maType" to "EMA",
-                        "color" to "#4A98E9",
+                        "color" to 0xFF4A98E9.toString(),
                     ),
                     enabled = true,
                 ),
@@ -141,7 +141,7 @@ interface ChartIndicatorSettingsDao {
                     defaultData = mapOf(
                         "period" to "50",
                         "maType" to "EMA",
-                        "color" to "#BF5AF2",
+                        "color" to 0xFFBF5AF2.toString(),
                     ),
                     enabled = true,
                 ),
