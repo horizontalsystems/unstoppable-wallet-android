@@ -9,6 +9,7 @@
     <string name="Alert_Loading">Chargement en cours...</string>
     <string name="Alert_Restart">Redémarrer</string>
     <string name="Action_Undo">ANNULER</string>
+    <string name="Button_Show">Afficher</string>
     <string name="Button_Cancel">Annuler</string>
     <string name="Button_Next">Suivant</string>
     <string name="Button_Enable">Activer</string>
