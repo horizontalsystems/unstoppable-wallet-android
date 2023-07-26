@@ -29,7 +29,6 @@ object CoinAnalyticsModule {
                 App.currencyManager,
                 App.subscriptionManager,
                 App.accountManager,
-                App.appConfigProvider,
             )
 
 
@@ -144,7 +143,7 @@ object CoinAnalyticsModule {
     )
 
     sealed class AnalyticsViewItem {
-        class Preview(val blocks: List<PreviewBlockViewItem>, val subscriptionAddress: String?) : AnalyticsViewItem()
+        class Preview(val blocks: List<PreviewBlockViewItem>) : AnalyticsViewItem()
         class Analytics(val blocks: List<BlockViewItem>) : AnalyticsViewItem()
         object NoData : AnalyticsViewItem()
     }

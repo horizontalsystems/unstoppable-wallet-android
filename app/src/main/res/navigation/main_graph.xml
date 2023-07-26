@@ -156,6 +156,9 @@
         android:id="@+id/activateSubscription"
         android:name="cash.p.terminal.modules.subscription.ActivateSubscriptionFragment" />
     <fragment
+        android:id="@+id/subscriptionInfoFragment"
+        android:name="cash.p.terminal.modules.subscription.SubscriptionInfoFragment" />
+    <fragment
         android:id="@+id/coinAnalyticsInfoFragment"
         android:name="cash.p.terminal.modules.info.CoinAnalyticsInfoFragment" />
     <fragment

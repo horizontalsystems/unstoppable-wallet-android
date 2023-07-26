@@ -41,6 +41,7 @@ class NoDataException() : Exception() {
 }
 
 class NoAuthTokenException(override val message: String = "Auth Token is not set or empty") : Exception()
+class InvalidAuthTokenException(override val message: String = "Auth Token is expired or invalid") : Exception()
 
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()

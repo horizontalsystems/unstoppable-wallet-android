@@ -1,6 +1,7 @@
 package cash.p.terminal.core.managers
 
 import android.content.Context
+import cash.p.terminal.core.InvalidAuthTokenException
 import cash.p.terminal.core.NoAuthTokenException
 import cash.p.terminal.core.customCoinPrefix
 import io.horizontalsystems.marketkit.MarketKit
@@ -14,6 +15,7 @@ import io.horizontalsystems.marketkit.models.NftTopCollection
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.reactivex.Observable
 import io.reactivex.Single
+import retrofit2.HttpException
 import retrofit2.Response
 import java.math.BigDecimal
 
@@ -35,7 +37,15 @@ class MarketKitWrapper(
 
     private fun <T> requestWithAuthToken(f: (String) -> Single<T>) =
         subscriptionManager.authToken?.let { authToken ->
-            f.invoke(authToken)
+            f.invoke(authToken).onErrorResumeNext { error ->
+                if (error is HttpException && (error.code() == 401 || error.code() == 403)) {
+                    subscriptionManager.authToken = null
+
+                    Single.error(InvalidAuthTokenException())
+                } else {
+                    Single.error(error)
+                }
+            }
         } ?: run {
             Single.error(NoAuthTokenException())
         }
@@ -212,7 +222,8 @@ class MarketKitWrapper(
 
     fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
 
-    fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) = marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
+    fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
+        marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
 
     // Global Market Info
 
@@ -233,7 +244,12 @@ class MarketKitWrapper(
     suspend fun nftCollections(): List<NftTopCollection> =
         marketKit.nftTopCollections()
 
-    fun authKey(address: String) = marketKit.authGetSignMessage(address)
+    fun subscriptionsSingle(addresses: List<String>) =
+        marketKit.subscriptionsSingle(addresses)
+
+    fun authGetSignMessage(address: String) =
+        marketKit.authGetSignMessage(address)
+
     fun authenticate(signature: String, address: String) =
         marketKit.authenticate(signature, address)
 

@@ -23,6 +23,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsScreen
 import cash.p.terminal.modules.coin.coinmarkets.CoinMarketsScreen
 import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen
@@ -30,6 +31,7 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CoinFragment : BaseFragment() {
@@ -143,9 +145,16 @@ fun CoinTabs(
         val tabItems = tabs.map {
             TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
         }
-        Tabs(tabItems, onClick = {
+        Tabs(tabItems, onClick = { tab ->
             coroutineScope.launch {
-                pagerState.scrollToPage(it.ordinal)
+                pagerState.scrollToPage(tab.ordinal)
+
+                if (tab == CoinModule.Tab.Details && viewModel.shouldShowSubscriptionInfo()) {
+                    viewModel.subscriptionInfoShown()
+
+                    delay(1000)
+                    navController.slideFromBottom(R.id.subscriptionInfoFragment)
+                }
             }
         })
 

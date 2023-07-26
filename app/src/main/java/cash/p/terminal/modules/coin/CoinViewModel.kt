@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.managers.SubscriptionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -16,6 +17,7 @@ class CoinViewModel(
     private val service: CoinService,
     private val clearables: List<Clearable>,
     private val localStorage: ILocalStorage,
+    private val subscriptionManager: SubscriptionManager
 ) : ViewModel() {
 
     val tabs = CoinModule.Tab.values()
@@ -26,6 +28,8 @@ class CoinViewModel(
         private set
     var successMessage by mutableStateOf<Int?>(null)
         private set
+
+    private var subscriptionInfoShown: Boolean = false
 
     init {
         viewModelScope.launch {
@@ -52,6 +56,14 @@ class CoinViewModel(
 
     fun onSuccessMessageShown() {
         successMessage = null
+    }
+
+    fun shouldShowSubscriptionInfo():Boolean {
+        return !subscriptionManager.hasSubscription() && !subscriptionInfoShown
+    }
+
+    fun subscriptionInfoShown() {
+        subscriptionInfoShown = true
     }
 
 }

@@ -54,7 +54,6 @@ class CoinAnalyticsViewModel(
     private val code: String
 ) : ViewModel() {
 
-    val analyticsLink by service::analyticsLink
     private val disposables = CompositeDisposable()
 
     private val currency = service.currency
@@ -127,12 +126,7 @@ class CoinAnalyticsViewModel(
         if (item.analyticsPreview != null) {
             val viewItems = getPreviewViewItems(item.analyticsPreview)
             if (viewItems.isNotEmpty()) {
-                val subscriptionAddress = item.analyticsPreview.subscriptions
-                    ?.sortedByDescending { it.deadline }
-                    ?.firstOrNull()
-                    ?.address
-
-                return AnalyticsViewItem.Preview(viewItems, subscriptionAddress)
+                return AnalyticsViewItem.Preview(viewItems)
             }
         } else if (item.analytics != null) {
             val viewItems = getViewItems(item.analytics)
@@ -464,13 +458,13 @@ class CoinAnalyticsViewModel(
     }
 
     private fun getFormattedSum(values: List<BigDecimal>, currency: Currency? = null): String {
-        return currency?.let { currency ->
+        return currency?.let {
             numberFormatter.formatFiatShort(values.sumOf { it }, currency.symbol, 2)
         } ?: numberFormatter.formatCoinShort(values.sumOf { it }, null, 0)
     }
 
     private fun getFormattedValue(value: BigDecimal, currency: Currency? = null): String {
-        return currency?.let { currency ->
+        return currency?.let {
             numberFormatter.formatFiatShort(value, currency.symbol, 2)
         } ?: numberFormatter.formatCoinShort(value, null, 0)
     }
