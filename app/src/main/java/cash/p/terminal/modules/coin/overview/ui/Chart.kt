@@ -310,6 +310,7 @@ fun PriceVolChart(
     }
 
     val mainCurveState = chartHelper.getMainCurveState()
+    val dominanceCurveState = chartHelper.getDominanceCurveState()
     val movingAverageCurveStates = chartHelper.getMovingAverageCurveStates()
     val volumeBarsState = chartHelper.getVolumeBarsState()
     val rsiCurveState = chartHelper.getRsiCurveState()
@@ -395,6 +396,18 @@ fun PriceVolChart(
                                 selectedItemKey = selectedItem?.timestamp
                             )
                         }
+                    }
+
+                    dominanceCurveState?.let {
+                        GraphicLine(
+                            Modifier.fillMaxSize(),
+                            dominanceCurveState.values,
+                            dominanceCurveState.startTimestamp,
+                            dominanceCurveState.endTimestamp,
+                            dominanceCurveState.minValue,
+                            dominanceCurveState.maxValue,
+                            ComposeAppTheme.colors.yellow50
+                        )
                     }
 
                     movingAverageCurveStates.forEach { maCurveState ->

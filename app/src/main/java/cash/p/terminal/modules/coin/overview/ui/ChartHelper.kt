@@ -21,6 +21,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     private var maxKey: Long = 0
 
     private val mainCurve: CurveAnimator2
+    private var dominanceCurve: CurveAnimator2? = null
     private val movingAverageCurves = mutableMapOf<String, CurveAnimator2>()
     private var volumeBars: CurveAnimatorBars? = null
     private var rsiCurve: CurveAnimator2? = null
@@ -46,6 +47,8 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             maxValue
         )
 
+        initDominanceCurve()
+
         initMovingAverages()
 
         initRsiCurve()
@@ -65,6 +68,19 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         }
 
         defineColors()
+    }
+
+    private fun initDominanceCurve() {
+        val dominanceValues = target.dominanceByTimestamp()
+        if (dominanceValues.isNotEmpty()) {
+            dominanceCurve = CurveAnimator2(
+                dominanceValues,
+                minKey,
+                maxKey,
+                dominanceValues.minOf { it.value },
+                dominanceValues.maxOf { it.value }
+            )
+        }
     }
 
     private fun defineColors() {
@@ -170,6 +186,10 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         return mainCurve.state
     }
 
+    fun getDominanceCurveState(): CurveAnimator2.UiState? {
+        return dominanceCurve?.state
+    }
+
     fun getVolumeBarsState(): CurveAnimatorBars.UiState? {
         return volumeBars?.state
     }
@@ -236,6 +256,21 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                     maxValue,
                 )
             }
+        }
+
+        val dominanceValues = target.dominanceByTimestamp()
+        if (dominanceValues.isEmpty()) {
+            dominanceCurve = null
+        } else if (dominanceCurve == null) {
+            initDominanceCurve()
+        } else {
+            dominanceCurve?.setTo(
+                dominanceValues,
+                minKey,
+                maxKey,
+                dominanceValues.minOf { it.value },
+                dominanceValues.maxOf { it.value }
+            )
         }
 
         if (target.rsi == null) {
@@ -320,6 +355,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
 
     fun onNextFrame(value: Float) {
         mainCurve.onNextFrame(value)
+        dominanceCurve?.onNextFrame(value)
         movingAverageCurves.forEach { (_, curve) ->
             curve.onNextFrame(value)
         }
