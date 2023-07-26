@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
@@ -28,8 +27,6 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsBlockH
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsChart
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContainer
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContentNumber
-import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsDataLockedBlockNoSubscription
-import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsDataLockedBlockNotActivated
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsFooterCell
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
@@ -40,7 +37,6 @@ import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
-import io.horizontalsystems.bankwallet.modules.subscription.ActivateSubscriptionFragment
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -58,9 +54,7 @@ fun CoinAnalyticsScreen(
     fragmentManager: FragmentManager
 ) {
     val viewModel = viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
-
     val uiState = viewModel.uiState
-    val uriHandler = LocalUriHandler.current
 
     HSSwipeRefresh(
         refreshing = uiState.isRefreshing,
@@ -84,13 +78,6 @@ fun CoinAnalyticsScreen(
                         is AnalyticsViewItem.Preview -> {
                             AnalyticsDataPreview(
                                 previewBlocks = item.blocks,
-                                subscriptionAddress = item.subscriptionAddress,
-                                onClickLearnMore = {
-                                    uriHandler.openUri(viewModel.analyticsLink)
-                                },
-                                onClickActivate = {
-                                    navController.slideFromBottom(R.id.activateSubscription, ActivateSubscriptionFragment.prepareParams(it))
-                                },
                                 navController = navController
                             )
                         }
@@ -136,25 +123,9 @@ private fun AnalyticsData(
 @Composable
 private fun AnalyticsDataPreview(
     previewBlocks: List<CoinAnalyticsModule.PreviewBlockViewItem>,
-    subscriptionAddress: String?,
-    onClickLearnMore: () -> Unit,
-    onClickActivate: (String) -> Unit,
     navController: NavController,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item {
-            if (subscriptionAddress != null) {
-                AnalyticsDataLockedBlockNotActivated(
-                    onClickActivate = {
-                        onClickActivate.invoke(subscriptionAddress)
-                    }
-                )
-            } else {
-                AnalyticsDataLockedBlockNoSubscription(
-                    onClickLearnMore = onClickLearnMore
-                )
-            }
-        }
         items(previewBlocks) { block ->
             AnalyticsPreviewBlock(block, navController)
         }
@@ -288,7 +259,7 @@ private fun FooterCell(
                 }
 
                 CoinAnalyticsModule.ActionType.Preview -> {
-
+                    navController.slideFromBottom(R.id.subscriptionInfoFragment)
                 }
             }
         }
