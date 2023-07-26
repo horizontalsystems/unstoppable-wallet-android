@@ -8,7 +8,7 @@ class ChartPoint(
 )
 
 sealed class ChartIndicator {
-    data class MovingAverage(val line: LinkedHashMap<Long, Float>, val color: String) : ChartIndicator()
+    data class MovingAverage(val line: LinkedHashMap<Long, Float>, val color: Long) : ChartIndicator()
     data class Rsi(val points: LinkedHashMap<Long, Float>) : ChartIndicator()
     data class Macd(
         val macdLine: LinkedHashMap<Long, Float>,

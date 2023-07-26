@@ -89,7 +89,7 @@ fun IndicatorsScreen(navController: NavController) {
                     leftIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_chart_type_2_24),
-                            tint = Color(android.graphics.Color.parseColor(indicatorDataMa.color)),
+                            tint = Color(indicatorDataMa.color),
                             contentDescription = null,
                         )
                     },
