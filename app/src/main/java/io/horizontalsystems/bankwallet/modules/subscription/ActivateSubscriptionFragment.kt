@@ -16,15 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -37,6 +38,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawren
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MessageToSign
+import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -55,35 +57,18 @@ class ActivateSubscriptionFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                val address = arguments?.getString(addressKey)
-
-                if (address == null) {
-                    HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
-
-                    navController.popBackStack()
-                } else {
-                    ActivateSubscriptionScreen(navController, address)
-                }
+                ActivateSubscriptionScreen(findNavController())
             }
         }
-    }
-
-    companion object {
-        private const val addressKey = "addressKey"
-
-        fun prepareParams(address: String) = bundleOf(addressKey to address)
     }
 }
 
 @Composable
-fun ActivateSubscriptionScreen(navController: NavController, address: String) {
-    val viewModel =
-        viewModel<ActivateSubscriptionViewModel>(factory = ActivateSubscriptionViewModel.Factory(address))
-
+fun ActivateSubscriptionScreen(navController: NavController) {
+    val viewModel = viewModel<ActivateSubscriptionViewModel>(factory = ActivateSubscriptionViewModel.Factory())
     val uiState = viewModel.uiState
-
     val view = LocalView.current
+    val uriHandler = LocalUriHandler.current
 
     LaunchedEffect(uiState.fetchingTokenSuccess) {
         if (uiState.fetchingTokenSuccess) {
@@ -119,11 +104,28 @@ fun ActivateSubscriptionScreen(navController: NavController, address: String) {
                     Loading()
                 }
                 uiState.fetchingMessageError?.let { error ->
-                    ListErrorView(
-                        errorText = error.message ?: error.javaClass.simpleName,
-                        icon = R.drawable.ic_error_48
-                    ) {
-                        viewModel.fetchMessageToSign()
+                    if (error is NoSubscription) {
+                        ScreenMessageWithAction(
+                            text = stringResource(R.string.ActivateSubscription_NoSubscriptionError),
+                            icon = R.drawable.ic_sync_error,
+                        ) {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 48.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.SubscriptionInfo_GetPremium),
+                                onClick = {
+                                    uriHandler.openUri(App.appConfigProvider.analyticsLink)
+                                }
+                            )
+                        }
+                    } else {
+                        ListErrorView(
+                            errorText = error.message ?: error.javaClass.simpleName,
+                            icon = R.drawable.ic_error_48
+                        ) {
+                            viewModel.retry()
+                        }
                     }
                 }
                 uiState.subscriptionInfo?.let { subscriptionInfo ->

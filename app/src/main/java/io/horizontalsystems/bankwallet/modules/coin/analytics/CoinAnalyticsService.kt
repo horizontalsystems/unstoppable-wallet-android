@@ -2,18 +2,23 @@ package io.horizontalsystems.bankwallet.modules.coin.analytics
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.InvalidAuthTokenException
+import io.horizontalsystems.bankwallet.core.NoAuthTokenException
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Analytics
+import io.horizontalsystems.marketkit.models.AnalyticsPreview
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
-import retrofit2.HttpException
 
 class CoinAnalyticsService(
     val fullCoin: FullCoin,
@@ -21,11 +26,8 @@ class CoinAnalyticsService(
     private val currencyManager: CurrencyManager,
     private val subscriptionManager: SubscriptionManager,
     private val accountManager: IAccountManager,
-    appConfigProvider: AppConfigProvider,
 ) {
     private val disposables = CompositeDisposable()
-
-    val analyticsLink = appConfigProvider.analyticsLink
 
     private val stateSubject = BehaviorSubject.create<DataState<AnalyticData>>()
     val stateObservable: Observable<DataState<AnalyticData>>
@@ -84,10 +86,15 @@ class CoinAnalyticsService(
     }
 
     private fun handleError(error: Throwable) {
-        if (error is HttpException && (error.code() == 401 || error.code() == 403)) {
-            preview()
-        } else {
-            stateSubject.onNext(DataState.Error(error))
+        when (error) {
+            is NoAuthTokenException,
+            is InvalidAuthTokenException -> {
+                preview()
+            }
+
+            else -> {
+                stateSubject.onNext(DataState.Error(error))
+            }
         }
     }
 

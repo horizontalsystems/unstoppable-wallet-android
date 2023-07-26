@@ -1469,8 +1469,6 @@
     <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
 
-    <string name="CoinAnalytics_PageLocked">This page available only for Unstoppable Wallet premium users</string>
-    <string name="CoinAnalytics_ActivateSubscription">Activate your subscription for getting access to analytics</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
     <string name="CoinAnalytics_ThreeDots" translatable="false">•••</string>
     <string name="CoinAnalytics_CexVolume">CEX Volume</string>
@@ -1530,6 +1528,17 @@
     <string name="ActivateSubscription_Address">Address</string>
     <string name="ActivateSubscription_MessageToSign">Message to Sign</string>
     <string name="ActivateSubscription_SignMessageDescription">You need to sign this message to activate your subscription</string>
+    <string name="ActivateSubscription_NoSubscriptionError">Your wallet address does not have a subscription to premium features, you need to purchase it to activate the subscription.</string>
+
+    <string name="SubscriptionInfo_Title">Premium Features</string>
+    <string name="SubscriptionInfo_Analytics_Title">Cryptocurrency Analytics</string>
+    <string name="SubscriptionInfo_Analytics_Info">Access comprehensive market and on-chain stats about each token.</string>
+    <string name="SubscriptionInfo_Indicators_Title">Price Trend Indicators</string>
+    <string name="SubscriptionInfo_Indicators_Info">Discover uptrending tokens based on technical analysis indicators.</string>
+    <string name="SubscriptionInfo_PersonalSupport_Title">Personal Support</string>
+    <string name="SubscriptionInfo_PersonalSupport_Info">Contact our team directly over Telegram for personal assistance.</string>
+    <string name="SubscriptionInfo_GetPremium">Get Premium</string>
+    <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
 
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">7D avg.</string>
