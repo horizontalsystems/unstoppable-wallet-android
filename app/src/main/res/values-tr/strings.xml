@@ -9,6 +9,7 @@
     <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Alert_Restart">Yeniden başlat</string>
     <string name="Action_Undo">GERİ ALMA</string>
+    <string name="Button_Show">Göster</string>
     <string name="Button_Cancel">İptal</string>
     <string name="Button_Next">İleri</string>
     <string name="Button_Enable">Etkinleştir</string>
