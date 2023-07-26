@@ -8,6 +8,7 @@
     <string name="Alert_Loading">درحال بارگذاری...</string>
     <string name="Alert_Restart">راه اندازی مجدد</string>
     <string name="Action_Undo">بازگرد</string>
+    <string name="Button_Show">نمایش</string>
     <string name="Button_Cancel">کنسل</string>
     <string name="Button_Next">بعدي</string>
     <string name="Button_Enable">فعال کردن</string>
