@@ -351,20 +351,15 @@ fun PriceVolChart(
                         }
                     }
 
-                    movingAverageCurveStates.forEach {
-                        val color = try {
-                            Color(android.graphics.Color.parseColor(it.color))
-                        } catch (e: Exception) {
-                            Color.Gray
-                        }
-
+                    movingAverageCurveStates.forEach { maCurveState ->
+                        val color = maCurveState.color?.let { Color(it) } ?: Color.Gray
                         GraphicLine(
                             Modifier.fillMaxSize(),
-                            it.values,
-                            it.startTimestamp,
-                            it.endTimestamp,
-                            it.minValue,
-                            it.maxValue,
+                            maCurveState.values,
+                            maCurveState.startTimestamp,
+                            maCurveState.endTimestamp,
+                            maCurveState.minValue,
+                            maCurveState.maxValue,
                             color
                         )
                     }
