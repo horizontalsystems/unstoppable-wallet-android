@@ -1,8 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.withdrawcex
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
+import io.horizontalsystems.bankwallet.modules.send.SendErrorInsufficientBalance
+import io.horizontalsystems.bankwallet.modules.send.SendErrorMaximumSendAmount
+import io.horizontalsystems.bankwallet.modules.send.SendErrorMinimumSendAmount
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -15,6 +21,7 @@ class CexWithdrawAmountService(
     private val freeBalance: BigDecimal,
     private var network: CexWithdrawNetwork,
     private val decimals: Int,
+    private val numberFormatter: IAppNumberFormatter
 ) {
     private var amount: BigDecimal? = null
     private var minAmount: BigDecimal? = null
@@ -112,7 +119,38 @@ class CexWithdrawAmountService(
             minAmount
         }
 
-        amountCaution = amountValidator.validate(amount, coinCode, availableBalance, minAmount?.stripTrailingZeros(), maxAmount?.stripTrailingZeros())
+        val amountCaution = amountValidator.validate(
+            coinAmount = amount,
+            coinCode = coinCode,
+            availableBalance = availableBalance,
+            minimumSendAmount = minAmount,
+            maximumSendAmount = maxAmount
+        )
+
+        this.amountCaution = when (amountCaution) {
+            is SendErrorInsufficientBalance -> {
+                HSCaution(TranslatableString.ResString(R.string.CexWithdraw_Error_NotEnoughBalance))
+            }
+
+            is SendErrorMinimumSendAmount -> {
+                minAmount?.let {
+                    val formattedMinAmount = numberFormatter.formatCoinShort(minAmount, coinCode, decimals)
+                    HSCaution(TranslatableString.ResString(R.string.CexWithdraw_Error_MinimumAmount, formattedMinAmount))
+
+                }
+            }
+
+            is SendErrorMaximumSendAmount -> {
+                maxAmount?.let { maxAmount ->
+                    val formattedMaxAmount = numberFormatter.formatCoinShort(maxAmount, coinCode, decimals)
+                    HSCaution(TranslatableString.ResString(R.string.CexWithdraw_Error_MaximumAmount, formattedMaxAmount))
+                }
+            }
+
+            else -> {
+                amountCaution
+            }
+        }
     }
 
     private fun BigDecimal.scaledDivide(divisor: BigDecimal) =

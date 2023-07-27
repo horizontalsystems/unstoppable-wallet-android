@@ -19,16 +19,23 @@ object WithdrawCexModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val amountValidator = AmountValidator()
-            val amountService = CexWithdrawAmountService(amountValidator, cexAsset.id, cexAsset.freeBalance, network, cexAsset.decimals)
+            val amountService = CexWithdrawAmountService(
+                amountValidator = amountValidator,
+                coinCode = cexAsset.id,
+                freeBalance = cexAsset.freeBalance,
+                network = network,
+                decimals = cexAsset.decimals,
+                numberFormatter = App.numberFormatter
+            )
 
             return WithdrawCexViewModel(
-                cexAsset,
-                network,
-                XRateService(App.marketKit, App.currencyManager.baseCurrency),
-                amountService,
-                CexWithdrawAddressService(),
-                cexProvider,
-                App.contactsRepository
+                cexAsset = cexAsset,
+                network = network,
+                xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency),
+                amountService = amountService,
+                addressService = CexWithdrawAddressService(network.blockchain),
+                cexProvider = cexProvider,
+                contactsRepository = App.contactsRepository
             ) as T
         }
     }
