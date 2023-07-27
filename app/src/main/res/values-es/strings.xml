@@ -1029,8 +1029,6 @@
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes que están siendo seguidos:</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">Blockchains seguidos: Ethereum, Binance Smart Chain, Optismo, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polígono</string>
-    <string name="CoinAnalytics_PageLocked">Esta página sólo está disponible para usuarios premium de Wallet imparables</string>
-    <string name="CoinAnalytics_ActivateSubscription">Activa tu suscripción para obtener acceso a analíticas</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Este proyecto no tiene datos analíticos</string>
     <string name="CoinAnalytics_CexVolume">Volumen CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Rango de Volumen CEX</string>
