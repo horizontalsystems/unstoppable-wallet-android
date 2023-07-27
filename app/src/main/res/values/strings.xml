@@ -1743,12 +1743,12 @@
     <string name="CexWithdraw_FeeFromAmount">Fee from amount</string>
     <string name="CexWithdraw_NetworkDescription">Ensure the network matches the withdrawal address and the deposit platform supports it.</string>
     <string name="CexWithdraw_SecurityVerification">Security Verification</string>
-    <string name="CexWithdraw_EmailVerificationCode">Email Verification Code</string>
-    <string name="CexWithdraw_GoogleAuthenticationCode">Google Authentication Code</string>
-    <string name="CexWithdraw_GetCode">Get Code</string>
+    <string name="CexWithdraw_EmailVerificationCode">Verification Code</string>
+    <string name="CexWithdraw_GoogleAuthenticationCode">Google Authenticator Code</string>
+    <string name="CexWithdraw_GetCode">Resend</string>
     <string name="CexWithdraw_GetCodeSeconds">%s sec</string>
     <string name="CexWithdraw_EmailVerificationInfo">Enter verification code sent to your email.</string>
-    <string name="CexWithdraw_GoogleAuthenticationInfo">Enter google authentication code from your Google Authenticator App</string>
+    <string name="CexWithdraw_GoogleAuthenticationInfo">Enter code from your Google Authenticator App.</string>
     <string name="CexWithdraw_Withdraw">Withdraw</string>
     <string name="CexWithdraw_WithdrawSuccess">Success</string>
 

@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -81,11 +82,9 @@ fun CoinzixVerificationScreen(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             hint = stringResource(R.string.CexWithdraw_EmailVerificationCode),
                             state = null,
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             actionButtonState = uiState.resendButtonState,
-                            onValueChange = {
-                                viewModel.onEnterEmailCode(it)
+                            onValueChange = { v ->
+                                viewModel.onEnterEmailCode(v)
                             },
                             actionButtonClick = {
                                 viewModel.onResendEmailCode()
@@ -98,15 +97,15 @@ fun CoinzixVerificationScreen(
                     }
 
                     if (uiState.googleCodeEnabled) {
-                        AuthenticationCodeInput(
+                        FormsInput(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             hint = stringResource(R.string.CexWithdraw_GoogleAuthenticationCode),
-                            state = null,
+                            pasteEnabled = true,
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            onValueChange = {
-                                viewModel.onEnterTwoFactorCode(it)
-                            },
+                            onValueChange = { v ->
+                                viewModel.onEnterTwoFactorCode(v)
+                            }
                         )
                         InfoText(
                             text = stringResource(R.string.CexWithdraw_GoogleAuthenticationInfo)
