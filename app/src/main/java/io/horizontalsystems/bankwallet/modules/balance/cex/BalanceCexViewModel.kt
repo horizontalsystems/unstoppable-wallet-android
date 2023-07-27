@@ -11,15 +11,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
 import io.horizontalsystems.bankwallet.core.providers.ICexProvider
-import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewHelper
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
-import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
-import io.horizontalsystems.bankwallet.modules.balance.ITotalBalance
-import io.horizontalsystems.bankwallet.modules.balance.TotalBalance
-import io.horizontalsystems.bankwallet.modules.balance.TotalService
+import io.horizontalsystems.bankwallet.modules.balance.*
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -50,7 +42,6 @@ class BalanceCexViewModel(
     private var viewItems = mutableListOf<BalanceCexViewItem>()
     private var isActiveScreen = false
     private var withdrawEnabled = false
-    private var depositEnabled = false
 
     var uiState by mutableStateOf(
         UiState(
@@ -59,7 +50,6 @@ class BalanceCexViewModel(
             sortType = sortType,
             isActiveScreen = isActiveScreen,
             withdrawEnabled = withdrawEnabled,
-            depositEnabled = depositEnabled,
         )
     )
         private set
@@ -162,7 +152,6 @@ class BalanceCexViewModel(
         }
 
         withdrawEnabled = items?.any { it.withdrawEnabled } ?: false
-        depositEnabled = items?.any { it.depositEnabled } ?: false
 
         refreshTotalBalance()
         emitState()
@@ -227,7 +216,6 @@ class BalanceCexViewModel(
                 sortType = sortType,
                 isActiveScreen = isActiveScreen,
                 withdrawEnabled = withdrawEnabled,
-                depositEnabled = depositEnabled,
             )
         }
     }
@@ -283,8 +271,7 @@ data class UiState(
     val viewItems: List<BalanceCexViewItem>,
     val sortType: BalanceSortType,
     val isActiveScreen: Boolean,
-    val withdrawEnabled: Boolean,
-    val depositEnabled: Boolean
+    val withdrawEnabled: Boolean
 )
 
 data class BalanceCexViewItem(
