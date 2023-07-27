@@ -130,7 +130,8 @@ fun CoinzixWithdrawNavHost(
             WithdrawCexConfirmScreen(
                 mainViewModel = viewModel,
                 openVerification = { withdraw ->
-                    navController.navigate("withdraw-verification/${withdraw.withdrawId}?steps=${withdraw.twoFactorTypes.joinToString { "${it.code}" }}")
+                    val steps = withdraw.twoFactorTypes.joinToString(separator = ",") { "${it.code}" }
+                    navController.navigate("withdraw-verification/${withdraw.withdrawId}?steps=$steps")
                 },
                 onNavigateBack = { navController.popBackStack() },
                 onClose = { fragmentNavController.popBackStack() },
