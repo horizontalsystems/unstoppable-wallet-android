@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -48,15 +47,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
@@ -80,7 +79,7 @@ fun DepositQrCodeScreen(
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-    if(address?.tag != null && address.tag.isNotEmpty()) {
+    if (address?.tag != null && address.tag.isNotEmpty()) {
         LaunchedEffect(Unit) {
             modalBottomSheetState.show()
         }
@@ -92,7 +91,7 @@ fun DepositQrCodeScreen(
             sheetBackgroundColor = ComposeAppTheme.colors.transparent,
             sheetContent = {
                 WarningBottomSheet(
-                    text = stringResource(R.string.CexDeposit_MemoAlertText,),
+                    text = stringResource(R.string.CexDeposit_MemoAlertText),
                     onButtonClick = {
                         coroutineScope.launch { modalBottomSheetState.hide() }
                     }
@@ -203,7 +202,7 @@ fun DepositQrCodeScreen(
                                     }
                                 }
 
-                                CellSingleLineLawrenceSection(composableItems = composableItems)
+                                CellUniversalLawrenceSection(composableItems = composableItems)
 
                                 if (address.tag.isNotEmpty()) {
                                     TextImportantError(
@@ -261,18 +260,15 @@ private fun DetailCell(
     value: String,
     onCopy: (() -> Unit)? = null
 ) {
-    Row(
+    RowUniversal(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp)
     ) {
-        body_grey(text = title)
-
+        subhead2_grey(title)
+        HSpacer(16.dp)
         subhead1_leah(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
+            modifier = Modifier.weight(1f),
             text = value,
             textAlign = TextAlign.End,
         )
