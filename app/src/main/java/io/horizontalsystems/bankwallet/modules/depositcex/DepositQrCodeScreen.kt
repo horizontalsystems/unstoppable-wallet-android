@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -48,15 +47,15 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantError
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_grey
 import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.BottomSheetHeader
@@ -80,7 +79,7 @@ fun DepositQrCodeScreen(
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-    if(address?.tag != null && address.tag.isNotEmpty()) {
+    if (address?.tag != null && address.tag.isNotEmpty()) {
         LaunchedEffect(Unit) {
             modalBottomSheetState.show()
         }
@@ -92,7 +91,7 @@ fun DepositQrCodeScreen(
             sheetBackgroundColor = ComposeAppTheme.colors.transparent,
             sheetContent = {
                 WarningBottomSheet(
-                    text = stringResource(R.string.CexDeposit_MemoAlertText,),
+                    text = stringResource(R.string.CexDeposit_MemoAlertText),
                     onButtonClick = {
                         coroutineScope.launch { modalBottomSheetState.hide() }
                     }
@@ -203,7 +202,7 @@ fun DepositQrCodeScreen(
                                     }
                                 }
 
-                                CellSingleLineLawrenceSection(composableItems = composableItems)
+                                CellUniversalLawrenceSection(composableItems = composableItems)
 
                                 if (address.tag.isNotEmpty()) {
                                     TextImportantError(
@@ -261,18 +260,15 @@ private fun DetailCell(
     value: String,
     onCopy: (() -> Unit)? = null
 ) {
-    Row(
+    RowUniversal(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp)
     ) {
-        body_grey(text = title)
-
+        subhead2_grey(title)
+        HSpacer(16.dp)
         subhead1_leah(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
+            modifier = Modifier.weight(1f),
             text = value,
             textAlign = TextAlign.End,
         )
