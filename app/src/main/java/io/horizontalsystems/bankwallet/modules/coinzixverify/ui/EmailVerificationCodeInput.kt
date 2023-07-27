@@ -14,14 +14,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -29,6 +34,7 @@ import cash.p.terminal.R
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.FormsInputStateWarning
 
@@ -42,9 +48,8 @@ fun EmailVerificationCodeInput(
     modifier: Modifier = Modifier,
     hint: String,
     state: DataState<Any>? = null,
-    singleLine: Boolean = false,
+    singleLine: Boolean = true,
     maxLength: Int? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     actionButtonState: CodeGetButtonState,
     onValueChange: (String) -> Unit,
     actionButtonClick: () -> Unit,
@@ -67,6 +72,8 @@ fun EmailVerificationCodeInput(
         is CodeGetButtonState.Pending -> stringResource(R.string.CexWithdraw_GetCodeSeconds, actionButtonState.secondsLeft)
     }
 
+    val focusRequester = remember { FocusRequester() }
+
     Column(modifier) {
         Row(
             modifier = Modifier
@@ -83,6 +90,7 @@ fun EmailVerificationCodeInput(
 
             BasicTextField(
                 modifier = Modifier
+                    .focusRequester(focusRequester)
                     .padding(horizontal = 16.dp, vertical = 12.dp)
                     .weight(1f),
                 value = textState,
@@ -115,15 +123,40 @@ fun EmailVerificationCodeInput(
                     }
                     innerTextField()
                 },
-                keyboardOptions = keyboardOptions,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
-            ButtonSecondaryDefault(
-                modifier = Modifier.padding(end = 16.dp),
-                title = actionButtonText,
-                enabled = actionButtonState == CodeGetButtonState.Active,
-                onClick = actionButtonClick,
-            )
+            if (textState.text.isNotEmpty()) {
+                ButtonSecondaryCircle(
+                    modifier = Modifier.padding(end = 16.dp),
+                    icon = R.drawable.ic_delete_20,
+                    onClick = {
+                        textState = TextFieldValue(text = "")
+                        onValueChange.invoke("")
+
+                        focusRequester.requestFocus()
+                    }
+                )
+            } else {
+                ButtonSecondaryDefault(
+                    modifier = Modifier.padding(end = 8.dp),
+                    title = actionButtonText,
+                    enabled = actionButtonState == CodeGetButtonState.Active,
+                    onClick = actionButtonClick,
+                )
+
+                val clipboardManager = LocalClipboardManager.current
+                ButtonSecondaryDefault(
+                    modifier = Modifier.padding(end = 16.dp),
+                    title = stringResource(id = R.string.Send_Button_Paste),
+                    onClick = {
+                        clipboardManager.getText()?.text?.let { textInClipboard ->
+                            textState = textState.copy(text = textInClipboard, selection = TextRange(textInClipboard.length))
+                            onValueChange.invoke(textInClipboard)
+                        }
+                    },
+                )
+            }
         }
     }
 }
