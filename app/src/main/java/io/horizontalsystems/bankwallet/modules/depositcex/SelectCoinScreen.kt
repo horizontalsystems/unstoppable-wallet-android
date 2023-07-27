@@ -25,8 +25,9 @@ fun SelectCoinScreen(
     onClose: () -> Unit,
     itemIsSuspended: (DepositCexModule.CexCoinViewItem) -> Boolean,
     openNetworkSelect: (CexAsset) -> Unit,
+    withBalance: Boolean
 ) {
-    val viewModel = viewModel<SelectCexAssetViewModel>(factory = SelectCexAssetViewModel.Factory())
+    val viewModel = viewModel<SelectCexAssetViewModel>(factory = SelectCexAssetViewModel.Factory(withBalance))
 
     val uiState = viewModel.uiState
 

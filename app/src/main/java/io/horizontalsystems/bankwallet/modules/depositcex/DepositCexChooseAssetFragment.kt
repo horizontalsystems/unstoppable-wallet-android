@@ -42,6 +42,7 @@ fun DepositCexChooseAssetScreen(navController: NavController) {
             openNetworkSelect = { cexAsset ->
                 navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(cexAsset))
             },
+            withBalance = false
         )
     }
 }

@@ -44,6 +44,7 @@ fun WithdrawCexChooseAssetScreen(navController: NavController) {
             openNetworkSelect = { cexAsset ->
                 navController.slideFromRight(R.id.withdrawCexFragment, WithdrawCexFragment.args(cexAsset))
             },
+            withBalance = true
         )
     }
 }
