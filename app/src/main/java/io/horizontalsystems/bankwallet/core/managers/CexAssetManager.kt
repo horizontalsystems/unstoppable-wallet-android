@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexAssetRaw
 import io.horizontalsystems.bankwallet.core.storage.CexAssetsDao
 import io.horizontalsystems.bankwallet.entities.Account
+import java.math.BigDecimal
 
 class CexAssetManager(marketKit: MarketKitWrapper, private val cexAssetsDao: CexAssetsDao) {
 
@@ -37,6 +38,14 @@ class CexAssetManager(marketKit: MarketKitWrapper, private val cexAssetsDao: Cex
 
     fun getAllForAccount(account: Account): List<CexAsset> {
         return cexAssetsDao.getAllForAccount(account.id)
+            .map {
+                buildCexAsset(it)
+            }
+    }
+
+    fun getWithBalance(account: Account): List<CexAsset> {
+        return cexAssetsDao.getAllForAccount(account.id)
+            .filter { it.freeBalance > BigDecimal.ZERO }
             .map {
                 buildCexAsset(it)
             }

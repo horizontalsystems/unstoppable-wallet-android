@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
 
 class SelectCexAssetViewModel(
     private val cexAssetManager: CexAssetManager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val withBalance: Boolean
 ) : ViewModel() {
     private var allItems: List<DepositCexModule.CexCoinViewItem> = listOf()
     private var loading = true
@@ -37,18 +38,22 @@ class SelectCexAssetViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             allItems = accountManager.activeAccount?.let {
-                cexAssetManager.getAllForAccount(it)
-                    .map { cexAsset ->
-                        DepositCexModule.CexCoinViewItem(
-                            title = cexAsset.id,
-                            subtitle = cexAsset.name,
-                            coinIconUrl = cexAsset.coin?.imageUrl,
-                            coinIconPlaceholder = R.drawable.coin_placeholder,
-                            cexAsset = cexAsset,
-                            depositEnabled = cexAsset.depositEnabled,
-                            withdrawEnabled = cexAsset.withdrawEnabled,
-                        )
-                    }
+                val assets = if (withBalance)
+                    cexAssetManager.getWithBalance(it)
+                else
+                    cexAssetManager.getAllForAccount(it)
+
+                assets.map { cexAsset ->
+                    DepositCexModule.CexCoinViewItem(
+                        title = cexAsset.id,
+                        subtitle = cexAsset.name,
+                        coinIconUrl = cexAsset.coin?.imageUrl,
+                        coinIconPlaceholder = R.drawable.coin_placeholder,
+                        cexAsset = cexAsset,
+                        depositEnabled = cexAsset.depositEnabled,
+                        withdrawEnabled = cexAsset.withdrawEnabled,
+                    )
+                }
                     .sortedBy { it.title }
             } ?: listOf()
 
@@ -78,10 +83,10 @@ class SelectCexAssetViewModel(
         }
     }
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val withBalance: Boolean) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SelectCexAssetViewModel(App.cexAssetManager, App.accountManager) as T
+            return SelectCexAssetViewModel(App.cexAssetManager, App.accountManager, withBalance) as T
         }
     }
 }
