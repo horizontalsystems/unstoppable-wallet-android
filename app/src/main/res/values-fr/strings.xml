@@ -1048,8 +1048,6 @@
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total des revenus générés pour les détenteurs de tokens sur une période de 30 jours. Généralement, les frais sont perçus par les détenteurs de tokens ou bien par le biais d\'un mécanisme de brûlage de tokens.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info2">Classement du token basé sur les revenus générés sur une période de 30 jours pour les stakers de token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Liste de tous les tokens classés en fonction des revenus générés pour les stakers de tokens sur des intervalles de 24h / 7J / 1M.</string>
-    <string name="CoinAnalytics_PageLocked">Cette page n\'est disponible que pour les utilisateurs Premium Unstoppable Wallet</string>
-    <string name="CoinAnalytics_ActivateSubscription">Activez votre abonnement pour avoir accès aux analyses</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Ce projet n\'a pas de données d\'analyse</string>
     <string name="CoinAnalytics_CexVolume">Volume CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Rang de volume CEX</string>
