@@ -7,9 +7,26 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.core.bep2TokenUrl
+import cash.p.terminal.core.coinSettingType
+import cash.p.terminal.core.eip20TokenUrl
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.isSupported
+import cash.p.terminal.core.order
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.*
+import cash.p.terminal.core.shorten
+import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.supports
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.AccountType
+import cash.p.terminal.entities.BitcoinCashCoinType
+import cash.p.terminal.entities.CoinSettingType
+import cash.p.terminal.entities.CoinSettings
+import cash.p.terminal.entities.ConfiguredToken
+import cash.p.terminal.entities.ViewState
+import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -45,9 +62,7 @@ class CoinOverviewViewModel(
     private var hudMessage: HudMessage? = null
         set(value) {
             field = value
-            value?.let {
-                showHudMessage = it
-            }
+            showHudMessage = value
         }
     private var fullCoin = service.fullCoin
     private var activeAccount = accountManager.activeAccount
@@ -76,7 +91,7 @@ class CoinOverviewViewModel(
             .subscribeIO { wallets ->
                 if (wallets.size > activeWallets.size) {
                     hudMessage = HudMessage(R.string.Hud_Added_To_Wallet, HudMessageType.Success, R.drawable.ic_add_to_wallet_2_24)
-                } else if(wallets.size < activeWallets.size) {
+                } else if (wallets.size < activeWallets.size) {
                     hudMessage = HudMessage(R.string.Hud_Removed_From_Wallet, HudMessageType.Error, R.drawable.ic_empty_wallet_24)
                 }
 
@@ -135,8 +150,8 @@ class CoinOverviewViewModel(
 
         fullCoin.tokens.sortedBy { it.blockchainType.order }.forEach { token ->
             val canAddToWallet = accountTypeNotWatch != null
-                && token.isSupported
-                && token.blockchainType.supports(accountTypeNotWatch)
+                    && token.isSupported
+                    && token.blockchainType.supports(accountTypeNotWatch)
 
             when (val tokenType = token.type) {
                 is TokenType.Eip20 -> {
@@ -156,6 +171,7 @@ class CoinOverviewViewModel(
                         )
                     )
                 }
+
                 is TokenType.Bep2 -> {
                     val configuredToken = ConfiguredToken(token)
                     val inWallet =
@@ -173,6 +189,7 @@ class CoinOverviewViewModel(
                         )
                     )
                 }
+
                 is TokenType.Spl -> {
                     val configuredToken = ConfiguredToken(token)
                     val inWallet =
@@ -190,6 +207,7 @@ class CoinOverviewViewModel(
                         )
                     )
                 }
+
                 TokenType.Native -> when (token.blockchainType.coinSettingType) {
                     CoinSettingType.derivation -> {
                         type = TokenVariants.Type.Bips
@@ -214,6 +232,7 @@ class CoinOverviewViewModel(
                             )
                         }
                     }
+
                     CoinSettingType.bitcoinCashCoinType -> {
                         type = TokenVariants.Type.CoinTypes
 
@@ -237,6 +256,7 @@ class CoinOverviewViewModel(
                             )
                         }
                     }
+
                     null -> {
                         val configuredToken = ConfiguredToken(token)
                         val inWallet =
@@ -255,6 +275,7 @@ class CoinOverviewViewModel(
                         )
                     }
                 }
+
                 is TokenType.Unsupported -> {
                     val configuredToken = ConfiguredToken(token)
                     items.add(
