@@ -1744,6 +1744,7 @@
     <string name="CexWithdraw_Title">Withdraw %s</string>
     <string name="CexWithdraw_Network">Network</string>
     <string name="CexWithdraw_FeeFromAmount">Fee from amount</string>
+    <string name="CexWithdraw_Fee">Fee</string>
     <string name="CexWithdraw_NetworkDescription">Ensure the network matches the withdrawal address and the deposit platform supports it.</string>
     <string name="CexWithdraw_SecurityVerification">Security Verification</string>
     <string name="CexWithdraw_EmailVerificationCode">Verification Code</string>
@@ -1754,6 +1755,9 @@
     <string name="CexWithdraw_GoogleAuthenticationInfo">Enter code from your Google Authenticator App.</string>
     <string name="CexWithdraw_Withdraw">Withdraw</string>
     <string name="CexWithdraw_WithdrawSuccess">Success</string>
+    <string name="CexWithdraw_Error_NotEnoughBalance">Not enough available balance</string>
+    <string name="CexWithdraw_Error_MinimumAmount">The minimum amount you can withdraw is %s</string>
+    <string name="CexWithdraw_Error_MaximumAmount">The maximum amount you can withdraw is %s</string>
 
 
 </resources>

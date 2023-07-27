@@ -33,10 +33,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CexWithdrawAddressService {
-
+class CexWithdrawAddressService(
+    blockchain: Blockchain?
+) {
     private var address: String? = null
-    private var addressParser: ContactAddressParser? = null
+    private var addressParser: ContactAddressParser? = blockchain?.let { addressParser(blockchain) }
     private var state: DataState<Address>? = null
         set(value) {
             field = value

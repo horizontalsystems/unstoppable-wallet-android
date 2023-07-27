@@ -145,11 +145,11 @@ fun WithdrawCexScreen(
                     listOf(
                         {
                             FeeCell(
-                                title = stringResource(R.string.FeeSettings_NetworkFee),
-                                info = stringResource(R.string.FeeSettings_NetworkFee_Info),
+                                title = stringResource(R.string.CexWithdraw_Fee),
+                                info = "",
                                 value = uiState.feeItem,
                                 viewState = null,
-                                navController = fragmentNavController
+                                navController = null
                             )
                         },
                         {
