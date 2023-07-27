@@ -11,15 +11,7 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.ICexProvider
-import cash.p.terminal.modules.balance.BalanceSortType
-import cash.p.terminal.modules.balance.BalanceViewHelper
-import cash.p.terminal.modules.balance.BalanceViewType
-import cash.p.terminal.modules.balance.BalanceViewTypeManager
-import cash.p.terminal.modules.balance.BalanceXRateRepository
-import cash.p.terminal.modules.balance.DeemedValue
-import cash.p.terminal.modules.balance.ITotalBalance
-import cash.p.terminal.modules.balance.TotalBalance
-import cash.p.terminal.modules.balance.TotalService
+import cash.p.terminal.modules.balance.*
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -50,7 +42,6 @@ class BalanceCexViewModel(
     private var viewItems = mutableListOf<BalanceCexViewItem>()
     private var isActiveScreen = false
     private var withdrawEnabled = false
-    private var depositEnabled = false
 
     var uiState by mutableStateOf(
         UiState(
@@ -59,7 +50,6 @@ class BalanceCexViewModel(
             sortType = sortType,
             isActiveScreen = isActiveScreen,
             withdrawEnabled = withdrawEnabled,
-            depositEnabled = depositEnabled,
         )
     )
         private set
@@ -162,7 +152,6 @@ class BalanceCexViewModel(
         }
 
         withdrawEnabled = items?.any { it.withdrawEnabled } ?: false
-        depositEnabled = items?.any { it.depositEnabled } ?: false
 
         refreshTotalBalance()
         emitState()
@@ -227,7 +216,6 @@ class BalanceCexViewModel(
                 sortType = sortType,
                 isActiveScreen = isActiveScreen,
                 withdrawEnabled = withdrawEnabled,
-                depositEnabled = depositEnabled,
             )
         }
     }
@@ -283,8 +271,7 @@ data class UiState(
     val viewItems: List<BalanceCexViewItem>,
     val sortType: BalanceSortType,
     val isActiveScreen: Boolean,
-    val withdrawEnabled: Boolean,
-    val depositEnabled: Boolean
+    val withdrawEnabled: Boolean
 )
 
 data class BalanceCexViewItem(

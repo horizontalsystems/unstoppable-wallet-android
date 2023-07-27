@@ -112,7 +112,6 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                 ButtonPrimaryDefault(
                                     modifier = Modifier.weight(1f),
                                     title = stringResource(R.string.Balance_Deposit),
-                                    enabled = uiState.depositEnabled,
                                     onClick = {
                                         navController.slideFromRight(R.id.depositCexChooseAssetFragment)
                                     }
@@ -127,22 +126,24 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                             )
                         }
 
-                        stickyHeader {
-                            HeaderSorting {
-                                BalanceSortingSelector(
-                                    sortType = uiState.sortType,
-                                    sortTypes = viewModel.sortTypes,
-                                    onSelectSortType = viewModel::onSelectSortType
-                                )
+                        if (uiState.viewItems.isNotEmpty()) {
+                            stickyHeader {
+                                HeaderSorting {
+                                    BalanceSortingSelector(
+                                        sortType = uiState.sortType,
+                                        sortTypes = viewModel.sortTypes,
+                                        onSelectSortType = viewModel::onSelectSortType
+                                    )
+                                }
                             }
-                        }
 
-                        wallets(
-                            items = uiState.viewItems,
-                            key = { it.assetId },
-                        ) { item ->
-                            BalanceCardCex(navController, item) {
-                                viewModel.onClickItem(item)
+                            wallets(
+                                items = uiState.viewItems,
+                                key = { it.assetId },
+                            ) { item ->
+                                BalanceCardCex(navController, item) {
+                                    viewModel.onClickItem(item)
+                                }
                             }
                         }
                     }
