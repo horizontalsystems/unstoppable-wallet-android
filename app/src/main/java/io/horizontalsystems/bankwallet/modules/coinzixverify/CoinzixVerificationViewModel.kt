@@ -124,15 +124,9 @@ class CoinzixVerificationViewModel(
                 loading = true
                 emitState()
 
-                val tmpEmailCode = emailCode
+                verifyService.verify(emailCode, twoFactorCode)
 
-                if (tmpEmailCode == null) {
-                    throw IllegalStateException()
-                } else {
-                    verifyService.verify(tmpEmailCode, twoFactorCode)
-
-                    success = true
-                }
+                success = true
             } catch (err: Throwable) {
                 loading = false
                 error = err

@@ -51,12 +51,12 @@ class DepositCexFragment : BaseFragment() {
 
                     if (cexAsset != null) {
                         val networks = cexAsset.depositNetworks
-                        if (networks.isEmpty() || network != null) {
+                        if (networks.isEmpty() || network != null || networks.size == 1) {
                             DepositQrCodeScreen(
                                 cexAsset = cexAsset,
                                 onNavigateBack = if (navigatedFromMain) null else navigateBack,
                                 onClose = { navController.popBackStack(R.id.mainFragment, false) },
-                                network = network
+                                network = network ?: networks.firstOrNull()
                             )
                         } else {
                             SelectNetworkScreen(
