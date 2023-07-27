@@ -45,12 +45,18 @@ class ChartIndicatorsViewModel(
         }
     }
 
-    fun enable(indicatorId: String) {
-        chartIndicatorManager.enableIndicator(indicatorId)
+    fun enable(indicator: ChartIndicatorSetting) {
+        chartIndicatorManager.enableIndicator(indicator.id)
+
+        if (oscillatorIndicators.contains(indicator)) {
+            oscillatorIndicators.minus(indicator).forEach {
+                chartIndicatorManager.disableIndicator(it.id)
+            }
+        }
     }
 
-    fun disable(indicatorId: String) {
-        chartIndicatorManager.disableIndicator(indicatorId)
+    fun disable(indicator: ChartIndicatorSetting) {
+        chartIndicatorManager.disableIndicator(indicator.id)
     }
 
     class Factory : ViewModelProvider.Factory {
