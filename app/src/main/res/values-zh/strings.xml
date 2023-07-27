@@ -1089,8 +1089,6 @@
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">正在追踪的DEX：</string>
     <string name="CoinAnalytics_TransactionCount_Info5">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">已追踪区块链：以太坊、币安智能链、Optimism、Arbitrum、Celo、Cronos、Avalanche、Fantom、Polygon</string>
-    <string name="CoinAnalytics_PageLocked">此页面仅对Unstoppable钱包的高级用户开放</string>
-    <string name="CoinAnalytics_ActivateSubscription">请激活您的订阅以获取分析权限</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">此项目没有分析数据</string>
     <string name="CoinAnalytics_CexVolume">CEX交易量</string>
     <string name="CoinAnalytics_CexVolumeRank">CEX交易量排名</string>
