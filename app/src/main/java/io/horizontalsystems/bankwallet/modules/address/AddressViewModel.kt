@@ -10,6 +10,8 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -26,6 +28,7 @@ class AddressViewModel(
     var value by mutableStateOf(initial?.hex ?: "")
         private set
     private val addressHandlers = mutableListOf<IAddressHandler>()
+    private var parseAddressJob: Job? = null
 
     fun addAddressHandler(handler: IAddressHandler) {
         addressHandlers.add(handler)
@@ -34,8 +37,9 @@ class AddressViewModel(
     fun hasContacts() =
         contactsRepository.getContactsFiltered(blockchainType).isNotEmpty()
 
-    fun parseAddressX(value: String) {
+    fun parseAddress(value: String) {
         this.value = value
+        parseAddressJob?.cancel()
 
         if (value.isBlank()) {
             inputState = null
@@ -47,7 +51,7 @@ class AddressViewModel(
 
         inputState = DataState.Loading
 
-        viewModelScope.launch(Dispatchers.IO) {
+        parseAddressJob = viewModelScope.launch(Dispatchers.IO) {
             val handler = addressHandlers.firstOrNull {
                 try {
                     it.isSupported(vTrimmed)
@@ -55,17 +59,22 @@ class AddressViewModel(
                     false
                 }
             } ?: run {
-                inputState = DataState.Error(AddressValidationException.Unsupported())
+                ensureActive()
+                withContext(Dispatchers.Main) {
+                    inputState = DataState.Error(AddressValidationException.Unsupported())
+                }
                 return@launch
             }
 
             try {
                 val parsedAddress = handler.parseAddress(vTrimmed)
+                ensureActive()
                 withContext(Dispatchers.Main) {
                     address = parsedAddress
                     inputState = DataState.Success(parsedAddress)
                 }
             } catch (t: Throwable) {
+                ensureActive()
                 withContext(Dispatchers.Main) {
                     inputState = DataState.Error(t)
                 }

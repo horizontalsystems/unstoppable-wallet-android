@@ -73,6 +73,6 @@ fun HSAddressInput(
         chooseContactEnable = viewModel.hasContacts(),
         blockchainType = viewModel.blockchainType,
     ) {
-        viewModel.parseAddressX(it)
+        viewModel.parseAddress(it)
     }
 }
