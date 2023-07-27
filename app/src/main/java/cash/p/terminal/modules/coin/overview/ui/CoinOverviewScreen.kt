@@ -138,9 +138,9 @@ fun CoinOverviewScreen(
                                 CellUniversalLawrenceSection {
                                     RowUniversal(
                                         modifier = Modifier
+                                            .height(52.dp)
                                             .fillMaxWidth()
                                             .padding(horizontal = 16.dp),
-                                        verticalPadding = 12.dp
                                     ) {
                                         subhead2_grey(text = stringResource(R.string.CoinPage_Indicators))
                                         Spacer(modifier = Modifier.weight(1f))
