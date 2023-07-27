@@ -29,7 +29,16 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class IndicatorsFragment : BaseFragment() {
 
@@ -58,11 +67,11 @@ fun IndicatorsScreen(navController: NavController) {
     val chartIndicatorsViewModel = viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
 
     val uiState = chartIndicatorsViewModel.uiState
-    val toggleIndicator = { indicatorId: String, checked: Boolean ->
+    val toggleIndicator = { indicator: ChartIndicatorSetting, checked: Boolean ->
         if (checked) {
-            chartIndicatorsViewModel.enable(indicatorId)
+            chartIndicatorsViewModel.enable(indicator)
         } else {
-            chartIndicatorsViewModel.disable(indicatorId)
+            chartIndicatorsViewModel.disable(indicator)
         }
     }
 
@@ -94,7 +103,7 @@ fun IndicatorsScreen(navController: NavController) {
                         )
                     },
                     onCheckedChange = {
-                        toggleIndicator.invoke(indicator.id, it)
+                        toggleIndicator.invoke(indicator, it)
                     },
                     onEditClick = {
                         navController.slideFromRight(R.id.indicatorSettingsFragment, IndicatorSettingsFragment.params(indicator.id))
@@ -110,7 +119,7 @@ fun IndicatorsScreen(navController: NavController) {
                     title = indicator.name,
                     checked = indicator.enabled,
                     onCheckedChange = {
-                        toggleIndicator.invoke(indicator.id, it)
+                        toggleIndicator.invoke(indicator, it)
                     },
                     onEditClick = {
                         navController.slideFromRight(R.id.indicatorSettingsFragment, IndicatorSettingsFragment.params(indicator.id))
