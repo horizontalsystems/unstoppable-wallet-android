@@ -272,7 +272,9 @@ fun Chart(
                         HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
 
                         val loadingModifier = if (uiState.loading) Modifier.alpha(0.5f) else Modifier
-                        Box(loadingModifier) {
+                        Box(
+                            modifier = loadingModifier.fillMaxWidth()
+                        ) {
                             PriceVolChart(
                                 chartInfoData = uiState.chartInfoData,
                                 hasVolumes = uiState.hasVolumes,
