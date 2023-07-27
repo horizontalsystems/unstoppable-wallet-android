@@ -11,8 +11,8 @@ sealed class Cex {
 
     companion object {
         fun all() = listOf(
-            CexCoinzix(),
             CexBinance(),
+            CexCoinzix(),
         )
 
         fun getById(cexId: String) = all().find {
