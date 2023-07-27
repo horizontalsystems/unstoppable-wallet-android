@@ -1094,8 +1094,6 @@
     <string name="CoinAnalytics_ProjectRevenue_Info1">Receita total gerada para holders do token em um período de 30 dias. Normalmente, as taxas são coletadas por stakers do token ou por meio de um mecanismo de queima de token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info2">Classificação do token com base na receita gerada ao longo de um período de 30 dias para stakers do token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Lista de todos os tokens classificados com base na receita gerada para stakers do token em intervalos de 24h / 7D / 1M.</string>
-    <string name="CoinAnalytics_PageLocked">Esta página está disponível apenas para usuários premium da Carteira Unstoppable</string>
-    <string name="CoinAnalytics_ActivateSubscription">Ativar sua assinatura para ter acesso ao Analytics</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Este projeto não tem dados analíticos</string>
     <string name="CoinAnalytics_CexVolume">Volume CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Ranking do Volume CEX</string>
