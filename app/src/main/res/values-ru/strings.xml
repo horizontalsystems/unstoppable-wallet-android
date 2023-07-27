@@ -1133,8 +1133,6 @@
     <string name="CoinAnalytics_ProjectRevenue_Info1">Общая прибыль, полученная владельцами токенов за 30-дневный период. Как правило, плата взимается стейкерами токенов или посредством сжигания токенов.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info2">Рейтинг токена основан на доходе, полученном стейкерами токенов за 30-дневный период.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Список всех токенов, ранжированных на основе пассивного дохода стейкеров токенов с интервалом 24ч. / 7 дн. / 1 мес.</string>
-    <string name="CoinAnalytics_PageLocked">Эта страница доступна только для премиум-пользователей Unstoppable Wallet</string>
-    <string name="CoinAnalytics_ActivateSubscription">Активируйте свою подписку, чтобы получить доступ к аналитике</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Этот проект не имеет аналитических данных</string>
     <string name="CoinAnalytics_CexVolume">Объем CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Рейтинг объема CEX</string>
