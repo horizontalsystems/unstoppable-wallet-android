@@ -115,7 +115,13 @@ private fun ImportCoinzixCexAccountNavHost(
                 viewModel = coinzixVerificationViewModel,
                 onSuccess = onAccountCreate,
                 onNavigateBack = { navController.popBackStack() },
-                onClose = onClose
+                onClose = onClose,
+                onShowError = { text ->
+                    onShowError(
+                        TranslatableString.ResString(R.string.ImportCexAccountConzix_Error_Title),
+                        text
+                    )
+                }
             )
         }
     }
@@ -170,7 +176,7 @@ private fun ImportCoinzixCexAccountScreen(
                     textColor = textColor,
                     enabled = inputsEnabled,
                     pasteEnabled = false,
-                    keyboardOptions= KeyboardOptions(keyboardType = KeyboardType.Email)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 ) {
                     viewModel.onEnterEmail(it)
                 }

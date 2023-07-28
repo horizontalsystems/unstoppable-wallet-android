@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.core.providers.BinanceCexProvider
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
 import io.horizontalsystems.bankwallet.core.providers.CoinzixCexProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.coinzixverify.CoinzixVerificationViewModel
 import io.horizontalsystems.bankwallet.modules.coinzixverify.TwoFactorType
@@ -165,7 +166,16 @@ fun CoinzixWithdrawNavHost(
                     fragmentNavController.popBackStack()
                 },
                 onNavigateBack = { navController.popBackStack() },
-                onClose = { fragmentNavController.popBackStack() }
+                onClose = { fragmentNavController.popBackStack() },
+                onShowError = { text ->
+                    fragmentNavController.slideFromBottom(
+                        resId = R.id.errorDisplayDialogFragment,
+                        args = ErrorDisplayDialogFragment.prepareParams(
+                            Translator.getString(R.string.CexWithdraw_Error_WithdrawTitle),
+                            text.toString()
+                        )
+                    )
+                }
             )
 
         }
