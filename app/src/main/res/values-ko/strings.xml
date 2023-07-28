@@ -1030,4 +1030,6 @@
     <string name="CexDeposit_Network">회로망</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Network">회로망</string>
+    <string name="CexWithdraw_Fee">수수료</string>
+    <string name="CexWithdraw_GetCode">재전송</string>
 </resources>
