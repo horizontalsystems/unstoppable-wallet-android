@@ -28,9 +28,11 @@ import io.horizontalsystems.bankwallet.core.providers.BinanceCexProvider
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetwork
 import io.horizontalsystems.bankwallet.core.providers.CoinzixCexProvider
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.coinzixverify.CoinzixVerificationViewModel
 import io.horizontalsystems.bankwallet.modules.coinzixverify.TwoFactorType
 import io.horizontalsystems.bankwallet.modules.coinzixverify.ui.CoinzixVerificationScreen
+import io.horizontalsystems.bankwallet.modules.info.ErrorDisplayDialogFragment
 import io.horizontalsystems.bankwallet.modules.settings.about.*
 import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexConfirmScreen
 import io.horizontalsystems.bankwallet.modules.withdrawcex.ui.WithdrawCexScreen
@@ -129,11 +131,15 @@ fun CoinzixWithdrawNavHost(
         composablePage("withdraw-confirm") {
             WithdrawCexConfirmScreen(
                 mainViewModel = viewModel,
+                fragmentNavController = fragmentNavController,
                 openVerification = { withdraw ->
                     val steps = withdraw.twoFactorTypes.joinToString(separator = ",") { "${it.code}" }
                     navController.navigate("withdraw-verification/${withdraw.withdrawId}?steps=$steps")
                 },
                 onNavigateBack = { navController.popBackStack() },
+                onError = { title, text ->
+                    fragmentNavController.slideFromBottom(R.id.errorDisplayDialogFragment, ErrorDisplayDialogFragment.prepareParams(title, text))
+                },
                 onClose = { fragmentNavController.popBackStack() },
             )
         }
