@@ -58,7 +58,7 @@
     <string name="Button_Activate">Activate</string>
     <string name="Button_Sign">Sign</string>
     <string name="Button_Activating">Activating</string>
-    <string name="Button_GetApiKeys">Get Api Keys</string>
+    <string name="Button_GetApiKeys">Get API Keys</string>
     <string name="Button_Login">Log In</string>
     <string name="Button_SignUp">Sign Up</string>
     <string name="Button_Submit">Submit</string>
@@ -168,12 +168,12 @@
     <string name="Restore_ZCash_OldWallet_Description">Has transactions</string>
     <string name="Restore_ZCash_SlowSyncWarningText">The initial synchronization with the blockchain can consume a lot of internet traffic.</string>
 
-    <string name="ImportCexAccount_SelectCex">Select Cex</string>
+    <string name="ImportCexAccount_SelectCex">Select CEX</string>
     <string name="ImportCexAccount_SelectCexDescription">Select the centralized exchange to which you want to connect.</string>
     <string name="ImportCexAccountBinance_Description">Please provide the API Keys and API Secret to link your exchange.</string>
     <string name="ImportCexAccountBinance_ApiKey">Api Key</string>
     <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
-    <string name="ImportCexAccountConzix_Description">Enter your email and password form Coinzix Account</string>
+    <string name="ImportCexAccountConzix_Description">Enter your email and password form Coinzix Account.</string>
     <string name="ImportCexAccountConzix_Email">Email</string>
 
     <!--Backup-->
@@ -1047,11 +1047,11 @@
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
-    <string name="ImportWallet_BackupFile_Description">Import from a backup file</string>
+    <string name="ImportWallet_BackupFile_Description">Import from a backup file.</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Import using recovery phrase or private key.</string>
     <string name="ImportWallet_ExchangeWallet">from Exchange Wallet</string>
-    <string name="ImportWallet_ExchangeWallet_Description">Connect to a wallet on centralized exchange</string>
+    <string name="ImportWallet_ExchangeWallet_Description">Connect to a wallet on centralized exchange.</string>
     <string name="ImportWallet_WatchAddress">Watch Address</string>
     <string name="ImportWallet_WatchAddress_Description">Observing mode of EVM-Chain and BTC, LTC, DASH addresses</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
@@ -1738,11 +1738,11 @@
     <string name="Cex_Error_FailedToConnectApiKey">Failed to connect your Api Key</string>
 
     <!--Cex Withdraw Module-->
-    <string name="CexWithdraw_Title">Withdraw %s</string>
+    <string name="CexWithdraw_Title">Send %s</string>
     <string name="CexWithdraw_Network">Network</string>
     <string name="CexWithdraw_FeeFromAmount">Fee from amount</string>
     <string name="CexWithdraw_Fee">Fee</string>
-    <string name="CexWithdraw_NetworkDescription">Ensure the network matches the withdrawal address and the deposit platform supports it.</string>
+    <string name="CexWithdraw_NetworkDescription">Ensure the network matches the withdrawal address and the deposit platform supports it, or assets may be lost.</string>
     <string name="CexWithdraw_SecurityVerification">Security Verification</string>
     <string name="CexWithdraw_EmailVerificationCode">Verification Code</string>
     <string name="CexWithdraw_GoogleAuthenticationCode">Google Authenticator Code</string>
