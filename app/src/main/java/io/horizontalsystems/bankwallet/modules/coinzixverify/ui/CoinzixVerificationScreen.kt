@@ -10,7 +10,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -26,22 +25,21 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
-import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun CoinzixVerificationScreen(
     viewModel: CoinzixVerificationViewModel,
     onSuccess: () -> Unit,
     onNavigateBack: () -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onShowError: (description: TranslatableString) -> Unit
 ) {
-    val view = LocalView.current
     val uiState = viewModel.uiState
     val error = uiState.error
 
     LaunchedEffect(error) {
         error?.let {
-            HudHelper.showErrorMessage(view, it.message ?: it.javaClass.simpleName)
+            onShowError.invoke(TranslatableString.PlainString(it.message ?: it.javaClass.simpleName))
         }
     }
 

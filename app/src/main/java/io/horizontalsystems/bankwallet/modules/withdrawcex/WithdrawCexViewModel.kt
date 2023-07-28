@@ -188,7 +188,8 @@ class WithdrawCexViewModel(
             cexAsset.id,
             network.id,
             addressState?.dataOrNull!!.hex,
-            amountState.amount!!
+            amountState.amount!!,
+            feeFromAmount
         )
     }
 }

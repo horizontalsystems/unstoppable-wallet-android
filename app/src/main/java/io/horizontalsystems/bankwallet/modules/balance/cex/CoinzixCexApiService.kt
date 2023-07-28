@@ -107,12 +107,14 @@ class CoinzixCexApiService {
         iso: String,
         network: String?,
         address: String,
-        amount: BigDecimal
+        amount: BigDecimal,
+        feeFromAmount: Boolean
     ): Response.Withdraw {
         val params = buildMap {
             put("iso", iso)
             put("to_address", address)
             put("amount", amount.toPlainString())
+            put("fee_from_amount", if (feeFromAmount) "1" else "0")
             network?.let {
                 put("network", it)
             }

@@ -28,6 +28,7 @@ import cash.p.terminal.core.providers.BinanceCexProvider
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexWithdrawNetwork
 import cash.p.terminal.core.providers.CoinzixCexProvider
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.coinzixverify.CoinzixVerificationViewModel
 import cash.p.terminal.modules.coinzixverify.TwoFactorType
@@ -165,7 +166,16 @@ fun CoinzixWithdrawNavHost(
                     fragmentNavController.popBackStack()
                 },
                 onNavigateBack = { navController.popBackStack() },
-                onClose = { fragmentNavController.popBackStack() }
+                onClose = { fragmentNavController.popBackStack() },
+                onShowError = { text ->
+                    fragmentNavController.slideFromBottom(
+                        resId = R.id.errorDisplayDialogFragment,
+                        args = ErrorDisplayDialogFragment.prepareParams(
+                            Translator.getString(R.string.CexWithdraw_Error_WithdrawTitle),
+                            text.toString()
+                        )
+                    )
+                }
             )
 
         }

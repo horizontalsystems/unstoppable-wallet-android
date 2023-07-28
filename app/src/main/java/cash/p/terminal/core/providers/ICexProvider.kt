@@ -310,11 +310,12 @@ class CoinzixCexProvider(
         assetId: String,
         networkId: String?,
         address: String,
-        amount: BigDecimal
+        amount: BigDecimal,
+        feeFromAmount: Boolean
     ): CoinzixVerificationMode.Withdraw {
         val network = if (networkId == nativeNetworkId) null else networkId
 
-        val response = api.withdraw(authToken, secret, assetId, network, address, amount)
+        val response = api.withdraw(authToken, secret, assetId, network, address, amount, feeFromAmount)
         validate(response)
 
         val data = response.data ?: throw IllegalStateException("Withdraw response data is null")
