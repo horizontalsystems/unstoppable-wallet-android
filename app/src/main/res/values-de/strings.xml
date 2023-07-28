@@ -1020,4 +1020,6 @@
     <string name="CexDeposit_Network">Netzwerk</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Network">Netzwerk</string>
+    <string name="CexWithdraw_Fee">Gebühr</string>
+    <string name="CexWithdraw_GetCode">Nochmal senden</string>
 </resources>
