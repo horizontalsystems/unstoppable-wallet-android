@@ -116,7 +116,7 @@ android {
             resValue "string", "openSeaApiKey", "cc98f68d836b4c8c8ab8f894b6e2aae8"
             resValue "string", "walletConnectV2Key", "0c5ca155c2f165a7d0c88686f2113a72"
             resValue "string", "solscanApiKey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE2Nzk0NjQxMTQ0ODUsImVtYWlsIjoiaHNkYW84ODg4QGdtYWlsLmNvbSIsImFjdGlvbiI6InRva2VuLWFwaSIsImlhdCI6MTY3OTQ2NDExNH0.91DUjjjYu86f1ZMMJ5cyJxIKTTw_srhI-vNgYaTCPUU"
-            resValue "string", "trongridApiKey", "cec10562-8f2f-44a8-a0f6-245842bc6758"
+            resValue "string", "trongridApiKey", "d1511874-1547-48df-9536-a32cc85949ac"
         }
 
         appcenterrelease {
