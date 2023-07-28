@@ -800,6 +800,7 @@
     <string name="Cex_ChooseCoin">سکه را انتخاب کنید</string>
     <string name="CexDeposit_Network">خالص</string>
     <!--Cex Withdraw Module-->
+    <string name="CexWithdraw_Title">ارسال %s</string>
     <string name="CexWithdraw_Network">خالص</string>
     <string name="CexWithdraw_Fee">هزينه</string>
     <string name="CexWithdraw_GetCode">ارسال مجدد</string>
