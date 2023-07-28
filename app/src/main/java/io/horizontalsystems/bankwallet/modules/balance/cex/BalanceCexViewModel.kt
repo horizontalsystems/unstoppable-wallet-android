@@ -196,7 +196,7 @@ class BalanceCexViewModel(
     ): BalanceCexViewItem {
         val expanded = cexAsset.id == expandedItemId
         val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
-            balance = cexAsset.freeBalance,
+            balance = cexAsset.freeBalance + cexAsset.lockedBalance,
             visible = !balanceHidden,
             fullFormat = expanded,
             coinDecimals = cexAsset.decimals,
