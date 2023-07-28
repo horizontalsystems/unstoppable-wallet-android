@@ -1237,4 +1237,6 @@
     <string name="CexDeposit_Network">Réseau</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Network">Réseau</string>
+    <string name="CexWithdraw_Fee">Frais</string>
+    <string name="CexWithdraw_GetCode">Réenvoyer</string>
 </resources>
