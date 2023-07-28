@@ -49,7 +49,6 @@
     <string name="Button_Activate">تفعيل</string>
     <string name="Button_Sign">توقيع</string>
     <string name="Button_Activating">تفعيل</string>
-    <string name="Button_GetApiKeys">الحصول على مفاتيح Api</string>
     <string name="Button_Login">تسجيل دخول</string>
     <string name="Button_SignUp">إنشاء حساب</string>
     <string name="Button_Submit">قدِّم</string>
