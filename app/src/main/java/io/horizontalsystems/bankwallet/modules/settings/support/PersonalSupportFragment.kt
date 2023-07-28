@@ -212,7 +212,7 @@ private fun RequestForm(
             ButtonPrimaryYellowWithSpinner(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                    .padding(start = 16.dp, end = 16.dp),
                 title = stringResource(R.string.Settings_PersonalSupport_Request),
                 showSpinner = uiState.showSpinner,
                 enabled = uiState.buttonEnabled,

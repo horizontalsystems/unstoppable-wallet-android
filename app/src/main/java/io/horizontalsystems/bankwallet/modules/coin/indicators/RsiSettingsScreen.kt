@@ -21,7 +21,14 @@ import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.FormsInput
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.VSpacer
 
 @Composable
 fun RsiSettingsScreen(navController: NavController, indicatorSetting: ChartIndicatorSetting) {
@@ -88,7 +95,7 @@ fun RsiSettingsScreen(navController: NavController, indicatorSetting: ChartIndic
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                        .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.SwapSettings_Apply),
                     onClick = {
                         viewModel.save()
