@@ -807,7 +807,6 @@
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">Резервный файл</string>
-    <string name="ImportWallet_BackupFile_Description">Импортировать из файла резервной копии</string>
     <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
     <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
@@ -1327,6 +1326,7 @@
     <string name="Cex_ChooseCoin">Выберите токен</string>
     <string name="CexDeposit_Network">Сеть</string>
     <!--Cex Withdraw Module-->
+    <string name="CexWithdraw_Title">Отправить %s</string>
     <string name="CexWithdraw_Network">Сеть</string>
     <string name="CexWithdraw_Fee">Комиссия</string>
     <string name="CexWithdraw_GetCode">Отправить повторно</string>
