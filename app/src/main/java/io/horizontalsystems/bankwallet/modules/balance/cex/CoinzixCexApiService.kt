@@ -194,7 +194,7 @@ class CoinzixCexApiService {
         exception.response()?.errorBody()?.string()?.let {
             try {
                 val jsonObject = gson.fromJson(it, Map::class.java)
-                jsonObject["error"]?.toString()
+                jsonObject["error"]?.toString() ?: jsonObject["message"]?.toString()
             } catch (exception: Exception) {
                 null
             }

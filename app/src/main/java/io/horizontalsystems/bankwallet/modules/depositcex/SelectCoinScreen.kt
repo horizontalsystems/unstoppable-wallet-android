@@ -24,7 +24,7 @@ import cash.p.terminal.ui.compose.components.*
 fun SelectCoinScreen(
     onClose: () -> Unit,
     itemIsSuspended: (DepositCexModule.CexCoinViewItem) -> Boolean,
-    openNetworkSelect: (CexAsset) -> Unit,
+    onSelectAsset: (CexAsset) -> Unit,
     withBalance: Boolean
 ) {
     val viewModel = viewModel<SelectCexAssetViewModel>(factory = SelectCexAssetViewModel.Factory(withBalance))
@@ -70,7 +70,7 @@ fun SelectCoinScreen(
                                             viewItem = viewItem,
                                             suspended = itemIsSuspended.invoke(viewItem),
                                             onItemClick = {
-                                                openNetworkSelect.invoke(viewItem.cexAsset)
+                                                onSelectAsset.invoke(viewItem.cexAsset)
                                             },
                                         )
                                     }

@@ -39,7 +39,7 @@ fun DepositCexChooseAssetScreen(navController: NavController) {
         SelectCoinScreen(
             onClose = { navController.popBackStack() },
             itemIsSuspended = { !it.depositEnabled },
-            openNetworkSelect = { cexAsset ->
+            onSelectAsset = { cexAsset ->
                 navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(cexAsset))
             },
             withBalance = false

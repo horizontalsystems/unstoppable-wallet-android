@@ -41,7 +41,9 @@ fun WithdrawCexChooseAssetScreen(navController: NavController) {
         SelectCoinScreen(
             onClose = { navController.popBackStack() },
             itemIsSuspended = { !it.withdrawEnabled },
-            openNetworkSelect = { cexAsset ->
+            onSelectAsset = { cexAsset ->
+                navController.popBackStack()
+
                 navController.slideFromRight(R.id.withdrawCexFragment, WithdrawCexFragment.args(cexAsset))
             },
             withBalance = true
