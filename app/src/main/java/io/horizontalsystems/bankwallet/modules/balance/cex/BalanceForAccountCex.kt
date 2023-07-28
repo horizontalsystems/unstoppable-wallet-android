@@ -351,7 +351,7 @@ private fun LockedValueRow(viewItem: BalanceCexViewItem) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = viewItem.fiatValueLocked.value,
-                    color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
+                    color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
                     style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
