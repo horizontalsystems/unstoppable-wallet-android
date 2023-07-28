@@ -6,12 +6,21 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
 import io.horizontalsystems.bankwallet.core.providers.ICexProvider
-import io.horizontalsystems.bankwallet.modules.balance.*
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewHelper
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
+import io.horizontalsystems.bankwallet.modules.balance.ITotalBalance
+import io.horizontalsystems.bankwallet.modules.balance.TotalBalance
+import io.horizontalsystems.bankwallet.modules.balance.TotalService
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -160,13 +169,25 @@ class BalanceCexViewModel(
     private fun refreshTotalBalance() {
         val totalServiceItems = viewItems.map {
             TotalService.BalanceItem(
-                it.cexAsset.freeBalance,
+                it.cexAsset.freeBalance + it.cexAsset.lockedBalance,
                 false,
                 it.coinPrice
             )
 
         }
         totalBalance.setTotalServiceItems(totalServiceItems)
+    }
+
+    private fun lockedCoinValue(
+        balance: BigDecimal,
+        hideBalance: Boolean,
+        coinDecimals: Int,
+        coinCode: String
+    ): DeemedValue<String> {
+        val visible = !hideBalance && balance > BigDecimal.ZERO
+        val value = App.numberFormatter.formatCoinFull(balance, coinCode, coinDecimals)
+
+        return DeemedValue(value, false, visible)
     }
 
     private fun createBalanceCexViewItem(
@@ -184,6 +205,7 @@ class BalanceCexViewModel(
             currency = currency,
             balanceViewType = balanceViewType
         )
+        val fiatLockedVisibility = !balanceHidden && cexAsset.lockedBalance > BigDecimal.ZERO
 
         return BalanceCexViewItem(
             coinIconUrl = cexAsset.coin?.imageUrl,
@@ -194,6 +216,20 @@ class BalanceCexViewModel(
             exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
             diff = latestRate?.diff,
             secondaryValue = secondaryValue,
+            coinValueLocked = lockedCoinValue(
+                balance = cexAsset.lockedBalance,
+                hideBalance = balanceHidden,
+                coinDecimals = cexAsset.decimals,
+                coinCode = cexAsset.id
+            ),
+            fiatValueLocked = BalanceViewHelper.currencyValue(
+                balance = cexAsset.lockedBalance,
+                coinPrice = latestRate,
+                visible = fiatLockedVisibility,
+                fullFormat = true,
+                currency = currency,
+                dimmed = false
+            ),
             expanded = expanded,
             coinUid = cexAsset.coin?.uid,
             assetId = cexAsset.id,
@@ -283,6 +319,8 @@ data class BalanceCexViewItem(
     val exchangeValue: DeemedValue<String>,
     val diff: BigDecimal?,
     val secondaryValue: DeemedValue<String>,
+    val coinValueLocked: DeemedValue<String>,
+    val fiatValueLocked: DeemedValue<String>,
     val expanded: Boolean,
     val coinUid: String?,
     val assetId: String,
