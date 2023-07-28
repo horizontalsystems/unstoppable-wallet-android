@@ -801,4 +801,6 @@
     <string name="CexDeposit_Network">خالص</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Network">خالص</string>
+    <string name="CexWithdraw_Fee">هزينه</string>
+    <string name="CexWithdraw_GetCode">ارسال مجدد</string>
 </resources>
