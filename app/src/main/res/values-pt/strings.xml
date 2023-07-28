@@ -783,7 +783,6 @@
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">do Arquivo</string>
-    <string name="ImportWallet_BackupFile_Description">Importar de um arquivo de backup</string>
     <string name="ImportWallet_RecoveryPhrase">da frase de recuperação</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Importar usando frase de recuperação ou chave privada.</string>
     <string name="ImportWallet_WatchAddress">Ver Endereço</string>
@@ -1285,6 +1284,7 @@
     <string name="Cex_ChooseCoin">Escolher Moedas</string>
     <string name="CexDeposit_Network">Rede</string>
     <!--Cex Withdraw Module-->
+    <string name="CexWithdraw_Title">Enviar %s</string>
     <string name="CexWithdraw_Network">Rede</string>
     <string name="CexWithdraw_Fee">Taxa</string>
     <string name="CexWithdraw_GetCode">Enviar novamente</string>
