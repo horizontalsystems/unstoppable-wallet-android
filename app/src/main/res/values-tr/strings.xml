@@ -1049,4 +1049,6 @@
     <string name="CexDeposit_Network">Ağ</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Network">Ağ</string>
+    <string name="CexWithdraw_Fee">Masraf</string>
+    <string name="CexWithdraw_GetCode">Yeniden Gönder</string>
 </resources>
