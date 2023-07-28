@@ -16,23 +16,11 @@ class EnterCexDataCoinzixViewModel : ViewModel() {
     private var email: String? = null
     private var password: String? = null
 
-    private var loginEnabled = false
-    private var error: Throwable? = null
-
-    var uiState by mutableStateOf(
-        UiState(
-            loginEnabled = loginEnabled,
-            error = error
-        )
-    )
+    var loginEnabled by mutableStateOf(false)
+        private set
 
     private fun emitState() {
         loginEnabled = !email.isNullOrBlank() && !password.isNullOrBlank()
-
-        uiState = UiState(
-            loginEnabled = loginEnabled,
-            error = error
-        )
     }
 
     fun onEnterEmail(v: String) {
@@ -50,19 +38,20 @@ class EnterCexDataCoinzixViewModel : ViewModel() {
         val tmpPassword = password ?: throw IllegalStateException("Password is null")
 
         val login = coinzixCexApiService.login(tmpEmail, tmpPassword)
+        val loginData = login.loginData()
 
         if (login.status) {
-            val twoFactorType = TwoFactorType.fromCode(login.data?.required)
-            if (login.token != null && login.data?.secret != null && twoFactorType != null) {
-                return CoinzixVerificationMode.Login(login.token, login.data.secret, listOf(twoFactorType))
+            val twoFactorType = TwoFactorType.fromCode(loginData?.required)
+            if (login.token != null && loginData?.secret != null && twoFactorType != null) {
+                return CoinzixVerificationMode.Login(login.token, loginData.secret, listOf(twoFactorType))
             } else {
                 throw Exception("Invalid login data returned")
             }
         } else {
-            if (login.data?.left_attempt != null) {
-                throw Exception("Invalid login credentials. Attempts left: ${login.data.left_attempt}")
-            } else if (login.data?.time_expire != null) {
-                val unlockDate = Date(login.data.time_expire.toLong() * 1000)
+            if (loginData?.left_attempt != null) {
+                throw Exception("Invalid login credentials. Attempts left: ${loginData.left_attempt}")
+            } else if (loginData?.time_expire != null) {
+                val unlockDate = Date(loginData.time_expire.toLong() * 1000)
                 val formattedDate = DateHelper.formatDate(unlockDate, "MMM d, yyyy, HH:mm")
 
                 throw Exception("Too many invalid login attempts were made. Login is locked until $formattedDate")
@@ -72,8 +61,4 @@ class EnterCexDataCoinzixViewModel : ViewModel() {
         }
     }
 
-    data class UiState(
-        var loginEnabled: Boolean,
-        var error: Throwable?
-    )
 }

@@ -59,6 +59,7 @@ fun ImportCexAccountEnterCexDataScreen(
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
     onAccountCreate: () -> Unit,
+    onShowError: (title: TranslatableString, description: TranslatableString) -> Unit,
 ) {
     val viewModel = viewModel<ImportCexAccountEnterCexDataViewModel>(factory = ImportCexAccountEnterCexDataViewModel.Factory(cexId))
 
@@ -68,7 +69,7 @@ fun ImportCexAccountEnterCexDataScreen(
         }
 
         is CexCoinzix -> {
-            ImportCoinzixCexAccountNavHost(cex, onNavigateBack, onClose, onAccountCreate)
+            ImportCoinzixCexAccountNavHost(cex, onNavigateBack, onClose, onAccountCreate, onShowError)
         }
 
         else -> Unit
@@ -81,7 +82,8 @@ private fun ImportCoinzixCexAccountNavHost(
     cex: CexCoinzix,
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
-    onAccountCreate: () -> Unit
+    onAccountCreate: () -> Unit,
+    onShowError: (title: TranslatableString, description: TranslatableString) -> Unit
 ) {
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(
@@ -95,7 +97,8 @@ private fun ImportCoinzixCexAccountNavHost(
                 onClose = onClose,
                 openVerification = { login: CoinzixVerificationMode.Login ->
                     navController.navigate("login-verification/${login.token}/${login.secret}/?steps=${login.twoFactorTypes.joinToString { "${it.code}" }}")
-                }
+                },
+                onShowError = onShowError
             )
         }
 
@@ -123,19 +126,12 @@ private fun ImportCoinzixCexAccountScreen(
     cex: CexCoinzix,
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
+    onShowError: (title: TranslatableString, description: TranslatableString) -> Unit,
     openVerification: (CoinzixVerificationMode.Login) -> Unit
 ) {
     val viewModel = viewModel<EnterCexDataCoinzixViewModel>()
-    val view = LocalView.current
     val coroutineScope = rememberCoroutineScope()
-    val uiState = viewModel.uiState
-    val error = uiState.error
-
-    LaunchedEffect(error) {
-        error?.let {
-            HudHelper.showErrorMessage(view, it.message ?: it.javaClass.simpleName)
-        }
-    }
+    val uriHandler = LocalUriHandler.current
 
     var hidePassphrase by remember { mutableStateOf(true) }
     var loading by remember { mutableStateOf(false) }
@@ -172,7 +168,9 @@ private fun ImportCoinzixCexAccountScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     hint = stringResource(R.string.ImportCexAccountConzix_Email),
                     textColor = textColor,
-                    enabled = inputsEnabled
+                    enabled = inputsEnabled,
+                    pasteEnabled = false,
+                    keyboardOptions= KeyboardOptions(keyboardType = KeyboardType.Email)
                 ) {
                     viewModel.onEnterEmail(it)
                 }
@@ -200,7 +198,7 @@ private fun ImportCoinzixCexAccountScreen(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Login),
                         showSpinner = loading,
-                        enabled = uiState.loginEnabled && !loading,
+                        enabled = viewModel.loginEnabled && !loading,
                         onClick = {
                             coroutineScope.launch {
                                 loading = true
@@ -208,7 +206,10 @@ private fun ImportCoinzixCexAccountScreen(
                                     val login = viewModel.login()
                                     openVerification.invoke(login)
                                 } catch (error: Throwable) {
-                                    HudHelper.showErrorMessage(view, error.message ?: error.javaClass.simpleName)
+                                    onShowError(
+                                        TranslatableString.ResString(R.string.ImportCexAccountConzix_Error_Title),
+                                        TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
+                                    )
                                 }
                                 loading = false
                             }
@@ -218,9 +219,8 @@ private fun ImportCoinzixCexAccountScreen(
                     ButtonPrimaryTransparent(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_SignUp),
-                        enabled = false,
                         onClick = {
-                            //viewModel.onSignUp()
+                            uriHandler.openUri("https://coinzix.com/sign-up")
                         }
                     )
                 }
