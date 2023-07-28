@@ -1285,4 +1285,6 @@
     <string name="CexDeposit_Network">網絡</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Network">網絡</string>
+    <string name="CexWithdraw_Fee">费用</string>
+    <string name="CexWithdraw_GetCode">重新发送</string>
 </resources>
