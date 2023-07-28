@@ -1328,4 +1328,6 @@
     <string name="CexDeposit_Network">Сеть</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Network">Сеть</string>
+    <string name="CexWithdraw_Fee">Комиссия</string>
+    <string name="CexWithdraw_GetCode">Отправить повторно</string>
 </resources>
