@@ -344,6 +344,9 @@
         android:id="@+id/backupRecoveryPhraseDialog"
         android:name="cash.p.terminal.modules.backupalert.BackupRecoveryPhraseDialog" />
     <dialog
+        android:id="@+id/errorDisplayDialogFragment"
+        android:name="cash.p.terminal.modules.info.ErrorDisplayDialogFragment" />
+    <dialog
         android:id="@+id/indicatorsAlertDialog"
         android:name="cash.p.terminal.modules.coin.indicators.IndicatorsAlertDialog" />
     <dialog

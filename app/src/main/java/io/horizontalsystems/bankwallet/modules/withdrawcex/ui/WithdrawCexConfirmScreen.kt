@@ -13,10 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.modules.coinzixverify.CoinzixVerificationMode
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -24,6 +23,7 @@ import cash.p.terminal.modules.fee.FeeCell
 import cash.p.terminal.modules.send.ConfirmAmountCell
 import cash.p.terminal.modules.withdrawcex.WithdrawCexViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -35,23 +35,33 @@ import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
 import cash.p.terminal.ui.compose.components.VSpacer
-import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 @Composable
 fun WithdrawCexConfirmScreen(
     mainViewModel: WithdrawCexViewModel,
+    fragmentNavController: NavController,
     openVerification: (CoinzixVerificationMode.Withdraw) -> Unit,
     onNavigateBack: () -> Unit,
+    onError: (Int, String) -> Unit,
     onClose: () -> Unit
 ) {
-    val navController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()
-    val view = LocalView.current
+    var confirmationData by remember { mutableStateOf(mainViewModel.getConfirmationData()) }
+    var refresh by remember { mutableStateOf(false) }
+
+    DisposableLifecycleCallbacks(
+        onResume = {
+            if (refresh) {
+                confirmationData = mainViewModel.getConfirmationData()
+            }
+        },
+        onPause = {
+            refresh = true
+        }
+    )
 
     ComposeAppTheme {
-        val confirmationData = mainViewModel.getConfirmationData()
-
         val assetName = confirmationData.assetName
         val coinAmount = confirmationData.coinAmount
         val currencyAmount = confirmationData.currencyAmount
@@ -102,9 +112,9 @@ fun WithdrawCexConfirmScreen(
                             TransactionInfoAddressCell(
                                 title = stringResource(R.string.Send_Confirmation_To),
                                 value = address.hex,
-                                showAdd = false,
+                                showAdd = contact == null,
                                 blockchainType = blockchainType,
-                                navController = navController
+                                navController = fragmentNavController
                             )
                         }
                         contact?.let {
@@ -133,7 +143,7 @@ fun WithdrawCexConfirmScreen(
                     CellUniversalLawrenceSection(
                         listOf {
                             FeeCell(
-                                title = stringResource(R.string.FeeSettings_NetworkFee),
+                                title = stringResource(R.string.CexWithdraw_Fee),
                                 info = "",
                                 value = fee,
                                 viewState = null,
@@ -159,7 +169,7 @@ fun WithdrawCexConfirmScreen(
                                     openVerification.invoke(withdraw)
                                 } catch (error: Throwable) {
 
-                                    HudHelper.showErrorMessage(view, error.message ?: it.javaClass.simpleName)
+                                    onError(R.string.CexWithdraw_Error_WithdrawTitle, error.message ?: it.javaClass.simpleName)
                                 }
                                 confirmEnabled = true
                             }

@@ -28,9 +28,11 @@ import cash.p.terminal.core.providers.BinanceCexProvider
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexWithdrawNetwork
 import cash.p.terminal.core.providers.CoinzixCexProvider
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.coinzixverify.CoinzixVerificationViewModel
 import cash.p.terminal.modules.coinzixverify.TwoFactorType
 import cash.p.terminal.modules.coinzixverify.ui.CoinzixVerificationScreen
+import cash.p.terminal.modules.info.ErrorDisplayDialogFragment
 import cash.p.terminal.modules.settings.about.*
 import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexConfirmScreen
 import cash.p.terminal.modules.withdrawcex.ui.WithdrawCexScreen
@@ -129,11 +131,15 @@ fun CoinzixWithdrawNavHost(
         composablePage("withdraw-confirm") {
             WithdrawCexConfirmScreen(
                 mainViewModel = viewModel,
+                fragmentNavController = fragmentNavController,
                 openVerification = { withdraw ->
                     val steps = withdraw.twoFactorTypes.joinToString(separator = ",") { "${it.code}" }
                     navController.navigate("withdraw-verification/${withdraw.withdrawId}?steps=$steps")
                 },
                 onNavigateBack = { navController.popBackStack() },
+                onError = { title, text ->
+                    fragmentNavController.slideFromBottom(R.id.errorDisplayDialogFragment, ErrorDisplayDialogFragment.prepareParams(title, text))
+                },
                 onClose = { fragmentNavController.popBackStack() },
             )
         }
