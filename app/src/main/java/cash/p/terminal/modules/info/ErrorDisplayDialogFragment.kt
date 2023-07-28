@@ -28,7 +28,7 @@ import io.horizontalsystems.core.findNavController
 class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
 
     private val title by lazy {
-        requireArguments().getInt(keyTitle)
+        requireArguments().getString(keyTitle) ?: ""
     }
 
     private val text by lazy {
@@ -45,7 +45,7 @@ class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ErrorDisplayScreen(stringResource(title), text, findNavController())
+                ErrorDisplayScreen(title, text, findNavController())
             }
         }
     }
@@ -54,7 +54,7 @@ class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
         private const val keyTitle = "key_title"
         private const val keyText = "key_text"
 
-        fun prepareParams(title: Int, text: String) = bundleOf(
+        fun prepareParams(title: String, text: String) = bundleOf(
             keyTitle to title,
             keyText to text
         )

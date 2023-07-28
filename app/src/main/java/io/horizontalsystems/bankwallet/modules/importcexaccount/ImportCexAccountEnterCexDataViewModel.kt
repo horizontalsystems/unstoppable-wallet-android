@@ -3,7 +3,7 @@ package cash.p.terminal.modules.importcexaccount
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class ImportCexAccountEnterCexDataViewModel(private val cexId: String) : ViewModel() {
+class ImportCexAccountEnterCexDataViewModel(cexId: String) : ViewModel() {
     val cex = Cex.getById(cexId)
 
     class Factory(private val cexId: String) : ViewModelProvider.Factory {

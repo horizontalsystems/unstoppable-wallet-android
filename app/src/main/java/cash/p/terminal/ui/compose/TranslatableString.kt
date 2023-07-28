@@ -3,6 +3,7 @@ package cash.p.terminal.ui.compose
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import cash.p.terminal.core.providers.Translator
 
 sealed class TranslatableString {
     class PlainString(val text: String) : TranslatableString()
@@ -13,6 +14,13 @@ sealed class TranslatableString {
         return when (this) {
             is PlainString -> text
             is ResString -> stringResource(id, *formatArgs)
+        }
+    }
+
+    override fun toString(): String {
+        return when (this) {
+            is PlainString -> text
+            is ResString -> Translator.getString(id, formatArgs)
         }
     }
 }

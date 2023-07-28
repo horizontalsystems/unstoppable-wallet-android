@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.balance.cex
 
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import cash.p.terminal.core.managers.APIClient
 import cash.p.terminal.core.toRawHexString
 import io.horizontalsystems.bitcoincore.utils.HashUtils
@@ -241,12 +242,18 @@ object Response {
 
     data class Login(
         val status: Boolean,
-        val data: LoginData?,
+        val data: JsonElement?,
         val token: String?,
         val is_login: Boolean,
         val required_code: Boolean,
         val errors: List<String>?
-    )
+    ) {
+        fun loginData(): LoginData? = try {
+            Gson().fromJson(data, LoginData::class.java)
+        } catch (e: Throwable) {
+            null
+        }
+    }
 
     data class LoginData(
         val required: Int?,

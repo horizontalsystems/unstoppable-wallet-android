@@ -137,8 +137,11 @@ fun CoinzixWithdrawNavHost(
                     navController.navigate("withdraw-verification/${withdraw.withdrawId}?steps=$steps")
                 },
                 onNavigateBack = { navController.popBackStack() },
-                onError = { title, text ->
-                    fragmentNavController.slideFromBottom(R.id.errorDisplayDialogFragment, ErrorDisplayDialogFragment.prepareParams(title, text))
+                onShowError = { title, text ->
+                    fragmentNavController.slideFromBottom(
+                        resId = R.id.errorDisplayDialogFragment,
+                        args = ErrorDisplayDialogFragment.prepareParams(title.toString(), text.toString())
+                    )
                 },
                 onClose = { fragmentNavController.popBackStack() },
             )

@@ -18,13 +18,15 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.composablePage
+import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.modules.info.ErrorDisplayDialogFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.settings.about.*
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
 
-class ImportCexAccountFragment: BaseFragment() {
+class ImportCexAccountFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,6 +87,12 @@ fun ImportCexAccountNavHost(
                         iconTint = R.color.white
                     )
                     fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
+                },
+                onShowError = { title, text ->
+                    fragmentNavController.slideFromBottom(
+                        resId = R.id.errorDisplayDialogFragment,
+                        args = ErrorDisplayDialogFragment.prepareParams(title.toString(), text.toString())
+                    )
                 }
             )
         }
