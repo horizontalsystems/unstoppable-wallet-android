@@ -177,7 +177,7 @@ class WithdrawCexViewModel(
             coinIconUrl = cexAsset.coin?.imageUrl,
             address = address,
             contact = contact,
-            blockchainType = null,
+            blockchainType = network.blockchain?.type,
             networkName = network.networkName,
             feeItem = feeItem
         )

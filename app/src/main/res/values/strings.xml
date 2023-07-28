@@ -1755,6 +1755,8 @@
     <string name="CexWithdraw_Error_NotEnoughBalance">Not enough available balance</string>
     <string name="CexWithdraw_Error_MinimumAmount">The minimum amount you can withdraw is %s</string>
     <string name="CexWithdraw_Error_MaximumAmount">The maximum amount you can withdraw is %s</string>
+    <string name="CexWithdraw_Error_WithdrawTitle">Withdraw Failed</string>
+    <string name="CexWithdraw_Error_LoginTitle">Login Failed</string>
 
 
 </resources>
