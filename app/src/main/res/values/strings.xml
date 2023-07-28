@@ -173,8 +173,9 @@
     <string name="ImportCexAccountBinance_Description">Please provide the API Keys and API Secret to link your exchange.</string>
     <string name="ImportCexAccountBinance_ApiKey">Api Key</string>
     <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
-    <string name="ImportCexAccountConzix_Description">Enter your email and password form Coinzix Account.</string>
+    <string name="ImportCexAccountConzix_Description">Enter your email and password from Coinzix Account.</string>
     <string name="ImportCexAccountConzix_Email">Email</string>
+    <string name="ImportCexAccountConzix_Error_Title">Login Failed</string>
 
     <!--Backup-->
 
@@ -1756,7 +1757,6 @@
     <string name="CexWithdraw_Error_MinimumAmount">The minimum amount you can withdraw is %s</string>
     <string name="CexWithdraw_Error_MaximumAmount">The maximum amount you can withdraw is %s</string>
     <string name="CexWithdraw_Error_WithdrawTitle">Withdraw Failed</string>
-    <string name="CexWithdraw_Error_LoginTitle">Login Failed</string>
 
 
 </resources>

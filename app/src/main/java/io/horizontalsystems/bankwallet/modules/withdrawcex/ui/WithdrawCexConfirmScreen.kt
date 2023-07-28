@@ -43,7 +43,7 @@ fun WithdrawCexConfirmScreen(
     fragmentNavController: NavController,
     openVerification: (CoinzixVerificationMode.Withdraw) -> Unit,
     onNavigateBack: () -> Unit,
-    onError: (Int, String) -> Unit,
+    onShowError: (title: TranslatableString, description: TranslatableString) -> Unit,
     onClose: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -168,8 +168,10 @@ fun WithdrawCexConfirmScreen(
                                     val withdraw = mainViewModel.confirm()
                                     openVerification.invoke(withdraw)
                                 } catch (error: Throwable) {
-
-                                    onError(R.string.CexWithdraw_Error_WithdrawTitle, error.message ?: it.javaClass.simpleName)
+                                    onShowError(
+                                        TranslatableString.ResString(R.string.CexWithdraw_Error_WithdrawTitle),
+                                        TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
+                                    )
                                 }
                                 confirmEnabled = true
                             }

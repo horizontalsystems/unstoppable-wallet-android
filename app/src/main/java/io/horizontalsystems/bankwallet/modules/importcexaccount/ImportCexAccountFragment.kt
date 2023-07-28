@@ -18,13 +18,15 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.composablePage
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.info.ErrorDisplayDialogFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.settings.about.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
 
-class ImportCexAccountFragment: BaseFragment() {
+class ImportCexAccountFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,6 +87,12 @@ fun ImportCexAccountNavHost(
                         iconTint = R.color.white
                     )
                     fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
+                },
+                onShowError = { title, text ->
+                    fragmentNavController.slideFromBottom(
+                        resId = R.id.errorDisplayDialogFragment,
+                        args = ErrorDisplayDialogFragment.prepareParams(title.toString(), text.toString())
+                    )
                 }
             )
         }
