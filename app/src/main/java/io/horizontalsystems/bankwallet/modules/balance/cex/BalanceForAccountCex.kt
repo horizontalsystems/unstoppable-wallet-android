@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance.cex
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -305,12 +307,55 @@ private fun ExpandableContentCex(
         exit = shrinkVertically() + fadeOut()
     ) {
         Column {
+            LockedValueRow(viewItem)
             Divider(
                 modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 6.dp),
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10
             )
             ButtonsRowCex(viewItem, navController)
+        }
+    }
+}
+
+@Composable
+private fun LockedValueRow(viewItem: BalanceCexViewItem) {
+    AnimatedVisibility(
+        visible = viewItem.coinValueLocked.visible,
+        enter = expandVertically() + fadeIn(),
+        exit = shrinkVertically() + fadeOut()
+    ) {
+        Column {
+            Divider(
+                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 6.dp),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+            Row(
+                modifier = Modifier
+                    .height(25.dp)
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_lock_16),
+                    contentDescription = "lock icon"
+                )
+                Text(
+                    modifier = Modifier.padding(start = 6.dp),
+                    text = viewItem.coinValueLocked.value,
+                    color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = viewItem.fiatValueLocked.value,
+                    color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                )
+            }
         }
     }
 }
