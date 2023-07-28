@@ -696,7 +696,6 @@
     <string name="ManageAccounts_WatchAddress">Adresi İzle</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">Dosyadan</string>
-    <string name="ImportWallet_BackupFile_Description">Bir yedek dosyadan içe aktar</string>
     <string name="ImportWallet_RecoveryPhrase">Kurtarma İfadesinden</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Kurtarma ifadesini veya özel anahtarı kullanarak içe aktarın.</string>
     <string name="ImportWallet_WatchAddress">Adresi İzle</string>
@@ -1048,6 +1047,7 @@
     <string name="Cex_ChooseCoin">Kripto Parayı Seç</string>
     <string name="CexDeposit_Network">Ağ</string>
     <!--Cex Withdraw Module-->
+    <string name="CexWithdraw_Title">%s gönder</string>
     <string name="CexWithdraw_Network">Ağ</string>
     <string name="CexWithdraw_Fee">Masraf</string>
     <string name="CexWithdraw_GetCode">Yeniden Gönder</string>
