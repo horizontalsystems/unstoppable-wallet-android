@@ -154,13 +154,20 @@ class WithdrawCexViewModel(
 
     fun getConfirmationData(): ConfirmationData {
         val amount = amountState.amount ?: BigDecimal.ZERO
+        var receivedAmount = if (amountState.feeFromAmount) {
+            amount - amountState.fee
+        } else {
+            amount
+        }
+        receivedAmount = receivedAmount.coerceAtLeast(BigDecimal.ZERO)
+
         val coinAmount = App.numberFormatter.formatCoinFull(
-            amount,
+            receivedAmount,
             cexAsset.id,
             coinMaxAllowedDecimals
         )
         val currencyAmount = coinRate?.let { rate ->
-            rate.copy(value = amount.times(rate.value))
+            rate.copy(value = receivedAmount.times(rate.value))
                 .getFormattedFull()
         }
 
