@@ -1219,4 +1219,6 @@
     <string name="CexDeposit_Network">La red</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Network">La red</string>
+    <string name="CexWithdraw_Fee">Comisión</string>
+    <string name="CexWithdraw_GetCode">Reenviar</string>
 </resources>
