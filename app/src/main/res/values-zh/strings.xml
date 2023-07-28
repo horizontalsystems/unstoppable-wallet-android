@@ -801,7 +801,6 @@
     <string name="ManageAccounts_WatchAddress">观察地址</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">从文件</string>
-    <string name="ImportWallet_BackupFile_Description">从备份文件导入</string>
     <string name="ImportWallet_RecoveryPhrase">恢复短语</string>
     <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入。</string>
     <string name="ImportWallet_WatchAddress">观察地址</string>
@@ -1284,6 +1283,7 @@
     <string name="Cex_ChooseCoin">选择代币</string>
     <string name="CexDeposit_Network">網絡</string>
     <!--Cex Withdraw Module-->
+    <string name="CexWithdraw_Title">发送%s</string>
     <string name="CexWithdraw_Network">網絡</string>
     <string name="CexWithdraw_Fee">费用</string>
     <string name="CexWithdraw_GetCode">重新发送</string>
