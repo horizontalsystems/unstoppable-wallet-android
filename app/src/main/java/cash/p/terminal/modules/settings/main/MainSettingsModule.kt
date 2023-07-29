@@ -24,7 +24,6 @@ object MainSettingsModule {
             val viewModel = MainSettingsViewModel(
                 service,
                 App.appConfigProvider.companyWebPageLink,
-                App.subscriptionManager,
             )
 
             return viewModel as T

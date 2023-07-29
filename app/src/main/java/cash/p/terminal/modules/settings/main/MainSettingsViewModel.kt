@@ -1,12 +1,8 @@
 package cash.p.terminal.modules.settings.main
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
 import cash.p.terminal.modules.walletconnect.version1.WC1Manager
@@ -15,8 +11,7 @@ import kotlinx.coroutines.launch
 
 class MainSettingsViewModel(
     private val service: MainSettingsService,
-    val companyWebPage: String,
-    private val subscriptionManager: SubscriptionManager,
+    val companyWebPage: String
 ) : ViewModel() {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -28,9 +23,6 @@ class MainSettingsViewModel(
     val baseCurrencyLiveData = MutableLiveData(service.baseCurrency)
     val languageLiveData = MutableLiveData(service.currentLanguageDisplayName)
     val appVersion by service::appVersion
-
-    var openPersonalSupport by mutableStateOf(false)
-        private set
 
     private var wcSessionsCount = service.walletConnectSessionCount
     private var wc2PendingRequestCount = 0
@@ -70,6 +62,7 @@ class MainSettingsViewModel(
         syncCounter()
         service.start()
     }
+
     private fun shouldShowAlertForManageWallet(allBackedUp: Boolean, hasNonStandardAccount: Boolean): Boolean {
         return !allBackedUp || hasNonStandardAccount
     }
@@ -80,7 +73,7 @@ class MainSettingsViewModel(
         disposables.clear()
     }
 
-    fun getWalletConnectSupportState() : WC1Manager.SupportState {
+    fun getWalletConnectSupportState(): WC1Manager.SupportState {
         return service.getWalletConnectSupportState()
     }
 
@@ -92,19 +85,5 @@ class MainSettingsViewModel(
         } else {
             wcCounterLiveData.postValue(null)
         }
-    }
-
-    fun onPersonalSupportClick() {
-        if (subscriptionManager.hasSubscription()){
-            openPersonalSupport = true
-        } else {
-            viewModelScope.launch {
-                subscriptionManager.showPremiumFeatureWarning()
-            }
-        }
-    }
-
-    fun personalSupportOpened() {
-        openPersonalSupport = false
     }
 }

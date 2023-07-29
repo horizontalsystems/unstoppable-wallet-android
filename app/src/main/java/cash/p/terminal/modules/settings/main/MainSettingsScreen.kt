@@ -17,7 +17,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -87,13 +86,6 @@ private fun SettingSections(
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
     val language by viewModel.languageLiveData.observeAsState()
 
-    LaunchedEffect(viewModel.openPersonalSupport) {
-        if (viewModel.openPersonalSupport) {
-            navController.slideFromRight(R.id.personalSupportFragment)
-            viewModel.personalSupportOpened()
-        }
-    }
-
     CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
@@ -149,20 +141,6 @@ private fun SettingSections(
                             )
                         }
                     }
-                }
-            )
-        }
-    )
-
-    Spacer(Modifier.height(32.dp))
-
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.Settings_PersonalSupport,
-                R.drawable.ic_support_jacob_24,
-                onClick = {
-                    viewModel.onPersonalSupportClick()
                 }
             )
         }
