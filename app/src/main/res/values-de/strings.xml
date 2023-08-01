@@ -50,6 +50,9 @@
     <string name="Button_Login">Anmelden</string>
     <string name="Button_SignUp">Lege ein Benutzerkonto an</string>
     <string name="Button_Submit">Jetzt anmelden</string>
+    <string name="Button_TryAgain">Bitte versuche es noch einmal</string>
+    <string name="Error_OutOfRange">Es muss mindestens %s enthalten und darf maximal %s Zeichen lang sein</string>
+    <string name="Error_NotInteger">Die von Dir angegebenen Zahlen sind nicht richtig</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">k. A.</string>
     <string name="Any">Beliebig</string>
@@ -122,7 +125,7 @@
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="Select_Coins">Coins auswählen</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
-    <string name="Restore_ZCash">Zcash</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Geburtstagshöhe</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Geben Sie die Geburtstagshöhe das Wallet für eine schnellere Synchronisierung ein.</string>
     <string name="Restore_ZCash_RestoreAsNew">Als neu wiederherstellen</string>
@@ -131,6 +134,7 @@
     <string name="Restore_ZCash_OldWallet">Vorhandene Wallet</string>
     <string name="Restore_ZCash_OldWallet_Description">Hat Transaktionen</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Die erste Synchronisation mit der Blockchain kann viel Internet-Verkehr verbrauchen.</string>
+    <string name="ImportCexAccount_SelectCex">Wähle CEX</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
