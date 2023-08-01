@@ -27,6 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.BoxItem
@@ -39,6 +41,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.bankwallet.ui.compose.components.StackedBarChart
+import io.horizontalsystems.bankwallet.ui.compose.components.TechnicalIndicatorsChart
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
@@ -91,6 +94,7 @@ fun AnalyticsContentNumber(
             )
         }
     }
+    VSpacer(12.dp)
 }
 
 @Composable
@@ -265,10 +269,12 @@ fun AnalyticsContainer(
 @Composable
 fun AnalyticsChart(
     analyticChart: CoinAnalyticsModule.AnalyticChart,
+    navController: NavController,
 ) {
     when (analyticChart) {
         is CoinAnalyticsModule.AnalyticChart.StackedBars -> {
             StackedBarChart(analyticChart.data, modifier = Modifier.padding(horizontal = 16.dp))
+            VSpacer(12.dp)
         }
 
         is CoinAnalyticsModule.AnalyticChart.Bars -> {
@@ -279,6 +285,7 @@ fun AnalyticsChart(
                     .height(60.dp),
                 chartData = analyticChart.data
             )
+            VSpacer(12.dp)
         }
 
         is CoinAnalyticsModule.AnalyticChart.Line -> {
@@ -296,6 +303,11 @@ fun AnalyticsChart(
                     }
                 }
             )
+            VSpacer(12.dp)
+        }
+
+        is CoinAnalyticsModule.AnalyticChart.TechIndicators -> {
+            TechnicalIndicatorsChart(analyticChart.data, navController = navController)
         }
     }
 }
@@ -350,6 +362,7 @@ private fun Preview_HoldersBlockLocked() {
 @Preview
 @Composable
 private fun Preview_AnalyticsBarChartDisabled() {
+    val navController = rememberNavController()
     ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
@@ -372,6 +385,7 @@ private fun Preview_AnalyticsBarChartDisabled() {
             )
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(false),
+                navController,
             )
             VSpacer(12.dp)
         }
@@ -381,6 +395,7 @@ private fun Preview_AnalyticsBarChartDisabled() {
 @Preview
 @Composable
 private fun Preview_AnalyticsLineChartDisabled() {
+    val navController = rememberNavController()
     ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
@@ -403,6 +418,7 @@ private fun Preview_AnalyticsLineChartDisabled() {
             )
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
+                navController,
             )
             VSpacer(12.dp)
         }
@@ -455,6 +471,7 @@ private fun Preview_HoldersBlock() {
 @Preview
 @Composable
 private fun Preview_AnalyticsRatingScale() {
+    val navController = rememberNavController()
     ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
@@ -477,6 +494,7 @@ private fun Preview_AnalyticsRatingScale() {
             )
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
+                navController,
             )
             VSpacer(12.dp)
         }

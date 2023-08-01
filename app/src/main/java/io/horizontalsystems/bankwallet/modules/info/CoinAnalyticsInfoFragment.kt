@@ -164,6 +164,11 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info4)
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info5)
         }
+        AnalyticInfo.TechnicalIndicatorsInfo-> {
+            BulletedText(R.string.CoinAnalytics_TechIndicators_Info1)
+            BulletedText(R.string.CoinAnalytics_TechIndicators_Info2)
+            BulletedText(R.string.CoinAnalytics_TechIndicators_Info3)
+        }
     }
 }
 
