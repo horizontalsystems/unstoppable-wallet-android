@@ -18,6 +18,7 @@
     <string name="Button_Disable">Désactiver</string>
     <string name="Button_ScanQr">QR Code à scanner</string>
     <string name="Button_Close">Fermer</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Done">Fait</string>
     <string name="Button_Retry">Réessayer</string>
     <string name="Button_Change">Changer</string>
