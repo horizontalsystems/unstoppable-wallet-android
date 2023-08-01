@@ -16,6 +16,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -385,3 +386,13 @@ val FullCoin.iconPlaceholder: Int
 fun FullCoin.eligibleTokens(accountType: AccountType): List<Token> {
     return supportedTokens.filter { it.blockchainType.supports(accountType) }
 }
+
+val HsPointTimePeriod.title: Int
+    get() = when(this){
+        HsPointTimePeriod.Minute30 -> R.string.Coin_Analytics_Period_30m
+        HsPointTimePeriod.Hour1 -> R.string.Coin_Analytics_Period_1h
+        HsPointTimePeriod.Hour4 -> R.string.Coin_Analytics_Period_4h
+        HsPointTimePeriod.Hour8 ->R.string.Coin_Analytics_Period_8h
+        HsPointTimePeriod.Day1 -> R.string.Coin_Analytics_Period_1d
+        HsPointTimePeriod.Week1 -> R.string.Coin_Analytics_Period_1w
+    }

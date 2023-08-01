@@ -197,10 +197,7 @@ private fun AnalyticsBlock(
             }
             block.analyticChart?.let { chartViewItem ->
                 VSpacer(12.dp)
-                AnalyticsChart(chartViewItem.analyticChart)
-            }
-            if (block.value != null || block.analyticChart != null) {
-                VSpacer(12.dp)
+                AnalyticsChart(chartViewItem.analyticChart, navController)
             }
         }
     }
@@ -261,6 +258,10 @@ private fun FooterCell(
                 CoinAnalyticsModule.ActionType.Preview -> {
                     navController.slideFromBottom(R.id.subscriptionInfoFragment)
                 }
+
+                CoinAnalyticsModule.ActionType.OpenTechnicalIndicatorsDetails -> {
+                    navController.slideFromRight(R.id.technicalIndicatorsDetailsFragment)
+                }
             }
         }
     )
@@ -314,6 +315,7 @@ private fun AnalyticsPreviewBlock(block: CoinAnalyticsModule.PreviewBlockViewIte
             } else {
                 AnalyticsChart(
                     CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(chartType == CoinAnalyticsModule.PreviewChartType.Line),
+                    navController,
                 )
             }
         }

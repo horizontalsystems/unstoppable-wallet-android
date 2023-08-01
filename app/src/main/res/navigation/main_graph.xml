@@ -147,6 +147,9 @@
             app:uri="pcash://coin-page?uid={coinUid}" />
     </fragment>
     <fragment
+        android:id="@+id/technicalIndicatorsDetailsFragment"
+        android:name="cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment" />
+    <fragment
         android:id="@+id/indicatorsFragment"
         android:name="cash.p.terminal.modules.coin.indicators.IndicatorsFragment" />
     <fragment
@@ -370,4 +373,7 @@
     <dialog
         android:id="@+id/configuredTokenInfo"
         android:name="cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoDialog" />
+    <dialog
+        android:id="@+id/periodSelectDialog"
+        android:name="cash.p.terminal.ui.compose.components.PeriodSelectDialog" />
 </navigation>

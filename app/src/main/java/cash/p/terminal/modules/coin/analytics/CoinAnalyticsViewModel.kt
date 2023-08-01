@@ -31,6 +31,9 @@ import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.FooterItem
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.PreviewBlockViewItem
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.PreviewChartType
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
+import cash.p.terminal.modules.coin.technicalindicators.AdviceBlock
+import cash.p.terminal.modules.coin.technicalindicators.AdviceViewType
+import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorData
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.metricchart.ProChartModule
 import cash.p.terminal.ui.compose.TranslatableString
@@ -138,8 +141,56 @@ class CoinAnalyticsViewModel(
         return AnalyticsViewItem.NoData
     }
 
+    private fun testRows(): List<TechnicalIndicatorData> {
+        val blocks1 = listOf(
+            AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
+            AdviceBlock(type = AdviceViewType.SELL, filled = true),
+            AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
+            AdviceBlock(type = AdviceViewType.BUY, filled = true),
+            AdviceBlock(type = AdviceViewType.STRONGBUY, filled = true),
+        )
+        val blocks2 = listOf(
+            AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
+            AdviceBlock(type = AdviceViewType.SELL, filled = true),
+            AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
+            AdviceBlock(type = AdviceViewType.BUY, filled = true),
+            AdviceBlock(type = AdviceViewType.STRONGBUY, filled = false),
+        )
+        val blocks3 = listOf(
+            AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
+            AdviceBlock(type = AdviceViewType.SELL, filled = true),
+            AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
+            AdviceBlock(type = AdviceViewType.BUY, filled = false),
+            AdviceBlock(type = AdviceViewType.STRONGBUY, filled = false),
+        )
+        val rows = listOf(
+            TechnicalIndicatorData(title = "Summary", AdviceViewType.STRONGBUY, blocks1),
+            TechnicalIndicatorData(title = "MA", AdviceViewType.BUY, blocks2),
+            TechnicalIndicatorData(title = "Oscillators", AdviceViewType.NEUTRAL, blocks3),
+        )
+        return rows
+    }
+
     private fun getViewItems(analytics: Analytics): List<BlockViewItem> {
         val blocks = mutableListOf<BlockViewItem>()
+
+        blocks.add(
+            BlockViewItem(
+                title = R.string.Coin_Analytics_TechnicalIndicators,
+                info = AnalyticInfo.TechnicalIndicatorsInfo,
+                analyticChart = ChartViewItem(
+                    AnalyticChart.TechIndicators(testRows()),
+                    coin.uid,
+                ),
+                footerItems = listOf(
+                    FooterItem(
+                        title = Title(ResString(R.string.Coin_Analytics_Details)),
+                        action = ActionType.OpenTechnicalIndicatorsDetails
+                    )
+                )
+            )
+        )
+
         analytics.cexVolume?.let { data ->
             val footerItems = mutableListOf<FooterItem>()
             data.rating?.let { rating ->
