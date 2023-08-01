@@ -46,6 +46,10 @@
     <string name="Button_Copy">Kopieren</string>
     <string name="Button_Delete">Löschen</string>
     <string name="Button_Sign">Signieren</string>
+    <string name="Button_GetApiKeys">Hol Dir Deine Schlüssel API</string>
+    <string name="Button_Login">Anmelden</string>
+    <string name="Button_SignUp">Lege ein Benutzerkonto an</string>
+    <string name="Button_Submit">Jetzt anmelden</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">k. A.</string>
     <string name="Any">Beliebig</string>
