@@ -16,7 +16,9 @@
     <string name="Button_Next">Weiter</string>
     <string name="Button_Enable">Aktivieren</string>
     <string name="Button_Disable">Deaktivieren</string>
+    <string name="Button_ScanQr">Zur scannende QR-Code</string>
     <string name="Button_Close">Schließen</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Done">Fertig</string>
     <string name="Button_Retry">Wiederholen</string>
     <string name="Button_Change">Ändern</string>
