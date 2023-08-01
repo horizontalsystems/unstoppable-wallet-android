@@ -8,12 +8,15 @@
     <string name="Alert_Close">Fermer</string>
     <string name="Alert_Loading">Chargement en cours...</string>
     <string name="Alert_Restart">Redémarrer</string>
+    <string name="Suspended">DÉSACTIVÉ</string>
     <string name="Action_Undo">ANNULER</string>
     <string name="Button_Show">Afficher</string>
+    <string name="Button_Hide">Masquer</string>
     <string name="Button_Cancel">Annuler</string>
     <string name="Button_Next">Suivant</string>
     <string name="Button_Enable">Activer</string>
     <string name="Button_Disable">Désactiver</string>
+    <string name="Button_ScanQr">QR Code à scanner</string>
     <string name="Button_Close">Fermer</string>
     <string name="Button_Done">Fait</string>
     <string name="Button_Retry">Réessayer</string>
