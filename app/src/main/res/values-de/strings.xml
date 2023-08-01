@@ -135,6 +135,7 @@
     <string name="Restore_ZCash_OldWallet_Description">Hat Transaktionen</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Die erste Synchronisation mit der Blockchain kann viel Internet-Verkehr verbrauchen.</string>
     <string name="ImportCexAccount_SelectCex">Wähle CEX</string>
+    <string name="ImportCexAccount_SelectCexDescription">Wähle eine Centralized Exchange, mit der Du Dich verbinden möchtest.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
