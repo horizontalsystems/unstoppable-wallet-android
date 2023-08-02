@@ -375,6 +375,8 @@
     <string name="FeeSettings_Fee">Frais Max</string>
     <string name="FeeSettings_Fee_Info">Le montant maximum estimé des frais à payer pour cette transaction, calculé sur la base des valeurs de limite de gas, de taux de frais maximum et de frais de priorité maximum ci-dessous. Les frais réels payés sont généralement inférieurs.</string>
     <string name="FeeSettings_NetworkFee">Frais de réseau</string>
+    <string name="FeeSettings_NetworkFee_Info">Le coût d\'une opération de paiement donnée, tel que mesuré de prime abord sur le réseau.</string>
+    <string name="FeeSettings_GasLimit">Limite de Gaz</string>
     <string name="FeeSettings_GasLimit_Info">La complexité des transactions est mesurée en unités appelées \"gas\". Elles varient en fonction du contrat intelligent en cours d\'exécution. La limite de gas est le volume maximum estimé de gas nécessaire pour son exécution. Le volume de gaz réellement utilisé est généralement inférieur.</string>
     <string name="FeeSettings_GasPrice">Gas price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Les frais pour effectuer des transactions sur le réseau sont mesurés en unités de gas. Le prix du gas est le montant qu\'un utilisateur est prêt à dépenser par unité de gas. Le prix du gas est élevé lorsque le réseau est encombré, et faible lorsqu\'il est inactif. Souvent, une transaction reste en suspens pendant une période prolongée si le montant du gas est insuffisant.</string>
