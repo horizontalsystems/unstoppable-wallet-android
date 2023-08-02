@@ -136,6 +136,9 @@
     <string name="Restore_ZCash_SlowSyncWarningText">Die erste Synchronisation mit der Blockchain kann viel Internet-Verkehr verbrauchen.</string>
     <string name="ImportCexAccount_SelectCex">Wähle CEX</string>
     <string name="ImportCexAccount_SelectCexDescription">Wähle eine Centralized Exchange, mit der Du Dich verbinden möchtest.</string>
+    <string name="ImportCexAccountBinance_Description">Bitte gib Deine API-Schlüssel (API Keys and Secrets) ein, damit Du eine direkte Verknüpfung zu Deiner Kryptowährungs-Exchange erstellen kannst.</string>
+    <string name="ImportCexAccountBinance_ApiKey">API-Schlüssel</string>
+    <string name="ImportCexAccountBinance_SecretKey">Geheimer Schlüssel</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
