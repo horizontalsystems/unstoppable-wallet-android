@@ -276,7 +276,7 @@
     <string name="FeeSettings_Fee">Max Gebühr</string>
     <string name="FeeSettings_Fee_Info">Die geschätzte Transaktionsgebühr, die für diese Transaktion gezahlt werden soll berechnet anhand des Gaslimits, der maximalen Gebührenrate und der unten angegebenen Maximalpriorität. Die tatsächlich gezahlte Gebühr ist in der Regel niedriger.</string>
     <string name="FeeSettings_NetworkFee">Netzwerkgebühr</string>
-    <string name="FeeSettings_NetworkFee_Info">Die geschätzten Kosten für den Versand der Transaktion im Netzwerk.</string>
+    <string name="FeeSettings_NetworkFee_Info">Einschätzung der Kosten für den Versand einer angegebenen Transaktion im Netzwerk.</string>
     <string name="FeeSettings_GasLimit_Info">Die Transaktionskomplexität wird in Einheiten mit dem Namen \"Gas\" gemessen, die je nach ausgeführten intelligenten Verträgen variieren. Das Gaslimit ist das geschätzte Höchstgas, das benötigt wird, um es auszuführen. Das tatsächliche Gas wird normalerweise niedriger sein.</string>
     <string name="FeeSettings_GasPrice">Gas price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Die Gebühr für Transaktionen im Netzwerk wird in Gaseinheiten gemessen. Der Gaspreis ist der Betrag, den ein Nutzer für eine Einheit Gas auszugeben bereit ist. Wenn das Netzwerk ausgelastet ist, sind die Gaspreise hoch, und niedrig, wenn es nicht genutzt wird. Ein unzureichender Gaspreis ist oft ein Grund dafür, dass eine Transaktion über einen längeren Zeitraum aussteht.</string>
