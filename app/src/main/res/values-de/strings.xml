@@ -139,6 +139,8 @@
     <string name="ImportCexAccountBinance_Description">Bitte gib Deine API-Schlüssel (API Keys and Secrets) ein, damit Du eine direkte Verknüpfung zu Deiner Kryptowährungs-Exchange erstellen kannst.</string>
     <string name="ImportCexAccountBinance_ApiKey">API-Schlüssel</string>
     <string name="ImportCexAccountBinance_SecretKey">Geheimer Schlüssel</string>
+    <string name="ImportCexAccountConzix_Description">Bitte E-Mail-Adresse und Passwort Deines Coinzix-Kontos eingeben.</string>
+    <string name="ImportCexAccountConzix_Email">E-Mail</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
@@ -153,6 +155,7 @@
     <string name="Market_Field_HighestPrice">Höchster Preis</string>
     <string name="Market_Field_LowestPrice">Niedrigster Preis</string>
     <string name="Market_Sort_PopupTitle">Sortieren nach</string>
+    <string name="Market_BtcDominance">BTC-Dominanz in Prozent</string>
     <string name="Market_SeeAll">Alle anzeigen</string>
     <string name="Market_PoweredByHorizontalApi">Powered by Horizontal API</string>
     <string name="Market_Tab_Watchlist">Merkliste</string>
@@ -170,6 +173,7 @@
     <string name="Market_AdvancedSearch_Results">Ergebnisse</string>
     <string name="Market_Search_Hint">Suchen</string>
     <string name="Market_Filter_Volume24h">Handelsvolumen (24h)</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">Übertraf BTC</string>
     <string name="Market_Filter_OutperformedEth">Übertraf ETH</string>
     <string name="Market_Filter_OutperformedBnb">Übertraf BNB</string>
@@ -901,6 +905,7 @@
     <string name="CoinPage_SecurityParams_Privacy">Privatsphäre</string>
     <string name="CoinPage_SecurityParams_Low">Niedrig</string>
     <string name="CoinPage_SecurityParams_High">Hoch</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_CoinTypes">Coin Type</string>
     <string name="CoinPage_Website">Webseite</string>
     <string name="CoinPage_Volume">Lautstärke</string>
