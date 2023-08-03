@@ -383,6 +383,7 @@
     <string name="FeeSettings_GasPrice">Gas price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Les frais pour effectuer des transactions sur le réseau sont mesurés en unités de gas. Le prix du gas est le montant qu\'un utilisateur est prêt à dépenser par unité de gas. Le prix du gas est élevé lorsque le réseau est encombré, et faible lorsqu\'il est inactif. Souvent, une transaction reste en suspens pendant une période prolongée si le montant du gas est insuffisant.</string>
     <string name="FeeSettings_BaseFee">Frais de base</string>
+    <string name="FeeSettings_BaseFee_Info">Le prix plancher du gaz, que l\'on nomme aussi &lt;&lt;taux minimal des frais de transaction&gt;&gt;, est fixé par le protocole réseau à chaque bloc. La volatilité des prix plancher serait à l\'origine d\'une utilisation hétérogène du réseau, qui varie souvent d\'un bloc à l\'autre. Haussier ou baissier, il est impératif que le prix ne dépasse pas la zone des 12.5% de tous les blocs qui suivent, ce qui rend les frais encore plus prévisibles. La valeur qui a été reportée ici, représente le taux minimal des frais de transaction issus des transactions du bloc.</string>
     <string name="FeeSettings_MaxFee">Taux de frais max (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips">Frais de priorité max (Gwei)</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risqué</string>
