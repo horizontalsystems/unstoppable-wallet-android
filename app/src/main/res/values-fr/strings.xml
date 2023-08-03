@@ -349,6 +349,7 @@
     <string name="Send_TxSpeed_High">Élevée</string>
     <string name="Send_TxSpeed_Recommended">Recommandé</string>
     <string name="Send_TxSpeed_Custom">Personnalisé</string>
+    <string name="Send_TxSpeed_CustomFeeHint">satoshis/octet</string>
     <string name="Send_DialogFee">Frais</string>
     <string name="Send_DialogProceed">Suivant</string>
     <string name="Send_LockTime_Off">Désactivé</string>
