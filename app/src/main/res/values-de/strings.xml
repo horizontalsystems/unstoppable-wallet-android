@@ -250,6 +250,7 @@
     <string name="Send_TxSpeed_High">Hoch</string>
     <string name="Send_TxSpeed_Recommended">Empfohlen</string>
     <string name="Send_TxSpeed_Custom">Benutzerdefiniert</string>
+    <string name="Send_TxSpeed_CustomFeeHint">Sats/Byte</string>
     <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogProceed">Weiter</string>
     <string name="Send_LockTime_Off">Aus</string>
