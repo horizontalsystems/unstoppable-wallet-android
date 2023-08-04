@@ -218,7 +218,7 @@
     <string name="Send_Fee">Gebühr</string>
     <string name="Send_Fee_Info">Blockchains verlangen, dass Nutzer Netzwerkgebühren beim Versenden von Transaktionen bezahlen. Die Gebühren sind höher, wenn viele Transaktionen im Netzwerk stattfinden.</string>
     <string name="Send_Button_Paste">Einfügen</string>
-    <string name="Send_Button_Max">Max.</string>
+    <string name="Send_Button_Max">Maximal</string>
     <string name="Send_Advanced">Erweitert</string>
     <string name="Send_Hodler_Description">TimeLock funktioniert nur beim Senden an BIP44 Adressen (ab 1)</string>
     <string name="Send_Confirmation_Title">Bestätigen</string>
