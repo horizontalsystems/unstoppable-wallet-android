@@ -5,20 +5,24 @@ import cash.p.terminal.entities.Currency
 
 class AppConfigProvider {
 
-     val companyWebPageLink: String = "https://p.cash/"
-     val appWebPageLink: String = "https://p.cash/wallet"
-     val analyticsLink: String = "https://portfolio.cash/"
-     val appGithubLink: String = "https://github.com/piratecash/pcash-wallet-android"
-     val appTwitterLink: String = "https://twitter.com/PirateCash_NET"
-     val appTelegramLink: String = "https://t.me/pcash"
-     val appRedditLink: String = "https://www.reddit.com/r/PirateCash/"
-     val reportEmail = "i@p.cash"
+     val companyWebPageLink by lazy { Translator.getString(R.string.companyWebPageLink) }
+     val appWebPageLink by lazy { Translator.getString(R.string.appWebPageLink) }
+     val analyticsLink by lazy { Translator.getString(R.string.analyticsLink) }
+     val appGithubLink by lazy { Translator.getString(R.string.appGithubLink) }
+     val appTwitterLink by lazy { Translator.getString(R.string.appTwitterLink) }
+     val appTelegramLink by lazy { Translator.getString(R.string.appTelegramLink) }
+     val appRedditLink by lazy { Translator.getString(R.string.appRedditLink) }
+     val reportEmail by lazy { Translator.getString(R.string.reportEmail) }
+     val releaseNotesUrl by lazy { Translator.getString(R.string.releaseNotesUrl) }
      val btcCoreRpcUrl: String = "https://btc.blocksdecoded.com/rpc"
-     val releaseNotesUrl: String = "https://api.github.com/repos/piratecash/pcash-wallet-android/releases/tags/"
      val walletConnectUrl = "relay.walletconnect.com"
-     val walletConnectProjectId by lazy {
-         Translator.getString(R.string.walletConnectV2Key)
-     }
+     val walletConnectProjectId by lazy { Translator.getString(R.string.walletConnectV2Key) }
+     val walletConnectAppMetaDataName by lazy { Translator.getString(R.string.walletConnectAppMetaDataName) }
+     val walletConnectAppMetaDataUrl by lazy { Translator.getString(R.string.walletConnectAppMetaDataUrl) }
+     val walletConnectAppMetaDataIcon by lazy { Translator.getString(R.string.walletConnectAppMetaDataIcon) }
+     val walletConnectV1PeerMetaName by lazy { Translator.getString(R.string.walletConnectV1PeerMetaName) }
+     val walletConnectV1PeerMetaUrl by lazy { Translator.getString(R.string.walletConnectV1PeerMetaUrl) }
+     val accountsBackupFileSalt by lazy { Translator.getString(R.string.accountsBackupFileSalt) }
 
      val twitterBearerToken by lazy {
         Translator.getString(R.string.twitterBearerToken)

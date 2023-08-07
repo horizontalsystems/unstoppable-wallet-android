@@ -31,6 +31,22 @@ android {
         lintOptions {
             checkReleaseBuilds false
         }
+
+        resValue "string", "companyWebPageLink", "https://p.cash/"
+        resValue "string", "appWebPageLink", "https://p.cash/wallet"
+        resValue "string", "analyticsLink", "https://portfolio.cash/"
+        resValue "string", "appGithubLink", "https://github.com/piratecash/pcash-wallet-android"
+        resValue "string", "appTwitterLink", "https://twitter.com/PirateCash_NET"
+        resValue "string", "appTelegramLink", "https://t.me/pcash"
+        resValue "string", "appRedditLink", "https://www.reddit.com/r/PirateCash/"
+        resValue "string", "reportEmail", "i@p.cash"
+        resValue "string", "releaseNotesUrl", "https://api.github.com/repos/piratecash/pcash-wallet-android/releases/tags/"
+        resValue "string", "walletConnectAppMetaDataName", "pcash"
+        resValue "string", "walletConnectAppMetaDataUrl", "p.cash"
+        resValue "string", "walletConnectAppMetaDataIcon", "https://raw.githubusercontent.com/piratecash/pcash-wallet-ios/master/UnstoppableWallet/UnstoppableWallet/AppIcon.xcassets/AppIcon.appiconset/p.cash_1024.png"
+        resValue "string", "walletConnectV1PeerMetaName", "Unstoppable Wallet"
+        resValue "string", "walletConnectV1PeerMetaUrl", "https://p.cash"
+        resValue "string", "accountsBackupFileSalt", "pcash"
     }
 
     buildFeatures {

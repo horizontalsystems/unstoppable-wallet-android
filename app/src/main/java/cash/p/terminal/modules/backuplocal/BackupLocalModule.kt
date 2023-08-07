@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.backuplocal
 
 import com.google.gson.annotations.SerializedName
+import cash.p.terminal.core.App
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CexType
 import io.horizontalsystems.hdwalletkit.Base58
@@ -113,6 +114,6 @@ object BackupLocalModule {
         n = 16384,
         p = 4,
         r = 8,
-        salt = "unstoppable"
+        salt = App.appConfigProvider.accountsBackupFileSalt
     )
 }
