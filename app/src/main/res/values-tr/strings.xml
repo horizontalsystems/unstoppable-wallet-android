@@ -913,6 +913,8 @@
     <string name="CoinAnalytics_TransactionCountRank">İşlem Sayısı Sıralaması</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Proje TVL (Toplam Değer)</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Proje Gelir Sıralaması</string>
+    <string name="Coin_Analytics_Details">Ayrıntılar</string>
+    <string name="Coin_Analytics_Period_1h">1 saat</string>
     <string name="ActivateSubscription_Address">Adres</string>
     <string name="Nfts_Title">NFT\'ler</string>
     <string name="Nfts_PriceType_Days_7">Ortalama 7G</string>
