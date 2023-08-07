@@ -1167,6 +1167,9 @@
     <string name="Coin_Analytics_30DayRank">Рейтинг на 30д</string>
     <string name="Coin_Analytics_30DayUniqueAddress">Уникальные адреса за 30 дней</string>
     <string name="Coin_Analytics_30DayVolume">Объем за 30д</string>
+    <string name="Coin_Analytics_Details">Детали</string>
+    <string name="Coin_Analytics_Period_1h">1 час</string>
+    <string name="Coin_Analytics_Indicators_NoData">Нет данных</string>
     <string name="ActivateSubscription_Title">Активировать</string>
     <string name="ActivateSubscription_Wallet">Кошелек</string>
     <string name="ActivateSubscription_Address">Адрес</string>
