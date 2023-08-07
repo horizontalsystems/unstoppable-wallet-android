@@ -1124,6 +1124,9 @@
     <string name="Coin_Analytics_30DayRank">30天排名</string>
     <string name="Coin_Analytics_30DayUniqueAddress">30天唯一地址</string>
     <string name="Coin_Analytics_30DayVolume">30天交易量</string>
+    <string name="Coin_Analytics_Details">详细信息</string>
+    <string name="Coin_Analytics_Period_1h">1 小时</string>
+    <string name="Coin_Analytics_Indicators_NoData">无数据</string>
     <string name="ActivateSubscription_Title">激活</string>
     <string name="ActivateSubscription_Wallet">钱包</string>
     <string name="ActivateSubscription_Address">地址</string>
