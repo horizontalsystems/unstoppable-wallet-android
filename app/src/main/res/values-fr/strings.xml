@@ -386,6 +386,7 @@
     <string name="FeeSettings_BaseFee">Frais de base</string>
     <string name="FeeSettings_BaseFee_Info">Le prix plancher du gaz, que l\'on nomme aussi &lt;&lt;taux minimal des frais de transaction&gt;&gt;, est fixé par le protocole réseau à chaque bloc. La volatilité des prix plancher serait à l\'origine d\'une utilisation hétérogène du réseau, qui varie souvent d\'un bloc à l\'autre. Haussier ou baissier, il est impératif que le prix ne dépasse pas la zone des 12.5% de tous les blocs qui suivent, ce qui rend les frais encore plus prévisibles. La valeur qui a été reportée ici, représente le taux minimal des frais de transaction issus des transactions du bloc.</string>
     <string name="FeeSettings_MaxFee">Taux de frais max (Gwei)</string>
+    <string name="FeeSettings_MaxFee_Info">Cela correspond au montant maximal du prix auquel l\'utilisateur achète le gaz. Ce prix doit couvrir le taux minimal des frais de transaction du réseau, il doit aussi devenir la priorité avec laquelle une transaction sera traitée. L\'origine de l\'estimation de la valeur, indiquée ici, se trouve dans une analyse, selon laquelle la valeur serait calculée en ajoutant le taux minimal des frais de transaction du bloc successif à la priorité de l\'utilisateur avec la quelle une transaction sera traitée. Le taux actuel des frais de transaction à payer, sera revu à la baisse et ajusté automatiquement. La fixation du taux du prix en dessous du taux plancher actuel, serait, d\'une part, un soulagement parce qu\'elle limiterait les frais à payer, d\'autre part, il faut compter avec un temps de confirmation moyen plus long des transactions, voire un blocage de la transaction.</string>
     <string name="FeeSettings_MaxMinerTips">Frais de priorité max (Gwei)</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risqué</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transaction risque de rester en attente pendant un certain temps ou d\'échouer complètement.</string>
@@ -668,6 +669,7 @@
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
+    <string name="Settings_PersonalSupport_PremiumFeatureWarning">Cette fonctionnalité est destinée aux utilisateurs premium du portefeuille (Wallet) Unstoppable uniquement. Vous trouverez plus d\'informations sur notre site officiel.</string>
     <string name="Settings_PersonalSupport_Account">Compte</string>
     <string name="Settings_PersonalSupport_Request">Requête</string>
     <string name="Appearance_Theme">Thème</string>
