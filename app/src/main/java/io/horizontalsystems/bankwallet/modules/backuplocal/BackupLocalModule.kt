@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal
 
 import com.google.gson.annotations.SerializedName
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CexType
 import io.horizontalsystems.hdwalletkit.Base58
@@ -113,6 +114,6 @@ object BackupLocalModule {
         n = 16384,
         p = 4,
         r = 8,
-        salt = "unstoppable"
+        salt = App.appConfigProvider.accountsBackupFileSalt
     )
 }

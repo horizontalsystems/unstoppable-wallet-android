@@ -366,10 +366,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val serverUrl = "wss://${appConfig.walletConnectUrl}?projectId=$projectId"
         val connectionType = ConnectionType.AUTOMATIC
         val appMetaData = Core.Model.AppMetaData(
-            name = "Unstoppable",
+            name = appConfig.walletConnectAppMetaDataName,
             description = "",
-            url = "unstoppable.money",
-            icons = listOf("https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png"),
+            url = appConfig.walletConnectAppMetaDataUrl,
+            icons = listOf(appConfig.walletConnectAppMetaDataIcon),
             redirect = null,
         )
 

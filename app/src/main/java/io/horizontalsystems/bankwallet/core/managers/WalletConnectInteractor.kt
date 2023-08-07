@@ -7,11 +7,12 @@ import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import com.trustwallet.walletconnect.models.session.WCSession
 import com.trustwallet.walletconnect.models.session.WCSessionUpdate
+import io.horizontalsystems.bankwallet.core.App
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import java.util.*
+import java.util.UUID
 
 class WalletConnectInteractor(
         val session: WCSession,
@@ -44,7 +45,10 @@ class WalletConnectInteractor(
 
     constructor(uri: String) : this(WCSession.from(uri) ?: throw SessionError.InvalidUri)
 
-    private val clientMeta = WCPeerMeta("Unstoppable Wallet", "https://unstoppable.money")
+    private val clientMeta = WCPeerMeta(
+        App.appConfigProvider.walletConnectV1PeerMetaName,
+        App.appConfigProvider.walletConnectV1PeerMetaUrl
+    )
     var delegate: Delegate? = null
 
     private val client = WCClient(GsonBuilder(), OkHttpClient.Builder().build())
