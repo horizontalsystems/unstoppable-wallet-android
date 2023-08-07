@@ -1059,6 +1059,9 @@
     <string name="Coin_Analytics_30DayRank">Rango de 30 días</string>
     <string name="Coin_Analytics_30DayUniqueAddress">Direcciones únicas de 30 días</string>
     <string name="Coin_Analytics_30DayVolume">Volumen de 30 días</string>
+    <string name="Coin_Analytics_Details">Detalles</string>
+    <string name="Coin_Analytics_Period_1h">1 hora</string>
+    <string name="Coin_Analytics_Indicators_NoData">No hay datos</string>
     <string name="ActivateSubscription_Title">Activar</string>
     <string name="ActivateSubscription_Wallet">Monedero</string>
     <string name="ActivateSubscription_Address">Dirección</string>
