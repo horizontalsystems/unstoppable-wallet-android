@@ -50,98 +50,6 @@ class ChartIndicatorManager(
             .toMap()
     }
 
-    private fun calculateRsi(
-        points: LinkedHashMap<Long, Float>,
-        typedDataRsi: ChartIndicatorDataRsi,
-        startTimestamp: Long
-    ): ChartIndicator.Rsi {
-        val period = typedDataRsi.period
-
-        val upMove = mutableMapOf<Long, Float>()
-        val downMove = mutableMapOf<Long, Float>()
-
-        val pointsList = points.toList()
-
-        pointsList.windowed(2).forEach {
-            val first = it.first()
-            val last = it.last()
-            val change = last.second - first.second
-            val key = last.first
-            upMove[key] = if (change > 0) change else 0f
-            downMove[key] = if (change < 0) abs(change) else 0f
-        }
-
-        val rsi =  mutableMapOf<Long, Float>()
-
-        var maUp = 0f
-        var maDown = 0f
-        var rStrength: Float
-
-        var i = -1
-
-        for (key in upMove.keys) {
-            i++
-
-            val up = upMove[key]!!
-            val down = downMove[key]!!
-
-            // SMA
-            if (i < period) {
-                maUp += up
-                maDown += down
-                if (i + 1 == period) {
-                    maUp /= period
-                    maDown /= period
-                    rStrength = maUp / maDown
-
-                    rsi[key] = 100 - 100 / (rStrength + 1)
-                }
-                continue
-            }
-
-            // EMA
-            maUp = (maUp * (period - 1) + up) / period
-            maDown = (maDown * (period - 1) + down) / period
-            rStrength = maUp / maDown
-
-            rsi[key] = 100 - 100 / (rStrength + 1)
-        }
-
-        return ChartIndicator.Rsi(LinkedHashMap(rsi).filterByTimestamp(startTimestamp))
-    }
-
-    private fun calculateMacd(
-        points: LinkedHashMap<Long, Float>,
-        typedDataMacd: ChartIndicatorDataMacd,
-        startTimestamp: Long
-    ): ChartIndicator.Macd {
-        val emaFast = calculateEMA(points, typedDataMacd.fast)
-        val emaSlow = calculateEMA(points, typedDataMacd.slow)
-
-        val macdLine = LinkedHashMap(
-            emaSlow.mapNotNull { (key, value) ->
-                emaFast[key]?.minus(value)?.let {
-                    key to it
-                }
-            }.toMap()
-        )
-        val signalLine = calculateEMA(macdLine, typedDataMacd.signal)
-
-        val histogram = LinkedHashMap(
-            signalLine.mapNotNull { (key, value) ->
-                macdLine[key]?.minus(value)?.let {
-                    key to it
-                }
-            }.toMap()
-        )
-
-        return ChartIndicator.Macd(
-            macdLine.filterByTimestamp(startTimestamp),
-            signalLine.filterByTimestamp(startTimestamp),
-            histogram.filterByTimestamp(startTimestamp)
-        )
-    }
-
     private fun calculateMovingAverage(
         points: LinkedHashMap<Long, Float>,
         typedDataMA: ChartIndicatorDataMa,
@@ -159,63 +67,6 @@ class ChartIndicatorManager(
         }
 
         return ChartIndicator.MovingAverage(line.filterByTimestamp(startTimestamp), typedDataMA.color)
-    }
-
-    private fun LinkedHashMap<Long, Float>.filterByTimestamp(startTimestamp: Long): LinkedHashMap<Long, Float> {
-        return LinkedHashMap(filter { it.key >= startTimestamp })
-    }
-
-    private fun calculateWMA(
-        points: LinkedHashMap<Long, Float>,
-        period: Int
-    ): LinkedHashMap<Long, Float> {
-        val pointsList = points.toList()
-        return LinkedHashMap(
-            pointsList.windowed(period, 1) { window ->
-                val n = period
-                val sumOfWeights = (n + 1) * n / 2
-                val wma = window.mapIndexed { i, (_, value) ->
-                    value * (i + 1)
-                }.sum() / sumOfWeights
-
-                window.last().first to wma
-            }.toMap()
-        )
-    }
-
-    private fun calculateEMA(
-        points: LinkedHashMap<Long, Float>,
-        period: Int
-    ): LinkedHashMap<Long, Float> {
-        val pointsList = points.toList()
-        val subListForFirstSma = pointsList.subList(0, period)
-        val firstSma = subListForFirstSma.map { it.second }.average().toFloat()
-
-        val res = LinkedHashMap<Long, Float>()
-        res[subListForFirstSma.last().first] = firstSma
-
-        var prevEma = firstSma
-
-        val k = 2f / (period + 1) // multiplier for weighting the EMA
-        pointsList.subList(period, pointsList.size).forEach { (key, value) ->
-            val ema = value * k + prevEma * (1 - k)
-            res[key] = ema
-
-            prevEma = ema
-        }
-        return res
-    }
-
-    private fun calculateSMA(
-        points: LinkedHashMap<Long, Float>,
-        period: Int
-    ): LinkedHashMap<Long, Float> {
-        val pointsList = points.toList()
-        return LinkedHashMap(
-            pointsList.windowed(period, 1) {
-                it.last().first to it.map { it.second }.average().toFloat()
-            }.toMap()
-        )
     }
 
     fun enable() {
@@ -251,4 +102,159 @@ class ChartIndicatorManager(
     fun update(chartIndicatorSetting: ChartIndicatorSetting) {
         chartIndicatorSettingsDao.update(chartIndicatorSetting)
     }
+
+    companion object{
+        val maPeriods = listOf(9, 25, 50)
+        val rsiPeriod = 12
+        val macdPeriods = listOf(12, 26, 9)
+
+        fun calculateWMA(
+            points: LinkedHashMap<Long, Float>,
+            period: Int
+        ): LinkedHashMap<Long, Float> {
+            val pointsList = points.toList()
+            return LinkedHashMap(
+                pointsList.windowed(period, 1) { window ->
+                    val n = period
+                    val sumOfWeights = (n + 1) * n / 2
+                    val wma = window.mapIndexed { i, (_, value) ->
+                        value * (i + 1)
+                    }.sum() / sumOfWeights
+
+                    window.last().first to wma
+                }.toMap()
+            )
+        }
+
+        fun calculateEMA(
+            points: LinkedHashMap<Long, Float>,
+            period: Int
+        ): LinkedHashMap<Long, Float> {
+            val pointsList = points.toList()
+            val subListForFirstSma = pointsList.subList(0, period)
+            val firstSma = subListForFirstSma.map { it.second }.average().toFloat()
+
+            val res = LinkedHashMap<Long, Float>()
+            res[subListForFirstSma.last().first] = firstSma
+
+            var prevEma = firstSma
+
+            val k = 2f / (period + 1) // multiplier for weighting the EMA
+            pointsList.subList(period, pointsList.size).forEach { (key, value) ->
+                val ema = value * k + prevEma * (1 - k)
+                res[key] = ema
+
+                prevEma = ema
+            }
+            return res
+        }
+
+         fun calculateSMA(
+            points: LinkedHashMap<Long, Float>,
+            period: Int
+        ): LinkedHashMap<Long, Float> {
+            val pointsList = points.toList()
+            return LinkedHashMap(
+                pointsList.windowed(period, 1) {
+                    it.last().first to it.map { it.second }.average().toFloat()
+                }.toMap()
+            )
+        }
+
+        fun calculateRsi(
+            points: LinkedHashMap<Long, Float>,
+            typedDataRsi: ChartIndicatorDataRsi,
+            startTimestamp: Long
+        ): ChartIndicator.Rsi {
+            val period = typedDataRsi.period
+
+            val upMove = mutableMapOf<Long, Float>()
+            val downMove = mutableMapOf<Long, Float>()
+
+            val pointsList = points.toList()
+
+            pointsList.windowed(2).forEach {
+                val first = it.first()
+                val last = it.last()
+                val change = last.second - first.second
+                val key = last.first
+                upMove[key] = if (change > 0) change else 0f
+                downMove[key] = if (change < 0) abs(change) else 0f
+            }
+
+            val rsi =  mutableMapOf<Long, Float>()
+
+            var maUp = 0f
+            var maDown = 0f
+            var rStrength: Float
+
+            var i = -1
+
+            for (key in upMove.keys) {
+                i++
+
+                val up = upMove[key]!!
+                val down = downMove[key]!!
+
+                // SMA
+                if (i < period) {
+                    maUp += up
+                    maDown += down
+                    if (i + 1 == period) {
+                        maUp /= period
+                        maDown /= period
+                        rStrength = maUp / maDown
+
+                        rsi[key] = 100 - 100 / (rStrength + 1)
+                    }
+                    continue
+                }
+
+                // EMA
+                maUp = (maUp * (period - 1) + up) / period
+                maDown = (maDown * (period - 1) + down) / period
+                rStrength = maUp / maDown
+
+                rsi[key] = 100 - 100 / (rStrength + 1)
+            }
+
+            return ChartIndicator.Rsi(LinkedHashMap(rsi).filterByTimestamp(startTimestamp))
+        }
+
+         fun calculateMacd(
+            points: LinkedHashMap<Long, Float>,
+            typedDataMacd: ChartIndicatorDataMacd,
+            startTimestamp: Long
+        ): ChartIndicator.Macd {
+            val emaFast = calculateEMA(points, typedDataMacd.fast)
+            val emaSlow = calculateEMA(points, typedDataMacd.slow)
+
+            val macdLine = LinkedHashMap(
+                emaSlow.mapNotNull { (key, value) ->
+                    emaFast[key]?.minus(value)?.let {
+                        key to it
+                    }
+                }.toMap()
+            )
+            val signalLine = calculateEMA(macdLine, typedDataMacd.signal)
+
+            val histogram = LinkedHashMap(
+                signalLine.mapNotNull { (key, value) ->
+                    macdLine[key]?.minus(value)?.let {
+                        key to it
+                    }
+                }.toMap()
+            )
+
+            return ChartIndicator.Macd(
+                macdLine.filterByTimestamp(startTimestamp),
+                signalLine.filterByTimestamp(startTimestamp),
+                histogram.filterByTimestamp(startTimestamp)
+            )
+        }
+    }
+}
+
+private fun LinkedHashMap<Long, Float>.filterByTimestamp(startTimestamp: Long): LinkedHashMap<Long, Float> {
+    return LinkedHashMap(filter { it.key >= startTimestamp })
 }

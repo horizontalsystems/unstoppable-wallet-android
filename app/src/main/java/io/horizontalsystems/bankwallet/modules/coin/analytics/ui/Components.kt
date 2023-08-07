@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.chartview.ChartMinimal
+import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 
 @Composable
 fun AnalyticsBlockHeader(
@@ -270,6 +271,7 @@ fun AnalyticsContainer(
 fun AnalyticsChart(
     analyticChart: CoinAnalyticsModule.AnalyticChart,
     navController: NavController,
+    onPeriodChange: (HsPointTimePeriod) -> Unit,
 ) {
     when (analyticChart) {
         is CoinAnalyticsModule.AnalyticChart.StackedBars -> {
@@ -307,7 +309,12 @@ fun AnalyticsChart(
         }
 
         is CoinAnalyticsModule.AnalyticChart.TechIndicators -> {
-            TechnicalIndicatorsChart(analyticChart.data, navController = navController)
+            TechnicalIndicatorsChart(
+                rows = analyticChart.data,
+                selectedPeriod = analyticChart.selectedPeriod,
+                navController = navController,
+                onPeriodChange = onPeriodChange
+                )
         }
     }
 }
@@ -386,6 +393,7 @@ private fun Preview_AnalyticsBarChartDisabled() {
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(false),
                 navController,
+                {},
             )
             VSpacer(12.dp)
         }
@@ -419,6 +427,7 @@ private fun Preview_AnalyticsLineChartDisabled() {
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
                 navController,
+                {},
             )
             VSpacer(12.dp)
         }
@@ -495,6 +504,7 @@ private fun Preview_AnalyticsRatingScale() {
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
                 navController,
+                {},
             )
             VSpacer(12.dp)
         }
