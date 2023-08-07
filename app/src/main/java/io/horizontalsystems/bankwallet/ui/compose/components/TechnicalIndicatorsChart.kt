@@ -19,10 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
@@ -39,7 +35,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.AdviceBlock
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.AdviceViewType
+import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.AdviceViewItem
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -52,11 +48,11 @@ import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 @Composable
 fun TechnicalIndicatorsChart(
     rows: List<TechnicalIndicatorData>,
+    selectedPeriod: HsPointTimePeriod,
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    onPeriodChange: (HsPointTimePeriod) -> Unit
 ) {
-
-    var selectedPeriod by remember { mutableStateOf(HsPointTimePeriod.Hour1) }
 
     Column(modifier = modifier) {
         rows.forEach { row ->
@@ -72,9 +68,9 @@ fun TechnicalIndicatorsChart(
                 ) {
                     subhead1_grey(row.title)
                     Text(
-                        text = row.value.title,
+                        text = stringResource(row.advice.title),
                         style = ComposeAppTheme.typography.subhead1,
-                        color = row.value.color,
+                        color = row.advice.color,
                     )
                 }
                 VSpacer(8.dp)
@@ -117,9 +113,10 @@ fun TechnicalIndicatorsChart(
                 iconRight = painterResource(R.drawable.ic_down_arrow_20),
                 onClick = {
                     PeriodSelectDialog.onSelectPeriod(navController) { period ->
-                        selectedPeriod = period
+                        onPeriodChange.invoke(period)
                     }
-                    navController.slideFromBottom(R.id.periodSelectDialog)
+                    val params = PeriodSelectDialog.prepareParams(selectedPeriod)
+                    navController.slideFromBottom(R.id.periodSelectDialog, params)
                 }
             )
         }
@@ -134,6 +131,11 @@ class PeriodSelectDialog : BaseComposableBottomSheetFragment() {
         HsPointTimePeriod.Week1,
     )
 
+    private val selectedPeriod by lazy {
+        val value = requireArguments().getString(SELECTED_PERIOD_KEY)
+        HsPointTimePeriod.fromString(value) ?: periods[2]
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -147,7 +149,7 @@ class PeriodSelectDialog : BaseComposableBottomSheetFragment() {
                 ComposeAppTheme {
                     BottomSheetScreen(
                         periods = periods,
-                        selectedItem = periods[0],
+                        selectedItem = selectedPeriod,
                         onSelectListener = { selectedTimePeriod ->
                             setResult(findNavController(), selectedTimePeriod)
                         },
@@ -160,6 +162,12 @@ class PeriodSelectDialog : BaseComposableBottomSheetFragment() {
 
     companion object {
         private const val resultKey = "PeriodSelectDialogResultKey"
+        private const val SELECTED_PERIOD_KEY = "SelectedPeriodKey"
+
+        fun prepareParams(period: HsPointTimePeriod) =
+            bundleOf(
+                SELECTED_PERIOD_KEY to period.value
+            )
 
         fun onSelectPeriod(navController: NavController, callback: (HsPointTimePeriod) -> Unit) {
             navController.getNavigationResult(resultKey) { bundle ->
@@ -222,35 +230,38 @@ private fun BottomSheetScreen(
 @Composable
 private fun TechnicalIndicatorsChart_Preview() {
     val blocks1 = listOf(
-        AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
-        AdviceBlock(type = AdviceViewType.SELL, filled = true),
-        AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
-        AdviceBlock(type = AdviceViewType.BUY, filled = true),
-        AdviceBlock(type = AdviceViewType.STRONGBUY, filled = true),
+        AdviceBlock(type = AdviceViewItem.STRONGSELL, filled = true),
+        AdviceBlock(type = AdviceViewItem.SELL, filled = true),
+        AdviceBlock(type = AdviceViewItem.NEUTRAL, filled = true),
+        AdviceBlock(type = AdviceViewItem.BUY, filled = true),
+        AdviceBlock(type = AdviceViewItem.STRONGBUY, filled = true),
     )
     val blocks2 = listOf(
-        AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
-        AdviceBlock(type = AdviceViewType.SELL, filled = true),
-        AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
-        AdviceBlock(type = AdviceViewType.BUY, filled = true),
-        AdviceBlock(type = AdviceViewType.STRONGBUY, filled = false),
+        AdviceBlock(type = AdviceViewItem.STRONGSELL, filled = true),
+        AdviceBlock(type = AdviceViewItem.SELL, filled = true),
+        AdviceBlock(type = AdviceViewItem.NEUTRAL, filled = true),
+        AdviceBlock(type = AdviceViewItem.BUY, filled = true),
+        AdviceBlock(type = AdviceViewItem.STRONGBUY, filled = false),
     )
     val blocks3 = listOf(
-        AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
-        AdviceBlock(type = AdviceViewType.SELL, filled = true),
-        AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
-        AdviceBlock(type = AdviceViewType.BUY, filled = false),
-        AdviceBlock(type = AdviceViewType.STRONGBUY, filled = false),
+        AdviceBlock(type = AdviceViewItem.STRONGSELL, filled = true),
+        AdviceBlock(type = AdviceViewItem.SELL, filled = true),
+        AdviceBlock(type = AdviceViewItem.NEUTRAL, filled = true),
+        AdviceBlock(type = AdviceViewItem.BUY, filled = false),
+        AdviceBlock(type = AdviceViewItem.STRONGBUY, filled = false),
     )
     val rows = listOf(
-        TechnicalIndicatorData(title = "Summary", AdviceViewType.STRONGBUY, blocks1),
-        TechnicalIndicatorData(title = "MA", AdviceViewType.BUY, blocks2),
-        TechnicalIndicatorData(title = "Oscillators", AdviceViewType.NEUTRAL, blocks3),
+        TechnicalIndicatorData(title = "Summary", AdviceViewItem.STRONGBUY, blocks1),
+        TechnicalIndicatorData(title = "MA", AdviceViewItem.BUY, blocks2),
+        TechnicalIndicatorData(title = "Oscillators", AdviceViewItem.NEUTRAL, blocks3),
     )
     val navController = rememberNavController()
     ComposeAppTheme {
         TechnicalIndicatorsChart(
-            rows, navController = navController
+            rows,
+            HsPointTimePeriod.Day1,
+            navController = navController,
+            onPeriodChange = {}
         )
     }
 }
