@@ -693,6 +693,8 @@
     <string name="CoinPage_Performance_Week">1Week</string>
     <string name="CoinPage_Performance_Month"> 1Month </string>
     <string name="CoinPage_MajorHolders_Description">Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.</string>
+    <string name="Coin_Analytics_Details">جزئیات</string>
+    <string name="Coin_Analytics_Period_1h">۱ ساعت</string>
     <string name="ActivateSubscription_Address">آدرس</string>
     <string name="Nfts_Title">NFTها</string>
     <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
