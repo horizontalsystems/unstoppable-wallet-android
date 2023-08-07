@@ -1135,6 +1135,9 @@
     <string name="Coin_Analytics_30DayRank">Classement sur 30 jours</string>
     <string name="Coin_Analytics_30DayUniqueAddress">Adresses uniques de 30 jours</string>
     <string name="Coin_Analytics_30DayVolume">Volume sur 30 jours</string>
+    <string name="Coin_Analytics_Details">Détailles</string>
+    <string name="Coin_Analytics_Period_1h">1 heure</string>
+    <string name="Coin_Analytics_Indicators_NoData">Pas de données</string>
     <string name="ActivateSubscription_Title">Activer</string>
     <string name="ActivateSubscription_Wallet">Portefeuille</string>
     <string name="ActivateSubscription_Address">Adresse</string>
