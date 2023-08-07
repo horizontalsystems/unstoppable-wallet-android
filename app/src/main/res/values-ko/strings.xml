@@ -890,6 +890,8 @@
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
     <string name="CoinPage_TvlDescription">Capital is deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 전체 토큰의 %를 보여줍니다. %가 낮을수록 코인이 더 많이 분배됩니다.</string>
+    <string name="Coin_Analytics_Details">상세 정보</string>
+    <string name="Coin_Analytics_Period_1h">1시간</string>
     <string name="ActivateSubscription_Title">활성화</string>
     <string name="ActivateSubscription_Address">주소</string>
     <string name="Nfts_Title">NFT</string>
