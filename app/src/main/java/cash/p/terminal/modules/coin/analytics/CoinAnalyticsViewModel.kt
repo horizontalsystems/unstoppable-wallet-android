@@ -31,9 +31,10 @@ import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.FooterItem
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.PreviewBlockViewItem
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.PreviewChartType
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
-import cash.p.terminal.modules.coin.technicalindicators.AdviceBlock
-import cash.p.terminal.modules.coin.technicalindicators.AdviceViewType
+import cash.p.terminal.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
 import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorData
+import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorService
+import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorService.SectionItem
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.metricchart.ProChartModule
 import cash.p.terminal.ui.compose.TranslatableString
@@ -45,14 +46,19 @@ import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.AnalyticsPreview
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class CoinAnalyticsViewModel(
     private val service: CoinAnalyticsService,
+    private val indicatorsService: TechnicalIndicatorService,
+    private val indicatorFactory: CoinIndicatorViewItemFactory,
     private val numberFormatter: IAppNumberFormatter,
     private val code: String
 ) : ViewModel() {
@@ -65,7 +71,10 @@ class CoinAnalyticsViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var analyticsViewItem: AnalyticsViewItem? = null
+    private var cachedAnalyticData: CoinAnalyticsService.AnalyticData? = null
     private var isRefreshing = false
+    private var technicalIndicators = listOf<TechnicalIndicatorData>()
+    private var techIndicatorPeriod: HsPointTimePeriod = HsPointTimePeriod.Day1
 
     var uiState by mutableStateOf(CoinAnalyticsModule.UiState(viewState))
         private set
@@ -81,6 +90,7 @@ class CoinAnalyticsViewModel(
 
                     is DataState.Success -> {
                         viewState = ViewState.Success
+                        cachedAnalyticData = state.data
                         analyticsViewItem = viewItem(state.data)
                         syncState()
                     }
@@ -98,6 +108,8 @@ class CoinAnalyticsViewModel(
         viewModelScope.launch {
             service.start()
         }
+
+        fetchTechnicalIndicators()
     }
 
     fun refresh() {
@@ -113,6 +125,39 @@ class CoinAnalyticsViewModel(
 
     override fun onCleared() {
         disposables.clear()
+    }
+
+    fun onPeriodChange(period: HsPointTimePeriod) {
+        techIndicatorPeriod = period
+        syncState()
+        fetchTechnicalIndicators()
+    }
+
+    private fun fetchTechnicalIndicators(){
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = indicatorsService.fetch(techIndicatorPeriod)
+            handle(result)
+        }
+    }
+
+    private suspend fun handle(result: DataState<List<SectionItem>>?) {
+        when (result) {
+            is DataState.Success -> {
+                technicalIndicators = indicatorFactory.viewItems(result.data)
+            }
+
+            is DataState.Error -> {
+            }
+
+            DataState.Loading -> {}
+            null -> {}
+        }
+        withContext(Dispatchers.Main) {
+            cachedAnalyticData?.let {
+                analyticsViewItem = viewItem(it)
+            }
+            syncState()
+        }
     }
 
     private fun syncState() {
@@ -141,55 +186,27 @@ class CoinAnalyticsViewModel(
         return AnalyticsViewItem.NoData
     }
 
-    private fun testRows(): List<TechnicalIndicatorData> {
-        val blocks1 = listOf(
-            AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
-            AdviceBlock(type = AdviceViewType.SELL, filled = true),
-            AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
-            AdviceBlock(type = AdviceViewType.BUY, filled = true),
-            AdviceBlock(type = AdviceViewType.STRONGBUY, filled = true),
-        )
-        val blocks2 = listOf(
-            AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
-            AdviceBlock(type = AdviceViewType.SELL, filled = true),
-            AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
-            AdviceBlock(type = AdviceViewType.BUY, filled = true),
-            AdviceBlock(type = AdviceViewType.STRONGBUY, filled = false),
-        )
-        val blocks3 = listOf(
-            AdviceBlock(type = AdviceViewType.STRONGSELL, filled = true),
-            AdviceBlock(type = AdviceViewType.SELL, filled = true),
-            AdviceBlock(type = AdviceViewType.NEUTRAL, filled = true),
-            AdviceBlock(type = AdviceViewType.BUY, filled = false),
-            AdviceBlock(type = AdviceViewType.STRONGBUY, filled = false),
-        )
-        val rows = listOf(
-            TechnicalIndicatorData(title = "Summary", AdviceViewType.STRONGBUY, blocks1),
-            TechnicalIndicatorData(title = "MA", AdviceViewType.BUY, blocks2),
-            TechnicalIndicatorData(title = "Oscillators", AdviceViewType.NEUTRAL, blocks3),
-        )
-        return rows
-    }
-
     private fun getViewItems(analytics: Analytics): List<BlockViewItem> {
         val blocks = mutableListOf<BlockViewItem>()
 
-        blocks.add(
-            BlockViewItem(
-                title = R.string.Coin_Analytics_TechnicalIndicators,
-                info = AnalyticInfo.TechnicalIndicatorsInfo,
-                analyticChart = ChartViewItem(
-                    AnalyticChart.TechIndicators(testRows()),
-                    coin.uid,
-                ),
-                footerItems = listOf(
-                    FooterItem(
-                        title = Title(ResString(R.string.Coin_Analytics_Details)),
-                        action = ActionType.OpenTechnicalIndicatorsDetails
+        if (technicalIndicators.isNotEmpty()) {
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.Coin_Analytics_TechnicalIndicators,
+                    info = AnalyticInfo.TechnicalIndicatorsInfo,
+                    analyticChart = ChartViewItem(
+                        AnalyticChart.TechIndicators(technicalIndicators, techIndicatorPeriod),
+                        coin.uid,
+                    ),
+                    footerItems = listOf(
+                        FooterItem(
+                            title = Title(ResString(R.string.Coin_Analytics_Details)),
+                            action = ActionType.OpenTechnicalIndicatorsDetails(coin.uid, techIndicatorPeriod)
+                        )
                     )
                 )
             )
-        )
+        }
 
         analytics.cexVolume?.let { data ->
             val footerItems = mutableListOf<FooterItem>()

@@ -9,6 +9,7 @@ import io.horizontalsystems.marketkit.SyncInfo
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.HsPeriodType
+import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.NftTopCollection
@@ -224,6 +225,9 @@ class MarketKitWrapper(
 
     fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
         marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
+
+    fun chartPointsSingle(coinUid: String, currencyCode: String, period: HsPointTimePeriod, pointCount: Int) =
+        marketKit.chartPointsSingle(coinUid, currencyCode, period, pointCount)
 
     // Global Market Info
 

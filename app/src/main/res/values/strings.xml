@@ -1539,6 +1539,12 @@
     <string name="Coin_Analytics_Period_8h">8 hours</string>
     <string name="Coin_Analytics_Period_1d">1 day</string>
     <string name="Coin_Analytics_Period_1w">1 week</string>
+    <string name="Coin_Analytics_Indicators_StrongBuy">Strong Buy</string>
+    <string name="Coin_Analytics_Indicators_StrongSell">Strong Sell</string>
+    <string name="Coin_Analytics_Indicators_Sell">Sell</string>
+    <string name="Coin_Analytics_Indicators_Buy">Buy</string>
+    <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
+    <string name="Coin_Analytics_Indicators_NoData">No Data</string>
 
     <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Wallet">Wallet</string>
