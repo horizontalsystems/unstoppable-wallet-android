@@ -1520,16 +1520,18 @@
     <string name="Coin_Analytics_Blockchain1" translatable="false">Blockchain 1</string>
     <string name="Coin_Analytics_Blockchain2" translatable="false">Blockchain 2</string>
     <string name="Coin_Analytics_Blockchain3" translatable="false">Blockchain 3</string>
-    <string name="Coin_Analytics_RatingScale">Rating Scale</string>
-    <string name="Coin_Analytics_RatingExcellent">Excellent</string>
-    <string name="Coin_Analytics_RatingGood">Good</string>
-    <string name="Coin_Analytics_RatingFair">Fair</string>
-    <string name="Coin_Analytics_RatingPoor">Poor</string>
-    <string name="Coin_Analytics_RatingScaleDescription">The rating scale is derived from the top 250 tokens by market capitalisation and is proportionally adjusted by percentage to obtain the final rating scale.</string>
-    <string name="Coin_Analytics_RatingExcellentPercent">25%</string>
-    <string name="Coin_Analytics_RatingGoodPercent">25%-50%</string>
-    <string name="Coin_Analytics_RatingFairPercent">50%-75%</string>
-    <string name="Coin_Analytics_RatingPoorPercent">75%-100%</string>
+    <string name="Coin_Analytics_OverallScore">Overall Score</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Excellent</string>
+    <string name="Coin_Analytics_OverallScore_Good">Good</string>
+    <string name="Coin_Analytics_OverallScore_Fair">Fair</string>
+    <string name="Coin_Analytics_OverallScore_Poor">Poor</string>
+    <string name="Coin_Analytics_OverallScore_CexVolume">The overall score is based on the average daily trading volume on centralized exchanges over the last 7 days.</string>
+    <string name="Coin_Analytics_OverallScore_DexVolume">The overall score is based on the average daily trading volume on decentralized exchanges over the last 7 days.</string>
+    <string name="Coin_Analytics_OverallScore_DexLiquidity">The overall score is based on the total available liquidity on decentralized exchanges.</string>
+    <string name="Coin_Analytics_OverallScore_ActiveAddresses">The overall score is based on the average daily active addresses over the last 7 days.</string>
+    <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
+    <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding respective token.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
     <string name="Coin_Analytics_Details">Details</string>
     <string name="Coin_Analytics_SelectPeriod">Select Period</string>

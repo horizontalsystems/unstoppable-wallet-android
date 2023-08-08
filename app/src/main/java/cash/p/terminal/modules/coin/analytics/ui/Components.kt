@@ -32,7 +32,8 @@ import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.BoxItem
-import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.Rating
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.OverallScore
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.ChartBars
@@ -163,8 +164,8 @@ private fun BoxItemCell(
             )
         }
 
-        is BoxItem.RatingValue -> {
-            RatingCell(boxItem.rating)
+        is BoxItem.OverallScoreValue -> {
+            RatingCell(boxItem.score)
         }
 
         is BoxItem.Title -> {
@@ -207,12 +208,12 @@ private fun BoxItemCell(
 }
 
 @Composable
-private fun RatingCell(rating: Rating) {
+private fun RatingCell(rating: OverallScore) {
     val color = when (rating) {
-        Rating.Excellent -> Color(0xFF05C46B)
-        Rating.Good -> Color(0xFFFFA800)
-        Rating.Fair -> Color(0xFFFF7A00)
-        Rating.Poor -> Color(0xFFFF3D00)
+        OverallScore.Excellent -> Color(0xFF05C46B)
+        OverallScore.Good -> Color(0xFFFFA800)
+        OverallScore.Fair -> Color(0xFFFF7A00)
+        OverallScore.Poor -> Color(0xFFFF3D00)
     }
     Text(
         text = stringResource(rating.title).uppercase(),
@@ -314,7 +315,7 @@ fun AnalyticsChart(
                 selectedPeriod = analyticChart.selectedPeriod,
                 navController = navController,
                 onPeriodChange = onPeriodChange
-                )
+            )
         }
     }
 }
@@ -491,8 +492,11 @@ private fun Preview_AnalyticsRatingScale() {
             },
             bottomRows = {
                 AnalyticsFooterCell(
-                    title = BoxItem.TitleWithInfo(TranslatableString.PlainString("Rating Scale"), CoinAnalyticsModule.ActionType.OpenRatingScaleInfo),
-                    value = BoxItem.RatingValue(Rating.Fair),
+                    title = BoxItem.TitleWithInfo(
+                        TranslatableString.PlainString("Rating Scale"),
+                        CoinAnalyticsModule.ActionType.OpenOverallScoreInfo(ScoreCategory.CexScoreCategory)
+                    ),
+                    value = BoxItem.OverallScoreValue(OverallScore.Fair),
                     cellAction = null,
                     onActionClick = {}
                 )

@@ -37,6 +37,7 @@ import cash.p.terminal.modules.coin.reports.CoinReportsFragment
 import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment
 import cash.p.terminal.modules.coin.treasuries.CoinTreasuriesFragment
 import cash.p.terminal.modules.info.CoinAnalyticsInfoFragment
+import cash.p.terminal.modules.info.OverallScoreInfoFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.InfoText
@@ -261,12 +262,13 @@ private fun FooterCell(
                     navController.slideFromBottom(R.id.coinRankFragment, arguments)
                 }
 
-                CoinAnalyticsModule.ActionType.OpenTvl -> {
-                    navController.slideFromBottom(R.id.tvlFragment)
+                is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {
+                    val params = OverallScoreInfoFragment.prepareParams(action.scoreCategory)
+                    navController.slideFromRight(R.id.overallScoreInfoFragment, params)
                 }
 
-                CoinAnalyticsModule.ActionType.OpenRatingScaleInfo -> {
-                    navController.slideFromRight(R.id.ratingScaleInfoFragment)
+                CoinAnalyticsModule.ActionType.OpenTvl -> {
+                    navController.slideFromBottom(R.id.tvlFragment)
                 }
 
                 CoinAnalyticsModule.ActionType.Preview -> {
