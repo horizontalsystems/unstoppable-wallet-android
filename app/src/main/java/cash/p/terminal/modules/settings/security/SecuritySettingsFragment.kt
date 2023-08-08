@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -68,18 +72,24 @@ class SecuritySettingsFragment : BaseFragment() {
     }
 
     private fun showAppRestartAlert() {
-        val warningTitle =
-            if (torViewModel.torCheckEnabled)
-                getString(R.string.Tor_Connection_Enable)
-            else
-                getString(R.string.Tor_Connection_Disable)
+        val warningTitle = if (torViewModel.torCheckEnabled) {
+            getString(R.string.Tor_Connection_Enable)
+        } else {
+            getString(R.string.Tor_Connection_Disable)
+        }
+
+        val actionButton = if (torViewModel.torCheckEnabled) {
+            getString(R.string.Button_Enable)
+        } else {
+            getString(R.string.Button_Disable)
+        }
 
         ConfirmationDialog.show(
             icon = R.drawable.ic_tor_connection_24,
             title = getString(R.string.Tor_Alert_Title),
             warningTitle = warningTitle,
             warningText = getString(R.string.SettingsSecurity_AppRestartWarning),
-            actionButtonTitle = getString(R.string.Alert_Restart),
+            actionButtonTitle = actionButton,
             transparentButtonTitle = getString(R.string.Alert_Cancel),
             fragmentManager = childFragmentManager,
             listener = object : ConfirmationDialog.Listener {
