@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -261,12 +262,13 @@ private fun FooterCell(
                     navController.slideFromBottom(R.id.coinRankFragment, arguments)
                 }
 
-                CoinAnalyticsModule.ActionType.OpenTvl -> {
-                    navController.slideFromBottom(R.id.tvlFragment)
+                is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {
+                    val params = OverallScoreInfoFragment.prepareParams(action.scoreCategory)
+                    navController.slideFromRight(R.id.overallScoreInfoFragment, params)
                 }
 
-                CoinAnalyticsModule.ActionType.OpenRatingScaleInfo -> {
-                    navController.slideFromRight(R.id.ratingScaleInfoFragment)
+                CoinAnalyticsModule.ActionType.OpenTvl -> {
+                    navController.slideFromBottom(R.id.tvlFragment)
                 }
 
                 CoinAnalyticsModule.ActionType.Preview -> {
