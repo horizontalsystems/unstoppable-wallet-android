@@ -243,7 +243,6 @@ fun MnemonicLanguageCell(
 fun PassphraseCell(enabled: Boolean, onCheckedChange: (Boolean) -> Unit) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        verticalPadding = 0.dp,
         onClick = { onCheckedChange(!enabled) },
     ) {
         Icon(
