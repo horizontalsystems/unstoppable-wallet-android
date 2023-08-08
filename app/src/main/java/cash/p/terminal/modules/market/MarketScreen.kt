@@ -1,16 +1,16 @@
 package cash.p.terminal.modules.market
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
@@ -23,7 +23,7 @@ import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TabItem
 import cash.p.terminal.ui.compose.components.Tabs
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketScreen(navController: NavController) {
     val marketViewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
@@ -57,7 +57,7 @@ fun MarketScreen(navController: NavController) {
         })
 
         HorizontalPager(
-            count = tabs.size,
+            pageCount = tabs.size,
             state = pagerState,
             userScrollEnabled = false
         ) { page ->
