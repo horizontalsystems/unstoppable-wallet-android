@@ -7,11 +7,15 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -25,8 +29,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.*
-import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -65,7 +67,7 @@ class IntroActivity : BaseActivity() {
 
 }
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalSnapperApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActivity: () -> Unit) {
     val pagerState = rememberPagerState(initialPage = 0)
@@ -78,29 +80,31 @@ private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActi
                 contentScale = ContentScale.Crop
             )
         }
+        val pageCount = 3
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
-            count = 3,
+            pageCount = pageCount,
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            flingBehavior = rememberFlingBehaviorMultiplier(
-                multiplier = 1.5f,
-                baseFlingBehavior = PagerDefaults.flingBehavior(pagerState)
-            )
+//            flingBehavior = rememberFlingBehaviorMultiplier(
+//                multiplier = 1.5f,
+//                baseFlingBehavior = PagerDefaults.flingBehavior(pagerState)
+//            )
         ) { index ->
             SlidingContent(viewModel.slides[index], nightMode)
         }
 
-        StaticContent(viewModel, pagerState, closeActivity)
+        StaticContent(viewModel, pagerState, closeActivity, pageCount)
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun StaticContent(
     viewModel: IntroViewModel,
     pagerState: PagerState,
-    closeActivity: () -> Unit
+    closeActivity: () -> Unit,
+    pageCount: Int
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -148,7 +152,7 @@ private fun StaticContent(
                 .fillMaxWidth(),
             title = stringResource(R.string.Button_Next),
             onClick = {
-                if (pagerState.currentPage + 1 < pagerState.pageCount) {
+                if (pagerState.currentPage + 1 < pageCount) {
                     coroutineScope.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage + 1)
                     }
