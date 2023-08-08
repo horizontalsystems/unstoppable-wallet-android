@@ -10,15 +10,12 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.FlingBehavior
-import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -86,10 +83,6 @@ private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActi
             pageCount = pageCount,
             state = pagerState,
             verticalAlignment = Alignment.Top,
-//            flingBehavior = rememberFlingBehaviorMultiplier(
-//                multiplier = 1.5f,
-//                baseFlingBehavior = PagerDefaults.flingBehavior(pagerState)
-//            )
         ) { index ->
             SlidingContent(viewModel.slides[index], nightMode)
         }
@@ -211,23 +204,4 @@ private fun SlidingContent(
         Spacer(Modifier.weight(2f))
         Spacer(Modifier.height(110.dp))
     }
-}
-
-private class FlingBehaviourMultiplier(
-    private val multiplier: Float,
-    private val baseFlingBehavior: FlingBehavior
-) : FlingBehavior {
-    override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
-        return with(baseFlingBehavior) {
-            performFling(initialVelocity * multiplier)
-        }
-    }
-}
-
-@Composable
-fun rememberFlingBehaviorMultiplier(
-    multiplier: Float,
-    baseFlingBehavior: FlingBehavior
-): FlingBehavior = remember(multiplier, baseFlingBehavior) {
-    FlingBehaviourMultiplier(multiplier, baseFlingBehavior)
 }
