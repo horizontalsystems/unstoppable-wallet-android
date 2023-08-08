@@ -117,7 +117,6 @@ fun AppearanceScreen(navController: NavController) {
                             listOf {
                                 RowUniversal(
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    verticalPadding = 0.dp,
                                 ) {
                                     Image(
                                         modifier = Modifier.size(24.dp),
@@ -203,7 +202,6 @@ fun AppearanceScreen(navController: NavController) {
                             listOf {
                                 RowUniversal(
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    verticalPadding = 0.dp,
                                 ) {
                                     Image(
                                         modifier = Modifier.size(24.dp),
