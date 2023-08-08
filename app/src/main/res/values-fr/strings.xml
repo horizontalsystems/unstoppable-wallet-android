@@ -388,6 +388,7 @@
     <string name="FeeSettings_MaxFee">Taux de frais max (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">Cela correspond au montant maximal du prix auquel l\'utilisateur achète le gaz. Ce prix doit couvrir le taux minimal des frais de transaction du réseau, il doit aussi devenir la priorité avec laquelle une transaction sera traitée. L\'origine de l\'estimation de la valeur, indiquée ici, se trouve dans une analyse, selon laquelle la valeur serait calculée en ajoutant le taux minimal des frais de transaction du bloc successif à la priorité de l\'utilisateur avec la quelle une transaction sera traitée. Le taux actuel des frais de transaction à payer, sera revu à la baisse et ajusté automatiquement. La fixation du taux du prix en dessous du taux plancher actuel, serait, d\'une part, un soulagement parce qu\'elle limiterait les frais à payer, d\'autre part, il faut compter avec un temps de confirmation moyen plus long des transactions, voire un blocage de la transaction.</string>
     <string name="FeeSettings_MaxMinerTips">Frais de priorité max (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Les utilisateurs donnent une priorité aux frais de transaction, que l\'on désigne parfois avec l\'appellation de Tips, impliquant un temps de confirmation moyen plus court des transactions. Prioriser le traitement d\'une transaction, en fixant le taux maximal des frais à payer, signifie appliquer des hausses de taux supplémentaires au montant maximal du prix auquel l\'utilisateur achète le gaz. L\'origine de l\'estimation de la valeur indiquée ici, se trouve dans une analyse anticipatrice de l\'état du réseau. Une baisse de la priorité, avec laquelle les frais actuels seront traités, vous sera normalement accordée. L\'application du taux zéro pourrait impliquer un temps de confirmation moyen plus long des transactions. Et pour cause, la transaction et toutes les transactions des utilisateurs qui suivent, restent en attente de validation.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risqué</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transaction risque de rester en attente pendant un certain temps ou d\'échouer complètement.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risqué</string>
@@ -670,6 +671,7 @@
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
     <string name="Settings_PersonalSupport_PremiumFeatureWarning">Cette fonctionnalité est destinée aux utilisateurs premium du portefeuille (Wallet) Unstoppable uniquement. Vous trouverez plus d\'informations sur notre site officiel.</string>
+    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Votre demande de participation aux chats privés a été transmise. Retrouvez toutes les informations sur Telegram</string>
     <string name="Settings_PersonalSupport_Account">Compte</string>
     <string name="Settings_PersonalSupport_Request">Requête</string>
     <string name="Appearance_Theme">Thème</string>
