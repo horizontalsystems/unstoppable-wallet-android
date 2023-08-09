@@ -223,7 +223,6 @@
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <string name="Send_Warning_LowFee">Uyarı! Takılma riski</string>
     <string name="Send_Warning_LowFee_Description">İşlem takılabilir veya başarısız olabilir</string>
-    <string name="Send_Error_FetchFeeRateFailed">Ücret oranı getirilirken hata oluştu</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">İleri düzey</string>
     <string name="SendEvmSettings_Nonce">İşlem Nonce</string>
