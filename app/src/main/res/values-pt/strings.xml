@@ -307,7 +307,6 @@
     <string name="Send_Token_InsufficientFeeAlert">Taxas de transação para %1$s (%2$s) pagas em %3$s. Você precisa de %4$s.</string>
     <string name="Send_Warning_LowFee">Atenção! Risco de ficar preso</string>
     <string name="Send_Warning_LowFee_Description">A transação pode ficar presa ou falhar</string>
-    <string name="Send_Error_FetchFeeRateFailed">Erro ao buscar a taxa de tarifa</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avançado</string>
     <string name="SendEvmSettings_Nonce">Nonce de Transação</string>
