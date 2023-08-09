@@ -5,26 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.Warning
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.slideFromBottom
@@ -49,15 +36,7 @@ import cash.p.terminal.modules.fee.FeeCell
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.animations.shake
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.TextImportantError
-import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.*
 import java.math.BigDecimal
 
 @Composable
@@ -162,13 +141,70 @@ fun EvmSettingsInput(
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
 ) {
-    HeaderText(text = title) {
-        navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(title, info))
-    }
     val borderColor = when {
         errors.isNotEmpty() -> ComposeAppTheme.colors.red50
         warnings.isNotEmpty() -> ComposeAppTheme.colors.yellow50
         else -> ComposeAppTheme.colors.steel20
+    }
+
+    EvmSettingsInput(
+        title = title,
+        info = info,
+        value = value,
+        decimals = decimals,
+        borderColor = borderColor,
+        navController = navController,
+        onValueChange = onValueChange,
+        onClickIncrement = onClickIncrement,
+        onClickDecrement = onClickDecrement
+    )
+}
+
+@Composable
+fun EvmSettingsInput(
+    title: String,
+    info: String,
+    value: BigDecimal,
+    decimals: Int,
+    caution: HSCaution?,
+    navController: NavController,
+    onValueChange: (BigDecimal) -> Unit,
+    onClickIncrement: () -> Unit,
+    onClickDecrement: () -> Unit
+) {
+    val borderColor = when (caution?.type) {
+        HSCaution.Type.Error -> ComposeAppTheme.colors.red50
+        HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
+        else -> ComposeAppTheme.colors.steel20
+    }
+
+    EvmSettingsInput(
+        title = title,
+        info = info,
+        value = value,
+        decimals = decimals,
+        borderColor = borderColor,
+        navController = navController,
+        onValueChange = onValueChange,
+        onClickIncrement = onClickIncrement,
+        onClickDecrement = onClickDecrement
+    )
+}
+
+@Composable
+private fun EvmSettingsInput(
+    title: String,
+    info: String,
+    value: BigDecimal,
+    decimals: Int,
+    borderColor: Color,
+    navController: NavController,
+    onValueChange: (BigDecimal) -> Unit,
+    onClickIncrement: () -> Unit,
+    onClickDecrement: () -> Unit,
+) {
+    HeaderText(text = title) {
+        navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(title, info))
     }
 
     NumberInputWithButtons(value, decimals, borderColor, onValueChange, onClickIncrement, onClickDecrement)
