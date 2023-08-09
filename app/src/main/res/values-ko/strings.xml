@@ -229,7 +229,6 @@
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
     <string name="Send_Warning_LowFee_Description">트랜잭션이 중단되거나 실패할 수 있습니다</string>
-    <string name="Send_Error_FetchFeeRateFailed">수수료율을 가져오는 동안 오류가 발생했습니다</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">고급의</string>
     <string name="SendEvmSettings_Nonce">트랜잭션 Nonce</string>
