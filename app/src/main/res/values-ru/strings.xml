@@ -329,7 +329,6 @@
     <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
     <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <string name="Send_Warning_LowFee_Description">Транзакция может застрять в сети или будет отклонена</string>
-    <string name="Send_Error_FetchFeeRateFailed">Ошибка при получении ставки комиссии</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Доп. настройки</string>
     <string name="SendEvmSettings_Nonce">Nonce транзакции</string>
