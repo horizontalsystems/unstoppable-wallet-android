@@ -363,7 +363,6 @@
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %1$s (%2$s) payé en %3$s. Il est nécessaire %4$s.</string>
     <string name="Send_Warning_LowFee">Attention ! Risque de blocage</string>
     <string name="Send_Warning_LowFee_Description">La transaction risque d\'être bloquée ou d\'échouer</string>
-    <string name="Send_Error_FetchFeeRateFailed">Erreur lors de la récupération du taux de frais</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avancé</string>
     <string name="SendEvmSettings_Nonce">Nonce de transaction</string>
@@ -442,6 +441,7 @@
     <string name="WalletConnect_Disconnecting">Déconnexion</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signer la demande</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domaine</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">DApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message à signer</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Veuillez signer un message pour vous authentifier</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signer</string>
@@ -459,12 +459,15 @@
     <string name="WalletConnect_Address">Adresse</string>
     <string name="WalletConnect_Network">Réseau</string>
     <string name="WalletConnect_Input">Entrées</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <string name="WalletConnect_I_Trust">Je fais confiance à</string>
     <string name="WalletConnect_Note">Remarque</string>
     <string name="WalletConnect_LegacySignWarning">Signer ce message peut être dangereux. Cette signature peut potentiellement effectuer toute opération au nom de votre compte, y compris en donnant le contrôle total de votre compte et de tous ses actifs au site requérant. Ne signez ce message que si vous savez ce que vous faites ou si vous faites entièrement confiance au site requérant.</string>
     <string name="WalletConnect_NotSupportedDescription">Votre type de portefeuille actuel %s ne prend pas en charge WalletConnect</string>
     <string name="WalletConnect_Unnamed">Inconnu</string>
     <string name="WalletConnect_DAppUnknown">DApp inconnu</string>
+    <string name="WalletConnect_Pairings">Paires de Devises</string>
     <string name="WalletConnect_Pairings_DeleteAll">Tout Supprimer</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Voulez-vous supprimer tous les dApss appariés ?</string>
     <string name="WalletConnect_Pairings_Delete">Supprimer</string>
