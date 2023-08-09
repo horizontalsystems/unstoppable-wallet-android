@@ -517,12 +517,18 @@
     <string name="Swap_Revoking">Révocation en cours...</string>
     <string name="Swap_Approve">Approuver</string>
     <string name="Swap_Approving">Approbation</string>
+    <string name="Swap_Swapping">Swapping de Crypto</string>
     <string name="Swap_MaximumPaid">Montant maximum payé</string>
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
     <string name="Swap_SelectSwapProvider_Title">Fournisseur swap</string>
+    <string name="Swap_AmountEstimated">(est)</string>
+    <string name="Swap_AmountMin">(montant minimal)</string>
+    <string name="Swap_AmountMax">(montant maximal)</string>
+    <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
+    <string name="SwapSettings_Service">Service Swap</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
     <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix évolue défavorablement au-delà de ce pourcentage</string>
     <string name="SwapSettings_DeadlineTitle">Date limite de transaction</string>
@@ -530,6 +536,7 @@
     <string name="SwapSettings_RecipientAddressTitle">Adresse du destinataire</string>
     <string name="SwapSettings_RecipientAddressDescription">Le montant sera transféré à l\'adresse indiquée après l\'opération de change</string>
     <string name="SwapSettings_Apply">Appliquer</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse ou domaine</string>
     <string name="SwapSettings_FeeSettingsAlert">Des frais de service pour l\'action de swap sur la plateforme sont typiques de 0,3% ou 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Délai Zéro</string>
@@ -542,6 +549,7 @@
     <string name="SwapSettings_Error_InvalidDeadline">Date limite invalide</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
     <!-- Swap Confirmation -->
+    <string name="Swap_Confirmation">Valider</string>
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
     <string name="Swap_Confirmation_Estimated">Estimé</string>
     <!--Approve-->
@@ -568,6 +576,7 @@
     <string name="Deposit_Your_Address">Votre address</string>
     <string name="Deposit_Address">Adresse</string>
     <!--Transactions-->
+    <string name="Transactions_Title">Virements</string>
     <string name="Transactions_FilterAll">TOUS</string>
     <string name="Transactions_EmptyList">Vous n\'avez encore aucune transaction en cours ou passée</string>
     <string name="Transactions_WaitForSync">Veuillez attendre la fin de la synchronisation.</string>
@@ -577,6 +586,7 @@
     <string name="Transactions_Processing">Traitement en cours</string>
     <string name="Transactions_Send">Envoyer</string>
     <string name="Transactions_Burn">Brûlure</string>
+    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Approuver</string>
     <string name="Transactions_Swap">Echanger</string>
     <string name="Transactions_Failed">Échec</string>
@@ -597,12 +607,16 @@
     <string name="Transactions_Approvals">Approbations</string>
     <string name="Transactions_Unknown">Transaction inconnue</string>
     <string name="Transactions_Unknown_Description">La transaction ne peut pas être analysée</string>
+    <string name="Transactions_Multiple">Plusieurs Virements</string>
     <!--Transaction Info-->
+    <string name="TransactionInfo_Transaction">Virement</string>
     <string name="TransactionInfo_Title">Informations sur la transaction</string>
     <string name="TransactionInfo_Approval">Validation du remplacement</string>
     <string name="TransactionInfo_Status">Statut</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
+    <string name="TransactionInfo_Date">Date du Virement</string>
     <string name="TransactionInfo_Id">Identifiant</string>
+    <string name="TransactionInfo_Service">Service Swap</string>
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_ContactName">Nom du contact</string>
     <string name="TransactionInfo_To">À</string>
@@ -662,6 +676,7 @@
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
+    <string name="Settings_Notifications">Mise en Place de Notifications</string>
     <string name="Settings_ExperimentalFeatures">Expérimental</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
@@ -670,10 +685,13 @@
     <string name="Settings_Privacy">Confidentialité</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_AppStatus">Statut de l\'appli</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
+    <string name="Settings_PersonalSupport">Accompagnement Personnalisé</string>
     <string name="Settings_PersonalSupport_PremiumFeatureWarning">Cette fonctionnalité est destinée aux utilisateurs premium du portefeuille (Wallet) Unstoppable uniquement. Vous trouverez plus d\'informations sur notre site officiel.</string>
+    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Renseignez le nom de votre compte Telegram afin que notre équipe puisse vous offrir un accompagnement personnalisé. Un processus d\'évaluation du problème sera mis en place et nous vous reviendrons là-dessus, une fois que le problème a été identifié.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Votre demande de participation aux chats privés a été transmise. Retrouvez toutes les informations sur Telegram</string>
     <string name="Settings_PersonalSupport_Account">Compte</string>
     <string name="Settings_PersonalSupport_Request">Requête</string>
@@ -771,6 +789,7 @@
     <string name="SettingsNotifications_Off">Désactivé</string>
     <string name="SettingsNotifications_DeactivateAll">Tout réinitialiser</string>
     <string name="SettingsNotifications_PushNotification">Notification push</string>
+    <string name="Notification_Title">Mise en Place de Notifications</string>
     <string name="Notification_PriceUp">%1$s prix : Hausse %2$s%% ⬆️</string>
     <string name="Notification_PriceDown">%1$s prix : Baisse %2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s tendance : Hausse 📈</string>
@@ -1150,6 +1169,7 @@
     <string name="ActivateSubscription_Address">Adresse</string>
     <string name="ActivateSubscription_MessageToSign">Message à signer</string>
     <string name="ActivateSubscription_SignMessageDescription">Vous devez signer ce message pour activer votre abonnement</string>
+    <string name="SubscriptionInfo_PersonalSupport_Title">Accompagnement Personnalisé</string>
     <string name="Nfts_PriceType_Days_7">Moy. 7D</string>
     <string name="Nfts_PriceType_Days_30">Moy. 30D</string>
     <string name="Nfts_PriceType_LastSale">Dernière vente</string>
@@ -1207,6 +1227,7 @@
     <string name="NftCollection_EventType_Custom">Personnalisé</string>
     <string name="NftCollection_EventType_Payout">Versement</string>
     <string name="NftCollection_EventType_BulkCancel">Annuler en bloc</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Inconnu</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Les grands gagnants</string>
