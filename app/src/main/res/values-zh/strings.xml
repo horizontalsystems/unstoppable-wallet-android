@@ -328,7 +328,6 @@
     <string name="Send_Token_InsufficientFeeAlert">%1$s（%2$s）的交易费用以%3$s支付。您需要%4$s。</string>
     <string name="Send_Warning_LowFee">警告！有被骗的风险</string>
     <string name="Send_Warning_LowFee_Description">交易可能被卡或失败</string>
-    <string name="Send_Error_FetchFeeRateFailed">获取收费率时出错</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">高级</string>
     <string name="SendEvmSettings_Nonce">交易nonce</string>
