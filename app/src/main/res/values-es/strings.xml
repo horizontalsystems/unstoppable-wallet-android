@@ -293,7 +293,6 @@
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <string name="Send_Warning_LowFee">¡Advertencia! Riesgo de atascarse</string>
     <string name="Send_Warning_LowFee_Description">La transacción puede quedarse atascada o fallar</string>
-    <string name="Send_Error_FetchFeeRateFailed">Error al obtener la tasa de comisión</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avanzado</string>
     <string name="SendEvmSettings_Nonce">Transacción Nonce</string>
