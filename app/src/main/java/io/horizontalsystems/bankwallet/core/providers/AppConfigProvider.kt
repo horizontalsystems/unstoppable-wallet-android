@@ -14,7 +14,7 @@ class AppConfigProvider {
      val appRedditLink by lazy { Translator.getString(R.string.appRedditLink) }
      val reportEmail by lazy { Translator.getString(R.string.reportEmail) }
      val releaseNotesUrl by lazy { Translator.getString(R.string.releaseNotesUrl) }
-     val btcCoreRpcUrl: String = "https://btc.blocksdecoded.com/rpc"
+     val mempoolSpaceUrl: String = "https://mempool.space"
      val walletConnectUrl = "relay.walletconnect.com"
      val walletConnectProjectId by lazy { Translator.getString(R.string.walletConnectV2Key) }
      val walletConnectAppMetaDataName by lazy { Translator.getString(R.string.walletConnectAppMetaDataName) }

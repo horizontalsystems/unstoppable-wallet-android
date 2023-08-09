@@ -56,7 +56,6 @@ class SendBitcoinViewModel(
     var uiState by mutableStateOf(
         SendBitcoinUiState(
             availableBalance = amountState.availableBalance,
-            feeRatePriority = feeRateState.feeRatePriority,
             feeRate = feeRateState.feeRate,
             fee = fee,
             lockTimeInterval = pluginState.lockTimeInterval,
@@ -99,7 +98,6 @@ class SendBitcoinViewModel(
     private fun emitState() {
         val newUiState = SendBitcoinUiState(
             availableBalance = amountState.availableBalance,
-            feeRatePriority = feeRateState.feeRatePriority,
             feeRate = feeRateState.feeRate,
             fee = fee,
             lockTimeInterval = pluginState.lockTimeInterval,
@@ -123,27 +121,23 @@ class SendBitcoinViewModel(
     }
 
     fun reset() {
-        viewModelScope.launch {
-            feeRateService.setFeeRatePriority(FeeRatePriority.RECOMMENDED)
-        }
+        feeRateService.reset()
         onEnterLockTimeInterval(null)
     }
 
-    fun updateFeeRate(value: Long) {
-        viewModelScope.launch {
-            feeRateService.setFeeRatePriority(FeeRatePriority.Custom(value))
-        }
+    fun updateFeeRate(value: Int) {
+        feeRateService.setFeeRate(value)
     }
 
     fun incrementFeeRate() {
-        val incremented = (feeRateState.feeRate ?: 0L) + 1
+        val incremented = (feeRateState.feeRate ?: 0) + 1
         updateFeeRate(incremented)
     }
 
     fun decrementFeeRate() {
-        var incremented = (feeRateState.feeRate ?: 0L) - 1
+        var incremented = (feeRateState.feeRate ?: 0) - 1
         if (incremented < 0) {
-            incremented = 0L
+            incremented = 0
         }
         updateFeeRate(incremented)
     }
@@ -252,8 +246,7 @@ class SendBitcoinViewModel(
 data class SendBitcoinUiState(
     val availableBalance: BigDecimal?,
     val fee: BigDecimal?,
-    val feeRate: Long?,
-    val feeRatePriority: FeeRatePriority,
+    val feeRate: Int?,
     val lockTimeInterval: LockTimeInterval?,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,

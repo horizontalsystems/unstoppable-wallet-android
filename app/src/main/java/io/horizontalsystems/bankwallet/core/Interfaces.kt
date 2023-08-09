@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.Bep2TokenInfoService
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.FeeRates
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -257,7 +257,7 @@ interface ISendBitcoinAdapter {
     val balanceData: BalanceData
     val blockchainType: BlockchainType
     fun availableBalance(
-        feeRate: Long,
+        feeRate: Int,
         address: String?,
         pluginData: Map<Byte, IPluginData>?
     ): BigDecimal
@@ -265,7 +265,7 @@ interface ISendBitcoinAdapter {
     fun minimumSendAmount(address: String?): BigDecimal?
     fun fee(
         amount: BigDecimal,
-        feeRate: Long,
+        feeRate: Int,
         address: String?,
         pluginData: Map<Byte, IPluginData>?
     ): BigDecimal?
@@ -274,7 +274,7 @@ interface ISendBitcoinAdapter {
     fun send(
         amount: BigDecimal,
         address: String,
-        feeRate: Long,
+        feeRate: Int,
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
         logger: AppLogger
@@ -404,10 +404,8 @@ interface IAppNumberFormatter {
 }
 
 interface IFeeRateProvider {
-    val feeRatePriorityList: List<FeeRatePriority>
-        get() = listOf()
-    fun getFeeRateRange(): ClosedRange<Long>? = null
-    suspend fun getFeeRate(feeRatePriority: FeeRatePriority): Long
+    val feeRateChangeable: Boolean get() = false
+    suspend fun getFeeRates() : FeeRates
 }
 
 interface IAddressParser {
@@ -444,14 +442,6 @@ interface ITermsManager {
     val terms: List<TermsModule.TermType>
     val allTermsAccepted: Boolean
     fun acceptTerms()
-}
-
-sealed class FeeRatePriority(val titleRes: Int) {
-    object LOW : FeeRatePriority(R.string.Send_TxSpeed_Low)
-    object RECOMMENDED : FeeRatePriority(R.string.Send_TxSpeed_Recommended)
-    object HIGH : FeeRatePriority(R.string.Send_TxSpeed_High)
-
-    class Custom(val value: Long) : FeeRatePriority(R.string.Send_TxSpeed_Custom)
 }
 
 interface Clearable {
