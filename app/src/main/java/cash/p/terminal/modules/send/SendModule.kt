@@ -66,13 +66,20 @@ sealed class SendResult {
 
 object SendErrorFetchFeeRateFailed : HSCaution(
     TranslatableString.ResString(R.string.Send_Error_FetchFeeRateFailed),
-    Type.Error
+    Type.Error,
+    TranslatableString.ResString(R.string.Send_Error_FetchFeeRateFailed_Description)
 )
 
-object SendWarningLowFee : HSCaution(
+object SendWarningRiskOfGettingStuck : HSCaution(
     TranslatableString.ResString(R.string.Send_Warning_LowFee),
     Type.Warning,
     TranslatableString.ResString(R.string.Send_Warning_LowFee_Description)
+)
+
+object SendErrorLowFee : HSCaution(
+    TranslatableString.ResString(R.string.Send_Error_LowFee),
+    Type.Error,
+    TranslatableString.ResString(R.string.Send_Error_LowFee_Description)
 )
 
 class SendErrorInsufficientBalance(coinCode: Any) : HSCaution(

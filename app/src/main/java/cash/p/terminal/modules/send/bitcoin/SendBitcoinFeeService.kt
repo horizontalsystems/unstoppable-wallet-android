@@ -18,7 +18,7 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
     private var validAddress: Address? = null
     private var pluginData: Map<Byte, IPluginData>? = null
 
-    private var feeRate: Long? = null
+    private var feeRate: Int? = null
 
     private fun refreshFee() {
         val tmpAmount = amount
@@ -56,7 +56,7 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
         emitState()
     }
 
-    fun setFeeRate(feeRate: Long?) {
+    fun setFeeRate(feeRate: Int?) {
         this.feeRate = feeRate
 
         refreshFee()

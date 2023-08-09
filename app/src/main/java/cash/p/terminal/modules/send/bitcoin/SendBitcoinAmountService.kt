@@ -21,7 +21,7 @@ class SendBitcoinAmountService(
     private var minimumSendAmount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
     private var validAddress: Address? = null
-    private var feeRate: Long? = null
+    private var feeRate: Int? = null
     private var pluginData: Map<Byte, IPluginData>? = null
 
     private val _stateFlow = MutableStateFlow(
@@ -87,7 +87,7 @@ class SendBitcoinAmountService(
         emitState()
     }
 
-    fun setFeeRate(feeRate: Long?) {
+    fun setFeeRate(feeRate: Int?) {
         this.feeRate = feeRate
 
         refreshAvailableBalance()

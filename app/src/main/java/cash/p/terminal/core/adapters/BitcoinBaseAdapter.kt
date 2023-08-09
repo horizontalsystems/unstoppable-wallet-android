@@ -24,7 +24,7 @@ import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.*
+import java.util.Date
 
 abstract class BitcoinBaseAdapter(
     open val kit: AbstractKit,
@@ -197,12 +197,12 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortMode?, logger: AppLogger): Single<Unit> {
+    fun send(amount: BigDecimal, address: String, feeRate: Int, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortMode?, logger: AppLogger): Single<Unit> {
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
                 logger.info("call btc-kit.send")
-                kit.send(address, (amount * satoshisInBitcoin).toLong(), true, feeRate.toInt(), sortingType, pluginData
+                kit.send(address, (amount * satoshisInBitcoin).toLong(), true, feeRate, sortingType, pluginData
                         ?: mapOf())
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
@@ -211,9 +211,9 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
+    fun availableBalance(feeRate: Int, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
         return try {
-            val maximumSpendableValue = kit.maximumSpendableValue(address, feeRate.toInt(), pluginData
+            val maximumSpendableValue = kit.maximumSpendableValue(address, feeRate, pluginData
                     ?: mapOf())
             satoshiToBTC(maximumSpendableValue, RoundingMode.CEILING)
         } catch (e: Exception) {
@@ -229,10 +229,10 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal? {
+    fun fee(amount: BigDecimal, feeRate: Int, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal? {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
-            val fee = kit.fee(satoshiAmount, address, senderPay = true, feeRate = feeRate.toInt(), pluginData = pluginData
+            val fee = kit.fee(satoshiAmount, address, senderPay = true, feeRate = feeRate, pluginData = pluginData
                     ?: mapOf())
             satoshiToBTC(fee, RoundingMode.CEILING)
         } catch (e: Exception) {

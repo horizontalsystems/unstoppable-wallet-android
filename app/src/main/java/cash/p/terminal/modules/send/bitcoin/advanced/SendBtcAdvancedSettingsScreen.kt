@@ -117,7 +117,7 @@ fun SendBtcAdvancedSettingsScreen(
                             errors = listOf(),
                             navController = fragmentNavController,
                             onValueChange = {
-                                sendBitcoinViewModel.updateFeeRate(it.toLong())
+                                sendBitcoinViewModel.updateFeeRate(it.toInt())
                             },
                             onClickIncrement = {
                                 sendBitcoinViewModel.incrementFeeRate()
