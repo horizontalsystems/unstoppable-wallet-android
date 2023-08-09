@@ -263,7 +263,6 @@
     <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <string name="Send_Warning_LowFee">Warnung! Gefahr des Festklemmens</string>
     <string name="Send_Warning_LowFee_Description">Die Transaktion kann festklemmen oder fehlschlagen</string>
-    <string name="Send_Error_FetchFeeRateFailed">Fehler beim Abrufen der Gebührenrate</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Erweitert</string>
     <string name="SendEvmSettings_Nonce">Transaktion Nonce</string>
@@ -338,6 +337,7 @@
     <string name="WalletConnect_Disconnecting">Verbindung wird getrennt</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signaturanfrage</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domäne</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Bitte signieren Sie eine Nachricht zur Authentifizierung</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signieren</string>
@@ -355,12 +355,15 @@
     <string name="WalletConnect_Address">Adresse</string>
     <string name="WalletConnect_Network">Netzwerk</string>
     <string name="WalletConnect_Input">Eingabe</string>
+    <string name="WalletConnect_Version1">Wallet-Version 1.0</string>
+    <string name="WalletConnect_Version2">Wallet-Version 2.0</string>
     <string name="WalletConnect_I_Trust">Ich vertraue</string>
     <string name="WalletConnect_Note">Hinweis</string>
     <string name="WalletConnect_LegacySignWarning">Die Unterschrift dieser Nachricht kann gefährlich sein. Diese Signatur könnte möglicherweise jede Operation im Namen Ihres Kontos ausführen einschließlich der vollen Kontrolle über Ihr Konto und alle seine Assets an die anfragende Website. Signieren Sie diese Nachricht nur, wenn Sie wissen, was Sie tun oder vertrauen Sie der anfragenden Website.</string>
     <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Wallet-Typ %s unterstützt WalletConnect nicht</string>
     <string name="WalletConnect_Unnamed">Unbenannt</string>
     <string name="WalletConnect_DAppUnknown">Unbekannte dApp</string>
+    <string name="WalletConnect_Pairings">Währungspaare</string>
     <string name="WalletConnect_Pairings_DeleteAll">Alle löschen</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Möchten Sie alle gepaart dApss löschen?</string>
     <string name="WalletConnect_Pairings_Delete">Löschen</string>
