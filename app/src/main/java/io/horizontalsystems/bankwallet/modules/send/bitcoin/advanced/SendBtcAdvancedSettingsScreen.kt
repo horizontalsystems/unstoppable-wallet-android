@@ -49,6 +49,7 @@ fun SendBtcAdvancedSettingsScreen(
     val lockTimeEnabled = sendBitcoinViewModel.isLockTimeEnabled
     val lockTimeInterval = sendUiState.lockTimeInterval
     val feeRate = sendUiState.feeRate
+    val feeRateCaution = sendUiState.feeRateCaution
 
     val viewModel: SendBtcAdvancedSettingsViewModel =
         viewModel(factory = SendBtcAdvancedSettingsModule.Factory(blockchainType))
@@ -113,8 +114,7 @@ fun SendBtcAdvancedSettingsScreen(
                             info = stringResource(R.string.FeeSettings_FeeRate_Info),
                             value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
                             decimals = 0,
-                            warnings = listOf(),
-                            errors = listOf(),
+                            caution = feeRateCaution,
                             navController = fragmentNavController,
                             onValueChange = {
                                 sendBitcoinViewModel.updateFeeRate(it.toInt())
@@ -159,7 +159,7 @@ fun SendBtcAdvancedSettingsScreen(
                         )
                     }
 
-                    sendUiState.feeRateCaution?.let {
+                    feeRateCaution?.let {
                         FeeRateCaution(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
                             feeRateCaution = it
