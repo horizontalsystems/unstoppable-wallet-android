@@ -366,6 +366,7 @@
     <string name="Send_Error_LowFee_Description">Le montant des frais appliqués est inférieur au montant minimal requis !</string>
     <string name="Send_Warning_LowFee_Description">La transaction risque d\'être bloquée ou d\'échouer</string>
     <string name="Send_Error_FetchFeeRateFailed">Erreur de calcul du Taux des Frais</string>
+    <string name="Send_Error_FetchFeeRateFailed_Description">La connexion au serveur a échoué. Le versement de commissions nécessite la saisie manuelle des données que vous pouvez trouver sur le site.</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avancé</string>
     <string name="SendEvmSettings_Nonce">Nonce de transaction</string>
@@ -697,6 +698,8 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Renseignez le nom de votre compte Telegram afin que notre équipe puisse vous offrir un accompagnement personnalisé. Un processus d\'évaluation du problème sera mis en place et nous vous reviendrons là-dessus, une fois que le problème a été identifié.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Votre demande de participation aux chats privés a été transmise. Retrouvez toutes les informations sur Telegram</string>
     <string name="Settings_PersonalSupport_Account">Compte</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
+    <string name="Settings_PersonalSupport_Requested">Demande soumise</string>
     <string name="Settings_PersonalSupport_Request">Requête</string>
     <string name="Appearance_Theme">Thème</string>
     <string name="Appearance_Tab">PARAMÈTRES DES TAB</string>
