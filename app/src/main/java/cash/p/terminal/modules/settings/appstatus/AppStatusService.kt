@@ -1,13 +1,18 @@
 package cash.p.terminal.modules.settings.appstatus
 
-import cash.p.terminal.core.*
+import cash.p.terminal.core.AppLog
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.IAdapterManager
+import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.core.adapters.BaseTronAdapter
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.marketkit.models.BlockchainType
-import java.util.*
+import java.util.Date
 
 class AppStatusService(
         private val systemInfoManager: ISystemInfoManager,
@@ -23,10 +28,10 @@ class AppStatusService(
             val status = LinkedHashMap<String, Any>()
 
             status["App Info"] = getAppInfo()
-            status["App Log"] = AppLog.getLog()
             status["Version History"] = getVersionHistory()
             status["Wallets Status"] = getWalletsStatus()
             status["Blockchain Status"] = getBlockchainStatus()
+            status["App Log"] = AppLog.getLog()
             status["Market Last Sync Timestamps"] = getMarketLastSyncTimestamps()
 
             return status
@@ -78,8 +83,20 @@ class AppStatusService(
         val blockchainStatus = LinkedHashMap<String, Any>()
 
         blockchainStatus.putAll(getBitcoinForkStatuses())
+        getTronStatus()?.let {
+            blockchainStatus.putAll(it)
+        }
 
         return blockchainStatus
+    }
+
+    private fun getTronStatus(): Map<String, Any>? {
+        val wallet = walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Tron }
+        return wallet?.let {
+            (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.statusInfo?.let {
+                mapOf("Tron" to it)
+            }
+        }
     }
 
     private fun getBitcoinForkStatuses(): Map<String, Any> {
