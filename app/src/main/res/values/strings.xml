@@ -356,6 +356,7 @@
     <string name="Balance_NoWalletAlert">You don\'t have any installed wallets yet.\nCreate a new wallet or restore an existing one </string>
     <string name="Balance_NoCoinsAlert">You don\'t have an added coins.\nAdd the coins you will be using</string>
     <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
+    <string name="Balance_NoAssetsToSend">You have no assets to send.</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
