@@ -262,7 +262,10 @@
     <string name="Send_FeeRate">Gebührenrate</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <string name="Send_Warning_LowFee">Warnung! Gefahr des Festklemmens</string>
+    <string name="Send_Error_LowFee">Fehler bei der Gebührenbewertung</string>
+    <string name="Send_Error_LowFee_Description">Die Gebühren wurden unzureichend eingesetzt!</string>
     <string name="Send_Warning_LowFee_Description">Die Transaktion kann festklemmen oder fehlschlagen</string>
+    <string name="Send_Error_FetchFeeRateFailed">Fehler bei der Berechnung des Gebührensatzes</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Erweitert</string>
     <string name="SendEvmSettings_Nonce">Transaktion Nonce</string>
