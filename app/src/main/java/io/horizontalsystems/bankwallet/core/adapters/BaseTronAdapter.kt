@@ -22,6 +22,9 @@ abstract class BaseTronAdapter(
     override val debugInfo: String
         get() = ""
 
+    val statusInfo: Map<String, Any>
+        get() = tronKit.statusInfo()
+
     // IReceiveAdapter
 
     override val isAccountActive: Boolean

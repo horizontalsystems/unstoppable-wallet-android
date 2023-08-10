@@ -1,13 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AppLog
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.adapters.BaseTronAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.marketkit.models.BlockchainType
-import java.util.*
+import java.util.Date
 
 class AppStatusService(
         private val systemInfoManager: ISystemInfoManager,
@@ -23,10 +28,10 @@ class AppStatusService(
             val status = LinkedHashMap<String, Any>()
 
             status["App Info"] = getAppInfo()
-            status["App Log"] = AppLog.getLog()
             status["Version History"] = getVersionHistory()
             status["Wallets Status"] = getWalletsStatus()
             status["Blockchain Status"] = getBlockchainStatus()
+            status["App Log"] = AppLog.getLog()
             status["Market Last Sync Timestamps"] = getMarketLastSyncTimestamps()
 
             return status
@@ -78,8 +83,20 @@ class AppStatusService(
         val blockchainStatus = LinkedHashMap<String, Any>()
 
         blockchainStatus.putAll(getBitcoinForkStatuses())
+        getTronStatus()?.let {
+            blockchainStatus.putAll(it)
+        }
 
         return blockchainStatus
+    }
+
+    private fun getTronStatus(): Map<String, Any>? {
+        val wallet = walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Tron }
+        return wallet?.let {
+            (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.statusInfo?.let {
+                mapOf("Tron" to it)
+            }
+        }
     }
 
     private fun getBitcoinForkStatuses(): Map<String, Any> {
