@@ -362,6 +362,7 @@
     <string name="Send_FeeRate">Taux de frais</string>
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %1$s (%2$s) payé en %3$s. Il est nécessaire %4$s.</string>
     <string name="Send_Warning_LowFee">Attention ! Risque de blocage</string>
+    <string name="Send_Error_LowFee">Erreur de calcul des Frais</string>
     <string name="Send_Warning_LowFee_Description">La transaction risque d\'être bloquée ou d\'échouer</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avancé</string>
