@@ -266,6 +266,7 @@
     <string name="Send_Error_LowFee_Description">Die Gebühren wurden unzureichend eingesetzt!</string>
     <string name="Send_Warning_LowFee_Description">Die Transaktion kann festklemmen oder fehlschlagen</string>
     <string name="Send_Error_FetchFeeRateFailed">Fehler bei der Berechnung des Gebührensatzes</string>
+    <string name="Send_Error_FetchFeeRateFailed_Description">Die Verbindung zum Server ist fehlgeschlagen. Die Auszahlung von Provisionen erfordert die manuelle Eingabe von Daten, die Du auf der Website finden kannst.</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Erweitert</string>
     <string name="SendEvmSettings_Nonce">Transaktion Nonce</string>
@@ -584,6 +585,7 @@
     <string name="Settings_PersonalSupport_PremiumFeatureWarning">Diese Funktion ist nur für Premium-Nutzer der Unstoppable Wallet gedacht. Weitere Informationen findest Du auf unserer offiziellen Website.</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Gib den Namen Deines Telegram-Kontos an, damit unser Team Dir eine persönliche Betreuung anbieten kann. Wir werden einen Prozess zur Bewertung des Problems einleiten und uns bei Dir melden, sobald das Problem erkannt wurde.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Dein Antrag auf Teilnahme an privaten Chats wurde weitergeleitet. Alle Infos dazu findest Du auf Telegram</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Request">Anforderung</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
