@@ -18,6 +18,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.FaqManager
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.balance.*
 import cash.p.terminal.modules.rateapp.RateAppModule
@@ -177,6 +179,45 @@ fun BalanceItems(
                         HudHelper.vibrate(context)
                     }
                 )
+            }
+
+            item {
+                Row(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(R.string.Balance_Send),
+                        onClick = {
+                            navController.slideFromBottom(
+                                R.id.sendTokenSelectFragment,
+                            )
+                        },
+                        enabled = true//viewItem.sendEnabled
+                    )
+                    HSpacer(8.dp)
+                    ButtonPrimaryCircle(
+                        icon = R.drawable.ic_arrow_down_left_24,
+                        contentDescription = stringResource(R.string.Balance_Receive),
+                        onClick = {},
+                    )
+                    if (true) {
+                        HSpacer(8.dp)
+                        ButtonPrimaryCircle(
+                            icon = R.drawable.ic_swap_24,
+                            contentDescription = stringResource(R.string.Swap),
+                            onClick = {
+//                                navController.slideFromBottom(
+//                                    R.id.swapFragment,
+//                                    SwapMainModule.prepareParams(viewItem.wallet.token)
+//                                )
+                            },
+                            enabled = true
+                        )
+                    }
+                }
+                VSpacer(12.dp)
             }
 
             item {
