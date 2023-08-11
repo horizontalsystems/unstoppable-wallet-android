@@ -1,10 +1,11 @@
 package cash.p.terminal.entities
 
 import android.os.Parcelable
+import cash.p.terminal.core.badge
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.Objects
 
 @Parcelize
 data class Wallet(
@@ -24,7 +25,7 @@ data class Wallet(
         get() = token.decimals
 
     val badge
-        get() = configuredToken.badge
+        get() = token.badge
 
     val transactionSource get() = TransactionSource(token.blockchain, account, coinSettings)
 

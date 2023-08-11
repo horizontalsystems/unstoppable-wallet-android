@@ -415,3 +415,16 @@ val TokenType.AddressType.bitcoinCashCoinType: BitcoinCashCoinType
         TokenType.AddressType.Type0 -> BitcoinCashCoinType.type0
         TokenType.AddressType.Type145 -> BitcoinCashCoinType.type145
     }
+
+val Token.badge: String?
+    get() = when (val tokenType = type) {
+        is TokenType.Derived -> {
+            tokenType.derivation.accountTypeDerivation.value.uppercase()
+        }
+        is TokenType.AddressTyped -> {
+            tokenType.type.bitcoinCashCoinType.value.uppercase()
+        }
+        else -> {
+            protocolType?.uppercase()
+        }
+    }
