@@ -218,25 +218,25 @@ class CoinOverviewViewModel(
                 is TokenType.AddressTyped -> {
                     type = TokenVariants.Type.CoinTypes
 
-                    BitcoinCashCoinType.values().forEach { bchCoinType ->
-                        val coinSettings =
-                            CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to bchCoinType.value))
-                        val configuredToken = ConfiguredToken(token, coinSettings)
-                        val inWallet =
-                            canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
-                        items.add(
-                            TokenVariant(
-                                value = Translator.getString(bchCoinType.title),
-                                copyValue = null,
-                                imgUrl = token.blockchainType.imageUrl,
-                                explorerUrl = null,
-                                name = bchCoinType.value,
-                                configuredToken = configuredToken,
-                                canAddToWallet = canAddToWallet,
-                                inWallet = inWallet
-                            )
+                    val bchCoinType = tokenType.type.bitcoinCashCoinType
+
+                    val coinSettings =
+                        CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to bchCoinType.value))
+                    val configuredToken = ConfiguredToken(token, coinSettings)
+                    val inWallet =
+                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                    items.add(
+                        TokenVariant(
+                            value = Translator.getString(bchCoinType.title),
+                            copyValue = null,
+                            imgUrl = token.blockchainType.imageUrl,
+                            explorerUrl = null,
+                            name = bchCoinType.value,
+                            configuredToken = configuredToken,
+                            canAddToWallet = canAddToWallet,
+                            inWallet = inWallet
                         )
-                    }
+                    )
                 }
 
                 TokenType.Native -> {
