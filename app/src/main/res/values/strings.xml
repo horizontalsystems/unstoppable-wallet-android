@@ -173,9 +173,6 @@
     <string name="ImportCexAccountBinance_Description">Please provide the API Keys and API Secret to link your exchange.</string>
     <string name="ImportCexAccountBinance_ApiKey">Api Key</string>
     <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
-    <string name="ImportCexAccountConzix_Description">Enter your email and password from Coinzix Account.</string>
-    <string name="ImportCexAccountConzix_Email">Email</string>
-    <string name="ImportCexAccountConzix_Error_Title">Login Failed</string>
 
     <!--Backup-->
 

@@ -12,10 +12,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CexType
 import io.horizontalsystems.bankwallet.modules.balance.cex.CexAddress
-import io.horizontalsystems.bankwallet.modules.balance.cex.CoinzixCexApiService
-import io.horizontalsystems.bankwallet.modules.balance.cex.Response
-import io.horizontalsystems.bankwallet.modules.coinzixverify.CoinzixVerificationMode
-import io.horizontalsystems.bankwallet.modules.coinzixverify.TwoFactorType
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
@@ -42,10 +38,8 @@ class CexProviderManager(private val accountManager: IAccountManager) {
     }
 
     private fun handleAccount(account: Account?) {
-        val cexType = (account?.type as? AccountType.Cex)?.cexType
-        val cexProvider = when (cexType) {
+        val cexProvider = when (val cexType = (account?.type as? AccountType.Cex)?.cexType) {
             is CexType.Binance -> BinanceCexProvider(cexType.apiKey, cexType.secretKey, account)
-            is CexType.Coinzix -> CoinzixCexProvider(cexType.authToken, cexType.secret, account)
             null -> null
         }
 
@@ -163,285 +157,421 @@ data class CexWithdrawNetwork(
     val networkName get() = blockchain?.name ?: name
 }
 
-class CoinzixCexProvider(
-    private val authToken: String,
-    private val secret: String,
-    override val account: Account
-) : ICexProvider {
-    private val api = CoinzixCexApiService()
-
-    private val coinUidMap = mapOf(
-        "1INCH" to "1inch",
-        "AAVE" to "aave",
-        "ADA" to "cardano",
-        "ALGO" to "algorand",
-        "AMP" to "amp-token",
-        "APE" to "apecoin-ape",
-        "ARB" to "arbitrum",
-        "ATOM" to "cosmos",
-        "AVAX" to "avalanche-2",
-        "AXS" to "axie-infinity",
-        "BAKE" to "bakerytoken",
-        "BCH" to "bitcoin-cash",
-        "BNB" to "binancecoin",
-        "BTC" to "bitcoin",
-        "BUSD" to "binance-usd",
-        "CAKE" to "pancakeswap-token",
-        "CHZ" to "chiliz",
-        "COMP" to "compound-governance-token",
-        "DENT" to "dent",
-        "DOGE" to "dogecoin",
-        "DOT" to "polkadot",
-        "EGLD" to "elrond-erd-2",
-        "ENJ" to "enjincoin",
-        "EOS" to "eos",
-        "ETC" to "ethereum-classic",
-        "ETH" to "ethereum",
-        "FIL" to "filecoin",
-        "FLOKI" to "floki",
-        "FTM" to "fantom",
-        "GALA" to "gala",
-        "GMT" to "stepn",
-        "GRT" to "the-graph",
-        "HOT" to "holotoken",
-        "IOTA" to "iota",
-        "LINK" to "chainlink",
-        "LTC" to "litecoin",
-        "LUNA" to "terra-luna-2",
-        "LUNC" to "terra-luna",
-        "MANA" to "decentraland",
-        "MATIC" to "matic-network",
-        "MKR" to "maker",
-        "NEAR" to "near",
-        "ONE" to "harmony",
-        "PEPE" to "pepe",
-        "QNT" to "quant-network",
-        "QTUM" to "qtum",
-        "REEF" to "reef",
-        "RNDR" to "render-token",
-        "RUNE" to "thorchain",
-        "SAND" to "the-sandbox",
-        "SC" to "siacoin",
-        "SHIB" to "shiba-inu",
-        "SOL" to "solana",
-        "SUI" to "sui",
-        "SUSHI" to "sushi",
-        "TFUEL" to "theta-fuel",
-        "THETA" to "theta-token",
-        "TRX" to "tron",
-        "UNI" to "uniswap",
-        "USDT" to "tether",
-        "VET" to "vechain",
-        "WIN" to "wink",
-        "WISTA" to "wistaverse",
-        "XLM" to "stellar",
-        "XMR" to "monero",
-        "XRP" to "ripple",
-        "XTZ" to "tezos",
-        "XVG" to "verge",
-        "YFI" to "yearn-finance",
-        "ZIL" to "zilliqa",
-        "ZIX" to "coinzix-token",
-    )
-
-    private val networkTypeToBlockchainUidMap = mapOf(
-        1 to "ethereum",
-        2 to "tron",
-        3 to "binancecoin",
-        4 to "binance-smart-chain",
-        6 to "solana",
-        8 to "polygon-pos",
-        9 to "arbitrum-one",
-    )
-
-    private val isoToBlockchainUidMap = mapOf(
-        "ADA" to "cardano",
-        "ALGO" to "algorand",
-        "ATOM" to "cosmos",
-        "BCH" to "bitcoin-cash",
-        "BTC" to "bitcoin",
-        "DOGE" to "dogecoin",
-        "DOT" to "polkadot",
-        "EGLD" to "elrond-erd-2",
-        "EOS" to "eos",
-        "ETH" to "ethereum",
-        "LTC" to "litecoin",
-        "LUNA" to "terra-luna-2",
-        "LUNC" to "terra-luna",
-        "MATIC" to "polygon-pos",
-        "ONE" to "harmony",
-        "QTUM" to "qtum",
-        "RUNE" to "thorchain",
-        "SC" to "siacoin",
-        "SOL" to "solana",
-        "SUI" to "sui",
-        "THETA" to "theta-token",
-        "TRX" to "tron",
-        "VET" to "vechain",
-        "XLM" to "stellar",
-        "XMR" to "monero",
-        "XRP" to "ripple",
-        "ZIL" to "zilliqa",
-    )
-
-    private val nativeNetworkId = "NATIVE"
-
-
-    override suspend fun getAddress(assetId: String, networkId: String?): CexAddress {
-        val network = if (networkId == nativeNetworkId) null else networkId
-        val addressData = api.getAddress(authToken, secret, assetId, 0, network)
-
-        return when {
-            addressData.address != null -> {
-                CexAddress(addressData.address, "")
-            }
-
-            addressData.account != null -> {
-                CexAddress(addressData.account, addressData.memo ?: "")
-            }
-
-            else -> {
-                throw Exception()
-            }
-        }
-    }
-
-    suspend fun withdraw(
-        assetId: String,
-        networkId: String?,
-        address: String,
-        amount: BigDecimal,
-        feeFromAmount: Boolean
-    ): CoinzixVerificationMode.Withdraw {
-        val network = if (networkId == nativeNetworkId) null else networkId
-
-        val response = api.withdraw(authToken, secret, assetId, network, address, amount, feeFromAmount)
-        validate(response)
-
-        val data = response.data ?: throw IllegalStateException("Withdraw response data is null")
-
-        return CoinzixVerificationMode.Withdraw(data.id, data.step.mapNotNull { TwoFactorType.fromCode(it) })
-    }
-
-    suspend fun confirmWithdraw(
-        withdrawId: String,
-        emailCode: String?,
-        twoFactorCode: String?
-    ) {
-        val response = api.confirmWithdraw(authToken, secret, withdrawId, emailCode, twoFactorCode)
-        validate(response)
-    }
-
-    suspend fun sendWithdrawPin(
-        withdrawId: String
-    ) {
-        val response = api.sendWithdrawPin(authToken, secret, withdrawId)
-        validate(response)
-    }
-
-    private fun validate(response: Response.Withdraw) {
-        check(response.status) { response.errors?.joinToString { it } ?: response.message ?: "Unknown error" }
-    }
-
-    override suspend fun getAssets(): List<CexAssetRaw> {
-        val configResponse = api.getConfig()
-        val ignoredIds = configResponse.data.fiat_currencies + configResponse.data.demo_currency.values
-
-        return api.getBalances(authToken, secret)
-            .mapNotNull {
-                val assetId = it.currency.iso3
-
-                if (ignoredIds.contains(assetId)) return@mapNotNull null
-
-                val decimals = 8
-                val depositEnabled = configResponse.data.currency_deposit.contains(assetId)
-                val withdrawEnabled = configResponse.data.currency_withdraw.contains(assetId)
-
-                CexAssetRaw(
-                    id = assetId,
-                    accountId = account.id,
-                    name = it.currency.name,
-                    freeBalance = it.balance_available.movePointLeft(decimals),
-                    lockedBalance = (it.balance - it.balance_available).movePointLeft(decimals),
-                    depositEnabled = depositEnabled,
-                    withdrawEnabled = withdrawEnabled,
-                    depositNetworks = configResponse.depositNetworks(assetId).mapIndexedNotNull { index, depositNetwork ->
-                        val networkId = if (depositNetwork.network_type == 0) {
-                            nativeNetworkId
-                        } else {
-                            it.currency.networks[depositNetwork.network_type]
-                        }
-                        networkId?.let {
-                            CexDepositNetworkRaw(
-                                id = networkId,
-                                name = networkId,
-                                isDefault = index == 0,
-                                enabled = depositEnabled,
-                                minAmount = depositNetwork.min_refill,
-                                blockchainUid = if (depositNetwork.network_type == 0)
-                                    isoToBlockchainUidMap[assetId]
-                                else
-                                    networkTypeToBlockchainUidMap[depositNetwork.network_type]
-                            )
-                        }
-                    },
-                    withdrawNetworks = configResponse.withdrawNetworks(assetId).mapIndexedNotNull { index, withdrawNetwork ->
-                        val networkId = if (withdrawNetwork.network_type == 0) {
-                            nativeNetworkId
-                        } else {
-                            it.currency.networks[withdrawNetwork.network_type]
-                        }
-
-                        networkId?.let {
-                            CexWithdrawNetworkRaw(
-                                id = networkId,
-                                name = networkId,
-                                isDefault = index == 0,
-                                enabled = withdrawEnabled,
-                                minAmount = withdrawNetwork.min_withdraw,
-                                maxAmount = withdrawNetwork.max_withdraw,
-                                fixedFee = withdrawNetwork.fixed,
-                                feePercent = withdrawNetwork.percent,
-                                minFee = withdrawNetwork.min_commission,
-                                blockchainUid = if (withdrawNetwork.network_type == 0)
-                                    isoToBlockchainUidMap[assetId]
-                                else
-                                    networkTypeToBlockchainUidMap[withdrawNetwork.network_type]
-                            )
-                        }
-                    },
-                    coinUid = coinUidMap[assetId],
-                    decimals = decimals
-                )
-            }
-    }
-}
-
-
 class BinanceCexProvider(apiKey: String, secretKey: String, override val account: Account) : ICexProvider {
     private val client = SpotClientImpl(apiKey, secretKey)
     private val wallet = client.createWallet()
     private val gson = Gson()
 
     private val coinUidMap = mapOf(
-        "USDT" to "tether",
-        "BUSD" to "binance-usd",
+        "1INCH" to "1inch",
+        "AAVE" to "aave",
+        "ACA" to "acala",
+        "ACH" to "alchemy-pay",
+        "ACM" to "ac-milan-fan-token",
+        "ADA" to "cardano",
+        "ADX" to "adex",
+        "AERGO" to "aergo",
         "AGIX" to "singularitynet",
-        "SUSHI" to "sushi",
-        "GMT" to "stepn",
-        "CAKE" to "pancakeswap-token",
-        "ETH" to "ethereum",
-        "ETHW" to "ethereum-pow-iou",
-        "BTC" to "bitcoin",
+        "AGLD" to "adventure-gold",
+        "AKRO" to "akropolis",
+        "ALCX" to "alchemix",
+        "ALGO" to "algorand",
+        "ALICE" to "my-neighbor-alice",
+        "ALPACA" to "alpaca-finance",
+        "ALPHA" to "alpha-finance",
+        "ALPINE" to "alpine-f1-team-fan-token",
+        "AMB" to "amber",
+        "AMP" to "amp-token",
+        "ANKR" to "ankr",
+        "ANT" to "aragon",
+        "APE" to "apecoin-ape",
+        "API3" to "api3",
+        "APT" to "aptos",
+        "AR" to "arweave",
+        "ARB" to "arbitrum",
+        "ARDR" to "ardor",
+        "ARK" to "ark",
+        "ARKM" to "arkham",
+        "ARPA" to "arpa",
+        "ASR" to "as-roma-fan-token",
+        "AST" to "airswap",
+        "ASTR" to "astar",
+        "ATA" to "automata",
+        "ATM" to "atletico-madrid",
+        "ATOM" to "cosmos",
+        "AUCTION" to "auction",
+        "AUDIO" to "audius",
+        "AUTO" to "cube",
+        "AVA" to "concierge-io",
+        "AVAX" to "avalanche-2",
+        "AXS" to "axie-infinity",
+        "BADGER" to "badger-dao",
+        "BAKE" to "bakerytoken",
+        "BAL" to "balancer",
+        "BAND" to "band-protocol",
+        "BAR" to "fc-barcelona-fan-token",
+        "BAT" to "basic-attention-token",
+        "BCH" to "bitcoin-cash",
+        "BDOT" to "babydot",
+        "BEL" to "bella-protocol",
+        "BETA" to "beta-finance",
+        "BETH" to "binance-eth",
+        "BICO" to "biconomy",
+        "BIDR" to "binanceidr",
+        "BIFI" to "beefy-finance",
+        "BLZ" to "bluzelle",
         "BNB" to "binancecoin",
-        "SOL" to "solana",
-        "QI" to "benqi",
+        "BNC" to "bifrost-native-coin",
+        "BNT" to "bancor",
+        "BNX" to "binaryx",
+        "BOND" to "barnbridge",
         "BSW" to "biswap",
+        "BTC" to "bitcoin",
+        "BTS" to "bitshares",
+        "BTTOLD" to "bittorrent-old",
+        "BURGER" to "burger-swap",
+        "BUSD" to "binance-usd",
+        "C98" to "coin98",
+        "CAKE" to "pancakeswap-token",
+        "CAN" to "channels",
+        "CELO" to "celo",
+        "CELR" to "celer-network",
+        "CFX" to "conflux-token",
+        "CHESS" to "tranchess",
+        "CHR" to "chromaway",
+        "CHZ" to "chiliz",
+        "CITY" to "manchester-city-fan-token",
+        "CKB" to "nervos-network",
+        "CLV" to "clover-finance",
+        "COCOS" to "cocos-bcx",
+        "COMBO" to "furucombo",
+        "COMP" to "compound-governance-token",
+        "COS" to "contentos",
+        "COTI" to "coti",
+        "CREAM" to "cream-2",
+        "CRV" to "curve-dao-token",
+        "CTK" to "certik",
+        "CTSI" to "cartesi",
+        "CTXC" to "cortex",
+        "CVC" to "civic",
+        "CVP" to "concentrated-voting-power",
+        "CVX" to "convex-finance",
+        "DAI" to "dai",
+        "DAR" to "mines-of-dalarnia",
+        "DASH" to "dash",
+        "DATA" to "streamr",
+        "DCR" to "decred",
+        "DEGO" to "dego-finance",
+        "DENT" to "dent",
+        "DEXE" to "dexe",
+        "DF" to "dforce-token",
+        "DGB" to "digibyte",
+        "DIA" to "dia-data",
+        "DOCK" to "dock",
+        "DODO" to "dodo",
+        "DOGE" to "dogecoin",
+        "DOT" to "polkadot",
+        "DREP" to "drep-new",
+        "DUSK" to "dusk-network",
+        "DYDX" to "dydx",
+        "EDU" to "edu-coin",
+        "EFI" to "efinity",
+        "EGLD" to "elrond-erd-2",
+        "ELF" to "aelf",
+        "ENJ" to "enjincoin",
+        "ENS" to "ethereum-name-service",
+        "EOS" to "eos",
+        "EPS" to "ellipsis",
+        "ERN" to "ethernity-chain",
+        "ETC" to "ethereum-classic",
+        "ETH" to "ethereum",
+        "ETHDOWN" to "ethdown",
+        "ETHUP" to "ethup",
+        "ETHW" to "ethereum-pow-iou",
+        "EVX" to "everex",
+        "FARM" to "harvest-finance",
+        "FET" to "fetch-ai",
+        "FIDA" to "bonfida",
+        "FIL" to "filecoin",
+        "FIO" to "fio-protocol",
+        "FIRO" to "zcoin",
+        "FIS" to "stafi",
+        "FLM" to "flamingo-finance",
+        "FLOKI" to "floki",
+        "FLOW" to "flow",
+        "FLR" to "flare-networks",
+        "FLUX" to "zelcash",
+        "FOR" to "force-protocol",
+        "FORTH" to "ampleforth-governance-token",
+        "FRONT" to "frontier-token",
+        "FTM" to "fantom",
+        "FTT" to "ftx-token",
+        "FUN" to "funfair",
+        "FXS" to "frax-share",
+        "GAL" to "project-galaxy",
+        "GALA" to "gala",
+        "GAS" to "gas",
+        "GFT" to "game-fantasy-token",
+        "GHST" to "aavegotchi",
+        "GLM" to "golem",
+        "GLMR" to "moonbeam",
+        "GMT" to "stepn",
+        "GMX" to "gmx",
+        "GNO" to "gnosis",
+        "GNS" to "gains-network",
+        "GRT" to "the-graph",
+        "GTC" to "gitcoin",
+        "GYEN" to "gyen",
+        "HARD" to "kava-lend",
+        "HBAR" to "hedera-hashgraph",
+        "HFT" to "hashflow",
+        "HIFI" to "hifi-finance",
+        "HIGH" to "highstreet",
+        "HIVE" to "hive",
+        "HOOK" to "hooked-protocol",
+        "HOT" to "holotoken",
+        "ICP" to "internet-computer",
+        "ICX" to "icon",
+        "ID" to "space-id",
+        "IDEX" to "aurora-dao",
+        "IDRT" to "rupiah-token",
+        "ILV" to "illuvium",
+        "IMX" to "immutable-x",
+        "INJ" to "injective-protocol",
+        "IOST" to "iostoken",
+        "IOTX" to "iotex",
+        "IQ" to "everipedia",
+        "IRIS" to "iris-network",
+        "JASMY" to "jasmycoin",
+        "JOE" to "joe",
+        "JST" to "just",
+        "JUV" to "juventus-fan-token",
+        "KAVA" to "kava",
+        "KDA" to "kadena",
+        "KEY" to "selfkey",
+        "KEYFI" to "keyfi",
+        "KLAY" to "klay-token",
+        "KMD" to "komodo",
+        "KNC" to "kyber-network-crystal",
+        "KNCL" to "kyber-network",
+        "KP3R" to "keep3rv1",
+        "KSM" to "kusama",
+        "LAZIO" to "lazio-fan-token",
+        "LBA" to "libra-credit",
+        "LDO" to "lido-dao",
+        "LEVER" to "lever",
+        "LINA" to "linear",
+        "LINK" to "chainlink",
+        "LIT" to "litentry",
+        "LOKA" to "league-of-kingdoms",
+        "LOOKS" to "looksrare",
+        "LOOM" to "loom-network-new",
+        "LPT" to "livepeer",
+        "LQTY" to "liquity",
+        "LRC" to "loopring",
+        "LSK" to "lisk",
+        "LTC" to "litecoin",
+        "LTO" to "lto-network",
+        "LUNA" to "terra-luna-2",
+        "MAGIC" to "magic",
+        "MANA" to "decentraland",
+        "MASK" to "mask-network",
+        "MATIC" to "matic-network",
+        "MBL" to "moviebloc",
+        "MBOX" to "mobox",
+        "MC" to "merit-circle",
+        "MDT" to "measurable-data-token",
+        "MDX" to "mdex",
+        "MINA" to "mina-protocol",
+        "MKR" to "maker",
+        "MLN" to "melon",
+        "MOB" to "mobilecoin",
+        "MOVR" to "moonriver",
+        "MTL" to "metal",
+        "MTLX" to "mettalex",
+        "MULTI" to "multichain",
+        "NEAR" to "near",
+        "NEBL" to "neblio",
+        "NEO" to "neo",
+        "NEXO" to "nexo",
+        "NFT" to "apenft",
+        "NKN" to "nkn",
+        "NMR" to "numeraire",
+        "NULS" to "nuls",
+        "NVT" to "nervenetwork",
+        "OAX" to "openanx",
+        "OCEAN" to "ocean-protocol",
+        "OG" to "og-fan-token",
+        "OGN" to "origin-protocol",
+        "OM" to "mantra-dao",
+        "OMG" to "omisego",
+        "ONE" to "harmony",
+        "ONT" to "ontology",
+        "OOKI" to "ooki",
+        "OP" to "optimism",
+        "ORN" to "orion-protocol",
+        "OSMO" to "osmosis",
+        "OXT" to "orchid-protocol",
+        "PARA" to "paralink-network",
+        "PAXG" to "pax-gold",
+        "PEOPLE" to "constitutiondao",
+        "PEPE" to "pepe",
+        "PERL" to "perlin",
+        "PERP" to "perpetual-protocol",
+        "PHA" to "pha",
+        "PHB" to "phoenix-global",
+        "PIVX" to "pivx",
+        "PLA" to "playdapp",
+        "PNT" to "pnetwork",
+        "POLS" to "polkastarter",
+        "POLYX" to "polymesh",
+        "POND" to "marlin",
+        "PORTO" to "fc-porto",
+        "POWR" to "power-ledger",
+        "PROM" to "prometeus",
+        "PROS" to "prosper",
+        "PSG" to "paris-saint-germain-fan-token",
+        "PUNDIX" to "pundi-x-2",
+        "PYR" to "vulcan-forged",
+        "QI" to "benqi",
+        "QKC" to "quark-chain",
+        "QLC" to "qlink",
+        "QNT" to "quant-network",
+        "QTUM" to "qtum",
+        "QUICK" to "quickswap",
+        "RAD" to "radicle",
+        "RARE" to "superrare",
+        "RAY" to "raydium",
+        "RCN" to "ripio-credit-network",
+        "RDNT" to "radiant-capital",
+        "REEF" to "reef",
+        "REI" to "rei-network",
+        "REN" to "republic-protocol",
+        "REQ" to "request-network",
+        "RIF" to "rif-token",
+        "RLC" to "iexec-rlc",
+        "RNDR" to "render-token",
+        "ROSE" to "oasis-network",
+        "RPL" to "rocket-pool",
+        "RSR" to "reserve-rights-token",
+        "RUNE" to "thorchain",
+        "RVN" to "ravencoin",
+        "SAND" to "the-sandbox",
+        "SANTOS" to "santos-fc-fan-token",
+        "SC" to "siacoin",
+        "SCRT" to "secret",
+        "SFP" to "safepal",
+        "SHIB" to "shiba-inu",
+        "SKL" to "skale",
+        "SLP" to "smooth-love-potion",
+        "SNM" to "sonm",
+        "SNT" to "status",
+        "SNX" to "havven",
+        "SOL" to "solana",
+        "SOLO" to "solo-coin",
+        "SPELL" to "spell-token",
+        "SRM" to "serum",
+        "SSV" to "ssv-network",
+        "STEEM" to "steem",
+        "STG" to "stargate-finance",
+        "STMX" to "storm",
+        "STORJ" to "storj",
+        "STPT" to "stp-network",
+        "STRAX" to "stratis",
+        "STX" to "blockstack",
+        "SUI" to "sui",
+        "SUN" to "sun-token",
+        "SUPER" to "superfarm",
+        "SUSHI" to "sushi",
+        "SXP" to "swipe",
+        "SYN" to "synapse-2",
+        "SYS" to "syscoin",
+        "TCT" to "tokenclub",
+        "TFUEL" to "theta-fuel",
+        "THETA" to "theta-token",
+        "TKO" to "tokocrypto",
+        "TLM" to "alien-worlds",
+        "TOMO" to "tomochain",
+        "TORN" to "tornado-cash",
+        "TRB" to "tellor",
+        "TROY" to "troy",
+        "TRU" to "truefi",
+        "TRX" to "tron",
+        "TUSD" to "true-usd",
+        "TVK" to "the-virtua-kolect",
+        "TWT" to "trust-wallet-token",
+        "UFT" to "unlend-finance",
+        "UMA" to "uma",
+        "UNFI" to "unifi-protocol-dao",
+        "UNI" to "uniswap",
+        "USDC" to "usd-coin",
+        "USDP" to "paxos-standard",
+        "USDT" to "tether",
+        "UTK" to "utrust",
+        "VAI" to "vai",
+        "VET" to "vechain",
+        "VGX" to "ethos",
+        "VIB" to "viberate",
+        "VIDT" to "vidt-dao",
+        "VITE" to "vite",
+        "VOXEL" to "voxies",
+        "VRT" to "venus-reward-token",
+        "VTHO" to "vethor-token",
+        "WAN" to "wanchain",
+        "WAVES" to "waves",
+        "WAXP" to "wax",
+        "WBNB" to "wbnb",
+        "WBTC" to "wrapped-bitcoin",
+        "WETH" to "weth",
+        "WIN" to "wink",
+        "WING" to "wing-finance",
+        "WNXM" to "wrapped-nxm",
+        "WOO" to "woo-network",
+        "WRX" to "wazirx",
+        "WTC" to "waltonchain",
+        "XEC" to "ecash",
+        "XEM" to "nem",
+        "XLM" to "stellar",
+        "XMR" to "monero",
+        "XNO" to "nano",
+        "XRP" to "ripple",
+        "XTZ" to "tezos",
+        "XVG" to "verge",
+        "XVS" to "venus",
+        "YFI" to "yearn-finance",
+        "YFII" to "yfii-finance",
+        "YGG" to "yield-guild-games",
+        "ZEC" to "zcash",
+        "ZEN" to "zencash",
+        "ZIL" to "zilliqa",
+        "ZRX" to "0x",
     )
 
     private val blockchainUidMap = mapOf(
+        "BTC" to "bitcoin",
         "BSC" to "binance-smart-chain",
         "ETH" to "ethereum",
+        "EOS" to "eos",
+        "NEAR" to "near-protocol",
+        "AVAXC" to "avalanche",
+        "ARBITRUM" to "arbitrum-one",
+        "BNB" to "binancecoin",
+        "OPTIMISM" to "optimistic-ethereum",
+        "MATIC" to "polygon-pos",
+        "STATEMINT" to "polkadot",
+        "SOL" to "solana",
+        "XTZ" to "tezos",
+        "TRX" to "tron",
+        "APT" to "aptos",
+        "ADA" to "cardano",
+        "FTM" to "fantom",
+        "BCH" to "bitcoin-cash",
+        "ETC" to "ethereum-classic",
+        "FIL" to "filecoin",
+        "FLOW" to "flow",
+        "LTC" to "litecoin",
+        "XRP" to "ripple",
+        "ZEC" to "zcash",
     )
 
     override suspend fun getAddress(assetId: String, networkId: String?): CexAddress {
@@ -452,7 +582,7 @@ class BinanceCexProvider(apiKey: String, secretKey: String, override val account
             }
         }.toMutableMap()
 
-        val depositAddress = gson.fromJson(wallet.depositAddress(params), BinanceCexProvider.DepositAddress::class.java)
+        val depositAddress = gson.fromJson(wallet.depositAddress(params), DepositAddress::class.java)
         return CexAddress(depositAddress.address, depositAddress.tag)
     }
 
