@@ -7,26 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.bep2TokenUrl
-import cash.p.terminal.core.coinSettingType
-import cash.p.terminal.core.eip20TokenUrl
-import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.isSupported
-import cash.p.terminal.core.order
+import cash.p.terminal.core.*
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.shorten
-import cash.p.terminal.core.subscribeIO
-import cash.p.terminal.core.supports
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.BitcoinCashCoinType
-import cash.p.terminal.entities.CoinSettingType
-import cash.p.terminal.entities.CoinSettings
-import cash.p.terminal.entities.ConfiguredToken
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.entities.Wallet
+import cash.p.terminal.entities.*
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -208,66 +191,46 @@ class CoinOverviewViewModel(
                     )
                 }
 
-                TokenType.Native -> when (token.blockchainType.coinSettingType) {
-                    CoinSettingType.derivation -> {
-                        type = TokenVariants.Type.Bips
+                is TokenType.Derived -> {
+                    type = TokenVariants.Type.Bips
 
-                        AccountType.Derivation.values().forEach { derivation ->
-                            val coinSettings =
-                                CoinSettings(mapOf(CoinSettingType.derivation to derivation.value))
-                            val configuredToken = ConfiguredToken(token, coinSettings)
-                            val inWallet =
-                                canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
-                            items.add(
-                                TokenVariant(
-                                    value = derivation.addressType,
-                                    copyValue = null,
-                                    imgUrl = token.blockchainType.imageUrl,
-                                    explorerUrl = null,
-                                    name = derivation.rawName,
-                                    configuredToken = configuredToken,
-                                    canAddToWallet = canAddToWallet,
-                                    inWallet = inWallet,
-                                )
-                            )
-                        }
-                    }
-
-                    CoinSettingType.bitcoinCashCoinType -> {
-                        type = TokenVariants.Type.CoinTypes
-
-                        BitcoinCashCoinType.values().forEach { bchCoinType ->
-                            val coinSettings =
-                                CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to bchCoinType.value))
-                            val configuredToken = ConfiguredToken(token, coinSettings)
-                            val inWallet =
-                                canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
-                            items.add(
-                                TokenVariant(
-                                    value = Translator.getString(bchCoinType.title),
-                                    copyValue = null,
-                                    imgUrl = token.blockchainType.imageUrl,
-                                    explorerUrl = null,
-                                    name = bchCoinType.value,
-                                    configuredToken = configuredToken,
-                                    canAddToWallet = canAddToWallet,
-                                    inWallet = inWallet
-                                )
-                            )
-                        }
-                    }
-
-                    null -> {
-                        val configuredToken = ConfiguredToken(token)
+                    AccountType.Derivation.values().forEach { derivation ->
+                        val coinSettings =
+                            CoinSettings(mapOf(CoinSettingType.derivation to derivation.value))
+                        val configuredToken = ConfiguredToken(token, coinSettings)
                         val inWallet =
                             canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                         items.add(
                             TokenVariant(
-                                value = Translator.getString(R.string.CoinPlatforms_Native),
+                                value = derivation.addressType,
                                 copyValue = null,
                                 imgUrl = token.blockchainType.imageUrl,
                                 explorerUrl = null,
-                                name = token.blockchain.name,
+                                name = derivation.rawName,
+                                configuredToken = configuredToken,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet,
+                            )
+                        )
+                    }
+                }
+
+                is TokenType.AddressTyped -> {
+                    type = TokenVariants.Type.CoinTypes
+
+                    BitcoinCashCoinType.values().forEach { bchCoinType ->
+                        val coinSettings =
+                            CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to bchCoinType.value))
+                        val configuredToken = ConfiguredToken(token, coinSettings)
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                        items.add(
+                            TokenVariant(
+                                value = Translator.getString(bchCoinType.title),
+                                copyValue = null,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = null,
+                                name = bchCoinType.value,
                                 configuredToken = configuredToken,
                                 canAddToWallet = canAddToWallet,
                                 inWallet = inWallet
@@ -276,14 +239,35 @@ class CoinOverviewViewModel(
                     }
                 }
 
+                TokenType.Native -> {
+                    val configuredToken = ConfiguredToken(token)
+                    val inWallet =
+                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                    items.add(
+                        TokenVariant(
+                            value = Translator.getString(R.string.CoinPlatforms_Native),
+                            copyValue = null,
+                            imgUrl = token.blockchainType.imageUrl,
+                            explorerUrl = null,
+                            name = token.blockchain.name,
+                            configuredToken = configuredToken,
+                            canAddToWallet = canAddToWallet,
+                            inWallet = inWallet
+                        )
+                    )
+                }
+
                 is TokenType.Unsupported -> {
                     val configuredToken = ConfiguredToken(token)
                     items.add(
                         TokenVariant(
-                            value = tokenType.reference?.shorten() ?: "",
+                            value = tokenType.reference.shorten(),
                             copyValue = tokenType.reference,
                             imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = tokenType.reference?.let { token.blockchain.eip20TokenUrl(it) },
+                            explorerUrl = when {
+                                tokenType.reference.isNotBlank() -> token.blockchain.eip20TokenUrl(tokenType.reference)
+                                else -> null
+                            },
                             name = token.blockchain.name,
                             configuredToken = configuredToken,
                             canAddToWallet = false,

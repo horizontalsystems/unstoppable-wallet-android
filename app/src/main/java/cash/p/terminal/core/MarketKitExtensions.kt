@@ -4,23 +4,11 @@ import androidx.compose.ui.graphics.Color
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.BitcoinCashCoinType
-import cash.p.terminal.entities.CoinSettingType
-import cash.p.terminal.entities.CoinSettings
-import cash.p.terminal.entities.FeePriceScale
-import cash.p.terminal.entities.derivation
+import cash.p.terminal.entities.*
+import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
 import io.horizontalsystems.hdwalletkit.ExtendedKeyCoinType
 import io.horizontalsystems.hdwalletkit.HDWallet
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.HsPointTimePeriod
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.marketkit.models.TopPlatform
+import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.nftkit.models.NftType
 
 val Token.protocolType: String?
@@ -75,6 +63,8 @@ val Token.protocolInfo: String
 
 val Token.typeInfo: String
     get() = when (val type = type) {
+        is TokenType.Derived,
+        is TokenType.AddressTyped,
         TokenType.Native -> Translator.getString(R.string.CoinPlatforms_Native)
         is TokenType.Eip20 -> type.address.shorten()
         is TokenType.Bep2 -> type.symbol
@@ -188,6 +178,7 @@ fun Blockchain.bep2TokenUrl(symbol: String) = "https://explorer.binance.org/asse
 val BlockchainType.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
 
+// todo: remove it
 val BlockchainType.coinSettingType: CoinSettingType?
     get() = when (this) {
         BlockchainType.Bitcoin,
@@ -395,4 +386,18 @@ val HsPointTimePeriod.title: Int
         HsPointTimePeriod.Hour8 ->R.string.Coin_Analytics_Period_8h
         HsPointTimePeriod.Day1 -> R.string.Coin_Analytics_Period_1d
         HsPointTimePeriod.Week1 -> R.string.Coin_Analytics_Period_1w
+    }
+
+val TokenType.Derivation.purpose: HDWallet.Purpose
+    get() = when (this) {
+        TokenType.Derivation.Bip44 -> HDWallet.Purpose.BIP44
+        TokenType.Derivation.Bip49 -> HDWallet.Purpose.BIP49
+        TokenType.Derivation.Bip84 -> HDWallet.Purpose.BIP84
+        TokenType.Derivation.Bip86 -> HDWallet.Purpose.BIP86
+    }
+
+val TokenType.AddressType.bchCoinType: MainNetBitcoinCash.CoinType
+    get() = when (this) {
+        TokenType.AddressType.Type0 -> MainNetBitcoinCash.CoinType.Type0
+        TokenType.AddressType.Type145 -> MainNetBitcoinCash.CoinType.Type145
     }

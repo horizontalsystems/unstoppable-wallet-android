@@ -1,11 +1,10 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.AdapterErrorWrongParameters
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.bchCoinType
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.BitcoinCashCoinType
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincash.BitcoinCashKit
@@ -17,6 +16,7 @@ import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
 
 class BitcoinCashAdapter(
@@ -29,8 +29,9 @@ class BitcoinCashAdapter(
     constructor(
         wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
-        backgroundManager: BackgroundManager
-    ) : this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
+        backgroundManager: BackgroundManager,
+        addressType: TokenType.AddressType
+    ) : this(createKit(wallet, syncMode, addressType), syncMode, backgroundManager, wallet)
 
     init {
         kit.listener = this
@@ -88,14 +89,13 @@ class BitcoinCashAdapter(
     companion object {
         private const val confirmationsThreshold = 3
 
-        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): BitcoinCashKit {
+        private fun createKit(
+            wallet: Wallet,
+            syncMode: BitcoinCore.SyncMode,
+            addressType: TokenType.AddressType
+        ): BitcoinCashKit {
             val account = wallet.account
-            val bchCoinType = wallet.coinSettings.bitcoinCashCoinType ?: throw AdapterErrorWrongParameters("BitcoinCashCoinType is null")
-            val kitCoinType = when(bchCoinType){
-                BitcoinCashCoinType.type145 -> MainNetBitcoinCash.CoinType.Type145
-                BitcoinCashCoinType.type0 -> MainNetBitcoinCash.CoinType.Type0
-            }
-            val networkType = getNetworkType(kitCoinType)
+            val networkType = getNetworkType(addressType.bchCoinType)
             when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
                     return BitcoinCashKit(

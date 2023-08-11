@@ -31,14 +31,13 @@ class ConfiguredTokenInfoViewModel(
             is TokenType.Spl -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
             }
+            is TokenType.Derived -> {
+                ConfiguredTokenInfoType.Bips(token.blockchain.name)
+            }
+            is TokenType.AddressTyped -> {
+                ConfiguredTokenInfoType.Bch
+            }
             TokenType.Native -> when (token.blockchainType) {
-                BlockchainType.Bitcoin,
-                BlockchainType.Litecoin -> {
-                    ConfiguredTokenInfoType.Bips(token.blockchain.name)
-                }
-                BlockchainType.BitcoinCash -> {
-                    ConfiguredTokenInfoType.Bch
-                }
                 BlockchainType.Zcash -> {
                     ConfiguredTokenInfoType.BirthdayHeight(getBirthdayHeight(token))
                 }
