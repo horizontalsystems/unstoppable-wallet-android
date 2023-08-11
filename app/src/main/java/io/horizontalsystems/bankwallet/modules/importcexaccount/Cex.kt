@@ -12,7 +12,6 @@ sealed class Cex {
     companion object {
         fun all() = listOf(
             CexBinance(),
-            CexCoinzix(),
         )
 
         fun getById(cexId: String) = all().find {
@@ -27,12 +26,4 @@ class CexBinance : Cex() {
     override val icon = R.drawable.ic_cex_binance_32
     override val title = "Binance"
     override val url = "https://www.binance.com"
-}
-
-class CexCoinzix : Cex() {
-    override val name = "Coinzix"
-    override val id = "coinzix"
-    override val icon = R.drawable.ic_cex_coinzix_32
-    override val title = "Coinzix"
-    override val url = "https://coinzix.com"
 }

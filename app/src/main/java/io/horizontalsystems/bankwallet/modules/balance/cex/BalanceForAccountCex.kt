@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
@@ -37,7 +36,6 @@ import io.horizontalsystems.bankwallet.modules.balance.ui.TotalBalanceRow
 import io.horizontalsystems.bankwallet.modules.balance.ui.wallets
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.depositcex.DepositCexFragment
-import io.horizontalsystems.bankwallet.modules.withdrawcex.WithdrawCexFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -104,9 +102,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                     modifier = Modifier.weight(1f),
                                     title = stringResource(R.string.Balance_Withdraw),
                                     enabled = uiState.withdrawEnabled,
-                                    onClick = {
-                                        navController.slideFromBottom(R.id.withdrawCexChooseAssetFragment)
-                                    },
+                                    onClick = {},
                                 )
 
                                 HSpacer(width = 8.dp)
@@ -372,9 +368,7 @@ private fun ButtonsRowCex(viewItem: BalanceCexViewItem, navController: NavContro
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Withdraw),
             enabled = viewItem.withdrawEnabled,
-            onClick = {
-                navController.slideFromBottom(R.id.withdrawCexFragment, WithdrawCexFragment.args(viewItem.cexAsset))
-            },
+            onClick = {},
         )
         Spacer(modifier = Modifier.width(8.dp))
         ButtonPrimaryDefault(
