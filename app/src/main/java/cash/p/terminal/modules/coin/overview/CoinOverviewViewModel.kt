@@ -194,25 +194,25 @@ class CoinOverviewViewModel(
                 is TokenType.Derived -> {
                     type = TokenVariants.Type.Bips
 
-                    AccountType.Derivation.values().forEach { derivation ->
-                        val coinSettings =
-                            CoinSettings(mapOf(CoinSettingType.derivation to derivation.value))
-                        val configuredToken = ConfiguredToken(token, coinSettings)
-                        val inWallet =
-                            canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
-                        items.add(
-                            TokenVariant(
-                                value = derivation.addressType,
-                                copyValue = null,
-                                imgUrl = token.blockchainType.imageUrl,
-                                explorerUrl = null,
-                                name = derivation.rawName,
-                                configuredToken = configuredToken,
-                                canAddToWallet = canAddToWallet,
-                                inWallet = inWallet,
-                            )
+                    val derivation = tokenType.derivation.accountTypeDerivation
+
+                    val coinSettings =
+                        CoinSettings(mapOf(CoinSettingType.derivation to derivation.value))
+                    val configuredToken = ConfiguredToken(token, coinSettings)
+                    val inWallet =
+                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                    items.add(
+                        TokenVariant(
+                            value = derivation.addressType,
+                            copyValue = null,
+                            imgUrl = token.blockchainType.imageUrl,
+                            explorerUrl = null,
+                            name = derivation.rawName,
+                            configuredToken = configuredToken,
+                            canAddToWallet = canAddToWallet,
+                            inWallet = inWallet,
                         )
-                    }
+                    )
                 }
 
                 is TokenType.AddressTyped -> {
