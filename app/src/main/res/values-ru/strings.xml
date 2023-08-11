@@ -1148,6 +1148,8 @@
     <string name="CoinPage_CoinNotFound">[%s]\nне найден</string>
     <string name="CoinPage_Indicators">Индикаторы</string>
     <string name="CoinPage_MovingAverages">Скользящие средние</string>
+    <string name="CoinPage_Type">Тип</string>
+    <string name="CoinPage_Period">Период</string>
     <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_CexVolume_Info2">График, показывающий колебания дневного объема торговли токеном на ведущих централизованных биржах за 1 год.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих централизованных биржах за 30-дневный период.</string>
@@ -1157,10 +1159,14 @@
     <string name="CoinAnalytics_DexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих децентрализованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_DexVolume_Info4">Список всех токенов, ранжированных по объему торговли на децентрализованных биржах за 24ч/7дн/1мес.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">Отслеживаемые DEX биржи:</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Общая ликвидность, доступная в настоящий момент для токена на ведущих децентрализованных биржах.</string>
     <string name="CoinAnalytics_DexLiquidity_Info2">График, отражающий колебания доступной ликвидности для токена на ведущих децентрализованных биржах за 1 год.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">Список всех токенов, ранжированных по доступной ликвидности на ведущих децентрализованных биржах.</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">Отслеживаемые DEX биржи:</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
     <string name="CoinAnalytics_ActiveAddresses_Info1">Общее количество уникальных ежедневных активных адресов за 24 часа.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">График, показывающий вариацию количества ежедневных активных адресов в течение 1 года.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">Общее количество уникальных адресов блокчейна, с которых проводились транзакции с токеном за 30 дней.</string>
@@ -1219,13 +1225,24 @@
     <string name="Coin_Analytics_30DayUniqueAddress">Уникальные адреса за 30 дней</string>
     <string name="Coin_Analytics_30DayVolume">Объем за 30д</string>
     <string name="Coin_Analytics_Details">Детали</string>
+    <string name="Coin_Analytics_SelectPeriod">Выберите период</string>
+    <string name="Coin_Analytics_Period_30m">30 минут</string>
     <string name="Coin_Analytics_Period_1h">1 час</string>
+    <string name="Coin_Analytics_Period_4h">4 часа</string>
+    <string name="Coin_Analytics_Period_8h">8 часов</string>
+    <string name="Coin_Analytics_Period_1d">1 день</string>
+    <string name="Coin_Analytics_Period_1w">1 неделя</string>
+    <string name="Coin_Analytics_Indicators_StrongBuy">Активно покупать</string>
+    <string name="Coin_Analytics_Indicators_StrongSell">Активно продавать</string>
+    <string name="Coin_Analytics_Indicators_Sell">Продавать</string>
+    <string name="Coin_Analytics_Indicators_Buy">Покупать</string>
     <string name="Coin_Analytics_Indicators_NoData">Нет данных</string>
     <string name="ActivateSubscription_Title">Активировать</string>
     <string name="ActivateSubscription_Wallet">Кошелек</string>
     <string name="ActivateSubscription_Address">Адрес</string>
     <string name="ActivateSubscription_MessageToSign">Сообщение для подписи</string>
     <string name="ActivateSubscription_SignMessageDescription">Вам нужно подписать это сообщение, чтобы активировать вашу подписку</string>
+    <string name="SubscriptionInfo_Title">Премиум-функции</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">7Д сред.</string>
     <string name="Nfts_PriceType_Days_30">30Д сред.</string>
@@ -1384,11 +1401,20 @@
     <string name="Hud_Text_Connected">Подключен</string>
     <!--Cex Deposit Module-->
     <string name="Cex_ChooseCoin">Выберите токен</string>
+    <string name="Cex_ChooseNetwork">Выберите сеть</string>
+    <string name="CexDeposit_Memo">Memo(Tag)</string>
     <string name="CexDeposit_Network">Сеть</string>
+    <string name="CexDeposit_AddressDescription">Ваш адрес для депозита %s</string>
+    <string name="CexDeposit_DepositWarning">Отправка только %s на этот адрес. Отправка других типов токенов на этот адрес приведет к их окончательной потере.</string>
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Title">Отправить %s</string>
     <string name="CexWithdraw_Network">Сеть</string>
     <string name="CexWithdraw_Fee">Комиссия</string>
+    <string name="CexWithdraw_GoogleAuthenticationCode">Код Google Authenticator</string>
     <string name="CexWithdraw_GetCode">Отправить повторно</string>
+    <string name="CexWithdraw_GetCodeSeconds">%s сек</string>
+    <string name="CexWithdraw_EmailVerificationInfo">Введите код подтверждения, отправленный на вашу эл. почту.</string>
+    <string name="CexWithdraw_GoogleAuthenticationInfo">Введите код из приложения Google Authenticator.</string>
     <string name="CexWithdraw_Withdraw">Вывод средств</string>
+    <string name="CexWithdraw_WithdrawSuccess">Успешно</string>
 </resources>
