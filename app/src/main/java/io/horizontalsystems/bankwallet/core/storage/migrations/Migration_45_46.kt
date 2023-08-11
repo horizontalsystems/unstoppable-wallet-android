@@ -93,7 +93,7 @@ object Migration_45_46 : Migration(45, 46) {
                 TokenQuery(BlockchainType.BinanceChain, TokenType.Bep2(coinType.symbol))
             }
             else -> {
-                TokenQuery(BlockchainType.Unsupported(""), TokenType.Unsupported("", null))
+                TokenQuery(BlockchainType.Unsupported(""), TokenType.Unsupported("", ""))
             }
         }
 
