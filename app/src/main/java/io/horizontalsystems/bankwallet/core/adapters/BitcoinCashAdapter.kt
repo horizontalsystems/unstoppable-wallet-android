@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.core.bchCoinType
+import io.horizontalsystems.bankwallet.core.kitCoinType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
@@ -95,7 +95,7 @@ class BitcoinCashAdapter(
             addressType: TokenType.AddressType
         ): BitcoinCashKit {
             val account = wallet.account
-            val networkType = getNetworkType(addressType.bchCoinType)
+            val networkType = getNetworkType(addressType.kitCoinType)
             when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
                     return BitcoinCashKit(
