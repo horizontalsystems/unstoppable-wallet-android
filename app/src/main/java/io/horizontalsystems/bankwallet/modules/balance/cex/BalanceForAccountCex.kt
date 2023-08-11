@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceModule
@@ -37,7 +36,6 @@ import cash.p.terminal.modules.balance.ui.TotalBalanceRow
 import cash.p.terminal.modules.balance.ui.wallets
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.depositcex.DepositCexFragment
-import cash.p.terminal.modules.withdrawcex.WithdrawCexFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
@@ -104,9 +102,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                     modifier = Modifier.weight(1f),
                                     title = stringResource(R.string.Balance_Withdraw),
                                     enabled = uiState.withdrawEnabled,
-                                    onClick = {
-                                        navController.slideFromBottom(R.id.withdrawCexChooseAssetFragment)
-                                    },
+                                    onClick = {},
                                 )
 
                                 HSpacer(width = 8.dp)
@@ -372,9 +368,7 @@ private fun ButtonsRowCex(viewItem: BalanceCexViewItem, navController: NavContro
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Withdraw),
             enabled = viewItem.withdrawEnabled,
-            onClick = {
-                navController.slideFromBottom(R.id.withdrawCexFragment, WithdrawCexFragment.args(viewItem.cexAsset))
-            },
+            onClick = {},
         )
         Spacer(modifier = Modifier.width(8.dp))
         ButtonPrimaryDefault(
