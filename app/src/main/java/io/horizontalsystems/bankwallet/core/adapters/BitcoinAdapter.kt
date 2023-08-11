@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.AdapterErrorWrongParameters
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.purpose
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
@@ -15,6 +15,7 @@ import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
 
 class BitcoinAdapter(
@@ -24,8 +25,13 @@ class BitcoinAdapter(
     wallet: Wallet,
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), BitcoinKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, backgroundManager: BackgroundManager) : this(
-        createKit(wallet, syncMode),
+    constructor(
+        wallet: Wallet,
+        syncMode: BitcoinCore.SyncMode,
+        backgroundManager: BackgroundManager,
+        derivation: TokenType.Derivation
+    ) : this(
+        createKit(wallet, syncMode, derivation),
         syncMode,
         backgroundManager,
         wallet
@@ -88,13 +94,15 @@ class BitcoinAdapter(
     companion object {
         private const val confirmationsThreshold = 3
 
-        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): BitcoinKit {
+        private fun createKit(
+            wallet: Wallet,
+            syncMode: BitcoinCore.SyncMode,
+            derivation: TokenType.Derivation
+        ): BitcoinKit {
             val account = wallet.account
 
             when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
-                    val derivation = wallet.coinSettings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
-
                     return BitcoinKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
@@ -106,8 +114,6 @@ class BitcoinAdapter(
                     )
                 }
                 is AccountType.Mnemonic -> {
-                    val derivation = wallet.coinSettings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
-
                     return BitcoinKit(
                         context = App.instance,
                         words = accountType.words,

@@ -59,22 +59,30 @@ class AdapterFactory(
     }
 
     fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
-        TokenType.Native -> when (wallet.token.blockchainType) {
-            BlockchainType.Bitcoin -> {
-                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Bitcoin, wallet.account.origin)
-                BitcoinAdapter(wallet, syncMode, backgroundManager)
+        is TokenType.Derived -> {
+            when (wallet.token.blockchainType) {
+                BlockchainType.Bitcoin -> {
+                    val syncMode = btcBlockchainManager.syncMode(BlockchainType.Bitcoin, wallet.account.origin)
+                    BitcoinAdapter(wallet, syncMode, backgroundManager, tokenType.derivation)
+                }
+                BlockchainType.Litecoin -> {
+                    val syncMode = btcBlockchainManager.syncMode(BlockchainType.Litecoin, wallet.account.origin)
+                    LitecoinAdapter(wallet, syncMode, backgroundManager, tokenType.derivation)
+                }
+                else -> null
             }
-            BlockchainType.BitcoinCash -> {
+        }
+        is TokenType.AddressTyped -> {
+            if (wallet.token.blockchainType == BlockchainType.BitcoinCash) {
                 val syncMode = btcBlockchainManager.syncMode(BlockchainType.BitcoinCash, wallet.account.origin)
-                BitcoinCashAdapter(wallet, syncMode, backgroundManager)
+                BitcoinCashAdapter(wallet, syncMode, backgroundManager, tokenType.type)
             }
+            else null
+        }
+        TokenType.Native -> when (wallet.token.blockchainType) {
             BlockchainType.ECash -> {
                 val syncMode = btcBlockchainManager.syncMode(BlockchainType.ECash, wallet.account.origin)
                 ECashAdapter(wallet, syncMode, backgroundManager)
-            }
-            BlockchainType.Litecoin -> {
-                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Litecoin, wallet.account.origin)
-                LitecoinAdapter(wallet, syncMode, backgroundManager)
             }
             BlockchainType.Dash -> {
                 val syncMode = btcBlockchainManager.syncMode(BlockchainType.Dash, wallet.account.origin)
