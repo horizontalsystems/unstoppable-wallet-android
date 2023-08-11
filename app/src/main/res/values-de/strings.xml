@@ -139,8 +139,6 @@
     <string name="ImportCexAccountBinance_Description">Bitte gib Deine API-Schlüssel (API Keys and Secrets) ein, damit Du eine direkte Verknüpfung zu Deiner Kryptowährungs-Exchange erstellen kannst.</string>
     <string name="ImportCexAccountBinance_ApiKey">API-Schlüssel</string>
     <string name="ImportCexAccountBinance_SecretKey">Geheimer Schlüssel</string>
-    <string name="ImportCexAccountConzix_Description">Bitte E-Mail-Adresse und Passwort Deines Coinzix-Kontos eingeben.</string>
-    <string name="ImportCexAccountConzix_Email">E-Mail</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
@@ -194,7 +192,6 @@
     <string name="Balance_SyncedUntil">bis %s</string>
     <string name="Balance_Syncing">Synchronisieren…</string>
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
-    <string name="Balance_FoundTx">%s TX</string>
     <string name="Balance_Syncing_WithProgress">Synchronisiere... %s%%</string>
     <string name="Balance_AddCoins">Coins hinzufügen</string>
     <string name="Balance_AddCoin">Coin hinzufügen</string>
@@ -218,7 +215,7 @@
     <string name="Send_Fee">Gebühr</string>
     <string name="Send_Fee_Info">Blockchains verlangen, dass Nutzer Netzwerkgebühren beim Versenden von Transaktionen bezahlen. Die Gebühren sind höher, wenn viele Transaktionen im Netzwerk stattfinden.</string>
     <string name="Send_Button_Paste">Einfügen</string>
-    <string name="Send_Button_Max">Maximal</string>
+    <string name="Send_Button_Max">Max.</string>
     <string name="Send_Advanced">Erweitert</string>
     <string name="Send_Hodler_Description">TimeLock funktioniert nur beim Senden an BIP44 Adressen (ab 1)</string>
     <string name="Send_Confirmation_Title">Bestätigen</string>
@@ -250,7 +247,6 @@
     <string name="Send_TxSpeed_High">Hoch</string>
     <string name="Send_TxSpeed_Recommended">Empfohlen</string>
     <string name="Send_TxSpeed_Custom">Benutzerdefiniert</string>
-    <string name="Send_TxSpeed_CustomFeeHint">Sats/Byte</string>
     <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogProceed">Weiter</string>
     <string name="Send_LockTime_Off">Aus</string>
@@ -262,11 +258,7 @@
     <string name="Send_FeeRate">Gebührenrate</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <string name="Send_Warning_LowFee">Warnung! Gefahr des Festklemmens</string>
-    <string name="Send_Error_LowFee">Fehler bei der Gebührenbewertung</string>
-    <string name="Send_Error_LowFee_Description">Die Gebühren wurden unzureichend eingesetzt!</string>
     <string name="Send_Warning_LowFee_Description">Die Transaktion kann festklemmen oder fehlschlagen</string>
-    <string name="Send_Error_FetchFeeRateFailed">Fehler bei der Berechnung des Gebührensatzes</string>
-    <string name="Send_Error_FetchFeeRateFailed_Description">Die Verbindung zum Server ist fehlgeschlagen. Die Auszahlung von Provisionen erfordert die manuelle Eingabe von Daten, die Du auf der Website finden kannst.</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Erweitert</string>
     <string name="SendEvmSettings_Nonce">Transaktion Nonce</string>
@@ -286,11 +278,11 @@
     <string name="FeeSettings_GasPrice">Gas price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Die Gebühr für Transaktionen im Netzwerk wird in Gaseinheiten gemessen. Der Gaspreis ist der Betrag, den ein Nutzer für eine Einheit Gas auszugeben bereit ist. Wenn das Netzwerk ausgelastet ist, sind die Gaspreise hoch, und niedrig, wenn es nicht genutzt wird. Ein unzureichender Gaspreis ist oft ein Grund dafür, dass eine Transaktion über einen längeren Zeitraum aussteht.</string>
     <string name="FeeSettings_BaseFee">Basisgebühr</string>
-    <string name="FeeSettings_BaseFee_Info">Die Gaspreisuntergrenze, die auch als Mindestsatz der Transaktionskosten bezeichnet wird, wird vom Netzwerkprotokoll für jeden Block festgelegt. Die Volatilität der Preisuntergrenze soll die Ursache für eine heterogene Nutzung des Netzwerks sein, die oft von Block zu Block variiert. Ob der Preis niedrig oder hoch ist, er darf auf keinen Fall die 12,5 %-Zone aller nachfolgenden Blöcke überschreiten, wodurch die Gebühren noch besser vorhersehbar werden. Der Wert, der hier übertragen wurde, stellt den Mindestsatz der Transaktionskosten dar, die aus den Transaktionen des Blocks resultieren.</string>
+    <string name="FeeSettings_BaseFee_Info">Das Netzwerkprotokoll bestimmt den Basispreis pro Gas für jeden Block, sogenannte Basisgebühren. Sie variiert je nach Netzwerkauslastung von Block zu Block. Sie kann im nächsten Block um nicht mehr als 12,5% steigen oder sinken, was die Gebühren berechenbarer macht. Der hier angezeigte Wert ist die Basisgebühr des aktuellen Blocks.</string>
     <string name="FeeSettings_MaxFee">Max Gebühr (Gwei)</string>
-    <string name="FeeSettings_MaxFee_Info">Dies entspricht dem Höchstbetrag der Gasgebühren, die der Nutzer bereit ist zu bezahlen. Gasgebühren müssen den Mindestsatz der Transaktionskosten des Netzes abdecken und sollten auch die Priorität sein, mit der eine Transaktion abgewickelt wird. Der Ursprung der hier angegebenen Schätzung des Wertes liegt in einer Analyse, nach der der Wert berechnet wird, indem der Mindestsatz der Transaktionskosten des nächsten Blocks zur Priorität des Nutzers, mit der eine Transaktion abgewickelt wird, addiert wird. Der aktuelle Satz der zu zahlenden Transaktionsgebühren wird nach unten korrigiert und automatisch angepasst. Die Festlegung des Preissatzes unterhalb des aktuellen Mindestsatzes wäre einerseits eine Erleichterung, da die zu zahlenden Gebühren begrenzt würden, andererseits ist mit einer längeren durchschnittlichen Bestätigungszeit für Transaktionen oder sogar mit einer Blockierung der Transaktion zu rechnen.</string>
+    <string name="FeeSettings_MaxFee_Info">Dies ist der maximale Gesamtpreis pro Gas, den der Nutzer zu zahlen bereit ist. Es muss den Basistarif des Netzwerks und den maximalen Prioritätstarif abdecken. Der hier angezeigte Wert wird anhand einer Schätzung der Basisgebühr des nächsten Blocks plus der vom Nutzer gewählten Maximalgebührengebühr vorgeschlagen. Der tatsächlich gezahlte Gebührensatz ist normalerweise niedriger. Wenn diese Einstellung niedriger als die aktuelle Basisgebühr ist, wird die gezahlte Gebühr begrenzt aber führt zu längeren Wartezeiten für die Bestätigung der Transaktion oder sogar zu einer festgefahrenen Transaktion.</string>
     <string name="FeeSettings_MaxMinerTips">Max Prioritätsgebühr (Gwei)</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Die Nutzer priorisieren die Transaktionsgebühren, die manchmal auch als Tips bezeichnet werden und eine kürzere durchschnittliche Bestätigungszeit für Transaktionen bedeuten. Die Priorisierung einer Transaktion durch die Festlegung des Höchstsatzes der zu zahlenden Gebühren bedeutet, dass der Höchstbetrag des Preises, zu dem der Nutzer das Gas kauft, um zusätzliche Gebührenerhöhungen erhöht wird. Der Ursprung der Schätzung des hier angegebenen Werts liegt in einer vorausschauenden Analyse des Netzwerkzustands. Eine Senkung der Priorität, mit der die aktuellen Kosten behandelt werden, wird Dir normalerweise gewährt. Die Anwendung des Nullsatzes könnte eine längere durchschnittliche Bestätigungszeit für Transaktionen bedeuten, weil die Transaktion sowie alle nachfolgenden Transaktionen der Nutzer in der Warteschlange für die Bestätigung bleiben.</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Benutzer zahlen Prioritätsgebühren, um eine Transaktion schneller zu bestätigen. Sie werden manchmal als Tipps bezeichnet. Die maximale Prioritätsgebühr ist der maximale Zusatzpreis pro Gas, den der Nutzer zusätzlich zur Basisgebühr zahlen möchte. Der hier angezeigte Wert wird basierend auf vorausgesagten Netzwerkbedingungen vorgeschlagen. Die tatsächliche Prioritätsgebühr wird normalerweise niedriger sein. Die Einstellung auf Null kann zu einer langen Wartezeit führen, bis die Transaktion bestätigt wird, , da er am Ende der Warteschlange aller Benutzer platziert ist.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskant</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">Die Transaktion kann eine Zeit lang ausstehend bleiben oder ganz fehlschlagen.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Riskant</string>
@@ -341,7 +333,6 @@
     <string name="WalletConnect_Disconnecting">Verbindung wird getrennt</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signaturanfrage</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domäne</string>
-    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Bitte signieren Sie eine Nachricht zur Authentifizierung</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signieren</string>
@@ -359,15 +350,12 @@
     <string name="WalletConnect_Address">Adresse</string>
     <string name="WalletConnect_Network">Netzwerk</string>
     <string name="WalletConnect_Input">Eingabe</string>
-    <string name="WalletConnect_Version1">Wallet-Version 1.0</string>
-    <string name="WalletConnect_Version2">Wallet-Version 2.0</string>
     <string name="WalletConnect_I_Trust">Ich vertraue</string>
     <string name="WalletConnect_Note">Hinweis</string>
     <string name="WalletConnect_LegacySignWarning">Die Unterschrift dieser Nachricht kann gefährlich sein. Diese Signatur könnte möglicherweise jede Operation im Namen Ihres Kontos ausführen einschließlich der vollen Kontrolle über Ihr Konto und alle seine Assets an die anfragende Website. Signieren Sie diese Nachricht nur, wenn Sie wissen, was Sie tun oder vertrauen Sie der anfragenden Website.</string>
     <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Wallet-Typ %s unterstützt WalletConnect nicht</string>
     <string name="WalletConnect_Unnamed">Unbenannt</string>
     <string name="WalletConnect_DAppUnknown">Unbekannte dApp</string>
-    <string name="WalletConnect_Pairings">Währungspaare</string>
     <string name="WalletConnect_Pairings_DeleteAll">Alle löschen</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Möchten Sie alle gepaart dApss löschen?</string>
     <string name="WalletConnect_Pairings_Delete">Löschen</string>
@@ -417,17 +405,14 @@
     <string name="Swap_Revoking">Widerrufen...</string>
     <string name="Swap_Approve">Genehmigen</string>
     <string name="Swap_Approving">Wird bestätigt</string>
-    <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_MaximumPaid">Maximal bezahlt</string>
     <string name="Swap_MinimumGot">Garantierter Betrag</string>
     <string name="Swap_PoweredBy">Betrieben durch</string>
     <string name="Swap_SelectSwapProvider_Title">Provider tauschen</string>
-    <string name="Swap_AmountMin">(Mindestbetrag)</string>
-    <string name="Swap_AmountMax">(Höchstbetrag)</string>
-    <string name="Swap_AmountTypeCoin">Coin</string>
+    <string name="Swap_AmountMin">(Min.)</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap-Einstellungen</string>
-    <string name="SwapSettings_Service">Swap-Service</string>
+    <string name="SwapSettings_Service">Dienst</string>
     <string name="SwapSettings_SlippageTitle">Slippage-Toleranz</string>
     <string name="SwapSettings_SlippageDescription">Ihre Transaktion wird zurückgesetzt, wenn sich der Preis um mehr als diesen Prozentsatz ungünstig ändert</string>
     <string name="SwapSettings_DeadlineTitle">Transaktionsfrist</string>
@@ -435,7 +420,7 @@
     <string name="SwapSettings_RecipientAddressTitle">Empfängeradresse</string>
     <string name="SwapSettings_RecipientAddressDescription">Nach dem Umtauschvorgang wird der Betrag an die angegebene Adresse überwiesen</string>
     <string name="SwapSettings_Apply">Übernehmen</string>
-    <string name="SwapSettings_DeadlineMinute">%s Min.</string>
+    <string name="SwapSettings_DeadlineMinute">%s Min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse oder Domäne</string>
     <string name="SwapSettings_FeeSettingsAlert">Eine Service-Gebühr für die Swap-Aktion auf der Plattform typischerweise entweder 0,3% oder 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Null Frist</string>
@@ -448,7 +433,7 @@
     <string name="SwapSettings_Error_InvalidDeadline">Ungültige Frist</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Ihre Transaktion kann vorzeitig ausgeführt werden</string>
     <!-- Swap Confirmation -->
-    <string name="Swap_Confirmation">Tausch bestätigen</string>
+    <string name="Swap_Confirmation">Bestätigung</string>
     <string name="Swap_Confirmation_Guaranteed">Garantiert</string>
     <string name="Swap_Confirmation_Maximum">Maximal</string>
     <string name="Swap_Confirmation_Estimated">Geschätzt</string>
@@ -503,7 +488,7 @@
     <string name="Transactions_Approvals">Genehmigungen</string>
     <string name="Transactions_Unknown">Unbekannte Transaktion</string>
     <string name="Transactions_Unknown_Description">Transaktion kann nicht analysiert werden</string>
-    <string name="Transactions_Multiple">Mehrere Überweisungen</string>
+    <string name="Transactions_Multiple">Mehrere</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transaktion</string>
     <string name="TransactionInfo_Title">Transaktionsdaten</string>
@@ -582,10 +567,6 @@
     <string name="Settings_RateUs">Bewerten Sie uns</string>
     <string name="Settings_LaunchScreen">Startbildschirm</string>
     <string name="Settings_Appearance">Darstellung</string>
-    <string name="Settings_PersonalSupport_PremiumFeatureWarning">Diese Funktion ist nur für Premium-Nutzer der Unstoppable Wallet gedacht. Weitere Informationen findest Du auf unserer offiziellen Website.</string>
-    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Gib den Namen Deines Telegram-Kontos an, damit unser Team Dir eine persönliche Betreuung anbieten kann. Wir werden einen Prozess zur Bewertung des Problems einleiten und uns bei Dir melden, sobald das Problem erkannt wurde.</string>
-    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Dein Antrag auf Teilnahme an privaten Chats wurde weitergeleitet. Alle Infos dazu findest Du auf Telegram</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Request">Anforderung</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
