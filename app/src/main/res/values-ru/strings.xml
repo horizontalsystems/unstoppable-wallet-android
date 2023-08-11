@@ -50,6 +50,10 @@
     <string name="Button_Activate">Активировать</string>
     <string name="Button_Sign">Подписать</string>
     <string name="Button_Activating">Активация</string>
+    <string name="Button_Login">Войти</string>
+    <string name="Button_SignUp">Регистрация</string>
+    <string name="Button_Submit">Подтвердить</string>
+    <string name="Button_TryAgain">Попробовать ещё раз</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Any">Любые</string>
@@ -134,6 +138,10 @@
     <string name="Restore_ZCash_OldWallet">Существующий кошелек</string>
     <string name="Restore_ZCash_OldWallet_Description">Есть транзакции</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Первоначальная синхронизация с блокчейном может потреблять много интернет-трафика.</string>
+    <string name="ImportCexAccount_SelectCex">Выберите CEX</string>
+    <string name="ImportCexAccount_SelectCexDescription">Выберите централизованный обмен, к которому вы хотите подключиться.</string>
+    <string name="ImportCexAccountBinance_Description">Пожалуйста, предоставьте ключ API и секрет API, чтобы связать вашу биржу.</string>
+    <string name="ImportCexAccountBinance_SecretKey">Секретный ключ</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <!--Market-->
@@ -269,8 +277,10 @@
     <string name="TvlRank_Field_Mat">Polygon</string>
     <string name="TvlRank_Filters_PopupTitle">Фильтры</string>
     <!--Balance-->
+    <string name="Balance_Withdraw">Вывод средств</string>
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
+    <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Receive">Получить</string>
     <string name="Balance_Address">Адрес</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
@@ -678,7 +688,11 @@
     <string name="Settings_Appearance">Оформление</string>
     <string name="Settings_PersonalSupport_Account">Аккаунт</string>
     <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
+    <string name="Settings_PersonalSupport_Requested">Запрошено</string>
     <string name="Settings_PersonalSupport_Request">Запрос</string>
+    <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
+    <string name="Settings_PersonalSupport_Requestfailed">Ошибка запроса</string>
+    <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
@@ -709,6 +723,7 @@
     <string name="EvmNetwork_SyncMode">Режим синхронизации</string>
     <string name="EvmNetwork_SyncModeDescription">Этот параметр определяет способ взаимодействия приложения с блокчейнами при отправке или получении транзакций.\n\nКогда речь идет о Bitcoin, Bitcoin Cash, Litecoin, и Dash, связь с сетевыми узлами блокчейна полностью равноправна. Unstoppable пингует многие узлы и связывается с одним из них. Каждый раз приложение подключается к другому узлу.\n\nЧто касается Ethereum и Binance Smart Chain, то пока нет подходящих альтернативных вариантов мобильных кошельков для взаимодействия с соответствующими блокчейнами кроме сторонних поставщиков услуг RPC (т.е. Infura.io) или личными узлами Ethereum. Это значит, что ваше взаимодействие с блокчейном не децентрализовано. Это влияет не на ваши средства, а на возможность подключения к сети блокчейн.</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
@@ -805,6 +820,7 @@
     <string name="Hud_Text_EmailAddressCopied">Адрес электронной почты скопирован</string>
     <string name="Hud_Added_To_Watchlist">Добавлено в избранное</string>
     <string name="Hud_Added_To_Wallet">Добавлено в кошелек</string>
+    <string name="Hud_Removed_From_Wallet">Удалено из кошелька</string>
     <string name="Hud_Already_In_Wallet">Уже добавлено в кошелек</string>
     <string name="Hud_Removed_from_Watchlist">Удалить из избранного</string>
     <string name="Hud_Removed">Удалено</string>
@@ -1131,6 +1147,7 @@
     <string name="CoinPage_NftBannerDescription">Получите доступ к расширенным функциям Unstoppable Кошелька.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nне найден</string>
     <string name="CoinPage_Indicators">Индикаторы</string>
+    <string name="CoinPage_MovingAverages">Скользящие средние</string>
     <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_CexVolume_Info2">График, показывающий колебания дневного объема торговли токеном на ведущих централизованных биржах за 1 год.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих централизованных биржах за 30-дневный период.</string>
@@ -1373,4 +1390,5 @@
     <string name="CexWithdraw_Network">Сеть</string>
     <string name="CexWithdraw_Fee">Комиссия</string>
     <string name="CexWithdraw_GetCode">Отправить повторно</string>
+    <string name="CexWithdraw_Withdraw">Вывод средств</string>
 </resources>
