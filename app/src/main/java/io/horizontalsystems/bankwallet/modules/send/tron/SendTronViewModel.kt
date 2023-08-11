@@ -135,9 +135,9 @@ class SendTronViewModel(
     }
 
     private fun validateBalance() {
-        val trxAmount = if (sendToken == feeToken) decimalAmount else BigDecimal.ZERO
-        val feeState = feeState as? FeeState.Success ?: return
-        val totalFee = feeState.fees.sumOf { it.feeInSuns }.toBigDecimal().movePointLeft(feeToken.decimals)
+        val confirmationData = confirmationData ?: return
+        val trxAmount = if (sendToken == feeToken) confirmationData.amount else BigDecimal.ZERO
+        val totalFee = confirmationData.fee ?: return
         val availableBalance = adapter.trxBalanceData.available
 
         cautions = if (trxAmount + totalFee > availableBalance) {
@@ -147,6 +147,17 @@ class SendTronViewModel(
                         Translator.getString(
                             R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
                             feeToken.coin.code
+                        )
+                    )
+                )
+            )
+        } else if (sendToken == feeToken && confirmationData.amount <= BigDecimal.ZERO) {
+            listOf(
+                HSCaution(
+                    TranslatableString.PlainString(
+                        Translator.getString(
+                            R.string.Tron_ZeroAmountTrxNotAllowed,
+                            sendToken.coin.code
                         )
                     )
                 )
@@ -196,9 +207,13 @@ class SendTronViewModel(
             feeState = FeeState.Success(fees)
             emitState()
 
-            val totalFee = fees.sumOf { it.feeInSuns }.toBigDecimal().movePointLeft(feeToken.decimals)
+            val totalFee = fees.sumOf { it.feeInSuns }.toBigInteger()
+            val isMaxAmount = amountState.availableBalance == decimalAmount
+            val adjustedAmount = if (sendToken == feeToken && isMaxAmount) amount - totalFee else amount
+
             confirmationData = confirmationData?.copy(
-                fee = totalFee,
+                amount = adjustedAmount.toBigDecimal().movePointLeft(sendToken.decimals),
+                fee = totalFee.toBigDecimal().movePointLeft(feeToken.decimals),
                 activationFee = activationFee,
                 resourcesConsumed = resourcesConsumed
             )
@@ -223,10 +238,12 @@ class SendTronViewModel(
 
     private suspend fun send() = withContext(Dispatchers.IO) {
         try {
+            val confirmationData = confirmationData ?: return@withContext
             sendResult = SendResult.Sending
             logger.info("sending tx")
 
-            adapter.send(amountState.evmAmount!!, addressState.tronAddress!!, feeState.feeLimit)
+            val amount = confirmationData.amount.movePointRight(sendToken.decimals).toBigInteger()
+            adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
 
             sendResult = SendResult.Sent
             logger.info("success")
@@ -260,7 +277,7 @@ class SendTronViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             proceedEnabled = amountState.canBeSend && addressState.canBeSend,
-            sendEnabled = cautions.isEmpty(),
+            sendEnabled = feeState is FeeState.Success && cautions.isEmpty(),
             feeViewState = feeState.viewState,
             cautions = cautions
         )
