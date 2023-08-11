@@ -375,6 +375,14 @@ val TokenType.Derivation.purpose: HDWallet.Purpose
         TokenType.Derivation.Bip86 -> HDWallet.Purpose.BIP86
     }
 
+val TokenType.Derivation.accountTypeDerivation: AccountType.Derivation
+    get() = when (this) {
+        TokenType.Derivation.Bip44 -> AccountType.Derivation.bip44
+        TokenType.Derivation.Bip49 -> AccountType.Derivation.bip49
+        TokenType.Derivation.Bip84 -> AccountType.Derivation.bip84
+        TokenType.Derivation.Bip86 -> AccountType.Derivation.bip86
+    }
+
 val TokenType.AddressType.kitCoinType: MainNetBitcoinCash.CoinType
     get() = when (this) {
         TokenType.AddressType.Type0 -> MainNetBitcoinCash.CoinType.Type0
