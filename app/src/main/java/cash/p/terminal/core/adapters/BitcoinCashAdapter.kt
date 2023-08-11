@@ -3,7 +3,7 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.core.bchCoinType
+import cash.p.terminal.core.kitCoinType
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
@@ -95,7 +95,7 @@ class BitcoinCashAdapter(
             addressType: TokenType.AddressType
         ): BitcoinCashKit {
             val account = wallet.account
-            val networkType = getNetworkType(addressType.bchCoinType)
+            val networkType = getNetworkType(addressType.kitCoinType)
             when (val accountType = account.type) {
                 is AccountType.HdExtendedKey -> {
                     return BitcoinCashKit(
