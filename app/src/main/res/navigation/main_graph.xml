@@ -278,6 +278,18 @@
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment"
         android:label="ReceiveFragment" />
     <fragment
+        android:id="@+id/receiveTokenSelectFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receivemain.ReceiveTokenSelectFragment" />
+    <fragment
+        android:id="@+id/receiveNetworkSelectFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receivemain.NetworkSelectFragment"/>
+    <fragment
+        android:id="@+id/receiveAddressFormatFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receivemain.AddressFormatFragment"/>
+    <fragment
+        android:id="@+id/receiveMainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receivemain.ReceiveMainFragment"/>
+    <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment"
         android:label="EvmNetworkFragment" />

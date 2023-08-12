@@ -357,6 +357,13 @@
     <string name="Balance_NoCoinsAlert">You don\'t have an added coins.\nAdd the coins you will be using</string>
     <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
     <string name="Balance_NoAssetsToSend">You have no assets to send.</string>
+    <string name="Balance_Network">Network</string>
+    <string name="Balance_NetworkSelectDescription">Choose network to get an address to receive.</string>
+    <string name="Balance_ReceiveAddressHint">Your address for depositing %s</string>
+    <string name="Balance_ReceiveWarningText">Send only %s network tokens to this address. Tokens from other networks will be lost.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Select an address format to get an address to receive.</string>
+    <string name="Balance_Receive_AddressFormat">Address Format</string>
+    <string name="Balance_Receive_AddressFormat_WarningText">The Native SegWit format is preferred in Bitcoin. While all address formats (Taproot, SegWit, Legacy) can be used to receive BTC, your Bitcoin balances for each address type are tracked separately.</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
