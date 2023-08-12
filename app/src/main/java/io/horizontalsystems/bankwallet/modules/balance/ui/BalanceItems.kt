@@ -30,7 +30,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.*
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
@@ -190,7 +189,7 @@ fun BalanceItems(
                         modifier = Modifier.weight(1f),
                         title = stringResource(R.string.Balance_Send),
                         onClick = {
-                            navController.slideFromBottom(
+                            navController.slideFromRight(
                                 R.id.sendTokenSelectFragment,
                             )
                         },
@@ -200,7 +199,11 @@ fun BalanceItems(
                     ButtonPrimaryCircle(
                         icon = R.drawable.ic_arrow_down_left_24,
                         contentDescription = stringResource(R.string.Balance_Receive),
-                        onClick = {},
+                        onClick = {
+                            navController.slideFromRight(
+                                R.id.receiveTokenSelectFragment,
+                            )
+                        },
                     )
                     if (true) {
                         HSpacer(8.dp)
