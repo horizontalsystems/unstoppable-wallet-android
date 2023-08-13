@@ -259,6 +259,35 @@ class CoinAnalyticsViewModel(
                 )
             )
         }
+        analytics.tvl?.let { data ->
+            val footerItems = mutableListOf<FooterItem>()
+            data.ratio?.let {
+                footerItems.add(
+                    FooterItem(
+                        title = Title(ResString(R.string.Coin_Analytics_Rank)),
+                        value = data.rank?.let { Value(getRank(it)) },
+                        action = ActionType.OpenTvl
+                    ),
+                )
+                footerItems.add(
+                    FooterItem(
+                        title = Title(ResString(R.string.CoinAnalytics_TvlRatio)),
+                        value = Value(numberFormatter.format(it, 2, 2))
+                    )
+                )
+            }
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_ProjectTvl,
+                    info = AnalyticInfo.TvlInfo,
+                    value = getFormattedValue(data.points.last().tvl, currency),
+                    valuePeriod = getValuePeriod(true),
+                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.Tvl),
+                    footerItems = footerItems
+                )
+            )
+        }
+
         analytics.dexLiquidity?.let { data ->
             val footerItems = mutableListOf<FooterItem>()
             data.rating?.let { rating ->
@@ -395,34 +424,6 @@ class CoinAnalyticsViewModel(
                     value = getFormattedSum(listOf(total)),
                     valuePeriod = getValuePeriod(true),
                     analyticChart = ChartViewItem(AnalyticChart.StackedBars(chartSlices), coin.uid),
-                    footerItems = footerItems
-                )
-            )
-        }
-        analytics.tvl?.let { data ->
-            val footerItems = mutableListOf<FooterItem>()
-            data.ratio?.let {
-                footerItems.add(
-                    FooterItem(
-                        title = Title(ResString(R.string.Coin_Analytics_Rank)),
-                        value = data.rank?.let { Value(getRank(it)) },
-                        action = ActionType.OpenTvl
-                    ),
-                )
-                footerItems.add(
-                    FooterItem(
-                        title = Title(ResString(R.string.CoinAnalytics_TvlRatio)),
-                        value = Value(numberFormatter.format(it, 2, 2))
-                    )
-                )
-            }
-            blocks.add(
-                BlockViewItem(
-                    title = R.string.CoinAnalytics_ProjectTvl,
-                    info = AnalyticInfo.TvlInfo,
-                    value = getFormattedValue(data.points.last().tvl, currency),
-                    valuePeriod = getValuePeriod(true),
-                    analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.Tvl),
                     footerItems = footerItems
                 )
             )
