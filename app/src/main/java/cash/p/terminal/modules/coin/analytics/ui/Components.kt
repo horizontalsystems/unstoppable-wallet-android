@@ -62,7 +62,7 @@ fun AnalyticsBlockHeader(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        subhead2_grey(text = title)
+        subhead1_grey(text = title)
         onInfoClick?.let {
             HsIconButton(
                 modifier = Modifier.size(20.dp),
