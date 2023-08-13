@@ -47,6 +47,7 @@
     <string name="Button_LearnMore">Daha fazla bilgi edin</string>
     <string name="Button_Sign">kaydol</string>
     <string name="Error">Hata</string>
+    <string name="NotAvailable">N/A</string>
     <string name="Any">Herhangi</string>
     <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
     <string name="PercentTitle">Yüzde</string>
@@ -55,6 +56,7 @@
     <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
     <string name="Intro_Wallet_Screen2Description">Kendinizi kilitlemeyin ve başkalarının bunu sizin için yapmasına izin vermeyin.</string>
     <string name="Intro_Wallet_Screen3Title">Sınırları Kaldırın</string>
@@ -623,6 +625,7 @@
     <string name="SettingsTerms_Bugs">Bu uygulamaya güç veren kodda, uygulamanın arızalanmasına neden olabilecek keşfedilmemiş yazılım sorunları olabilir.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Iletişim</string>
     <!--Setting_Notifications-->
