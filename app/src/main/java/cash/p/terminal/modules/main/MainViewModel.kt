@@ -13,7 +13,6 @@ import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.ReleaseNotesManager
-import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.LaunchPage
@@ -35,7 +34,6 @@ class MainViewModel(
     private val localStorage: ILocalStorage,
     wc2SessionManager: WC2SessionManager,
     private val wc1Manager: WC1Manager,
-    subscriptionManager: SubscriptionManager,
     private val wcDeepLink: String?
 ) : ViewModel() {
 
@@ -78,7 +76,6 @@ class MainViewModel(
     private var selectedPageIndex = getPageIndexToOpen()
     private var mainNavItems = navigationItems()
     private var showRateAppDialog = false
-    private var showPremiumFeatureWarningDialog = false
     private var contentHidden = pinComponent.isLocked
     private var showWhatsNew = false
     private var activeWallet = accountManager.activeAccount
@@ -100,7 +97,6 @@ class MainViewModel(
             showWhatsNew = showWhatsNew,
             activeWallet = activeWallet,
             wcSupportState = wcSupportState,
-            showPremiumFeatureWarningDialog = showPremiumFeatureWarningDialog,
             torEnabled = torEnabled
         )
     )
@@ -123,11 +119,6 @@ class MainViewModel(
 
         rateAppManager.showRateAppFlow.collectWith(viewModelScope) {
             showRateAppDialog = it
-            syncState()
-        }
-
-        subscriptionManager.showPremiumFeatureWarningFlow.collectWith(viewModelScope) {
-            showPremiumFeatureWarningDialog = true
             syncState()
         }
 
@@ -178,11 +169,6 @@ class MainViewModel(
         syncState()
     }
 
-    fun premiumFeatureWarningShown() {
-        showPremiumFeatureWarningDialog = false
-        syncState()
-    }
-
     fun closeRateDialog() {
         showRateAppDialog = false
         syncState()
@@ -226,7 +212,6 @@ class MainViewModel(
             showWhatsNew = showWhatsNew,
             activeWallet = activeWallet,
             wcSupportState = wcSupportState,
-            showPremiumFeatureWarningDialog = showPremiumFeatureWarningDialog,
             torEnabled = torEnabled
         )
     }

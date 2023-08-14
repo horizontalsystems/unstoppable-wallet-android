@@ -332,8 +332,8 @@
         android:id="@+id/wcAccountTypeNotSupportedDialog"
         android:name="cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
     <dialog
-        android:id="@+id/premiumFeatureWarningDialog"
-        android:name="cash.p.terminal.modules.settings.support.PremiumFeatureWarningDialog" />
+        android:id="@+id/contactOptionsDialog"
+        android:name="cash.p.terminal.modules.settings.about.ContactOptionsDialog" />
     <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog" />

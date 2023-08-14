@@ -812,9 +812,10 @@
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_Appearance">Appearance</string>
+    <string name="Settings_Contact_ViaTelegram">via Telegram</string>
+    <string name="Settings_Contact_ViaEmail">via E-mail</string>
 
     <string name="Settings_PersonalSupport">Personal Support</string>
-    <string name="Settings_PersonalSupport_PremiumFeatureWarning">This feature only for Unstoppable Wallet premium users. More info in our official site.</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
     <string name="Settings_PersonalSupport_Account">Account</string>

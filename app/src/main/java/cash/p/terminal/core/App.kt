@@ -166,7 +166,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         }
 
         torKitManager = TorManager(instance, localStorage)
-        subscriptionManager = SubscriptionManager(localStorage)
+        subscriptionManager = SubscriptionManager()
 
         marketKit = MarketKitWrapper(
             context = this,
@@ -174,7 +174,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             hsApiKey = appConfig.marketApiKey,
             cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
             defiYieldApiKey = appConfig.defiyieldProviderApiKey,
-            subscriptionManager = App.subscriptionManager
+            subscriptionManager = subscriptionManager
         )
         marketKit.sync()
 
