@@ -7,9 +7,23 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.core.accountTypeDerivation
+import cash.p.terminal.core.bep2TokenUrl
+import cash.p.terminal.core.bitcoinCashCoinType
+import cash.p.terminal.core.eip20TokenUrl
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.isSupported
+import cash.p.terminal.core.order
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.*
+import cash.p.terminal.core.shorten
+import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.supports
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.ConfiguredToken
+import cash.p.terminal.entities.ViewState
+import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -196,9 +210,7 @@ class CoinOverviewViewModel(
 
                     val derivation = tokenType.derivation.accountTypeDerivation
 
-                    val coinSettings =
-                        CoinSettings(mapOf(CoinSettingType.derivation to derivation.value))
-                    val configuredToken = ConfiguredToken(token, coinSettings)
+                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
@@ -220,9 +232,7 @@ class CoinOverviewViewModel(
 
                     val bchCoinType = tokenType.type.bitcoinCashCoinType
 
-                    val coinSettings =
-                        CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to bchCoinType.value))
-                    val configuredToken = ConfiguredToken(token, coinSettings)
+                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
