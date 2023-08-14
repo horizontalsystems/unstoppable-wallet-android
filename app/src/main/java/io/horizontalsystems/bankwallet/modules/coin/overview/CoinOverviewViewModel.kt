@@ -7,9 +7,23 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.accountTypeDerivation
+import io.horizontalsystems.bankwallet.core.bep2TokenUrl
+import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
+import io.horizontalsystems.bankwallet.core.eip20TokenUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.isSupported
+import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.supports
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.ConfiguredToken
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -196,9 +210,7 @@ class CoinOverviewViewModel(
 
                     val derivation = tokenType.derivation.accountTypeDerivation
 
-                    val coinSettings =
-                        CoinSettings(mapOf(CoinSettingType.derivation to derivation.value))
-                    val configuredToken = ConfiguredToken(token, coinSettings)
+                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
@@ -220,9 +232,7 @@ class CoinOverviewViewModel(
 
                     val bchCoinType = tokenType.type.bitcoinCashCoinType
 
-                    val coinSettings =
-                        CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to bchCoinType.value))
-                    val configuredToken = ConfiguredToken(token, coinSettings)
+                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
                         canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
                     items.add(
