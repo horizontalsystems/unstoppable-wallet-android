@@ -332,8 +332,8 @@
         android:id="@+id/wcAccountTypeNotSupportedDialog"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
     <dialog
-        android:id="@+id/premiumFeatureWarningDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.support.PremiumFeatureWarningDialog" />
+        android:id="@+id/contactOptionsDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.about.ContactOptionsDialog" />
     <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
