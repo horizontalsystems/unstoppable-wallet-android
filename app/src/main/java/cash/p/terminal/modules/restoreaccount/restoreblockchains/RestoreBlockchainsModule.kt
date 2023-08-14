@@ -12,8 +12,6 @@ import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.market.ImageSource
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.Token
 
 object RestoreBlockchainsModule {
 
@@ -78,8 +76,6 @@ object RestoreBlockchainsModule {
             }
         }
     }
-
-    class InternalItem(val blockchain: Blockchain, val token: Token)
 }
 
 data class CoinViewItem<T>(
