@@ -12,8 +12,6 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSetti
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.Token
 
 object RestoreBlockchainsModule {
 
@@ -78,8 +76,6 @@ object RestoreBlockchainsModule {
             }
         }
     }
-
-    class InternalItem(val blockchain: Blockchain, val token: Token)
 }
 
 data class CoinViewItem<T>(

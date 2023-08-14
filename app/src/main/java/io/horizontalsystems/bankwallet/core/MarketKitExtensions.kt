@@ -424,3 +424,21 @@ val Token.badge: String?
             protocolType?.uppercase()
         }
     }
+
+val BlockchainType.nativeTokenQueries: List<TokenQuery>
+    get() = when (this) {
+        BlockchainType.Bitcoin,
+        BlockchainType.Litecoin -> {
+            TokenType.Derivation.values().map {
+                TokenQuery(this, TokenType.Derived(it))
+            }
+        }
+        BlockchainType.BitcoinCash -> {
+            TokenType.AddressType.values().map {
+                TokenQuery(this, TokenType.AddressTyped(it))
+            }
+        }
+        else -> {
+            listOf(TokenQuery(this, TokenType.Native))
+        }
+    }
