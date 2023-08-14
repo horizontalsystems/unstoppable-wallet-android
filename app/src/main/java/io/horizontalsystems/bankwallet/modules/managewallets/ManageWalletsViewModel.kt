@@ -38,12 +38,12 @@ class ManageWalletsViewModel(
         item: ManageWalletsService.Item,
     ) = CoinViewItem(
         item = item.configuredToken,
-        imageSource = ImageSource.Remote(item.configuredToken.token.coin.imageUrl, item.configuredToken.token.iconPlaceholder),
-        title = item.configuredToken.token.coin.code,
-        subtitle = item.configuredToken.token.coin.name,
+        imageSource = ImageSource.Remote(item.token.coin.imageUrl, item.token.iconPlaceholder),
+        title = item.token.coin.code,
+        subtitle = item.token.coin.name,
         enabled = item.enabled,
         hasInfo = item.hasInfo,
-        label = item.configuredToken.token.badge
+        label = item.token.badge
     )
 
     fun enable(configuredToken: ConfiguredToken) {
