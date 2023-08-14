@@ -3,6 +3,7 @@ package cash.p.terminal.modules.managewallets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.Clearable
+import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.subscribeIO
@@ -42,7 +43,7 @@ class ManageWalletsViewModel(
         subtitle = item.configuredToken.token.coin.name,
         enabled = item.enabled,
         hasInfo = item.hasInfo,
-        label = item.configuredToken.badge
+        label = item.configuredToken.token.badge
     )
 
     fun enable(configuredToken: ConfiguredToken) {

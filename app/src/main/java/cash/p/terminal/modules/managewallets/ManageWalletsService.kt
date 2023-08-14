@@ -1,9 +1,19 @@
 package cash.p.terminal.modules.managewallets
 
-import cash.p.terminal.core.*
+import cash.p.terminal.core.Clearable
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.core.eligibleTokens
+import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
-import cash.p.terminal.entities.*
+import cash.p.terminal.core.restoreSettingTypes
+import cash.p.terminal.core.sortedByFilter
+import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.AccountType
+import cash.p.terminal.entities.ConfiguredToken
+import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -115,30 +125,7 @@ class ManageWalletsService(
 
         val items = mutableListOf<Item>()
         fullCoin.eligibleTokens(accountType).forEach { token ->
-            items.addAll(getItemsForToken(token, accountType))
-        }
-
-        return items
-    }
-
-    private fun getItemsForToken(token: Token, accountType: AccountType): List<Item> {
-        val items = mutableListOf<Item>()
-        when (token.blockchainType.coinSettingType) {
-            CoinSettingType.derivation -> {
-                accountType.supportedDerivations.forEach {
-                    val coinSettings = CoinSettings(mapOf(CoinSettingType.derivation to it.value))
-                    items.add(getItemForConfiguredToken(ConfiguredToken(token, coinSettings)))
-                }
-            }
-            CoinSettingType.bitcoinCashCoinType -> {
-                BitcoinCashCoinType.values().forEach {
-                    val coinSettings = CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to it.value))
-                    items.add(getItemForConfiguredToken(ConfiguredToken(token, coinSettings)))
-                }
-            }
-            else -> {
-                items.add(getItemForConfiguredToken(ConfiguredToken(token)))
-            }
+            items.add(getItemForConfiguredToken(ConfiguredToken(token)))
         }
 
         return items
@@ -147,25 +134,21 @@ class ManageWalletsService(
     private fun getItemForConfiguredToken(configuredToken: ConfiguredToken): Item {
         val enabled = isEnabled(configuredToken)
 
-        val hasInfo = when (configuredToken.token.type) {
-            is TokenType.Eip20,
-            is TokenType.Bep2,
-            is TokenType.Spl -> true
-            is TokenType.Native -> when (configuredToken.token.blockchainType) {
-                is BlockchainType.Bitcoin,
-                is BlockchainType.Litecoin,
-                is BlockchainType.BitcoinCash -> true
-                is BlockchainType.Zcash -> enabled
-                else -> false
-            }
-            else -> false
-        }
-
         return Item(
-            configuredToken = configuredToken,
-            enabled = enabled,
-            hasInfo = hasInfo
+                configuredToken = configuredToken,
+                enabled = enabled,
+                hasInfo = hasInfo(configuredToken.token, enabled)
         )
+    }
+
+    private fun hasInfo(token: Token, enabled: Boolean) = when (token.type) {
+        is TokenType.Native -> token.blockchainType is BlockchainType.Zcash && enabled
+        is TokenType.Derived,
+        is TokenType.AddressTyped,
+        is TokenType.Eip20,
+        is TokenType.Bep2,
+        is TokenType.Spl -> true
+        else -> false
     }
 
     private fun syncState() {
