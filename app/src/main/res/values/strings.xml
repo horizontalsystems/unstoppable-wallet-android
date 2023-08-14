@@ -171,7 +171,7 @@
     <string name="ImportCexAccount_SelectCex">Select CEX</string>
     <string name="ImportCexAccount_SelectCexDescription">Select the centralized exchange to which you want to connect.</string>
     <string name="ImportCexAccountBinance_Description">Please provide the API Keys and API Secret to link your exchange.</string>
-    <string name="ImportCexAccountBinance_ApiKey">Api Key</string>
+    <string name="ImportCexAccountBinance_ApiKey">API Key</string>
     <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
 
     <!--Backup-->
@@ -1410,15 +1410,15 @@
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="CoinPage_Indicators">Indicators</string>
     <string name="CoinPage_MovingAverages">Moving Averages</string>
-    <string name="CoinPage_OscillatorsSettings">Oscillators Settings</string>
-    <string name="CoinPage_EmaSettingsDescription">The EMA, SMA, and WMA are moving averages used in technical analysis:\n\nEMA emphasizes recent prices for quicker reactions.\nSMA averages price data for a general trend view.\nWMA balances sensitivity and noise reduction by linearly weighting recent data.The stochastic oscillator is a After the exchange operation, the </string>
-    <string name="CoinPage_RsiSettingsDescription">The Relative Strength Index (RSI) is a momentum oscillator that measures price speed and change, identifying overbought (above 70) or oversold (below 30) market conditions. It can also detect price reversals through divergences.The stochastic oscillator </string>
+    <string name="CoinPage_OscillatorsSettings">Oscillators</string>
+    <string name="CoinPage_EmaSettingsDescription">The EMA, SMA, and WMA are moving averages used in technical analysis:\n\nEMA emphasizes recent prices for quicker reactions.\nSMA averages price data for a general trend view.\nWMA balances sensitivity and noise reduction by linearly weighting recent data.</string>
+    <string name="CoinPage_RsiSettingsDescription">The Relative Strength Index (RSI) is a momentum oscillator that measures price speed and change, identifying overbought (above 70) or oversold (below 30) market conditions. It can also detect price reversals through divergences.</string>
     <string name="CoinPage_MacdSettingsDescription">The Moving Average Convergence Divergence (MACD) is a momentum indicator that tracks the relationship between two EMAs of a security\'s price. It signals buying or selling opportunities when the MACD line (12-period EMA minus 26-period EMA) crosses the 9-period EMA, known as the signal line.</string>
     <string name="CoinPage_InsufficientData">Insufficient Data</string>
     <string name="CoinPage_InsufficientDataError">There are not enough data points to display the EMA 1 indicator. Please adjust the time period to generate a view of the moving average line.Not enough point to display EMA 1 </string>
     <string name="CoinPage_Type">Type</string>
     <string name="CoinPage_Period">Period</string>
-    <string name="CoinPage_RsiLength">Rsi Length</string>
+    <string name="CoinPage_RsiLength">RSI Length</string>
     <string name="CoinPage_FastLength">Fast Length</string>
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
@@ -1761,7 +1761,7 @@
     <string name="CexDeposit_MemoWarning">Memo (tag) is required, or your will lose your coins.\n\nSend only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
     <string name="CexDeposit_Important">Important</string>
     <string name="CexDeposit_MemoAlertText">Both a memo (tag) and the address are needed to ensure that assets are received. Otherwise your funds will be lost.</string>
-    <string name="Cex_Error_FailedToConnectApiKey">Failed to connect your Api Key</string>
+    <string name="Cex_Error_FailedToConnectApiKey">Failed to connect your API Key</string>
 
     <!--Cex Withdraw Module-->
     <string name="CexWithdraw_Title">Send %s</string>
@@ -1778,7 +1778,7 @@
     <string name="CexWithdraw_GoogleAuthenticationInfo">Enter code from your Google Authenticator App.</string>
     <string name="CexWithdraw_Withdraw">Withdraw</string>
     <string name="CexWithdraw_WithdrawSuccess">Success</string>
-    <string name="CexWithdraw_Error_NotEnoughBalance">Not enough available balance</string>
+    <string name="CexWithdraw_Error_NotEnoughBalance">Not enough available Balance</string>
     <string name="CexWithdraw_Error_MinimumAmount">The minimum amount you can withdraw is %s</string>
     <string name="CexWithdraw_Error_MaximumAmount">The maximum amount you can withdraw is %s</string>
     <string name="CexWithdraw_Error_WithdrawTitle">Withdraw Failed</string>
