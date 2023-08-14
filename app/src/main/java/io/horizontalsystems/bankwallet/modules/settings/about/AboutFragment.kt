@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.about
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +33,7 @@ import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
@@ -44,7 +43,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 
 class AboutFragment : BaseFragment() {
@@ -81,7 +79,13 @@ private fun AboutNavHost(fragmentNavController: NavController) {
         navController = navController,
         startDestination = AboutPage,
     ) {
-        composable(AboutPage) { AboutScreen(navController, { fragmentNavController.popBackStack() }) }
+        composable(AboutPage) {
+            AboutScreen(
+                navController,
+                { fragmentNavController.slideFromBottom(R.id.contactOptionsDialog) },
+                { fragmentNavController.popBackStack() }
+            )
+        }
         composablePage(ReleaseNotesPage) {
             ReleaseNotesScreen(false, { navController.popBackStack() })
         }
@@ -94,6 +98,7 @@ private fun AboutNavHost(fragmentNavController: NavController) {
 @Composable
 private fun AboutScreen(
     navController: NavController,
+    showContactOptions: () -> Unit,
     onBackPress: () -> Unit,
     aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
 ) {
@@ -112,7 +117,7 @@ private fun AboutScreen(
                 Spacer(Modifier.height(24.dp))
                 InfoTextBody(text = stringResource(R.string.SettingsTerms_Text))
                 Spacer(Modifier.height(24.dp))
-                SettingSections(aboutViewModel, navController)
+                SettingSections(aboutViewModel, navController, showContactOptions)
                 Spacer(Modifier.height(36.dp))
             }
         }
@@ -120,7 +125,11 @@ private fun AboutScreen(
 }
 
 @Composable
-private fun SettingSections(viewModel: AboutViewModel, navController: NavController) {
+private fun SettingSections(
+    viewModel: AboutViewModel,
+    navController: NavController,
+    showContactOptions: () -> Unit
+) {
 
     val context = LocalContext.current
     val termsShowAlert = viewModel.termsShowAlert
@@ -217,7 +226,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
             HsSettingCell(
                 R.string.SettingsContact_Title,
                 R.drawable.ic_email,
-                onClick = { sendEmail(viewModel.reportEmail, context) }
+                onClick = showContactOptions
             )
         }
     )
@@ -265,19 +274,6 @@ private fun shareAppLink(appLink: String, context: Context) {
             Translator.getString(R.string.SettingsShare_Title)
         )
     )
-}
-
-private fun sendEmail(recipient: String, context: Context) {
-    val intent = Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.parse("mailto:")
-        putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
-    }
-
-    try {
-        context.startActivity(intent)
-    } catch (e: ActivityNotFoundException) {
-        TextHelper.copyText(recipient)
-    }
 }
 
 @Preview
