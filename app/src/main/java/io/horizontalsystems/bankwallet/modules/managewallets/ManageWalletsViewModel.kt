@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -42,7 +43,7 @@ class ManageWalletsViewModel(
         subtitle = item.configuredToken.token.coin.name,
         enabled = item.enabled,
         hasInfo = item.hasInfo,
-        label = item.configuredToken.badge
+        label = item.configuredToken.token.badge
     )
 
     fun enable(configuredToken: ConfiguredToken) {
