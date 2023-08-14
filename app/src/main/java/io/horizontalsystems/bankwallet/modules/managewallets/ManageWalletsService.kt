@@ -222,5 +222,7 @@ class ManageWalletsService(
         val configuredToken: ConfiguredToken,
         val enabled: Boolean,
         val hasInfo: Boolean
-    )
+    ) {
+        val token = configuredToken.token
+    }
 }
