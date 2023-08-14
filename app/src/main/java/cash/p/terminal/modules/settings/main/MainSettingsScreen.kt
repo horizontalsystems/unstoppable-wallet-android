@@ -162,19 +162,19 @@ private fun SettingSections(
             },
             {
                 HsSettingCell(
-                    R.string.Settings_Appearance,
-                    R.drawable.ic_brush_20,
+                    R.string.Contacts,
+                    R.drawable.ic_user_20,
                     onClick = {
-                        navController.slideFromRight(R.id.appearanceFragment)
+                        navController.slideFromRight(R.id.contactsFragment, ContactsFragment.prepareParams(Mode.Full))
                     }
                 )
             },
             {
                 HsSettingCell(
-                    R.string.Contacts,
-                    R.drawable.ic_user_20,
+                    R.string.Settings_Appearance,
+                    R.drawable.ic_brush_20,
                     onClick = {
-                        navController.slideFromRight(R.id.contactsFragment, ContactsFragment.prepareParams(Mode.Full))
+                        navController.slideFromRight(R.id.appearanceFragment)
                     }
                 )
             },

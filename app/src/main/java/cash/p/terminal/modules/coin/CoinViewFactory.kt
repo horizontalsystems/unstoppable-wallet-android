@@ -149,6 +149,20 @@ class CoinViewFactory(
                 marketCapString,
                 rankLabel = marketCapRankString))
         }
+        overview.totalSupply?.let {
+            val totalSupplyString = numberFormatter.formatCoinShort(it,
+                item.coinCode,
+                8)
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply),
+                totalSupplyString))
+        }
+        overview.circulatingSupply?.let {
+            val supplyString = numberFormatter.formatCoinShort(it,
+                item.coinCode,
+                8)
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation),
+                supplyString))
+        }
 
         overview.volume24h?.let {
             val volumeString = formatFiatShortened(it, currency.symbol)
@@ -165,22 +179,6 @@ class CoinViewFactory(
             val dilutedMarketCapString = formatFiatShortened(it, currency.symbol)
             items.add(CoinDataItem(Translator.getString(R.string.CoinPage_DilutedMarketCap),
                 dilutedMarketCapString))
-        }
-
-        overview.totalSupply?.let {
-            val totalSupplyString = numberFormatter.formatCoinShort(it,
-                item.coinCode,
-                8)
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply),
-                totalSupplyString))
-        }
-
-        overview.circulatingSupply?.let {
-            val supplyString = numberFormatter.formatCoinShort(it,
-                item.coinCode,
-                8)
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation),
-                supplyString))
         }
 
         overview.genesisDate?.let {
