@@ -28,7 +28,6 @@ class SolanaWalletManager(
         val enabledWallets = tokens.map { token ->
             EnabledWallet(
                     tokenQueryId = token.tokenQuery.id,
-                    coinSettingsId = "",
                     accountId = account.id,
                     coinName = token.coin.name,
                     coinCode = token.coin.code,

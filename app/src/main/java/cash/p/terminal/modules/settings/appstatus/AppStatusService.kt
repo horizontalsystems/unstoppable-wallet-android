@@ -108,10 +108,7 @@ class AppStatusService(
                 .sortedBy { it.token.coin.name }
                 .forEach { wallet ->
                     (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
-                        val settings = wallet.configuredToken.coinSettings
-                        val settingsValue = settings.derivation?.value
-                                ?: settings.bitcoinCashCoinType?.value
-                        val statusTitle = "${wallet.token.coin.name}${settingsValue?.let { "-$it" } ?: ""}"
+                        val statusTitle = "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}"
                         bitcoinChainStatus[statusTitle] = adapter.statusInfo
                     }
                 }

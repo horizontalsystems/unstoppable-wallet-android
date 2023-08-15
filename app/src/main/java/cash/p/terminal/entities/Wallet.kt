@@ -15,9 +15,6 @@ data class Wallet(
     val token
         get() = configuredToken.token
 
-    val coinSettings
-        get() = configuredToken.coinSettings
-
     val coin
         get() = token.coin
 
@@ -27,7 +24,7 @@ data class Wallet(
     val badge
         get() = token.badge
 
-    val transactionSource get() = TransactionSource(token.blockchain, account, coinSettings)
+    val transactionSource get() = TransactionSource(token.blockchain, account, token.type)
 
     constructor(token: Token, account: Account) : this(ConfiguredToken(token), account)
 

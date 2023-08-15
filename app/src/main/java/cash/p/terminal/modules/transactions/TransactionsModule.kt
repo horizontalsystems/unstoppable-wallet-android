@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.CoinSettings
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
 import java.util.*
 
@@ -54,5 +54,5 @@ data class TransactionWallet(
 data class TransactionSource(
     val blockchain: Blockchain,
     val account: Account,
-    val coinSettings: CoinSettings
+    val tokenType: TokenType
 )

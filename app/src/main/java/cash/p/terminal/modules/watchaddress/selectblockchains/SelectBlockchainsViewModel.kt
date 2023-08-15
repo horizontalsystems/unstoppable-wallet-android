@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
+import cash.p.terminal.core.badge
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.AccountType
@@ -50,7 +51,7 @@ class SelectBlockchainsViewModel(
             is AccountType.HdExtendedKey -> {
                 title = R.string.Watch_Select_Coins
                 coinViewItems = service.configuredTokens(accountType).map {
-                    coinViewItemForToken(it, label = it.coinSettings.settings.values.firstOrNull())
+                    coinViewItemForToken(it, label = it.token.badge)
                 }
             }
         }
