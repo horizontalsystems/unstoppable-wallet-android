@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.CoinSettings
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -28,9 +27,8 @@ class WalletStorage(
         return enabledWallets.mapNotNull { enabledWallet ->
             val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
-            val coinSettings = CoinSettings(enabledWallet.coinSettingsId)
             tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
-                val configuredToken = ConfiguredToken(token, coinSettings)
+                val configuredToken = ConfiguredToken(token)
                 return@mapNotNull Wallet(configuredToken, account)
             }
 
@@ -45,7 +43,7 @@ class WalletStorage(
                     decimals = enabledWallet.coinDecimals
                 )
 
-                val configuredToken = ConfiguredToken(token, coinSettings)
+                val configuredToken = ConfiguredToken(token)
 
                 Wallet(configuredToken, account)
             } else {
@@ -82,7 +80,6 @@ class WalletStorage(
     private fun enabledWallet(wallet: Wallet, index: Int? = null): EnabledWallet {
         return EnabledWallet(
             wallet.token.tokenQuery.id,
-            wallet.coinSettings.id,
             wallet.account.id,
             index,
             wallet.coin.name,
