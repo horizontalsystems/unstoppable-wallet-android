@@ -161,7 +161,7 @@ class RestoreBlockchainsService(
     fun enable(blockchain: Blockchain) {
         val tokens = tokens.filter { it.blockchain == blockchain }
         val token = tokens.firstOrNull() ?: return
-        enableCoinService.enable(FullCoin(token.coin, tokens), accountType)
+        enableCoinService.enable(FullCoin(token.coin, tokens))
     }
 
     fun disable(blockchain: Blockchain) {
@@ -176,7 +176,7 @@ class RestoreBlockchainsService(
         val enabledTokens = enabledTokens.filter { it.token.blockchain == blockchain }
         val token = tokens.firstOrNull() ?: return
 
-        enableCoinService.configure(FullCoin(token.coin, tokens), accountType, enabledTokens)
+        enableCoinService.configure(FullCoin(token.coin, tokens), enabledTokens)
     }
 
     fun restore() {
