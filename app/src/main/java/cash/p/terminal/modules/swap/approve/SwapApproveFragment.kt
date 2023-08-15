@@ -41,6 +41,7 @@ import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class SwapApproveFragment : BaseFragment() {
 
@@ -54,7 +55,7 @@ class SwapApproveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val approveData = requireArguments().getParcelable<SwapMainModule.ApproveData>(dataKey)!!
+                val approveData = requireArguments().parcelable<SwapMainModule.ApproveData>(dataKey)!!
                 SwapApproveScreen(findNavController(), approveData)
             }
         }

@@ -26,14 +26,14 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.overview.ui.Chart
+import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.CoinCategory
+import io.horizontalsystems.core.parcelable
 
 class MarketCategoryFragment : BaseFragment() {
 
@@ -44,7 +44,7 @@ class MarketCategoryFragment : BaseFragment() {
     ): View {
 
         val factory = MarketCategoryModule.Factory(
-            arguments?.get(categoryKey) as CoinCategory
+            arguments?.parcelable(categoryKey)!!
         )
 
         val chartViewModel by viewModels<ChartViewModel> { factory }

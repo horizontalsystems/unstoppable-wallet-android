@@ -44,6 +44,7 @@ import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
@@ -68,7 +69,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
 
     private val transactionData: TransactionData
         get() {
-            val transactionDataParcelable = arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
+            val transactionDataParcelable = arguments?.parcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
             return TransactionData(
                 Address(transactionDataParcelable.toAddress),
                 transactionDataParcelable.value,
@@ -76,7 +77,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
             )
         }
     private val additionalInfo: SendEvmData.AdditionalInfo?
-        get() = arguments?.getParcelable(SendEvmModule.additionalInfoKey)
+        get() = arguments?.parcelable(SendEvmModule.additionalInfoKey)
 
     override fun onCreateView(
         inflater: LayoutInflater,

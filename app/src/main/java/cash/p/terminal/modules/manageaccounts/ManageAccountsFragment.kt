@@ -44,6 +44,7 @@ import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class ManageAccountsFragment : BaseFragment() {
 
@@ -57,7 +58,7 @@ class ManageAccountsFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ManageAccountsScreen(findNavController(), arguments?.getParcelable(ManageAccountsModule.MODE)!!)
+                ManageAccountsScreen(findNavController(), arguments?.parcelable(ManageAccountsModule.MODE)!!)
             }
         }
     }

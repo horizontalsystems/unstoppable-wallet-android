@@ -11,6 +11,7 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.confirmation.BaseSwapConfirmationFragment
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
@@ -35,11 +36,11 @@ class UniswapConfirmationFragment(
     }
 
     private val dex by lazy {
-        requireArguments().getParcelable<SwapMainModule.Dex>(dexKey)!!
+        requireArguments().parcelable<SwapMainModule.Dex>(dexKey)!!
     }
 
     private val transactionData by lazy {
-        val transactionDataParcelable = requireArguments().getParcelable<SendEvmModule.TransactionDataParcelable>(transactionDataKey)!!
+        val transactionDataParcelable = requireArguments().parcelable<SendEvmModule.TransactionDataParcelable>(transactionDataKey)!!
         TransactionData(
             Address(transactionDataParcelable.toAddress),
             transactionDataParcelable.value,
@@ -48,7 +49,7 @@ class UniswapConfirmationFragment(
     }
 
     private val additionalInfo by lazy {
-        requireArguments().getParcelable<SendEvmData.AdditionalInfo>(additionalInfoKey)
+        requireArguments().parcelable<SendEvmData.AdditionalInfo>(additionalInfoKey)
     }
 
     override val logger = AppLogger("swap_uniswap")

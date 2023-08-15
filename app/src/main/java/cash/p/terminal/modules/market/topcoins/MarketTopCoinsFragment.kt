@@ -33,17 +33,18 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class MarketTopCoinsFragment : BaseFragment() {
 
     private val sortingField by lazy {
-        arguments?.getParcelable<SortingField>(sortingFieldKey)
+        arguments?.parcelable<SortingField>(sortingFieldKey)
     }
     private val topMarket by lazy {
-        arguments?.getParcelable<TopMarket>(topMarketKey)
+        arguments?.parcelable<TopMarket>(topMarketKey)
     }
     private val marketField by lazy {
-        arguments?.getParcelable<MarketField>(marketFieldKey)
+        arguments?.parcelable<MarketField>(marketFieldKey)
     }
 
     val viewModel by viewModels<MarketTopCoinsViewModel> {

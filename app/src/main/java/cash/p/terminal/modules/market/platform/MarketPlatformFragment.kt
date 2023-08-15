@@ -32,8 +32,8 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.overview.ui.Chart
+import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.modules.market.topplatforms.Platform
@@ -41,6 +41,7 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class MarketPlatformFragment : BaseFragment() {
 
@@ -55,7 +56,7 @@ class MarketPlatformFragment : BaseFragment() {
         val platform = if (platformUid != null && platformTitle != null) {
             Platform(platformUid, platformTitle)
         } else {
-            arguments?.getParcelable(platformKey)
+            arguments?.parcelable(platformKey)
         }
 
         if (platform == null) {

@@ -28,6 +28,7 @@ import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 
 class SelectSwapCoinFragment : BaseFragment() {
@@ -42,7 +43,7 @@ class SelectSwapCoinFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val dex = arguments?.getParcelable<SwapMainModule.Dex>(dexKey)
+                val dex = arguments?.parcelable<SwapMainModule.Dex>(dexKey)
                 val requestId = arguments?.getLong(requestIdKey)
                 if (dex == null || requestId == null) {
                     findNavController().popBackStack()

@@ -40,11 +40,12 @@ import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class CoinRankFragment : BaseFragment() {
 
     private val type by lazy {
-        requireArguments().getParcelable<RankType>(rankTypeKey)
+        requireArguments().parcelable<RankType>(rankTypeKey)
     }
 
     override fun onCreateView(

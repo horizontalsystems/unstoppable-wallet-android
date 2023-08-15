@@ -41,6 +41,7 @@ import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.headline2_jacob
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 import java.math.BigDecimal
 
 class OverallScoreInfoFragment : BaseFragment() {
@@ -56,7 +57,7 @@ class OverallScoreInfoFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
 
-            val scoreCategory = requireArguments().getParcelable<ScoreCategory>(SCORE_CATEGORY_KEY)
+            val scoreCategory = requireArguments().parcelable<ScoreCategory>(SCORE_CATEGORY_KEY)
             val categoryScores = getScores(scoreCategory)
 
             setContent {

@@ -151,7 +151,7 @@ fun ZcashConfigureScreen(
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
-        confirmStateChange = {
+        confirmValueChange = {
             if (it == ModalBottomSheetValue.Hidden) {
                 showSlowSyncWarning = false
             }

@@ -28,11 +28,12 @@ import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 
     private val account by lazy {
-        requireArguments().getParcelable<Account>(ACCOUNT)
+        requireArguments().parcelable<Account>(ACCOUNT)
     }
 
     private val text by lazy {

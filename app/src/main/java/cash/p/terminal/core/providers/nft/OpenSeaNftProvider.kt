@@ -148,9 +148,9 @@ class OpenSeaNftProvider(
     private fun collectionMetadata(
         blockchainType: BlockchainType,
         response: OpenSeaNftApiResponse.Collection,
-        baseToken: Token? = null
+        token: Token? = null
     ): NftCollectionMetadata {
-        val baseToken = baseToken ?: marketKit.token(TokenQuery(blockchainType, TokenType.Native))
+        val baseToken = token ?: marketKit.token(TokenQuery(blockchainType, TokenType.Native))
 
         return NftCollectionMetadata(
             blockchainType = blockchainType,

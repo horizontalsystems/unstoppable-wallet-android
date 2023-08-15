@@ -36,15 +36,16 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class TopNftCollectionsFragment : BaseFragment() {
 
     private val sortingField by lazy {
-        arguments?.getParcelable<SortingField>(sortingFieldKey)!!
+        arguments?.parcelable<SortingField>(sortingFieldKey)!!
     }
     private val timeDuration by lazy {
-        arguments?.getParcelable<TimeDuration>(timeDurationKey)!!
+        arguments?.parcelable<TimeDuration>(timeDurationKey)!!
     }
     val viewModel by viewModels<TopNftCollectionsViewModel> {
         TopNftCollectionsModule.Factory(sortingField, timeDuration)

@@ -32,11 +32,12 @@ import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class CoinAnalyticsInfoFragment : BaseFragment() {
 
     private val analyticsInfo by lazy {
-        requireArguments().getParcelable<AnalyticInfo>(analyticsInfoKey)
+        requireArguments().parcelable<AnalyticInfo>(analyticsInfoKey)
     }
 
     override fun onCreateView(

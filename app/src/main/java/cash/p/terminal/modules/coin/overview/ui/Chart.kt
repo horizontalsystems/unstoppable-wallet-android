@@ -615,14 +615,14 @@ fun PriceVolChart(
                             onPress = { offset ->
                                 selectedX = offset.x
                             },
-                            onTap = { offset ->
+                            onTap = {
                                 selectedX = null
                             }
                         )
                     }
                     .pointerInput(Unit) {
                         detectDragGestures(
-                            onDrag = { change: PointerInputChange, dragAmount: Offset ->
+                            onDrag = { change: PointerInputChange, _: Offset ->
                                 selectedX = change.position.x
                             },
                             onDragEnd = {
