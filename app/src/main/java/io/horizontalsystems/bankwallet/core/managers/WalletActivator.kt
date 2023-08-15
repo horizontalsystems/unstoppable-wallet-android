@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletActivator(
@@ -21,11 +21,11 @@ class WalletActivator(
         walletManager.save(wallets)
     }
 
-    fun activateConfiguredTokens(account: Account, configuredTokens: List<ConfiguredToken>) {
+    fun activateTokens(account: Account, tokens: List<Token>) {
         val wallets = mutableListOf<Wallet>()
 
-        for (configuredToken in configuredTokens) {
-            wallets.add(Wallet(configuredToken, account))
+        for (token in tokens) {
+            wallets.add(Wallet(token, account))
         }
 
         walletManager.save(wallets)

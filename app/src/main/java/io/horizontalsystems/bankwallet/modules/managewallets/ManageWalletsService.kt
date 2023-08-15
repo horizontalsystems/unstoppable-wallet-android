@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.sortedByFilter
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
@@ -60,7 +59,7 @@ class ManageWalletsService(
 
         restoreSettingsService.approveSettingsObservable
             .subscribeIO {
-                enable(ConfiguredToken(it.token), it.settings)
+                enable(it.token, it.settings)
             }.let {
                 disposables.add(it)
             }
@@ -71,8 +70,8 @@ class ManageWalletsService(
         syncState()
     }
 
-    private fun isEnabled(configuredToken: ConfiguredToken): Boolean {
-        return wallets.any { it.configuredToken == configuredToken }
+    private fun isEnabled(token: Token): Boolean {
+        return wallets.any { it.token == token }
     }
 
     private fun sync(walletList: List<Wallet>) {
@@ -125,19 +124,19 @@ class ManageWalletsService(
 
         val items = mutableListOf<Item>()
         fullCoin.eligibleTokens(accountType).forEach { token ->
-            items.add(getItemForConfiguredToken(ConfiguredToken(token)))
+            items.add(getItemForToken(token))
         }
 
         return items
     }
 
-    private fun getItemForConfiguredToken(configuredToken: ConfiguredToken): Item {
-        val enabled = isEnabled(configuredToken)
+    private fun getItemForToken(token: Token): Item {
+        val enabled = isEnabled(token)
 
         return Item(
-                configuredToken = configuredToken,
+                token = token,
                 enabled = enabled,
-                hasInfo = hasInfo(configuredToken.token, enabled)
+                hasInfo = hasInfo(token, enabled)
         )
     }
 
@@ -167,9 +166,9 @@ class ManageWalletsService(
         syncState()
     }
 
-    private fun updateSortedItems(configuredToken: ConfiguredToken, enable: Boolean) {
+    private fun updateSortedItems(token: Token, enable: Boolean) {
         sortedItems = sortedItems.map { item ->
-            if (item.configuredToken == configuredToken) {
+            if (item.token == token) {
                 item.copy(enabled = enable)
             } else {
                 item
@@ -177,16 +176,16 @@ class ManageWalletsService(
         }
     }
 
-    private fun enable(configuredToken: ConfiguredToken, restoreSettings: RestoreSettings) {
+    private fun enable(token: Token, restoreSettings: RestoreSettings) {
         val account = this.account ?: return
 
         if (restoreSettings.isNotEmpty()) {
-            restoreSettingsService.save(restoreSettings, account, configuredToken.token.blockchainType)
+            restoreSettingsService.save(restoreSettings, account, token.blockchainType)
         }
 
-        walletManager.save(listOf(Wallet(configuredToken, account)))
+        walletManager.save(listOf(Wallet(token, account)))
 
-        updateSortedItems(configuredToken, true)
+        updateSortedItems(token, true)
     }
 
     fun setFilter(filter: String) {
@@ -197,20 +196,20 @@ class ManageWalletsService(
         syncState()
     }
 
-    fun enable(configuredToken: ConfiguredToken) {
+    fun enable(token: Token) {
         val account = this.account ?: return
 
-        if (configuredToken.token.blockchainType.restoreSettingTypes.isNotEmpty()) {
-            restoreSettingsService.approveSettings(configuredToken.token, account)
+        if (token.blockchainType.restoreSettingTypes.isNotEmpty()) {
+            restoreSettingsService.approveSettings(token, account)
         } else {
-            enable(configuredToken, RestoreSettings())
+            enable(token, RestoreSettings())
         }
     }
 
-    fun disable(configuredToken: ConfiguredToken) {
-        wallets.firstOrNull { it.configuredToken == configuredToken }?.let {
+    fun disable(token: Token) {
+        wallets.firstOrNull { it.token == token }?.let {
             walletManager.delete(listOf(it))
-            updateSortedItems(configuredToken, false)
+            updateSortedItems(token, false)
         }
     }
 
@@ -219,10 +218,8 @@ class ManageWalletsService(
     }
 
     data class Item(
-        val configuredToken: ConfiguredToken,
+        val token: Token,
         val enabled: Boolean,
         val hasInfo: Boolean
-    ) {
-        val token = configuredToken.token
-    }
+    )
 }

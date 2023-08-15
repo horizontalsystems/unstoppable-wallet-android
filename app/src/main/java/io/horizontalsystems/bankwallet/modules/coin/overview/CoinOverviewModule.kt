@@ -3,13 +3,13 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterSignificant
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.*
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfoOverview
+import io.horizontalsystems.marketkit.models.Token
 
 object CoinOverviewModule {
 
@@ -65,7 +65,7 @@ data class TokenVariant(
     val imgUrl: String,
     val explorerUrl: String?,
     val name: String?,
-    val configuredToken: ConfiguredToken,
+    val token: Token,
     val canAddToWallet: Boolean,
     val inWallet: Boolean,
 ) {
