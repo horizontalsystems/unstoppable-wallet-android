@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.copyableTypeInfo
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
@@ -15,6 +14,7 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supportedTokens
 import cash.p.terminal.core.supports
 import cash.p.terminal.core.typeInfo
+import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import cash.p.terminal.ui.extensions.BottomSheetSelectorViewItem
@@ -22,7 +22,7 @@ import io.reactivex.disposables.Disposable
 
 class CoinTokensViewModel(
     private val service: CoinTokensService,
-    private val accountManager: IAccountManager
+    private val accountType: AccountType
 ) : ViewModel() {
 
     var showBottomSheetDialog by mutableStateOf(false)
@@ -45,9 +45,7 @@ class CoinTokensViewModel(
         val fullCoin = request.fullCoin
 
         val supportedTokens = fullCoin.supportedTokens.filter { token ->
-            accountManager.activeAccount?.type?.let {
-                token.blockchainType.supports(it)
-            } ?: false
+            token.blockchainType.supports(accountType)
         }
 
         val selectedTokenIndexes =
