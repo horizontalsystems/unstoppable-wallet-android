@@ -8,7 +8,6 @@ import java.util.Objects
 @Parcelize
 data class ConfiguredToken(
     val token: Token,
-    val coinSettings: CoinSettings = CoinSettings()
 ): Parcelable {
     override fun hashCode(): Int {
         return Objects.hash(token)
