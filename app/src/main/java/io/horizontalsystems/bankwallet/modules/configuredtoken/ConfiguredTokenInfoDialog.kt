@@ -25,7 +25,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -42,6 +41,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
+import io.horizontalsystems.marketkit.models.Token
 
 class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
 
@@ -55,26 +55,26 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val configuredToken = arguments?.parcelable<ConfiguredToken>(configuredTokenKey)
-                if (configuredToken != null) {
-                    ConfiguredTokenInfo(findNavController(), configuredToken)
+                val token = arguments?.parcelable<Token>(tokenKey)
+                if (token != null) {
+                    ConfiguredTokenInfo(findNavController(), token)
                 }
             }
         }
     }
 
     companion object {
-        private const val configuredTokenKey = "configuredToken"
+        private const val tokenKey = "token"
 
-        fun prepareParams(configuredToken: ConfiguredToken): Bundle {
-            return bundleOf(configuredTokenKey to configuredToken)
+        fun prepareParams(token: Token): Bundle {
+            return bundleOf(tokenKey to token)
         }
     }
 }
 
 @Composable
-private fun ConfiguredTokenInfo(navController: NavController, configuredToken: ConfiguredToken) {
-    val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(configuredToken))
+private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
+    val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
     val uiState = viewModel.uiState
 
     ComposeAppTheme {

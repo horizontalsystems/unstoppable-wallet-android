@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.Token
@@ -28,8 +27,7 @@ class WalletStorage(
             val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
             tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
-                val configuredToken = ConfiguredToken(token)
-                return@mapNotNull Wallet(configuredToken, account)
+                return@mapNotNull Wallet(token, account)
             }
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
@@ -43,9 +41,7 @@ class WalletStorage(
                     decimals = enabledWallet.coinDecimals
                 )
 
-                val configuredToken = ConfiguredToken(token)
-
-                Wallet(configuredToken, account)
+                Wallet(token, account)
             } else {
                 null
             }

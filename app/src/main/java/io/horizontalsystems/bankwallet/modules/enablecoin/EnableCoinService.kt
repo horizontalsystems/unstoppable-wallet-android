@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.restoreSettingTypes
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.core.supportedTokens
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -21,7 +20,7 @@ class EnableCoinService(
 ) {
     private val disposable = CompositeDisposable()
 
-    val enableCoinObservable = PublishSubject.create<Pair<List<ConfiguredToken>, RestoreSettings>>()
+    val enableCoinObservable = PublishSubject.create<Pair<List<Token>, RestoreSettings>>()
     val cancelEnableCoinObservable = PublishSubject.create<FullCoin>()
 
     init {
@@ -43,8 +42,7 @@ class EnableCoinService(
     }
 
     private fun handleApproveCoinTokens(tokens: List<Token>) {
-        val configuredTokens = tokens.map { ConfiguredToken(it) }
-        enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
+        enableCoinObservable.onNext(Pair(tokens, RestoreSettings()))
     }
 
     private fun handleRejectApprovePlatformSettings(fullCoin: FullCoin) {
@@ -55,7 +53,7 @@ class EnableCoinService(
         token: Token,
         settings: RestoreSettings = RestoreSettings()
     ) {
-        enableCoinObservable.onNext(Pair(listOf(ConfiguredToken(token)), settings))
+        enableCoinObservable.onNext(Pair(listOf(token), settings))
     }
 
     private fun handleRejectApproveRestoreSettings(token: Token) {
@@ -74,7 +72,7 @@ class EnableCoinService(
                     coinTokensService.approveTokens(fullCoin)
                 }
                 else -> {
-                    enableCoinObservable.onNext(Pair(listOf(ConfiguredToken(token)), RestoreSettings()))
+                    enableCoinObservable.onNext(Pair(listOf(token), RestoreSettings()))
                 }
             }
         } else {
@@ -82,9 +80,8 @@ class EnableCoinService(
         }
     }
 
-    fun configure(fullCoin: FullCoin, configuredTokens: List<ConfiguredToken>) {
-        val currentTokens = configuredTokens.map { it.token }
-        coinTokensService.approveTokens(fullCoin, currentTokens, true)
+    fun configure(fullCoin: FullCoin, tokens: List<Token>) {
+        coinTokensService.approveTokens(fullCoin, tokens, true)
     }
 
     fun save(restoreSettings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
