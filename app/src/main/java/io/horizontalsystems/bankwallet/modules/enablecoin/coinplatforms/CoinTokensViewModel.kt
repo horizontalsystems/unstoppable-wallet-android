@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.copyableTypeInfo
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -15,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.core.supportedTokens
 import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.core.typeInfo
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
@@ -22,7 +22,7 @@ import io.reactivex.disposables.Disposable
 
 class CoinTokensViewModel(
     private val service: CoinTokensService,
-    private val accountManager: IAccountManager
+    private val accountType: AccountType
 ) : ViewModel() {
 
     var showBottomSheetDialog by mutableStateOf(false)
@@ -45,9 +45,7 @@ class CoinTokensViewModel(
         val fullCoin = request.fullCoin
 
         val supportedTokens = fullCoin.supportedTokens.filter { token ->
-            accountManager.activeAccount?.type?.let {
-                token.blockchainType.supports(it)
-            } ?: false
+            token.blockchainType.supports(accountType)
         }
 
         val selectedTokenIndexes =
