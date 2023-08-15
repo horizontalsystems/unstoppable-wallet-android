@@ -26,7 +26,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -36,7 +35,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
-import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -54,10 +52,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-enum class RestoreBlockchainsBottomSheetType {
-    CoinSettings, CoinTokens
-}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -78,7 +72,6 @@ fun ManageWalletsScreen(
     val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType, manualBackup, fileBackup)
     val viewModel: RestoreBlockchainsViewModel = viewModel(factory = factory)
     val restoreSettingsViewModel: RestoreSettingsViewModel = viewModel(factory = factory)
-    val coinSettingsViewModel: CoinSettingsViewModel = viewModel(factory = factory)
     val coinTokensViewModel: CoinTokensViewModel = viewModel(factory = factory)
 
     val view = LocalView.current
@@ -115,7 +108,6 @@ fun ManageWalletsScreen(
         }
     }
 
-    var bottomSheetType: RestoreBlockchainsBottomSheetType? by remember { mutableStateOf(null) }
     val coroutineScope = rememberCoroutineScope()
     val skipHalfExpanded by remember { mutableStateOf(true) }
     val modalBottomSheetState = rememberModalBottomSheetState(
@@ -123,19 +115,8 @@ fun ManageWalletsScreen(
         skipHalfExpanded = skipHalfExpanded
     )
 
-    LaunchedEffect(coinSettingsViewModel.showBottomSheetDialog) {
-        if (coinSettingsViewModel.showBottomSheetDialog) {
-            bottomSheetType = RestoreBlockchainsBottomSheetType.CoinSettings
-            coroutineScope.launch {
-                modalBottomSheetState.show()
-            }
-            coinSettingsViewModel.bottomSheetDialogShown()
-        }
-    }
-
     LaunchedEffect(coinTokensViewModel.showBottomSheetDialog) {
         if (coinTokensViewModel.showBottomSheetDialog) {
-            bottomSheetType = RestoreBlockchainsBottomSheetType.CoinTokens
             coroutineScope.launch {
                 modalBottomSheetState.show()
             }
@@ -147,36 +128,15 @@ fun ManageWalletsScreen(
         sheetState = modalBottomSheetState,
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
-            when (bottomSheetType) {
-                null -> {
-                    Spacer(modifier = Modifier.height(1.dp))
-                }
-
-                RestoreBlockchainsBottomSheetType.CoinSettings -> {
-                    coinSettingsViewModel.config?.let { config ->
-                        BottomSheetSelectorMultiple(
-                            config = config,
-                            onItemsSelected = { coinSettingsViewModel.onSelect(it) },
-                            onCloseClick = {
-                                coinSettingsViewModel.onCancelSelect()
-                                coroutineScope.launch { modalBottomSheetState.hide() }
-                            },
-                        )
-                    }
-                }
-
-                RestoreBlockchainsBottomSheetType.CoinTokens -> {
-                    coinTokensViewModel.config?.let { config ->
-                        BottomSheetSelectorMultiple(
-                            config = config,
-                            onItemsSelected = { coinTokensViewModel.onSelect(it) },
-                            onCloseClick = {
-                                coinTokensViewModel.onCancelSelect()
-                                coroutineScope.launch { modalBottomSheetState.hide() }
-                            },
-                        )
-                    }
-                }
+            coinTokensViewModel.config?.let { config ->
+                BottomSheetSelectorMultiple(
+                    config = config,
+                    onItemsSelected = { coinTokensViewModel.onSelect(it) },
+                    onCloseClick = {
+                        coinTokensViewModel.onCancelSelect()
+                        coroutineScope.launch { modalBottomSheetState.hide() }
+                    },
+                )
             }
         },
     ) {

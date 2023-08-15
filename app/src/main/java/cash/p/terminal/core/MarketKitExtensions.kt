@@ -6,10 +6,7 @@ import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.BitcoinCashCoinType
-import cash.p.terminal.entities.CoinSettingType
-import cash.p.terminal.entities.CoinSettings
 import cash.p.terminal.entities.FeePriceScale
-import cash.p.terminal.entities.derivation
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
 import io.horizontalsystems.hdwalletkit.ExtendedKeyCoinType
 import io.horizontalsystems.hdwalletkit.HDWallet
@@ -194,32 +191,6 @@ fun Blockchain.bep2TokenUrl(symbol: String) = "https://explorer.binance.org/asse
 
 val BlockchainType.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
-
-// todo: remove it
-val BlockchainType.coinSettingType: CoinSettingType?
-    get() = when (this) {
-        BlockchainType.Bitcoin,
-        BlockchainType.Litecoin -> CoinSettingType.derivation
-        BlockchainType.BitcoinCash -> CoinSettingType.bitcoinCashCoinType
-        else -> null
-    }
-
-fun BlockchainType.defaultSettingsArray(accountType: AccountType): List<CoinSettings> = when (this) {
-    BlockchainType.Bitcoin,
-    BlockchainType.Litecoin -> {
-        when (accountType) {
-            is AccountType.Mnemonic -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip84.value)))
-            is AccountType.HdExtendedKey -> {
-                accountType.hdExtendedKey.purposes.firstOrNull()?.let { purpose ->
-                    listOf(CoinSettings(mapOf(CoinSettingType.derivation to purpose.derivation.value)))
-                } ?: listOf()
-            }
-            else -> listOf()
-        }
-    }
-    BlockchainType.BitcoinCash -> listOf(CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to BitcoinCashCoinType.type145.value)))
-    else -> listOf()
-}
 
 val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
     get() = when (this) {

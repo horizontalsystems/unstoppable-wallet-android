@@ -7,8 +7,6 @@ import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.enablecoin.EnableCoinService
 import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensService
 import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
-import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsService
-import cash.p.terminal.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.market.ImageSource
@@ -25,14 +23,11 @@ object RestoreBlockchainsModule {
         private val restoreSettingsService by lazy {
             RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider)
         }
-        private val coinSettingsService by lazy {
-            CoinSettingsService()
-        }
         private val coinTokensService by lazy {
             CoinTokensService()
         }
         private val enableCoinService by lazy {
-            EnableCoinService(coinTokensService, restoreSettingsService, coinSettingsService)
+            EnableCoinService(coinTokensService, restoreSettingsService)
         }
 
         private val restoreSelectCoinsService by lazy {
@@ -59,9 +54,6 @@ object RestoreBlockchainsModule {
                         restoreSettingsService,
                         listOf(restoreSettingsService)
                     ) as T
-                }
-                CoinSettingsViewModel::class.java -> {
-                    CoinSettingsViewModel(coinSettingsService, listOf(coinSettingsService)) as T
                 }
                 RestoreBlockchainsViewModel::class.java -> {
                     RestoreBlockchainsViewModel(
