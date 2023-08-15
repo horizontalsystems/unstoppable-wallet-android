@@ -5,7 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
@@ -31,11 +38,27 @@ import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
+import io.horizontalsystems.bankwallet.ui.compose.components.SnackbarError
+import io.horizontalsystems.bankwallet.ui.compose.components.StackedBarChart
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.headline1_bran
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Blockchain
 
 class CoinMajorHoldersFragment : BaseFragment() {
@@ -45,7 +68,7 @@ class CoinMajorHoldersFragment : BaseFragment() {
     }
 
     private val blockchain by lazy {
-        requireArguments().getParcelable<Blockchain>(BLOCKCHAIN_KEY)!!
+        requireArguments().parcelable<Blockchain>(BLOCKCHAIN_KEY)!!
     }
 
     override fun onCreateView(

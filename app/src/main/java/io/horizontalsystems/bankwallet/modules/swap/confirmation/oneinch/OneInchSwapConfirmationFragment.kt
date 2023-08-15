@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceVie
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.BaseSwapConfirmationFragment
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class OneInchSwapConfirmationFragment(
@@ -29,11 +30,11 @@ class OneInchSwapConfirmationFragment(
     }
 
     private val blockchainType by lazy {
-        requireArguments().getParcelable<BlockchainType>(blockchainTypeKey)!!
+        requireArguments().parcelable<BlockchainType>(blockchainTypeKey)!!
     }
 
     private val oneInchSwapParameters by lazy {
-        requireArguments().getParcelable<OneInchSwapParameters>(oneInchSwapParametersKey)!!
+        requireArguments().parcelable<OneInchSwapParameters>(oneInchSwapParametersKey)!!
     }
 
     override val logger = AppLogger("swap_1inch")

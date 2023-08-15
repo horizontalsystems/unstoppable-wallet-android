@@ -59,7 +59,7 @@ private fun BaseCurrencyScreen(
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
-        confirmStateChange = {
+        confirmValueChange = {
             if (it == ModalBottomSheetValue.Hidden) {
                 viewModel.closeDisclaimer()
             }

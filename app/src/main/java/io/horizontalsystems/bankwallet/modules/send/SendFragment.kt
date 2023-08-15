@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class SendFragment : BaseFragment() {
@@ -49,7 +50,7 @@ class SendFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             try {
-                val wallet = requireArguments().getParcelable<Wallet>(walletKey) ?: throw IllegalStateException("Wallet is Null!")
+                val wallet = requireArguments().parcelable<Wallet>(walletKey) ?: throw IllegalStateException("Wallet is Null!")
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
                     AmountInputModeModule.Factory(wallet.coin.uid)
                 }

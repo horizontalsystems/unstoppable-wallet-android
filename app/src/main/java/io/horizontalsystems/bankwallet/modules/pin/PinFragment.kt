@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 
 class PinFragment : BaseFragment() {
@@ -24,7 +25,7 @@ class PinFragment : BaseFragment() {
     }
 
     private val interactionType: PinInteractionType by lazy {
-        arguments?.getParcelable(PinModule.keyInteractionType) ?: PinInteractionType.UNLOCK
+        arguments?.parcelable(PinModule.keyInteractionType) ?: PinInteractionType.UNLOCK
     }
 
     private val showCancelButton: Boolean by lazy {

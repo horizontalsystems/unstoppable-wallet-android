@@ -5,6 +5,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Blockchain
 
 object EvmNetworkModule {
@@ -14,7 +15,7 @@ object EvmNetworkModule {
     }
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val blockchain = arguments.getParcelable<Blockchain>("blockchain")!!
+        private val blockchain = arguments.parcelable<Blockchain>("blockchain")!!
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

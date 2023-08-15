@@ -61,7 +61,7 @@ class MarketWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            content(context, id)
+            content(context)
         }
     }
 
@@ -72,7 +72,7 @@ class MarketWidget : GlanceAppWidget() {
     override val stateDefinition = MarketWidgetStateDefinition
 
     @Composable
-    private fun content(context: Context, glanceId: GlanceId) {
+    private fun content(context: Context) {
         val state = currentState<MarketWidgetState>()
 
         AppWidgetTheme {

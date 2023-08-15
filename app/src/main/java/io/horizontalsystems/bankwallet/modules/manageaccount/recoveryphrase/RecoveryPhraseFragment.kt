@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.launch
 
 class RecoveryPhraseFragment : BaseFragment(screenshotEnabled = false) {
@@ -46,7 +47,7 @@ class RecoveryPhraseFragment : BaseFragment(screenshotEnabled = false) {
             setContent {
                 RecoveryPhraseScreen(
                     navController = findNavController(),
-                    account = arguments?.getParcelable(RecoveryPhraseModule.ACCOUNT)!!
+                    account = arguments?.parcelable(RecoveryPhraseModule.ACCOUNT)!!
                 )
             }
         }

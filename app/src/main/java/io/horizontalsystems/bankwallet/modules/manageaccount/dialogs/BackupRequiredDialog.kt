@@ -28,11 +28,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 
     private val account by lazy {
-        requireArguments().getParcelable<Account>(ACCOUNT)
+        requireArguments().parcelable<Account>(ACCOUNT)
     }
 
     private val text by lazy {

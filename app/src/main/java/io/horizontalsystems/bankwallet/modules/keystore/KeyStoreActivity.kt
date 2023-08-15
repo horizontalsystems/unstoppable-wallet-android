@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
@@ -33,12 +32,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BottomSheetsElement
 import io.horizontalsystems.bankwallet.ui.compose.components.BottomSheetsElementsHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.BottomSheetsElementsText
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.putParcelableExtra
 
 class KeyStoreActivity : BaseActivity() {
 
     private val mode by lazy {
-        intent.getParcelableExtra<KeyStoreModule.ModeType>(MODE)!!
+        intent.parcelable<KeyStoreModule.ModeType>(MODE)!!
     }
 
     val viewModel by viewModels<KeyStoreViewModel> { KeyStoreModule.Factory(mode) }

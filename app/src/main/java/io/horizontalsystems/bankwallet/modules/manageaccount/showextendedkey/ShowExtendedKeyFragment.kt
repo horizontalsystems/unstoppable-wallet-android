@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.launch
 
@@ -56,7 +57,7 @@ class ShowExtendedKeyFragment : BaseFragment(screenshotEnabled = false) {
                         null
                     }
                 }
-                val displayKeyType = arguments?.getParcelable<DisplayKeyType>(ShowExtendedKeyModule.DISPLAY_KEY_TYPE)
+                val displayKeyType = arguments?.parcelable<DisplayKeyType>(ShowExtendedKeyModule.DISPLAY_KEY_TYPE)
 
                 if (hdExtendedKey == null || displayKeyType == null) {
                     NoExtendKeyScreen()

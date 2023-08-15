@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.pin.PinInteractionType
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.parcelable
 
 fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
     val navOptions = NavOptions.Builder()
@@ -35,7 +36,7 @@ fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
 fun NavController.authorizedAction(action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
         getNavigationResult(PinModule.requestKey) { bundle ->
-            val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
+            val resultType = bundle.parcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
             if (resultType == PinInteractionType.UNLOCK && resultCode == PinModule.RESULT_OK) {
@@ -65,7 +66,7 @@ fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
 
 fun NavController.navigateToSetPin(onSuccess: () -> Unit) {
     getNavigationResult(PinModule.requestKey) { bundle ->
-        val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
+        val resultType = bundle.parcelable<PinInteractionType>(PinModule.requestType)
         val resultCode = bundle.getInt(PinModule.requestResult)
 
         if (resultCode == PinModule.RESULT_OK && resultType == PinInteractionType.SET_PIN) {

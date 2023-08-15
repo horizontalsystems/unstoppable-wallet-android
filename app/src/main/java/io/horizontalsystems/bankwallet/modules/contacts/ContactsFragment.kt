@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewMod
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
 import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 
 class ContactsFragment : BaseFragment() {
@@ -43,7 +44,7 @@ class ContactsFragment : BaseFragment() {
             setContent {
                 ContactsNavHost(
                     navController = findNavController(),
-                    mode = arguments?.getParcelable(modeKey) ?: Mode.Full
+                    mode = arguments?.parcelable(modeKey) ?: Mode.Full
                 )
             }
         }
@@ -123,10 +124,10 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
                 },
                 onNavigateToAddress = { address ->
                     navHostController.getNavigationResult("contacts_address_result") { bundle ->
-                        bundle.getParcelable<ContactAddress>("added_address")?.let { editedAddress ->
+                        bundle.parcelable<ContactAddress>("added_address")?.let { editedAddress ->
                             viewModel.setAddress(editedAddress)
                         }
-                        bundle.getParcelable<ContactAddress>("deleted_address")?.let { deletedAddress ->
+                        bundle.parcelable<ContactAddress>("deleted_address")?.let { deletedAddress ->
                             viewModel.deleteAddress(deletedAddress)
                         }
                     }

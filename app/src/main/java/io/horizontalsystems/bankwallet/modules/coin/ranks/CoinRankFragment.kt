@@ -40,11 +40,12 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class CoinRankFragment : BaseFragment() {
 
     private val type by lazy {
-        requireArguments().getParcelable<RankType>(rankTypeKey)
+        requireArguments().parcelable<RankType>(rankTypeKey)
     }
 
     override fun onCreateView(

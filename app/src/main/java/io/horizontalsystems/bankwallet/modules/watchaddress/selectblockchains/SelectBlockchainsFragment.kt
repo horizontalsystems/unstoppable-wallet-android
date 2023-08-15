@@ -47,6 +47,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.delay
 
 class SelectBlockchainsFragment : BaseFragment() {
@@ -65,7 +66,7 @@ class SelectBlockchainsFragment : BaseFragment() {
                         arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
                     val inclusive =
                         arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
-                    val accountType = arguments?.getParcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
+                    val accountType = arguments?.parcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
                     val accountName = arguments?.getString(SelectBlockchainsModule.accountNameKey)
                     if (accountType != null) {
                         SelectBlockchainsScreen(

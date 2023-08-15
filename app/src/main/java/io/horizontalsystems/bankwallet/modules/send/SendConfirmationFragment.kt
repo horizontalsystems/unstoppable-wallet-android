@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 import kotlinx.parcelize.Parcelize
 
 class SendConfirmationFragment : BaseFragment() {
@@ -38,7 +39,7 @@ class SendConfirmationFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                when (requireArguments().getParcelable<Type>(typeKey)) {
+                when (requireArguments().parcelable<Type>(typeKey)) {
                     Type.Bitcoin -> {
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
 

@@ -32,11 +32,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class CoinAnalyticsInfoFragment : BaseFragment() {
 
     private val analyticsInfo by lazy {
-        requireArguments().getParcelable<AnalyticInfo>(analyticsInfoKey)
+        requireArguments().parcelable<AnalyticInfo>(analyticsInfoKey)
     }
 
     override fun onCreateView(

@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class BackupKeyFragment : BaseFragment(screenshotEnabled = false) {
 
@@ -52,7 +53,7 @@ class BackupKeyFragment : BaseFragment(screenshotEnabled = false) {
             )
 
             setContent {
-                val account = requireArguments().getParcelable<Account>(BackupKeyModule.ACCOUNT)!!
+                val account = requireArguments().parcelable<Account>(BackupKeyModule.ACCOUNT)!!
                 RecoveryPhraseScreen(findNavController(), account)
             }
         }

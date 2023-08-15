@@ -63,6 +63,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 
 class ReceiveFragment : BaseFragment() {
 
@@ -76,7 +77,7 @@ class ReceiveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             try {
-                val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY)!!
+                val wallet = arguments?.parcelable<Wallet>(WALLET_KEY)!!
                 val receiveAdapter = App.adapterManager.getReceiveAdapterForWallet(wallet)
                     ?: throw ReceiveModule.NoReceiverAdapter()
                 val viewModel by viewModels<ReceiveViewModel> {
