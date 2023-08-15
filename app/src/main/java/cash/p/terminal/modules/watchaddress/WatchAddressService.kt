@@ -8,13 +8,9 @@ import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.order
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.BitcoinCashCoinType
-import cash.p.terminal.entities.CoinSettingType
-import cash.p.terminal.entities.CoinSettings
 import cash.p.terminal.entities.ConfiguredToken
-import cash.p.terminal.entities.derivation
+import cash.p.terminal.entities.tokenTypeDerivation
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 
@@ -28,53 +24,66 @@ class WatchAddressService(
 
     fun nextWatchAccountName() = accountFactory.getNextWatchAccountName()
 
-    fun configuredTokens(accountType: AccountType) = buildList {
-        when (accountType) {
-            is AccountType.Cex,
-            is AccountType.Mnemonic,
-            is AccountType.EvmPrivateKey -> Unit // N/A
-            is AccountType.SolanaAddress -> {
-                token(BlockchainType.Solana, accountType)?.let {
-                    add(ConfiguredToken(it))
-                }
-            }
-            is AccountType.TronAddress -> {
-                token(BlockchainType.Tron, accountType)?.let {
-                    add(ConfiguredToken(it))
-                }
-            }
-            is AccountType.EvmAddress -> {
-                evmBlockchainManager.allMainNetBlockchains.forEach { blockchain ->
-                    token(blockchain.type, accountType)?.let { token ->
-                        add(ConfiguredToken(token))
+    fun configuredTokens(accountType: AccountType): List<ConfiguredToken> {
+        val tokenQueries = buildList {
+            when (accountType) {
+                is AccountType.Cex,
+                is AccountType.Mnemonic,
+                is AccountType.EvmPrivateKey -> Unit // N/A
+                is AccountType.SolanaAddress -> {
+                    if (BlockchainType.Solana.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Solana, TokenType.Native))
                     }
                 }
-            }
-            is AccountType.HdExtendedKey -> {
-                token(BlockchainType.Bitcoin, accountType)?.let { token ->
-                    accountType.hdExtendedKey.purposes.forEach { purpose ->
-                        add(ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.derivation to purpose.derivation.value))))
+
+                is AccountType.TronAddress -> {
+                    if (BlockchainType.Tron.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Tron, TokenType.Native))
                     }
                 }
-                token(BlockchainType.Dash, accountType)?.let { token ->
-                    add(ConfiguredToken(token))
-                }
-                token(BlockchainType.BitcoinCash, accountType)?.let { token ->
-                    BitcoinCashCoinType.values().map { coinType ->
-                        add(ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to coinType.value))))
+
+                is AccountType.EvmAddress -> {
+                    evmBlockchainManager.allMainNetBlockchains.forEach { blockchain ->
+                        if (blockchain.type.supports(accountType)) {
+                            add(TokenQuery(blockchain.type, TokenType.Native))
+                        }
                     }
                 }
-                token(BlockchainType.Litecoin, accountType)?.let { token ->
-                    accountType.hdExtendedKey.purposes.forEach { purpose ->
-                        add(ConfiguredToken(token, CoinSettings(mapOf(CoinSettingType.derivation to purpose.derivation.value))))
+
+                is AccountType.HdExtendedKey -> {
+                    if (BlockchainType.Bitcoin.supports(accountType)) {
+                        accountType.hdExtendedKey.purposes.forEach { purpose ->
+                            add(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(purpose.tokenTypeDerivation)))
+                        }
                     }
-                }
-                token(BlockchainType.ECash, accountType)?.let { token ->
-                    add(ConfiguredToken(token))
+
+                    if (BlockchainType.Dash.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Dash, TokenType.Native))
+                    }
+
+                    if (BlockchainType.BitcoinCash.supports(accountType)) {
+                        TokenType.AddressType.values().map {
+                            add(TokenQuery(BlockchainType.BitcoinCash, TokenType.AddressTyped(it)))
+                        }
+                    }
+
+                    if (BlockchainType.Litecoin.supports(accountType)) {
+                        accountType.hdExtendedKey.purposes.map { purpose ->
+                            add(TokenQuery(BlockchainType.Litecoin, TokenType.Derived(purpose.tokenTypeDerivation)))
+                        }
+                    }
+
+                    if (BlockchainType.ECash.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.ECash, TokenType.Native))
+                    }
                 }
             }
         }
-    }.sortedBy { it.token.blockchainType.order }
+
+        return marketKit.tokens(tokenQueries)
+            .map { ConfiguredToken(it) }
+            .sortedBy { it.token.blockchainType.order }
+    }
 
     fun watchAll(accountType: AccountType, name: String?) {
         watchConfiguredTokens(accountType, configuredTokens(accountType), name)
@@ -91,10 +100,4 @@ class WatchAddressService(
         } catch (e: Exception) {
         }
     }
-
-    private fun token(blockchainType: BlockchainType, accountType: AccountType): Token? =
-        if (blockchainType.supports(accountType))
-            marketKit.token(TokenQuery(blockchainType, TokenType.Native))
-        else
-            null
 }

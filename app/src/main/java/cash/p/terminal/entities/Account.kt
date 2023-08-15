@@ -14,6 +14,7 @@ import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
@@ -311,6 +312,14 @@ val HDWallet.Purpose.derivation: AccountType.Derivation
         HDWallet.Purpose.BIP49 -> AccountType.Derivation.bip49
         HDWallet.Purpose.BIP84 -> AccountType.Derivation.bip84
         HDWallet.Purpose.BIP86 -> AccountType.Derivation.bip86
+    }
+
+val HDWallet.Purpose.tokenTypeDerivation: TokenType.Derivation
+    get() = when (this) {
+        HDWallet.Purpose.BIP44 -> TokenType.Derivation.Bip44
+        HDWallet.Purpose.BIP49 -> TokenType.Derivation.Bip49
+        HDWallet.Purpose.BIP84 -> TokenType.Derivation.Bip84
+        HDWallet.Purpose.BIP86 -> TokenType.Derivation.Bip86
     }
 
 @Parcelize
