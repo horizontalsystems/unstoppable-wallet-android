@@ -1,8 +1,8 @@
-Unstoppable wallet is purposely built as a decentralized management tool for cryptocurrencies.
+Wallet Unstoppable, le portefeuille de finance décentralisée intentionnellement conçu pour la gestion des crypto-monnaies.
 
-It is engineered to serve privacy-conscious individuals looking to manage and invest in cryptocurrencies in a sovereign and professional manner.
+Il a été élaboré pour permettre de venir en aide aux personnes conscientes de leurs droits au respect de leur vie privée, souhaitant gérer des crypto-devises tout en investissant de manière optimale et professionnelle dans la crypto-monnaie.
 
-Unstoppable is built with the following in mind:
+Pour rappel, Unstoppabble a été élaboré avec en toile de fond :
 
 - Capital Should Be Free >> It’s built to provide users with genuinely independent control over their capital.
 
