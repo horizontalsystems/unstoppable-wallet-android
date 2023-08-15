@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">参数未设置</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
     <string name="Alert_Close">关闭</string>
@@ -56,7 +56,6 @@
     <string name="Button_SignUp">注册</string>
     <string name="Button_Submit">提交</string>
     <string name="Button_TryAgain">再试一次</string>
-    <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
@@ -302,7 +301,7 @@
     <string name="Balance_Hidden">隐藏</string>
     <string name="Balance_DownloadingBlocks">正在下载块</string>
     <string name="Balance_ScanningBlocks">扫描块</string>
-    <string name="Balance_Backup_Alert">您必须在接收%1$s之前先备份%2$s钱包。</string>
+    <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">尚无钱包</string>
     <string name="Balance_NoCoinsAlert">您没有添加的硬币。\n添加您将使用的硬币</string>
     <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
@@ -846,7 +845,6 @@
     <string name="ManageCoins_Search">姓名、代码或合同地址</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_NoResults">找不到结果。如果您知道智能合约地址，请尝试手动添加代币。</string>
-    <string name="ManageCoins_BipsDescription">有4种%1$s钱包可用于接收应收款的常见地址格式：\n\n- BIP44（较旧）\n- BIP49\n- BIP84（较新）\n- BIP86（最新）\n\n虽然Unstoppable钱包支持全部4种格式，但是我们建议使用以BIP84格式运作的%2$s钱包。</string>
     <string name="ManageCoins_BchTypeDescription">有2种比特币现金钱包可用于接收应收款的常见地址格式：\n\n- TYPE 0（较旧）\n- TYPE 145（较新）\n\n虽然Unstoppable钱包支持全部两种格式，但是我们建议使用以TYPE 145格式运作的比特币现金钱包。</string>
     <string name="ManageCoins_ContractAddress">联系地址</string>
     <!-- Experimental Feature -->
@@ -1158,7 +1156,6 @@
     <string name="CoinPage_Contract">%s 合约</string>
     <string name="CoinPage_Bep2Symbol">BEP2 符号</string>
     <string name="CoinPage_MajorHolders_TopWallets">排名地址</string>
-    <string name="CoinPage_MajorHolders_Description">上方图表显示了前10个钱包所持有的所有代币的百分比。 百分比越低，代币的分布越广。</string>
     <string name="CoinPage_MajorHolders_InTopWallets">在前10名持有者中</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">持有者总数：%s</string>
     <string name="CoinPage_CoinInvestments_Lead">领投</string>
