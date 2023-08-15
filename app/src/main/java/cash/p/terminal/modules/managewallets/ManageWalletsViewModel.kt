@@ -7,9 +7,9 @@ import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.subscribeIO
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(
@@ -17,7 +17,7 @@ class ManageWalletsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<ConfiguredToken>>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
 
     private var disposables = CompositeDisposable()
 
@@ -37,7 +37,7 @@ class ManageWalletsViewModel(
     private fun viewItem(
         item: ManageWalletsService.Item,
     ) = CoinViewItem(
-        item = item.configuredToken,
+        item = item.token,
         imageSource = ImageSource.Remote(item.token.coin.imageUrl, item.token.iconPlaceholder),
         title = item.token.coin.code,
         subtitle = item.token.coin.name,
@@ -46,12 +46,12 @@ class ManageWalletsViewModel(
         label = item.token.badge
     )
 
-    fun enable(configuredToken: ConfiguredToken) {
-        service.enable(configuredToken)
+    fun enable(token: Token) {
+        service.enable(token)
     }
 
-    fun disable(configuredToken: ConfiguredToken) {
-        service.disable(configuredToken)
+    fun disable(token: Token) {
+        service.disable(token)
     }
 
     fun updateFilter(filter: String) {

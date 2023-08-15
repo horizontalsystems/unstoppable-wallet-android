@@ -9,11 +9,9 @@ import java.util.Objects
 
 @Parcelize
 data class Wallet(
-    val configuredToken: ConfiguredToken,
+    val token: Token,
     val account: Account
 ) : Parcelable {
-    val token
-        get() = configuredToken.token
 
     val coin
         get() = token.coin
@@ -26,17 +24,15 @@ data class Wallet(
 
     val transactionSource get() = TransactionSource(token.blockchain, account, token.type)
 
-    constructor(token: Token, account: Account) : this(ConfiguredToken(token), account)
-
     override fun equals(other: Any?): Boolean {
         if (other is Wallet) {
-            return configuredToken == other.configuredToken && account == other.account
+            return token == other.token && account == other.account
         }
 
         return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(configuredToken, account)
+        return Objects.hash(token, account)
     }
 }

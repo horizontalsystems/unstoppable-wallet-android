@@ -21,7 +21,6 @@ import cash.p.terminal.core.shorten
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.chart.ChartIndicatorManager
@@ -152,9 +151,8 @@ class CoinOverviewViewModel(
 
             when (val tokenType = token.type) {
                 is TokenType.Eip20 -> {
-                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
-                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                        canAddToWallet && activeWallets.any { it.token == token }
                     items.add(
                         TokenVariant(
                             value = tokenType.address.shorten(),
@@ -162,7 +160,7 @@ class CoinOverviewViewModel(
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
                             name = token.blockchain.name,
-                            configuredToken = configuredToken,
+                            token = token,
                             canAddToWallet = canAddToWallet,
                             inWallet = inWallet
                         )
@@ -170,9 +168,8 @@ class CoinOverviewViewModel(
                 }
 
                 is TokenType.Bep2 -> {
-                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
-                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                        canAddToWallet && activeWallets.any { it.token == token }
                     items.add(
                         TokenVariant(
                             value = tokenType.symbol,
@@ -180,7 +177,7 @@ class CoinOverviewViewModel(
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = token.blockchain.bep2TokenUrl(tokenType.symbol),
                             name = token.blockchain.name,
-                            configuredToken = configuredToken,
+                            token = token,
                             canAddToWallet = canAddToWallet,
                             inWallet = inWallet
                         )
@@ -188,9 +185,8 @@ class CoinOverviewViewModel(
                 }
 
                 is TokenType.Spl -> {
-                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
-                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                        canAddToWallet && activeWallets.any { it.token == token }
                     items.add(
                         TokenVariant(
                             value = tokenType.address.shorten(),
@@ -198,7 +194,7 @@ class CoinOverviewViewModel(
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
                             name = token.blockchain.name,
-                            configuredToken = configuredToken,
+                            token = token,
                             canAddToWallet = canAddToWallet,
                             inWallet = inWallet
                         )
@@ -210,9 +206,8 @@ class CoinOverviewViewModel(
 
                     val derivation = tokenType.derivation.accountTypeDerivation
 
-                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
-                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                        canAddToWallet && activeWallets.any { it.token == token }
                     items.add(
                         TokenVariant(
                             value = derivation.addressType,
@@ -220,7 +215,7 @@ class CoinOverviewViewModel(
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = null,
                             name = derivation.rawName,
-                            configuredToken = configuredToken,
+                            token = token,
                             canAddToWallet = canAddToWallet,
                             inWallet = inWallet,
                         )
@@ -232,9 +227,8 @@ class CoinOverviewViewModel(
 
                     val bchCoinType = tokenType.type.bitcoinCashCoinType
 
-                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
-                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                        canAddToWallet && activeWallets.any { it.token == token }
                     items.add(
                         TokenVariant(
                             value = Translator.getString(bchCoinType.title),
@@ -242,7 +236,7 @@ class CoinOverviewViewModel(
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = null,
                             name = bchCoinType.value,
-                            configuredToken = configuredToken,
+                            token = token,
                             canAddToWallet = canAddToWallet,
                             inWallet = inWallet
                         )
@@ -250,9 +244,8 @@ class CoinOverviewViewModel(
                 }
 
                 TokenType.Native -> {
-                    val configuredToken = ConfiguredToken(token)
                     val inWallet =
-                        canAddToWallet && activeWallets.any { it.configuredToken == configuredToken }
+                        canAddToWallet && activeWallets.any { it.token == token }
                     items.add(
                         TokenVariant(
                             value = Translator.getString(R.string.CoinPlatforms_Native),
@@ -260,7 +253,7 @@ class CoinOverviewViewModel(
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = null,
                             name = token.blockchain.name,
-                            configuredToken = configuredToken,
+                            token = token,
                             canAddToWallet = canAddToWallet,
                             inWallet = inWallet
                         )
@@ -268,7 +261,6 @@ class CoinOverviewViewModel(
                 }
 
                 is TokenType.Unsupported -> {
-                    val configuredToken = ConfiguredToken(token)
                     items.add(
                         TokenVariant(
                             value = tokenType.reference.shorten(),
@@ -279,7 +271,7 @@ class CoinOverviewViewModel(
                                 else -> null
                             },
                             name = token.blockchain.name,
-                            configuredToken = configuredToken,
+                            token = token,
                             canAddToWallet = false,
                             inWallet = false
                         )

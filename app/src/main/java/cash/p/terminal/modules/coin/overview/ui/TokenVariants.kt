@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.coin.overview.TokenVariants
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
@@ -27,12 +26,13 @@ import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
+import io.horizontalsystems.marketkit.models.Token
 
 @Composable
 fun TokenVariants(
     tokenVariants: TokenVariants,
-    onClickAddToWallet: (ConfiguredToken) -> Unit,
-    onClickRemoveWallet: (ConfiguredToken) -> Unit,
+    onClickAddToWallet: (Token) -> Unit,
+    onClickRemoveWallet: (Token) -> Unit,
     onClickCopy: (String) -> Unit,
     onClickExplorer: (String) -> Unit,
 ) {
@@ -97,7 +97,7 @@ fun TokenVariants(
                             contentDescription = stringResource(R.string.CoinPage_InWallet),
                             tint = ComposeAppTheme.colors.jacob,
                             onClick = {
-                                onClickRemoveWallet.invoke(tokenVariant.configuredToken)
+                                onClickRemoveWallet.invoke(tokenVariant.token)
                             }
                         )
                     } else {
@@ -105,7 +105,7 @@ fun TokenVariants(
                             icon = R.drawable.ic_add_to_wallet_20,
                             contentDescription = stringResource(R.string.CoinPage_AddToWallet),
                             onClick = {
-                                onClickAddToWallet.invoke(tokenVariant.configuredToken)
+                                onClickAddToWallet.invoke(tokenVariant.token)
                             }
                         )
                     }

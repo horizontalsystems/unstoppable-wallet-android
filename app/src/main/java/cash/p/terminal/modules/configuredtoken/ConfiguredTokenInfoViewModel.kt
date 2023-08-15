@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.*
 import cash.p.terminal.core.managers.RestoreSettingsManager
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.address.*
 import cash.p.terminal.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -12,7 +11,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 
 class ConfiguredTokenInfoViewModel(
-    private val configuredToken: ConfiguredToken,
+    private val token: Token,
     private val accountManager: IAccountManager,
     private val restoreSettingsManager: RestoreSettingsManager
 ) : ViewModel() {
@@ -20,7 +19,6 @@ class ConfiguredTokenInfoViewModel(
     val uiState: ConfiguredTokenInfoUiState
 
     init {
-        val token = configuredToken.token
         val type = when (val type = token.type) {
             is TokenType.Eip20 -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
@@ -61,11 +59,11 @@ class ConfiguredTokenInfoViewModel(
         return restoreSettings.birthdayHeight
     }
 
-    class Factory(private val configuredToken: ConfiguredToken) : ViewModelProvider.Factory {
+    class Factory(private val token: Token) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ConfiguredTokenInfoViewModel(
-                configuredToken,
+                token,
                 App.accountManager,
                 App.restoreSettingsManager
             ) as T

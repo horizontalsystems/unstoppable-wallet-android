@@ -2,8 +2,8 @@ package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletActivator(
@@ -21,11 +21,11 @@ class WalletActivator(
         walletManager.save(wallets)
     }
 
-    fun activateConfiguredTokens(account: Account, configuredTokens: List<ConfiguredToken>) {
+    fun activateTokens(account: Account, tokens: List<Token>) {
         val wallets = mutableListOf<Wallet>()
 
-        for (configuredToken in configuredTokens) {
-            wallets.add(Wallet(configuredToken, account))
+        for (token in tokens) {
+            wallets.add(Wallet(token, account))
         }
 
         walletManager.save(wallets)

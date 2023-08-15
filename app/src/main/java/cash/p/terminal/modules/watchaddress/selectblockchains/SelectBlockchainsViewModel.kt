@@ -9,10 +9,10 @@ import cash.p.terminal.core.badge
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.watchaddress.WatchAddressService
+import io.horizontalsystems.marketkit.models.Token
 
 class SelectBlockchainsViewModel(
     private val accountType: AccountType,
@@ -21,8 +21,8 @@ class SelectBlockchainsViewModel(
 ) : ViewModel() {
 
     private var title: Int = R.string.Watch_Select_Blockchains
-    private var coinViewItems = listOf<CoinViewItem<ConfiguredToken>>()
-    private var selectedCoins = setOf<ConfiguredToken>()
+    private var coinViewItems = listOf<CoinViewItem<Token>>()
+    private var selectedCoins = setOf<Token>()
     private var accountCreated = false
 
     var uiState by mutableStateOf(
@@ -44,14 +44,14 @@ class SelectBlockchainsViewModel(
             is AccountType.TronAddress -> Unit // N/A
             is AccountType.EvmAddress -> {
                 title = R.string.Watch_Select_Blockchains
-                coinViewItems = service.configuredTokens(accountType).map {
+                coinViewItems = service.tokens(accountType).map {
                     coinViewItemForBlockchain(it)
                 }
             }
             is AccountType.HdExtendedKey -> {
                 title = R.string.Watch_Select_Coins
-                coinViewItems = service.configuredTokens(accountType).map {
-                    coinViewItemForToken(it, label = it.token.badge)
+                coinViewItems = service.tokens(accountType).map {
+                    coinViewItemForToken(it, label = it.badge)
                 }
             }
         }
@@ -59,10 +59,10 @@ class SelectBlockchainsViewModel(
         emitState()
     }
 
-    private fun coinViewItemForBlockchain(configuredToken: ConfiguredToken): CoinViewItem<ConfiguredToken> {
-        val blockchain = configuredToken.token.blockchain
+    private fun coinViewItemForBlockchain(token: Token): CoinViewItem<Token> {
+        val blockchain = token.blockchain
         return CoinViewItem(
-            item = configuredToken,
+            item = token,
             imageSource = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
             title = blockchain.name,
             subtitle = blockchain.description,
@@ -70,10 +70,9 @@ class SelectBlockchainsViewModel(
         )
     }
 
-    private fun coinViewItemForToken(configuredToken: ConfiguredToken, label: String?): CoinViewItem<ConfiguredToken> {
-        val token = configuredToken.token
+    private fun coinViewItemForToken(token: Token, label: String?): CoinViewItem<Token> {
         return CoinViewItem(
-            item = configuredToken,
+            item = token,
             imageSource = ImageSource.Remote(token.fullCoin.coin.imageUrl, R.drawable.coin_placeholder),
             title = token.fullCoin.coin.code,
             subtitle = token.fullCoin.coin.name,
@@ -82,11 +81,11 @@ class SelectBlockchainsViewModel(
         )
     }
 
-    fun onToggle(configuredToken: ConfiguredToken) {
-        selectedCoins = if (selectedCoins.contains(configuredToken))
-            selectedCoins.toMutableSet().also { it.remove(configuredToken) }
+    fun onToggle(token: Token) {
+        selectedCoins = if (selectedCoins.contains(token))
+            selectedCoins.toMutableSet().also { it.remove(token) }
         else
-            selectedCoins.toMutableSet().also { it.add(configuredToken) }
+            selectedCoins.toMutableSet().also { it.add(token) }
 
         coinViewItems = coinViewItems.map { viewItem ->
             viewItem.copy(enabled = selectedCoins.contains(viewItem.item))
@@ -96,7 +95,7 @@ class SelectBlockchainsViewModel(
     }
 
     fun onClickWatch() {
-        service.watchConfiguredTokens(accountType, selectedCoins.toList(), accountName)
+        service.watchTokens(accountType, selectedCoins.toList(), accountName)
         accountCreated = true
         emitState()
     }
@@ -113,7 +112,7 @@ class SelectBlockchainsViewModel(
 
 data class SelectBlockchainsUiState(
     val title: Int,
-    val coinViewItems: List<CoinViewItem<ConfiguredToken>>,
+    val coinViewItems: List<CoinViewItem<Token>>,
     val submitButtonEnabled: Boolean,
     val accountCreated: Boolean
 )

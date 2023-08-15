@@ -8,9 +8,9 @@ import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.order
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.entities.tokenTypeDerivation
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 
@@ -24,7 +24,7 @@ class WatchAddressService(
 
     fun nextWatchAccountName() = accountFactory.getNextWatchAccountName()
 
-    fun configuredTokens(accountType: AccountType): List<ConfiguredToken> {
+    fun tokens(accountType: AccountType): List<Token> {
         val tokenQueries = buildList {
             when (accountType) {
                 is AccountType.Cex,
@@ -81,22 +81,21 @@ class WatchAddressService(
         }
 
         return marketKit.tokens(tokenQueries)
-            .map { ConfiguredToken(it) }
-            .sortedBy { it.token.blockchainType.order }
+            .sortedBy { it.blockchainType.order }
     }
 
     fun watchAll(accountType: AccountType, name: String?) {
-        watchConfiguredTokens(accountType, configuredTokens(accountType), name)
+        watchTokens(accountType, tokens(accountType), name)
     }
 
-    fun watchConfiguredTokens(accountType: AccountType, configuredTokens: List<ConfiguredToken>, name: String? = null) {
+    fun watchTokens(accountType: AccountType, tokens: List<Token>, name: String? = null) {
         val accountName = name ?: accountFactory.getNextWatchAccountName()
         val account = accountFactory.watchAccount(accountName, accountType)
 
         accountManager.save(account)
 
         try {
-            walletActivator.activateConfiguredTokens(account, configuredTokens)
+            walletActivator.activateTokens(account, tokens)
         } catch (e: Exception) {
         }
     }

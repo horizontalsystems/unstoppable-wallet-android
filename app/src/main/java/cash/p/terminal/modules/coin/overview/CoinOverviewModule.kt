@@ -3,13 +3,13 @@ package cash.p.terminal.modules.coin.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterSignificant
 import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.*
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfoOverview
+import io.horizontalsystems.marketkit.models.Token
 
 object CoinOverviewModule {
 
@@ -65,7 +65,7 @@ data class TokenVariant(
     val imgUrl: String,
     val explorerUrl: String?,
     val name: String?,
-    val configuredToken: ConfiguredToken,
+    val token: Token,
     val canAddToWallet: Boolean,
     val inWallet: Boolean,
 ) {

@@ -14,7 +14,6 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.ConfiguredToken
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -42,7 +41,7 @@ class RestoreBlockchainsService(
     private val disposables = CompositeDisposable()
 
     private var tokens = listOf<Token>()
-    private val enabledTokens = mutableListOf<ConfiguredToken>()
+    private val enabledTokens = mutableListOf<Token>()
 
     private var restoreSettingsMap = mutableMapOf<Token, RestoreSettings>()
 
@@ -78,8 +77,8 @@ class RestoreBlockchainsService(
 
     init {
         enableCoinService.enableCoinObservable
-            .subscribeIO { (configuredPlatformCoins, settings) ->
-                handleEnableCoin(configuredPlatformCoins, settings)
+            .subscribeIO { (tokens, settings) ->
+                handleEnableCoin(tokens, settings)
             }.let {
                 disposables.add(it)
             }
@@ -103,21 +102,21 @@ class RestoreBlockchainsService(
     }
 
     private fun handleEnableCoin(
-        configuredTokens: List<ConfiguredToken>,
+        tokens: List<Token>,
         restoreSettings: RestoreSettings
     ) {
-        val platformCoin = configuredTokens.firstOrNull()?.token ?: return
+        val platformCoin = tokens.firstOrNull() ?: return
 
         if (restoreSettings.isNotEmpty()) {
             restoreSettingsMap[platformCoin] = restoreSettings
         }
 
-        val existingConfiguredPlatformCoins = enabledTokens.filter { it.token == platformCoin }
-        val newConfiguredPlatformCoins = configuredTokens.minus(existingConfiguredPlatformCoins)
-        val removedConfiguredPlatformCoins = existingConfiguredPlatformCoins.minus(configuredTokens)
+        val existingTokens = enabledTokens.filter { it == platformCoin }
+        val newTokens = tokens.minus(existingTokens)
+        val removedTokens = existingTokens.minus(tokens)
 
-        enabledTokens.addAll(newConfiguredPlatformCoins)
-        enabledTokens.removeAll(removedConfiguredPlatformCoins)
+        enabledTokens.addAll(newTokens)
+        enabledTokens.removeAll(removedTokens)
 
         syncCanRestore()
         syncState()
@@ -132,11 +131,11 @@ class RestoreBlockchainsService(
     }
 
     private fun isEnabled(token: Token): Boolean {
-        return enabledTokens.any { it.token == token }
+        return enabledTokens.any { it == token }
     }
 
     private fun isEnabled(blockchain: Blockchain): Boolean {
-        return enabledTokens.any { it.token.blockchain == blockchain }
+        return enabledTokens.any { it.blockchain == blockchain }
     }
 
     private fun item(blockchain: Blockchain): Item {
@@ -165,7 +164,7 @@ class RestoreBlockchainsService(
     }
 
     fun disable(blockchain: Blockchain) {
-        enabledTokens.removeIf { it.token.blockchain == blockchain }
+        enabledTokens.removeIf { it.blockchain == blockchain }
 
         syncState()
         syncCanRestore()
@@ -173,7 +172,7 @@ class RestoreBlockchainsService(
 
     fun configure(blockchain: Blockchain) {
         val tokens = tokens.filter { it.blockchain == blockchain }
-        val enabledTokens = enabledTokens.filter { it.token.blockchain == blockchain }
+        val enabledTokens = enabledTokens.filter { it.blockchain == blockchain }
         val token = tokens.firstOrNull() ?: return
 
         enableCoinService.configure(FullCoin(token.coin, tokens), enabledTokens)
