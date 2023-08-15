@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -50,7 +51,7 @@ class SelectBlockchainsViewModel(
             is AccountType.HdExtendedKey -> {
                 title = R.string.Watch_Select_Coins
                 coinViewItems = service.configuredTokens(accountType).map {
-                    coinViewItemForToken(it, label = it.coinSettings.settings.values.firstOrNull())
+                    coinViewItemForToken(it, label = it.token.badge)
                 }
             }
         }

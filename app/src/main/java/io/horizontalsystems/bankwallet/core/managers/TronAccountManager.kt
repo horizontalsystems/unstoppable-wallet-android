@@ -218,7 +218,6 @@ class TronAccountManager(
         val enabledWallets = tokensWithBalance.map { tokenInfo ->
             EnabledWallet(
                 tokenQueryId = TokenQuery(blockchainType, tokenInfo.type).id,
-                coinSettingsId = "",
                 accountId = account.id,
                 coinName = tokenInfo.coinName,
                 coinCode = tokenInfo.coinCode,
