@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Le paramètre n\'est pas défini</string>
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Annuler</string>
     <string name="Alert_Copy">Copier</string>
     <string name="Alert_Close">Fermer</string>
@@ -56,7 +56,7 @@
     <string name="Button_SignUp">S\'Inscrire</string>
     <string name="Button_Submit">Je me connecte</string>
     <string name="Button_TryAgain">Veuillez Réessayer</string>
-    <string name="Error_OutOfRange">Il doit contenir au moins %s et faire un maximum de %s caractères</string>
+    <string name="Error_OutOfRange">Il doit contenir au moins %1$s et faire un maximum de %2$s caractères</string>
     <string name="Error_NotInteger">Les chiffres que vous avez fournis sont incorrects</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
@@ -845,7 +845,7 @@
     <string name="ManageCoins_Search">Nom, code ou adresse du contrat</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
-    <string name="ManageCoins_BipsDescription">Les portefeuilles %s peuvent utiliser 4 formats d\'adresse courants pour recevoir des paiements : \n\n- BIP44 (plus ancien)\n- BIP49\n- BIP84 (recommandé)\n- BIP86 (plus récent)\n\n. Bien que le portefeuille Unstoppable prenne en charge ces 4 formats, il est recommandé d\'utiliser un portefeuille %s opérant au format BIP84.</string>
+    <string name="ManageCoins_BipsDescription">Les portefeuilles %1$s peuvent utiliser 4 formats d\'adresse courants pour recevoir des paiements : \n\n- BIP44 (plus ancien)\n- BIP49\n- BIP84 (recommandé)\n- BIP86 (plus récent)\n\n. Bien que le portefeuille Unstoppable prenne en charge ces 4 formats, il est recommandé d\'utiliser un portefeuille %2$s opérant au format BIP84.</string>
     <string name="ManageCoins_BchTypeDescription">Les portefeuilles Bitcoin Cash peuvent utiliser deux formats d\'adresse pour recevoir les paiements entrants : \n\n- TYPE 0 (plus ancien)\n- TYPE 145 (plus récent)\n\n. Bien que le portefeuille Unstoppable soit compatible avec les deux formats, l\'utilisation d\'un portefeuille Bitcoin Cash utilisant le format TYPE 145 est recommandée.</string>
     <string name="ManageCoins_ContractAddress">ADRESSE DE CONTRACT</string>
     <!-- Experimental Feature -->
@@ -1157,7 +1157,7 @@
     <string name="CoinPage_Contract">%s Contrat</string>
     <string name="CoinPage_Bep2Symbol">Symbole BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Meilleurs portefeuilles</string>
-    <string name="CoinPage_MajorHolders_Description">Le graphique ci-dessus indique le % de tous les tokens en circulation détenus dans les 10 meilleurs portefeuilles. Plus le % est faible, plus la pièce est distribuée.</string>
+    <string name="CoinPage_MajorHolders_Description">Le graphique ci-dessus indique le \%% de tous les tokens en circulation détenus dans les 10 meilleurs portefeuilles. Plus le \%% est faible, plus la pièce est distribuée.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">dans les 10 premiers détenteurs</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Nombre total de détenteurs : %s</string>
     <string name="CoinPage_CoinInvestments_Lead">En tête</string>

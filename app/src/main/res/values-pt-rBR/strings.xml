@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Alert_Close">Fechar or Encerrar</string>
@@ -977,7 +977,7 @@
     <string name="CoinPage_Contract">%s Contrato</string>
     <string name="CoinPage_Bep2Symbol">Símbolo BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Principais Carteiras</string>
-    <string name="CoinPage_MajorHolders_Description">O gráfico acima mostra a % porcentagem de todos os tokens em circulação mantidos pelas 10 principais carteiras. Quanto mais baixa for a porcentagem, mais distribuída a moeda está.</string>
+    <string name="CoinPage_MajorHolders_Description">O gráfico acima mostra a \%% porcentagem de todos os tokens em circulação mantidos pelas 10 principais carteiras. Quanto mais baixa for a porcentagem, mais distribuída a moeda está.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">Nas top 10 carteiras de Ethereum</string>
     <string name="CoinPage_CoinInvestments_Lead">Conduzir</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>

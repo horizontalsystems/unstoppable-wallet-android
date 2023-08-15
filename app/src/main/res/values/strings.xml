@@ -64,7 +64,7 @@
     <string name="Button_Submit">Submit</string>
     <string name="Button_TryAgain">Try Again</string>
 
-    <string name="Error_OutOfRange">Can\'t be less than %s or more than %s</string>
+    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
@@ -1011,14 +1011,14 @@
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
-    <string name="ManageCoins_BipsDescription">There are 4 common address formats %s wallets can use to receive incoming payments:
+    <string name="ManageCoins_BipsDescription">There are 4 common address formats %1$s wallets can use to receive incoming payments:
 \n
 \n- BIP-44 (older)
 \n- BIP-49
 \n- BIP-84 (recommended)
 \n- BIP-86 (newest)
 \n
-\nWhile Unstoppable wallet supports all 4 of them it recommends to use a %s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %s transactions.</string>
+\nWhile Unstoppable wallet supports all 4 of them it recommends to use a %2$s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %3$s transactions.</string>
     <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
 \n
 \n- TYPE0 (older)
@@ -1399,7 +1399,7 @@
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
-    <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
+    <string name="CoinPage_MajorHolders_Description">The chart above shows the \%% of all tokens in circulation held by the top 10 wallets. The lower the \%% the more distributed the coin is.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
