@@ -8,11 +8,15 @@
     <string name="Alert_Close">Schließen</string>
     <string name="Alert_Loading">Wird geladen ...</string>
     <string name="Alert_Restart">Neustart</string>
+    <string name="Suspended">INAKTIV</string>
     <string name="Action_Undo">Rückgängig</string>
+    <string name="Button_Show">Anzeigen</string>
+    <string name="Button_Hide">Ausblenden</string>
     <string name="Button_Cancel">Abbrechen</string>
     <string name="Button_Next">Weiter</string>
     <string name="Button_Enable">Aktivieren</string>
     <string name="Button_Disable">Deaktivieren</string>
+    <string name="Button_ScanQr">Zur scannende QR-Code</string>
     <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Done">Fertig</string>
@@ -47,6 +51,13 @@
     <string name="Button_Activate">Activate</string>
     <string name="Button_Sign">Signieren</string>
     <string name="Button_Activating">Activating</string>
+    <string name="Button_GetApiKeys">Hol Dir Deine Schlüssel API</string>
+    <string name="Button_Login">Anmelden</string>
+    <string name="Button_SignUp">Lege ein Benutzerkonto an</string>
+    <string name="Button_Submit">Jetzt anmelden</string>
+    <string name="Button_TryAgain">Bitte versuche es noch einmal</string>
+    <string name="Error_OutOfRange">Es muss mindestens %s enthalten und darf maximal %s Zeichen lang sein</string>
+    <string name="Error_NotInteger">Die von Dir angegebenen Zahlen sind nicht richtig</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">k. A.</string>
     <string name="Any">Beliebig</string>
@@ -120,7 +131,7 @@
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="Select_Coins">Coins auswählen</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
-    <string name="Restore_ZCash">Zcash</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Geburtstagshöhe</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Geben Sie die Geburtstagshöhe das Wallet für eine schnellere Synchronisierung ein.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
@@ -130,6 +141,11 @@
     <string name="Restore_ZCash_OldWallet">Vorhandene Wallet</string>
     <string name="Restore_ZCash_OldWallet_Description">Hat Transaktionen</string>
     <string name="Restore_ZCash_SlowSyncWarningText">Die erste Synchronisation mit der Blockchain kann viel Internet-Verkehr verbrauchen.</string>
+    <string name="ImportCexAccount_SelectCex">Wähle CEX</string>
+    <string name="ImportCexAccount_SelectCexDescription">Wähle eine Centralized Exchange, mit der Du Dich verbinden möchtest.</string>
+    <string name="ImportCexAccountBinance_Description">Bitte gib Deine API-Schlüssel (API Keys and Secrets) ein, damit Du eine direkte Verknüpfung zu Deiner Kryptowährungs-Exchange erstellen kannst.</string>
+    <string name="ImportCexAccountBinance_ApiKey">API-Schlüssel</string>
+    <string name="ImportCexAccountBinance_SecretKey">Geheimer Schlüssel</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
@@ -149,7 +165,7 @@
     <string name="Market_Field_LowestPrice">Niedrigster Preis</string>
     <string name="Market_Sort_PopupTitle">Sortieren nach</string>
     <string name="Market_TotalMarketCap">Total Cap</string>
-    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_BtcDominance">BTC-Dominanz in Prozent</string>
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
@@ -265,11 +281,13 @@
     <string name="TvlRank_Field_Mat">Polygon</string>
     <string name="TvlRank_Filters_PopupTitle">Filter</string>
     <!--Balance-->
+    <string name="Balance_Withdraw">Abheben</string>
     <string name="Balance_Title">Guthaben</string>
     <string name="Balance_Send">Senden</string>
+    <string name="Balance_Deposit">Anfordern</string>
     <string name="Balance_Receive">Empfangen</string>
     <string name="Balance_Address">Adresse</string>
-    <string name="Balance_RatePerCoin">%s pro %s</string>
+    <string name="Balance_RatePerCoin">%1$s pro %2$s</string>
     <string name="Balance_SyncedUntil">bis %s</string>
     <string name="Balance_Syncing">Synchronisieren…</string>
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
@@ -342,8 +360,11 @@
     <string name="Send_FeeRate">Gebührenrate</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <string name="Send_Warning_LowFee">Warnung! Gefahr des Festklemmens</string>
+    <string name="Send_Error_LowFee">Gebührenfehler</string>
+    <string name="Send_Error_LowFee_Description">Die Gebühr ist zu niedrig.</string>
     <string name="Send_Warning_LowFee_Description">Die Transaktion kann festklemmen oder fehlschlagen</string>
-    <string name="Send_Error_FetchFeeRateFailed">Fehler beim Abrufen der Gebührenrate</string>
+    <string name="Send_Error_FetchFeeRateFailed">Gebührenfehler</string>
+    <string name="Send_Error_FetchFeeRateFailed_Description">Die Verbindung zum Server wurde unterbrochen. Um fortzufahren, richten Sie die Gebühren manuell mit den Daten der Site ein.</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Erweitert</string>
     <string name="SendEvmSettings_Nonce">Transaktion Nonce</string>
@@ -358,7 +379,7 @@
     <string name="FeeSettings_Fee">Max Gebühr</string>
     <string name="FeeSettings_Fee_Info">Die geschätzte Transaktionsgebühr, die für diese Transaktion gezahlt werden soll berechnet anhand des Gaslimits, der maximalen Gebührenrate und der unten angegebenen Maximalpriorität. Die tatsächlich gezahlte Gebühr ist in der Regel niedriger.</string>
     <string name="FeeSettings_NetworkFee">Netzwerkgebühr</string>
-    <string name="FeeSettings_NetworkFee_Info">Die geschätzten Kosten für den Versand der Transaktion im Netzwerk.</string>
+    <string name="FeeSettings_NetworkFee_Info">Einschätzung der Kosten für den Versand einer angegebenen Transaktion im Netzwerk.</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Die Transaktionskomplexität wird in Einheiten mit dem Namen \"Gas\" gemessen, die je nach ausgeführten intelligenten Verträgen variieren. Das Gaslimit ist das geschätzte Höchstgas, das benötigt wird, um es auszuführen. Das tatsächliche Gas wird normalerweise niedriger sein.</string>
     <string name="FeeSettings_GasPrice">Gas price (Gwei)</string>
@@ -400,6 +421,7 @@
     <string name="Tron_AddressNotActive_Title">Keine aktive Adresse</string>
     <string name="Tron_AddressNotActive_Info">Neu erstellte Konten in der TRON-Blockchain sind inaktiv und können nicht abgefragt oder untersucht werden. Sie müssen aktiviert werden.\n\nDie Übertragung von TRX- oder TRC-10-Token an eine inaktive Konto-Adresse wird das Konto aktivieren. Zur Aktivierung eines neuen Kontos auf der Tron-Kette ist eine Gebühr von 1 TRX erforderlich</string>
     <string name="Tron_SelfSendTrxNotAllowed">TRX kann nicht auf sich selbst übertragen werden</string>
+    <string name="Tron_ZeroAmountTrxNotAllowed">Kann 0 %s nicht übertragen</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Anforderung</string>
     <string name="WalletConnect_SendRequest_Title">Senden</string>
@@ -505,7 +527,7 @@
     <string name="Swap_PoweredBy">Betrieben durch</string>
     <string name="Swap_SelectSwapProvider_Title">Provider tauschen</string>
     <string name="Swap_AmountEstimated">(est)</string>
-    <string name="Swap_AmountMin">(min)</string>
+    <string name="Swap_AmountMin">(Min.)</string>
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
@@ -672,6 +694,18 @@
     <string name="Settings_RateUs">Bewerten Sie uns</string>
     <string name="Settings_LaunchScreen">Startbildschirm</string>
     <string name="Settings_Appearance">Darstellung</string>
+    <string name="Settings_Contact_ViaTelegram">via Telegramm</string>
+    <string name="Settings_Contact_ViaEmail">per e-Mail</string>
+    <string name="Settings_PersonalSupport">Persönlicher Support</string>
+    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Geben Sie Ihren Telegram-Kontonamen ein, um einen persönlichen Support-Chat mit unserem Team zu starten. Wir werden uns mit Ihnen in Verbindung setzen und anfangen, an Ihrem Problem zu arbeiten, sobald wir es sehen.</string>
+    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Sie haben bereits einen privaten Chat angefordert, finden Sie ihn auf Telegram</string>
+    <string name="Settings_PersonalSupport_Account">Konto</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@Benutzername</string>
+    <string name="Settings_PersonalSupport_Requested">Angefragt</string>
+    <string name="Settings_PersonalSupport_Request">Anforderung</string>
+    <string name="Settings_PersonalSupport_NewRequest">Neue Zahlungsaufforderung</string>
+    <string name="Settings_PersonalSupport_Requestfailed">Anfrage fehlgeschlagen</string>
+    <string name="Settings_PersonalSupport_OpenTelegram">Telegram öffnen</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
     <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>
@@ -806,6 +840,7 @@
     <string name="Hud_Text_EmailAddressCopied">E-Mail-Adresse kopiert</string>
     <string name="Hud_Added_To_Watchlist">Zur Merkliste hinzugefügt</string>
     <string name="Hud_Added_To_Wallet">Zum Wallet hinzugefügt</string>
+    <string name="Hud_Removed_From_Wallet">Removed from Wallet</string>
     <string name="Hud_Already_In_Wallet">Bereits im Wallet enthalten</string>
     <string name="Hud_Removed_from_Watchlist">Aus Merkliste entfernt</string>
     <string name="Hud_Removed">Entfernt</string>
@@ -832,9 +867,11 @@
     <string name="ManageAccounts_WatchAddress">Watch-Adresse</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">aus Datei</string>
-    <string name="ImportWallet_BackupFile_Description">Aus Backup-Datei importieren</string>
+    <string name="ImportWallet_BackupFile_Description">Aus Backup-Datei importieren.</string>
     <string name="ImportWallet_RecoveryPhrase">von Wiederherstellungsphrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Importieren Sie mithilfe der Wiederherstellungsphrase oder des privaten Schlüssels.</string>
+    <string name="ImportWallet_ExchangeWallet">von Exchange Wallet</string>
+    <string name="ImportWallet_ExchangeWallet_Description">Verbinden Sie sich mit einer Brieftasche bei zentralisiertem Austausch.</string>
     <string name="ImportWallet_WatchAddress">Watch-Adresse</string>
     <string name="ImportWallet_WatchAddress_Description">Beobachtung der EVM-Kette sowie der BTC-, LTC- und DASH-Adressen</string>
     <string name="ImportWallet_WarningInvalidJson">Ungültige Json-Datei</string>
@@ -991,7 +1028,7 @@
     <string name="EnalbeToken_EnableKey">Aktivieren</string>
     <!-- Add Token -->
     <string name="AddToken_Title">Token hinzufügen</string>
-    <string name="AddToken_CoinName">Coin Name</string>
+    <string name="AddToken_CoinName">Name der Coin</string>
     <string name="AddToken_Symbol">Symbol</string>
     <string name="AddToken_CoinCode">Münzcode</string>
     <string name="AddToken_Decimals">Dezimalen</string>
@@ -1129,9 +1166,24 @@
     <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
-    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
+    <string name="CoinPage_NftBannerTitle">P.CASH NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding P.CASH NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nnicht gefunden</string>
+    <string name="CoinPage_Indicators">Indicators</string>
+    <string name="CoinPage_MovingAverages">Moving Averages</string>
+    <string name="CoinPage_OscillatorsSettings">Oscillators</string>
+    <string name="CoinPage_EmaSettingsDescription">The EMA, SMA, and WMA are moving averages used in technical analysis:\n\nEMA emphasizes recent prices for quicker reactions.\nSMA averages price data for a general trend view.\nWMA balances sensitivity and noise reduction by linearly weighting recent data.</string>
+    <string name="CoinPage_RsiSettingsDescription">The Relative Strength Index (RSI) is a momentum oscillator that measures price speed and change, identifying overbought (above 70) or oversold (below 30) market conditions. It can also detect price reversals through divergences.</string>
+    <string name="CoinPage_MacdSettingsDescription">The Moving Average Convergence Divergence (MACD) is a momentum indicator that tracks the relationship between two EMAs of a security\'s price. It signals buying or selling opportunities when the MACD line (12-period EMA minus 26-period EMA) crosses the 9-period EMA, known as the signal line.</string>
+    <string name="CoinPage_InsufficientData">Unzureichende Daten</string>
+    <string name="CoinPage_InsufficientDataError">Es gibt nicht genügend Datenpunkte, um den EMA 1-Indikator anzuzeigen. Bitte passen Sie die Zeitspanne an, um eine Ansicht der bewegten Durchschnittslinie zu generieren. Nicht genügend Punkt, um EMA 1 anzuzeigen.</string>
+    <string name="CoinPage_Type">Type</string>
+    <string name="CoinPage_Period">Period</string>
+    <string name="CoinPage_RsiLength">RSI Length</string>
+    <string name="CoinPage_FastLength">Fast Length</string>
+    <string name="CoinPage_SlowLength">Slow Length</string>
+    <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
+    <string name="CoinPage_IndicatorsAlertText">Indicators available only for P.CASH Wallet premium users.</string>
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
@@ -1170,8 +1222,9 @@
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total revenue generated for the token holders over 30-day period. Typically, fees are collected by token stakers or though a token burn mechanism.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_PageLocked">This page available only for P.CASH Wallet premium users</string>
-    <string name="CoinAnalytics_ActivateSubscription">Activate your subscription for getting access to analytics</string>
+    <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
+    <string name="CoinAnalytics_TechIndicators_Info2">Moving Averages (MA): These are commonly used technical indicators that smooth out price data to create a trend-following indicator. They show the average price over a specific time period. There are several types of MAs:\n\nSimple Moving Average (SMA): This calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.\n\nExponential Moving Average (EMA): This gives more weight to recent prices, thereby responding more quickly to recent price changes.</string>
+    <string name="CoinAnalytics_TechIndicators_Info3">Oscillators: These are technical indicators that fluctuate over time within a band (above and below a center line, or between set levels). They are designed to help identify overbought and oversold conditions in a market. Here are some common oscillators:\n\nRelative Strength Index (RSI): This measures the speed and change of price movements. It is usually used to identify overbought or oversold conditions.\n\nMoving Average Convergence Divergence (MACD): This is used to identify potential buy and sell signals. It triggers technical signals when it crosses above (to buy) or below (to sell) its signal line.</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
     <string name="CoinAnalytics_CexVolume">CEX Volume</string>
     <string name="CoinAnalytics_CexVolumeRank">CEX Volume Rank</string>
@@ -1193,9 +1246,12 @@
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total value Locked)</string>
     <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Project Revenue</string>
+    <string name="CoinAnalytics_ProjectFee">Project Fee</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Project Revenue Rank</string>
+    <string name="CoinAnalytics_ProjectFeeRank">Project Fee Rank</string>
     <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
     <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
     <string name="CoinAnalytics_OtherData">Other Data</string>
     <string name="CoinAnalytics_Reports">Reports</string>
@@ -1208,11 +1264,48 @@
     <string name="Coin_Analytics_30DayRank">30-Day Rank</string>
     <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
     <string name="Coin_Analytics_30DayVolume">30-Day Volume</string>
+    <string name="Coin_Analytics_OverallScore">Overall Score</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Excellent</string>
+    <string name="Coin_Analytics_OverallScore_Good">Good</string>
+    <string name="Coin_Analytics_OverallScore_Fair">Fair</string>
+    <string name="Coin_Analytics_OverallScore_Poor">Poor</string>
+    <string name="Coin_Analytics_OverallScore_CexVolume">The overall score is based on the average daily trading volume on centralized exchanges over the last 7 days.</string>
+    <string name="Coin_Analytics_OverallScore_DexVolume">The overall score is based on the average daily trading volume on decentralized exchanges over the last 7 days.</string>
+    <string name="Coin_Analytics_OverallScore_DexLiquidity">The overall score is based on the total available liquidity on decentralized exchanges.</string>
+    <string name="Coin_Analytics_OverallScore_ActiveAddresses">The overall score is based on the average daily active addresses over the last 7 days.</string>
+    <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
+    <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding respective token.</string>
+    <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
+    <string name="Coin_Analytics_Details">Info</string>
+    <string name="Coin_Analytics_SelectPeriod">Select Period</string>
+    <string name="Coin_Analytics_Period_30m">30 minutes</string>
+    <string name="Coin_Analytics_Period_1h">1 Stunde</string>
+    <string name="Coin_Analytics_Period_4h">4 hours</string>
+    <string name="Coin_Analytics_Period_8h">8 hours</string>
+    <string name="Coin_Analytics_Period_1d">1 day</string>
+    <string name="Coin_Analytics_Period_1w">1 week</string>
+    <string name="Coin_Analytics_Indicators_StrongBuy">Strong Buy</string>
+    <string name="Coin_Analytics_Indicators_StrongSell">Strong Sell</string>
+    <string name="Coin_Analytics_Indicators_Sell">Sell</string>
+    <string name="Coin_Analytics_Indicators_Buy">Buy</string>
+    <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
+    <string name="Coin_Analytics_Indicators_NoData">No Data</string>
     <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Wallet">Wallet</string>
     <string name="ActivateSubscription_Address">Adresse</string>
     <string name="ActivateSubscription_MessageToSign">Message to Sign</string>
-    <string name="ActivateSubscription_SignMessageDescription">You need to sign this message to activate your subscription</string>
+    <string name="ActivateSubscription_SignMessageDescription">You need to sign this message to activate your subscription.</string>
+    <string name="ActivateSubscription_NoSubscriptionError">Your wallet address does not have a subscription to premium features, you need to purchase it to activate the subscription.</string>
+    <string name="SubscriptionInfo_Title">Premium-Funktionen</string>
+    <string name="SubscriptionInfo_Analytics_Title">Cryptocurrency Analytics</string>
+    <string name="SubscriptionInfo_Analytics_Info">Greifen Sie auf umfassende Markt- und On-Kettenstatistiken zu jedem Token.</string>
+    <string name="SubscriptionInfo_Indicators_Title">Preis-Trend-Indikatoren</string>
+    <string name="SubscriptionInfo_Indicators_Info">Entdecke hochgelobte Token, die auf technischen Analyseindikatoren basieren.</string>
+    <string name="SubscriptionInfo_PersonalSupport_Title">Persönlicher Support</string>
+    <string name="SubscriptionInfo_PersonalSupport_Info">Kontaktieren Sie unser Team direkt über Telegram für persönliche Hilfe.</string>
+    <string name="SubscriptionInfo_GetPremium">Premium erhalten</string>
+    <string name="SubscriptionInfo_HavePremium">Ich habe bereits Premium</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Durchschnitt 7D</string>
     <string name="Nfts_PriceType_Days_30">Durchschnitt 30D</string>
@@ -1332,6 +1425,7 @@
     <string name="Unlock_BiometricScannerDisabled_Description">Code eingeben oder später erneut versuchen</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Biometrische Auth. deaktiviert</string>
     <string name="Unlock_WalletDisabledUntil">Deaktiviert bis: %s </string>
+    <string name="Unlock_AttemptsLeft">Verbleibende Versuche: %s</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Code festlegen</string>
     <string name="PinSet_Info">Dein Code wird verwendet werden, um deinen Wallet zu entsperren und Geld schicken</string>
@@ -1370,4 +1464,40 @@
     <string name="Contacts_ActionMore">Mehr</string>
     <string name="Contacts_Error_DefinedAddress">Diese Adresse wird bereits für %s verwendet</string>
     <string name="Contacts_Error_DefinedName">Dieser Name existiert bereits</string>
+    <string name="Hud_Text_Connected">Verbunden</string>
+    <!--Cex Deposit Module-->
+    <string name="Cex_ChooseCoin">Coins auswählen</string>
+    <string name="Cex_ChooseNetwork">Netzwerk auswählen</string>
+    <string name="Cex_ChooseNetwork_Description">Wählen Sie ein Netzwerk aus und erhalten Sie eine Adresse zum Einzahlen.</string>
+    <string name="Cex_SelectCoin_Search">Name oder Code</string>
+    <string name="CexDeposit_Title">Auftragen %s</string>
+    <string name="CexDeposit_CopyAddress">Adresse kopieren</string>
+    <string name="CexDeposit_ShareAddress">Adresse teilen</string>
+    <string name="CexDeposit_Memo">Memo (Tag)</string>
+    <string name="CexDeposit_Network">Netzwerk</string>
+    <string name="CexDeposit_AddressDescription">Ihre Adresse für %s</string>
+    <string name="CexDeposit_DepositWarning">Senden Sie nur %s an diese Adresse. Das Senden anderer Arten von Tokens an diese Adresse führt zu ihrem ultimativen Verlust.</string>
+    <string name="CexDeposit_MemoWarning">Memo (Tag) ist erforderlich oder Sie verlieren Ihre Münzen.\n\nSenden Sie nur %s an diese Adresse. Das Senden anderer Arten von Tokens an diese Adresse führt zu ihrem endgültigen Verlust.</string>
+    <string name="CexDeposit_Important">Wichtig</string>
+    <string name="CexDeposit_MemoAlertText">Sowohl eine Memo (Tag) als auch die Adresse werden benötigt, um sicherzustellen, dass Vermögenswerte empfangen werden. Andernfalls gehen Ihre Gelder verloren.</string>
+    <string name="Cex_Error_FailedToConnectApiKey">Verbindung zum API-Schlüssel fehlgeschlagen</string>
+    <!--Cex Withdraw Module-->
+    <string name="CexWithdraw_Title">%s senden</string>
+    <string name="CexWithdraw_Network">Netzwerk</string>
+    <string name="CexWithdraw_FeeFromAmount">Gebühr aus Betrag</string>
+    <string name="CexWithdraw_Fee">Gebühr</string>
+    <string name="CexWithdraw_NetworkDescription">Stellen Sie sicher, dass das Netzwerk mit der Auszahlungsadresse übereinstimmt und die Einzahlungsplattform sie unterstützt, oder es können Vermögenswerte verloren gehen.</string>
+    <string name="CexWithdraw_SecurityVerification">Sicherheitsüberprüfung</string>
+    <string name="CexWithdraw_EmailVerificationCode">Bestätigungscode</string>
+    <string name="CexWithdraw_GoogleAuthenticationCode">Google Authenticator-Code</string>
+    <string name="CexWithdraw_GetCode">Nochmal senden</string>
+    <string name="CexWithdraw_GetCodeSeconds">%s sec</string>
+    <string name="CexWithdraw_EmailVerificationInfo">Gib den Bestätigungscode ein, der an deine E-Mail gesendet wurde.</string>
+    <string name="CexWithdraw_GoogleAuthenticationInfo">Geben Sie den Code aus Ihrer Google Authenticator App ein.</string>
+    <string name="CexWithdraw_Withdraw">Abheben</string>
+    <string name="CexWithdraw_WithdrawSuccess">Erfolgreich</string>
+    <string name="CexWithdraw_Error_NotEnoughBalance">Nicht genügend verfügbares Guthaben</string>
+    <string name="CexWithdraw_Error_MinimumAmount">Der Mindestbetrag, den du abheben kannst, ist %s</string>
+    <string name="CexWithdraw_Error_MaximumAmount">Der maximale Betrag, den du abheben kannst, ist %s</string>
+    <string name="CexWithdraw_Error_WithdrawTitle">Fehler bei Auszahlung</string>
 </resources>

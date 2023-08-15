@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Common-->
+    <string name="Error_ParameterNotSet">لم يتم تحديد الإعدادات</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="Alert_Cancel">إلغاء</string>
+    <string name="Alert_Copy">نسخ</string>
+    <string name="Alert_Close">إغلاق</string>
+    <string name="Alert_Loading">جاري التحميل...</string>
+    <string name="Alert_Restart">إعادة التشغيل</string>
+    <string name="Suspended">معلق</string>
+    <string name="Action_Undo">تراجع</string>
+    <string name="Button_Cancel">إلغاء</string>
+    <string name="Button_Next">التالي</string>
+    <string name="Button_Enable">تمكين</string>
+    <string name="Button_Disable">تعطيل</string>
+    <string name="Button_ScanQr">فحص رمز QR</string>
+    <string name="Button_Close">إغلاق</string>
+    <string name="Button_Ok">حسنًا</string>
+    <string name="Button_Done">تم</string>
+    <string name="Button_Retry">إعادة المحاولة</string>
+    <string name="Button_Change">تغيير</string>
+    <string name="Button_Add">إضافة</string>
+    <string name="Button_Approve">قبول</string>
+    <string name="Button_Confirm">تأكيد</string>
+    <string name="Button_Connect">اتصال</string>
+    <string name="Button_Reject">رفض</string>
+    <string name="Button_Disconnect">قطع الاتصال</string>
+    <string name="Button_Start">البداية</string>
+    <string name="Button_Create">إنشاء</string>
+    <string name="Button_Advanced">إعدادات متقدمة</string>
+    <string name="Button_Restore">استيراد</string>
+    <string name="Button_WatchAddress">تابع عنوانًا</string>
+    <string name="Button_Reset">إعادة تعيين</string>
+    <string name="Button_Reconnect">إعادة الاتصال</string>
+    <string name="Button_Understand">فهمت</string>
+    <string name="Button_Switch">تبديل</string>
+    <string name="Button_Remove">إزالة</string>
+    <string name="Button_Save">حفظ</string>
+    <string name="Button_IAgree">أنا أوافق</string>
+    <string name="Button_Continue">متابعة</string>
+    <string name="Button_Send">إرسال</string>
+    <string name="Button_Search">بحث</string>
+    <string name="Button_Back">رجوع</string>
+    <string name="Button_Copy">نسخ</string>
+    <string name="Button_Browser">المتصفح</string>
+    <string name="Button_Delete">حذف</string>
+    <string name="Button_LearnMore">اعرف المزيد</string>
+    <string name="Button_Activate">تفعيل</string>
+    <string name="Button_Sign">توقيع</string>
+    <string name="Button_Activating">تفعيل</string>
+    <string name="Button_Login">تسجيل دخول</string>
+    <string name="Button_SignUp">إنشاء حساب</string>
+    <string name="Button_Submit">قدِّم</string>
+    <string name="Button_TryAgain">حاول مرة أخرى</string>
+    <string name="Error">خطأ</string>
+    <string name="NotAvailable">غير متوفر</string>
+    <string name="Any">أي واحد</string>
+    <string name="SyncError">خطأ في المزامنة. حاول مرة أخرى</string>
+    <string name="PercentTitle">نسبة مئوية</string>
+    <string name="Keyboard">لوحة المفاتيح</string>
+    <string name="AccountRecovery_Note">ملاحظة</string>
+    <string name="AccountRecovery_MigrationRecommended">يبدو أن هذه المحفظة تستخدم حرف غير قياسي في عبارة الاسترداد و/أو عبارة المرور. إذا كنت لا ترا رصيد أو معاملات يرجى قراءة أدناه للحصول على التفاصيل.\n\nضع علامة للحصول على المزيد من المعلومات</string>
+    <string name="AccountRecovery_MigrationRequired">هذه محفظة غير قياسية. \n\nاضغط للحصول على المزيد من المعلومات</string>
+    <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">كن غير قابل للإيقاف؛ Unstoppable</string>
+    <string name="Intro_Wallet_Screen2Title">أصول خارج السلسلة</string>
+    <string name="Intro_Wallet_Screen2Description">لا تقفل على نفسك ولا تدع الآخرين يفعلون ذلك بك.</string>
+    <string name="Intro_Wallet_Screen3Title">اذهب بلا حدود</string>
+    <string name="Intro_Wallet_Screen3Description">تجاوز الحواجز المشروطة والوصول إلى الأسواق على الصعيد العالمي.</string>
+    <string name="Intro_Wallet_Screen4Title">حافظ على خصوصيتك</string>
+    <string name="Intro_Wallet_Screen4Description">لا تسرب بياناتك الخاصة والمالية إلى العالم.</string>
+    <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">فهمت</string>
+    <!--Welcome-->
+    <string name="Welcome_PrivacySettings">اعدادات الخصوصية</string>
+    <!--Create Wallet-->
+    <string name="CreateWallet_Advanced_Title">إعدادات متقدمة</string>
+    <string name="CreateWallet_Mnemonic">كلمات الاسترجاع</string>
+    <string name="CreateWallet_Wordlist">قائمة الكلمات</string>
+    <string name="Passphrase">عبارة المرور</string>
+    <string name="Password">كلمة المرور</string>
+    <string name="ConfirmPassphrase">تأكيد</string>
+    <string name="CreateWallet_N_WordsRecommended">%s الكلمات (موصى بها)</string>
+    <string name="CreateWallet_N_Words">%s الكلمات</string>
+    <string name="CreateWallet_PassphraseConfirm">تأكيد</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">لا يمكن أن تكون كلمة المرور فارغة</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">الرجاء استخدام الرموز المدعومة فقط: <![CDATA[A-Z a-z 0-9 \' ` & ? :; . , ~ * $ = + - [ ](){} <> \ # @ <unk> % ]]></string>
+    <string name="CreateWallet_Error_InvalidConfirmation">تأكيد عبارة المرور غير مطابق</string>
+    <!--Languages-->
+    <!--Rate App-->
+    <!--Restore-->
+    <string name="Restore_Advanced_Title">إعدادات متقدمة</string>
+    <string name="Restore_Error_EmptyPassphrase">لا يمكن أن تكون كلمة المرور فارغة</string>
+    <string name="Restore_Key">المفتاح</string>
+    <string name="Restore_By">استيراد بواسطة</string>
+    <string name="Restore_RestoreBy">استيراد بواسطة</string>
+    <string name="Restore_RecoveryPhrase">كلمات الاسترجاع</string>
+    <string name="Restore_PrivateKey">المفتاح الخاص</string>
+    <string name="Restore_PrivateKeyHint">أدخل مفتاح EVM الخاص، أو مفتاح روت BIP32 أو المفتاح الخاص الموسع للحساب</string>
+    <string name="Restore_PhraseHint">أدخل كلمات الاسترجاع الخاصة بك</string>
+    <!--Backup-->
+    <!--Market-->
+    <string name="Market_Search">بحث</string>
+    <!--Market Overview-->
+    <!--Market Top Platforms-->
+    <!--Market Global Metrics-->
+    <!--Market Search-->
+    <string name="Market_Search_Hint">بحث</string>
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <!--Coin Markets-->
+    <!--TVL Rank-->
+    <string name="TvlRank_Field_Eth">Ethereum</string>
+    <string name="TvlRank_Field_Bsc">Binance</string>
+    <string name="TvlRank_Field_Sol">Solana</string>
+    <string name="TvlRank_Field_Ava">Avalanche</string>
+    <string name="TvlRank_Field_Mat">Polygon</string>
+    <!--Balance-->
+    <string name="Balance_Send">إرسال</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">إرسال</string>
+    <!--Send-->
+    <string name="Send_Advanced">إعدادات متقدمة</string>
+    <string name="Send_Confirmation_Title">تأكيد</string>
+    <string name="Send_Confirmation_Send_Button">إرسال</string>
+    <string name="Send_DialogProceed">التالي</string>
+    <!-- Send Evm Settings -->
+    <string name="SendEvmSettings_Title">إعدادات متقدمة</string>
+    <!-- Fee Settings -->
+    <string name="FeeSettings_Reset">إعادة تعيين</string>
+    <string name="FeeSettings_Info_IUnderstand">فهمت</string>
+    <!--Fee Info -->
+    <!--Tron-->
+    <!--WalletConnect-->
+    <string name="WalletConnect_SendRequest_Title">إرسال</string>
+    <string name="WalletConnect_ApproveRequest_Title">قبول</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">توقيع</string>
+    <string name="WalletConnect_Note">ملاحظة</string>
+    <string name="WalletConnect_Pairings_Delete">حذف</string>
+    <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Error_Title">خطأ</string>
+    <!--Swap-->
+    <string name="Swap_Proceed">التالي</string>
+    <string name="Swap_Approve">قبول</string>
+    <!-- Swap Settings -->
+    <!-- Swap Confirmation -->
+    <!--Approve-->
+    <string name="Approve_ButtonApprove">قبول</string>
+    <!--Uniswap Info -->
+    <!--Deposit-->
+    <!--Transactions-->
+    <string name="Transactions_Send">إرسال</string>
+    <string name="Transactions_Approve">قبول</string>
+    <!--Transaction Info-->
+    <string name="TransactionInfo_Cancel">إلغاء</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_Cancel_Title">إلغاء</string>
+    <!-- Info -->
+    <!--Guides-->
+    <!--Markdown-->
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Understand">فهمت</string>
+    <!--Settings-->
+    <string name="Settings_PersonalSupport_Account">Account</string>
+    <!-- Blockchain Settings  -->
+    <!-- Privacy  -->
+    <!-- Security Center -->
+    <!--Evm Network-->
+    <!--Add RPC Source-->
+    <!--Btc Blockchain Settings -->
+    <!--Info screen-->
+    <!--Setting_Security-->
+    <!--Setting_Terms-->
+    <!--Setting_Tell Friends-->
+    <string name="SettingsShare_Text">كن غير قابل للإيقاف؛ Unstoppable</string>
+    <!--Setting_Contact-->
+    <!--Setting_Notifications-->
+    <!-- Settings Launch Screen -->
+    <!--Settings-->
+    <!--Errors-->
+    <!--Hud texts-->
+    <string name="Hud_Text_Done">تم</string>
+    <!--Manage Coins-->
+    <!-- Experimental Feature -->
+    <!-- Bitcoin Hodling -->
+    <!-- Testnet Settings -->
+    <!--Manage Accounts-->
+    <!-- Import Wallet -->
+    <string name="ImportWallet_WatchAddress">تابع عنوانًا</string>
+    <!-- Import Backup File -->
+    <!--Manage Account-->
+    <string name="ManageAccount_Save">حفظ</string>
+    <string name="ManageAccount_NWords">%s الكلمات</string>
+    <!--Network Settings-->
+    <!-- Show Key -->
+    <string name="ShowKey_Title">المفتاح</string>
+    <string name="ShowKey_Passphrase">عبارة المرور</string>
+    <string name="ShowKey_ButtonClose">إغلاق</string>
+    <string name="ShowKey_TabMnemonicPhrase">كلمات الاسترجاع</string>
+    <string name="ShowKey_TabPrivateKey">المفتاح الخاص</string>
+    <!-- Backup Recovery Phrase -->
+    <!-- Local Backup -->
+    <!-- Recovery Phrase -->
+    <string name="RecoveryPhrase_Title">كلمات الاسترجاع</string>
+    <!-- Evm Private Key -->
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
+    <string name="ExtendedKey_Purpose">Purpose</string>
+    <string name="ExtendedKey_Account">Account</string>
+    <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_EvmPrivateKey">EVM Private Key</string>
+    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <!-- Public Keys -->
+    <string name="PublicKeys_EvmAddress">EVM Address</string>
+    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
+    <!-- Recovery Phrase Verify -->
+    <!-- Backup Key -->
+    <!--Manage Keys Delete Alert-->
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_CreateKey">إنشاء</string>
+    <!-- Add Token Dialog-->
+    <!-- Enable Token -->
+    <string name="EnalbeToken_EnableKey">تمكين</string>
+    <!-- Add Token -->
+    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
+    <!-- Address Format Settings List -->
+    <!-- Coin Platforms -->
+    <!-- Blockchain Settings -->
+    <!-- Tor -->
+    <!--Coin Page-->
+    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
+    <string name="ActivateSubscription_Title">تفعيل</string>
+    <string name="NftAsset_Action_Save">حفظ</string>
+    <string name="NftAsset_Blockchain">Blockchain</string>
+    <!-- NFT Collection -->
+    <!-- NFT Collection Events -->
+    <string name="NftCollection_EventType_Cancelled">إلغاء</string>
+    <string name="NftCollection_EventType_Approve">قبول</string>
+    <!--Rate list-->
+    <!-- Balance Sync Error -->
+    <string name="BalanceSyncError_ButtonRetry">إعادة المحاولة</string>
+    <!--Release notes-->
+    <string name="Hud_Text_Activate">تفعيل</string>
+    <!--Widget-->
+    <!--Alert-->
+    <!--OS Pin-->
+    <!--Unlock-->
+    <!--Set Pin-->
+    <string name="PinSet_ConfirmInfo">تأكيد</string>
+    <!--Edit Pin-->
+    <!--Biometric Auth texts-->
+    <!--Contacts-->
+    <!--Cex Deposit Module-->
+    <!--Cex Withdraw Module-->
+</resources>
