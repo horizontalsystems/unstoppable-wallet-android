@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -45,7 +46,7 @@ object SwapMainModule {
     )
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val tokenFrom: Token? = arguments.getParcelable(tokenFromKey)
+        private val tokenFrom: Token? = arguments.parcelable(tokenFromKey)
         private val swapProviders: List<ISwapProvider> = listOf(
             UniswapProvider,
             UniswapV3Provider,

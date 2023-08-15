@@ -39,6 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class BackupRecoveryPhraseDialog : BaseComposableBottomSheetFragment() {
 
@@ -52,7 +53,7 @@ class BackupRecoveryPhraseDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val account = requireArguments().getParcelable<Account>(accountKey)!!
+                val account = requireArguments().parcelable<Account>(accountKey)!!
                 BackupRecoveryPhraseScreen(findNavController(), account)
             }
         }

@@ -13,7 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -34,6 +38,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 
 class SyncErrorDialog : BaseComposableBottomSheetFragment() {
     private val error by lazy {
@@ -41,7 +46,7 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
     }
 
     private val wallet by lazy {
-        requireArguments().getParcelable<Wallet>(walletKey)
+        requireArguments().parcelable<Wallet>(walletKey)
     }
 
     override fun onCreateView(

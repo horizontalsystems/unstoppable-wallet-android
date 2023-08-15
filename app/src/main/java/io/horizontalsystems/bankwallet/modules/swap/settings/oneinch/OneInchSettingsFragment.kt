@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAc
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 import java.math.BigDecimal
 
@@ -62,11 +63,11 @@ class OneInchSettingsFragment : BaseFragment() {
     }
 
     private val dex by lazy {
-        requireArguments().getParcelable<SwapMainModule.Dex>(dexKey)
+        requireArguments().parcelable<SwapMainModule.Dex>(dexKey)
     }
 
     private val address by lazy {
-        requireArguments().getParcelable<Address>(addressKey)
+        requireArguments().parcelable<Address>(addressKey)
     }
 
     private val slippage by lazy {

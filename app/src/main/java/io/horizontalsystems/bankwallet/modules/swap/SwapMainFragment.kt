@@ -67,6 +67,7 @@ import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.*
 import kotlinx.coroutines.launch
 
@@ -409,7 +410,7 @@ private fun TopMenu(
             icon = R.drawable.ic_manage_2,
             onClick = {
                 navController.getNavigationResult(SwapMainModule.resultKey) {
-                    val recipient = it.getParcelable<Address>(SwapMainModule.swapSettingsRecipientKey)
+                    val recipient = it.parcelable<Address>(SwapMainModule.swapSettingsRecipientKey)
                     val slippage = it.getString(SwapMainModule.swapSettingsSlippageKey)
                     val ttl = it.getLong(SwapMainModule.swapSettingsTtlKey)
                     viewModel.onUpdateSwapSettings(recipient, slippage?.toBigDecimal(), ttl)

@@ -4,7 +4,11 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidgetManager
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import java.time.Duration
 
 class MarketWidgetWorker(
@@ -22,7 +26,7 @@ class MarketWidgetWorker(
 
             manager.enqueueUniquePeriodicWork(
                 workName,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 requestBuilder.build()
             )
         }

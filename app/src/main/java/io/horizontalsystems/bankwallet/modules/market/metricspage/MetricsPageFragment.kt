@@ -36,11 +36,12 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class MetricsPageFragment : BaseFragment() {
 
     private val metricsType by lazy {
-        requireArguments().getParcelable<MetricsType>(METRICS_TYPE_KEY)
+        requireArguments().parcelable<MetricsType>(METRICS_TYPE_KEY)
     }
 
     override fun onCreateView(

@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 
 class PrivateKeysFragment : BaseFragment() {
 
@@ -49,7 +50,7 @@ class PrivateKeysFragment : BaseFragment() {
             )
             try {
                 setContent {
-                    val account: Account = arguments?.getParcelable(ACCOUNT_KEY)
+                    val account: Account = arguments?.parcelable(ACCOUNT_KEY)
                         ?: throw IllegalArgumentException("Account parameter is missing")
                     ManageAccountScreen(findNavController(), account)
                 }

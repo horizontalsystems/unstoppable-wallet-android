@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.LocalMinimumTouchTargetEnforcement
+import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.runtime.Composable
@@ -17,7 +17,7 @@ fun HsSwitch(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ){
-    CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+    CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
         Switch(
             modifier = modifier,
             checked = checked,

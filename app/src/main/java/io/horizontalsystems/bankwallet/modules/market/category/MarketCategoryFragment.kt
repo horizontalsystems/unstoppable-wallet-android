@@ -26,14 +26,14 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.CoinCategory
+import io.horizontalsystems.core.parcelable
 
 class MarketCategoryFragment : BaseFragment() {
 
@@ -44,7 +44,7 @@ class MarketCategoryFragment : BaseFragment() {
     ): View {
 
         val factory = MarketCategoryModule.Factory(
-            arguments?.get(categoryKey) as CoinCategory
+            arguments?.parcelable(categoryKey)!!
         )
 
         val chartViewModel by viewModels<ChartViewModel> { factory }

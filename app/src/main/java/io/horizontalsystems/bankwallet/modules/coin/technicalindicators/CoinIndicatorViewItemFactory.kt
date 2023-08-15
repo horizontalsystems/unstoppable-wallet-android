@@ -64,8 +64,8 @@ class CoinIndicatorViewItemFactory {
         return items.map { item ->
             SectionViewItem(
                 item.name,
-                item.items.map { item ->
-                    DetailViewItem(item.name, item.advice)
+                item.items.map {
+                    DetailViewItem(it.name, it.advice)
                 }
             )
         }

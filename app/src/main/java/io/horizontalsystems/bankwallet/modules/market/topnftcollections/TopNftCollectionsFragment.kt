@@ -36,15 +36,16 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class TopNftCollectionsFragment : BaseFragment() {
 
     private val sortingField by lazy {
-        arguments?.getParcelable<SortingField>(sortingFieldKey)!!
+        arguments?.parcelable<SortingField>(sortingFieldKey)!!
     }
     private val timeDuration by lazy {
-        arguments?.getParcelable<TimeDuration>(timeDurationKey)!!
+        arguments?.parcelable<TimeDuration>(timeDurationKey)!!
     }
     val viewModel by viewModels<TopNftCollectionsViewModel> {
         TopNftCollectionsModule.Factory(sortingField, timeDuration)

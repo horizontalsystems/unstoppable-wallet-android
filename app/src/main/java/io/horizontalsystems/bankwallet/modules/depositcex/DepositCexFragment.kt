@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.providers.CexDepositNetwork
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.parcelable
 
 class DepositCexFragment : BaseFragment() {
 
@@ -35,8 +36,8 @@ class DepositCexFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val cexAsset = arguments?.getParcelable<CexAsset>("cexAsset")
-        val network = arguments?.getParcelable<CexDepositNetwork>("cexDepositNetwork")
+        val cexAsset = arguments?.parcelable<CexAsset>("cexAsset")
+        val network = arguments?.parcelable<CexDepositNetwork>("cexDepositNetwork")
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
