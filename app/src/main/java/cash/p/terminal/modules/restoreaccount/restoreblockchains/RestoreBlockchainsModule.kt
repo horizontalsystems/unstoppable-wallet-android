@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.modules.enablecoin.EnableCoinService
 import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensService
 import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
@@ -26,9 +25,6 @@ object RestoreBlockchainsModule {
         private val coinTokensService by lazy {
             CoinTokensService()
         }
-        private val enableCoinService by lazy {
-            EnableCoinService(coinTokensService, restoreSettingsService)
-        }
 
         private val restoreSelectCoinsService by lazy {
             RestoreBlockchainsService(
@@ -40,9 +36,10 @@ object RestoreBlockchainsModule {
                 App.accountManager,
                 App.walletManager,
                 App.marketKit,
-                enableCoinService,
                 App.evmBlockchainManager,
-                App.tokenAutoEnableManager
+                App.tokenAutoEnableManager,
+                coinTokensService,
+                restoreSettingsService
             )
         }
 
