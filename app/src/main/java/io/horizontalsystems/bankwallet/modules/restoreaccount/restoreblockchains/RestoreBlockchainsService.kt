@@ -128,7 +128,7 @@ class RestoreBlockchainsService(
             restoreSettingsMap[platformCoin] = restoreSettings
         }
 
-        val existingTokens = enabledTokens.filter { it == platformCoin }
+        val existingTokens = enabledTokens.filter { tokens.contains(it) }
         val newTokens = tokens.minus(existingTokens)
         val removedTokens = existingTokens.minus(tokens)
 
