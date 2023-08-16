@@ -56,6 +56,7 @@
     <string name="Button_SignUp">注册</string>
     <string name="Button_Submit">提交</string>
     <string name="Button_TryAgain">再试一次</string>
+    <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
@@ -704,6 +705,9 @@
     <string name="Settings_PersonalSupport_NewRequest">新建请求</string>
     <string name="Settings_PersonalSupport_Requestfailed">请求失败</string>
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
+    <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
+    <string name="Settings_Donate">捐助</string>
+    <string name="Settings_Donate_CoinAddress">%s 地址</string>
     <string name="Appearance_Theme">主题</string>
     <string name="Appearance_Tab">TAB设置</string>
     <string name="Appearance_LaunchScreen">局域网SCREEN</string>
@@ -845,6 +849,14 @@
     <string name="ManageCoins_Search">姓名、代码或合同地址</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_NoResults">找不到结果。如果您知道智能合约地址，请尝试手动添加代币。</string>
+    <string name="ManageCoins_BipsDescription">有四种常见的地址格式 %1$s 钱包可以用来接收收到的付款：
+\n
+\n- BIP-44 (老)
+\n- BIP-49
+\n- BIP-84 (推荐)
+\n- BIP-86 (新建)
+\n
+\n虽然无法阻挡的钱包支持他们中的所有4个，但它建议使用 BIP-84 格式操作的 %2$s 钱包。 以此格式操作的钱包在发送 %3$s 交易时可以支付最低费用。</string>
     <string name="ManageCoins_BchTypeDescription">有2种比特币现金钱包可用于接收应收款的常见地址格式：\n\n- TYPE 0（较旧）\n- TYPE 145（较新）\n\n虽然Unstoppable钱包支持全部两种格式，但是我们建议使用以TYPE 145格式运作的比特币现金钱包。</string>
     <string name="ManageCoins_ContractAddress">联系地址</string>
     <!-- Experimental Feature -->
@@ -1156,6 +1168,7 @@
     <string name="CoinPage_Contract">%s 合约</string>
     <string name="CoinPage_Bep2Symbol">BEP2 符号</string>
     <string name="CoinPage_MajorHolders_TopWallets">排名地址</string>
+    <string name="CoinPage_MajorHolders_Description">上图显示了前 10 名钱包持有的所有流通代币的\%%。 \%% 越低，硬币的分布越广泛。</string>
     <string name="CoinPage_MajorHolders_InTopWallets">在前10名持有者中</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">持有者总数：%s</string>
     <string name="CoinPage_CoinInvestments_Lead">领投</string>
