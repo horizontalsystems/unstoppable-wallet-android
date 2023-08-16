@@ -313,9 +313,13 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 }
 
 val TokenType.order: Int
-    get() = when (this) {
-        TokenType.Native -> 0
-        else -> Int.MAX_VALUE
+    get() {
+        return when (this) {
+            TokenType.Native -> 0
+            is TokenType.Derived -> derivation.accountTypeDerivation.ordinal
+            is TokenType.AddressTyped -> type.bitcoinCashCoinType.ordinal
+            else -> Int.MAX_VALUE
+        }
     }
 
 
@@ -433,4 +437,18 @@ val BlockchainType.nativeTokenQueries: List<TokenQuery>
         else -> {
             listOf(TokenQuery(this, TokenType.Native))
         }
+    }
+
+val TokenType.title: String
+    get() = when (this) {
+        is TokenType.Derived -> derivation.accountTypeDerivation.rawName
+        is TokenType.AddressTyped -> Translator.getString(type.bitcoinCashCoinType.title)
+        else -> ""
+    }
+
+val TokenType.description: String
+    get() = when (this) {
+        is TokenType.Derived -> derivation.accountTypeDerivation.addressType
+        is TokenType.AddressTyped -> Translator.getString(type.bitcoinCashCoinType.description)
+        else -> ""
     }
