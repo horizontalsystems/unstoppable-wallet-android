@@ -826,6 +826,10 @@
     <string name="Settings_PersonalSupport_Requestfailed">Request failed</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Open Telegram</string>
 
+    <string name="Settings_Donate_Info">Together, with your support, we can make this app even better!</string>
+    <string name="Settings_Donate">Donate</string>
+    <string name="Settings_Donate_CoinAddress">%s address</string>
+
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_Tab">TAB SETTINGS</string>
     <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
