@@ -1,33 +1,26 @@
 package cash.p.terminal.modules.enablecoin.coinplatforms
 
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
 class CoinTokensService {
-    val approveTokensObservable = PublishSubject.create<CoinWithTokens>()
-    val rejectApproveTokensObservable = PublishSubject.create<io.horizontalsystems.marketkit.models.FullCoin>()
+    val approveTokensObservable = PublishSubject.create<BlockchainWithTokens>()
+    val rejectApproveTokensObservable = PublishSubject.create<Blockchain>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveTokens(fullCoin: io.horizontalsystems.marketkit.models.FullCoin, currentTokens: List<Token> = listOf(), allowEmpty: Boolean = false) {
-        requestObservable.onNext(Request(fullCoin, currentTokens, allowEmpty))
+    fun approveTokens(blockchain: Blockchain, tokens: List<Token>, enabledTokens: List<Token>, allowEmpty: Boolean = false) {
+        requestObservable.onNext(Request(blockchain, tokens, enabledTokens, allowEmpty))
     }
 
-    fun select(tokens: List<Token>, coin: io.horizontalsystems.marketkit.models.Coin) {
-        approveTokensObservable.onNext(CoinWithTokens(coin, tokens))
+    fun select(tokens: List<Token>, blockchain: Blockchain) {
+        approveTokensObservable.onNext(BlockchainWithTokens(blockchain, tokens))
     }
 
-    fun cancel(fullCoin: io.horizontalsystems.marketkit.models.FullCoin) {
-        rejectApproveTokensObservable.onNext(fullCoin)
+    fun cancel(blockchain: Blockchain) {
+        rejectApproveTokensObservable.onNext(blockchain)
     }
 
-    data class CoinWithTokens(
-        val coin: io.horizontalsystems.marketkit.models.Coin,
-        val tokens: List<Token> = listOf()
-    )
-
-    data class Request(
-        val fullCoin: io.horizontalsystems.marketkit.models.FullCoin,
-        val currentTokens: List<Token>,
-        val allowEmpty: Boolean
-    )
+    data class BlockchainWithTokens(val blockchain: Blockchain, val tokens: List<Token>)
+    data class Request(val blockchain: Blockchain, val tokens: List<Token>, val enabledTokens: List<Token>, val allowEmpty: Boolean)
 }

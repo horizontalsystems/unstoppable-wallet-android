@@ -210,6 +210,7 @@ sealed class AccountType : Parcelable {
             }
 
         companion object {
+            val default = bip84
             private val map = values().associateBy(Derivation::value)
 
             fun fromString(value: String?): Derivation? = map[value]
