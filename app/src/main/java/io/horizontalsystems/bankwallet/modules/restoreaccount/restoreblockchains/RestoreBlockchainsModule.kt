@@ -36,7 +36,6 @@ object RestoreBlockchainsModule {
                 App.accountManager,
                 App.walletManager,
                 App.marketKit,
-                App.evmBlockchainManager,
                 App.tokenAutoEnableManager,
                 blockchainTokensService,
                 restoreSettingsService
