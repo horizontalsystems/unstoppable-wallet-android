@@ -431,3 +431,10 @@ val TokenType.description: String
         is TokenType.AddressTyped -> Translator.getString(type.bitcoinCashCoinType.description)
         else -> ""
     }
+
+val TokenType.isDefault
+    get() = when (this) {
+        is TokenType.Derived -> derivation.accountTypeDerivation == AccountType.Derivation.default
+        is TokenType.AddressTyped -> type.bitcoinCashCoinType == BitcoinCashCoinType.default
+        else -> false
+    }

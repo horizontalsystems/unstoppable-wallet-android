@@ -22,6 +22,7 @@ enum class BitcoinCashCoinType(val value: String) {
         }
 
         companion object {
+            val default = type145
             private val map = values().associateBy(BitcoinCashCoinType::value)
 
             fun fromString(value: String?): BitcoinCashCoinType? = map[value]
