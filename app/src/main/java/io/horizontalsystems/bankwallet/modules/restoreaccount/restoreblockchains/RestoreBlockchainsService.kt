@@ -10,16 +10,20 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.core.order
+import io.horizontalsystems.bankwallet.core.restoreSettingTypes
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.supportedTokens
 import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -33,9 +37,10 @@ class RestoreBlockchainsService(
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
-    private val enableCoinService: EnableCoinService,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val tokenAutoEnableManager: TokenAutoEnableManager
+    private val tokenAutoEnableManager: TokenAutoEnableManager,
+    private val coinTokensService: CoinTokensService,
+    private val restoreSettingsService: RestoreSettingsService
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
@@ -76,17 +81,29 @@ class RestoreBlockchainsService(
     )
 
     init {
-        enableCoinService.enableCoinObservable
-            .subscribeIO { (tokens, settings) ->
-                handleEnableCoin(tokens, settings)
-            }.let {
-                disposables.add(it)
+        coinTokensService.approveTokensObservable
+            .subscribeIO {
+                handleEnableCoin(it.tokens, RestoreSettings())
             }
+            .let { disposables.add(it) }
 
-        enableCoinService.cancelEnableCoinObservable
-            .subscribeIO { fullCoin ->
-                handleCancelEnable(fullCoin)
-            }.let { disposables.add(it) }
+        coinTokensService.rejectApproveTokensObservable
+            .subscribeIO {
+                handleCancelEnable(it)
+            }
+            .let { disposables.add(it) }
+
+        restoreSettingsService.approveSettingsObservable
+            .subscribeIO {
+                handleEnableCoin(listOf(it.token), it.settings)
+            }
+            .let { disposables.add(it) }
+
+        restoreSettingsService.rejectApproveSettingsObservable
+            .subscribeIO {
+                handleCancelEnable(it.fullCoin)
+            }
+            .let { disposables.add(it) }
 
         syncInternalItems()
         syncState()
@@ -160,7 +177,27 @@ class RestoreBlockchainsService(
     fun enable(blockchain: Blockchain) {
         val tokens = tokens.filter { it.blockchain == blockchain }
         val token = tokens.firstOrNull() ?: return
-        enableCoinService.enable(FullCoin(token.coin, tokens))
+        val fullCoin = FullCoin(token.coin, tokens)
+
+        val supportedTokens = fullCoin.supportedTokens
+        if (supportedTokens.size == 1) {
+            val supportedToken = supportedTokens.first()
+            when {
+                supportedToken.blockchainType.restoreSettingTypes.isNotEmpty() -> {
+                    restoreSettingsService.approveSettings(supportedToken)
+                }
+
+                supportedToken.type != TokenType.Native -> {
+                    coinTokensService.approveTokens(fullCoin)
+                }
+
+                else -> {
+                    handleEnableCoin(listOf(supportedToken), RestoreSettings())
+                }
+            }
+        } else {
+            coinTokensService.approveTokens(fullCoin)
+        }
     }
 
     fun disable(blockchain: Blockchain) {
@@ -175,7 +212,7 @@ class RestoreBlockchainsService(
         val enabledTokens = enabledTokens.filter { it.blockchain == blockchain }
         val token = tokens.firstOrNull() ?: return
 
-        enableCoinService.configure(FullCoin(token.coin, tokens), enabledTokens)
+        coinTokensService.approveTokens(FullCoin(token.coin, tokens), enabledTokens, true)
     }
 
     fun restore() {
@@ -183,7 +220,7 @@ class RestoreBlockchainsService(
         accountManager.save(account)
 
         restoreSettingsMap.forEach { (token, settings) ->
-            enableCoinService.save(settings, account, token.blockchainType)
+            restoreSettingsService.save(settings, account, token.blockchainType)
         }
 
         items.filter { it.enabled }.forEach { item ->
