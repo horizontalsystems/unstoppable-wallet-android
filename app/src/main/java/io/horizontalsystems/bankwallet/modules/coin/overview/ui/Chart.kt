@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -47,7 +48,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -69,12 +74,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.formatValueAsDiff
 import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_issykBlue
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.launch
+
+private const val MAX_WIDTH = 600
 
 @Composable
 fun HsChartLineHeader(
@@ -149,6 +155,7 @@ fun HsChartLineHeader(
                         )
                     }
                 }
+
                 is ChartModule.ChartHeaderExtraData.Dominance -> {
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                         subhead2_grey(
@@ -176,16 +183,41 @@ fun HsChartLineHeader(
                 }
 
                 is ChartModule.ChartHeaderExtraData.Indicators -> {
-                    Column(modifier = Modifier.width(IntrinsicSize.Max), horizontalAlignment = Alignment.End) {
+                    val styleSubhead = ComposeAppTheme.typography.subhead2
+                    Column(
+                        modifier = Modifier.width(IntrinsicSize.Max),
+                        horizontalAlignment = Alignment.End
+                    ) {
                         Row {
-                            extraData.movingAverages.forEach {
-                                HSpacer(width = 4.dp)
-                                Text(
-                                    text = App.numberFormatter.formatFiatShort(it.value.toBigDecimal(), "", 8),
-                                    color = Color(it.color),
-                                    style = ComposeAppTheme.typography.subhead2
-                                )
-                            }
+                            var textStyle by remember { mutableStateOf(styleSubhead) }
+                            var readyToDraw by remember { mutableStateOf(false) }
+                            var textSize by remember { mutableStateOf<IntSize?>(null) }
+                            Text(
+                                text = buildAnnotatedString {
+                                    extraData.movingAverages.forEachIndexed { index, item ->
+                                        withStyle(style = SpanStyle(color = Color(item.color))) {
+                                            append(item.value.plainString())
+                                            if (index < extraData.movingAverages.size - 1) {
+                                                append(" ")
+                                            }
+                                        }
+                                    }
+                                },
+                                style = textStyle,
+                                modifier = Modifier.drawWithContent {
+                                    if (readyToDraw) drawContent()
+                                },
+                                onTextLayout = { textLayoutResult ->
+                                    textSize = textLayoutResult.size
+                                    textSize?.let { size ->
+                                        if (size.width > MAX_WIDTH) {
+                                            textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.9)
+                                        } else {
+                                            readyToDraw = true
+                                        }
+                                    }
+                                }
+                            )
                         }
 
                         if (extraData.rsi != null) {
@@ -193,24 +225,42 @@ fun HsChartLineHeader(
                         } else if (extraData.macd != null) {
                             val macd = extraData.macd
                             Row {
-                                macd.histogramValue?.let { value ->
-                                    val color = if (value >= 0) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
-                                    HSpacer(width = 4.dp)
-                                    Text(
-                                        text = value.plainString(),
-                                        color = color,
-                                        style = ComposeAppTheme.typography.subhead2
-                                    )
-                                }
-                                macd.signalValue?.let { value ->
-                                    HSpacer(width = 4.dp)
-                                    subhead2_issykBlue(
-                                        text = value.plainString()
-                                    )
-                                }
-                                HSpacer(width = 4.dp)
-                                subhead2_jacob(
-                                    text = macd.macdValue.plainString()
+                                var textStyle by remember { mutableStateOf(styleSubhead) }
+                                var readyToDraw by remember { mutableStateOf(false) }
+                                var textSize by remember { mutableStateOf<IntSize?>(null) }
+                                Text(
+                                    text = buildAnnotatedString {
+                                        macd.histogramValue?.let { value ->
+                                            val color = if (value >= 0) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
+                                            withStyle(style = SpanStyle(color = color)) {
+                                                append(value.plainString())
+                                                append(" ")
+                                            }
+                                        }
+                                        macd.signalValue?.let { value ->
+                                            withStyle(style = SpanStyle(color = ComposeAppTheme.colors.issykBlue)) {
+                                                append(value.plainString())
+                                                append(" ")
+                                            }
+                                        }
+                                        withStyle(style = SpanStyle(color = ComposeAppTheme.colors.jacob)) {
+                                            append(macd.macdValue.plainString())
+                                        }
+                                    },
+                                    style = textStyle,
+                                    modifier = Modifier.drawWithContent {
+                                        if (readyToDraw) drawContent()
+                                    },
+                                    onTextLayout = { textLayoutResult ->
+                                        textSize = textLayoutResult.size
+                                        textSize?.let { size ->
+                                            if (size.width > MAX_WIDTH) {
+                                                textStyle = textStyle.copy(fontSize = textStyle.fontSize * 0.9)
+                                            } else {
+                                                readyToDraw = true
+                                            }
+                                        }
+                                    }
                                 )
                             }
                         }
@@ -221,7 +271,7 @@ fun HsChartLineHeader(
     }
 }
 
-fun Float.plainString() : String {
+fun Float.plainString(): String {
     return App.numberFormatter.format(this, 0, 8)
 }
 
@@ -266,6 +316,7 @@ fun Chart(
                         subhead2_grey(text = stringResource(id = R.string.SyncError))
                     }
                 }
+
                 ViewState.Loading -> Unit
                 ViewState.Success -> {
                     Column {
@@ -418,6 +469,7 @@ fun PriceVolChart(
                                 selectedItem?.timestamp,
                             )
                         }
+
                         ChartViewType.Bar -> {
                             val color = if (selectedItem == null) {
                                 chartHelper.mainBarsColor
