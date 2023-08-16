@@ -56,6 +56,7 @@
     <string name="Button_SignUp">Üye olmak</string>
     <string name="Button_Submit">Onayla</string>
     <string name="Button_TryAgain">Tekrar deneyin</string>
+    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
@@ -708,6 +709,9 @@
     <string name="Settings_PersonalSupport_NewRequest">New Request</string>
     <string name="Settings_PersonalSupport_Requestfailed">Request failed</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Open Telegram</string>
+    <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
+    <string name="Settings_Donate">Bağış yapmak</string>
+    <string name="Settings_Donate_CoinAddress">%s adresi</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">TAB AYARLARI</string>
     <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
@@ -845,6 +849,14 @@
     <string name="ManageCoins_Search">Ad, kod veya sözleşme adresi</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
+    <string name="ManageCoins_BipsDescription">%1$s cüzdanının gelen ödemeleri almak için kullanabileceği 4 yaygın adres biçimi vardır:
+\n
+\n- BIP-44 (eski)
+\n- BİP-49
+\n- BIP-84 (önerilen)
+\n- BIP-86 (en yeni)
+\n
+\nDurdurulamaz cüzdan 4 tanesini de desteklerken, BIP-84 formatında çalışan bir %2$s cüzdanı kullanmanızı önerir. Bu biçimde çalışan cüzdanlar, %3$s işlemi gönderirken en düşük ücreti öderler.</string>
     <string name="ManageCoins_BchTypeDescription">Bitcoin Cash cüzdanlarının gelen ödemeleri almak için kullanabileceği 2 adres formatı vardır: 
 \n 
 \n- TYPE0 (eski) 
@@ -1161,6 +1173,7 @@
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
+    <string name="CoinPage_MajorHolders_Description">Yukarıdaki grafik, ilk 10 cüzdan tarafından tutulan dolaşımdaki tüm tokenlerin \%%\'sini göstermektedir. \%% ne kadar düşük olursa, madeni para o kadar fazla dağıtılır.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">ilk 10 sahibinde</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Toplam Sahip: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
