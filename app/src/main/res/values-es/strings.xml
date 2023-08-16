@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parámetro no establecido</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Alert_Close">Cerrar</string>
@@ -302,7 +302,7 @@
     <string name="Balance_Hidden">oculto</string>
     <string name="Balance_DownloadingBlocks">Descargando bloques</string>
     <string name="Balance_ScanningBlocks">Bloques de escaneo</string>
-    <string name="Balance_Backup_Alert">Necesita respaldar el monedero %1$s antes de poder recibir %2$s.</string>
+    <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <string name="Balance_NoWalletAlert">Aún no tiene ninguna cartera instalada.\nCrear una nueva cartera o restaurar una existente </string>
     <string name="Balance_NoCoinsAlert">No tienes monedas añadidas.\nAñade las monedas que usarás</string>
     <string name="Balance_WatchAccount_NoBalance">Esta dirección de billetera no tiene saldo</string>
@@ -357,7 +357,7 @@
     <string name="Send_LockTime_Year">1 año</string>
     <string name="Send_Sending">Enviando</string>
     <string name="Send_FeeRate">Tasa de comisión</string>
-    <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %1$s (%2$s) pagado en %3$s. Es necesario %4$s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <string name="Send_Warning_LowFee">¡Advertencia! Riesgo de atascarse</string>
     <string name="Send_Error_LowFee">Error de tarifa</string>
     <string name="Send_Error_LowFee_Description">La tarifa es demasiado baja.</string>
@@ -709,6 +709,9 @@
     <string name="Settings_PersonalSupport_NewRequest">Nueva requisición</string>
     <string name="Settings_PersonalSupport_Requestfailed">Error en la solicitud</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
+    <string name="Settings_Donate_Info">¡Junto con tu apoyo, podemos hacer esta aplicación aún mejor!</string>
+    <string name="Settings_Donate">Donar</string>
+    <string name="Settings_Donate_CoinAddress">Dirección %s</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">ESPECIALES DE OBJETO</string>
     <string name="Appearance_LaunchScreen">ACTUALIZAR SCREEN</string>
@@ -849,7 +852,14 @@
     <string name="ManageCoins_Search">Nombre, código o dirección del contrato</string>
     <string name="ManageCoins_AddToken">Añadir Token</string>
     <string name="ManageCoins_NoResults">No se han encontrado resultados. Intente añadir un token manualmente si conoce su dirección de contrato inteligente.</string>
-    <string name="ManageCoins_BipsDescription">Hay 4 formatos de dirección comunes que %1$s monederos pueden usar para recibir pagos entrantes:\n\n- BIP44 (más antiguo)\n- BIP49 (más reciente)\n- BIP84 (recomendado)\n- BIP86 (más reciente)\n\nMientras que el monedero imparable soporta todos los 4 se recomienda usar un monedero %2$s que opere en formato BIP84.</string>
+    <string name="ManageCoins_BipsDescription">Hay 4 formatos de dirección comunes de monederos %1$s que pueden usar para recibir pagos entrantes:
+\n
+\n- BIP-44 (más antiguo)
+\n- BIP-49
+\n- BIP-84 (recomendado)
+\n- BIP-86 (más reciente)
+\n
+\nMientras que el monedero imparable soporta todos los 4 de ellos recomienda usar un monedero %2$s que opere en formato BIP-84. Las billeteras que operan en este formato pueden pagar las comisiones más bajas al enviar transacciones %3$s.</string>
     <string name="ManageCoins_BchTypeDescription">Hay 2 formatos de dirección de las carteras Bitcoin Cash pueden usar para recibir pagos entrantes:\n\n- TYPE 0 (más antiguo)\n- TYPE 145 (más reciente)\n\nMientras que el monedero imparable soporta ambos se recomienda usar un monedero Bitcoin Cash que funcione en formato TYPE 145.</string>
     <string name="ManageCoins_ContractAddress">AÑADIR CONTRACTO</string>
     <!-- Experimental Feature -->
@@ -1161,7 +1171,7 @@
     <string name="CoinPage_Contract">Contrato de %s</string>
     <string name="CoinPage_Bep2Symbol">Símbolo BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Mejores Monederos</string>
-    <string name="CoinPage_MajorHolders_Description">El gráfico anterior muestra el \%% de todos los tokens en circulación retenidos por los 10 Monderos más importantes. Cuanto más bajo sea el \%%, más distribuída se encontrará la moneda.</string>
+    <string name="CoinPage_MajorHolders_Description">La tabla anterior muestra el \%% de todos los tokens en circulación sostenidos por los 10 mejores monederos. Cuanto más bajo sea el \%% más distribuida está la moneda.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">en los 10 mejores poseedores</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Total de tenedores: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Plomo</string>
