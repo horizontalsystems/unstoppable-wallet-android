@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,8 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
@@ -44,11 +50,14 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
@@ -252,6 +261,14 @@ private fun SettingSections(
         }
     )
 
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf {
+            DonateBlock { navController.slideFromRight(R.id.donateFragment) }
+        }
+    )
+
     Spacer(Modifier.height(32.dp))
 }
 
@@ -343,6 +360,50 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
             modifier = Modifier.padding(top = 12.dp, bottom = 32.dp),
             text = stringResource(R.string.Settings_CompanyName),
         )
+    }
+}
+
+@Composable
+private fun DonateBlock(
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        VSpacer(32.dp)
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(
+                    color = ComposeAppTheme.colors.steel10,
+                    shape = CircleShape,
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(R.drawable.ic_heart_48),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.jacob
+            )
+        }
+        VSpacer(32.dp)
+        headline2_leah(
+            modifier = Modifier.padding(horizontal = 32.dp),
+            text = stringResource(R.string.Settings_Donate_Info),
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+        )
+        VSpacer(32.dp)
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            title = stringResource(R.string.Settings_Donate),
+            onClick = onClick,
+        )
+        VSpacer(32.dp)
     }
 }
 
