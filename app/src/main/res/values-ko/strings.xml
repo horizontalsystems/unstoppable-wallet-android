@@ -56,6 +56,7 @@
     <string name="Button_SignUp">회원가입</string>
     <string name="Button_Submit">제출하기</string>
     <string name="Button_TryAgain">다시 시도하십시오.</string>
+    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
@@ -708,6 +709,9 @@
     <string name="Settings_PersonalSupport_NewRequest">요청</string>
     <string name="Settings_PersonalSupport_Requestfailed">요청 실패</string>
     <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
+    <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
+    <string name="Settings_Donate">후원하기</string>
+    <string name="Settings_Donate_CoinAddress">%s 주소</string>
     <string name="Appearance_Theme">주제</string>
     <string name="Appearance_Tab">탭 설정</string>
     <string name="Appearance_LaunchScreen">시작 화면</string>
@@ -848,6 +852,14 @@
     <string name="ManageCoins_Search">이름, 코드 또는 계약 주소</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
+    <string name="ManageCoins_BipsDescription">%1$s 지갑이 입금을 받는 데 사용할 수 있는 4가지 일반적인 주소 형식이 있습니다.
+\n
+\n- BIP44(이전)
+\n- BIP49
+\n- BIP84 (추천)
+\n- BIP 86 (최신)
+\n
+\nUnstoppable 지갑은 4가지 모두를 지원하지만 BIP-84 형식으로 작동하는 %2$s 지갑을 사용하는 것이 좋습니다. 이 형식으로 작동하는 지갑은 %3$s 거래를 보낼 때 가장 낮은 수수료를 지불합니다.</string>
     <string name="ManageCoins_BchTypeDescription">비트코인 캐시 지갑이 수신 지불을 받는 데 사용할 수 있는 2가지 주소 형식이 있습니다.\n\n- 유형 0(이전)\n- 유형 145(최신)\n\nUnstoppable 지갑은 두 가지를 모두 지원하지만 비트코인 캐시를 사용하는 것이 좋습니다. TYPE 145 형식으로 작동하는 지갑.</string>
     <string name="ManageCoins_ContractAddress">계약 주소</string>
     <!-- Experimental Feature -->
@@ -1159,6 +1171,7 @@
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
+    <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 유통 중인 모든 토큰의 \%%를 보여줍니다. \%%가 낮을수록 코인이 더 많이 분산됩니다.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
