@@ -304,7 +304,7 @@
     <string name="Balance_Hidden">скрытое</string>
     <string name="Balance_DownloadingBlocks">Загрузка блоков</string>
     <string name="Balance_ScanningBlocks">Сканирование блоков</string>
-    <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %1$s Кошелька, прежде чем вы сможете получать %2$s.</string>
+    <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет установленных кошельков.\nСоздайте новый кошелек или восстановите существующий кошелек </string>
     <string name="Balance_NoCoinsAlert">У вас нет добавленных монет.\nДобавьте монеты, которые вы будете использовать</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
@@ -359,7 +359,7 @@
     <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_FeeRate">Комиссия</string>
-    <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %1$s (%2$s) взимаются в %3$s. Вам нужно %4$s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
     <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <string name="Send_Error_LowFee">Ошибка комиссии</string>
     <string name="Send_Error_LowFee_Description">Ставка комиссии слишком низкая.</string>
@@ -707,6 +707,9 @@
     <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
     <string name="Settings_PersonalSupport_Requestfailed">Ошибка запроса</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
+    <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
+    <string name="Settings_Donate">Пожертвовать</string>
+    <string name="Settings_Donate_CoinAddress">%s адрес</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
@@ -844,7 +847,14 @@
     <string name="ManageCoins_Search">Название, код или адрес контракта</string>
     <string name="ManageCoins_AddToken">Добавить токен</string>
     <string name="ManageCoins_NoResults">Ничего не найдено. Попробуйте добавить токен вручную, если вы знаете его адрес смарт-контракта.</string>
-    <string name="ManageCoins_BipsDescription">Существует 4 распространенных формата адресов %1$s кошельков для получения входящих платежей:\n\n- BIP44 (более старый)\n- BIP49\n- BIP84 (рекомендованный)\n- BIP86 (самый новый)\n\nХотя кошелек Unstoppable поддерживает все четыре формата, рекомендуется использовать %2$s кошелек, работающий в формате BIP84.</string>
+    <string name="ManageCoins_BipsDescription">Существует 4 распространенных формата адресов %1$s кошельков для получения входящих платежей:
+\n
+\n- BIP-44 (более старый)
+\n- BIP-49 
+\n- BIP-84 (рекомендованный)
+\n- BIP-86 (самый новый)
+\n
+\nХотя кошелек Unstoppable поддерживает все три формата, рекомендуется использовать %2$s кошелек, работающий в формате BIP84. Кошельки, работающие в этом формате, платят наименьшую комиссию при отправке %3$s транзакций.</string>
     <string name="ManageCoins_BchTypeDescription">Существует 2 формата адресов, которые кошельки Bitcoin Cash могут использовать для приема входящих платежей:\n\n- TYPE 0 (более старый)\n- TYPE 145 (более новый)\n\nХотя кошелек Unstoppable поддерживает оба формата, рекомендуется использовать кошелек Bitcoin Cash, работающий в формате TYPE 145.</string>
     <string name="ManageCoins_ContractAddress">АДРЕС КОНТРАКТА</string>
     <!-- Experimental Feature -->
@@ -1156,7 +1166,7 @@
     <string name="CoinPage_Contract">%s Контракт</string>
     <string name="CoinPage_Bep2Symbol">Символ BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Топ Кошельки</string>
-    <string name="CoinPage_MajorHolders_Description">На графике выше показано \%% всех токенов, находящихся в обороте топ-10 кошельков. Чем ниже это процентное соотношение, тем выше распределение коина.</string>
+    <string name="CoinPage_MajorHolders_Description">На приведенной выше диаграмме показано \%% всех находящихся в обращении токенов, принадлежащих 10 ведущим кошелькам. Чем меньше \%%, тем больше распределена монета.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">в топ-10 держателей</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Всего держателей: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Лид</string>

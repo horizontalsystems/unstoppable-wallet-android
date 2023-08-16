@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
     <string name="Alert_Close">Kapat</string>
@@ -302,7 +302,7 @@
     <string name="Balance_Hidden">gizli</string>
     <string name="Balance_DownloadingBlocks">Blokları İndirme</string>
     <string name="Balance_ScanningBlocks">Tarama Blokları</string>
-    <string name="Balance_Backup_Alert">Öncelikle %1$s cüzdanınızı yedeklemeniz gerekiyor daha sonra %2$s kripto parasını alabilirsiniz.</string>
+    <string name="Balance_Backup_Alert">Öncelikle %s cüzdanınızı yedeklemeniz gerekiyor daha sonra %s kripto parasını alabilirsiniz.</string>
     <string name="Balance_NoWalletAlert">Henüz cüzdan yok</string>
     <string name="Balance_NoCoinsAlert">Eklenmiş jetonunuz yok.\nKullanacağınız jetonları ekleyin</string>
     <string name="Balance_WatchAccount_NoBalance">Bu cüzdan adresinde bakiye bulunmuyor</string>
@@ -357,7 +357,7 @@
     <string name="Send_LockTime_Year">1 yıl</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_FeeRate">Ücret oranı</string>
-    <string name="Send_Token_InsufficientFeeAlert">%1$s (%2$s) için ișlem ücreti %3$s hesabından ödenir. Asgari %4$s gerekiyor.</string>
+    <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <string name="Send_Warning_LowFee">Uyarı! Takılma riski</string>
     <string name="Send_Error_LowFee">Ücret Hatası</string>
     <string name="Send_Error_LowFee_Description">Ücret Oranı çok düşük.</string>
@@ -545,7 +545,7 @@
     <string name="SwapSettings_Apply">Uygula</string>
     <string name="SwapSettings_DeadlineMinute">%s dk</string>
     <string name="SwapSettings_RecipientPlaceholder">Adres veya Domain</string>
-    <string name="SwapSettings_FeeSettingsAlert">Platformdaki takas işlemi için bir hizmet ücreti genellikle \%%0,3 veya \%%0,6\'dır</string>
+    <string name="SwapSettings_FeeSettingsAlert">Platformdaki takas işlemi için bir hizmet ücreti genellikle %0,3 veya %0,6\'dır</string>
     <string name="SwapSettings_Error_DeadlineZero">Geçersiz Son Tarih</string>
     <string name="SwapSettings_Error_SlippageZero">Geçersiz Kayma</string>
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
@@ -709,6 +709,9 @@
     <string name="Settings_PersonalSupport_NewRequest">New Request</string>
     <string name="Settings_PersonalSupport_Requestfailed">Request failed</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Open Telegram</string>
+    <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
+    <string name="Settings_Donate">Bağış yapmak</string>
+    <string name="Settings_Donate_CoinAddress">%s adresi</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">TAB AYARLARI</string>
     <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
@@ -846,7 +849,14 @@
     <string name="ManageCoins_Search">Ad, kod veya sözleşme adresi</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
-    <string name="ManageCoins_BipsDescription">%1$s cüzdanlarının gelen ödemeleri almak için kullanabileceği 4 yaygın adres biçimi vardır:\n\n- BIP-44 (eski)\n- BIP-49\n- BIP-84 (önerilen) \n- BIP-86 (en yeni)\n\nUnstoppable cüzdan 4\'ünü de desteklerken, BIP-84 formatında çalışan bir %2$s cüzdanı kullanmanızı önerir.</string>
+    <string name="ManageCoins_BipsDescription">%1$s cüzdanının gelen ödemeleri almak için kullanabileceği 4 yaygın adres biçimi vardır:
+\n
+\n- BIP-44 (eski)
+\n- BİP-49
+\n- BIP-84 (önerilen)
+\n- BIP-86 (en yeni)
+\n
+\nDurdurulamaz cüzdan 4 tanesini de desteklerken, BIP-84 formatında çalışan bir %2$s cüzdanı kullanmanızı önerir. Bu biçimde çalışan cüzdanlar, %3$s işlemi gönderirken en düşük ücreti öderler.</string>
     <string name="ManageCoins_BchTypeDescription">Bitcoin Cash cüzdanlarının gelen ödemeleri almak için kullanabileceği 2 adres formatı vardır: 
 \n 
 \n- TYPE0 (eski) 
@@ -1163,7 +1173,7 @@
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
-    <string name="CoinPage_MajorHolders_Description">Chart above shows the \%% of all tokens in circulation held by top 10 wallets. The lower the \%% the more distributed the coin is.</string>
+    <string name="CoinPage_MajorHolders_Description">Yukarıdaki grafik, ilk 10 cüzdan tarafından tutulan dolaşımdaki tüm tokenlerin \%%\'sini göstermektedir. \%% ne kadar düşük olursa, madeni para o kadar fazla dağıtılır.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">ilk 10 sahibinde</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Toplam Sahip: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>

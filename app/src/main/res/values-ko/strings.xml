@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">매개 변수가 설정되지 않았습니다</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Alert_Close">가까운, 닫힌</string>
@@ -302,7 +302,7 @@
     <string name="Balance_Hidden">숨겨짐</string>
     <string name="Balance_DownloadingBlocks">블록 다운로드</string>
     <string name="Balance_ScanningBlocks">스캐닝 블록</string>
-    <string name="Balance_Backup_Alert">귀하께서 %1$s를 받기전에 %2$s 지갑의 백업이 필요합니다.</string>
+    <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
     <string name="Balance_NoWalletAlert">아직 지갑이 없습니다</string>
     <string name="Balance_NoCoinsAlert">추가된 코인이 없습니다.\n사용할 코인을 추가하세요.</string>
     <string name="Balance_WatchAccount_NoBalance">이 지갑 주소에는 잔액이 없습니다</string>
@@ -357,7 +357,7 @@
     <string name="Send_LockTime_Year">1 년</string>
     <string name="Send_Sending">전송중</string>
     <string name="Send_FeeRate">수수료율</string>
-    <string name="Send_Token_InsufficientFeeAlert">%1$s (%2$s) 에 대한 거래 수수료는 %3$s로 지불되었습니다. 귀하는 %4$s가 필요합니다.</string>
+    <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
     <string name="Send_Error_LowFee">수수료 오류</string>
     <string name="Send_Error_LowFee_Description">요금이 너무 낮습니다.</string>
@@ -545,7 +545,7 @@
     <string name="SwapSettings_Apply">적용</string>
     <string name="SwapSettings_DeadlineMinute">최소 %s</string>
     <string name="SwapSettings_RecipientPlaceholder">Memo</string>
-    <string name="SwapSettings_FeeSettingsAlert">플랫폼에서 스왑 작업에 대한 서비스 수수료는 일반적으로 0.3\%% 또는 0.6\%%입니다.</string>
+    <string name="SwapSettings_FeeSettingsAlert">플랫폼에서 스왑 작업에 대한 서비스 수수료는 일반적으로 0.3% 또는 0.6%입니다.</string>
     <string name="SwapSettings_Error_DeadlineZero">올바르지 않은 마감 시간</string>
     <string name="SwapSettings_Error_SlippageZero">올바르지 않은 슬립</string>
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>
@@ -709,6 +709,9 @@
     <string name="Settings_PersonalSupport_NewRequest">요청</string>
     <string name="Settings_PersonalSupport_Requestfailed">요청 실패</string>
     <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
+    <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
+    <string name="Settings_Donate">후원하기</string>
+    <string name="Settings_Donate_CoinAddress">%s 주소</string>
     <string name="Appearance_Theme">주제</string>
     <string name="Appearance_Tab">탭 설정</string>
     <string name="Appearance_LaunchScreen">시작 화면</string>
@@ -849,7 +852,14 @@
     <string name="ManageCoins_Search">이름, 코드 또는 계약 주소</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
-    <string name="ManageCoins_BipsDescription">%1$s 지갑이 입금을 받는 데 사용할 수 있는 4가지 일반적인 주소 형식이 있습니다.\n\n- BIP44(이전)\n- BIP49\n- BIP84(추천)\n- BIP86(최신)\n\nUnstoppable 지갑은 이 4가지 모두를 지원합니다. BIP84 형식으로 작동하는 %2$s 지갑을 사용하는 것이 좋습니다.</string>
+    <string name="ManageCoins_BipsDescription">%1$s 지갑이 입금을 받는 데 사용할 수 있는 4가지 일반적인 주소 형식이 있습니다.
+\n
+\n- BIP44(이전)
+\n- BIP49
+\n- BIP84 (추천)
+\n- BIP 86 (최신)
+\n
+\nUnstoppable 지갑은 4가지 모두를 지원하지만 BIP-84 형식으로 작동하는 %2$s 지갑을 사용하는 것이 좋습니다. 이 형식으로 작동하는 지갑은 %3$s 거래를 보낼 때 가장 낮은 수수료를 지불합니다.</string>
     <string name="ManageCoins_BchTypeDescription">비트코인 캐시 지갑이 수신 지불을 받는 데 사용할 수 있는 2가지 주소 형식이 있습니다.\n\n- 유형 0(이전)\n- 유형 145(최신)\n\nUnstoppable 지갑은 두 가지를 모두 지원하지만 비트코인 캐시를 사용하는 것이 좋습니다. TYPE 145 형식으로 작동하는 지갑.</string>
     <string name="ManageCoins_ContractAddress">계약 주소</string>
     <!-- Experimental Feature -->
@@ -1161,7 +1171,7 @@
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
-    <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 전체 토큰의 \%%를 보여줍니다. \%%가 낮을수록 코인이 더 많이 분배됩니다.</string>
+    <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 유통 중인 모든 토큰의 \%%를 보여줍니다. \%%가 낮을수록 코인이 더 많이 분산됩니다.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>

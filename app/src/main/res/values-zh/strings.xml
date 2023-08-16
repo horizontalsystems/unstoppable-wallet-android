@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">参数未设置</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
     <string name="Alert_Close">关闭</string>
@@ -302,7 +302,7 @@
     <string name="Balance_Hidden">隐藏</string>
     <string name="Balance_DownloadingBlocks">正在下载块</string>
     <string name="Balance_ScanningBlocks">扫描块</string>
-    <string name="Balance_Backup_Alert">您必须在接收%1$s之前先备份%2$s钱包。</string>
+    <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">尚无钱包</string>
     <string name="Balance_NoCoinsAlert">您没有添加的硬币。\n添加您将使用的硬币</string>
     <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
@@ -705,6 +705,9 @@
     <string name="Settings_PersonalSupport_NewRequest">新建请求</string>
     <string name="Settings_PersonalSupport_Requestfailed">请求失败</string>
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
+    <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
+    <string name="Settings_Donate">捐助</string>
+    <string name="Settings_Donate_CoinAddress">%s 地址</string>
     <string name="Appearance_Theme">主题</string>
     <string name="Appearance_Tab">TAB设置</string>
     <string name="Appearance_LaunchScreen">局域网SCREEN</string>
@@ -846,7 +849,14 @@
     <string name="ManageCoins_Search">姓名、代码或合同地址</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_NoResults">找不到结果。如果您知道智能合约地址，请尝试手动添加代币。</string>
-    <string name="ManageCoins_BipsDescription">有4种%1$s钱包可用于接收应收款的常见地址格式：\n\n- BIP44（较旧）\n- BIP49\n- BIP84（较新）\n- BIP86（最新）\n\n虽然Unstoppable钱包支持全部4种格式，但是我们建议使用以BIP84格式运作的%2$s钱包。</string>
+    <string name="ManageCoins_BipsDescription">有四种常见的地址格式 %1$s 钱包可以用来接收收到的付款：
+\n
+\n- BIP-44 (老)
+\n- BIP-49
+\n- BIP-84 (推荐)
+\n- BIP-86 (新建)
+\n
+\n虽然无法阻挡的钱包支持他们中的所有4个，但它建议使用 BIP-84 格式操作的 %2$s 钱包。 以此格式操作的钱包在发送 %3$s 交易时可以支付最低费用。</string>
     <string name="ManageCoins_BchTypeDescription">有2种比特币现金钱包可用于接收应收款的常见地址格式：\n\n- TYPE 0（较旧）\n- TYPE 145（较新）\n\n虽然Unstoppable钱包支持全部两种格式，但是我们建议使用以TYPE 145格式运作的比特币现金钱包。</string>
     <string name="ManageCoins_ContractAddress">联系地址</string>
     <!-- Experimental Feature -->
@@ -1158,7 +1168,7 @@
     <string name="CoinPage_Contract">%s 合约</string>
     <string name="CoinPage_Bep2Symbol">BEP2 符号</string>
     <string name="CoinPage_MajorHolders_TopWallets">排名地址</string>
-    <string name="CoinPage_MajorHolders_Description">上方图表显示了前10个钱包所持有的所有代币的百分比。 百分比越低，代币的分布越广。</string>
+    <string name="CoinPage_MajorHolders_Description">上图显示了前 10 名钱包持有的所有流通代币的\%%。 \%% 越低，硬币的分布越广泛。</string>
     <string name="CoinPage_MajorHolders_InTopWallets">在前10名持有者中</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">持有者总数：%s</string>
     <string name="CoinPage_CoinInvestments_Lead">领投</string>

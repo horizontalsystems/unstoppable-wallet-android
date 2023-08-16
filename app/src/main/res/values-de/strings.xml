@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parameter ist nicht festgelegt</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">Abbrechen</string>
     <string name="Alert_Copy">Kopieren</string>
     <string name="Alert_Close">Schließen</string>
@@ -303,7 +303,7 @@
     <string name="Balance_Hidden">verborgen</string>
     <string name="Balance_DownloadingBlocks">Blöcke herunterladen</string>
     <string name="Balance_ScanningBlocks">Scanne Blöcke</string>
-    <string name="Balance_Backup_Alert">Sie müssen ein Backup des %1$s Wallet machen, bevor Sie %2$s erhalten können.</string>
+    <string name="Balance_Backup_Alert">Sie müssen ein Backup des %s Wallet machen, bevor Sie %s erhalten können.</string>
     <string name="Balance_NoWalletAlert">Sie haben noch keine installierten Wallets.\nErstellen Sie eine neue Wallet oder stellen Sie eine vorhandene wieder her </string>
     <string name="Balance_NoCoinsAlert">Sie haben keine Münzen hinzugefügt.\nFügen Sie die Münzen hinzu, die Sie verwenden werden</string>
     <string name="Balance_WatchAccount_NoBalance">Diese Wallet-Adresse hat keinen Kontostand</string>
@@ -358,7 +358,7 @@
     <string name="Send_LockTime_Year">1 Jahr</string>
     <string name="Send_Sending">Wird gesendet</string>
     <string name="Send_FeeRate">Gebührenrate</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %1$s (%2$s) in %3$s bezahlt. Du brauchst %4$s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <string name="Send_Warning_LowFee">Warnung! Gefahr des Festklemmens</string>
     <string name="Send_Error_LowFee">Gebührenfehler</string>
     <string name="Send_Error_LowFee_Description">Die Gebühr ist zu niedrig.</string>
@@ -706,6 +706,9 @@
     <string name="Settings_PersonalSupport_NewRequest">Neue Zahlungsaufforderung</string>
     <string name="Settings_PersonalSupport_Requestfailed">Anfrage fehlgeschlagen</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Telegram öffnen</string>
+    <string name="Settings_Donate_Info">Gemeinsam können wir mit Ihrer Unterstützung diese App noch besser machen!</string>
+    <string name="Settings_Donate">Spenden</string>
+    <string name="Settings_Donate_CoinAddress">%s-Adresse</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
     <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>
@@ -850,7 +853,14 @@
     <string name="ManageCoins_Search">Name, Code oder Vertragsadresse</string>
     <string name="ManageCoins_AddToken">Token hinzufügen</string>
     <string name="ManageCoins_NoResults">Keine Ergebnisse gefunden. Versuchen Sie, den Token manuell hinzuzufügen, wenn Sie die Adresse des Smart Contracts kennen.</string>
-    <string name="ManageCoins_BipsDescription">Es gibt 4 gängige Adressformate %1$s Brieftaschen können verwendet werden, um eingehende Zahlungen zu erhalten:\n\n- BIP44 (älter)\n- BIP49\n- BIP84 (empfohlen)\n- BIP86 (neueste)\n\nWährend unaufhaltsame Brieftasche alle 4 unterstützt, empfiehlt es eine %2$s Brieftasche im BIP84-Format zu verwenden.</string>
+    <string name="ManageCoins_BipsDescription">Es gibt 4 gängige Adressformate %1$s Brieftaschen zum Empfang eingehender Zahlungen:
+\n
+\n- BIP-44 (älter)
+\n- BIP-49
+\n- BIP-84 (empfohlen)
+\n- BIP-86 (neueste)
+\n
+\nWährend unaufhaltsame Brieftasche alle 4 von ihnen unterstützt, empfiehlt es sich, eine %2$s Brieftasche im BIP-84 Format zu verwenden. Die Brieftaschen in diesem Format zahlen die niedrigsten Gebühren beim Senden von %3$s -Transaktionen.</string>
     <string name="ManageCoins_BchTypeDescription">Es gibt 2 Adressformate Bitcoin Cash Wallets zum Empfang eingehender Zahlungen:\n\n- TYPE 0 (älter)\n- TYPE 145 (neuer)\n\nWährend unaufhaltsame Brieftaschen beide unterstützt, empfiehlt es sich, ein Bitcoin Cash Wallet im TYPE 145 Format zu verwenden.</string>
     <string name="ManageCoins_ContractAddress">CONTRACT ADRESSE</string>
     <!-- Experimental Feature -->
@@ -1162,7 +1172,7 @@
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
-    <string name="CoinPage_MajorHolders_Description">Chart above shows the \%% of all tokens in circulation held by top 10 wallets. The lower the \%% the more distributed the coin is.</string>
+    <string name="CoinPage_MajorHolders_Description">Das obige Diagramm zeigt die \%% aller in Umlauf befindlichen Token, die an den Top 10 Wallets gehalten werden. Je niedriger die \%% ist, desto mehr ist die Münze verteilt.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>

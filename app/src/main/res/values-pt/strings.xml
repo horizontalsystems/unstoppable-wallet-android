@@ -709,6 +709,9 @@
     <string name="Settings_PersonalSupport_NewRequest">Nova solicitação</string>
     <string name="Settings_PersonalSupport_Requestfailed">Falha na solicitação</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
+    <string name="Settings_Donate_Info">Juntos, com o seu apoio, podemos fazer este aplicativo ainda melhor!</string>
+    <string name="Settings_Donate">Doar</string>
+    <string name="Settings_Donate_CoinAddress">endereço %s</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">DEFINIÇÕES DO TAB</string>
     <string name="Appearance_LaunchScreen">TELA DE INÍCIO</string>
@@ -843,7 +846,14 @@
     <string name="ManageCoins_Search">Nome, código ou endereço do contrato</string>
     <string name="ManageCoins_AddToken">Adicionar token</string>
     <string name="ManageCoins_NoResults">Nenhum resultado encontrado. Tente adicionar o token manualmente se você souber seu endereço do contrato inteligente.</string>
-    <string name="ManageCoins_BipsDescription">Existem 4 formatos de endereço comuns que as carteiras %1$s podem usar para receber pagamentos:\n\n- BIP-44 (antigo)\n- BIP-49\n- BIP-84 (recomendado)\n- BIP-86 (mais recente)\n\nEmbora a Unstoppable wallet suporte todos os 4, recomenda-se usar uma carteira %2$s operando no formato BIP-84.</string>
+    <string name="ManageCoins_BipsDescription">Existem 4 formatos de endereço comuns Carteiras %1$s podem usar para receber pagamentos recebidos:
+\n
+\n- BIP-44 (mais antigo)
+\n- BIP-49
+\n- BIP-84 (recomendado)
+\n- BIP-86 (mais recente)
+\n
+\nEnquanto que a carteira 4 deles oferece suporte a todos os 4 deles é recomendado usar uma carteira %2$s operando no formato BIP-84. As carteiras que operam neste formato pagam taxas mais baixas ao enviar transações de %3$s.</string>
     <string name="ManageCoins_BchTypeDescription">Existem 2 formatos de endereço que as carteiras Bitcoin Cash podem usar para receber pagamentos:
 \n
 \n- TYPE0 (antigo)
@@ -1160,7 +1170,7 @@
     <string name="CoinPage_Contract">%s Contrato</string>
     <string name="CoinPage_Bep2Symbol">Símbolo BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Principais Carteiras</string>
-    <string name="CoinPage_MajorHolders_Description">O gráfico acima mostra a \%% porcentagem de todos os tokens em circulação mantidos pelas 10 principais carteiras. Quanto mais baixa for a porcentagem, mais distribuída a moeda está.</string>
+    <string name="CoinPage_MajorHolders_Description">O gráfico acima mostra os \%% de todos os tokens em circulação mantidos pelas 10 melhores carteiras. Quanto mais baixo o \%% mais distribuída a moeda.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">nos Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Número total de Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Conduzir</string>
