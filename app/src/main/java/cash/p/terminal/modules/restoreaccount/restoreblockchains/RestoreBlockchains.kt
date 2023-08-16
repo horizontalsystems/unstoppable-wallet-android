@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
+import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -72,7 +72,7 @@ fun ManageWalletsScreen(
     val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType, manualBackup, fileBackup)
     val viewModel: RestoreBlockchainsViewModel = viewModel(factory = factory)
     val restoreSettingsViewModel: RestoreSettingsViewModel = viewModel(factory = factory)
-    val coinTokensViewModel: CoinTokensViewModel = viewModel(factory = factory)
+    val blockchainTokensViewModel: BlockchainTokensViewModel = viewModel(factory = factory)
 
     val view = LocalView.current
 
@@ -115,12 +115,12 @@ fun ManageWalletsScreen(
         skipHalfExpanded = skipHalfExpanded
     )
 
-    LaunchedEffect(coinTokensViewModel.showBottomSheetDialog) {
-        if (coinTokensViewModel.showBottomSheetDialog) {
+    LaunchedEffect(blockchainTokensViewModel.showBottomSheetDialog) {
+        if (blockchainTokensViewModel.showBottomSheetDialog) {
             coroutineScope.launch {
                 modalBottomSheetState.show()
             }
-            coinTokensViewModel.bottomSheetDialogShown()
+            blockchainTokensViewModel.bottomSheetDialogShown()
         }
     }
 
@@ -128,12 +128,12 @@ fun ManageWalletsScreen(
         sheetState = modalBottomSheetState,
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
-            coinTokensViewModel.config?.let { config ->
+            blockchainTokensViewModel.config?.let { config ->
                 BottomSheetSelectorMultiple(
                     config = config,
-                    onItemsSelected = { coinTokensViewModel.onSelect(it) },
+                    onItemsSelected = { blockchainTokensViewModel.onSelect(it) },
                     onCloseClick = {
-                        coinTokensViewModel.onCancelSelect()
+                        blockchainTokensViewModel.onCancelSelect()
                         coroutineScope.launch { modalBottomSheetState.hide() }
                     },
                 )

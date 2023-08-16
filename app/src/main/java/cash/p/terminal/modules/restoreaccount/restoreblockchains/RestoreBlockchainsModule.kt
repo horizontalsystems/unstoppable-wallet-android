@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensService
-import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensViewModel
+import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensService
+import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.market.ImageSource
@@ -22,8 +22,8 @@ object RestoreBlockchainsModule {
         private val restoreSettingsService by lazy {
             RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider)
         }
-        private val coinTokensService by lazy {
-            CoinTokensService()
+        private val blockchainTokensService by lazy {
+            BlockchainTokensService()
         }
 
         private val restoreSelectCoinsService by lazy {
@@ -38,7 +38,7 @@ object RestoreBlockchainsModule {
                 App.marketKit,
                 App.evmBlockchainManager,
                 App.tokenAutoEnableManager,
-                coinTokensService,
+                blockchainTokensService,
                 restoreSettingsService
             )
         }
@@ -58,8 +58,8 @@ object RestoreBlockchainsModule {
                         listOf(restoreSelectCoinsService)
                     ) as T
                 }
-                CoinTokensViewModel::class.java -> {
-                    CoinTokensViewModel(coinTokensService) as T
+                BlockchainTokensViewModel::class.java -> {
+                    BlockchainTokensViewModel(blockchainTokensService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

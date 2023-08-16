@@ -17,7 +17,7 @@ import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.enablecoin.coinplatforms.CoinTokensService
+import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -37,7 +37,7 @@ class RestoreBlockchainsService(
     private val marketKit: MarketKitWrapper,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
-    private val coinTokensService: CoinTokensService,
+    private val blockchainTokensService: BlockchainTokensService,
     private val restoreSettingsService: RestoreSettingsService
 ) : Clearable {
 
@@ -79,13 +79,13 @@ class RestoreBlockchainsService(
     )
 
     init {
-        coinTokensService.approveTokensObservable
+        blockchainTokensService.approveTokensObservable
             .subscribeIO {
                 handleApproveTokens(it.blockchain, it.tokens)
             }
             .let { disposables.add(it) }
 
-        coinTokensService.rejectApproveTokensObservable
+        blockchainTokensService.rejectApproveTokensObservable
             .subscribeIO {
                 handleCancelEnable(it)
             }
@@ -182,7 +182,7 @@ class RestoreBlockchainsService(
                 handleApproveRestoreSettings(token, RestoreSettings())
             }
         } else {
-            coinTokensService.approveTokens(blockchain, tokens, tokens.filter { it.type.isDefault })
+            blockchainTokensService.approveTokens(blockchain, tokens, tokens.filter { it.type.isDefault })
         }
     }
 
@@ -199,7 +199,7 @@ class RestoreBlockchainsService(
 
         val enabledTokens = enabledTokens.filter { it.blockchain == blockchain }
 
-        coinTokensService.approveTokens(blockchain, tokens, enabledTokens, true)
+        blockchainTokensService.approveTokens(blockchain, tokens, enabledTokens, true)
     }
 
     fun restore() {

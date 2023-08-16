@@ -1,10 +1,11 @@
-package cash.p.terminal.modules.enablecoin.coinplatforms
+package cash.p.terminal.modules.enablecoin.blockchaintokens
+>>>>>>>> ed55da797 (Rename module):app/src/main/java/cash.p.terminal/modules/enablecoin/blockchaintokens/BlockchainTokensService.kt
 
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
-class CoinTokensService {
+class BlockchainTokensService {
     val approveTokensObservable = PublishSubject.create<BlockchainWithTokens>()
     val rejectApproveTokensObservable = PublishSubject.create<Blockchain>()
     val requestObservable = PublishSubject.create<Request>()
