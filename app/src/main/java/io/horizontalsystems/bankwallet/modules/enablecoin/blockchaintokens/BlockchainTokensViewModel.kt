@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
+package io.horizontalsystems.bankwallet.modules.enablecoin.blockchaintokens
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,8 +15,8 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultiple
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.reactivex.disposables.Disposable
 
-class CoinTokensViewModel(
-    private val service: CoinTokensService
+class BlockchainTokensViewModel(
+    private val service: BlockchainTokensService
 ) : ViewModel() {
 
     var showBottomSheetDialog by mutableStateOf(false)
@@ -24,7 +24,7 @@ class CoinTokensViewModel(
 
     var config: BottomSheetSelectorMultipleDialog.Config? = null
         private set
-    private var currentRequest: CoinTokensService.Request? = null
+    private var currentRequest: BlockchainTokensService.Request? = null
     private val disposable: Disposable
 
     init {
@@ -34,7 +34,7 @@ class CoinTokensViewModel(
             }
     }
 
-    private fun handle(request: CoinTokensService.Request) {
+    private fun handle(request: BlockchainTokensService.Request) {
         currentRequest = request
         val blockchain = request.blockchain
         val selectedTokenIndexes = request.enabledTokens.map { request.tokens.indexOf(it) }

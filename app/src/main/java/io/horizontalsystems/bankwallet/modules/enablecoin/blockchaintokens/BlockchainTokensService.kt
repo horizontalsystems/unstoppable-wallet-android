@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
+package io.horizontalsystems.bankwallet.modules.enablecoin.blockchaintokens
 
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
-class CoinTokensService {
+class BlockchainTokensService {
     val approveTokensObservable = PublishSubject.create<BlockchainWithTokens>()
     val rejectApproveTokensObservable = PublishSubject.create<Blockchain>()
     val requestObservable = PublishSubject.create<Request>()
