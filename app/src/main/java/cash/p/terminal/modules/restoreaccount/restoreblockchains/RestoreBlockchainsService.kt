@@ -5,7 +5,6 @@ import cash.p.terminal.core.IAccountFactory
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.isDefault
-import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.TokenAutoEnableManager
@@ -35,7 +34,6 @@ class RestoreBlockchainsService(
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
-    private val evmBlockchainManager: EvmBlockchainManager,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
     private val blockchainTokensService: BlockchainTokensService,
     private val restoreSettingsService: RestoreSettingsService
