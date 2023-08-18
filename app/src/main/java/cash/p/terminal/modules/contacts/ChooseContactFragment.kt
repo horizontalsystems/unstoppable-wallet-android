@@ -9,7 +9,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -76,6 +78,7 @@ class ChooseContactFragment : BaseFragment() {
     }
 
 }
+
 @Composable
 fun ChooseContactScreen(
     blockchainType: BlockchainType?,
@@ -153,30 +156,32 @@ fun ChooseContactScreen(
             }
         ) {
             Column(modifier = Modifier.padding(it)) {
-                Crossfade(items.isEmpty()) {empty ->
+                Crossfade(items.isEmpty(), label = "") { empty ->
                     if (empty) {
                         ListEmptyView(
                             text = stringResource(R.string.EmptyResults),
                             icon = R.drawable.ic_not_found
                         )
                     } else {
-                        VSpacer(height = 12.dp)
-                        CellUniversalLawrenceSection(items, showFrame = true) { contact ->
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        navController.setNavigationResult(
-                                            ChooseContactFragment.resultKey,
-                                            bundleOf("contact" to contact.address)
-                                        )
-                                        navController.popBackStack()
-                                    }
-                                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                            ) {
-                                body_leah(text = contact.name)
-                                VSpacer(height = 1.dp)
-                                subhead2_grey(text = contact.address.shorten())
+                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                            VSpacer(height = 12.dp)
+                            CellUniversalLawrenceSection(items, showFrame = true) { contact ->
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            navController.setNavigationResult(
+                                                ChooseContactFragment.resultKey,
+                                                bundleOf("contact" to contact.address)
+                                            )
+                                            navController.popBackStack()
+                                        }
+                                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                                ) {
+                                    body_leah(text = contact.name)
+                                    VSpacer(height = 1.dp)
+                                    subhead2_grey(text = contact.address.shorten())
+                                }
                             }
                         }
                     }
