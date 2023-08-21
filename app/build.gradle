@@ -285,7 +285,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     // WalletConnect V2
-    implementation(platform("com.walletconnect:android-bom:1.13.0"))
+    implementation(platform("com.walletconnect:android-bom:1.15.0"))
     implementation 'com.walletconnect:sign'
     implementation 'com.walletconnect:android-core'
 
