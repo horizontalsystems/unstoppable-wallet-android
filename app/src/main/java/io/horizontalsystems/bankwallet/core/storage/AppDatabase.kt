@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnec
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 54, exportSchema = false, entities = [
+@Database(version = 55, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -81,7 +81,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "dbBankWallet")
-                    .fallbackToDestructiveMigration()
+//                    .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .addMigrations(
                             Migration_31_32,
@@ -107,6 +107,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_51_52,
                             Migration_52_53,
                             Migration_53_54,
+                            Migration_54_55,
                     )
                     .build()
         }
