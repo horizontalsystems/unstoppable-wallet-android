@@ -100,8 +100,9 @@ class WC2Service : SignClient.WalletDelegate {
     }
 
     fun approve(proposal: Sign.Model.SessionProposal, blockchains: List<WCBlockchain>) {
-        val methods = proposal.requiredNamespaces.values.flatMap { it.methods }
-        val events = proposal.requiredNamespaces.values.flatMap { it.events }
+        val namespaces = proposal.requiredNamespaces + proposal.optionalNamespaces
+        val methods = namespaces.values.flatMap { it.methods }.distinct()
+        val events = namespaces.values.flatMap { it.events }.distinct()
 
         val sessionNamespaces = blockchains
             .groupBy { it.chainNamespace }
