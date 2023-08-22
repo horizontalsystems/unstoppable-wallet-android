@@ -2,10 +2,10 @@ package cash.p.terminal.modules.send
 
 import cash.p.terminal.R
 import cash.p.terminal.core.HSCaution
+import cash.p.terminal.core.isNative
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -81,7 +81,7 @@ class SendAmountAdvancedService(
     }
 
     private fun isCoinUsedForFee(): Boolean {
-        return token.type is TokenType.Native
+        return token.type.isNative
     }
 
     data class State(

@@ -459,3 +459,6 @@ val TokenType.isDefault
         is TokenType.AddressTyped -> type.bitcoinCashCoinType == BitcoinCashCoinType.default
         else -> false
     }
+
+val TokenType.isNative: Boolean
+    get() = this is TokenType.Native || this is TokenType.Derived || this is TokenType.AddressTyped
