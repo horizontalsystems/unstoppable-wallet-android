@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -81,7 +81,7 @@ class SendAmountAdvancedService(
     }
 
     private fun isCoinUsedForFee(): Boolean {
-        return token.type is TokenType.Native
+        return token.type.isNative
     }
 
     data class State(
