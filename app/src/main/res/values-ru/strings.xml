@@ -708,7 +708,7 @@
     <string name="Settings_PersonalSupport_Requestfailed">Ошибка запроса</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
-    <string name="Settings_Donate">Пожертвовать</string>
+    <string name="Settings_Donate">Поддержать</string>
     <string name="Settings_Donate_CoinAddress">%s адрес</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
