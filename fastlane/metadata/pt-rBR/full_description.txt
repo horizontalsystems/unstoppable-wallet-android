@@ -1,0 +1,49 @@
+Carteira Unstoppable é construída propositalmente como uma ferramenta de gerenciamento descentralizada para criptomoedas.
+
+Ele é projetado para servir indivíduos conscientes de privacidade, buscando gerenciar e investir em criptomoedas de forma soberana e profissional.
+
+Unstoppable construída com o seguinte em mente:
+
+— O capital deve ser gratuito >> Criado para fornecer aos usuários um controle genuinamente independente sobre o seu capital.
+
+— O Capital deve ser sem fronteiras >> Funciona fora da camada financeira tradicional e atua como uma faca suíça para o mundo das finanças descentralizadas (DeFi).
+
+- O capital deve ser privado >> Não vaza dados privados, não tem meios de rastrear os usuários e tomar medidas adicionais para garantir a privacidade em várias camadas.
+
+Se as frases acima combinam com você, a Unstoppable será para você! E estamos aqui para nos concentrar em suas necessidades exclusivas e atendê-lo da melhor maneira possível.
+
+Se você está procurando uma maneira simples de armazenar Bitcoin ou alguma cripto que esse aplicativo pode não ser para você.
+
+CARACTERÍSTICAS DA CARTEIRA:
+
+— Multi-carteira sem custódia>> Gerencie qualquer número de criptomoedas através de múltiplas carteiras de portifólio de forma sem custódia. Esta carteira é como o seu próprio banco onde você é o único cliente e o único responsável. Ela é projetada para manter os ativos seguros e fáceis de restaurar, mesmo se o telefone for roubado e adulterado.
+
+- Carteira orientada para o investimento >> Unstoppable traz análises de mercado de criptomoedas inigualáveis para o seu dispositivo: classificação avançada, categorização com curadoria, filtragem de pesquisa abrangente e recursos de alerta baseados em eventos.
+
+- Universal Wallet >> Ele suporta todos os blockchains convencionais e é construído de maneira compatível com o padrão, permitindo que os usuários usem apenas um aplicativo de carteira para todas as criptomoedas.
+
+— Uma carteira de Bitcoin >> A carteira carrega alguns dos recursos mais avançados de Bitcoin disponíveis: SPV ativado, BIP 44/49/84/69 bloqueios de tempo compatíveis com o Bitcoin, taxas de transação personalizadas e muito mais.
+
+- Uma Carteira de DeFi >> Suporte total para troca de token descentralizado na Ethereum, Binance Smart Chain, Avalanche, Solana, e muito mais. Além disso, a capacidade de interagir com qualquer serviço inteligente baseado em contratos na blockchain através do protocolo WalletConnect.
+
+- Ethereum Wallet >> Suporte completo para a blockchain Ethereum, o seu ecossistema crescente de tokens (ERC20, tokens NFT, etc., e outros serviços descentralizados como ENS (Serviço de Nome (Ethereum).
+
+- Ethereum L2 Wallet >> Artbitrum, Optimizm, suporte Polygon.
+
+- Carteira Avalanche >> Suporte completo para a blockchain Avalanche C-Chain.
+
+- Carteira Binance >> Suporte total para Corrente Binance original (incl. BEP2) e Binance Smart Chain.
+
+- Carteira NFT >> Suporte total para tokens não fungíveis (NFTs).
+
+— Crypto Academy >> O aplicativo inclui dois cursos destinados a integrar o novo mundo das criptomoedas e do ecossistema DeFi de forma fácil de compreender, cobrindo aspectos essenciais da segurança das criptomoedas, armazenamento, privacidade, transação, troca e muito mais.
+
+— Carteira para Moedas de Privacidade >> Suporta totalmente as principais moedas de privacidade (ZCash, DASH) de forma SPV. Uma das muito poucas carteiras capazes de apoiar transações Zcash totalmente protegidas, bem como a capacidade de privatizar transações em Bitcoin.
+
+— Carteira descentralizada >> Projetada para trabalhar com as principais blockchains de forma descentralizada onde um aplicativo não depende de nenhum servidor de um provedor de carteiras para enviar/receber transações, mas interage com as redes blockchain diretamente.
+
+— Focada em Privacidade>> Projetado para permitir a privacidade, mesmo nos cenários mais violadores de privacidade. Não há contas de usuário mantendo seus registros, nenhuma verificação de identidade que arrisque expor suas finanças para o mundo e nenhuma interação com as camadas financeiras tradicionais. O aplicativo é parcialmente ativado via TOR e o suportará VPN em breve.
+
+— Totalmente Open Source >> Talvez o aplicativo de carteira mais transparente construído até agora. O processo de produção de 4 anos do aplicativo está abertamente acessível on-line, com 100% do código para qualquer pessoa avaliar ou reutilizar em outros projetos. Verificado e auditado por terceiros.
+
+Seja Unstoppable!  😎

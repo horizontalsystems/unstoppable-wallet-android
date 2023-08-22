@@ -4,7 +4,7 @@ Il a été élaboré pour permettre de venir en aide aux personnes conscientes d
 
 Pour rappel, Unstoppabble a été élaboré avec en toile de fond :
 
-- Capital Should Be Free >> It’s built to provide users with genuinely independent control over their capital.
+- la Gestion Libre de son Capital >> Il a été élaboré dans le but de fournir aux utilisateurs une véritable solution de gestion du capital, leur permettant de choisir la gestion libre.
 
 - Capital Should Be Borderless >> It works outside the traditional finance layer and acts as a Swiss knife to the world of decentralized finances (DeFi).
 
