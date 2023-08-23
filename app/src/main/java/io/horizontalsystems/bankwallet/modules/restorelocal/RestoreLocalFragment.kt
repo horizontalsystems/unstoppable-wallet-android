@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,9 +30,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -96,7 +95,6 @@ class RestoreLocalFragment : BaseFragment() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun RestoreLocalNavHost(
     backupJsonString: String?,
@@ -105,9 +103,9 @@ private fun RestoreLocalNavHost(
     popUpToInclusiveId: Int,
     popUpInclusive: Boolean
 ) {
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
-    AnimatedNavHost(
+    NavHost(
         navController = navController,
         startDestination = "restore_local",
     ) {

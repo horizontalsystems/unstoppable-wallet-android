@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.*
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.findNavController
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.composablePage
@@ -59,10 +59,9 @@ class ContactsFragment : BaseFragment() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ContactsNavHost(navController: NavController, mode: Mode) {
-    val navHostController = rememberAnimatedNavController()
+    val navHostController = rememberNavController()
 
     val startDestination: String
     val addAddress: ContactAddress?
@@ -86,7 +85,7 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
         }
     }
 
-    AnimatedNavHost(
+    NavHost(
         navController = navHostController,
         startDestination = startDestination
     ) {
@@ -175,7 +174,6 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AddressNavHost(
     viewModel: AddressViewModel,
@@ -183,9 +181,9 @@ fun AddressNavHost(
     onDeleteAddress: (ContactAddress) -> Unit,
     onCloseNavHost: () -> Unit
 ) {
-    val navHostController = rememberAnimatedNavController()
+    val navHostController = rememberNavController()
 
-    AnimatedNavHost(
+    NavHost(
         navController = navHostController,
         startDestination = "address",
     ) {

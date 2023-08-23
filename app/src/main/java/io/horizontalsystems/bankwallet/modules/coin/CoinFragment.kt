@@ -106,7 +106,8 @@ fun CoinTabs(
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
-    val pagerState = rememberPagerState(initialPage = 0)
+    val tabs = viewModel.tabs
+    val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
 
@@ -140,7 +141,6 @@ fun CoinTabs(
             }
         )
 
-        val tabs = viewModel.tabs
         val selectedTab = tabs[pagerState.currentPage]
         val tabItems = tabs.map {
             TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
@@ -159,7 +159,6 @@ fun CoinTabs(
         })
 
         HorizontalPager(
-            pageCount = tabs.size,
             state = pagerState,
             userScrollEnabled = false
         ) { page ->

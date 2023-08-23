@@ -133,10 +133,10 @@ private fun NftAsset(
     viewModel: NftAssetViewModel,
     navController: NavController
 ) {
-    val pagerState = rememberPagerState(initialPage = 0)
+    val tabs = viewModel.tabs
+    val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val coroutineScope = viewModel.viewModelScope
 
-    val tabs = viewModel.tabs
     val selectedTab = tabs[pagerState.currentPage]
     val tabItems = tabs.map {
         TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
@@ -150,7 +150,6 @@ private fun NftAsset(
         })
 
         HorizontalPager(
-            pageCount = tabs.size,
             state = pagerState,
             userScrollEnabled = false
         ) { page ->

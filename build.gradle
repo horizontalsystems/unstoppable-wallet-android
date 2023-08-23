@@ -2,22 +2,22 @@
 
 buildscript {
     ext {
-        compile_sdk_version = 33
+        compile_sdk_version = 34
         min_sdk_version = 27
         lifecycle_version = '2.5.1'
 
-        compose_version = '1.4.3'
+        compose_version = '1.5.0'
         kotlin_version = '1.8.0'
         material_version = "1.9.0"
         appcompat_version = "1.6.1"
         constraint_version = "2.1.4"
         core_ktx_version = "1.10.1"
-        fragment_ktx_version = "1.6.0"
-        navigation_ktx_version = "2.6.0"
+        fragment_ktx_version = "1.6.1"
+        navigation_ktx_version = "2.7.0"
         rxjava_version = "2.2.19"
         biometric_version = "1.1.0"
         junit_version = "4.13.2"
-        accompanist_version = "0.28.0"
+        accompanist_version = "0.32.0"
     }
 
     repositories {
@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong

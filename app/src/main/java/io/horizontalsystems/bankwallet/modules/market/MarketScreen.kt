@@ -30,7 +30,7 @@ fun MarketScreen(navController: NavController) {
     val tabs = marketViewModel.tabs
     val selectedTab = marketViewModel.selectedTab
 
-    val pagerState = rememberPagerState(initialPage = selectedTab.ordinal)
+    val pagerState = rememberPagerState(initialPage = selectedTab.ordinal) { tabs.size }
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
@@ -57,7 +57,6 @@ fun MarketScreen(navController: NavController) {
         })
 
         HorizontalPager(
-            pageCount = tabs.size,
             state = pagerState,
             userScrollEnabled = false
         ) { page ->
