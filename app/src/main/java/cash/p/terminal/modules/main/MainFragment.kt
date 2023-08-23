@@ -137,7 +137,7 @@ private fun MainScreen(
 
     val uiState = viewModel.uiState
     val selectedPage = uiState.selectedPageIndex
-    val pagerState = rememberPagerState(initialPage = selectedPage)
+    val pagerState = rememberPagerState(initialPage = selectedPage) { uiState.mainNavItems.size }
 
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -216,7 +216,6 @@ private fun MainScreen(
 
                     HorizontalPager(
                         modifier = Modifier.weight(1f),
-                        pageCount = uiState.mainNavItems.size,
                         state = pagerState,
                         userScrollEnabled = false,
                         verticalAlignment = Alignment.Top

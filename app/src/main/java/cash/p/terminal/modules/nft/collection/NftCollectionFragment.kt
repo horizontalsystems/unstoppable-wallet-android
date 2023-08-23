@@ -85,7 +85,8 @@ class NftCollectionFragment : BaseFragment() {
 @Composable
 private fun NftCollectionScreen(navController: NavController, viewModel: NftCollectionOverviewViewModel) {
     ComposeAppTheme {
-        val pagerState = rememberPagerState(initialPage = 0)
+        val tabs = viewModel.tabs
+        val pagerState = rememberPagerState(initialPage = 0) { tabs.size}
         val coroutineScope = rememberCoroutineScope()
         val view = LocalView.current
         val context = LocalContext.current
@@ -103,7 +104,6 @@ private fun NftCollectionScreen(navController: NavController, viewModel: NftColl
                 )
             )
 
-            val tabs = viewModel.tabs
             val selectedTab = tabs[pagerState.currentPage]
             val tabItems = tabs.map {
                 TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
@@ -115,7 +115,6 @@ private fun NftCollectionScreen(navController: NavController, viewModel: NftColl
             })
 
             HorizontalPager(
-                pageCount = tabs.size,
                 state = pagerState,
                 userScrollEnabled = false
             ) { page ->
