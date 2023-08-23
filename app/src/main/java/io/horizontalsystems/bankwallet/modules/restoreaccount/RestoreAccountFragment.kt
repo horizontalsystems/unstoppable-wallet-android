@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.composablePage
@@ -53,17 +52,16 @@ class RestoreAccountFragment : BaseFragment() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun RestoreAccountNavHost(
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
     inclusive: Boolean
 ) {
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
     val restoreMenuViewModel: RestoreMenuViewModel = viewModel(factory = RestoreMenuModule.Factory())
     val mainViewModel: RestoreViewModel = viewModel()
-    AnimatedNavHost(
+    NavHost(
         navController = navController,
         startDestination = "restore_phrase",
     ) {

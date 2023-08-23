@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,8 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Account
@@ -67,6 +68,7 @@ class BackupConfirmKeyFragment : BaseFragment() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
     val viewModel = viewModel<BackupConfirmKeyViewModel>(factory = BackupConfirmKeyModule.Factory(account))
@@ -138,8 +140,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 24.dp),
-                    mainAxisAlignment = FlowMainAxisAlignment.Center,
-                    crossAxisSpacing = 16.dp
+                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
                 ) {
                     uiState.wordOptions.forEach { wordOption ->
                         Box(modifier = Modifier.height(28.dp)) {
