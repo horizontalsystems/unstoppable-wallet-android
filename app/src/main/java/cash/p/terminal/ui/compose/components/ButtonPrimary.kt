@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -107,6 +108,36 @@ fun ButtonPrimaryYellow(
             disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
+            Text(
+                title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        },
+        enabled = enabled
+    )
+}
+
+@Composable
+fun ButtonPrimaryYellow(
+    modifier: Modifier = Modifier,
+    icon: Int,
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
+) {
+    ButtonPrimary(
+        modifier = modifier,
+        onClick = onClick,
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
+            backgroundColor = ComposeAppTheme.colors.yellowD,
+            contentColor = ComposeAppTheme.colors.dark,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
+        ),
+        content = {
+            Icon(painter = painterResource(id = icon), contentDescription = null)
+            HSpacer(width = 8.dp)
             Text(
                 title,
                 maxLines = 1,

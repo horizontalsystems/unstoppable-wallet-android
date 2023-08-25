@@ -1,0 +1,132 @@
+package cash.p.terminal.modules.sendtokenselect
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import cash.p.terminal.R
+import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.balance.BalanceModule
+import cash.p.terminal.modules.balance.BalanceViewModel
+import cash.p.terminal.modules.balance.ui.BalanceCardInner
+import cash.p.terminal.modules.send.SendFragment
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.SearchBar
+import cash.p.terminal.ui.compose.components.SectionUniversalItem
+import cash.p.terminal.ui.compose.components.VSpacer
+import io.horizontalsystems.core.findNavController
+
+class SendTokenSelectFragment : BaseFragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+
+            setContent {
+                SendTokenSelectScreen(findNavController())
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun SendTokenSelectScreen(
+    navController: NavController,
+) {
+    val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
+
+    val uiState = viewModel.uiState
+    val noItems = false
+
+    ComposeAppTheme {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                if (noItems) {
+                    AppBar(
+                        title = TranslatableString.ResString(R.string.Balance_Send),
+                        navigationIcon = {
+                            HsBackButton(onClick = { navController.popBackStack() })
+                        }
+                    )
+                } else {
+                    SearchBar(
+                        title = stringResource(R.string.Balance_Send),
+                        searchHintText = "",
+                        menuItems = listOf(),
+                        onClose = { navController.popBackStack() },
+                        onSearchTextChanged = { text ->
+                            //viewModel.updateFilter(text)
+                        }
+                    )
+                }
+            }
+        ) { paddingValues ->
+            if (noItems) {
+                ListEmptyView(
+                    text = stringResource(R.string.Balance_NoAssetsToSend),
+                    icon = R.drawable.ic_empty_wallet
+                )
+            } else {
+                LazyColumn(contentPadding = paddingValues) {
+                    item {
+                        VSpacer(12.dp)
+                    }
+                    val balanceViewItems = uiState.balanceViewItems
+                    itemsIndexed(balanceViewItems) { index, item ->
+                        val lastItem = index == balanceViewItems.size - 1
+                        Box(
+                            modifier = Modifier
+                                .clickable {
+                                    navController.slideFromRight(
+                                        R.id.sendXFragment,
+                                        SendFragment.prepareParams(item.wallet)
+                                    )
+                                }
+                        ) {
+                            SectionUniversalItem(
+                                borderTop = true,
+                                borderBottom = lastItem
+                            ) {
+                                BalanceCardInner(
+                                    viewItem = item,
+                                    viewModel = viewModel,
+                                    navController = navController
+                                )
+                            }
+                        }
+                    }
+                    item {
+                        VSpacer(32.dp)
+                    }
+                }
+            }
+        }
+    }
+}

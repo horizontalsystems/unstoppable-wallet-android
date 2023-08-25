@@ -324,7 +324,7 @@
         android:name="cash.p.terminal.modules.send.SendFragment" />
     <fragment
         android:id="@+id/sendTokenSelectFragment"
-        android:name="cash.p.terminal.modules.balance.ui.SendTokenSelectFragment" />
+        android:name="cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment" />
     <fragment
         android:id="@+id/sendConfirmation"
         android:name="cash.p.terminal.modules.send.SendConfirmationFragment" />

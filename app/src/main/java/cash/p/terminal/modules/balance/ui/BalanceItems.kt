@@ -187,11 +187,10 @@ fun BalanceItems(
                 ) {
                     ButtonPrimaryYellow(
                         modifier = Modifier.weight(1f),
+                        icon = R.drawable.ic_arrow_up_right_24,
                         title = stringResource(R.string.Balance_Send),
                         onClick = {
-                            navController.slideFromRight(
-                                R.id.sendTokenSelectFragment,
-                            )
+                            navController.slideFromRight(R.id.sendTokenSelectFragment)
                         },
                         enabled = true//viewItem.sendEnabled
                     )
