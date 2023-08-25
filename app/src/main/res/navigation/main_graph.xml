@@ -324,7 +324,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.send.SendFragment" />
     <fragment
         android:id="@+id/sendTokenSelectFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.balance.ui.SendTokenSelectFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment" />
     <fragment
         android:id="@+id/sendConfirmation"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment" />
