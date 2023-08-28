@@ -21,8 +21,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -59,7 +57,7 @@ class SendTokenSelectFragment : BaseFragment() {
 fun SendTokenSelectScreen(
     navController: NavController,
 ) {
-    val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
+    val viewModel = viewModel<SendTokenSelectViewModel>(factory = SendTokenSelectViewModel.Factory())
 
     val uiState = viewModel.uiState
     val noItems = false
@@ -98,7 +96,7 @@ fun SendTokenSelectScreen(
                     item {
                         VSpacer(12.dp)
                     }
-                    val balanceViewItems = uiState.balanceViewItems
+                    val balanceViewItems = uiState.items
                     itemsIndexed(balanceViewItems) { index, item ->
                         val lastItem = index == balanceViewItems.size - 1
                         Box(
@@ -114,11 +112,7 @@ fun SendTokenSelectScreen(
                                 borderTop = true,
                                 borderBottom = lastItem
                             ) {
-                                BalanceCardInner(
-                                    viewItem = item,
-                                    viewModel = viewModel,
-                                    navController = navController
-                                )
+                                BalanceCardInner(viewItem = item)
                             }
                         }
                     }
