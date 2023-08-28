@@ -43,6 +43,37 @@ class SendTokenSelectFragment : BaseFragment() {
                     viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
                     emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
                 )
+            } else {
+                LazyColumn(contentPadding = paddingValues) {
+                    item {
+                        VSpacer(12.dp)
+                    }
+                    itemsIndexed(balanceViewItems) { index, item ->
+                        val lastItem = index == balanceViewItems.size - 1
+                        val modifier = if (item.sendEnabled) {
+                            Modifier.clickable {
+                                navController.slideFromRight(
+                                    R.id.sendXFragment,
+                                    SendFragment.prepareParams(item.wallet)
+                                )
+                            }
+                        } else {
+                            Modifier
+                        }
+
+                        Box(modifier = modifier) {
+                            SectionUniversalItem(
+                                borderTop = true,
+                                borderBottom = lastItem
+                            ) {
+                                BalanceCardInner(viewItem = item)
+                            }
+                        }
+                    }
+                    item {
+                        VSpacer(32.dp)
+                    }
+                }
             }
         }
     }
