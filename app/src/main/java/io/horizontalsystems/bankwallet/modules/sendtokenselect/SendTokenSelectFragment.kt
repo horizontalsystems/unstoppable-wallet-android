@@ -98,15 +98,18 @@ fun SendTokenSelectScreen(
                     }
                     itemsIndexed(balanceViewItems) { index, item ->
                         val lastItem = index == balanceViewItems.size - 1
-                        Box(
-                            modifier = Modifier
-                                .clickable {
-                                    navController.slideFromRight(
-                                        R.id.sendXFragment,
-                                        SendFragment.prepareParams(item.wallet)
-                                    )
-                                }
-                        ) {
+                        val modifier = if (item.sendEnabled) {
+                            Modifier.clickable {
+                                navController.slideFromRight(
+                                    R.id.sendXFragment,
+                                    SendFragment.prepareParams(item.wallet)
+                                )
+                            }
+                        } else {
+                            Modifier
+                        }
+
+                        Box(modifier = modifier) {
                             SectionUniversalItem(
                                 borderTop = true,
                                 borderBottom = lastItem
