@@ -60,20 +60,12 @@ fun SendTokenSelectScreen(
     val viewModel = viewModel<SendTokenSelectViewModel>(factory = SendTokenSelectViewModel.Factory())
 
     val uiState = viewModel.uiState
-    val noItems = false
 
     ComposeAppTheme {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
-                if (noItems) {
-                    AppBar(
-                        title = TranslatableString.ResString(R.string.Balance_Send),
-                        navigationIcon = {
-                            HsBackButton(onClick = { navController.popBackStack() })
-                        }
-                    )
-                } else {
+                if (uiState.filteringEnabled) {
                     SearchBar(
                         title = stringResource(R.string.Balance_Send),
                         searchHintText = "",
@@ -83,10 +75,18 @@ fun SendTokenSelectScreen(
                             viewModel.updateFilter(text)
                         }
                     )
+                } else {
+                    AppBar(
+                        title = TranslatableString.ResString(R.string.Balance_Send),
+                        navigationIcon = {
+                            HsBackButton(onClick = { navController.popBackStack() })
+                        }
+                    )
                 }
             }
         ) { paddingValues ->
-            if (noItems) {
+            val balanceViewItems = uiState.items
+            if (balanceViewItems.isEmpty()) {
                 ListEmptyView(
                     text = stringResource(R.string.Balance_NoAssetsToSend),
                     icon = R.drawable.ic_empty_wallet
@@ -96,7 +96,6 @@ fun SendTokenSelectScreen(
                     item {
                         VSpacer(12.dp)
                     }
-                    val balanceViewItems = uiState.items
                     itemsIndexed(balanceViewItems) { index, item ->
                         val lastItem = index == balanceViewItems.size - 1
                         Box(
