@@ -61,6 +61,17 @@ class SendTokenSelectViewModel(
         }
     }
 
+    fun updateFilter(filter: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val filteredItems = service.balanceItemsFlow.value?.filter {
+                val coin = it.wallet.coin
+                coin.code.contains(filter, true) || coin.name.contains(filter, true)
+            }
+
+            refreshViewItems(filteredItems)
+        }
+    }
+
     private fun emitState() {
         viewModelScope.launch {
             uiState = SendTokenSelectUiState(
