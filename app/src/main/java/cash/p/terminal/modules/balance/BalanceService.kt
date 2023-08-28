@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.balance
 
+import cash.p.terminal.core.App
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.ILocalStorage
@@ -196,5 +197,20 @@ class BalanceService(
 
     fun enable(wallet: Wallet) {
         activeWalletRepository.enable(wallet)
+    }
+
+    companion object {
+        fun getInstance(): BalanceService {
+            return BalanceService(
+                BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
+                BalanceXRateRepository(App.currencyManager, App.marketKit),
+                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
+                App.localStorage,
+                App.connectivityManager,
+                BalanceSorter(),
+                App.accountManager
+            )
+
+        }
     }
 }

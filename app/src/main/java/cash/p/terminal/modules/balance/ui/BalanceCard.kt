@@ -115,7 +115,11 @@ fun BalanceCard(
                 viewModel.onItem(viewItem)
             }
     ) {
-        BalanceCardInner(viewItem, viewModel, navController)
+        val view = LocalView.current
+
+        BalanceCardInner(viewItem) {
+            onSyncErrorClicked(viewItem, viewModel, navController, view)
+        }
 
         ExpandableContent(viewItem, navController, viewModel)
     }
@@ -124,12 +128,11 @@ fun BalanceCard(
 @Composable
 fun BalanceCardInner(
     viewItem: BalanceViewItem,
-    viewModel: BalanceViewModel,
-    navController: NavController
+    onClickSyncError: (() -> Unit)? = null
 ) {
     CellMultilineClear(height = 64.dp) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            WalletIcon(viewItem, viewModel, navController)
+            WalletIcon(viewItem, onClickSyncError)
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -390,7 +393,10 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
 }
 
 @Composable
-private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navController: NavController) {
+private fun WalletIcon(
+    viewItem: BalanceViewItem,
+    onClickSyncError: (() -> Unit)?
+) {
     Box(
         modifier = Modifier
             .width(64.dp)
@@ -414,13 +420,16 @@ private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel, n
             )
         }
         if (viewItem.failedIconVisible) {
-            val view = LocalView.current
+            val clickableModifier = if (onClickSyncError != null) {
+                Modifier.clickable(onClick = onClickSyncError)
+            } else {
+                Modifier
+            }
+
             Image(
                 modifier = Modifier
                     .size(32.dp)
-                    .clickable {
-                        onSyncErrorClicked(viewItem, viewModel, navController, view)
-                    },
+                    .then(clickableModifier),
                 painter = painterResource(id = R.drawable.ic_attention_24),
                 contentDescription = "coin icon",
                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian)

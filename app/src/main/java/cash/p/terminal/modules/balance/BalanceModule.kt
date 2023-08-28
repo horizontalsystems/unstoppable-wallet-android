@@ -22,16 +22,6 @@ object BalanceModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val balanceService = BalanceService(
-                BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
-                BalanceXRateRepository(App.currencyManager, App.marketKit),
-                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
-                App.localStorage,
-                App.connectivityManager,
-                BalanceSorter(),
-                App.accountManager
-            )
-
             val totalService = TotalService(
                 App.currencyManager,
                 App.marketKit,
@@ -39,7 +29,7 @@ object BalanceModule {
                 App.balanceHiddenManager
             )
             return BalanceViewModel(
-                balanceService,
+                BalanceService.getInstance(),
                 BalanceViewItemFactory(),
                 App.balanceViewTypeManager,
                 TotalBalance(totalService, App.balanceHiddenManager),
