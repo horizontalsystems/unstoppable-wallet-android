@@ -23,9 +23,11 @@ class SendTokenSelectViewModel(
 ) : ViewModel() {
 
     private var balanceViewItems = listOf<BalanceViewItem>()
+    private var filteringEnabled = true
     var uiState by mutableStateOf(
         SendTokenSelectUiState(
-            items = balanceViewItems
+            items = balanceViewItems,
+            filteringEnabled = filteringEnabled,
         )
     )
         private set
@@ -35,6 +37,8 @@ class SendTokenSelectViewModel(
 
         viewModelScope.launch {
             service.balanceItemsFlow.collect { items ->
+                filteringEnabled = !items.isNullOrEmpty()
+
                 refreshViewItems(items)
             }
         }
@@ -75,7 +79,8 @@ class SendTokenSelectViewModel(
     private fun emitState() {
         viewModelScope.launch {
             uiState = SendTokenSelectUiState(
-                items = balanceViewItems
+                items = balanceViewItems,
+                filteringEnabled = filteringEnabled,
             )
         }
     }
@@ -96,4 +101,7 @@ class SendTokenSelectViewModel(
     }
 }
 
-data class SendTokenSelectUiState(val items: List<BalanceViewItem>)
+data class SendTokenSelectUiState(
+    val items: List<BalanceViewItem>,
+    val filteringEnabled: Boolean
+)
