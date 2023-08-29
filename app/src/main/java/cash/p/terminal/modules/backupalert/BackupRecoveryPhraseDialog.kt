@@ -31,8 +31,9 @@ import cash.p.terminal.modules.backuplocal.BackupLocalFragment
 import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimary
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaults
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaultWithIcon
 import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
@@ -84,19 +85,13 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
             )
 
             VSpacer(32.dp)
-            PrimaryButtonWithIcon(
+            ButtonPrimaryYellowWithIcon(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup),
                 icon = R.drawable.ic_edit_24,
                 iconTint = ComposeAppTheme.colors.dark,
-                buttonColors = ButtonPrimaryDefaults.textButtonColors(
-                    backgroundColor = ComposeAppTheme.colors.yellowD,
-                    contentColor = ComposeAppTheme.colors.dark,
-                    disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-                    disabledContentColor = ComposeAppTheme.colors.grey50,
-                ),
                 onClick = {
                     navController.slideFromBottom(
                         R.id.backupKeyFragment,
@@ -105,19 +100,13 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 }
             )
             VSpacer(12.dp)
-            PrimaryButtonWithIcon(
+            ButtonPrimaryDefaultWithIcon(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BackupRecoveryPhrase_LocalBackup),
                 icon = R.drawable.ic_file_24,
                 iconTint = ComposeAppTheme.colors.claude,
-                buttonColors = ButtonPrimaryDefaults.textButtonColors(
-                    backgroundColor = ComposeAppTheme.colors.leah,
-                    contentColor = ComposeAppTheme.colors.claude,
-                    disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-                    disabledContentColor = ComposeAppTheme.colors.grey50,
-                ),
                 onClick = {
                     navController.slideFromBottom(
                         R.id.backupLocalFragment,
