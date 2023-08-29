@@ -24,9 +24,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
@@ -59,33 +56,22 @@ fun SendTokenSelectScreen(
 ) {
     val viewModel = viewModel<SendTokenSelectViewModel>(factory = SendTokenSelectViewModel.Factory())
 
-    val uiState = viewModel.uiState
-
     ComposeAppTheme {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
-                if (uiState.filteringEnabled) {
-                    SearchBar(
-                        title = stringResource(R.string.Balance_Send),
-                        searchHintText = "",
-                        menuItems = listOf(),
-                        onClose = { navController.popBackStack() },
-                        onSearchTextChanged = { text ->
-                            viewModel.updateFilter(text)
-                        }
-                    )
-                } else {
-                    AppBar(
-                        title = TranslatableString.ResString(R.string.Balance_Send),
-                        navigationIcon = {
-                            HsBackButton(onClick = { navController.popBackStack() })
-                        }
-                    )
-                }
+                SearchBar(
+                    title = stringResource(R.string.Balance_Send),
+                    searchHintText = "",
+                    menuItems = listOf(),
+                    onClose = { navController.popBackStack() },
+                    onSearchTextChanged = { text ->
+                        viewModel.updateFilter(text)
+                    }
+                )
             }
         ) { paddingValues ->
-            val balanceViewItems = uiState.items
+            val balanceViewItems = viewModel.uiState.items
             if (balanceViewItems.isEmpty()) {
                 ListEmptyView(
                     text = stringResource(R.string.Balance_NoAssetsToSend),
