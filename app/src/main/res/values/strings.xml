@@ -1115,6 +1115,8 @@
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <string name="ManageAccount_DeleteWarning">Do you want to stop watching this wallet address?</string>
 
+    <string name="Balance_Receive_BackupRequired_Description">You need to backup %1$s</string>
+
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
     <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>

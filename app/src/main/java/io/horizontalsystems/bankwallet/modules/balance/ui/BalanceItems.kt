@@ -30,8 +30,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.*
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -199,9 +202,25 @@ fun BalanceItems(
                         icon = R.drawable.ic_arrow_down_left_24,
                         contentDescription = stringResource(R.string.Balance_Receive),
                         onClick = {
-                            navController.slideFromRight(
-                                R.id.receiveTokenSelectFragment,
-                            )
+                            when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
+                                ReceiveAllowedState.Allowed -> {
+                                    navController.slideFromRight(R.id.receiveTokenSelectFragment)
+                                }
+
+                                is ReceiveAllowedState.BackupRequired -> {
+                                    val account = receiveAllowedState.account
+                                    val text = Translator.getString(
+                                        R.string.Balance_Receive_BackupRequired_Description,
+                                        account.name
+                                    )
+                                    navController.slideFromBottom(
+                                        R.id.backupRequiredDialog,
+                                        BackupRequiredDialog.prepareParams(account, text)
+                                    )
+                                }
+
+                                null -> Unit
+                            }
                         },
                     )
                     if (true) {

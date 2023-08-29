@@ -31,6 +31,9 @@ data class Account(
 ) : Parcelable {
 
     @IgnoredOnParcel
+    val hasAnyBackup = isBackedUp || isFileBackedUp
+
+    @IgnoredOnParcel
     val isWatchAccount: Boolean
         get() = when (this.type) {
             is AccountType.EvmAddress -> true
