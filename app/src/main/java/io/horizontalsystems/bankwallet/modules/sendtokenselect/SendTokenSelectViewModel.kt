@@ -22,12 +22,11 @@ class SendTokenSelectViewModel(
     private val balanceViewTypeManager: BalanceViewTypeManager,
 ) : ViewModel() {
 
+    private var filter: String? = null
     private var balanceViewItems = listOf<BalanceViewItem>()
-    private var filteringEnabled = true
     var uiState by mutableStateOf(
         SendTokenSelectUiState(
             items = balanceViewItems,
-            filteringEnabled = filteringEnabled,
         )
     )
         private set
@@ -37,8 +36,6 @@ class SendTokenSelectViewModel(
 
         viewModelScope.launch {
             service.balanceItemsFlow.collect { items ->
-                filteringEnabled = !items.isNullOrEmpty()
-
                 refreshViewItems(items)
             }
         }
@@ -46,8 +43,17 @@ class SendTokenSelectViewModel(
 
     private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
         withContext(Dispatchers.IO) {
-            if (balanceItems != null) {
-                balanceViewItems = balanceItems.map { balanceItem ->
+            val tmpFilter = filter
+            val filteredItems = when {
+                tmpFilter.isNullOrBlank() -> balanceItems
+                else -> balanceItems?.filter { item ->
+                    val coin = item.wallet.coin
+                    coin.code.contains(tmpFilter, true) || coin.name.contains(tmpFilter, true)
+                }
+            }
+
+            if (filteredItems != null) {
+                balanceViewItems = filteredItems.map { balanceItem ->
                     balanceViewItemFactory.viewItem(
                         item = balanceItem,
                         currency = service.baseCurrency,
@@ -67,12 +73,8 @@ class SendTokenSelectViewModel(
 
     fun updateFilter(filter: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val filteredItems = service.balanceItemsFlow.value?.filter {
-                val coin = it.wallet.coin
-                coin.code.contains(filter, true) || coin.name.contains(filter, true)
-            }
-
-            refreshViewItems(filteredItems)
+            this@SendTokenSelectViewModel.filter = filter
+            refreshViewItems(service.balanceItemsFlow.value)
         }
     }
 
@@ -80,7 +82,6 @@ class SendTokenSelectViewModel(
         viewModelScope.launch {
             uiState = SendTokenSelectUiState(
                 items = balanceViewItems,
-                filteringEnabled = filteringEnabled,
             )
         }
     }
@@ -103,5 +104,4 @@ class SendTokenSelectViewModel(
 
 data class SendTokenSelectUiState(
     val items: List<BalanceViewItem>,
-    val filteringEnabled: Boolean
 )

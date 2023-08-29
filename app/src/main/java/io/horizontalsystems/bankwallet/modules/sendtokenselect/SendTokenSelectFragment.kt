@@ -24,9 +24,6 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.balance.ui.BalanceCardInner
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui.compose.components.SectionUniversalItem
@@ -59,33 +56,22 @@ fun SendTokenSelectScreen(
 ) {
     val viewModel = viewModel<SendTokenSelectViewModel>(factory = SendTokenSelectViewModel.Factory())
 
-    val uiState = viewModel.uiState
-
     ComposeAppTheme {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
-                if (uiState.filteringEnabled) {
-                    SearchBar(
-                        title = stringResource(R.string.Balance_Send),
-                        searchHintText = "",
-                        menuItems = listOf(),
-                        onClose = { navController.popBackStack() },
-                        onSearchTextChanged = { text ->
-                            viewModel.updateFilter(text)
-                        }
-                    )
-                } else {
-                    AppBar(
-                        title = TranslatableString.ResString(R.string.Balance_Send),
-                        navigationIcon = {
-                            HsBackButton(onClick = { navController.popBackStack() })
-                        }
-                    )
-                }
+                SearchBar(
+                    title = stringResource(R.string.Balance_Send),
+                    searchHintText = "",
+                    menuItems = listOf(),
+                    onClose = { navController.popBackStack() },
+                    onSearchTextChanged = { text ->
+                        viewModel.updateFilter(text)
+                    }
+                )
             }
         ) { paddingValues ->
-            val balanceViewItems = uiState.items
+            val balanceViewItems = viewModel.uiState.items
             if (balanceViewItems.isEmpty()) {
                 ListEmptyView(
                     text = stringResource(R.string.Balance_NoAssetsToSend),
