@@ -30,8 +30,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.FaqManager
+import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.balance.*
+import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.rateapp.RateAppModule
 import cash.p.terminal.modules.rateapp.RateAppViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -199,9 +202,25 @@ fun BalanceItems(
                         icon = R.drawable.ic_arrow_down_left_24,
                         contentDescription = stringResource(R.string.Balance_Receive),
                         onClick = {
-                            navController.slideFromRight(
-                                R.id.receiveTokenSelectFragment,
-                            )
+                            when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
+                                ReceiveAllowedState.Allowed -> {
+                                    navController.slideFromRight(R.id.receiveTokenSelectFragment)
+                                }
+
+                                is ReceiveAllowedState.BackupRequired -> {
+                                    val account = receiveAllowedState.account
+                                    val text = Translator.getString(
+                                        R.string.Balance_Receive_BackupRequired_Description,
+                                        account.name
+                                    )
+                                    navController.slideFromBottom(
+                                        R.id.backupRequiredDialog,
+                                        BackupRequiredDialog.prepareParams(account, text)
+                                    )
+                                }
+
+                                null -> Unit
+                            }
                         },
                     )
                     if (true) {
