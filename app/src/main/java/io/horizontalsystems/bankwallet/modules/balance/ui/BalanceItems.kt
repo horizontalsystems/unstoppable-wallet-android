@@ -185,7 +185,7 @@ fun BalanceItems(
                     modifier = Modifier.padding(horizontal = 24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ButtonPrimaryYellow(
+                    ButtonPrimaryYellowWithIcon(
                         modifier = Modifier.weight(1f),
                         icon = R.drawable.ic_arrow_up_right_24,
                         title = stringResource(R.string.Balance_Send),
