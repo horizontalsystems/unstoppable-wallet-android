@@ -275,8 +275,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure"/>
     <fragment
         android:id="@+id/receiveFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment"
-        android:label="ReceiveFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment"/>
     <fragment
         android:id="@+id/receiveTokenSelectFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receivemain.ReceiveTokenSelectFragment" />
@@ -286,9 +285,6 @@
     <fragment
         android:id="@+id/receiveAddressFormatFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receivemain.AddressFormatFragment"/>
-    <fragment
-        android:id="@+id/receiveMainFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.receivemain.ReceiveMainFragment"/>
     <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment"
@@ -391,4 +387,7 @@
     <dialog
         android:id="@+id/periodSelectDialog"
         android:name="io.horizontalsystems.bankwallet.ui.compose.components.PeriodSelectDialog" />
+    <dialog
+        android:id="@+id/notActiveAccountDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.receive.address.NotActiveWarningDialog" />
 </navigation>

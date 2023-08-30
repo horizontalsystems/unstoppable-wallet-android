@@ -1,6 +1,13 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.BalanceData
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.UnsupportedFilterException
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -12,7 +19,11 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.bitcoincore.models.*
+import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
+import io.horizontalsystems.bitcoincore.models.TransactionFilterType
+import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.horizontalsystems.bitcoincore.models.TransactionStatus
+import io.horizontalsystems.bitcoincore.models.TransactionType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
@@ -74,6 +85,8 @@ abstract class BitcoinBaseAdapter(
 
     override val receiveAddress: String
         get() = kit.receiveAddress()
+
+    override val isMainNet: Boolean = true
 
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
