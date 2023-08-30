@@ -24,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.isCustom
@@ -36,7 +35,7 @@ import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
-import cash.p.terminal.modules.receive.ReceiveFragment
+import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
@@ -269,10 +268,8 @@ private fun ExpandableContent(
 private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: BalanceViewModel) {
     val onClickReceive = {
         try {
-            navController.slideFromBottom(
-                R.id.receiveFragment,
-                bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem))
-            )
+            val params = ReceiveAddressFragment.params(viewModel.getWalletForReceive(viewItem))
+            navController.slideFromBottom(R.id.receiveFragment, params)
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,

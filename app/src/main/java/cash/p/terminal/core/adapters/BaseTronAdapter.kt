@@ -5,6 +5,7 @@ import cash.p.terminal.core.IBalanceAdapter
 import cash.p.terminal.core.IReceiveAdapter
 import cash.p.terminal.core.managers.TronKitWrapper
 import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.tronkit.transaction.Signer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -32,6 +33,9 @@ abstract class BaseTronAdapter(
 
     override val receiveAddress: String
         get() = tronKit.address.base58
+
+    override val isMainNet: Boolean
+        get() = tronKit.network == Network.Mainnet
 
     suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {
         tronKit.isAccountActive(address)

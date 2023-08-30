@@ -61,6 +61,8 @@ class ZcashAdapter(
 
     override val receiveAddress: String
 
+    override val isMainNet: Boolean = true
+
     init {
         val birthday = when (wallet.account.origin) {
             AccountOrigin.Created -> {

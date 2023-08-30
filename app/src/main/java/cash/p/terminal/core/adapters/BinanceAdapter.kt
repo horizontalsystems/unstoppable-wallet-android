@@ -1,7 +1,17 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.AdapterState
+import cash.p.terminal.core.App
+import cash.p.terminal.core.AppLogger
+import cash.p.terminal.core.BalanceData
+import cash.p.terminal.core.IAdapter
+import cash.p.terminal.core.IBalanceAdapter
+import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.core.ISendBinanceAdapter
+import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.UnsupportedFilterException
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
@@ -197,6 +207,7 @@ class BinanceAdapter(
     override val receiveAddress: String
         get() = binanceKit.receiveAddress()
 
+    override val isMainNet: Boolean = true
 
     companion object {
         const val confirmationsThreshold = 1

@@ -109,7 +109,7 @@ fun AddressFormatScreen(
                                 title = item.title,
                                 subtitle = item.subtitle,
                                 onClick = {
-                                    navController.slideFromRight(R.id.receiveMainFragment)
+                                    navController.slideFromRight(R.id.receiveFragment)
                                 }
                             )
                         }

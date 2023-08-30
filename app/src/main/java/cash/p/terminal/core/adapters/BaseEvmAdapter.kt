@@ -1,6 +1,10 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.*
+import cash.p.terminal.core.IAdapter
+import cash.p.terminal.core.IBalanceAdapter
+import cash.p.terminal.core.ICoinManager
+import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.core.managers.EvmKitWrapper
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -30,6 +34,9 @@ abstract class BaseEvmAdapter(
 
     override val receiveAddress: String
         get() = evmKit.receiveAddress.eip55
+
+    override val isMainNet: Boolean
+        get() = evmKit.chain.isMainNet
 
     protected fun balanceInBigDecimal(balance: BigInteger?, decimal: Int): BigDecimal {
         balance?.toBigDecimal()?.let {

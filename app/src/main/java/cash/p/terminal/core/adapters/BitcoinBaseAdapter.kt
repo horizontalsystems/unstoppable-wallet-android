@@ -1,6 +1,13 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.*
+import cash.p.terminal.core.AdapterState
+import cash.p.terminal.core.AppLogger
+import cash.p.terminal.core.BalanceData
+import cash.p.terminal.core.IAdapter
+import cash.p.terminal.core.IBalanceAdapter
+import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.UnsupportedFilterException
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionDataSortMode
 import cash.p.terminal.entities.Wallet
@@ -12,7 +19,11 @@ import cash.p.terminal.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.bitcoincore.models.*
+import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
+import io.horizontalsystems.bitcoincore.models.TransactionFilterType
+import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.horizontalsystems.bitcoincore.models.TransactionStatus
+import io.horizontalsystems.bitcoincore.models.TransactionType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
@@ -74,6 +85,8 @@ abstract class BitcoinBaseAdapter(
 
     override val receiveAddress: String
         get() = kit.receiveAddress()
+
+    override val isMainNet: Boolean = true
 
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()

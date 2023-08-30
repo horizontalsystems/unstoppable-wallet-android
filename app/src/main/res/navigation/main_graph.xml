@@ -275,8 +275,7 @@
         android:name="cash.p.terminal.modules.zcashconfigure.ZcashConfigure"/>
     <fragment
         android:id="@+id/receiveFragment"
-        android:name="cash.p.terminal.modules.receive.ReceiveFragment"
-        android:label="ReceiveFragment" />
+        android:name="cash.p.terminal.modules.receive.address.ReceiveAddressFragment"/>
     <fragment
         android:id="@+id/receiveTokenSelectFragment"
         android:name="cash.p.terminal.modules.receivemain.ReceiveTokenSelectFragment" />
@@ -286,9 +285,6 @@
     <fragment
         android:id="@+id/receiveAddressFormatFragment"
         android:name="cash.p.terminal.modules.receivemain.AddressFormatFragment"/>
-    <fragment
-        android:id="@+id/receiveMainFragment"
-        android:name="cash.p.terminal.modules.receivemain.ReceiveMainFragment"/>
     <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="cash.p.terminal.modules.evmnetwork.EvmNetworkFragment"
@@ -391,4 +387,7 @@
     <dialog
         android:id="@+id/periodSelectDialog"
         android:name="cash.p.terminal.ui.compose.components.PeriodSelectDialog" />
+    <dialog
+        android:id="@+id/notActiveAccountDialog"
+        android:name="cash.p.terminal.modules.receive.address.NotActiveWarningDialog" />
 </navigation>
