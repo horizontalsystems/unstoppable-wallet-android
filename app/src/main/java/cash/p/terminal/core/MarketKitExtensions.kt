@@ -335,6 +335,9 @@ val Coin.imageUrl: String
         return coinURL
     }
 
+val Coin.imagePlaceholder: Int
+    get() = R.drawable.coin_placeholder
+
 val TopPlatform.imageUrl
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/${blockchain.uid}@3x.png"
 

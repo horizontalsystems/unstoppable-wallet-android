@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.receivemain
+package cash.p.terminal.modules.receivemain
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,65 +6,62 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
-import io.horizontalsystems.bankwallet.modules.balance.BalanceService
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
-import kotlinx.coroutines.Dispatchers
+import cash.p.terminal.core.App
+import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.balance.BalanceActiveWalletRepository
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.rx2.collect
 
 class ReceiveTokenSelectViewModel(
-    private val service: BalanceService,
-    private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val balanceViewTypeManager: BalanceViewTypeManager
+    private val activeWalletRepository: BalanceActiveWalletRepository
 ) : ViewModel() {
-    private var items: List<BalanceViewItem> = listOf()
+    private var wallets: List<Wallet> = listOf()
+    private val coins: List<Coin>
+        get() = wallets.map { it.coin }.distinct()
 
     var uiState by mutableStateOf(
         ReceiveTokenSelectUiState(
-            items = items
+            coins = coins
         )
     )
 
     init {
-        service.start()
-
         viewModelScope.launch {
-            service.balanceItemsFlow.collect { items ->
-                refreshViewItems(items)
-            }
-        }
-    }
+            activeWalletRepository.itemsObservable.collect {
+                wallets = it.sortedBy { it.coin.code }
 
-    private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
-        withContext(Dispatchers.IO) {
-            if (balanceItems != null) {
-                items = balanceItems.map { balanceItem ->
-                    balanceViewItemFactory.viewItem(
-                        item = balanceItem,
-                        currency = service.baseCurrency,
-                        expanded = false,
-                        hideBalance = false,
-                        watchAccount = service.isWatchAccount,
-                        balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
-                    )
-                }
-            } else {
-                items = listOf()
+                emitState()
             }
-
-            emitState()
         }
     }
 
     private fun emitState() {
         viewModelScope.launch {
             uiState = ReceiveTokenSelectUiState(
-                items = items,
+                coins = coins,
             )
+        }
+    }
+
+    fun getXxx(coin: Coin): ReceiveAddressXxxState {
+        val coinWallets = wallets.filter { it.coin == coin }
+        val singleWallet = coinWallets.singleOrNull()
+
+        return when {
+            singleWallet != null -> {
+                ReceiveAddressXxxState.Simple(singleWallet)
+            }
+            coinWallets.all { it.token.type is TokenType.Derived } -> {
+                ReceiveAddressXxxState.ChooseDerivationType
+            }
+            coinWallets.all { it.token.type is TokenType.AddressTyped } -> {
+                ReceiveAddressXxxState.ChooseAddressType
+            }
+            else -> {
+                ReceiveAddressXxxState.ChooseNetwork
+            }
         }
     }
 
@@ -72,12 +69,19 @@ class ReceiveTokenSelectViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ReceiveTokenSelectViewModel(
-                service = BalanceService.getInstance(),
-                balanceViewItemFactory = BalanceViewItemFactory(),
-                balanceViewTypeManager = App.balanceViewTypeManager
+                BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager)
             ) as T
         }
     }
 }
 
-data class ReceiveTokenSelectUiState(val items: List<BalanceViewItem>)
+sealed interface ReceiveAddressXxxState {
+    object ChooseNetwork : ReceiveAddressXxxState
+    object ChooseDerivationType : ReceiveAddressXxxState
+    object ChooseAddressType : ReceiveAddressXxxState
+    data class Simple(val wallet: Wallet) : ReceiveAddressXxxState
+}
+
+data class ReceiveTokenSelectUiState(
+    val coins: List<Coin>
+)

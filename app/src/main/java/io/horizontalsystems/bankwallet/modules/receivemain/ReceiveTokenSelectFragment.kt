@@ -20,14 +20,17 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.imagePlaceholder
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.receive.ReceiveFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.RowUniversal
@@ -37,21 +40,6 @@ import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
-
-private val testItems = listOf(
-    ReceiveTokenViewItem(
-        coinName = "Bitcoin",
-        coinCode = "BTC",
-        coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
-        coinIconPlaceholder = R.drawable.coin_placeholder,
-    ),
-    ReceiveTokenViewItem(
-        coinName = "Ethereum",
-        coinCode = "ETH",
-        coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/ethereum@3x.png",
-        coinIconPlaceholder = R.drawable.coin_placeholder,
-    ),
-)
 
 class ReceiveTokenSelectFragment : BaseFragment() {
 
@@ -78,7 +66,7 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
     val viewModel = viewModel<ReceiveTokenSelectViewModel>(
         factory = ReceiveTokenSelectViewModel.Factory()
     )
-    val items = viewModel.uiState.items
+    val coins = viewModel.uiState.coins
 
     ComposeAppTheme {
         Scaffold(
@@ -99,18 +87,36 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                 item {
                     VSpacer(12.dp)
                 }
-                itemsIndexed(items) { index, item ->
-                    val lastItem = index == items.size - 1
+                itemsIndexed(coins) { index, coin ->
+                    val lastItem = index == coins.size - 1
                     SectionUniversalItem(borderTop = true, borderBottom = lastItem) {
                         ReceiveCoin(
-                            coinName = item.coinTitle,
-                            coinCode = item.coinCode,
-                            coinIconUrl = item.coinIconUrl,
-                            coinIconPlaceholder = item.coinIconPlaceholder,
+                            coinName = coin.name,
+                            coinCode = coin.code,
+                            coinIconUrl = coin.imageUrl,
+                            coinIconPlaceholder = coin.imagePlaceholder,
                             onClick = {
-                                navController.slideFromRight(
-                                    R.id.receiveNetworkSelectFragment
-                                )
+                                when (val xxx = viewModel.getXxx(coin)) {
+                                    ReceiveAddressXxxState.ChooseAddressType -> {
+                                        navController.slideFromRight(R.id.receiveAddressFormatFragment)
+                                    }
+                                    ReceiveAddressXxxState.ChooseDerivationType -> {
+
+                                    }
+                                    ReceiveAddressXxxState.ChooseNetwork -> {
+                                        navController.slideFromRight(
+                                            R.id.receiveNetworkSelectFragment,
+                                            NetworkSelectFragment.prepareParams(coin.uid)
+                                        )
+                                    }
+                                    is ReceiveAddressXxxState.Simple -> {
+                                        navController.slideFromBottom(
+                                            R.id.receiveFragment,
+                                            bundleOf(ReceiveFragment.WALLET_KEY to xxx.wallet)
+                                        )
+                                    }
+                                }
+
                             }
                         )
                     }
@@ -149,7 +155,9 @@ fun ReceiveCoin(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 body_leah(
-                    modifier = Modifier.weight(1f).padding(end = 16.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 16.dp),
                     text = coinCode,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -167,21 +175,5 @@ fun ReceiveCoin(
                 )
             }
         }
-    }
-}
-
-data class ReceiveTokenViewItem(
-    val coinName: String,
-    val coinCode: String,
-    val coinIconUrl: String,
-    val coinIconPlaceholder: Int,
-)
-
-@Preview
-@Composable
-fun Preview_ReceiveTokenSelectScreen() {
-    val navController = rememberNavController()
-    ComposeAppTheme {
-        ReceiveTokenSelectScreen(navController)
     }
 }
