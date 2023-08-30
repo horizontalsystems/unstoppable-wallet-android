@@ -333,6 +333,7 @@
     <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
+    <string name="Balance_Swap">Swap</string>
     <string name="Balance_Deposit">Deposit</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_Address">Address</string>
@@ -357,6 +358,7 @@
     <string name="Balance_NoCoinsAlert">You don\'t have an added coins.\nAdd the coins you will be using</string>
     <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
     <string name="Balance_NoAssetsToSend">You have no assets to send.</string>
+    <string name="Balance_NoAssetsToSwap">You have no assets to swap.</string>
     <string name="Balance_Network">Network</string>
     <string name="Balance_NetworkSelectDescription">Choose network to get an address to receive.</string>
     <string name="Balance_ReceiveAddressHint">Your address for depositing %s</string>

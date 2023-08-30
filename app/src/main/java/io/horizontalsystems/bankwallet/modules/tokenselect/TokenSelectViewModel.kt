@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.sendtokenselect
+package cash.p.terminal.modules.tokenselect
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
+import cash.p.terminal.core.swappable
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceService
 import cash.p.terminal.modules.balance.BalanceViewItem
@@ -16,16 +17,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SendTokenSelectViewModel(
+class TokenSelectViewModel(
     private val service: BalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceViewTypeManager: BalanceViewTypeManager,
+    private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?
 ) : ViewModel() {
 
-    private var filter: String? = null
+    private var query: String? = null
     private var balanceViewItems = listOf<BalanceViewItem>()
     var uiState by mutableStateOf(
-        SendTokenSelectUiState(
+        TokenSelectUiState(
             items = balanceViewItems,
         )
     )
@@ -43,16 +45,27 @@ class SendTokenSelectViewModel(
 
     private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
         withContext(Dispatchers.IO) {
-            val tmpFilter = filter
-            val filteredItems = when {
-                tmpFilter.isNullOrBlank() -> balanceItems
-                else -> balanceItems?.filter { item ->
-                    val coin = item.wallet.coin
-                    coin.code.contains(tmpFilter, true) || coin.name.contains(tmpFilter, true)
-                }
-            }
+            if (balanceItems != null) {
+                val filters: List<(BalanceModule.BalanceItem) -> Boolean> = buildList {
+                    itemsFilter?.let { add(it) }
 
-            if (filteredItems != null) {
+                    val tmpQuery = query
+                    if (!tmpQuery.isNullOrBlank()) {
+                        add {
+                            val coin = it.wallet.coin
+                            coin.code.contains(tmpQuery, true) || coin.name.contains(tmpQuery, true)
+                        }
+                    }
+                }
+
+                val filteredItems = if (filters.isNotEmpty()) {
+                    balanceItems.filter { item ->
+                        filters.all { it.invoke(item) }
+                    }
+                } else {
+                    balanceItems
+                }
+
                 balanceViewItems = filteredItems.map { balanceItem ->
                     balanceViewItemFactory.viewItem(
                         item = balanceItem,
@@ -71,16 +84,16 @@ class SendTokenSelectViewModel(
         }
     }
 
-    fun updateFilter(filter: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            this@SendTokenSelectViewModel.filter = filter
+    fun updateFilter(q: String) {
+        viewModelScope.launch {
+            query = q
             refreshViewItems(service.balanceItemsFlow.value)
         }
     }
 
     private fun emitState() {
         viewModelScope.launch {
-            uiState = SendTokenSelectUiState(
+            uiState = TokenSelectUiState(
                 items = balanceViewItems,
             )
         }
@@ -90,18 +103,33 @@ class SendTokenSelectViewModel(
         service.clear()
     }
 
-    class Factory : ViewModelProvider.Factory {
+    class FactoryForSend : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SendTokenSelectViewModel(
-                BalanceService.getInstance(),
-                BalanceViewItemFactory(),
-                App.balanceViewTypeManager
+            return TokenSelectViewModel(
+                service = BalanceService.getInstance(),
+                balanceViewItemFactory = BalanceViewItemFactory(),
+                balanceViewTypeManager = App.balanceViewTypeManager,
+                itemsFilter = null
+            ) as T
+        }
+    }
+
+    class FactoryForSwap : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return TokenSelectViewModel(
+                service = BalanceService.getInstance(),
+                balanceViewItemFactory = BalanceViewItemFactory(),
+                balanceViewTypeManager = App.balanceViewTypeManager,
+                itemsFilter = {
+                    it.wallet.token.swappable
+                }
             ) as T
         }
     }
 }
 
-data class SendTokenSelectUiState(
+data class TokenSelectUiState(
     val items: List<BalanceViewItem>,
 )
