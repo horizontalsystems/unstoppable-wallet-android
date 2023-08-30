@@ -22,6 +22,9 @@ abstract class BaseSolanaAdapter(
     override val receiveAddress: String
         get() = solanaKit.receiveAddress
 
+    override val isMainNet: Boolean
+        get() = solanaKit.isMainnet
+
     companion object {
         const val confirmationsThreshold: Int = 12
     }

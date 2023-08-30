@@ -362,10 +362,13 @@
     <string name="Balance_Network">Network</string>
     <string name="Balance_NetworkSelectDescription">Choose network to get an address to receive.</string>
     <string name="Balance_ReceiveAddressHint">Your address for depositing %s</string>
-    <string name="Balance_ReceiveWarningText">Send only %s network tokens to this address. Tokens from other networks will be lost.</string>
+    <string name="Balance_ReceiveWatchAddressHint">Watch address of %s</string>
+    <string name="Balance_ReceiveWarningText">Send only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
     <string name="Balance_Receive_AddressFormatDescription">Select an address format to get an address to receive.</string>
     <string name="Balance_Receive_AddressFormat">Address Format</string>
     <string name="Balance_Receive_AddressFormat_WarningText">The Native SegWit format is preferred in Bitcoin. While all address formats (Taproot, SegWit, Legacy) can be used to receive BTC, your Bitcoin balances for each address type are tracked separately.</string>
+    <string name="Balance_Receive_Account">Account</string>
+    <string name="Balance_Receive_NotActive">Not active</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
