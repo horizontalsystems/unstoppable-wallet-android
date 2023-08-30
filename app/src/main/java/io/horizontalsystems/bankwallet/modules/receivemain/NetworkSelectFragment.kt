@@ -15,17 +15,21 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.description
+import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -39,19 +43,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
-
-private val testItems = listOf(
-    NetworkViewItem(
-        title = "Binance Smart Chain",
-        subtitle = "BNB, BEP20 tokens",
-        imageUrl = "https://cdn.blocksdecoded.com/blockchain-icons/32px/bitcoin@3x.png",
-    ),
-    NetworkViewItem(
-        title = "Litecoin Chain",
-        subtitle = "Litecoin tokens",
-        imageUrl = "https://cdn.blocksdecoded.com/blockchain-icons/32px/litecoin@3x.png",
-    ),
-)
+import io.horizontalsystems.core.helpers.HudHelper
 
 class NetworkSelectFragment : BaseFragment() {
 
@@ -66,16 +58,32 @@ class NetworkSelectFragment : BaseFragment() {
             )
 
             setContent {
-                NetworkSelectScreen(findNavController())
+                val navController = findNavController()
+                val coinUid = arguments?.getString("coinUid")
+
+                if (coinUid == null) {
+                    HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
+                    navController.popBackStack()
+                } else {
+                    NetworkSelectScreen(navController, coinUid)
+                }
+
             }
         }
+    }
+
+    companion object {
+        fun prepareParams(coinUid: String) = bundleOf("coinUid" to coinUid)
     }
 }
 
 @Composable
 fun NetworkSelectScreen(
     navController: NavController,
+    coinUid: String,
 ) {
+    val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(coinUid))
+
     ComposeAppTheme {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -107,14 +115,18 @@ fun NetworkSelectScreen(
                         text = stringResource(R.string.Balance_NetworkSelectDescription)
                     )
                     VSpacer(20.dp)
-                    CellUniversalLawrenceSection(testItems) { item ->
+                    CellUniversalLawrenceSection(viewModel.coinWallets) { wallet ->
+                        val blockchain = wallet.token.blockchain
                         SectionUniversalItem {
                             NetworkCell(
-                                title = item.title,
-                                subtitle = item.subtitle,
-                                imageUrl = item.imageUrl,
+                                title = blockchain.name,
+                                subtitle = blockchain.description,
+                                imageUrl = blockchain.type.imageUrl,
                                 onClick = {
-                                    navController.slideFromRight(R.id.receiveAddressFormatFragment)
+                                    navController.slideFromBottom(
+                                        R.id.receiveFragment,
+                                        bundleOf(ReceiveFragment.WALLET_KEY to wallet)
+                                    )
                                 }
                             )
                         }
@@ -156,20 +168,5 @@ fun NetworkCell(
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )
-    }
-}
-
-data class NetworkViewItem(
-    val title: String,
-    val subtitle: String,
-    val imageUrl: String,
-)
-
-@Preview
-@Composable
-fun Preview_NetworkSelectScreen() {
-    val navController = rememberNavController()
-    ComposeAppTheme {
-        NetworkSelectScreen(navController)
     }
 }
