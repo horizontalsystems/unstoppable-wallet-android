@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
@@ -73,31 +74,36 @@ class ReceiveTokenSelectFragment : BaseFragment() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ReceiveTokenSelectScreen(
-    navController: NavController,
-) {
-    ComposeAppTheme {
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            SearchBar(
-                title = stringResource(R.string.Balance_Receive),
-                searchHintText = "",
-                menuItems = listOf(),
-                onClose = { navController.popBackStack() },
-                onSearchTextChanged = { text ->
-                    //viewModel.updateFilter(text)
-                }
-            )
+fun ReceiveTokenSelectScreen(navController: NavController) {
+    val viewModel = viewModel<ReceiveTokenSelectViewModel>(
+        factory = ReceiveTokenSelectViewModel.Factory()
+    )
+    val items = viewModel.uiState.items
 
-            LazyColumn {
+    ComposeAppTheme {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                SearchBar(
+                    title = stringResource(R.string.Balance_Receive),
+                    searchHintText = "",
+                    menuItems = listOf(),
+                    onClose = { navController.popBackStack() },
+                    onSearchTextChanged = { text ->
+                        //viewModel.updateFilter(text)
+                    }
+                )
+            }
+        ) { paddingValues ->
+            LazyColumn(contentPadding = paddingValues) {
                 item {
                     VSpacer(12.dp)
                 }
-                itemsIndexed(testItems) { index, item ->
-                    SectionUniversalItem(borderTop = index == 0, borderBottom = true) {
+                itemsIndexed(items) { index, item ->
+                    val lastItem = index == items.size - 1
+                    SectionUniversalItem(borderTop = true, borderBottom = lastItem) {
                         ReceiveCoin(
-                            coinName = item.coinName,
+                            coinName = item.coinTitle,
                             coinCode = item.coinCode,
                             coinIconUrl = item.coinIconUrl,
                             coinIconPlaceholder = item.coinIconPlaceholder,
@@ -108,6 +114,9 @@ fun ReceiveTokenSelectScreen(
                             }
                         )
                     }
+                }
+                item {
+                    VSpacer(32.dp)
                 }
             }
         }
