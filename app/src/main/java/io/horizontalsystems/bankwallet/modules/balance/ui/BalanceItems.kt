@@ -194,8 +194,7 @@ fun BalanceItems(
                         title = stringResource(R.string.Balance_Send),
                         onClick = {
                             navController.slideFromRight(R.id.sendTokenSelectFragment)
-                        },
-                        enabled = true//viewItem.sendEnabled
+                        }
                     )
                     HSpacer(8.dp)
                     ButtonPrimaryCircle(
@@ -229,12 +228,8 @@ fun BalanceItems(
                             icon = R.drawable.ic_swap_24,
                             contentDescription = stringResource(R.string.Swap),
                             onClick = {
-//                                navController.slideFromBottom(
-//                                    R.id.swapFragment,
-//                                    SwapMainModule.prepareParams(viewItem.wallet.token)
-//                                )
-                            },
-                            enabled = true
+                                navController.slideFromRight(R.id.swapTokenSelectFragment)
+                            }
                         )
                     }
                 }
