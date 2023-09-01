@@ -45,7 +45,7 @@ class ReceiveTokenSelectViewModel(
         }
     }
 
-    fun getXxx(coin: Coin): ReceiveAddressXxxState {
+    fun getXxx(coin: Coin): ReceiveAddressXxxState? {
         val coinWallets = wallets.filter { it.coin == coin }
         val singleWallet = coinWallets.singleOrNull()
 
@@ -59,8 +59,11 @@ class ReceiveTokenSelectViewModel(
             coinWallets.all { it.token.type is TokenType.AddressTyped } -> {
                 ReceiveAddressXxxState.ChooseAddressType
             }
-            else -> {
+            coinWallets.isNotEmpty() -> {
                 ReceiveAddressXxxState.ChooseNetwork
+            }
+            else -> {
+                null
             }
         }
     }
