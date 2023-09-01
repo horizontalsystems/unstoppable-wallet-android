@@ -115,6 +115,8 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                                             bundleOf(ReceiveFragment.WALLET_KEY to xxx.wallet)
                                         )
                                     }
+
+                                    null -> Unit
                                 }
 
                             }
