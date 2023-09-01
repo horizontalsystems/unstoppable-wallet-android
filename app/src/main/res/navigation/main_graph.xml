@@ -283,8 +283,11 @@
         android:id="@+id/receiveNetworkSelectFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receivemain.NetworkSelectFragment"/>
     <fragment
-        android:id="@+id/receiveAddressFormatSelectFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.receivemain.AddressFormatSelectFragment"/>
+        android:id="@+id/receiveBchAddressTypeSelectFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receivemain.BchAddressTypeSelectFragment"/>
+    <fragment
+        android:id="@+id/receiveDerivationSelectFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receivemain.DerivationSelectFragment"/>
     <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment"

@@ -99,12 +99,15 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                                 when (val coinActiveWalletsType = viewModel.getCoinActiveWalletsType(coin)) {
                                     CoinActiveWalletsType.MultipleAddressTypes -> {
                                         navController.slideFromRight(
-                                            R.id.receiveAddressFormatSelectFragment,
-                                            AddressFormatSelectFragment.prepareParams(coin.uid)
+                                            R.id.receiveBchAddressTypeSelectFragment,
+                                            BchAddressTypeSelectFragment.prepareParams(coin.uid)
                                         )
                                     }
                                     CoinActiveWalletsType.MultipleDerivations -> {
-
+                                        navController.slideFromRight(
+                                            R.id.receiveDerivationSelectFragment,
+                                            DerivationSelectFragment.prepareParams(coin.uid)
+                                        )
                                     }
                                     CoinActiveWalletsType.MultipleBlockchains -> {
                                         navController.slideFromRight(
