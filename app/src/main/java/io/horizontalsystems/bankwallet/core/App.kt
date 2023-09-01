@@ -22,9 +22,64 @@ import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
-import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.core.providers.*
-import io.horizontalsystems.bankwallet.core.storage.*
+import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
+import io.horizontalsystems.bankwallet.core.managers.AccountManager
+import io.horizontalsystems.bankwallet.core.managers.AdapterManager
+import io.horizontalsystems.bankwallet.core.managers.AppVersionManager
+import io.horizontalsystems.bankwallet.core.managers.BackgroundStateChangeListener
+import io.horizontalsystems.bankwallet.core.managers.BackupManager
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
+import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
+import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.CexAssetManager
+import io.horizontalsystems.bankwallet.core.managers.CoinManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.KeyStoreCleaner
+import io.horizontalsystems.bankwallet.core.managers.LanguageManager
+import io.horizontalsystems.bankwallet.core.managers.LocalStorageManager
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.NetworkManager
+import io.horizontalsystems.bankwallet.core.managers.NftAdapterManager
+import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
+import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
+import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
+import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
+import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
+import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
+import io.horizontalsystems.bankwallet.core.managers.TermsManager
+import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
+import io.horizontalsystems.bankwallet.core.managers.TorManager
+import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.core.managers.TronAccountManager
+import io.horizontalsystems.bankwallet.core.managers.TronKitManager
+import io.horizontalsystems.bankwallet.core.managers.WalletActivator
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletStorage
+import io.horizontalsystems.bankwallet.core.managers.WordsManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
+import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
+import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
+import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
+import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
+import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
+import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
+import io.horizontalsystems.bankwallet.core.storage.NftStorage
+import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
@@ -155,15 +210,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        val appConfig = AppConfigProvider()
-        appConfigProvider = appConfig
-
         LocalStorageManager(preferences).apply {
             localStorage = this
             pinStorage = this
             thirdKeyboardStorage = this
             marketStorage = this
         }
+
+        val appConfig = AppConfigProvider(localStorage)
+        appConfigProvider = appConfig
 
         torKitManager = TorManager(instance, localStorage)
         subscriptionManager = SubscriptionManager()
@@ -174,6 +229,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             hsApiKey = appConfig.marketApiKey,
             cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
             defiYieldApiKey = appConfig.defiyieldProviderApiKey,
+            appConfigProvider = appConfigProvider,
             subscriptionManager = subscriptionManager
         )
         marketKit.sync()
@@ -258,7 +314,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
         tronAccountManager.start()
 
-        systemInfoManager = SystemInfoManager()
+        systemInfoManager = SystemInfoManager(appConfigProvider)
 
         languageManager = LanguageManager()
         currencyManager = CurrencyManager(localStorage, appConfigProvider)

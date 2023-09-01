@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
@@ -28,7 +28,8 @@ class MainSettingsService(
     private val wc1SessionManager: WC1SessionManager,
     private val wc2SessionManager: WC2SessionManager,
     private val wc1Manager: WC1Manager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val appConfigProvider: AppConfigProvider
 ) {
 
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
@@ -55,7 +56,7 @@ class MainSettingsService(
         get() {
             var appVersion = systemInfoManager.appVersion
             if (Translator.getString(R.string.is_release) == "false") {
-                appVersion += " (${BuildConfig.VERSION_CODE})"
+                appVersion += " (${appConfigProvider.appBuild})"
             }
 
             return appVersion
