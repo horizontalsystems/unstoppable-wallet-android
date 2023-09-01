@@ -370,6 +370,7 @@
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">The Native SegWit format is preferred in Bitcoin. While all address formats (Taproot, SegWit, Legacy) can be used to receive BTC, your Bitcoin balances for each address type are tracked separately.</string>
     <string name="Balance_Receive_Account">Account</string>
     <string name="Balance_Receive_NotActive">Not active</string>
+    <string name="Balance_LockedAmount_Title">Locked</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
