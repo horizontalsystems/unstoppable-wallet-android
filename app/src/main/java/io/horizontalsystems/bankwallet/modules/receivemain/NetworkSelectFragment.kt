@@ -29,7 +29,7 @@ import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.modules.receive.ReceiveFragment
+import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -125,7 +125,7 @@ fun NetworkSelectScreen(
                                 onClick = {
                                     navController.slideFromBottom(
                                         R.id.receiveFragment,
-                                        bundleOf(ReceiveFragment.WALLET_KEY to wallet)
+                                        bundleOf(ReceiveAddressFragment.WALLET_KEY to wallet)
                                     )
                                 }
                             )

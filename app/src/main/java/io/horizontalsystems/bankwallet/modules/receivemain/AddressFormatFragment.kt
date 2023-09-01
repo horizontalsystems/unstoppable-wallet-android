@@ -19,10 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.bitcoinCashCoinType
+import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -109,7 +110,10 @@ fun AddressFormatScreen(
                                 title = item.title,
                                 subtitle = item.subtitle,
                                 onClick = {
-                                    navController.slideFromRight(R.id.receiveFragment)
+                                    navController.slideFromBottom(
+                                        R.id.receiveFragment,
+                                        bundleOf(ReceiveAddressFragment.WALLET_KEY to wallet)
+                                    )
                                 }
                             )
                         }

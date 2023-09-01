@@ -30,7 +30,7 @@ import cash.p.terminal.core.imagePlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.receive.ReceiveFragment
+import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.RowUniversal
@@ -112,7 +112,7 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                                     is CoinActiveWalletsType.Single -> {
                                         navController.slideFromBottom(
                                             R.id.receiveFragment,
-                                            bundleOf(ReceiveFragment.WALLET_KEY to coinActiveWalletsType.wallet)
+                                            bundleOf(ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet)
                                         )
                                     }
 
