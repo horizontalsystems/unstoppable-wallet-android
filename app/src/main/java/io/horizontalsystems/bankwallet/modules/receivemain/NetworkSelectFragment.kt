@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
+import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -125,7 +125,7 @@ fun NetworkSelectScreen(
                                 onClick = {
                                     navController.slideFromBottom(
                                         R.id.receiveFragment,
-                                        bundleOf(ReceiveFragment.WALLET_KEY to wallet)
+                                        bundleOf(ReceiveAddressFragment.WALLET_KEY to wallet)
                                     )
                                 }
                             )

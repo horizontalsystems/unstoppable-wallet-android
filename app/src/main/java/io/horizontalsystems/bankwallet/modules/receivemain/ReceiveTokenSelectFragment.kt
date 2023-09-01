@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.core.imagePlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
+import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -115,7 +115,7 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                                     is CoinActiveWalletsType.Single -> {
                                         navController.slideFromBottom(
                                             R.id.receiveFragment,
-                                            bundleOf(ReceiveFragment.WALLET_KEY to coinActiveWalletsType.wallet)
+                                            bundleOf(ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet)
                                         )
                                     }
 
