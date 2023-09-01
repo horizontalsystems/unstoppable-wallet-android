@@ -23,7 +23,7 @@ object NftAssetModule {
                 App.accountManager,
                 App.nftAdapterManager,
                 App.nftMetadataManager.provider(nftUid.blockchainType),
-                BalanceXRateRepository(App.currencyManager, App.marketKit)
+                BalanceXRateRepository("nft-asset", App.currencyManager, App.marketKit)
             )
             return NftAssetViewModel(service) as T
         }

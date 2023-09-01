@@ -25,6 +25,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.UUID
 
 class LocalStorageManager(
     private val preferences: SharedPreferences
@@ -74,6 +75,7 @@ class LocalStorageManager(
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
     private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
+    private val APP_ID = "app_id"
 
     private val gson by lazy { Gson() }
 
@@ -109,6 +111,18 @@ class LocalStorageManager(
         get() = preferences.getString(AUTH_TOKEN, null)
         set(value) {
             preferences.edit().putString(AUTH_TOKEN, value).apply()
+        }
+
+    override val appId: String?
+        get() {
+            return when (val id = preferences.getString(APP_ID, null)) {
+                null -> {
+                    val newId = UUID.randomUUID().toString()
+                    preferences.edit().putString(APP_ID, newId).apply()
+                    newId
+                }
+                else -> id
+            }
         }
 
     override var baseBitcoinProvider: String?
