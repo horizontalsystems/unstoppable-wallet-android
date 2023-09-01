@@ -33,6 +33,7 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewModel
+import cash.p.terminal.modules.balance.token.TokenBalanceFragment
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
@@ -291,7 +292,12 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             ButtonPrimaryDefault(
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.Balance_Address),
-                onClick = onClickReceive,
+                onClick = {
+                    navController.slideFromRight(
+                        R.id.tokenBalanceFragment,
+                        TokenBalanceFragment.prepareParams(viewItem.wallet)
+                    )
+                },
             )
         } else {
             ButtonPrimaryYellow(
@@ -310,7 +316,12 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 ButtonPrimaryCircle(
                     icon = R.drawable.ic_arrow_down_left_24,
                     contentDescription = stringResource(R.string.Balance_Receive),
-                    onClick = onClickReceive,
+                    onClick = {
+                        navController.slideFromRight(
+                            R.id.tokenBalanceFragment,
+                            TokenBalanceFragment.prepareParams(viewItem.wallet)
+                        )
+                    },
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 ButtonPrimaryCircle(
@@ -328,7 +339,12 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 ButtonPrimaryDefault(
                     modifier = Modifier.weight(1f),
                     title = stringResource(R.string.Balance_Receive),
-                    onClick = onClickReceive,
+                    onClick = {
+                        navController.slideFromRight(
+                            R.id.tokenBalanceFragment,
+                            TokenBalanceFragment.prepareParams(viewItem.wallet)
+                        )
+                    },
                 )
             }
         }
@@ -349,6 +365,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
 
 @Composable
 private fun LockedValueRow(viewItem: BalanceViewItem) {
+    if (viewItem.coinValueLocked.value == null) return
+
     AnimatedVisibility(
         visible = viewItem.coinValueLocked.visible,
         enter = expandVertically() + fadeIn(),

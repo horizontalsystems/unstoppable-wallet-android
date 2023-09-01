@@ -121,7 +121,7 @@ fun TransactionsScreen(
                 }
             }
 
-            Crossfade(viewState) { viewState ->
+            Crossfade(viewState, label = "") { viewState ->
                 when (viewState) {
                     ViewState.Success -> {
                         transactions?.let { transactionItems ->
@@ -151,14 +151,14 @@ fun TransactionsScreen(
                                 ) {
                                     LazyListState(0, 0)
                                 }
-
-                                TransactionList(
-                                    listState = listState,
-                                    transactionsMap = transactionItems,
-                                    willShow = { viewModel.willShow(it) },
-                                    onClick = { onTransactionClick(it, viewModel, navController) },
-                                    onBottomReached = { viewModel.onBottomReached() }
-                                )
+                                LazyColumn(state = listState) {
+                                    transactionList(
+                                        transactionsMap = transactionItems,
+                                        willShow = { viewModel.willShow(it) },
+                                        onClick = { onTransactionClick(it, viewModel, navController) },
+                                        onBottomReached = { viewModel.onBottomReached() }
+                                    )
+                                }
                             }
                         }
                     }
@@ -184,9 +184,7 @@ private fun onTransactionClick(
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun TransactionList(
-    listState: LazyListState = rememberLazyListState(),
+fun LazyListScope.transactionList(
     transactionsMap: Map<String, List<TransactionViewItem>>,
     willShow: (TransactionViewItem) -> Unit,
     onClick: (TransactionViewItem) -> Unit,
@@ -194,42 +192,40 @@ fun TransactionList(
 ) {
     val bottomReachedUid = getBottomReachedUid(transactionsMap)
 
-    LazyColumn(state = listState) {
-        transactionsMap.forEach { (dateHeader, transactions) ->
-            stickyHeader {
-                DateHeader(dateHeader)
+    transactionsMap.forEach { (dateHeader, transactions) ->
+        stickyHeader {
+            DateHeader(dateHeader)
+        }
+
+        val itemsCount = transactions.size
+        val singleElement = itemsCount == 1
+
+        itemsIndexed(transactions) { index, item ->
+            val position: SectionItemPosition = when {
+                singleElement -> SectionItemPosition.Single
+                index == 0 -> SectionItemPosition.First
+                index == itemsCount - 1 -> SectionItemPosition.Last
+                else -> SectionItemPosition.Middle
             }
 
-            val itemsCount = transactions.size
-            val singleElement = itemsCount == 1
-
-            itemsIndexed(transactions) { index, item ->
-                val position: SectionItemPosition = when {
-                    singleElement -> SectionItemPosition.Single
-                    index == 0 -> SectionItemPosition.First
-                    index == itemsCount - 1 -> SectionItemPosition.Last
-                    else -> SectionItemPosition.Middle
-                }
-
-                Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    TransactionCell(item, position) { onClick.invoke(item) }
-                }
-
-                willShow.invoke(item)
-
-                if (item.uid == bottomReachedUid) {
-                    onBottomReached.invoke()
-                }
+            Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                TransactionCell(item, position) { onClick.invoke(item) }
             }
 
-            item {
-                Spacer(modifier = Modifier.height(12.dp))
+            willShow.invoke(item)
+
+            if (item.uid == bottomReachedUid) {
+                onBottomReached.invoke()
             }
         }
 
         item {
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
+    }
+
+    item {
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
