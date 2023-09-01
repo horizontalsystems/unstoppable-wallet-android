@@ -283,8 +283,11 @@
         android:id="@+id/receiveNetworkSelectFragment"
         android:name="cash.p.terminal.modules.receivemain.NetworkSelectFragment"/>
     <fragment
-        android:id="@+id/receiveAddressFormatFragment"
-        android:name="cash.p.terminal.modules.receivemain.AddressFormatFragment"/>
+        android:id="@+id/receiveBchAddressTypeSelectFragment"
+        android:name="cash.p.terminal.modules.receivemain.BchAddressTypeSelectFragment"/>
+    <fragment
+        android:id="@+id/receiveDerivationSelectFragment"
+        android:name="cash.p.terminal.modules.receivemain.DerivationSelectFragment"/>
     <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="cash.p.terminal.modules.evmnetwork.EvmNetworkFragment"
