@@ -98,7 +98,10 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                             onClick = {
                                 when (val coinActiveWalletsType = viewModel.getCoinActiveWalletsType(coin)) {
                                     CoinActiveWalletsType.MultipleAddressTypes -> {
-                                        navController.slideFromRight(R.id.receiveAddressFormatFragment)
+                                        navController.slideFromRight(
+                                            R.id.receiveAddressFormatSelectFragment,
+                                            AddressFormatSelectFragment.prepareParams(coin.uid)
+                                        )
                                     }
                                     CoinActiveWalletsType.MultipleDerivations -> {
 
