@@ -366,7 +366,8 @@
     <string name="Balance_ReceiveWarningText">Send only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
     <string name="Balance_Receive_AddressFormatDescription">Select an address format to get an address to receive.</string>
     <string name="Balance_Receive_AddressFormat">Address Format</string>
-    <string name="Balance_Receive_AddressFormat_WarningText">The Native SegWit format is preferred in Bitcoin. While all address formats (Taproot, SegWit, Legacy) can be used to receive BTC, your Bitcoin balances for each address type are tracked separately.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">The Cash Address format is preferred for receiving Bitcoin Cash (BCH). While both address formats can be used to receive BCH, your Bitcoin Cash balances for each address type are tracked separately.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">The Native SegWit format is preferred in Bitcoin. While all address formats (Taproot, SegWit, Legacy) can be used to receive BTC, your Bitcoin balances for each address type are tracked separately.</string>
     <string name="Balance_Receive_Account">Account</string>
     <string name="Balance_Receive_NotActive">Not active</string>
 

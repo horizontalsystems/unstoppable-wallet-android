@@ -13,16 +13,19 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -37,19 +40,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.TokenType
 
-private val testItems = listOf(
-    BipViewItem(
-        title = "Native SegWit (recommended)",
-        subtitle = "BIP 84",
-    ),
-    BipViewItem(
-        title = "Newest",
-        subtitle = "BIP 86",
-    ),
-)
-
-class AddressFormatFragment : BaseFragment() {
+class AddressFormatSelectFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,16 +56,31 @@ class AddressFormatFragment : BaseFragment() {
             )
 
             setContent {
-                AddressFormatScreen(findNavController())
+                val navController = findNavController()
+                val coinUid = arguments?.getString("coinUid")
+
+                if (coinUid == null) {
+                    HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
+                    navController.popBackStack()
+                } else {
+                    AddressFormatScreen(navController, coinUid)
+                }
             }
         }
+    }
+
+    companion object {
+        fun prepareParams(coinUid: String) = bundleOf("coinUid" to coinUid)
     }
 }
 
 @Composable
 fun AddressFormatScreen(
     navController: NavController,
+    coinUid: String,
 ) {
+    val viewModel = viewModel<AddressFormatSelectViewModel>(factory = AddressFormatSelectViewModel.Factory(coinUid))
+
     ComposeAppTheme {
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
@@ -103,13 +112,19 @@ fun AddressFormatScreen(
                         text = stringResource(R.string.Balance_Receive_AddressFormatDescription)
                     )
                     VSpacer(20.dp)
-                    CellUniversalLawrenceSection(testItems) { item ->
+                    CellUniversalLawrenceSection(viewModel.coinWallets) { wallet ->
+                        val addressType = (wallet.token.type as TokenType.AddressTyped).type
+                        val bitcoinCashCoinType = addressType.bitcoinCashCoinType
+
                         SectionUniversalItem {
                             AddressFormatCell(
-                                title = item.title,
-                                subtitle = item.subtitle,
+                                title = stringResource(bitcoinCashCoinType.title),
+                                subtitle = bitcoinCashCoinType.value.uppercase(),
                                 onClick = {
-                                    navController.slideFromRight(R.id.receiveFragment)
+                                    navController.slideFromBottom(
+                                        R.id.receiveFragment,
+                                        bundleOf(ReceiveFragment.WALLET_KEY to wallet)
+                                    )
                                 }
                             )
                         }
@@ -117,7 +132,7 @@ fun AddressFormatScreen(
                     VSpacer(32.dp)
                     TextImportantWarning(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(R.string.Balance_Receive_AddressFormat_WarningText)
+                        text = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType)
                     )
                 }
             }
@@ -148,19 +163,5 @@ fun AddressFormatCell(
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )
-    }
-}
-
-data class BipViewItem(
-    val title: String,
-    val subtitle: String,
-)
-
-@Preview
-@Composable
-fun Preview_BipSelectScreen() {
-    val navController = rememberNavController()
-    ComposeAppTheme {
-        AddressFormatScreen(navController)
     }
 }
