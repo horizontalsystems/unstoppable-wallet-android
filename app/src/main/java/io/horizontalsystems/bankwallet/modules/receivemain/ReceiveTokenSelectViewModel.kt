@@ -45,22 +45,22 @@ class ReceiveTokenSelectViewModel(
         }
     }
 
-    fun getXxx(coin: Coin): ReceiveAddressXxxState? {
+    fun getCoinActiveWalletsType(coin: Coin): CoinActiveWalletsType? {
         val coinWallets = wallets.filter { it.coin == coin }
         val singleWallet = coinWallets.singleOrNull()
 
         return when {
             singleWallet != null -> {
-                ReceiveAddressXxxState.Simple(singleWallet)
+                CoinActiveWalletsType.Single(singleWallet)
             }
             coinWallets.all { it.token.type is TokenType.Derived } -> {
-                ReceiveAddressXxxState.ChooseDerivationType
+                CoinActiveWalletsType.MultipleDerivations
             }
             coinWallets.all { it.token.type is TokenType.AddressTyped } -> {
-                ReceiveAddressXxxState.ChooseAddressType
+                CoinActiveWalletsType.MultipleAddressTypes
             }
             coinWallets.isNotEmpty() -> {
-                ReceiveAddressXxxState.ChooseNetwork
+                CoinActiveWalletsType.MultipleBlockchains
             }
             else -> {
                 null
@@ -78,11 +78,11 @@ class ReceiveTokenSelectViewModel(
     }
 }
 
-sealed interface ReceiveAddressXxxState {
-    object ChooseNetwork : ReceiveAddressXxxState
-    object ChooseDerivationType : ReceiveAddressXxxState
-    object ChooseAddressType : ReceiveAddressXxxState
-    data class Simple(val wallet: Wallet) : ReceiveAddressXxxState
+sealed interface CoinActiveWalletsType {
+    data class Single(val wallet: Wallet) : CoinActiveWalletsType
+    object MultipleDerivations : CoinActiveWalletsType
+    object MultipleAddressTypes : CoinActiveWalletsType
+    object MultipleBlockchains : CoinActiveWalletsType
 }
 
 data class ReceiveTokenSelectUiState(
