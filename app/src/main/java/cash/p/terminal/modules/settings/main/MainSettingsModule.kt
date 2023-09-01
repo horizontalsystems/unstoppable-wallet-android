@@ -19,7 +19,8 @@ object MainSettingsModule {
                 App.wc1SessionManager,
                 App.wc2SessionManager,
                 App.wc1Manager,
-                App.accountManager
+                App.accountManager,
+                App.appConfigProvider,
             )
             val viewModel = MainSettingsViewModel(
                 service,

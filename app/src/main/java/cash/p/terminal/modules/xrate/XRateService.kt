@@ -20,7 +20,7 @@ class XRateService(
     }
 
     fun getRateFlow(coinUid: String): Flow<CurrencyValue> {
-        return marketKit.coinPriceObservable(coinUid, currency.code)
+        return marketKit.coinPriceObservable("xrate-service", coinUid, currency.code)
             .subscribeOn(Schedulers.io())
             .map {
                 CurrencyValue(currency, it.value)

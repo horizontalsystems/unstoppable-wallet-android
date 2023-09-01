@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.settings.main
 
-import cash.p.terminal.BuildConfig
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.LanguageManager
+import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.walletconnect.version1.WC1Manager
@@ -28,7 +28,8 @@ class MainSettingsService(
     private val wc1SessionManager: WC1SessionManager,
     private val wc2SessionManager: WC2SessionManager,
     private val wc1Manager: WC1Manager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val appConfigProvider: AppConfigProvider
 ) {
 
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
@@ -55,7 +56,7 @@ class MainSettingsService(
         get() {
             var appVersion = systemInfoManager.appVersion
             if (Translator.getString(R.string.is_release) == "false") {
-                appVersion += " (${BuildConfig.VERSION_CODE})"
+                appVersion += " (${appConfigProvider.appBuild})"
             }
 
             return appVersion

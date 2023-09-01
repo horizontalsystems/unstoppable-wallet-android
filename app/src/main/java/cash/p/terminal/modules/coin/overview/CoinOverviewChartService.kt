@@ -145,7 +145,7 @@ class CoinOverviewChartService(
     }
 
     private fun subscribeForUpdates(currency: Currency) {
-        marketKit.coinPriceObservable(coinUid, currency.code)
+        marketKit.coinPriceObservable("coin-overview-chart-service", coinUid, currency.code)
             .subscribeIO {
                 dataInvalidated()
             }

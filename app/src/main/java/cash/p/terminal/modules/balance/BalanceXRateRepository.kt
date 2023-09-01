@@ -9,6 +9,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 
 class BalanceXRateRepository(
+    private val tag: String,
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper
 ) {
@@ -57,7 +58,7 @@ class BalanceXRateRepository(
     }
 
     private fun subscribeForLatestRateUpdates() {
-        latestRateDisposable = marketKit.coinPriceMapObservable(coinUids, baseCurrency.code)
+        latestRateDisposable = marketKit.coinPriceMapObservable(tag, coinUids, baseCurrency.code)
             .subscribeIO {
                 itemSubject.onNext(it)
             }

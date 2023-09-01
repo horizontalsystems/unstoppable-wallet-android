@@ -6,13 +6,13 @@ import android.os.Build
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
-import cash.p.terminal.BuildConfig
 import cash.p.terminal.core.App
+import cash.p.terminal.core.providers.AppConfigProvider
 import io.horizontalsystems.core.ISystemInfoManager
 
-class SystemInfoManager : ISystemInfoManager {
+class SystemInfoManager(appConfigProvider: AppConfigProvider) : ISystemInfoManager {
 
-    override val appVersion: String = BuildConfig.VERSION_NAME
+    override val appVersion: String = appConfigProvider.appVersion
 
     private val biometricManager by lazy { BiometricManager.from(App.instance) }
 
