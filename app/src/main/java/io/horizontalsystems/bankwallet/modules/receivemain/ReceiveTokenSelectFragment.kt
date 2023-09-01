@@ -96,23 +96,23 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                             coinIconUrl = coin.imageUrl,
                             coinIconPlaceholder = coin.imagePlaceholder,
                             onClick = {
-                                when (val xxx = viewModel.getXxx(coin)) {
-                                    ReceiveAddressXxxState.ChooseAddressType -> {
+                                when (val coinActiveWalletsType = viewModel.getCoinActiveWalletsType(coin)) {
+                                    CoinActiveWalletsType.MultipleAddressTypes -> {
                                         navController.slideFromRight(R.id.receiveAddressFormatFragment)
                                     }
-                                    ReceiveAddressXxxState.ChooseDerivationType -> {
+                                    CoinActiveWalletsType.MultipleDerivations -> {
 
                                     }
-                                    ReceiveAddressXxxState.ChooseNetwork -> {
+                                    CoinActiveWalletsType.MultipleBlockchains -> {
                                         navController.slideFromRight(
                                             R.id.receiveNetworkSelectFragment,
                                             NetworkSelectFragment.prepareParams(coin.uid)
                                         )
                                     }
-                                    is ReceiveAddressXxxState.Simple -> {
+                                    is CoinActiveWalletsType.Single -> {
                                         navController.slideFromBottom(
                                             R.id.receiveFragment,
-                                            bundleOf(ReceiveFragment.WALLET_KEY to xxx.wallet)
+                                            bundleOf(ReceiveFragment.WALLET_KEY to coinActiveWalletsType.wallet)
                                         )
                                     }
 
