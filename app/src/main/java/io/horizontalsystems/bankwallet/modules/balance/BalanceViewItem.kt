@@ -2,9 +2,13 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.helpers.DateHelper
@@ -24,7 +28,7 @@ data class BalanceViewItem(
     val exchangeValue: DeemedValue<String>,
     val diff: BigDecimal?,
     val secondaryValue: DeemedValue<String>,
-    val coinValueLocked: DeemedValue<String>,
+    val coinValueLocked: DeemedValue<String?>,
     val fiatValueLocked: DeemedValue<String>,
     val expanded: Boolean,
     val sendEnabled: Boolean = false,
@@ -90,7 +94,7 @@ class BalanceViewItemFactory {
             }
             is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
             is AdapterState.Zcash -> {
-                when(state.zcashState){
+                when (state.zcashState) {
                     is ZcashAdapter.ZcashState.DownloadingBlocks -> Translator.getString(R.string.Balance_DownloadingBlocks)
                     is ZcashAdapter.ZcashState.ScanningBlocks -> Translator.getString(R.string.Balance_ScanningBlocks)
                 }
@@ -151,8 +155,12 @@ class BalanceViewItemFactory {
         hideBalance: Boolean,
         coinDecimals: Int,
         token: Token
-    ): DeemedValue<String> {
-        val visible = !hideBalance && balance > BigDecimal.ZERO
+    ): DeemedValue<String?> {
+        if (balance <= BigDecimal.ZERO) {
+            return DeemedValue(null, false, false)
+        }
+
+        val visible = !hideBalance
         val deemed = state !is AdapterState.Synced
 
         val value = App.numberFormatter.formatCoinFull(balance, token.coin.code, coinDecimals)
@@ -173,8 +181,7 @@ class BalanceViewItemFactory {
         val state = item.state
         val latestRate = item.coinPrice
 
-        val showSyncing = expanded && (state is AdapterState.Syncing || state is AdapterState.SearchingTxs || state is AdapterState.Zcash)
-        val balanceTotalVisibility = !hideBalance && !showSyncing
+        val balanceTotalVisibility = !hideBalance
         val fiatLockedVisibility = !hideBalance && item.balanceData.locked > BigDecimal.ZERO
 
         val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
@@ -189,43 +196,43 @@ class BalanceViewItemFactory {
         )
 
         return BalanceViewItem(
-                wallet = item.wallet,
-                currencySymbol = currency.symbol,
-                coinCode = coin.code,
-                coinTitle = coin.name,
-                coinIconUrl = coin.imageUrl,
-                coinIconPlaceholder = wallet.token.iconPlaceholder,
-                primaryValue = primaryValue,
-                secondaryValue = secondaryValue,
-                coinValueLocked = lockedCoinValue(
-                    state,
-                    item.balanceData.locked,
-                    hideBalance,
-                    wallet.decimal,
-                    wallet.token
-                ),
-                fiatValueLocked = BalanceViewHelper.currencyValue(
-                    item.balanceData.locked,
-                    latestRate,
-                    fiatLockedVisibility,
-                    true,
-                    currency,
-                    state !is AdapterState.Synced
-                ),
-                exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, !showSyncing),
-                diff = item.coinPrice?.diff,
-                expanded = expanded,
-                sendEnabled = state is AdapterState.Synced,
-                syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
-                syncingTextValue = getSyncingText(state, expanded),
-                syncedUntilTextValue = getSyncedUntilText(state, expanded),
-                failedIconVisible = state is AdapterState.NotSynced,
-                coinIconVisible = state !is AdapterState.NotSynced,
-                badge = wallet.badge,
-                swapVisible = wallet.token.swappable,
-                swapEnabled = state is AdapterState.Synced,
-                errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
-                isWatchAccount = watchAccount
+            wallet = item.wallet,
+            currencySymbol = currency.symbol,
+            coinCode = coin.code,
+            coinTitle = coin.name,
+            coinIconUrl = coin.imageUrl,
+            coinIconPlaceholder = wallet.token.iconPlaceholder,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            coinValueLocked = lockedCoinValue(
+                state,
+                item.balanceData.locked,
+                hideBalance,
+                wallet.decimal,
+                wallet.token
+            ),
+            fiatValueLocked = BalanceViewHelper.currencyValue(
+                item.balanceData.locked,
+                latestRate,
+                fiatLockedVisibility,
+                true,
+                currency,
+                state !is AdapterState.Synced
+            ),
+            exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
+            diff = item.coinPrice?.diff,
+            expanded = expanded,
+            sendEnabled = state is AdapterState.Synced,
+            syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
+            syncingTextValue = getSyncingText(state, expanded),
+            syncedUntilTextValue = getSyncedUntilText(state, expanded),
+            failedIconVisible = state is AdapterState.NotSynced,
+            coinIconVisible = state !is AdapterState.NotSynced,
+            badge = wallet.badge,
+            swapVisible = wallet.token.swappable,
+            swapEnabled = state is AdapterState.Synced,
+            errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
+            isWatchAccount = watchAccount
         )
     }
 }
