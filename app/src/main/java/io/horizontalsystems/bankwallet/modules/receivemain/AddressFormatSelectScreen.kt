@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -37,7 +37,7 @@ fun AddressFormatSelectScreen(
     navController: NavController,
     addressFormatItems: List<AddressFormatItem>,
     description: String,
->>>>>>>> 5476c52de (Implement functionality for selecting BTC derivation type):app/src/main/java/cash.p.terminal/modules/receivemain/AddressFormatSelectScreen.kt
+    popupDestinationId: Int?,
 ) {
     ComposeAppTheme {
         Scaffold(
@@ -67,9 +67,12 @@ fun AddressFormatSelectScreen(
                             title = item.title,
                             subtitle = item.subtitle,
                             onClick = {
-                                navController.slideFromBottom(
+                                navController.slideFromRight(
                                     R.id.receiveFragment,
-                                    bundleOf(ReceiveAddressFragment.WALLET_KEY to item.wallet)
+                                    bundleOf(
+                                        ReceiveAddressFragment.WALLET_KEY to item.wallet,
+                                        ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
+                                    )
                                 )
                             }
                         )

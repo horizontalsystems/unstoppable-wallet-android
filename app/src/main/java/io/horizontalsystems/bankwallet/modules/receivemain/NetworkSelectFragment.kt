@@ -28,7 +28,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -59,12 +59,15 @@ class NetworkSelectFragment : BaseFragment() {
             setContent {
                 val navController = findNavController()
                 val coinUid = arguments?.getString("coinUid")
+                val popupDestinationId = arguments?.getInt(
+                    ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY
+                )
 
                 if (coinUid == null) {
                     HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
                     navController.popBackStack()
                 } else {
-                    NetworkSelectScreen(navController, coinUid)
+                    NetworkSelectScreen(navController, coinUid, popupDestinationId)
                 }
 
             }
@@ -72,7 +75,12 @@ class NetworkSelectFragment : BaseFragment() {
     }
 
     companion object {
-        fun prepareParams(coinUid: String) = bundleOf("coinUid" to coinUid)
+        fun prepareParams(coinUid: String, popupDestinationId: Int?): Bundle {
+            return bundleOf(
+                "coinUid" to coinUid,
+                ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId
+            )
+        }
     }
 }
 
@@ -80,6 +88,7 @@ class NetworkSelectFragment : BaseFragment() {
 fun NetworkSelectScreen(
     navController: NavController,
     coinUid: String,
+    popupDestinationId: Int?,
 ) {
     val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(coinUid))
 
@@ -114,9 +123,12 @@ fun NetworkSelectScreen(
                                 subtitle = blockchain.description,
                                 imageUrl = blockchain.type.imageUrl,
                                 onClick = {
-                                    navController.slideFromBottom(
+                                    navController.slideFromRight(
                                         R.id.receiveFragment,
-                                        bundleOf(ReceiveAddressFragment.WALLET_KEY to wallet)
+                                        bundleOf(
+                                            ReceiveAddressFragment.WALLET_KEY to wallet,
+                                            ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
+                                        )
                                     )
                                 }
                             )
