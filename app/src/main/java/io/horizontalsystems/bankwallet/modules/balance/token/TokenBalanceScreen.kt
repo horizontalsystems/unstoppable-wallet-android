@@ -297,7 +297,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
     val onClickReceive = {
         try {
             val params = ReceiveAddressFragment.params(viewModel.getWalletForReceive(viewItem))
-            navController.slideFromBottom(R.id.receiveFragment, params)
+            navController.slideFromRight(R.id.receiveFragment, params)
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
