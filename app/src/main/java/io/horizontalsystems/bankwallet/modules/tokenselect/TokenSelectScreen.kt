@@ -44,8 +44,8 @@ fun TokenSelectScreen(
                 )
             }
         ) { paddingValues ->
-            val balanceViewItems = viewModel.uiState.items
-            if (balanceViewItems.isEmpty()) {
+            val uiState = viewModel.uiState
+            if (uiState.noItems) {
                 ListEmptyView(
                     text = emptyItemsText,
                     icon = R.drawable.ic_empty_wallet
@@ -55,6 +55,7 @@ fun TokenSelectScreen(
                     item {
                         VSpacer(12.dp)
                     }
+                    val balanceViewItems = uiState.items
                     itemsIndexed(balanceViewItems) { index, item ->
                         val lastItem = index == balanceViewItems.size - 1
                         val modifier = if (onClickEnabled.invoke(item)) {
