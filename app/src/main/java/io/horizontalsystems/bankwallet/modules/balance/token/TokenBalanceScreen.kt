@@ -327,7 +327,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 icon = R.drawable.ic_arrow_up_right_24,
                 title = stringResource(R.string.Balance_Send),
                 onClick = {
-                    navController.slideFromBottom(
+                    navController.slideFromRight(
                         R.id.sendXFragment,
                         SendFragment.prepareParams(viewItem.wallet)
                     )
