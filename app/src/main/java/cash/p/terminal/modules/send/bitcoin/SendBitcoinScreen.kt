@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -24,8 +23,6 @@ import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
-import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
@@ -43,7 +40,7 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import java.math.BigDecimal
 
@@ -118,13 +115,7 @@ fun SendBitcoinScreen(
             AppBar(
                 title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
                 navigationIcon = {
-                    CoinImage(
-                        iconUrl = fullCoin.coin.imageUrl,
-                        placeholder = fullCoin.iconPlaceholder,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .size(24.dp)
-                    )
+                    HsBackButton(onClick = { fragmentNavController.popBackStack() })
                 },
                 menuItems = listOf(
                     MenuItem(
@@ -133,11 +124,6 @@ fun SendBitcoinScreen(
                         tint = ComposeAppTheme.colors.jacob,
                         onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
                     ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { fragmentNavController.popBackStack() }
-                    )
                 )
             )
 
