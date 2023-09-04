@@ -25,14 +25,12 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
->>>>>>>> 5476c52de (Implement functionality for selecting BTC derivation type):app/src/main/java/cash.p.terminal/modules/receivemain/AddressFormatSelectScreen.kt
 
 @Composable
 fun AddressFormatSelectScreen(
@@ -50,15 +48,7 @@ fun AddressFormatSelectScreen(
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = {
-                                navController.popBackStack(R.id.receiveTokenSelectFragment, true)
-                            }
-                        )
-                    )
+                    menuItems = listOf()
                 )
             }
         ) {
