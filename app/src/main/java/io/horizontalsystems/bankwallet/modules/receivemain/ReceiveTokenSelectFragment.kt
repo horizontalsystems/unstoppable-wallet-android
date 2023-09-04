@@ -78,7 +78,7 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                     menuItems = listOf(),
                     onClose = { navController.popBackStack() },
                     onSearchTextChanged = { text ->
-                        //viewModel.updateFilter(text)
+                        viewModel.updateFilter(text)
                     }
                 )
             }

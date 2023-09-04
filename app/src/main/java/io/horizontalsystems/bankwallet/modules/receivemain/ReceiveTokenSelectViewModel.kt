@@ -17,9 +17,9 @@ import kotlinx.coroutines.rx2.collect
 class ReceiveTokenSelectViewModel(
     private val activeWalletRepository: BalanceActiveWalletRepository
 ) : ViewModel() {
+    private var query: String? = null
     private var wallets: List<Wallet> = listOf()
-    private val coins: List<Coin>
-        get() = wallets.map { it.coin }.distinct()
+    private var coins: List<Coin> = listOf()
 
     var uiState by mutableStateOf(
         ReceiveTokenSelectUiState(
@@ -31,11 +31,36 @@ class ReceiveTokenSelectViewModel(
         viewModelScope.launch {
             activeWalletRepository.itemsObservable.collect {
                 wallets = it.sortedBy { it.coin.code }
+                refreshItems()
 
                 emitState()
             }
         }
     }
+
+    fun updateFilter(q: String) {
+        viewModelScope.launch {
+            query = q
+            refreshItems()
+
+            emitState()
+        }
+    }
+
+    private fun refreshItems() {
+        var result = wallets
+            .map { it.coin }
+            .distinct()
+
+        query?.let { tmpQuery ->
+            result = result.filter { coin ->
+                coin.code.contains(tmpQuery, true) || coin.name.contains(tmpQuery, true)
+            }
+        }
+
+        coins = result
+    }
+
 
     private fun emitState() {
         viewModelScope.launch {
