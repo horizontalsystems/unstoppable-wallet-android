@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.imagePlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -96,29 +95,34 @@ fun ReceiveTokenSelectScreen(navController: NavController) {
                             coinIconUrl = coin.imageUrl,
                             coinIconPlaceholder = coin.imagePlaceholder,
                             onClick = {
+                                val popupDestinationId = navController.currentDestination?.id
+
                                 when (val coinActiveWalletsType = viewModel.getCoinActiveWalletsType(coin)) {
                                     CoinActiveWalletsType.MultipleAddressTypes -> {
                                         navController.slideFromRight(
                                             R.id.receiveBchAddressTypeSelectFragment,
-                                            BchAddressTypeSelectFragment.prepareParams(coin.uid)
+                                            BchAddressTypeSelectFragment.prepareParams(coin.uid, popupDestinationId)
                                         )
                                     }
                                     CoinActiveWalletsType.MultipleDerivations -> {
                                         navController.slideFromRight(
                                             R.id.receiveDerivationSelectFragment,
-                                            DerivationSelectFragment.prepareParams(coin.uid)
+                                            DerivationSelectFragment.prepareParams(coin.uid, popupDestinationId)
                                         )
                                     }
                                     CoinActiveWalletsType.MultipleBlockchains -> {
                                         navController.slideFromRight(
                                             R.id.receiveNetworkSelectFragment,
-                                            NetworkSelectFragment.prepareParams(coin.uid)
+                                            NetworkSelectFragment.prepareParams(coin.uid, popupDestinationId)
                                         )
                                     }
                                     is CoinActiveWalletsType.Single -> {
-                                        navController.slideFromBottom(
+                                        navController.slideFromRight(
                                             R.id.receiveFragment,
-                                            bundleOf(ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet)
+                                            bundleOf(
+                                                ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet,
+                                                ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
+                                            )
                                         )
                                     }
 
