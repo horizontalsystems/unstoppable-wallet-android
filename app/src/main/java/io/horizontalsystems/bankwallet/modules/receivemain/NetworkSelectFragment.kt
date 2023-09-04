@@ -36,7 +36,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -93,15 +92,7 @@ fun NetworkSelectScreen(
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = {
-                                navController.popBackStack(R.id.receiveTokenSelectFragment, true)
-                            }
-                        )
-                    )
+                    menuItems = listOf()
                 )
             }
         ) {
