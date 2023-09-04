@@ -24,11 +24,13 @@ class TokenSelectViewModel(
     private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?
 ) : ViewModel() {
 
+    private var noItems = false
     private var query: String? = null
     private var balanceViewItems = listOf<BalanceViewItem>()
     var uiState by mutableStateOf(
         TokenSelectUiState(
             items = balanceViewItems,
+            noItems = noItems
         )
     )
         private set
@@ -46,27 +48,21 @@ class TokenSelectViewModel(
     private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
         withContext(Dispatchers.IO) {
             if (balanceItems != null) {
-                val filters: List<(BalanceModule.BalanceItem) -> Boolean> = buildList {
-                    itemsFilter?.let { add(it) }
+                var itemsFiltered: List<BalanceModule.BalanceItem> = balanceItems
+                itemsFilter?.let {
+                    itemsFiltered = itemsFiltered.filter(it)
+                }
+                noItems = itemsFiltered.isEmpty()
 
-                    val tmpQuery = query
-                    if (!tmpQuery.isNullOrBlank()) {
-                        add {
-                            val coin = it.wallet.coin
-                            coin.code.contains(tmpQuery, true) || coin.name.contains(tmpQuery, true)
-                        }
+                val tmpQuery = query
+                if (!tmpQuery.isNullOrBlank()) {
+                    itemsFiltered = itemsFiltered.filter {
+                        val coin = it.wallet.coin
+                        coin.code.contains(tmpQuery, true) || coin.name.contains(tmpQuery, true)
                     }
                 }
 
-                val filteredItems = if (filters.isNotEmpty()) {
-                    balanceItems.filter { item ->
-                        filters.all { it.invoke(item) }
-                    }
-                } else {
-                    balanceItems
-                }
-
-                balanceViewItems = filteredItems.map { balanceItem ->
+                balanceViewItems = itemsFiltered.map { balanceItem ->
                     balanceViewItemFactory.viewItem(
                         item = balanceItem,
                         currency = service.baseCurrency,
@@ -95,6 +91,7 @@ class TokenSelectViewModel(
         viewModelScope.launch {
             uiState = TokenSelectUiState(
                 items = balanceViewItems,
+                noItems = noItems,
             )
         }
     }
@@ -132,4 +129,5 @@ class TokenSelectViewModel(
 
 data class TokenSelectUiState(
     val items: List<BalanceViewItem>,
+    val noItems: Boolean,
 )
