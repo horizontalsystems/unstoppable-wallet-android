@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,17 +8,14 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsScreen
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsScreen
 import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewScreen
@@ -35,41 +28,32 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 
-class NftCollectionFragment : BaseFragment() {
+class NftCollectionFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val uid = activity?.intent?.data?.getQueryParameter("uid")
-                val blockchainTypeUidFromIntent = activity?.intent?.data?.getQueryParameter("blockchainTypeUid")
-                if (uid != null) {
-                    activity?.intent?.data = null
-                }
-                val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
-                val blockchainTypeString = requireArguments().getString(blockchainTypeKey, blockchainTypeUidFromIntent ?: "")
-                val blockchainType = BlockchainType.fromUid(blockchainTypeString)
-
-                val viewModel by navGraphViewModels<NftCollectionOverviewViewModel>(R.id.nftCollectionFragment) {
-                    NftCollectionModule.Factory(blockchainType, nftCollectionUid)
-                }
-
-                NftCollectionScreen(
-                    findNavController(),
-                    viewModel
-                )
-            }
+    @Composable
+    override fun GetContent() {
+        val uid = activity?.intent?.data?.getQueryParameter("uid")
+        val blockchainTypeUidFromIntent = activity?.intent?.data?.getQueryParameter("blockchainTypeUid")
+        if (uid != null) {
+            activity?.intent?.data = null
         }
+        val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
+        val blockchainTypeString = requireArguments().getString(blockchainTypeKey, blockchainTypeUidFromIntent ?: "")
+        val blockchainType = BlockchainType.fromUid(blockchainTypeString)
+
+        val viewModel by navGraphViewModels<NftCollectionOverviewViewModel>(R.id.nftCollectionFragment) {
+            NftCollectionModule.Factory(blockchainType, nftCollectionUid)
+        }
+
+        NftCollectionScreen(
+            findNavController(),
+            viewModel
+        )
     }
 
     companion object {

@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.ranks
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -19,8 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
@@ -42,43 +36,32 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
-class CoinRankFragment : BaseFragment() {
+class CoinRankFragment : BaseComposeFragment() {
 
     private val type by lazy {
         requireArguments().parcelable<RankType>(rankTypeKey)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    type?.let { rankType ->
-                        CoinRankScreen(
-                            rankType,
-                            findNavController(),
-                        )
-                    } ?: run {
-                        ScreenMessageWithAction(
-                            text = stringResource(R.string.Error),
-                            icon = R.drawable.ic_error_48
-                        ) {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 48.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.Button_Close),
-                                onClick = { findNavController().popBackStack() }
-                            )
-                        }
-                    }
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            type?.let { rankType ->
+                CoinRankScreen(
+                    rankType,
+                    findNavController(),
+                )
+            } ?: run {
+                ScreenMessageWithAction(
+                    text = stringResource(R.string.Error),
+                    icon = R.drawable.ic_error_48
+                ) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .padding(horizontal = 48.dp)
+                            .fillMaxWidth(),
+                        title = stringResource(R.string.Button_Close),
+                        onClick = { findNavController().popBackStack() }
+                    )
                 }
             }
         }
@@ -118,9 +101,11 @@ private fun CoinRankScreen(
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
+
                 ViewState.Success -> {
                     var periodSelect by remember { mutableStateOf(uiState.periodSelect) }
                     val listState = rememberSaveable(uiState.periodSelect?.selected, uiState.sortDescending, saver = LazyListState.Saver) {

@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,48 +8,54 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionAmountCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoBtcLockCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoCancelCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoDoubleSpendCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoExplorerCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoRawTransaction
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSentToSelfCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSpeedUpCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoStatusCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoTransactionHashCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmountCell
 import io.horizontalsystems.core.findNavController
 
-class TransactionInfoFragment : BaseFragment() {
+class TransactionInfoFragment : BaseComposeFragment() {
 
     private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        val viewItem = viewModelTxs.tmpItemToShow ?: run {
+    @Composable
+    override fun GetContent() {
+        val viewItem = viewModelTxs.tmpItemToShow
+        if (viewItem == null) {
             findNavController().popBackStack()
-            return null
+            return 
         }
 
         val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) {
             TransactionInfoModule.Factory(viewItem)
         }
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                TransactionInfoScreen(viewModel, findNavController())
-            }
-        }
+        
+        TransactionInfoScreen(viewModel, findNavController())
     }
+
 }
 
 @Composable

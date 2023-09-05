@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,17 +8,14 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
@@ -30,41 +23,32 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScre
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class CoinFragment : BaseFragment() {
+class CoinFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val uid = try {
-                    activity?.intent?.data?.getQueryParameter("uid")
-                } catch (e: UnsupportedOperationException) {
-                    null
-                }
-
-                val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
-                if (uid != null) {
-                    activity?.intent?.data = null
-                }
-
-                CoinScreen(
-                    coinUid,
-                    coinViewModel(coinUid),
-                    findNavController(),
-                    childFragmentManager
-                )
-            }
+    @Composable
+    override fun GetContent() {
+        val uid = try {
+            activity?.intent?.data?.getQueryParameter("uid")
+        } catch (e: UnsupportedOperationException) {
+            null
         }
+
+        val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
+        if (uid != null) {
+            activity?.intent?.data = null
+        }
+
+        CoinScreen(
+            coinUid,
+            coinViewModel(coinUid),
+            findNavController(),
+            childFragmentManager
+        )
     }
 
     private fun coinViewModel(coinUid: String): CoinViewModel? = try {

@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,10 +15,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +25,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
@@ -61,7 +55,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Blockchain
 
-class CoinMajorHoldersFragment : BaseFragment() {
+class CoinMajorHoldersFragment : BaseComposeFragment() {
 
     private val coinUid by lazy {
         requireArguments().getString(COIN_UID_KEY)!!
@@ -71,28 +65,16 @@ class CoinMajorHoldersFragment : BaseFragment() {
         requireArguments().parcelable<Blockchain>(BLOCKCHAIN_KEY)!!
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            CoinMajorHoldersScreen(
+                coinUid,
+                blockchain,
+                findNavController(),
             )
-            setContent {
-                ComposeAppTheme {
-                    CoinMajorHoldersScreen(
-                        coinUid,
-                        blockchain,
-                        findNavController(),
-                    )
-                }
-            }
         }
     }
-
 
     companion object {
         private const val COIN_UID_KEY = "coin_uid_key"
@@ -134,6 +116,7 @@ private fun CoinMajorHoldersScreen(
                     ViewState.Loading -> {
                         Loading()
                     }
+
                     is ViewState.Error -> {
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         viewModel.uiState.error?.let {
@@ -141,6 +124,7 @@ private fun CoinMajorHoldersScreen(
                             viewModel.errorShown()
                         }
                     }
+
                     ViewState.Success -> {
                         CoinMajorHoldersContent(viewModel)
                     }

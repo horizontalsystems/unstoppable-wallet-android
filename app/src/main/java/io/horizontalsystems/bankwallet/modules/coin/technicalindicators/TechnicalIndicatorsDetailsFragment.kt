@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.technicalindicators
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,8 +12,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorsDetailsModule.DetailViewItem
@@ -43,7 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 
-class TechnicalIndicatorsDetailsFragment : BaseFragment() {
+class TechnicalIndicatorsDetailsFragment : BaseComposeFragment() {
 
     private val coinUid by lazy {
         requireArguments().getString(COIN_UID_KEY)
@@ -54,42 +48,32 @@ class TechnicalIndicatorsDetailsFragment : BaseFragment() {
         HsPointTimePeriod.fromString(value)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    if (coinUid == null || period == null) {
-                        ScreenMessageWithAction(
-                            text = stringResource(R.string.Error),
-                            icon = R.drawable.ic_error_48
-                        ) {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 48.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.Button_Close),
-                                onClick = {
-                                    findNavController().popBackStack()
-                                }
-                            )
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            if (coinUid == null || period == null) {
+                ScreenMessageWithAction(
+                    text = stringResource(R.string.Error),
+                    icon = R.drawable.ic_error_48
+                ) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .padding(horizontal = 48.dp)
+                            .fillMaxWidth(),
+                        title = stringResource(R.string.Button_Close),
+                        onClick = {
+                            findNavController().popBackStack()
                         }
-                    } else {
-                        TechnicalIndicatorsDetailsScreen(
-                            coinUid = coinUid!!,
-                            period = period!!,
-                            onBackPress = {
-                                findNavController().popBackStack()
-                            }
-                        )
-                    }
+                    )
                 }
+            } else {
+                TechnicalIndicatorsDetailsScreen(
+                    coinUid = coinUid!!,
+                    period = period!!,
+                    onBackPress = {
+                        findNavController().popBackStack()
+                    }
+                )
             }
         }
     }

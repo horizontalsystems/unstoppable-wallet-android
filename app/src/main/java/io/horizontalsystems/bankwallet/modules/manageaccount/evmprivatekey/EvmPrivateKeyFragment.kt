@@ -1,23 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
@@ -30,7 +24,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
-class EvmPrivateKeyFragment : BaseFragment(screenshotEnabled = false) {
+class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     companion object{
         const val EVM_PRIVATE_KEY = "evm_private_key"
@@ -38,22 +32,12 @@ class EvmPrivateKeyFragment : BaseFragment(screenshotEnabled = false) {
         fun prepareParams(evmPrivateKey: String) = bundleOf(EVM_PRIVATE_KEY to evmPrivateKey)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                EvmPrivateKeyScreen(
-                    navController = findNavController(),
-                    evmPrivateKey = arguments?.getString(EVM_PRIVATE_KEY) ?: ""
-                )
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        EvmPrivateKeyScreen(
+            navController = findNavController(),
+            evmPrivateKey = arguments?.getString(EVM_PRIVATE_KEY) ?: ""
+        )
     }
 
 }
