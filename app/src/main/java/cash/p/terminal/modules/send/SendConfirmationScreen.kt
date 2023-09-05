@@ -36,7 +36,6 @@ import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SectionTitleCell
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
@@ -116,15 +115,7 @@ fun SendConfirmationScreen(
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack(closeUntilDestId, true)
-                        }
-                    )
-                )
+                menuItems = listOf()
             )
             Box(
                 modifier = Modifier.fillMaxSize()
