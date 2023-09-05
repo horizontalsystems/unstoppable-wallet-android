@@ -66,6 +66,15 @@ class SendEvmConfirmationFragment : BaseFragment() {
     private var snackbarInProcess: CustomSnackbar? = null
 
     private val sendNavGraphId: Int by lazy { arguments?.getInt(SendEvmModule.sendNavGraphIdKey)!! }
+    private val sendEntryPointDestId: Int by lazy { arguments?.getInt(SendEvmModule.sendEntryPointDestIdKey) ?: 0 }
+    private val closeUntilDestId: Int by lazy {
+        if (sendEntryPointDestId == 0) {
+            sendNavGraphId
+        } else {
+            sendEntryPointDestId
+        }
+    }
+
 
     private val transactionData: TransactionData
         get() {
@@ -122,7 +131,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
                 R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().popBackStack(sendNavGraphId, true)
+                findNavController().popBackStack(closeUntilDestId, true)
             }, 1200)
         }
 

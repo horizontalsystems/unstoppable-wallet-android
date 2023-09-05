@@ -30,7 +30,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 fun SendSolanaScreen(
     navController: NavController,
     viewModel: SendSolanaViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    amountInputModeViewModel: AmountInputModeViewModel,
+    sendEntryPointDestId: Int
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -106,7 +107,10 @@ fun SendSolanaScreen(
                     onClick = {
                         navController.slideFromRight(
                                 R.id.sendConfirmation,
-                                SendConfirmationFragment.prepareParams(SendConfirmationFragment.Type.Solana)
+                                SendConfirmationFragment.prepareParams(
+                                    SendConfirmationFragment.Type.Solana,
+                                    sendEntryPointDestId
+                                )
                         )
                     },
                     enabled = proceedEnabled

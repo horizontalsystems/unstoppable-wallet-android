@@ -32,7 +32,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 fun SendZCashScreen(
     navController: NavController,
     viewModel: SendZCashViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    amountInputModeViewModel: AmountInputModeViewModel,
+    sendEntryPointDestId: Int
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -128,7 +129,10 @@ fun SendZCashScreen(
                 onClick = {
                     navController.slideFromRight(
                         R.id.sendConfirmation,
-                        SendConfirmationFragment.prepareParams(SendConfirmationFragment.Type.ZCash)
+                        SendConfirmationFragment.prepareParams(
+                            SendConfirmationFragment.Type.ZCash,
+                            sendEntryPointDestId
+                        )
                     )
                 },
                 enabled = proceedEnabled

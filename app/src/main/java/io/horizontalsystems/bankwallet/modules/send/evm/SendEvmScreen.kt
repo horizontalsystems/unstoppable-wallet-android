@@ -30,7 +30,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 fun SendEvmScreen(
     navController: NavController,
     viewModel: SendEvmViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    amountInputModeViewModel: AmountInputModeViewModel,
+    sendEntryPointDestId: Int
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -105,7 +106,7 @@ fun SendEvmScreen(
                     viewModel.getSendData()?.let {
                         navController.slideFromRight(
                             R.id.sendEvmConfirmationFragment,
-                            SendEvmConfirmationModule.prepareParams(it, R.id.sendXFragment)
+                            SendEvmConfirmationModule.prepareParams(it, R.id.sendXFragment, sendEntryPointDestId)
                         )
                     }
                 },
