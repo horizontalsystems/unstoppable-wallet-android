@@ -23,9 +23,11 @@ class OneInchSwapConfirmationFragment(
         fun prepareParams(
             blockchainType: BlockchainType,
             oneInchSwapParameters: OneInchSwapParameters,
+            swapEntryPointDestId: Int,
         ) = bundleOf(
             blockchainTypeKey to blockchainType,
-            oneInchSwapParametersKey to oneInchSwapParameters
+            oneInchSwapParametersKey to oneInchSwapParameters,
+            swapEntryPointDestIdKey to swapEntryPointDestId
         )
     }
 

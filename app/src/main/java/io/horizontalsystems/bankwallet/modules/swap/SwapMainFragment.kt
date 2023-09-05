@@ -47,6 +47,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapActionSta
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.BaseSwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
@@ -83,7 +84,9 @@ class SwapMainFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             try {
-                val factory = SwapMainModule.Factory(requireArguments())
+                val arguments = requireArguments()
+                val swapEntryPointDestId = arguments.getInt(BaseSwapConfirmationFragment.swapEntryPointDestIdKey)
+                val factory = SwapMainModule.Factory(arguments)
                 val mainViewModel: SwapMainViewModel by viewModels { factory }
                 val allowanceViewModel: SwapAllowanceViewModel by viewModels { factory }
                 setContent {
@@ -91,7 +94,8 @@ class SwapMainFragment : BaseFragment() {
                         SwapNavHost(
                             findNavController(),
                             mainViewModel,
-                            allowanceViewModel
+                            allowanceViewModel,
+                            swapEntryPointDestId
                         )
                     }
                 }
@@ -110,12 +114,14 @@ private fun SwapNavHost(
     fragmentNavController: NavController,
     mainViewModel: SwapMainViewModel,
     allowanceViewModel: SwapAllowanceViewModel,
+    swapEntryPointDestId: Int,
 ) {
     SwapMainScreen(
         navController = fragmentNavController,
         viewModel = mainViewModel,
         allowanceViewModel = allowanceViewModel,
         onCloseClick = { fragmentNavController.popBackStack() },
+        swapEntryPointDestId = swapEntryPointDestId
     )
 }
 
@@ -126,6 +132,7 @@ private fun SwapMainScreen(
     viewModel: SwapMainViewModel,
     allowanceViewModel: SwapAllowanceViewModel,
     onCloseClick: () -> Unit,
+    swapEntryPointDestId: Int,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -172,7 +179,8 @@ private fun SwapMainScreen(
                         navController = navController,
                         viewModel = viewModel,
                         allowanceViewModel = allowanceViewModel,
-                        focusManager = focusManager
+                        focusManager = focusManager,
+                        swapEntryPointDestId = swapEntryPointDestId
                     )
                 }
             }
@@ -185,7 +193,8 @@ fun SwapCards(
     navController: NavController,
     viewModel: SwapMainViewModel,
     allowanceViewModel: SwapAllowanceViewModel,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    swapEntryPointDestId: Int
 ) {
 
     val focusRequester = remember { FocusRequester() }
@@ -338,7 +347,8 @@ fun SwapCards(
                                 R.id.oneInchConfirmationFragment,
                                 OneInchSwapConfirmationFragment.prepareParams(
                                     swapState.dex.blockchainType,
-                                    swapData.data
+                                    swapData.data,
+                                    swapEntryPointDestId
                                 )
                             )
                         }
@@ -351,6 +361,7 @@ fun SwapCards(
                                         swapState.dex,
                                         SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
                                         sendEvmData.additionalInfo,
+                                        swapEntryPointDestId
                                     )
                                 )
                             }
