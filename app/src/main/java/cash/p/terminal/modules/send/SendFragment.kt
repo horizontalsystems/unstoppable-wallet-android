@@ -50,7 +50,10 @@ class SendFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             try {
-                val wallet = requireArguments().parcelable<Wallet>(walletKey) ?: throw IllegalStateException("Wallet is Null!")
+                val arguments = requireArguments()
+                val wallet = arguments.parcelable<Wallet>(walletKey) ?: throw IllegalStateException("Wallet is Null!")
+                val sendEntryPointDestId = arguments.getInt(sendEntryPointDestIdKey)
+
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
                     AmountInputModeModule.Factory(wallet.coin.uid)
                 }
@@ -68,7 +71,8 @@ class SendFragment : BaseFragment() {
                             SendBitcoinNavHost(
                                 findNavController(),
                                 sendBitcoinViewModel,
-                                amountInputModeViewModel
+                                amountInputModeViewModel,
+                                sendEntryPointDestId
                             )
                         }
                     }
@@ -81,7 +85,8 @@ class SendFragment : BaseFragment() {
                             SendBinanceScreen(
                                 findNavController(),
                                 sendBinanceViewModel,
-                                amountInputModeViewModel
+                                amountInputModeViewModel,
+                                sendEntryPointDestId
                             )
                         }
                     }
@@ -94,7 +99,8 @@ class SendFragment : BaseFragment() {
                             SendZCashScreen(
                                 findNavController(),
                                 sendZCashViewModel,
-                                amountInputModeViewModel
+                                amountInputModeViewModel,
+                                sendEntryPointDestId
                             )
                         }
                     }
@@ -116,7 +122,8 @@ class SendFragment : BaseFragment() {
                             SendEvmScreen(
                                 findNavController(),
                                 sendEvmViewModel,
-                                amountInputModeViewModel
+                                amountInputModeViewModel,
+                                sendEntryPointDestId
                             )
                         }
                     }
@@ -127,7 +134,8 @@ class SendFragment : BaseFragment() {
                             SendSolanaScreen(
                                 findNavController(),
                                 sendSolanaViewModel,
-                                amountInputModeViewModel
+                                amountInputModeViewModel,
+                                sendEntryPointDestId
                             )
                         }
                     }
@@ -138,7 +146,8 @@ class SendFragment : BaseFragment() {
                             SendTronScreen(
                                 findNavController(),
                                 sendTronViewModel,
-                                amountInputModeViewModel
+                                amountInputModeViewModel,
+                                sendEntryPointDestId
                             )
                         }
                     }
@@ -155,9 +164,15 @@ class SendFragment : BaseFragment() {
 
     companion object {
         private const val walletKey = "walletKey"
+        private const val sendEntryPointDestIdKey = "sendEntryPointDestIdKey"
 
         fun prepareParams(wallet: Wallet) = bundleOf(
             walletKey to wallet
+        )
+
+        fun prepareParams(wallet: Wallet, sendEntryPointDestId: Int) = bundleOf(
+            walletKey to wallet,
+            sendEntryPointDestIdKey to sendEntryPointDestId,
         )
     }
 }

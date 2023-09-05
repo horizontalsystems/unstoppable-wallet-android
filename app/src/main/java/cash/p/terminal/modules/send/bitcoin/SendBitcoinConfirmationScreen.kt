@@ -1,6 +1,10 @@
 package cash.p.terminal.modules.send.bitcoin
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.send.SendConfirmationScreen
@@ -10,7 +14,8 @@ import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 fun SendBitcoinConfirmationScreen(
     navController: NavController,
     sendViewModel: SendBitcoinViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    amountInputModeViewModel: AmountInputModeViewModel,
+    sendEntryPointDestId: Int
 ) {
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }
@@ -44,6 +49,7 @@ fun SendBitcoinConfirmationScreen(
         fee = confirmationData.fee,
         lockTimeInterval = confirmationData.lockTimeInterval,
         memo = confirmationData.memo,
-        onClickSend = sendViewModel::onClickSend
+        onClickSend = sendViewModel::onClickSend,
+        sendEntryPointDestId = sendEntryPointDestId
     )
 }

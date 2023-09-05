@@ -39,14 +39,17 @@ class SendConfirmationFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                when (requireArguments().parcelable<Type>(typeKey)) {
+                val arguments = requireArguments()
+                val sendEntryPointDestId = arguments.getInt(sendEntryPointDestIdKey)
+                when (arguments.parcelable<Type>(typeKey)) {
                     Type.Bitcoin -> {
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
 
                         SendBitcoinConfirmationScreen(
                             findNavController(),
                             sendBitcoinViewModel,
-                            amountInputModeViewModel
+                            amountInputModeViewModel,
+                            sendEntryPointDestId
                         )
                     }
                     Type.Bep2 -> {
@@ -55,7 +58,8 @@ class SendConfirmationFragment : BaseFragment() {
                         SendBinanceConfirmationScreen(
                             findNavController(),
                             sendBinanceViewModel,
-                            amountInputModeViewModel
+                            amountInputModeViewModel,
+                            sendEntryPointDestId
                         )
                     }
                     Type.ZCash -> {
@@ -64,7 +68,8 @@ class SendConfirmationFragment : BaseFragment() {
                         SendZCashConfirmationScreen(
                             findNavController(),
                             sendZCashViewModel,
-                            amountInputModeViewModel
+                            amountInputModeViewModel,
+                            sendEntryPointDestId
                         )
                     }
                     Type.Tron -> {
@@ -72,16 +77,18 @@ class SendConfirmationFragment : BaseFragment() {
                         SendTronConfirmationScreen(
                             findNavController(),
                             sendTronViewModel,
-                            amountInputModeViewModel
+                            amountInputModeViewModel,
+                            sendEntryPointDestId
                         )
                     }
                     Type.Solana -> {
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment)
 
                         SendSolanaConfirmationScreen(
-                                findNavController(),
-                                sendSolanaViewModel,
-                                amountInputModeViewModel
+                            findNavController(),
+                            sendSolanaViewModel,
+                            amountInputModeViewModel,
+                            sendEntryPointDestId
                         )
                     }
                     null -> Unit
@@ -97,9 +104,11 @@ class SendConfirmationFragment : BaseFragment() {
 
     companion object {
         private const val typeKey = "typeKey"
+        private const val sendEntryPointDestIdKey = "sendEntryPointDestIdKey"
 
-        fun prepareParams(type: Type) = bundleOf(
-            typeKey to type
+        fun prepareParams(type: Type, sendEntryPointDestId: Int) = bundleOf(
+            typeKey to type,
+            sendEntryPointDestIdKey to sendEntryPointDestId,
         )
     }
 }

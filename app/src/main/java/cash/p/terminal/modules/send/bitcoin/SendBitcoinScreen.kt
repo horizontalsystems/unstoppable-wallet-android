@@ -53,7 +53,8 @@ const val TransactionInputsSortInfoPage = "transaction_input_sort_info_settings"
 fun SendBitcoinNavHost(
     fragmentNavController: NavController,
     viewModel: SendBitcoinViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    amountInputModeViewModel: AmountInputModeViewModel,
+    sendEntryPointDestId: Int
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -65,7 +66,8 @@ fun SendBitcoinNavHost(
                 fragmentNavController,
                 navController,
                 viewModel,
-                amountInputModeViewModel
+                amountInputModeViewModel,
+                sendEntryPointDestId
             )
         }
         composablePage(SendBtcAdvancedSettingsPage) {
@@ -85,7 +87,8 @@ fun SendBitcoinScreen(
     fragmentNavController: NavController,
     composeNavController: NavController,
     viewModel: SendBitcoinViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    amountInputModeViewModel: AmountInputModeViewModel,
+    sendEntryPointDestId: Int
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -199,7 +202,7 @@ fun SendBitcoinScreen(
                     onClick = {
                         fragmentNavController.slideFromRight(
                             R.id.sendConfirmation,
-                            SendConfirmationFragment.prepareParams(SendConfirmationFragment.Type.Bitcoin)
+                            SendConfirmationFragment.prepareParams(SendConfirmationFragment.Type.Bitcoin, sendEntryPointDestId)
                         )
                     },
                     enabled = proceedEnabled

@@ -107,4 +107,11 @@ object SendEvmConfirmationModule {
         SendEvmModule.sendNavGraphIdKey to sendNavId
     )
 
+    fun prepareParams(sendData: SendEvmData, sendNavId: Int, sendEntryPointDestId: Int) = bundleOf(
+        SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendData.transactionData),
+        SendEvmModule.additionalInfoKey to sendData.additionalInfo,
+        SendEvmModule.sendNavGraphIdKey to sendNavId,
+        SendEvmModule.sendEntryPointDestIdKey to sendEntryPointDestId
+    )
+
 }

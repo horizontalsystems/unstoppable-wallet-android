@@ -101,6 +101,7 @@ object SendEvmModule {
     const val blockchainTypeKey = "blockchainType"
     const val backButtonKey = "backButton"
     const val sendNavGraphIdKey = "sendNavGraphId_key"
+    const val sendEntryPointDestIdKey = "sendEntryPointDestIdKey"
 
     @Parcelize
     data class TransactionDataParcelable(

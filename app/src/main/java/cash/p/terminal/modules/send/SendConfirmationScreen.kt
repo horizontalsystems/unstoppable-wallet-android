@@ -1,7 +1,14 @@
 package cash.p.terminal.modules.send
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -24,7 +31,20 @@ import cash.p.terminal.modules.fee.HSFeeInputRaw
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.SectionTitleCell
+import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
+import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
+import cash.p.terminal.ui.compose.components.subhead1Italic_leah
+import cash.p.terminal.ui.compose.components.subhead1_grey
+import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hodler.LockTimeInterval
@@ -52,8 +72,14 @@ fun SendConfirmationScreen(
     fee: BigDecimal,
     lockTimeInterval: LockTimeInterval?,
     memo: String?,
-    onClickSend: () -> Unit
+    onClickSend: () -> Unit,
+    sendEntryPointDestId: Int
 ) {
+    val closeUntilDestId = if (sendEntryPointDestId == 0) {
+        R.id.sendXFragment
+    } else {
+        sendEntryPointDestId
+    }
     val view = LocalView.current
     when (sendResult) {
         SendResult.Sending -> {
@@ -79,7 +105,7 @@ fun SendConfirmationScreen(
     LaunchedEffect(sendResult) {
         if (sendResult == SendResult.Sent) {
             delay(1200)
-            navController.popBackStack(R.id.sendXFragment, true)
+            navController.popBackStack(closeUntilDestId, true)
         }
     }
 
@@ -95,7 +121,7 @@ fun SendConfirmationScreen(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = {
-                            navController.popBackStack(R.id.sendXFragment, true)
+                            navController.popBackStack(closeUntilDestId, true)
                         }
                     )
                 )
