@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
@@ -34,7 +34,7 @@ class SwapTokenSelectFragment : BaseFragment() {
                     title = stringResource(R.string.Balance_Swap),
                     onClickEnabled = { it.swapEnabled },
                     onClickItem = {
-                        navController.slideFromBottom(
+                        navController.slideFromRight(
                             R.id.swapFragment,
                             SwapMainModule.prepareParams(it.wallet.token)
                         )
