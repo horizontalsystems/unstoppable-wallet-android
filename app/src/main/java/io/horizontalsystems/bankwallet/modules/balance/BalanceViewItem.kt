@@ -19,22 +19,19 @@ import java.math.BigDecimal
 @Immutable
 data class BalanceViewItem(
     val wallet: Wallet,
-    val currencySymbol: String,
     val coinCode: String,
     val coinTitle: String,
     val coinIconUrl: String,
     val coinIconPlaceholder: Int,
     val primaryValue: DeemedValue<String>,
     val exchangeValue: DeemedValue<String>,
-    val diff: BigDecimal?,
     val secondaryValue: DeemedValue<String>,
     val coinValueLocked: DeemedValue<String?>,
     val fiatValueLocked: DeemedValue<String>,
-    val expanded: Boolean,
     val sendEnabled: Boolean = false,
     val syncingProgress: SyncingProgress,
-    val syncingTextValue: DeemedValue<String?>,
-    val syncedUntilTextValue: DeemedValue<String?>,
+    val syncingTextValue: String?,
+    val syncedUntilTextValue: String?,
     val failedIconVisible: Boolean,
     val coinIconVisible: Boolean,
     val badge: String?,
@@ -99,9 +96,9 @@ class BalanceViewItemFactory {
         is BlockchainType.Unsupported -> 0
     }
 
-    private fun getSyncingText(state: AdapterState?, expanded: Boolean): DeemedValue<String?> {
-        if (state == null || !expanded) {
-            return DeemedValue(null, false, false)
+    private fun getSyncingText(state: AdapterState?): String? {
+        if (state == null) {
+            return null
         }
 
         val text = when (state) {
@@ -122,12 +119,12 @@ class BalanceViewItemFactory {
             else -> null
         }
 
-        return DeemedValue(text, visible = expanded)
+        return text
     }
 
-    private fun getSyncedUntilText(state: AdapterState?, expanded: Boolean): DeemedValue<String?> {
-        if (state == null || !expanded) {
-            return DeemedValue(null, false, false)
+    private fun getSyncedUntilText(state: AdapterState?): String? {
+        if (state == null) {
+            return null
         }
 
         val text = when (state) {
@@ -166,7 +163,7 @@ class BalanceViewItemFactory {
             else -> null
         }
 
-        return DeemedValue(text, visible = expanded)
+        return text
     }
 
     private fun lockedCoinValue(
@@ -191,7 +188,6 @@ class BalanceViewItemFactory {
     fun viewItem(
         item: BalanceModule.BalanceItem,
         currency: Currency,
-        expanded: Boolean,
         hideBalance: Boolean,
         watchAccount: Boolean,
         balanceViewType: BalanceViewType
@@ -207,7 +203,7 @@ class BalanceViewItemFactory {
         val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
             balance = item.balanceData.total,
             visible = balanceTotalVisibility,
-            fullFormat = expanded,
+            fullFormat = true,
             coinDecimals = wallet.decimal,
             dimmed = state !is AdapterState.Synced,
             coinPrice = latestRate,
@@ -217,7 +213,6 @@ class BalanceViewItemFactory {
 
         return BalanceViewItem(
             wallet = item.wallet,
-            currencySymbol = currency.symbol,
             coinCode = coin.code,
             coinTitle = coin.name,
             coinIconUrl = coin.imageUrl,
@@ -240,12 +235,10 @@ class BalanceViewItemFactory {
                 state !is AdapterState.Synced
             ),
             exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
-            diff = item.coinPrice?.diff,
-            expanded = expanded,
             sendEnabled = state is AdapterState.Synced,
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
-            syncingTextValue = getSyncingText(state, expanded),
-            syncedUntilTextValue = getSyncedUntilText(state, expanded),
+            syncingTextValue = getSyncingText(state),
+            syncedUntilTextValue = getSyncedUntilText(state),
             failedIconVisible = state is AdapterState.NotSynced,
             coinIconVisible = state !is AdapterState.NotSynced,
             badge = wallet.badge,
