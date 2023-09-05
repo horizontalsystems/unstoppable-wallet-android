@@ -99,7 +99,8 @@ class TokenBalanceViewModel(
     }
 
     private fun updateBalanceViewItem(balanceItem: BalanceModule.BalanceItem) {
-        val balanceViewItem = balanceViewItemFactory.viewItem(
+        val balanceViewItem = balanceViewItemFactory.
+        viewItem(
             balanceItem,
             balanceService.baseCurrency,
             true,

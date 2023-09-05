@@ -10,7 +10,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.swappable
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceService
-import cash.p.terminal.modules.balance.BalanceViewItem
+import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ class TokenSelectViewModel(
 
     private var noItems = false
     private var query: String? = null
-    private var balanceViewItems = listOf<BalanceViewItem>()
+    private var balanceViewItems = listOf<BalanceViewItem2>()
     var uiState by mutableStateOf(
         TokenSelectUiState(
             items = balanceViewItems,
@@ -63,7 +63,7 @@ class TokenSelectViewModel(
                 }
 
                 balanceViewItems = itemsFiltered.map { balanceItem ->
-                    balanceViewItemFactory.viewItem(
+                    balanceViewItemFactory.viewItem2(
                         item = balanceItem,
                         currency = service.baseCurrency,
                         expanded = false,
@@ -128,6 +128,6 @@ class TokenSelectViewModel(
 }
 
 data class TokenSelectUiState(
-    val items: List<BalanceViewItem>,
+    val items: List<BalanceViewItem2>,
     val noItems: Boolean,
 )

@@ -137,7 +137,7 @@ fun Note(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BalanceItems(
-    balanceViewItems: List<BalanceViewItem>,
+    balanceViewItems: List<BalanceViewItem2>,
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
     navController: NavController,

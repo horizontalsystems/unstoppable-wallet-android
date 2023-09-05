@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.modules.balance.BalanceViewItem
+import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.ui.BalanceCardInner
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ListEmptyView
@@ -24,8 +24,8 @@ import cash.p.terminal.ui.compose.components.VSpacer
 fun TokenSelectScreen(
     navController: NavController,
     title: String,
-    onClickEnabled: (BalanceViewItem) -> Boolean = { true },
-    onClickItem: (BalanceViewItem) -> Unit,
+    onClickEnabled: (BalanceViewItem2) -> Boolean = { true },
+    onClickItem: (BalanceViewItem2) -> Unit,
     viewModel: TokenSelectViewModel,
     emptyItemsText: String,
 ) {

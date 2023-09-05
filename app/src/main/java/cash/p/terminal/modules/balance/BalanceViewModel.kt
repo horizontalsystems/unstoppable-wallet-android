@@ -25,7 +25,7 @@ class BalanceViewModel(
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
-    private var balanceViewItems = listOf<BalanceViewItem>()
+    private var balanceViewItems = listOf<BalanceViewItem2>()
     private var isRefreshing = false
 
     var uiState by mutableStateOf(
@@ -109,7 +109,7 @@ class BalanceViewModel(
             if (balanceItems != null) {
                 viewState = ViewState.Success
                 balanceViewItems = balanceItems.map { balanceItem ->
-                    balanceViewItemFactory.viewItem(
+                    balanceViewItemFactory.viewItem2(
                         balanceItem,
                         service.baseCurrency,
                         balanceItem.wallet == expandedWallet,
@@ -132,7 +132,7 @@ class BalanceViewModel(
         service.clear()
     }
 
-    fun onItem(viewItem: BalanceViewItem) {
+    fun onItem(viewItem: BalanceViewItem2) {
         viewModelScope.launch {
             expandedWallet = when {
                 viewItem.wallet == expandedWallet -> null
@@ -143,7 +143,7 @@ class BalanceViewModel(
         }
     }
 
-    fun getWalletForReceive(viewItem: BalanceViewItem) = when {
+    fun getWalletForReceive(viewItem: BalanceViewItem2) = when {
         viewItem.wallet.account.isBackedUp || viewItem.wallet.account.isFileBackedUp -> viewItem.wallet
         else -> throw BackupRequiredError(viewItem.wallet.account, viewItem.coinTitle)
     }
@@ -178,11 +178,11 @@ class BalanceViewModel(
         }
     }
 
-    fun disable(viewItem: BalanceViewItem) {
+    fun disable(viewItem: BalanceViewItem2) {
         service.disable(viewItem.wallet)
     }
 
-    fun getSyncErrorDetails(viewItem: BalanceViewItem): SyncError = when {
+    fun getSyncErrorDetails(viewItem: BalanceViewItem2): SyncError = when {
         service.networkAvailable -> SyncError.Dialog(viewItem.wallet, viewItem.errorMessage)
         else -> SyncError.NetworkNotAvailable()
     }
@@ -209,7 +209,7 @@ sealed class ReceiveAllowedState {
 class BackupRequiredError(val account: Account, val coinTitle: String) : Error("Backup Required")
 
 data class BalanceUiState(
-    val balanceViewItems: List<BalanceViewItem>,
+    val balanceViewItems: List<BalanceViewItem2>,
     val viewState: ViewState?,
     val isRefreshing: Boolean,
     val headerNote: HeaderNote
