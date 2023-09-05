@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -24,8 +24,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 fun TokenSelectScreen(
     navController: NavController,
     title: String,
-    onClickEnabled: (BalanceViewItem) -> Boolean = { true },
-    onClickItem: (BalanceViewItem) -> Unit,
+    onClickEnabled: (BalanceViewItem2) -> Boolean = { true },
+    onClickItem: (BalanceViewItem2) -> Unit,
     viewModel: TokenSelectViewModel,
     emptyItemsText: String,
 ) {
