@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,13 +9,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
@@ -32,27 +26,18 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class EvmAddressFragment : BaseFragment(screenshotEnabled = false) {
+class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     companion object {
         const val EVM_ADDRESS_KEY = "evm_address_key"
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val evmAddress = arguments?.getString(EVM_ADDRESS_KEY) ?: ""
-                EvmAddressScreen(evmAddress, findNavController())
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        val evmAddress = arguments?.getString(EVM_ADDRESS_KEY) ?: ""
+        EvmAddressScreen(evmAddress, findNavController())
     }
+
 }
 
 @Composable

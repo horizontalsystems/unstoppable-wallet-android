@@ -1,22 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.coin.investments
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,44 +26,43 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
-class CoinInvestmentsFragment : BaseFragment() {
+class CoinInvestmentsFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<CoinInvestmentsViewModel> {
         CoinInvestmentsModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    CoinInvestmentsScreen(viewModel,
-                        onClickNavigation = {
-                            findNavController().popBackStack()
-                        },
-                        onClickFundUrl = {
-                            LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                        }
-                    )
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            CoinInvestmentsScreen(
+                viewModel = viewModel,
+                onClickNavigation = {
+                    findNavController().popBackStack()
+                },
+                onClickFundUrl = {
+                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
                 }
-            }
+            )
         }
     }
 
@@ -100,9 +100,11 @@ private fun CoinInvestmentsScreen(
                     ViewState.Loading -> {
                         Loading()
                     }
+
                     is ViewState.Error -> {
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                     }
+
                     ViewState.Success -> {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             viewItems?.forEach { viewItem ->
@@ -120,6 +122,7 @@ private fun CoinInvestmentsScreen(
                             }
                         }
                     }
+
                     null -> {}
                 }
             }

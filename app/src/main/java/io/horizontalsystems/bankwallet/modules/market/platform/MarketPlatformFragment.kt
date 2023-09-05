@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.platform
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -17,8 +14,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
@@ -43,13 +38,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
-class MarketPlatformFragment : BaseFragment() {
+class MarketPlatformFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    @Composable
+    override fun GetContent() {
         val platformUid = activity?.intent?.data?.getQueryParameter("uid")
         val platformTitle = activity?.intent?.data?.getQueryParameter("title")
 
@@ -61,27 +53,20 @@ class MarketPlatformFragment : BaseFragment() {
 
         if (platform == null) {
             findNavController().popBackStack()
-            return null
+            return
         }
 
         val factory = MarketPlatformModule.Factory(platform)
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    PlatformScreen(
-                        factory = factory,
-                        onCloseButtonClick = { findNavController().popBackStack() },
-                        onCoinClick = { coinUid ->
-                            val arguments = CoinFragment.prepareParams(coinUid)
-                            findNavController().slideFromRight(R.id.coinFragment, arguments)
-                        }
-                    )
+        ComposeAppTheme {
+            PlatformScreen(
+                factory = factory,
+                onCloseButtonClick = { findNavController().popBackStack() },
+                onCoinClick = { coinUid ->
+                    val arguments = CoinFragment.prepareParams(coinUid)
+                    findNavController().slideFromRight(R.id.coinFragment, arguments)
                 }
-            }
+            )
         }
     }
 

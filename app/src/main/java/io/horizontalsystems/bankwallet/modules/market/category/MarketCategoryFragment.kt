@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.category
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,13 +11,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
@@ -35,36 +29,25 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
-class MarketCategoryFragment : BaseFragment() {
+class MarketCategoryFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    private val factory by lazy {
+        MarketCategoryModule.Factory(arguments?.parcelable(categoryKey)!!)
+    }
 
-        val factory = MarketCategoryModule.Factory(
-            arguments?.parcelable(categoryKey)!!
-        )
+    private val chartViewModel by viewModels<ChartViewModel> { factory }
 
-        val chartViewModel by viewModels<ChartViewModel> { factory }
+    private val viewModel by viewModels<MarketCategoryViewModel> { factory }
 
-        val viewModel by viewModels<MarketCategoryViewModel> { factory }
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            CategoryScreen(
+                viewModel,
+                chartViewModel,
+                { findNavController().popBackStack() },
+                { coinUid -> onCoinClick(coinUid) }
             )
-            setContent {
-                ComposeAppTheme {
-                    CategoryScreen(
-                        viewModel,
-                        chartViewModel,
-                        { findNavController().popBackStack() },
-                        { coinUid -> onCoinClick(coinUid) }
-                    )
-                }
-            }
         }
     }
 
@@ -111,9 +94,11 @@ fun CategoryScreen(
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
+
                         ViewState.Success -> {
                             viewItems?.let {
                                 val header by viewModel.headerLiveData.observeAsState()
@@ -181,8 +166,10 @@ fun CategoryScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+
             SelectorDialogState.Closed,
-            null -> {}
+            null -> {
+            }
         }
     }
 }

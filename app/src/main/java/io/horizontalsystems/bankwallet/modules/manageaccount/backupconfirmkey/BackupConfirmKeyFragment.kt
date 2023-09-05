@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,15 +19,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -45,27 +39,16 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.delay
 
-class BackupConfirmKeyFragment : BaseFragment() {
+class BackupConfirmKeyFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                RecoveryPhraseVerifyScreen(
-                    findNavController(),
-                    arguments?.parcelable(BackupConfirmKeyModule.ACCOUNT)!!,
-                )
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        RecoveryPhraseVerifyScreen(
+            findNavController(),
+            arguments?.parcelable(BackupConfirmKeyModule.ACCOUNT)!!,
+        )
     }
+
 }
 
 @OptIn(ExperimentalLayoutApi::class)

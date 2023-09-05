@@ -1,23 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.nft.send
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.nft.EvmNftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftKey
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
@@ -34,69 +29,61 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAc
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.nftkit.models.NftType
 
-class SendNftFragment : BaseFragment() {
+class SendNftFragment : BaseComposeFragment() {
 
     private val vmFactory by lazy { getFactory(requireArguments()) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    @Composable
+    override fun GetContent() {
+        val factory = vmFactory
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            val factory = vmFactory
+        when (factory?.evmNftRecord?.nftType) {
+            NftType.Eip721 -> {
+                val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
+                    R.id.nftSendFragment
+                ) { factory }
+                val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
 
-            setContent {
-                when (factory?.evmNftRecord?.nftType) {
-                    NftType.Eip721 -> {
-                        val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
-                            R.id.nftSendFragment
-                        ) { factory }
-                        val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
-
-                        val eip721ViewModel by viewModels<SendEip721ViewModel> { factory }
-                        val addressViewModel by viewModels<AddressViewModel> {
-                            AddressInputModule.FactoryNft(factory.nftUid.blockchainType)
-                        }
-                        val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
-                        SendEip721Screen(
-                            findNavController(),
-                            eip721ViewModel,
-                            addressViewModel,
-                            addressParserViewModel,
-                            R.id.nftSendFragment,
-                        )
-                    }
-                    NftType.Eip1155 -> {
-                        val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
-                            R.id.nftSendFragment
-                        ) { factory }
-                        val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
-
-                        val eip1155ViewModel by viewModels<SendEip1155ViewModel> { factory }
-                        val addressViewModel by viewModels<AddressViewModel> {
-                            AddressInputModule.FactoryNft(factory.nftUid.blockchainType)
-                        }
-                        val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
-                        SendEip1155Screen(
-                            findNavController(),
-                            eip1155ViewModel,
-                            addressViewModel,
-                            addressParserViewModel,
-                            R.id.nftSendFragment,
-                        )
-                    }
-                    else -> {
-                        ShowErrorMessage(findNavController())
-                    }
+                val eip721ViewModel by viewModels<SendEip721ViewModel> { factory }
+                val addressViewModel by viewModels<AddressViewModel> {
+                    AddressInputModule.FactoryNft(factory.nftUid.blockchainType)
                 }
+                val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
+                SendEip721Screen(
+                    findNavController(),
+                    eip721ViewModel,
+                    addressViewModel,
+                    addressParserViewModel,
+                    R.id.nftSendFragment,
+                )
+            }
+
+            NftType.Eip1155 -> {
+                val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
+                    R.id.nftSendFragment
+                ) { factory }
+                val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
+
+                val eip1155ViewModel by viewModels<SendEip1155ViewModel> { factory }
+                val addressViewModel by viewModels<AddressViewModel> {
+                    AddressInputModule.FactoryNft(factory.nftUid.blockchainType)
+                }
+                val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
+                SendEip1155Screen(
+                    findNavController(),
+                    eip1155ViewModel,
+                    addressViewModel,
+                    addressParserViewModel,
+                    R.id.nftSendFragment,
+                )
+            }
+
+            else -> {
+                ShowErrorMessage(findNavController())
             }
         }
     }
+
 }
 
 private fun getFactory(requireArguments: Bundle): SendNftModule.Factory? {

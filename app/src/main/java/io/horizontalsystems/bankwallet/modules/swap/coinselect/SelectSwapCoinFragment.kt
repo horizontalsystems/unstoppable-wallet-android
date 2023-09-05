@@ -1,11 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,8 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
@@ -31,32 +25,22 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 
-class SelectSwapCoinFragment : BaseFragment() {
+class SelectSwapCoinFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val dex = arguments?.parcelable<SwapMainModule.Dex>(dexKey)
-                val requestId = arguments?.getLong(requestIdKey)
-                if (dex == null || requestId == null) {
-                    findNavController().popBackStack()
-                } else {
-                    SelectSwapCoinDialogScreen(
-                        navController = findNavController(),
-                        dex = dex,
-                        onClickItem = {
-                            closeWithResult(it, requestId)
-                        }
-                    )
+    @Composable
+    override fun GetContent() {
+        val dex = arguments?.parcelable<SwapMainModule.Dex>(dexKey)
+        val requestId = arguments?.getLong(requestIdKey)
+        if (dex == null || requestId == null) {
+            findNavController().popBackStack()
+        } else {
+            SelectSwapCoinDialogScreen(
+                navController = findNavController(),
+                dex = dex,
+                onClickItem = {
+                    closeWithResult(it, requestId)
                 }
-            }
+            )
         }
     }
 

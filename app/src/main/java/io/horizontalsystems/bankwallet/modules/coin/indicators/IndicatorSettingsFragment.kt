@@ -1,63 +1,48 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
-class IndicatorSettingsFragment : BaseFragment() {
+class IndicatorSettingsFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    val navController = findNavController()
-                    val indicatorSetting = arguments?.getString("indicatorId")?.let {
-                        App.chartIndicatorManager.getChartIndicatorSetting(it)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            val navController = findNavController()
+            val indicatorSetting = arguments?.getString("indicatorId")?.let {
+                App.chartIndicatorManager.getChartIndicatorSetting(it)
+            }
+
+            if (indicatorSetting == null) {
+                HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
+                navController.popBackStack()
+            } else {
+                when (indicatorSetting.type) {
+                    ChartIndicatorSetting.IndicatorType.MA -> {
+                        EmaSettingsScreen(
+                            navController = navController,
+                            indicatorSetting = indicatorSetting
+                        )
                     }
-
-                    if (indicatorSetting == null) {
-                        HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
-                        navController.popBackStack()
-                    } else {
-                        when (indicatorSetting.type) {
-                            ChartIndicatorSetting.IndicatorType.MA -> {
-                                EmaSettingsScreen(
-                                    navController = navController,
-                                    indicatorSetting = indicatorSetting
-                                )
-                            }
-                            ChartIndicatorSetting.IndicatorType.RSI -> {
-                                RsiSettingsScreen(
-                                    navController = navController,
-                                    indicatorSetting = indicatorSetting
-                                )
-                            }
-                            ChartIndicatorSetting.IndicatorType.MACD -> {
-                                MacdSettingsScreen(
-                                    navController = navController,
-                                    indicatorSetting = indicatorSetting
-                                )
-                            }
-                        }
+                    ChartIndicatorSetting.IndicatorType.RSI -> {
+                        RsiSettingsScreen(
+                            navController = navController,
+                            indicatorSetting = indicatorSetting
+                        )
+                    }
+                    ChartIndicatorSetting.IndicatorType.MACD -> {
+                        MacdSettingsScreen(
+                            navController = navController,
+                            indicatorSetting = indicatorSetting
+                        )
                     }
                 }
             }

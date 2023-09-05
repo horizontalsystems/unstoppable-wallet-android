@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.zcashconfigure
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,10 +44,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -62,7 +58,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -89,27 +85,20 @@ import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 
-class ZcashConfigure : BaseFragment() {
+class ZcashConfigure : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.onBackPressedDispatcher?.addCallback(this) {
             close()
         }
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ZcashConfigureScreen(
-                    onCloseWithResult = { closeWithConfigt(it) },
-                    onCloseClick = { close() }
-                )
-            }
-        }
+    }
+
+    @Composable
+    override fun GetContent() {
+        ZcashConfigureScreen(
+            onCloseWithResult = { closeWithConfigt(it) },
+            onCloseClick = { close() }
+        )
     }
 
     private fun closeWithConfigt(config: ZCashConfig) {

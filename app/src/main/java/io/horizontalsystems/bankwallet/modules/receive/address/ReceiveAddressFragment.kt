@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.receive.address
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
@@ -28,9 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -41,7 +36,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -70,45 +65,37 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 
-class ReceiveAddressFragment : BaseFragment() {
+class ReceiveAddressFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            val navController = findNavController()
-            try {
-                val wallet = arguments?.parcelable<Wallet>(WALLET_KEY) ?: throw ReceiveAddressModule.NoWalletData()
-                val popupDestinationId = arguments?.getInt(POPUP_DESTINATION_ID_KEY)
-
-                val viewModel by viewModels<ReceiveAddressViewModel> {
-                    ReceiveAddressModule.Factory(wallet)
-                }
-                setContent {
-                    ReceiveAddressScreen(
-                        viewModel = viewModel,
-                        navController = navController,
-                        onCloseClick = {
-                            popupDestinationId?.let { destinationId ->
-                                if (destinationId != 0) {
-                                    navController.popBackStack(destinationId, true)
-                                } else {
-                                    navController.popBackStack()
-                                }
-                            }
-                        }
-                    )
-                }
-            } catch (t: Throwable) {
-                Toast.makeText(App.instance, t.message ?: t.javaClass.simpleName, Toast.LENGTH_SHORT).show()
-                navController.popBackStack()
-            }
+    @Composable
+    override fun GetContent() {
+        val navController = findNavController()
+        val wallet = arguments?.parcelable<Wallet>(WALLET_KEY)
+        if (wallet == null) {
+            Toast.makeText(App.instance, "Wallet parameter is missing", Toast.LENGTH_SHORT).show()
+            navController.popBackStack()
+            return
         }
+
+        val popupDestinationId = arguments?.getInt(POPUP_DESTINATION_ID_KEY)
+
+        val viewModel by viewModels<ReceiveAddressViewModel> {
+            ReceiveAddressModule.Factory(wallet)
+        }
+
+        ReceiveAddressScreen(
+            viewModel = viewModel,
+            navController = navController,
+            onCloseClick = {
+                popupDestinationId?.let { destinationId ->
+                    if (destinationId != 0) {
+                        navController.popBackStack(destinationId, true)
+                    } else {
+                        navController.popBackStack()
+                    }
+                }
+            }
+        )
     }
 
     companion object {

@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session.v1
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,8 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,7 +25,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.settings.appearance.RowSelect
@@ -52,7 +48,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
-class WCSessionFragment : BaseFragment() {
+class WCSessionFragment : BaseComposeFragment() {
 
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.wcSessionFragment) {
         WalletConnectModule.Factory(
@@ -65,23 +61,12 @@ class WCSessionFragment : BaseFragment() {
         WCSessionModule.Factory(baseViewModel.service)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                WCSessionPage(
-                    findNavController(),
-                    viewModel,
-                )
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        WCSessionPage(
+            findNavController(),
+            viewModel,
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

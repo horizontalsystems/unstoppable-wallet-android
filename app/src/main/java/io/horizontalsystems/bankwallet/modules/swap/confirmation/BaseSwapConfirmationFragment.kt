@@ -3,9 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,14 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
@@ -44,7 +40,7 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-abstract class BaseSwapConfirmationFragment : BaseFragment() {
+abstract class BaseSwapConfirmationFragment : BaseComposeFragment() {
 
     protected abstract val logger: AppLogger
     protected abstract val sendEvmTransactionViewModel: SendEvmTransactionViewModel
@@ -62,30 +58,18 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                BaseSwapConfirmationScreen(
-                    sendEvmTransactionViewModel = sendEvmTransactionViewModel,
-                    feeViewModel = feeViewModel,
-                    nonceViewModel = nonceViewModel,
-                    parentNavGraphId = navGraphId,
-                    navController = findNavController(),
-                    onSendClick = {
-                        logger.info("click swap button")
-                        sendEvmTransactionViewModel.send(logger)
-                    })
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        BaseSwapConfirmationScreen(
+            sendEvmTransactionViewModel = sendEvmTransactionViewModel,
+            feeViewModel = feeViewModel,
+            nonceViewModel = nonceViewModel,
+            parentNavGraphId = navGraphId,
+            navController = findNavController(),
+            onSendClick = {
+                logger.info("click swap button")
+                sendEvmTransactionViewModel.send(logger)
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

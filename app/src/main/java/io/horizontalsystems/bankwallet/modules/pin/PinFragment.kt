@@ -1,15 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinEdit
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
@@ -18,7 +11,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 
-class PinFragment : BaseFragment() {
+class PinFragment : BaseComposeFragment() {
 
     private val attachedToLockScreen: Boolean by lazy {
         arguments?.getBoolean(PinModule.keyAttachedToLockScreen) ?: false
@@ -32,25 +25,15 @@ class PinFragment : BaseFragment() {
         arguments?.getBoolean(PinModule.keyShowCancel) ?: false
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                PinScreen(
-                    interactionType = interactionType,
-                    showCancelButton = showCancelButton,
-                    onBackPress = { findNavController().popBackStack() },
-                    dismissWithSuccess = { dismissWithSuccess() },
-                    onCancelClick = { onCancelClick() }
-                )
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        PinScreen(
+            interactionType = interactionType,
+            showCancelButton = showCancelButton,
+            onBackPress = { findNavController().popBackStack() },
+            dismissWithSuccess = { dismissWithSuccess() },
+            onCancelClick = { onCancelClick() }
+        )
     }
 
     private fun dismissWithSuccess() {
