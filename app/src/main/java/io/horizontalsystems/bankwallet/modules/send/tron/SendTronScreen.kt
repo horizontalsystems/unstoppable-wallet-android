@@ -30,7 +30,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 fun SendTronScreen(
     navController: NavController,
     viewModel: SendTronViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    amountInputModeViewModel: AmountInputModeViewModel,
+    sendEntryPointDestId: Int
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -109,7 +110,10 @@ fun SendTronScreen(
 
                     navController.slideFromRight(
                         R.id.sendConfirmation,
-                        SendConfirmationFragment.prepareParams(SendConfirmationFragment.Type.Tron)
+                        SendConfirmationFragment.prepareParams(
+                            SendConfirmationFragment.Type.Tron,
+                            sendEntryPointDestId
+                        )
                     )
                 },
                 enabled = proceedEnabled

@@ -37,7 +37,7 @@ class SendTokenSelectFragment : BaseFragment() {
                     onClickItem = {
                         navController.slideFromRight(
                             R.id.sendXFragment,
-                            SendFragment.prepareParams(it.wallet)
+                            SendFragment.prepareParams(it.wallet, R.id.sendTokenSelectFragment)
                         )
                     },
                     viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),

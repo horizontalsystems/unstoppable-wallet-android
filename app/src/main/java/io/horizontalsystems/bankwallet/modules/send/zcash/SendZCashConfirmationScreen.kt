@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.zcash
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
@@ -10,7 +14,8 @@ import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 fun SendZCashConfirmationScreen(
     navController: NavController,
     sendViewModel: SendZCashViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    amountInputModeViewModel: AmountInputModeViewModel,
+    sendEntryPointDestId: Int
 ) {
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }
@@ -35,8 +40,8 @@ fun SendZCashConfirmationScreen(
         rate = sendViewModel.coinRate,
         feeCoinRate = sendViewModel.coinRate,
         sendResult = sendViewModel.sendResult,
-        coin = confirmationData.coin,
         blockchainType = sendViewModel.blockchainType,
+        coin = confirmationData.coin,
         feeCoin = confirmationData.feeCoin,
         amount = confirmationData.amount,
         address = confirmationData.address,
@@ -44,6 +49,7 @@ fun SendZCashConfirmationScreen(
         fee = confirmationData.fee,
         lockTimeInterval = confirmationData.lockTimeInterval,
         memo = confirmationData.memo,
-        onClickSend = sendViewModel::onClickSend
+        onClickSend = sendViewModel::onClickSend,
+        sendEntryPointDestId = sendEntryPointDestId
     )
 }
