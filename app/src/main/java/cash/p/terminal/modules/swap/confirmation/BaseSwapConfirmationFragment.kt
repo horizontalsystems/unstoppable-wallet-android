@@ -53,6 +53,14 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
     protected abstract val navGraphId: Int
 
     private var snackbarInProcess: CustomSnackbar? = null
+    private val closeUntilDestId by lazy {
+        val swapEntryPointDestId = arguments?.getInt(swapEntryPointDestIdKey) ?: 0
+        if (swapEntryPointDestId == 0) {
+            R.id.swapFragment
+        } else {
+            swapEntryPointDestId
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,7 +105,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
                 R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().popBackStack(R.id.swapFragment, true)
+                findNavController().popBackStack(closeUntilDestId, true)
             }, 1200)
         }
 
@@ -106,6 +114,10 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
 
             findNavController().popBackStack()
         }
+    }
+
+    companion object {
+        const val swapEntryPointDestIdKey = "swapEntryPointDestIdKey"
     }
 
 }

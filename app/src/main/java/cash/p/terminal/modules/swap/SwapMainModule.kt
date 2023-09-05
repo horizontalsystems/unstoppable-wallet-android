@@ -15,6 +15,7 @@ import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
+import cash.p.terminal.modules.swap.confirmation.BaseSwapConfirmationFragment
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
@@ -38,7 +39,10 @@ object SwapMainModule {
     const val swapSettingsSlippageKey = "swap_settings_slippage"
     const val swapSettingsTtlKey = "swap_settings_ttl"
 
-    fun prepareParams(tokenFrom: Token) = bundleOf(tokenFromKey to tokenFrom)
+    fun prepareParams(tokenFrom: Token, swapEntryPointDestId: Int = 0) = bundleOf(
+        tokenFromKey to tokenFrom,
+        BaseSwapConfirmationFragment.swapEntryPointDestIdKey to swapEntryPointDestId
+    )
 
     data class ProviderViewItem(
         val provider: ISwapProvider,
