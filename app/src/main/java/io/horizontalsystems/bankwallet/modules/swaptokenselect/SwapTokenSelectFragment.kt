@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
@@ -34,7 +34,7 @@ class SwapTokenSelectFragment : BaseFragment() {
                     title = stringResource(R.string.Balance_Swap),
                     onClickEnabled = { it.swapEnabled },
                     onClickItem = {
-                        navController.slideFromBottom(
+                        navController.slideFromRight(
                             R.id.swapFragment,
                             SwapMainModule.prepareParams(it.wallet.token)
                         )
