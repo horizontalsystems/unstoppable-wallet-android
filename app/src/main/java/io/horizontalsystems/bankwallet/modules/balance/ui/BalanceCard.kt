@@ -45,7 +45,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -71,7 +71,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun BalanceCardSwipable(
-    viewItem: BalanceViewItem,
+    viewItem: BalanceViewItem2,
     viewModel: BalanceViewModel,
     navController: NavController,
     revealed: Boolean,
@@ -112,7 +112,7 @@ fun BalanceCardSwipable(
 
 @Composable
 fun BalanceCard(
-    viewItem: BalanceViewItem,
+    viewItem: BalanceViewItem2,
     viewModel: BalanceViewModel,
     navController: NavController
 ) {
@@ -141,7 +141,7 @@ fun BalanceCard(
 
 @Composable
 fun BalanceCardInner(
-    viewItem: BalanceViewItem,
+    viewItem: BalanceViewItem2,
     onClickSyncError: (() -> Unit)? = null
 ) {
     CellMultilineClear(height = 64.dp) {
@@ -258,7 +258,7 @@ fun BalanceCardInner(
 
 @Composable
 private fun ExpandableContent(
-    viewItem: BalanceViewItem,
+    viewItem: BalanceViewItem2,
     navController: NavController,
     viewModel: BalanceViewModel
 ) {
@@ -280,7 +280,7 @@ private fun ExpandableContent(
 }
 
 @Composable
-private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: BalanceViewModel) {
+private fun ButtonsRow(viewItem: BalanceViewItem2, navController: NavController, viewModel: BalanceViewModel) {
     val onClickReceive = {
         try {
             val params = ReceiveAddressFragment.params(viewModel.getWalletForReceive(viewItem))
@@ -378,7 +378,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
 }
 
 @Composable
-private fun LockedValueRow(viewItem: BalanceViewItem) {
+private fun LockedValueRow(viewItem: BalanceViewItem2) {
     if (viewItem.coinValueLocked.value == null) return
 
     AnimatedVisibility(
@@ -423,7 +423,7 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
 
 @Composable
 private fun WalletIcon(
-    viewItem: BalanceViewItem,
+    viewItem: BalanceViewItem2,
     onClickSyncError: (() -> Unit)?
 ) {
     Box(
@@ -474,7 +474,7 @@ private fun WalletIcon(
     }
 }
 
-private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navController: NavController, view: View) {
+private fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, navController: NavController, view: View) {
     when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
         is BalanceViewModel.SyncError.Dialog -> {
             val wallet = syncErrorDetails.wallet
