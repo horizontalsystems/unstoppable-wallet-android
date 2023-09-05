@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.info
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,8 +12,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,7 +19,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.OverallScore
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
 import cash.p.terminal.modules.info.ui.InfoHeader
@@ -44,46 +38,33 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import java.math.BigDecimal
 
-class OverallScoreInfoFragment : BaseFragment() {
+class OverallScoreInfoFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            val scoreCategory = requireArguments().parcelable<ScoreCategory>(SCORE_CATEGORY_KEY)
-            val categoryScores = getScores(scoreCategory)
-
-            setContent {
-                ComposeAppTheme {
-                    if (scoreCategory == null) {
-                        ScreenMessageWithAction(
-                            text = stringResource(R.string.Error),
-                            icon = R.drawable.ic_error_48
-                        ) {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 48.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.Button_Close),
-                                onClick = { findNavController().popBackStack() }
-                            )
-                        }
-                    } else {
-                        InfoScreen(
-                            scoreCategory.title,
-                            scoreCategory.description,
-                            categoryScores,
-                            findNavController()
-                        )
-                    }
+    @Composable
+    override fun GetContent() {
+        val scoreCategory = requireArguments().parcelable<ScoreCategory>(SCORE_CATEGORY_KEY)
+        val categoryScores = getScores(scoreCategory)
+        ComposeAppTheme {
+            if (scoreCategory == null) {
+                ScreenMessageWithAction(
+                    text = stringResource(R.string.Error),
+                    icon = R.drawable.ic_error_48
+                ) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .padding(horizontal = 48.dp)
+                            .fillMaxWidth(),
+                        title = stringResource(R.string.Button_Close),
+                        onClick = { findNavController().popBackStack() }
+                    )
                 }
+            } else {
+                InfoScreen(
+                    scoreCategory.title,
+                    scoreCategory.description,
+                    categoryScores,
+                    findNavController()
+                )
             }
         }
     }

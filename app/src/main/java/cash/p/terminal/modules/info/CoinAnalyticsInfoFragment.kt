@@ -1,9 +1,6 @@
 package cash.p.terminal.modules.info
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,14 +11,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import cash.p.terminal.modules.info.ui.BulletedText
 import cash.p.terminal.modules.info.ui.InfoBody
@@ -34,30 +29,18 @@ import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
-class CoinAnalyticsInfoFragment : BaseFragment() {
+class CoinAnalyticsInfoFragment : BaseComposeFragment() {
 
     private val analyticsInfo by lazy {
         requireArguments().parcelable<AnalyticInfo>(analyticsInfoKey)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                ComposeAppTheme {
-                    CoinAnalyticsInfoScreen(
-                        analyticsInfo
-                    ) { findNavController().popBackStack() }
-                }
-            }
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            CoinAnalyticsInfoScreen(
+                analyticsInfo
+            ) { findNavController().popBackStack() }
         }
     }
 

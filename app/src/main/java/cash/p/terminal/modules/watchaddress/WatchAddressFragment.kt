@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.watchaddress
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,16 +11,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.address.HSAddressInput
@@ -47,28 +41,19 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.delay
 
-class WatchAddressFragment : BaseFragment() {
+class WatchAddressFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    val popUpToInclusiveId =
-                        arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.watchAddressFragment) ?: R.id.watchAddressFragment
-                    val inclusive =
-                        arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
-                    WatchAddressScreen(findNavController(), popUpToInclusiveId, inclusive)
-                }
-            }
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            val popUpToInclusiveId =
+                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.watchAddressFragment) ?: R.id.watchAddressFragment
+            val inclusive =
+                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
+            WatchAddressScreen(findNavController(), popUpToInclusiveId, inclusive)
         }
     }
+
 }
 
 @Composable

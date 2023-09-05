@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.coin.reports
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,15 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -36,33 +30,24 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.helpers.LinkHelper
 
-class CoinReportsFragment : BaseFragment() {
+class CoinReportsFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<CoinReportsViewModel> {
         CoinReportsModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    CoinReportsScreen(viewModel,
-                        onClickNavigation = {
-                            findNavController().popBackStack()
-                        },
-                        onClickReportUrl = {
-                            LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                        }
-                    )
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            CoinReportsScreen(
+                viewModel = viewModel,
+                onClickNavigation = {
+                    findNavController().popBackStack()
+                },
+                onClickReportUrl = {
+                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
                 }
-            }
+            )
         }
     }
 

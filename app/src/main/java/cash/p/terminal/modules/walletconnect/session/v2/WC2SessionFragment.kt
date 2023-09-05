@@ -1,9 +1,7 @@
 package cash.p.terminal.modules.walletconnect.session.v2
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -22,9 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -32,7 +28,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.walletconnect.request.WC2RequestFragment
 import cash.p.terminal.modules.walletconnect.session.ui.StatusCell
@@ -52,29 +48,18 @@ import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class WC2SessionFragment : BaseFragment() {
+class WC2SessionFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<WC2SessionViewModel> {
         WC2SessionModule.Factory(arguments?.getString(SESSION_TOPIC_KEY))
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                WCSessionPage(
-                    findNavController(),
-                    viewModel,
-                )
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        WCSessionPage(
+            findNavController(),
+            viewModel,
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

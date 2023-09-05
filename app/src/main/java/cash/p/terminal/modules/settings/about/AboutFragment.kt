@@ -2,10 +2,6 @@ package cash.p.terminal.modules.settings.about
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,9 +17,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.managers.RateAppManager
@@ -56,24 +50,15 @@ import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 
-class AboutFragment : BaseFragment() {
+class AboutFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    AboutNavHost(findNavController())
-                }
-            }
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            AboutNavHost(findNavController())
         }
     }
+
 }
 
 private const val AboutPage = "about"

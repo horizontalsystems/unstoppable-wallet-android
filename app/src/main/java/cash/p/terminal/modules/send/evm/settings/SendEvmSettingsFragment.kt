@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.send.evm.settings
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,8 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,8 +21,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
-import cash.p.terminal.modules.evmfee.*
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.modules.evmfee.Cautions
+import cash.p.terminal.modules.evmfee.Eip1559FeeSettings
+import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.evmfee.EvmFeeModule
+import cash.p.terminal.modules.evmfee.EvmSettingsInput
+import cash.p.terminal.modules.evmfee.LegacyFeeSettings
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -39,41 +38,31 @@ import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import java.math.BigDecimal
 
-class SendEvmSettingsFragment : BaseFragment() {
+class SendEvmSettingsFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
-        val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
-        val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+    private val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+    private val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            val feeSettingsViewModel = viewModel<ViewModel>(
+                factory = EvmFeeModule.Factory(
+                    feeViewModel.feeService,
+                    feeViewModel.gasPriceService,
+                    feeViewModel.coinService
+                )
             )
-            setContent {
-                ComposeAppTheme {
-                    val feeSettingsViewModel = viewModel<ViewModel>(
-                        factory = EvmFeeModule.Factory(
-                            feeViewModel.feeService,
-                            feeViewModel.gasPriceService,
-                            feeViewModel.coinService
-                        )
-                    )
-                    val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
-                        factory = SendEvmSettingsModule.Factory(sendViewModel.service.settingsService, feeViewModel.coinService)
-                    )
-                    SendEvmFeeSettingsScreen(
-                        viewModel = sendSettingsViewModel,
-                        feeSettingsViewModel = feeSettingsViewModel,
-                        nonceViewModel = nonceViewModel,
-                        navController = findNavController()
-                    )
-                }
-            }
+            val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
+                factory = SendEvmSettingsModule.Factory(sendViewModel.service.settingsService, feeViewModel.coinService)
+            )
+            SendEvmFeeSettingsScreen(
+                viewModel = sendSettingsViewModel,
+                feeSettingsViewModel = feeSettingsViewModel,
+                nonceViewModel = nonceViewModel,
+                navController = findNavController()
+            )
         }
     }
 

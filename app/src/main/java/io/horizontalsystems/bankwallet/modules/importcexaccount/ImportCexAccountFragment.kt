@@ -1,49 +1,33 @@
 package cash.p.terminal.modules.importcexaccount
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.findNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.info.ErrorDisplayDialogFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class ImportCexAccountFragment : BaseFragment() {
+class ImportCexAccountFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            val popUpToInclusiveId =
-                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
+    @Composable
+    override fun GetContent() {
+        val popUpToInclusiveId =
+            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
-            val inclusive =
-                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+        val inclusive =
+            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
 
-            setContent {
-                ComposeAppTheme {
-                    ImportCexAccountNavHost(findNavController(), popUpToInclusiveId, inclusive)
-                }
-            }
+        ComposeAppTheme {
+            ImportCexAccountNavHost(findNavController(), popUpToInclusiveId, inclusive)
         }
     }
 

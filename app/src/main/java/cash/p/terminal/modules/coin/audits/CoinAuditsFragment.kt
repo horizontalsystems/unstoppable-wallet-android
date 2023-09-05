@@ -1,22 +1,23 @@
 package cash.p.terminal.modules.coin.audits
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,42 +26,42 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.CellFooter
+import cash.p.terminal.ui.compose.components.CellMultilineLawrenceSection
+import cash.p.terminal.ui.compose.components.CellSingleLineClear
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 
-class CoinAuditsFragment : BaseFragment() {
+class CoinAuditsFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<CoinAuditsViewModel> {
         CoinAuditsModule.Factory(requireArguments().getStringArrayList(ADDRESSES_KEY)!!)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    CoinAuditsScreen(viewModel,
-                        onClickNavigation = {
-                            findNavController().popBackStack()
-                        },
-                        onClickReportUrl = {
-                            LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                        }
-                    )
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            CoinAuditsScreen(
+                viewModel = viewModel,
+                onClickNavigation = {
+                    findNavController().popBackStack()
+                },
+                onClickReportUrl = {
+                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
                 }
-            }
+            )
         }
     }
 

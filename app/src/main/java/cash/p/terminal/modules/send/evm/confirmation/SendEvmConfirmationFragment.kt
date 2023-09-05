@@ -3,9 +3,7 @@ package cash.p.terminal.modules.send.evm.confirmation
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,15 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
@@ -48,7 +44,7 @@ import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
-class SendEvmConfirmationFragment : BaseFragment() {
+class SendEvmConfirmationFragment : BaseComposeFragment() {
 
     private val logger = AppLogger("send-evm")
 
@@ -88,30 +84,18 @@ class SendEvmConfirmationFragment : BaseFragment() {
     private val additionalInfo: SendEvmData.AdditionalInfo?
         get() = arguments?.parcelable(SendEvmModule.additionalInfoKey)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                SendEvmConfirmationScreen(
-                    sendEvmTransactionViewModel = sendEvmTransactionViewModel,
-                    feeViewModel = feeViewModel,
-                    nonceViewModel = nonceViewModel,
-                    parentNavGraphId = R.id.sendEvmConfirmationFragment,
-                    navController = findNavController(),
-                    onSendClick = {
-                        logger.info("click send button")
-                        sendEvmTransactionViewModel.send(logger)
-                    })
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        SendEvmConfirmationScreen(
+            sendEvmTransactionViewModel = sendEvmTransactionViewModel,
+            feeViewModel = feeViewModel,
+            nonceViewModel = nonceViewModel,
+            parentNavGraphId = R.id.sendEvmConfirmationFragment,
+            navController = findNavController(),
+            onSendClick = {
+                logger.info("click send button")
+                sendEvmTransactionViewModel.send(logger)
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

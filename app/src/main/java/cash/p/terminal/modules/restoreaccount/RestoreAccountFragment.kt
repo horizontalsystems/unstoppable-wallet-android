@@ -1,19 +1,13 @@
 package cash.p.terminal.modules.restoreaccount
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
@@ -26,30 +20,25 @@ import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 
-class RestoreAccountFragment : BaseFragment() {
+class RestoreAccountFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        val popUpToInclusiveId =
+            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
+
+        val inclusive =
+            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+
+        ComposeAppTheme {
+            RestoreAccountNavHost(
+                findNavController(),
+                popUpToInclusiveId,
+                inclusive
             )
-            setContent {
-                val popUpToInclusiveId =
-                    arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
-
-                val inclusive =
-                    arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
-
-                ComposeAppTheme {
-                    RestoreAccountNavHost(findNavController(), popUpToInclusiveId, inclusive)
-                }
-            }
         }
     }
+
 }
 
 @Composable

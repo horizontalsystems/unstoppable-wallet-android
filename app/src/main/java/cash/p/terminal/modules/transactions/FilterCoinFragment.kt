@@ -1,12 +1,16 @@
 package cash.p.terminal.modules.transactions
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
@@ -16,8 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,34 +27,30 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.B2
+import cash.p.terminal.ui.compose.components.Badge
+import cash.p.terminal.ui.compose.components.CellMultilineClear
+import cash.p.terminal.ui.compose.components.D1
+import cash.p.terminal.ui.compose.components.HsBackButton
 import io.horizontalsystems.core.findNavController
 
-class FilterCoinFragment : BaseFragment() {
+class FilterCoinFragment : BaseComposeFragment() {
 
     private val viewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    FilterCoinScreen(findNavController(), viewModel)
-                }
-            }
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            FilterCoinScreen(findNavController(), viewModel)
         }
     }
+
 }
 
 

@@ -1,9 +1,6 @@
 package cash.p.terminal.modules.evmnetwork
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,9 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,7 +42,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.EvmSyncSource
@@ -72,26 +67,15 @@ import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class EvmNetworkFragment : BaseFragment() {
+class EvmNetworkFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            EvmNetworkNavHost(
+                requireArguments(),
+                findNavController()
             )
-            setContent {
-                ComposeAppTheme {
-                    EvmNetworkNavHost(
-                        requireArguments(),
-                        findNavController()
-                    )
-                }
-            }
         }
     }
 

@@ -1,39 +1,23 @@
 package cash.p.terminal.modules.backuplocal
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.modules.backuplocal.password.LocalBackupPasswordScreen
 import cash.p.terminal.modules.backuplocal.terms.LocalBackupTermsScreen
 import io.horizontalsystems.core.findNavController
 
-class BackupLocalFragment : BaseFragment() {
+class BackupLocalFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                BackupLocalNavHost(findNavController(), requireArguments().getString(ACCOUNT_ID_KEY))
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        BackupLocalNavHost(findNavController(), requireArguments().getString(ACCOUNT_ID_KEY))
     }
 
     companion object {

@@ -3,9 +3,7 @@ package cash.p.terminal.modules.swap.approve.confirmation
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,8 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,7 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
@@ -58,7 +54,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class SwapApproveConfirmationFragment : BaseFragment() {
+class SwapApproveConfirmationFragment : BaseComposeFragment() {
     private val logger = AppLogger("swap-approve")
     private val additionalItems: SendEvmData.AdditionalInfo?
         get() = arguments?.parcelable(additionalInfoKey)
@@ -91,32 +87,20 @@ class SwapApproveConfirmationFragment : BaseFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                SwapApproveConfirmationScreen(
-                    sendEvmTransactionViewModel = sendEvmTransactionViewModel,
-                    feeViewModel = feeViewModel,
-                    nonceViewModel = nonceViewModel,
-                    parentNavGraphId = R.id.swapApproveConfirmationFragment,
-                    navController = findNavController(),
-                    onSendClick = {
-                        logger.info("click approve button")
-                        sendEvmTransactionViewModel.send(logger)
-                    },
-                    backButton = backButton
-                )
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        SwapApproveConfirmationScreen(
+            sendEvmTransactionViewModel = sendEvmTransactionViewModel,
+            feeViewModel = feeViewModel,
+            nonceViewModel = nonceViewModel,
+            parentNavGraphId = R.id.swapApproveConfirmationFragment,
+            navController = findNavController(),
+            onSendClick = {
+                logger.info("click approve button")
+                sendEvmTransactionViewModel.send(logger)
+            },
+            backButton = backButton
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

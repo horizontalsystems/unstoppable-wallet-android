@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.restorelocal
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,10 +17,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -35,7 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -56,43 +50,34 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class RestoreLocalFragment : BaseFragment() {
-    companion object{
+class RestoreLocalFragment : BaseComposeFragment() {
+    companion object {
         const val jsonFileKey = "jsonFileKey"
         const val fileNameKey = "fileNameKey"
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        val popUpToInclusiveId =
+            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
+
+        val popUpInclusive =
+            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+
+        val backupJsonString = arguments?.getString(jsonFileKey)
+        val fileName = arguments?.getString(fileNameKey)
+
+        ComposeAppTheme {
+            RestoreLocalNavHost(
+                backupJsonString,
+                fileName,
+                findNavController(),
+                popUpToInclusiveId,
+                popUpInclusive
             )
-            val popUpToInclusiveId =
-                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
-
-            val popUpInclusive =
-                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
-
-            val backupJsonString = arguments?.getString(jsonFileKey)
-            val fileName = arguments?.getString(fileNameKey)
-
-            setContent {
-                ComposeAppTheme {
-                    RestoreLocalNavHost(
-                        backupJsonString,
-                        fileName,
-                        findNavController(),
-                        popUpToInclusiveId,
-                        popUpInclusive
-                    )
-                }
-            }
         }
     }
+
 }
 
 @Composable

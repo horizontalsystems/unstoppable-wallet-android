@@ -1,9 +1,6 @@
 package cash.p.terminal.modules.market.topcoins
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,14 +11,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
@@ -35,7 +30,7 @@ import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
-class MarketTopCoinsFragment : BaseFragment() {
+class MarketTopCoinsFragment : BaseComposeFragment() {
 
     private val sortingField by lazy {
         arguments?.parcelable<SortingField>(sortingFieldKey)
@@ -51,24 +46,14 @@ class MarketTopCoinsFragment : BaseFragment() {
         MarketTopCoinsModule.Factory(topMarket, sortingField, marketField)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            TopCoinsScreen(
+                viewModel,
+                { findNavController().popBackStack() },
+                { coinUid -> onCoinClick(coinUid) }
             )
-            setContent {
-                ComposeAppTheme {
-                    TopCoinsScreen(
-                        viewModel,
-                        { findNavController().popBackStack() },
-                        { coinUid -> onCoinClick(coinUid) }
-                    )
-                }
-            }
         }
     }
 

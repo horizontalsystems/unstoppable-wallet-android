@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.watchaddress.selectblockchains
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,15 +22,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -46,41 +39,36 @@ import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.delay
 
-class SelectBlockchainsFragment : BaseFragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    val popUpToInclusiveId =
-                        arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
-                    val inclusive =
-                        arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
-                    val accountType = arguments?.parcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
-                    val accountName = arguments?.getString(SelectBlockchainsModule.accountNameKey)
-                    if (accountType != null) {
-                        SelectBlockchainsScreen(
-                            accountType,
-                            accountName,
-                            findNavController(),
-                            popUpToInclusiveId,
-                            inclusive
-                        )
-                    }
-                }
+class SelectBlockchainsFragment : BaseComposeFragment() {
+
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            val popUpToInclusiveId =
+                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
+            val inclusive =
+                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+            val accountType = arguments?.parcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
+            val accountName = arguments?.getString(SelectBlockchainsModule.accountNameKey)
+            if (accountType != null) {
+                SelectBlockchainsScreen(
+                    accountType,
+                    accountName,
+                    findNavController(),
+                    popUpToInclusiveId,
+                    inclusive
+                )
+            } else {
+                findNavController().popBackStack()
             }
         }
     }
+
 }
 
 @Composable

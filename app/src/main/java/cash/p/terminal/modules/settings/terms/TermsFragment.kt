@@ -1,39 +1,43 @@
 package cash.p.terminal.modules.settings.terms
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HsCheckbox
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
 
-class TermsFragment : BaseFragment() {
+class TermsFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().setNavigationResult(
                 resultBundleKey,
@@ -41,15 +45,12 @@ class TermsFragment : BaseFragment() {
             )
             findNavController().popBackStack()
         }
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    TermsScreen(navController = findNavController())
-                }
-            }
+    }
+
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            TermsScreen(navController = findNavController())
         }
     }
 

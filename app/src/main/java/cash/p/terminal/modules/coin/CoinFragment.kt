@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.coin
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,17 +8,14 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsScreen
 import cash.p.terminal.modules.coin.coinmarkets.CoinMarketsScreen
@@ -30,41 +23,32 @@ import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class CoinFragment : BaseFragment() {
+class CoinFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val uid = try {
-                    activity?.intent?.data?.getQueryParameter("uid")
-                } catch (e: UnsupportedOperationException) {
-                    null
-                }
-
-                val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
-                if (uid != null) {
-                    activity?.intent?.data = null
-                }
-
-                CoinScreen(
-                    coinUid,
-                    coinViewModel(coinUid),
-                    findNavController(),
-                    childFragmentManager
-                )
-            }
+    @Composable
+    override fun GetContent() {
+        val uid = try {
+            activity?.intent?.data?.getQueryParameter("uid")
+        } catch (e: UnsupportedOperationException) {
+            null
         }
+
+        val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
+        if (uid != null) {
+            activity?.intent?.data = null
+        }
+
+        CoinScreen(
+            coinUid,
+            coinViewModel(coinUid),
+            findNavController(),
+            childFragmentManager
+        )
     }
 
     private fun coinViewModel(coinUid: String): CoinViewModel? = try {

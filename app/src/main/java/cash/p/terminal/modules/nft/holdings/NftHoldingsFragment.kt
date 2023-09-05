@@ -1,22 +1,27 @@
 package cash.p.terminal.modules.nft.holdings
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.balance.TotalUIState
@@ -36,25 +41,29 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.CellBorderedRowUniversal
+import cash.p.terminal.ui.compose.components.CellSingleLineClear
+import cash.p.terminal.ui.compose.components.DoubleText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.NftIcon
+import cash.p.terminal.ui.compose.components.SnackbarError
+import cash.p.terminal.ui.compose.components.headline2_leah
+import cash.p.terminal.ui.compose.components.subhead1_grey
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class NftHoldingsFragment : BaseFragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                NftHoldingsScreen(findNavController())
-            }
-        }
+class NftHoldingsFragment : BaseComposeFragment() {
+
+    @Composable
+    override fun GetContent() {
+        NftHoldingsScreen(findNavController())
     }
+
 }
 
 @Composable

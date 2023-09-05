@@ -1,10 +1,11 @@
 package cash.p.terminal.modules.info
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -14,49 +15,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.shorten
 import cash.p.terminal.modules.info.ui.InfoHeader
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
+import cash.p.terminal.ui.compose.components.CellSingleLineLawrence
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class TransactionDoubleSpendInfoFragment : BaseFragment() {
+class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            InfoScreen(
+                txHash = requireArguments().getString(TRANSACTION_HASH)!!,
+                conflictingTxHash = requireArguments().getString(
+                    CONFLICTING_TRANSACTION_HASH
+                )!!,
+                onBackClick = { findNavController().popBackStack() }
             )
-
-            setContent {
-                ComposeAppTheme {
-                    InfoScreen(
-                        txHash = requireArguments().getString(TRANSACTION_HASH)!!,
-                        conflictingTxHash = requireArguments().getString(
-                            CONFLICTING_TRANSACTION_HASH
-                        )!!,
-                        onBackClick = { findNavController().popBackStack() }
-                    )
-                }
-            }
         }
     }
 

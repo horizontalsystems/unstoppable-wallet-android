@@ -1,26 +1,31 @@
 package cash.p.terminal.modules.market.search
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,7 +34,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -40,31 +49,33 @@ import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.CategoryCard
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
+import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
+import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui.compose.components.SnackbarError
+import cash.p.terminal.ui.compose.components.body_grey50
+import cash.p.terminal.ui.compose.components.headline2_jacob
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
 
-class MarketSearchFragment : BaseFragment() {
+class MarketSearchFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<MarketSearchViewModel> { MarketSearchModule.Factory() }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                MarketSearchScreen(
-                    viewModel,
-                    findNavController(),
-                )
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        MarketSearchScreen(
+            viewModel,
+            findNavController(),
+        )
     }
 
 }

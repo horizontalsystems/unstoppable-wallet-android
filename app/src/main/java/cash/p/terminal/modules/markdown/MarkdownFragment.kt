@@ -1,19 +1,13 @@
 package cash.p.terminal.modules.markdown
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -22,34 +16,22 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
 
-class MarkdownFragment : BaseFragment() {
+class MarkdownFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                ComposeAppTheme {
-                    MarkdownScreen(
-                        handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false,
-                        showAsPopup = arguments?.getBoolean(showAsPopupKey) ?: false,
-                        markdownUrl = arguments?.getString(markdownUrlKey) ?: "",
-                        onCloseClick = { findNavController().popBackStack() },
-                        onUrlClick = { url ->
-                            findNavController().slideFromRight(
-                                R.id.markdownFragment, bundleOf(markdownUrlKey to url)
-                            )
-                        }
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            MarkdownScreen(
+                handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false,
+                showAsPopup = arguments?.getBoolean(showAsPopupKey) ?: false,
+                markdownUrl = arguments?.getString(markdownUrlKey) ?: "",
+                onCloseClick = { findNavController().popBackStack() },
+                onUrlClick = { url ->
+                    findNavController().slideFromRight(
+                        R.id.markdownFragment, bundleOf(markdownUrlKey to url)
                     )
                 }
-            }
+            )
         }
     }
 

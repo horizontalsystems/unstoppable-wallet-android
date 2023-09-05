@@ -1,19 +1,13 @@
 package cash.p.terminal.modules.walletconnect.request
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -25,67 +19,61 @@ import cash.p.terminal.modules.walletconnect.request.signmessage.v2.WC2Unsupport
 import cash.p.terminal.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
 import cash.p.terminal.modules.walletconnect.version2.WC2SignMessageRequest
 import cash.p.terminal.modules.walletconnect.version2.WC2UnsupportedRequest
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class WC2RequestFragment : BaseFragment() {
+class WC2RequestFragment : BaseComposeFragment() {
     private val logger = AppLogger("wallet-connect v2")
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val requestId = requireArguments().getLong(REQUEST_ID_KEY)
-                val navController = findNavController()
-                val wc2RequestViewModel = viewModel<WC2RequestViewModel>(factory = WC2RequestViewModel.Factory(requestId))
+    @Composable
+    override fun GetContent() {
+        val requestId = requireArguments().getLong(REQUEST_ID_KEY)
+        val navController = findNavController()
+        val wc2RequestViewModel = viewModel<WC2RequestViewModel>(factory = WC2RequestViewModel.Factory(requestId))
 
-                val requestData = wc2RequestViewModel.requestData
-                when (requestData?.pendingRequest) {
-                    is WC2UnsupportedRequest -> {
-                        WC2UnsupportedRequestScreen(navController, requestData)
-                    }
-                    is WC2SignMessageRequest -> {
-                        WC2SignMessageRequestScreen(navController, requestData)
-                    }
-                    is WC2SendEthereumTransactionRequest -> {
-                        val vmFactory by lazy { WCRequestModule.FactoryV2(requestData) }
-                        val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
-                        val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.wc2RequestFragment) { vmFactory }
-                        val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wc2RequestFragment) { vmFactory }
-                        val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(R.id.wc2RequestFragment) { vmFactory }
+        val requestData = wc2RequestViewModel.requestData
+        when (requestData?.pendingRequest) {
+            is WC2UnsupportedRequest -> {
+                WC2UnsupportedRequestScreen(navController, requestData)
+            }
 
-                        val cachedNonceViewModel = nonceViewModel //needed in SendEvmSettingsFragment
+            is WC2SignMessageRequest -> {
+                WC2SignMessageRequestScreen(navController, requestData)
+            }
 
-                        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) { transactionHash ->
-                            viewModel.approve(transactionHash)
-                            HudHelper.showSuccessMessage(
-                                requireActivity().findViewById(android.R.id.content),
-                                R.string.Hud_Text_Done
-                            )
-                            navController.popBackStack()
-                        }
+            is WC2SendEthereumTransactionRequest -> {
+                val vmFactory by lazy { WCRequestModule.FactoryV2(requestData) }
+                val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
+                val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.wc2RequestFragment) { vmFactory }
+                val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wc2RequestFragment) { vmFactory }
+                val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(R.id.wc2RequestFragment) { vmFactory }
 
-                        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
-                            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
-                        }
+                val cachedNonceViewModel = nonceViewModel //needed in SendEvmSettingsFragment
 
-                        SendEthRequestScreen(
-                            navController,
-                            viewModel,
-                            sendEvmTransactionViewModel,
-                            feeViewModel,
-                            logger,
-                            R.id.wc2RequestFragment
-                        ) { navController.popBackStack() }
-                    }
+                sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) { transactionHash ->
+                    viewModel.approve(transactionHash)
+                    HudHelper.showSuccessMessage(
+                        requireActivity().findViewById(android.R.id.content),
+                        R.string.Hud_Text_Done
+                    )
+                    navController.popBackStack()
                 }
+
+                sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
+                    HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
+                }
+
+                SendEthRequestScreen(
+                    navController,
+                    viewModel,
+                    sendEvmTransactionViewModel,
+                    feeViewModel,
+                    logger,
+                    R.id.wc2RequestFragment
+                ) { navController.popBackStack() }
             }
         }
+
     }
 
     companion object {

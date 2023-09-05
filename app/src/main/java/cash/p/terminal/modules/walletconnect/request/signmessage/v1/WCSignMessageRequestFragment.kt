@@ -1,35 +1,26 @@
 package cash.p.terminal.modules.walletconnect.request.signmessage.v1
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.walletconnect.WalletConnectViewModel
 import cash.p.terminal.modules.walletconnect.request.signmessage.WCSignMessageRequestModule
 import cash.p.terminal.modules.walletconnect.request.signmessage.WCSignMessageRequestViewModel
 import cash.p.terminal.modules.walletconnect.request.signmessage.ui.SignMessageRequestScreen
 import io.horizontalsystems.core.findNavController
 
-class WCSignMessageRequestFragment : BaseFragment() {
+class WCSignMessageRequestFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
+    @Composable
+    override fun GetContent() {
         val baseViewModel = getBaseViewModel()
 
         if (baseViewModel == null) {
             findNavController().popBackStack()
-            return View(requireContext())
+            return
         }
 
         val vmFactory by lazy {
@@ -50,17 +41,10 @@ class WCSignMessageRequestFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                SignMessageRequestScreen(
-                    findNavController(),
-                    viewModel
-                )
-            }
-        }
+        SignMessageRequestScreen(
+            findNavController(),
+            viewModel
+        )
     }
 
     private fun getBaseViewModel(): WalletConnectViewModel? {

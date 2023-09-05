@@ -1,19 +1,21 @@
 package cash.p.terminal.modules.solananetwork
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,38 +24,33 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 
-class SolanaNetworkFragment : BaseFragment() {
+class SolanaNetworkFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<SolanaNetworkViewModel> {
         SolanaNetworkModule.Factory()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            SolanaNetworkScreen(
+                viewModel,
+                findNavController()
             )
-            setContent {
-                ComposeAppTheme {
-                    SolanaNetworkScreen(
-                        viewModel,
-                        findNavController()
-                    )
-                }
-            }
         }
     }
 

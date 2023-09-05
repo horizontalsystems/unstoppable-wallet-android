@@ -1,25 +1,21 @@
 package cash.p.terminal.modules.depositcex
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexDepositNetwork
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 
-class DepositCexFragment : BaseFragment() {
+class DepositCexFragment : BaseComposeFragment() {
 
     companion object {
         fun args(cexAsset: CexAsset, network: CexDepositNetwork? = null): Bundle {
@@ -30,52 +26,39 @@ class DepositCexFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
+    @Composable
+    override fun GetContent() {
         val cexAsset = arguments?.parcelable<CexAsset>("cexAsset")
         val network = arguments?.parcelable<CexDepositNetwork>("cexDepositNetwork")
+        ComposeAppTheme {
+            val navController = findNavController()
+            val navigatedFromMain = navController.previousBackStackEntry?.destination?.id == R.id.mainFragment
+            val navigateBack: () -> Unit = { navController.popBackStack() }
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                ComposeAppTheme {
-                    val navController = findNavController()
-                    val navigatedFromMain = navController.previousBackStackEntry?.destination?.id == R.id.mainFragment
-                    val navigateBack: () -> Unit = { navController.popBackStack() }
-
-                    if (cexAsset != null) {
-                        val networks = cexAsset.depositNetworks
-                        if (networks.isEmpty() || network != null || networks.size == 1) {
-                            DepositQrCodeScreen(
-                                cexAsset = cexAsset,
-                                onNavigateBack = if (navigatedFromMain) null else navigateBack,
-                                onClose = { navController.popBackStack(R.id.mainFragment, false) },
-                                network = network ?: networks.firstOrNull()
-                            )
-                        } else {
-                            SelectNetworkScreen(
-                                networks = networks,
-                                onNavigateBack = if (navigatedFromMain) null else navigateBack,
-                                onClose = { navController.popBackStack(R.id.mainFragment, false) },
-                                onSelectNetwork = {
-                                    navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it))
-                                }
-                            )
+            if (cexAsset != null) {
+                val networks = cexAsset.depositNetworks
+                if (networks.isEmpty() || network != null || networks.size == 1) {
+                    DepositQrCodeScreen(
+                        cexAsset = cexAsset,
+                        onNavigateBack = if (navigatedFromMain) null else navigateBack,
+                        onClose = { navController.popBackStack(R.id.mainFragment, false) },
+                        network = network ?: networks.firstOrNull()
+                    )
+                } else {
+                    SelectNetworkScreen(
+                        networks = networks,
+                        onNavigateBack = if (navigatedFromMain) null else navigateBack,
+                        onClose = { navController.popBackStack(R.id.mainFragment, false) },
+                        onSelectNetwork = {
+                            navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it))
                         }
-
-                    } else {
-                        val view = LocalView.current
-                        HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
-                        navController.popBackStack()
-                    }
+                    )
                 }
+
+            } else {
+                val view = LocalView.current
+                HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
+                navController.popBackStack()
             }
         }
     }

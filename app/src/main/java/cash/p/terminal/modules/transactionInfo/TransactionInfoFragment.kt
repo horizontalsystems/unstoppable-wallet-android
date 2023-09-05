@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.transactionInfo
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,48 +8,54 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.SectionTitleCell
+import cash.p.terminal.ui.compose.components.TitleAndValueCell
+import cash.p.terminal.ui.compose.components.TransactionAmountCell
+import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
+import cash.p.terminal.ui.compose.components.TransactionInfoBtcLockCell
+import cash.p.terminal.ui.compose.components.TransactionInfoCancelCell
+import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
+import cash.p.terminal.ui.compose.components.TransactionInfoDoubleSpendCell
+import cash.p.terminal.ui.compose.components.TransactionInfoExplorerCell
+import cash.p.terminal.ui.compose.components.TransactionInfoRawTransaction
+import cash.p.terminal.ui.compose.components.TransactionInfoSentToSelfCell
+import cash.p.terminal.ui.compose.components.TransactionInfoSpeedUpCell
+import cash.p.terminal.ui.compose.components.TransactionInfoStatusCell
+import cash.p.terminal.ui.compose.components.TransactionInfoTransactionHashCell
+import cash.p.terminal.ui.compose.components.TransactionNftAmountCell
 import io.horizontalsystems.core.findNavController
 
-class TransactionInfoFragment : BaseFragment() {
+class TransactionInfoFragment : BaseComposeFragment() {
 
     private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        val viewItem = viewModelTxs.tmpItemToShow ?: run {
+    @Composable
+    override fun GetContent() {
+        val viewItem = viewModelTxs.tmpItemToShow
+        if (viewItem == null) {
             findNavController().popBackStack()
-            return null
+            return 
         }
 
         val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) {
             TransactionInfoModule.Factory(viewItem)
         }
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                TransactionInfoScreen(viewModel, findNavController())
-            }
-        }
+        
+        TransactionInfoScreen(viewModel, findNavController())
     }
+
 }
 
 @Composable

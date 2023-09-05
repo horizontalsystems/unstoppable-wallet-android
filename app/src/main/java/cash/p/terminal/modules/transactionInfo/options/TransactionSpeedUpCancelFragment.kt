@@ -3,9 +3,7 @@ package cash.p.terminal.modules.transactionInfo.options
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,8 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -25,7 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
@@ -46,7 +42,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 
-class TransactionSpeedUpCancelFragment : BaseFragment() {
+class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 
     private val logger = AppLogger("tx-speedUp-cancel")
     private val transactionInfoViewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment)
@@ -71,31 +67,19 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                TransactionSpeedUpCancelScreen(
-                    sendEvmTransactionViewModel = sendEvmTransactionViewModel,
-                    feeViewModel = feeViewModel,
-                    nonceViewModel = nonceViewModel,
-                    parentNavGraphId = R.id.transactionSpeedUpCancelFragment,
-                    speedUpCancelViewModel = speedUpCancelViewModel,
-                    navController = findNavController(),
-                    onSendClick = {
-                        logger.info("click send button")
-                        sendEvmTransactionViewModel.send(logger)
-                    })
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        TransactionSpeedUpCancelScreen(
+            sendEvmTransactionViewModel = sendEvmTransactionViewModel,
+            feeViewModel = feeViewModel,
+            nonceViewModel = nonceViewModel,
+            parentNavGraphId = R.id.transactionSpeedUpCancelFragment,
+            speedUpCancelViewModel = speedUpCancelViewModel,
+            navController = findNavController(),
+            onSendClick = {
+                logger.info("click send button")
+                sendEvmTransactionViewModel.send(logger)
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

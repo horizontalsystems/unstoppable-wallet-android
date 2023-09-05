@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.swap.settings.oneinch
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,16 +10,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.swap.SwapMainModule
@@ -44,7 +38,7 @@ import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 import java.math.BigDecimal
 
-class OneInchSettingsFragment : BaseFragment() {
+class OneInchSettingsFragment : BaseComposeFragment() {
 
     companion object {
         private const val dexKey = "dexKey"
@@ -74,42 +68,31 @@ class OneInchSettingsFragment : BaseFragment() {
         requireArguments().getString(slippageKey)?.toBigDecimal()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
+    @Composable
+    override fun GetContent() {
         val dexValue = dex
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    if (dexValue != null) {
-                        OneInchSettingsScreen(
-                            onCloseClick = {
-                                findNavController().popBackStack()
-                            },
-                            dex = dexValue,
-                            factory = OneInchSwapSettingsModule.Factory(address, slippage),
-                            navController = findNavController()
-                        )
-                    } else {
-                        ScreenMessageWithAction(
-                            text = stringResource(R.string.Error),
-                            icon = R.drawable.ic_error_48
-                        ) {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 48.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.Button_Close),
-                                onClick = { findNavController().popBackStack() }
-                            )
-                        }
-                    }
+        ComposeAppTheme {
+            if (dexValue != null) {
+                OneInchSettingsScreen(
+                    onCloseClick = {
+                        findNavController().popBackStack()
+                    },
+                    dex = dexValue,
+                    factory = OneInchSwapSettingsModule.Factory(address, slippage),
+                    navController = findNavController()
+                )
+            } else {
+                ScreenMessageWithAction(
+                    text = stringResource(R.string.Error),
+                    icon = R.drawable.ic_error_48
+                ) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .padding(horizontal = 48.dp)
+                            .fillMaxWidth(),
+                        title = stringResource(R.string.Button_Close),
+                        onClick = { findNavController().popBackStack() }
+                    )
                 }
             }
         }

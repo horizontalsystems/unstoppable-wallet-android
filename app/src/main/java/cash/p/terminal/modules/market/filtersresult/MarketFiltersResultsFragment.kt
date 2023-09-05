@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.market.filtersresult
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -15,15 +11,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
@@ -35,29 +29,19 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
-class MarketFiltersResultsFragment : BaseFragment() {
+class MarketFiltersResultsFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    @Composable
+    override fun GetContent() {
         val viewModel = getViewModel()
 
         if (viewModel == null) {
             findNavController().popBackStack()
-            return ComposeView(requireContext())
+            return
         }
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    SearchResultsScreen(viewModel, findNavController())
-                }
-            }
+        ComposeAppTheme {
+            SearchResultsScreen(viewModel, findNavController())
         }
     }
 

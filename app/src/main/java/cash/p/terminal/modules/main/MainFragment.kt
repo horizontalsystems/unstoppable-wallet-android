@@ -1,9 +1,6 @@
 package cash.p.terminal.modules.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -31,9 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,7 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
@@ -70,29 +65,19 @@ import cash.p.terminal.ui.extensions.WalletSwitchBottomSheet
 import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.launch
 
-class MainFragment : BaseFragment() {
+class MainFragment : BaseComposeFragment() {
 
     private val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    @Composable
+    override fun GetContent() {
+        ComposeAppTheme {
+            MainScreenWithRootedDeviceCheck(
+                transactionsViewModel = transactionsViewModel,
+                deepLink = activity?.intent?.data?.toString(),
+                navController = findNavController(),
+                clearActivityData = { activity?.intent?.data = null }
             )
-            setContent {
-                ComposeAppTheme {
-                    MainScreenWithRootedDeviceCheck(
-                        transactionsViewModel = transactionsViewModel,
-                        deepLink = activity?.intent?.data?.toString(),
-                        navController = findNavController(),
-                        clearActivityData = { activity?.intent?.data = null }
-                    )
-                }
-            }
         }
     }
 

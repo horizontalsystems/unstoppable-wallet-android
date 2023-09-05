@@ -1,21 +1,15 @@
 package cash.p.terminal.modules.contacts
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.findNavController
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
@@ -26,28 +20,20 @@ import cash.p.terminal.modules.contacts.screen.ContactsScreen
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 
-class ContactsFragment : BaseFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ContactsNavHost(
-                    navController = findNavController(),
-                    mode = arguments?.parcelable(modeKey) ?: Mode.Full
-                )
-            }
-        }
+class ContactsFragment : BaseComposeFragment() {
+
+    @Composable
+    override fun GetContent() {
+        ContactsNavHost(
+            navController = findNavController(),
+            mode = arguments?.parcelable(modeKey) ?: Mode.Full
+        )
     }
 
     companion object {

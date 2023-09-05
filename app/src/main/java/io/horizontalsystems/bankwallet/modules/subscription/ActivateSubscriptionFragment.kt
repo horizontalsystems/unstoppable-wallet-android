@@ -1,9 +1,5 @@
 package cash.p.terminal.modules.subscription
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,18 +11,15 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -42,25 +35,17 @@ import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.TitleAndValueCell
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.VSpacer
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class ActivateSubscriptionFragment : BaseFragment() {
+class ActivateSubscriptionFragment : BaseComposeFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ActivateSubscriptionScreen(findNavController())
-            }
-        }
+    @Composable
+    override fun GetContent() {
+        ActivateSubscriptionScreen(findNavController())
     }
+
 }
 
 @Composable
