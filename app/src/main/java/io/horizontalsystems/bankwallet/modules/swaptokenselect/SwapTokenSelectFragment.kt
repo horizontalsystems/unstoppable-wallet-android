@@ -36,7 +36,7 @@ class SwapTokenSelectFragment : BaseFragment() {
                     onClickItem = {
                         navController.slideFromRight(
                             R.id.swapFragment,
-                            SwapMainModule.prepareParams(it.wallet.token)
+                            SwapMainModule.prepareParams(it.wallet.token, R.id.swapTokenSelectFragment)
                         )
                     },
                     viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSwap()),
