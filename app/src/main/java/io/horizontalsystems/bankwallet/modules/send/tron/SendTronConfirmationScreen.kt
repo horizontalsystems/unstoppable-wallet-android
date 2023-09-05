@@ -45,7 +45,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawren
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -136,15 +135,7 @@ fun SendTronConfirmationScreen(
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack(closeUntilDestId, true)
-                        }
-                    )
-                )
+                menuItems = listOf()
             )
             Box(
                 modifier = Modifier.fillMaxSize()

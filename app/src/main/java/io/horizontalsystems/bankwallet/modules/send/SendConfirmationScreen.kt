@@ -36,7 +36,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
@@ -116,15 +115,7 @@ fun SendConfirmationScreen(
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack(closeUntilDestId, true)
-                        }
-                    )
-                )
+                menuItems = listOf()
             )
             Box(
                 modifier = Modifier.fillMaxSize()
