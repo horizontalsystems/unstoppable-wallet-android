@@ -174,9 +174,9 @@ private fun TokenBalanceHeader(
             maxLines = 1,
         )
         VSpacer(height = 6.dp)
-        if (balanceViewItem.syncingTextValue.visible && balanceViewItem.syncingTextValue.value != null) {
+        if (balanceViewItem.syncingTextValue != null) {
             body_grey(
-                text = balanceViewItem.syncingTextValue.value + (balanceViewItem.syncedUntilTextValue.value?.let { " - $it" } ?: ""),
+                text = balanceViewItem.syncingTextValue + (balanceViewItem.syncedUntilTextValue?.let { " - $it" } ?: ""),
                 maxLines = 1,
             )
         } else {
