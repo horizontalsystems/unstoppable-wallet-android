@@ -103,7 +103,6 @@ class TokenBalanceViewModel(
         viewItem(
             balanceItem,
             balanceService.baseCurrency,
-            true,
             balanceHiddenManager.balanceHidden,
             wallet.account.isWatchAccount,
             BalanceViewType.CoinThenFiat
