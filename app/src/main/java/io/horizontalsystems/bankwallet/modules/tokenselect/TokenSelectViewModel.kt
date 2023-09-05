@@ -66,7 +66,6 @@ class TokenSelectViewModel(
                     balanceViewItemFactory.viewItem2(
                         item = balanceItem,
                         currency = service.baseCurrency,
-                        expanded = false,
                         hideBalance = false,
                         watchAccount = service.isWatchAccount,
                         balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value

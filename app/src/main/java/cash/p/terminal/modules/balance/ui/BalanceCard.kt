@@ -1,14 +1,12 @@
 package cash.p.terminal.modules.balance.ui
 
 import android.view.View
-import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,38 +18,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.isCustom
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.balance.token.TokenBalanceFragment
-import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
-import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
-import cash.p.terminal.modules.send.SendFragment
-import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellMultilineClear
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.RateColor
 import cash.p.terminal.ui.compose.components.RateText
 import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -112,7 +97,10 @@ fun BalanceCard(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
-                viewModel.onItem(viewItem)
+                navController.slideFromRight(
+                    R.id.tokenBalanceFragment,
+                    TokenBalanceFragment.prepareParams(viewItem.wallet)
+                )
             }
     ) {
         val view = LocalView.current
@@ -120,8 +108,6 @@ fun BalanceCard(
         BalanceCardInner(viewItem) {
             onSyncErrorClicked(viewItem, viewModel, navController, view)
         }
-
-        ExpandableContent(viewItem, navController, viewModel)
     }
 }
 
@@ -192,12 +178,6 @@ fun BalanceCardInner(
                     Box(
                         modifier = Modifier.weight(1f),
                     ) {
-                        if (viewItem.syncingTextValue.visible) {
-                            subhead2_grey(
-                                text = viewItem.syncingTextValue.value ?: "",
-                                maxLines = 1,
-                            )
-                        }
                         if (viewItem.exchangeValue.visible) {
                             Row {
                                 Text(
@@ -219,12 +199,6 @@ fun BalanceCardInner(
                     Box(
                         modifier = Modifier.padding(start = 16.dp),
                     ) {
-                        if (viewItem.syncedUntilTextValue.visible) {
-                            subhead2_grey(
-                                text = viewItem.syncedUntilTextValue.value ?: "",
-                                maxLines = 1,
-                            )
-                        }
                         if (viewItem.secondaryValue.visible) {
                             Text(
                                 text = viewItem.secondaryValue.value,
@@ -238,171 +212,6 @@ fun BalanceCardInner(
             }
 
             Spacer(modifier = Modifier.width(16.dp))
-        }
-    }
-}
-
-@Composable
-private fun ExpandableContent(
-    viewItem: BalanceViewItem2,
-    navController: NavController,
-    viewModel: BalanceViewModel
-) {
-    AnimatedVisibility(
-        visible = viewItem.expanded,
-        enter = expandVertically() + fadeIn(),
-        exit = shrinkVertically() + fadeOut()
-    ) {
-        Column {
-            LockedValueRow(viewItem)
-            Divider(
-                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 6.dp),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-            ButtonsRow(viewItem, navController, viewModel)
-        }
-    }
-}
-
-@Composable
-private fun ButtonsRow(viewItem: BalanceViewItem2, navController: NavController, viewModel: BalanceViewModel) {
-    val onClickReceive = {
-        try {
-            val params = ReceiveAddressFragment.params(viewModel.getWalletForReceive(viewItem))
-            navController.slideFromBottom(R.id.receiveFragment, params)
-        } catch (e: BackupRequiredError) {
-            val text = Translator.getString(
-                R.string.ManageAccount_BackupRequired_Description,
-                e.account.name,
-                e.coinTitle
-            )
-            navController.slideFromBottom(
-                R.id.backupRequiredDialog,
-                BackupRequiredDialog.prepareParams(e.account, text)
-            )
-        }
-    }
-
-    Row(
-        modifier = Modifier.padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (viewItem.isWatchAccount) {
-            ButtonPrimaryDefault(
-                modifier = Modifier.weight(1f),
-                title = stringResource(R.string.Balance_Address),
-                onClick = {
-                    navController.slideFromRight(
-                        R.id.tokenBalanceFragment,
-                        TokenBalanceFragment.prepareParams(viewItem.wallet)
-                    )
-                },
-            )
-        } else {
-            ButtonPrimaryYellow(
-                modifier = Modifier.weight(1f),
-                title = stringResource(R.string.Balance_Send),
-                onClick = {
-                    navController.slideFromBottom(
-                        R.id.sendXFragment,
-                        SendFragment.prepareParams(viewItem.wallet)
-                    )
-                },
-                enabled = viewItem.sendEnabled
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            if (viewItem.swapVisible) {
-                ButtonPrimaryCircle(
-                    icon = R.drawable.ic_arrow_down_left_24,
-                    contentDescription = stringResource(R.string.Balance_Receive),
-                    onClick = {
-                        navController.slideFromRight(
-                            R.id.tokenBalanceFragment,
-                            TokenBalanceFragment.prepareParams(viewItem.wallet)
-                        )
-                    },
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                ButtonPrimaryCircle(
-                    icon = R.drawable.ic_swap_24,
-                    contentDescription = stringResource(R.string.Swap),
-                    onClick = {
-                        navController.slideFromBottom(
-                            R.id.swapFragment,
-                            SwapMainModule.prepareParams(viewItem.wallet.token)
-                        )
-                    },
-                    enabled = viewItem.swapEnabled
-                )
-            } else {
-                ButtonPrimaryDefault(
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(R.string.Balance_Receive),
-                    onClick = {
-                        navController.slideFromRight(
-                            R.id.tokenBalanceFragment,
-                            TokenBalanceFragment.prepareParams(viewItem.wallet)
-                        )
-                    },
-                )
-            }
-        }
-        Spacer(modifier = Modifier.width(8.dp))
-        ButtonPrimaryCircle(
-            icon = R.drawable.ic_chart_24,
-            contentDescription = stringResource(R.string.Coin_Info),
-            enabled = !viewItem.wallet.token.isCustom,
-            onClick = {
-                val coinUid = viewItem.wallet.coin.uid
-                val arguments = CoinFragment.prepareParams(coinUid)
-
-                navController.slideFromRight(R.id.coinFragment, arguments)
-            },
-        )
-    }
-}
-
-@Composable
-private fun LockedValueRow(viewItem: BalanceViewItem2) {
-    if (viewItem.coinValueLocked.value == null) return
-
-    AnimatedVisibility(
-        visible = viewItem.coinValueLocked.visible,
-        enter = expandVertically() + fadeIn(),
-        exit = shrinkVertically() + fadeOut()
-    ) {
-        Column {
-            Divider(
-                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 6.dp),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-            Row(
-                modifier = Modifier
-                    .height(25.dp)
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_lock_16),
-                    contentDescription = "lock icon"
-                )
-                Text(
-                    modifier = Modifier.padding(start = 6.dp),
-                    text = viewItem.coinValueLocked.value,
-                    color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = viewItem.fiatValueLocked.value,
-                    color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-            }
         }
     }
 }

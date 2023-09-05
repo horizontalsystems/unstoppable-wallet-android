@@ -41,8 +41,6 @@ class BalanceViewModel(
     val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     var sortType by service::sortType
 
-    private var expandedWallet: Wallet? = null
-
     init {
         viewModelScope.launch {
             service.balanceItemsFlow
@@ -112,7 +110,6 @@ class BalanceViewModel(
                     balanceViewItemFactory.viewItem2(
                         balanceItem,
                         service.baseCurrency,
-                        balanceItem.wallet == expandedWallet,
                         balanceHidden,
                         service.isWatchAccount,
                         balanceViewType
@@ -130,22 +127,6 @@ class BalanceViewModel(
     override fun onCleared() {
         totalBalance.stop()
         service.clear()
-    }
-
-    fun onItem(viewItem: BalanceViewItem2) {
-        viewModelScope.launch {
-            expandedWallet = when {
-                viewItem.wallet == expandedWallet -> null
-                else -> viewItem.wallet
-            }
-
-            service.balanceItemsFlow.value?.let { refreshViewItems(it) }
-        }
-    }
-
-    fun getWalletForReceive(viewItem: BalanceViewItem2) = when {
-        viewItem.wallet.account.isBackedUp || viewItem.wallet.account.isFileBackedUp -> viewItem.wallet
-        else -> throw BackupRequiredError(viewItem.wallet.account, viewItem.coinTitle)
     }
 
     fun onRefresh() {
