@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.ui.BalanceCardInner
+import cash.p.terminal.modules.balance.ui.BalanceCardSubtitleType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.SearchBar
@@ -67,7 +68,10 @@ fun TokenSelectScreen(
                                 borderTop = true,
                                 borderBottom = lastItem
                             ) {
-                                BalanceCardInner(viewItem = item)
+                                BalanceCardInner(
+                                    viewItem = item,
+                                    type = BalanceCardSubtitleType.CoinName
+                                )
                             }
                         }
                     }

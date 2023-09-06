@@ -37,6 +37,7 @@ import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.RateColor
 import cash.p.terminal.ui.compose.components.RateText
 import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -105,15 +106,23 @@ fun BalanceCard(
     ) {
         val view = LocalView.current
 
-        BalanceCardInner(viewItem) {
+        BalanceCardInner(
+            viewItem = viewItem,
+            type = BalanceCardSubtitleType.Rate
+        ) {
             onSyncErrorClicked(viewItem, viewModel, navController, view)
         }
     }
 }
 
+enum class BalanceCardSubtitleType {
+    Rate, CoinName
+}
+
 @Composable
 fun BalanceCardInner(
     viewItem: BalanceViewItem2,
+    type: BalanceCardSubtitleType,
     onClickSyncError: (() -> Unit)? = null
 ) {
     CellMultilineClear(height = 64.dp) {
@@ -178,21 +187,28 @@ fun BalanceCardInner(
                     Box(
                         modifier = Modifier.weight(1f),
                     ) {
-                        if (viewItem.exchangeValue.visible) {
-                            Row {
-                                Text(
-                                    text = viewItem.exchangeValue.value,
-                                    color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                                    style = ComposeAppTheme.typography.subhead2,
-                                    maxLines = 1,
-                                )
-                                Text(
-                                    modifier = Modifier.padding(start = 4.dp),
-                                    text = RateText(viewItem.diff),
-                                    color = RateColor(viewItem.diff),
-                                    style = ComposeAppTheme.typography.subhead2,
-                                    maxLines = 1,
-                                )
+                        when (type) {
+                            BalanceCardSubtitleType.Rate -> {
+                                if (viewItem.exchangeValue.visible) {
+                                    Row {
+                                        Text(
+                                            text = viewItem.exchangeValue.value,
+                                            color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                                            style = ComposeAppTheme.typography.subhead2,
+                                            maxLines = 1,
+                                        )
+                                        Text(
+                                            modifier = Modifier.padding(start = 4.dp),
+                                            text = RateText(viewItem.diff),
+                                            color = RateColor(viewItem.diff),
+                                            style = ComposeAppTheme.typography.subhead2,
+                                            maxLines = 1,
+                                        )
+                                    }
+                                }
+                            }
+                            BalanceCardSubtitleType.CoinName -> {
+                                subhead2_grey(text = viewItem.coinTitle)
                             }
                         }
                     }
