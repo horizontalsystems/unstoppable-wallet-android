@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner
+import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardSubtitleType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
@@ -67,7 +68,10 @@ fun TokenSelectScreen(
                                 borderTop = true,
                                 borderBottom = lastItem
                             ) {
-                                BalanceCardInner(viewItem = item)
+                                BalanceCardInner(
+                                    viewItem = item,
+                                    type = BalanceCardSubtitleType.CoinName
+                                )
                             }
                         }
                     }
