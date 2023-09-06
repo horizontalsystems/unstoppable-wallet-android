@@ -68,7 +68,8 @@ class TokenSelectViewModel(
                         currency = service.baseCurrency,
                         hideBalance = false,
                         watchAccount = service.isWatchAccount,
-                        balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
+                        balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
+                        networkAvailable = service.networkAvailable
                     )
                 }
             } else {

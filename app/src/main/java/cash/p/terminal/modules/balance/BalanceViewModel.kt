@@ -112,7 +112,8 @@ class BalanceViewModel(
                         service.baseCurrency,
                         balanceHidden,
                         service.isWatchAccount,
-                        balanceViewType
+                        balanceViewType,
+                        service.networkAvailable
                     )
                 }
             } else {
