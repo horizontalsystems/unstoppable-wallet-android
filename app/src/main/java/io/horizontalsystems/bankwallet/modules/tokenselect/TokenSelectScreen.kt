@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 fun TokenSelectScreen(
     navController: NavController,
     title: String,
-    onClickEnabled: (BalanceViewItem2) -> Boolean = { true },
     onClickItem: (BalanceViewItem2) -> Unit,
     viewModel: TokenSelectViewModel,
     emptyItemsText: String,
@@ -58,15 +57,12 @@ fun TokenSelectScreen(
                     val balanceViewItems = uiState.items
                     itemsIndexed(balanceViewItems) { index, item ->
                         val lastItem = index == balanceViewItems.size - 1
-                        val modifier = if (onClickEnabled.invoke(item)) {
-                            Modifier.clickable {
+
+                        Box(
+                            modifier = Modifier.clickable {
                                 onClickItem.invoke(item)
                             }
-                        } else {
-                            Modifier
-                        }
-
-                        Box(modifier = modifier) {
+                        ) {
                             SectionUniversalItem(
                                 borderTop = true,
                                 borderBottom = lastItem
