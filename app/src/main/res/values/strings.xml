@@ -1023,6 +1023,7 @@
     <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError">%s</string>
+    <string name="Hud_WaitForSynchronization">Wait for synchronization</string>
 
     <!--Manage Coins-->
 

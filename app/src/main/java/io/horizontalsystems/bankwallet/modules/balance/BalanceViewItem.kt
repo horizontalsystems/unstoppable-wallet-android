@@ -254,7 +254,8 @@ class BalanceViewItemFactory {
         currency: Currency,
         hideBalance: Boolean,
         watchAccount: Boolean,
-        balanceViewType: BalanceViewType
+        balanceViewType: BalanceViewType,
+        networkAvailable: Boolean
     ): BalanceViewItem2 {
         val wallet = item.wallet
         val coin = wallet.coin
@@ -274,6 +275,12 @@ class BalanceViewItemFactory {
             balanceViewType = balanceViewType
         )
 
+        val errorMessage = if (networkAvailable) {
+            (state as? AdapterState.NotSynced)?.error?.message
+        } else {
+            Translator.getString(R.string.Hud_Text_NoInternet)
+        }
+
         return BalanceViewItem2(
             wallet = item.wallet,
             coinCode = coin.code,
@@ -289,7 +296,7 @@ class BalanceViewItemFactory {
             failedIconVisible = state is AdapterState.NotSynced,
             badge = wallet.badge,
             swapEnabled = state is AdapterState.Synced,
-            errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
+            errorMessage = errorMessage,
             isWatchAccount = watchAccount
         )
     }
