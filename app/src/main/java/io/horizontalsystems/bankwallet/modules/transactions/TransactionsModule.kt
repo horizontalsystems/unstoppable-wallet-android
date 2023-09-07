@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
 import java.util.*
 
@@ -54,5 +53,5 @@ data class TransactionWallet(
 data class TransactionSource(
     val blockchain: Blockchain,
     val account: Account,
-    val tokenType: TokenType
+    val meta: String?
 )

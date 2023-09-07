@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.meta
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
@@ -22,7 +23,7 @@ data class Wallet(
     val badge
         get() = token.badge
 
-    val transactionSource get() = TransactionSource(token.blockchain, account, token.type)
+    val transactionSource get() = TransactionSource(token.blockchain, account, token.type.meta)
 
     override fun equals(other: Any?): Boolean {
         if (other is Wallet) {
