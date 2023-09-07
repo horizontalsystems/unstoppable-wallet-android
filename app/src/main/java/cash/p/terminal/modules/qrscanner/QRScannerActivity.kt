@@ -116,7 +116,6 @@ private fun QRScannerScreen(
             },
             onCancelClick = {
                 showPermissionNeededDialog = false
-                onCloseClick.invoke()
             }
         )
     }
