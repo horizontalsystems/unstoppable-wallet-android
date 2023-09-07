@@ -86,16 +86,18 @@ fun SendEvmScreen(
                 amountUnique = amountUnique
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-            HSAddressInput(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                tokenQuery = wallet.token.tokenQuery,
-                coinCode = wallet.coin.code,
-                error = addressError,
-                textPreprocessor = paymentAddressViewModel,
-                navController = navController
-            ) {
-                viewModel.onEnterAddress(it)
+            if (uiState.showAddressInput) {
+                Spacer(modifier = Modifier.height(12.dp))
+                HSAddressInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    tokenQuery = wallet.token.tokenQuery,
+                    coinCode = wallet.coin.code,
+                    error = addressError,
+                    textPreprocessor = paymentAddressViewModel,
+                    navController = navController
+                ) {
+                    viewModel.onEnterAddress(it)
+                }
             }
             ButtonPrimaryYellow(
                 modifier = Modifier
