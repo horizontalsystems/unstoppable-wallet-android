@@ -465,3 +465,11 @@ val TokenType.isDefault
 
 val TokenType.isNative: Boolean
     get() = this is TokenType.Native || this is TokenType.Derived || this is TokenType.AddressTyped
+
+val TokenType.meta: String?
+    get() = when (this) {
+        is TokenType.Derived -> this.derivation.name
+        is TokenType.AddressTyped -> this.type.name
+        is TokenType.Bep2 -> this.symbol
+        else -> null
+    }
