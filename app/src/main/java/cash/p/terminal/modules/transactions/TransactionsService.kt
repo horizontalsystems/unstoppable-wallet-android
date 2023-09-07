@@ -229,11 +229,11 @@ class TransactionsService(
 
         if (newRecords.isNotEmpty() && newRecords.all { it.spam }) {
             loadNext()
-        } else {
-            transactionItems.clear()
-            transactionItems.addAll(tmpList)
-            itemsSubject.onNext(transactionItems)
         }
+
+        transactionItems.clear()
+        transactionItems.addAll(tmpList)
+        itemsSubject.onNext(transactionItems)
     }
 
     private fun getCurrencyValue(record: TransactionRecord): CurrencyValue? {
