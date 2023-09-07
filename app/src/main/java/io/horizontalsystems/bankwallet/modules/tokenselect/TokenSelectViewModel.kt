@@ -10,6 +10,8 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.swappable
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceService
+import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.modules.balance.BalanceSorter
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
@@ -21,7 +23,8 @@ class TokenSelectViewModel(
     private val service: BalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?
+    private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?,
+    private val balanceSorter: BalanceSorter
 ) : ViewModel() {
 
     private var noItems = false
@@ -62,7 +65,8 @@ class TokenSelectViewModel(
                     }
                 }
 
-                balanceViewItems = itemsFiltered.map { balanceItem ->
+                val itemsSorted = balanceSorter.sort(itemsFiltered, BalanceSortType.Value)
+                balanceViewItems = itemsSorted.map { balanceItem ->
                     balanceViewItemFactory.viewItem2(
                         item = balanceItem,
                         currency = service.baseCurrency,
@@ -107,7 +111,8 @@ class TokenSelectViewModel(
                 service = BalanceService.getInstance(),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
-                itemsFilter = null
+                itemsFilter = null,
+                balanceSorter = BalanceSorter()
             ) as T
         }
     }
@@ -121,7 +126,8 @@ class TokenSelectViewModel(
                 balanceViewTypeManager = App.balanceViewTypeManager,
                 itemsFilter = {
                     it.wallet.token.swappable
-                }
+                },
+                balanceSorter = BalanceSorter()
             ) as T
         }
     }
