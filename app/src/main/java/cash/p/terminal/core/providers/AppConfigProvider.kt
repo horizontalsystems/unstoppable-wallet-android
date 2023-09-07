@@ -1,9 +1,8 @@
 package cash.p.terminal.core.providers
 
-import cash.p.terminal.BuildConfig
 import cash.p.terminal.R
-import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.entities.Currency
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class AppConfigProvider(localStorage: ILocalStorage) {
 
@@ -125,5 +124,27 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Currency("USD", "$", 2, R.drawable.icon_32_flag_usa),
         Currency("ZAR", "R", 2, R.drawable.icon_32_flag_south_africa),
     )
+
+    val donateAddresses: Map<BlockchainType, String> by lazy {
+        mapOf(
+            BlockchainType.Bitcoin to "3G5fwc9PP9Lcb1y3RAYGzoQZs5enJkmdxN",
+            BlockchainType.BitcoinCash to "bitcoincash:qr4f0pkvx86vv6cuae48nj83txqhwyt2fgadd9smxg",
+//            BlockchainType.ECash to "ecash:",
+            BlockchainType.Litecoin to "MNbHsci3A8u6UiqjBMMckXzfPrLjeMxdRC",
+            BlockchainType.Dash to "XcpUrR8LkohMNB9TfJaC97id6boUhRU3wk",
+            BlockchainType.Zcash to "zs186qysm39t6y9j6mdv67xx6aznzqq988mr7quvj9ptsa6yg5m3xnkhln9ezsh07sjnpuy2tls25p",
+            BlockchainType.Ethereum to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+            BlockchainType.BinanceSmartChain to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+//            BlockchainType.BinanceChain to "",
+            BlockchainType.Polygon to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+            BlockchainType.Avalanche to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+            BlockchainType.Optimism to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+            BlockchainType.ArbitrumOne to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+//            BlockchainType.Solana to "",
+            BlockchainType.Gnosis to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+            BlockchainType.Fantom to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+            BlockchainType.Tron to "TV4wYRcDun4iHb4oUgcse4Whptk9JKVui2"
+        )
+    }
 
 }

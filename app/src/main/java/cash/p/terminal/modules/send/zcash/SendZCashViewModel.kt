@@ -7,7 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.App
+import cash.p.terminal.core.AppLogger
+import cash.p.terminal.core.HSCaution
+import cash.p.terminal.core.ISendZcashAdapter
+import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.SendAmountService
@@ -40,6 +44,7 @@ class SendZCashViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var memoState = memoService.stateFlow.value
+    private val showAddressInput = addressService.predefinedAddress == null
 
     var uiState by mutableStateOf(
         SendZCashUiState(
@@ -49,6 +54,7 @@ class SendZCashViewModel(
             amountCaution = amountState.amountCaution,
             memoIsAllowed = memoState.memoIsAllowed,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
+            showAddressInput = showAddressInput,
         )
     )
         private set
@@ -117,6 +123,7 @@ class SendZCashViewModel(
             amountCaution = amountState.amountCaution,
             memoIsAllowed = memoState.memoIsAllowed,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
+            showAddressInput = showAddressInput,
         )
     }
 
@@ -178,5 +185,6 @@ data class SendZCashUiState(
     val addressError: Throwable?,
     val amountCaution: HSCaution?,
     val memoIsAllowed: Boolean,
-    val canBeSend: Boolean
+    val canBeSend: Boolean,
+    val showAddressInput: Boolean,
 )

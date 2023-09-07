@@ -43,16 +43,18 @@ class SendSolanaViewModel(
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
+    private val showAddressInput = addressService.predefinedAddress == null
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
 
     var uiState by mutableStateOf(
-            SendUiState(
-                    availableBalance = amountState.availableBalance,
-                    amountCaution = amountState.amountCaution,
-                    addressError = addressState.addressError,
-                    canBeSend = amountState.canBeSend && addressState.canBeSend,
-            )
+        SendUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            addressError = addressState.addressError,
+            canBeSend = amountState.canBeSend && addressState.canBeSend,
+            showAddressInput = showAddressInput
+        )
     )
         private set
 
@@ -142,10 +144,11 @@ class SendSolanaViewModel(
 
     private fun emitState() {
         uiState = SendUiState(
-                availableBalance = amountState.availableBalance,
-                amountCaution = amountState.amountCaution,
-                addressError = addressState.addressError,
-                canBeSend = amountState.canBeSend && addressState.canBeSend,
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            addressError = addressState.addressError,
+            canBeSend = amountState.canBeSend && addressState.canBeSend,
+            showAddressInput = showAddressInput
         )
     }
 

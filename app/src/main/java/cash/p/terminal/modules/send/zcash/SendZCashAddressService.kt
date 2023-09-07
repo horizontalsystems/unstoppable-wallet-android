@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendZCashAddressService(private val adapter: ISendZcashAdapter) {
-    private var address: Address? = null
+class SendZCashAddressService(private val adapter: ISendZcashAdapter, val predefinedAddress: String?) {
+    private var address: Address? = predefinedAddress?.let { Address(it) }
     private var addressType: ZcashAdapter.ZCashAddressType? = null
     private var addressError: Throwable? = null
 

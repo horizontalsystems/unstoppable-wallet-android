@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 
-class SendEvmAddressService {
+class SendEvmAddressService(val predefinedAddress: String? = null) {
     private var address: Address? = null
     private var addressError: Throwable? = null
-    private var evmAddress: EvmAddress? = null
+    private var evmAddress: EvmAddress? = predefinedAddress?.let { EvmAddress(it) }
 
     private val _stateFlow = MutableStateFlow(
         State(

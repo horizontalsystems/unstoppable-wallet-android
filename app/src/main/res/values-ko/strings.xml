@@ -711,7 +711,6 @@
     <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
     <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
     <string name="Settings_Donate">후원하기</string>
-    <string name="Settings_Donate_CoinAddress">%s 주소</string>
     <string name="Appearance_Theme">주제</string>
     <string name="Appearance_Tab">탭 설정</string>
     <string name="Appearance_LaunchScreen">시작 화면</string>

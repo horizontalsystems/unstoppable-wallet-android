@@ -28,6 +28,7 @@ fun TokenSelectScreen(
     onClickItem: (BalanceViewItem2) -> Unit,
     viewModel: TokenSelectViewModel,
     emptyItemsText: String,
+    header: @Composable (() -> Unit)? = null
 ) {
     ComposeAppTheme {
         Scaffold(
@@ -53,7 +54,10 @@ fun TokenSelectScreen(
             } else {
                 LazyColumn(contentPadding = paddingValues) {
                     item {
-                        VSpacer(12.dp)
+                        if (header == null) {
+                            VSpacer(12.dp)
+                        }
+                        header?.invoke()
                     }
                     val balanceViewItems = uiState.items
                     itemsIndexed(balanceViewItems) { index, item ->

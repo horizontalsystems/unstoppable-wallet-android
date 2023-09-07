@@ -14,11 +14,12 @@ import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 class SendTronAddressService(
     private val adapter: ISendTronAdapter,
-    private val token: Token
+    private val token: Token,
+    val predefinedAddress: String?
 ) {
-    private var address: Address? = null
+    private var address: Address? = predefinedAddress?.let { Address(it) }
     private var addressError: Throwable? = null
-    private var tronAddress: TronAddress? = null
+    private var tronAddress: TronAddress? = predefinedAddress?.let { TronAddress.fromBase58(it) }
     private var isInactiveAddress: Boolean = false
 
     private val _stateFlow = MutableStateFlow(
@@ -27,7 +28,7 @@ class SendTronAddressService(
             tronAddress = tronAddress,
             addressError = addressError,
             isInactiveAddress = isInactiveAddress,
-            canBeSend = false
+            canBeSend = tronAddress != null && (addressError == null || addressError is FormsInputStateWarning)
         )
     )
     val stateFlow = _stateFlow.asStateFlow()

@@ -1,30 +1,24 @@
 package cash.p.terminal.modules.settings.donate
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -35,13 +29,12 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.headline2_leah
 import cash.p.terminal.ui.compose.components.subhead2_leah
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class DonateFragment : BaseComposeFragment() {
+class DonateAddressesFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent() {
@@ -62,7 +55,7 @@ fun DonateScreen(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.ResString(R.string.Settings_Donate),
+                title = TranslatableString.ResString(R.string.Settings_Donate_Addresses),
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 },
@@ -76,26 +69,16 @@ fun DonateScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 VSpacer(12.dp)
-                HeartBlock()
-                VSpacer(24.dp)
-                DonateAddress(
-                    coinImageUrl = "https://cdn.blocksdecoded.com/blockchain-icons/32px/bitcoin@3x.png",
-                    coinName = "Bitcoin",
-                    address = "bc1qw5tw4cnyt0vxts70ntdzxesn2zzz97t6r29pjj"
-                )
-                VSpacer(24.dp)
-                DonateAddress(
-                    coinImageUrl = "https://cdn.blocksdecoded.com/blockchain-icons/32px/ethereum@3x.png",
-                    coinName = "Ethereum",
-                    address = "0x8a2Bec907827F496752c3F24F960B3cddc5D311B"
-                )
-                VSpacer(24.dp)
-                DonateAddress(
-                    coinImageUrl = "https://cdn.blocksdecoded.com/blockchain-icons/32px/binance-smart-chain@3x.png",
-                    coinName = "BNB Smart Chain",
-                    address = "0x8a2Bec907827F496752c3F24F960B3cddc5D311B"
-                )
-                VSpacer(32.dp)
+                App.appConfigProvider.donateAddresses.forEach { (blockchainType, address) ->
+                    DonateAddress(
+                        coinImageUrl = blockchainType.imageUrl,
+                        coinName = blockchainType.toString(),
+                        address = address
+                    )
+                    VSpacer(24.dp)
+                }
+
+                VSpacer(8.dp)
             }
         }
     }
@@ -109,7 +92,7 @@ private fun DonateAddress(
 ) {
     val localView = LocalView.current
 
-    InfoText(text = stringResource(R.string.Settings_Donate_CoinAddress, coinName).uppercase())
+    InfoText(text = coinName.uppercase())
     CellUniversalLawrenceSection() {
         RowUniversal(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -143,44 +126,6 @@ private fun DonateAddress(
             )
         }
     }
-}
-
-@Composable
-private fun HeartBlock() {
-    CellUniversalLawrenceSection(
-        listOf {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                VSpacer(32.dp)
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .background(
-                            color = ComposeAppTheme.colors.steel10,
-                            shape = CircleShape,
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        modifier = Modifier.size(48.dp),
-                        painter = painterResource(R.drawable.ic_heart_48),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
-                VSpacer(32.dp)
-                headline2_leah(
-                    modifier = Modifier.padding(horizontal = 32.dp),
-                    text = stringResource(R.string.Settings_Donate_Info),
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                VSpacer(32.dp)
-            }
-        }
-    )
 }
 
 @Preview

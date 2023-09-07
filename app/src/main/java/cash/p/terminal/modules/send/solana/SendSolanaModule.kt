@@ -15,7 +15,7 @@ import java.math.RoundingMode
 
 object SendSolanaModule {
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter) ?: throw IllegalStateException("SendSolanaAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
@@ -30,7 +30,7 @@ object SendSolanaModule {
                             wallet.token,
                             amountValidator,
                     )
-                    val addressService = SendSolanaAddressService()
+                    val addressService = SendSolanaAddressService(predefinedAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
 

@@ -708,7 +708,6 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Telegram öffnen</string>
     <string name="Settings_Donate_Info">Gemeinsam können wir mit Ihrer Unterstützung diese App noch besser machen!</string>
     <string name="Settings_Donate">Spenden</string>
-    <string name="Settings_Donate_CoinAddress">%s-Adresse</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
     <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>

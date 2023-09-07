@@ -93,7 +93,7 @@ private fun SettingSections(
                 R.string.Settings_Donate,
                 R.drawable.ic_heart_jacob_48,
                 onClick = {
-                    navController.slideFromRight(R.id.donateFragment)
+                    navController.slideFromRight(R.id.donateTokenSelectFragment)
                 }
             )
         }

@@ -11,5 +11,6 @@ data class SendUiState(
     val proceedEnabled: Boolean,
     val sendEnabled: Boolean,
     val feeViewState: ViewState,
-    val cautions: List<HSCaution>
+    val cautions: List<HSCaution>,
+    val showAddressInput: Boolean,
 )

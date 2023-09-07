@@ -117,7 +117,7 @@ object SendEvmModule {
     }
 
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
@@ -135,7 +135,7 @@ object SendEvmModule {
                         wallet.token,
                         amountValidator
                     )
-                    val addressService = SendEvmAddressService()
+                    val addressService = SendEvmAddressService(predefinedAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
                     SendEvmViewModel(

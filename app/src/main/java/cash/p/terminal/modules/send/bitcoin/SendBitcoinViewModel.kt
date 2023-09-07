@@ -7,7 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.App
+import cash.p.terminal.core.AppLogger
+import cash.p.terminal.core.HSCaution
+import cash.p.terminal.core.ISendBitcoinAdapter
+import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
@@ -48,6 +52,7 @@ class SendBitcoinViewModel(
     private var addressState = addressService.stateFlow.value
     private var pluginState = pluginService.stateFlow.value
     private var fee = feeService.feeFlow.value
+    private val showAddressInput = addressService.predefinedAddress == null
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
@@ -63,6 +68,7 @@ class SendBitcoinViewModel(
             amountCaution = amountState.amountCaution,
             feeRateCaution = feeRateState.feeRateCaution,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
+            showAddressInput = showAddressInput,
         )
     )
         private set
@@ -105,6 +111,7 @@ class SendBitcoinViewModel(
             amountCaution = amountState.amountCaution,
             feeRateCaution = feeRateState.feeRateCaution,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
+            showAddressInput = showAddressInput,
         )
 
         viewModelScope.launch {
@@ -252,4 +259,5 @@ data class SendBitcoinUiState(
     val amountCaution: HSCaution?,
     val feeRateCaution: HSCaution?,
     val canBeSend: Boolean,
+    val showAddressInput: Boolean,
 )

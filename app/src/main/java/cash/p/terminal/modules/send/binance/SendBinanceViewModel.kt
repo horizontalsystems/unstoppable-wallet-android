@@ -7,7 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.App
+import cash.p.terminal.core.AppLogger
+import cash.p.terminal.core.HSCaution
+import cash.p.terminal.core.ISendBinanceAdapter
+import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.SendAmountService
@@ -43,6 +47,7 @@ class SendBinanceViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
     private var memo: String? = null
+    private val showAddressInput = addressService.predefinedAddress == null
 
     var uiState by mutableStateOf(
         SendBinanceUiState(
@@ -52,6 +57,7 @@ class SendBinanceViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
+            showAddressInput = showAddressInput,
         )
     )
         private set
@@ -123,6 +129,7 @@ class SendBinanceViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
+            showAddressInput = showAddressInput,
         )
     }
 
@@ -186,4 +193,5 @@ data class SendBinanceUiState(
     val addressError: Throwable?,
     val amountCaution: HSCaution?,
     val canBeSend: Boolean,
+    val showAddressInput: Boolean
 )
