@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 
-class SendSolanaAddressService {
-    private var address: Address? = null
+class SendSolanaAddressService(val predefinedAddress: String?) {
+    private var address: Address? = predefinedAddress?.let { Address(it) }
     private var addressError: Throwable? = null
-    private var solanaAddress: SolanaAddress? = null
+    private var solanaAddress: SolanaAddress? = predefinedAddress?.let { SolanaAddress(it) }
 
     private val _stateFlow = MutableStateFlow(
             State(

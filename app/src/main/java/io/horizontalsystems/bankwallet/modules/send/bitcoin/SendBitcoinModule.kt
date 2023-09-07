@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object SendBitcoinModule {
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendBitcoinAdapter is null")
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -19,7 +19,7 @@ object SendBitcoinModule {
             val feeService = SendBitcoinFeeService(adapter)
             val feeRateService = SendBitcoinFeeRateService(provider)
             val amountService = SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
-            val addressService = SendBitcoinAddressService(adapter)
+            val addressService = SendBitcoinAddressService(adapter, predefinedAddress)
             val pluginService = SendBitcoinPluginService(App.localStorage, wallet.token.blockchainType)
             return SendBitcoinViewModel(
                 adapter,

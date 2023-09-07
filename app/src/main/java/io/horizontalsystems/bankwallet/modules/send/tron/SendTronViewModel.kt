@@ -50,6 +50,7 @@ class SendTronViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState: FeeState = FeeState.Loading
     private var cautions: List<HSCaution> = listOf()
+    private val showAddressInput = addressService.predefinedAddress == null
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -59,7 +60,8 @@ class SendTronViewModel(
             proceedEnabled = amountState.canBeSend && addressState.canBeSend,
             sendEnabled = feeState is FeeState.Success,
             feeViewState = feeState.viewState,
-            cautions = listOf()
+            cautions = listOf(),
+            showAddressInput = showAddressInput,
         )
     )
         private set
@@ -279,7 +281,8 @@ class SendTronViewModel(
             proceedEnabled = amountState.canBeSend && addressState.canBeSend,
             sendEnabled = feeState is FeeState.Success && cautions.isEmpty(),
             feeViewState = feeState.viewState,
-            cautions = cautions
+            cautions = cautions,
+            showAddressInput = showAddressInput,
         )
     }
 }

@@ -707,7 +707,6 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
-    <string name="Settings_Donate_CoinAddress">adresse.%s</string>
     <string name="Appearance_Theme">Thème</string>
     <string name="Appearance_Tab">PARAMÈTRES DES TAB</string>
     <string name="Appearance_LaunchScreen">ÉCRAN DE LÉCHARGEMENT</string>

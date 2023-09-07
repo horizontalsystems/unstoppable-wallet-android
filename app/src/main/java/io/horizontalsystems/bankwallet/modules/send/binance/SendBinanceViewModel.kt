@@ -7,7 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
+import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -43,6 +47,7 @@ class SendBinanceViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
     private var memo: String? = null
+    private val showAddressInput = addressService.predefinedAddress == null
 
     var uiState by mutableStateOf(
         SendBinanceUiState(
@@ -52,6 +57,7 @@ class SendBinanceViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
+            showAddressInput = showAddressInput,
         )
     )
         private set
@@ -123,6 +129,7 @@ class SendBinanceViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
+            showAddressInput = showAddressInput,
         )
     }
 
@@ -186,4 +193,5 @@ data class SendBinanceUiState(
     val addressError: Throwable?,
     val amountCaution: HSCaution?,
     val canBeSend: Boolean,
+    val showAddressInput: Boolean
 )
