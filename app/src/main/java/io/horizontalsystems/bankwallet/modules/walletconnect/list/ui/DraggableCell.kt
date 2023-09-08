@@ -24,6 +24,7 @@ const val MIN_DRAG_AMOUNT = 3
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
 fun DraggableCardSimple(
+    key: Any?,
     isRevealed: Boolean,
     cardOffset: Float,
     onReveal: () -> Unit,
@@ -49,7 +50,7 @@ fun DraggableCardSimple(
         modifier = Modifier
             .fillMaxSize()
             .offset { IntOffset(offsetTransition.roundToInt(), 0) }
-            .pointerInput(Unit) {
+            .pointerInput(key) {
                 detectHorizontalDragGestures { _, dragAmount ->
                     when {
                         dragAmount <= -MIN_DRAG_AMOUNT -> onReveal()
