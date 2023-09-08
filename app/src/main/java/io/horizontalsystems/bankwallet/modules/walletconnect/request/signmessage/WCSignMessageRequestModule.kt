@@ -4,37 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestChain
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v1.WC1SignMessageRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestService
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMessageRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 
 object WCSignMessageRequestModule {
-
-    const val TYPED_MESSAGE = "typed_message"
-
-    class Factory(
-        private val signMessageRequest: WC1SignMessageRequest,
-        private val dAppName: String?,
-        private val baseService: WC1Service
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
-                WCSignMessageRequestViewModel::class.java -> {
-                    val service = WC1SignMessageRequestService(
-                        signMessageRequest,
-                        dAppName,
-                        baseService,
-                        baseService.evmKitWrapper?.signer!!
-                    )
-                    WCSignMessageRequestViewModel(service) as T
-                }
-                else -> throw IllegalArgumentException()
-            }
-        }
-    }
 
     class FactoryWC2(private val requestData: WC2SessionManager.RequestData) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")

@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.Status
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -50,7 +54,7 @@ fun TitleValueCell(title: String, value: String) {
 }
 
 @Composable
-fun StatusCell(connectionStatus: WCSessionViewModel.Status?) {
+fun StatusCell(connectionStatus: Status?) {
     RowUniversal(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -60,9 +64,9 @@ fun StatusCell(connectionStatus: WCSessionViewModel.Status?) {
         Spacer(Modifier.weight(1f))
         connectionStatus?.let { status ->
             val color = when (status) {
-                WCSessionViewModel.Status.OFFLINE -> ComposeAppTheme.colors.lucian
-                WCSessionViewModel.Status.CONNECTING -> ComposeAppTheme.colors.leah
-                WCSessionViewModel.Status.ONLINE -> ComposeAppTheme.colors.remus
+                Status.OFFLINE -> ComposeAppTheme.colors.lucian
+                Status.CONNECTING -> ComposeAppTheme.colors.leah
+                Status.ONLINE -> ComposeAppTheme.colors.remus
             }
             Text(
                 text = stringResource(status.value),

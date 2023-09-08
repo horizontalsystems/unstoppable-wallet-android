@@ -4,18 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListService
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
 
 object WalletConnectListModule {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = WalletConnectListService(App.wc1SessionManager, App.evmBlockchainManager)
 
             return WalletConnectListViewModel(
-                service,
                 App.wc2SessionManager,
                 App.evmBlockchainManager,
                 App.wc2Service
@@ -38,7 +34,6 @@ object WalletConnectListModule {
     )
 
     enum class Version(val value: Int) {
-        Version1(R.string.WalletConnect_Version1),
         Version2(R.string.WalletConnect_Version2)
     }
 

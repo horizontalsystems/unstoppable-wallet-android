@@ -7,17 +7,8 @@
         android:id="@+id/wcListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment"/>
     <fragment
-        android:id="@+id/wcSessionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionFragment"/>
-    <fragment
         android:id="@+id/wc2SessionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionFragment"/>
-    <fragment
-        android:id="@+id/wcSendEthereumTransactionRequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestFragment"/>
-    <fragment
-        android:id="@+id/wcSignMessageRequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v1.WCSignMessageRequestFragment"/>
     <fragment
         android:id="@+id/wc2RequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment"/>
