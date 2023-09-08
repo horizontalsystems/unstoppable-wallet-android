@@ -356,7 +356,7 @@ fun BalanceSortingSelector(
         SelectorDialogCompose(
             title = stringResource(R.string.Balance_Sort_PopupTitle),
             items = sortTypes.map {
-                TabItem(stringResource(it.getTitleRes()), it == sortType, it)
+                SelectorItem(stringResource(it.getTitleRes()), it == sortType, it)
             },
             onDismissRequest = {
                 showSortTypeSelectorDialog = false

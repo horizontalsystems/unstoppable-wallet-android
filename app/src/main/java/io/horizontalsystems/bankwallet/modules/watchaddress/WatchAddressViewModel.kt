@@ -138,11 +138,11 @@ class WatchAddressViewModel(
         Type.XPubKey -> xPubKey?.let { AccountType.HdExtendedKey(it) }
     }
 
-    enum class Type(val titleResId: Int) {
-        EvmAddress(R.string.Watch_TypeEvmAddress),
-        TronAddress(R.string.Watch_TypeTronAddress),
-        SolanaAddress(R.string.Watch_TypeSolanaAddress),
-        XPubKey(R.string.Watch_TypeXPubKey),
+    enum class Type(val titleResId: Int, val subtitleResId: Int) {
+        EvmAddress(R.string.Watch_TypeEvmAddress, R.string.Watch_TypeEvmAddress_Subtitle),
+        TronAddress(R.string.Watch_TypeTronAddress, R.string.Watch_TypeTronAddress_Subtitle),
+        SolanaAddress(R.string.Watch_TypeSolanaAddress, R.string.Watch_TypeSolanaAddress_Subtitle),
+        XPubKey(R.string.Watch_TypeXPubKey, R.string.Watch_TypeXPubKey_Subtitle),
     }
 }
 

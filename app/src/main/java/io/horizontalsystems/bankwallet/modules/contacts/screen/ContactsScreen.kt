@@ -277,7 +277,9 @@ fun ContactsScreen(
                 if (showMoreSelectorDialog) {
                     SelectorDialogCompose(
                         title = stringResource(R.string.Contacts_ActionMore),
-                        items = ContactsModule.ContactsAction.values().map { (TabItem(stringResource(it.title), false, it)) },
+                        items = ContactsModule.ContactsAction.values().map {
+                            (SelectorItem(stringResource(it.title), false, it))
+                        },
                         onDismissRequest = {
                             showMoreSelectorDialog = false
                         },
