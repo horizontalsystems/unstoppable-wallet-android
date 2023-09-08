@@ -324,7 +324,7 @@ private fun BottomSection(
         SelectorDialogCompose(
             title = stringResource(R.string.CreateWallet_Wordlist),
             items = viewModel.mnemonicLanguages.map {
-                TabItem(
+                SelectorItem(
                     stringResource(it.displayNameStringRes),
                     it == uiState.language,
                     it

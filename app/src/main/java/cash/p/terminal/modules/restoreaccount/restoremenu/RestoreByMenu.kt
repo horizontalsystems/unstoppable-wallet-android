@@ -4,14 +4,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.B2
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.SelectorDialogCompose
+import cash.p.terminal.ui.compose.components.SelectorItem
+import cash.p.terminal.ui.compose.components.subhead1_grey
 
 @Composable
 fun RestoreByMenu(
@@ -22,7 +31,7 @@ fun RestoreByMenu(
         menuValue = stringResource(viewModel.restoreOption.titleRes),
         selectorDialogTitle = stringResource(R.string.Restore_RestoreBy),
         selectorItems = viewModel.restoreOptions.map {
-            TabItem(
+            SelectorItem(
                 stringResource(it.titleRes),
                 it == viewModel.restoreOption,
                 it
@@ -39,7 +48,7 @@ fun <T> ByMenu(
     menuTitle: String,
     menuValue: String,
     selectorDialogTitle: String,
-    selectorItems: List<TabItem<T>>,
+    selectorItems: List<SelectorItem<T>>,
     onSelectItem: (T) -> Unit
 ) {
     var showSelectorDialog by remember { mutableStateOf(false) }

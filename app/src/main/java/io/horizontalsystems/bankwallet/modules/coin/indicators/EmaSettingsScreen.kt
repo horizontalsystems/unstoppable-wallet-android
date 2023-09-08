@@ -37,7 +37,7 @@ import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
-import cash.p.terminal.ui.compose.components.TabItem
+import cash.p.terminal.ui.compose.components.SelectorItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead1_grey
@@ -63,7 +63,7 @@ fun EmaSettingsScreen(navController: NavController, indicatorSetting: ChartIndic
         SelectorDialogCompose(
             title = stringResource(R.string.CoinPage_Type),
             items = viewModel.maTypes.map {
-                TabItem(it, it == maType, it)
+                SelectorItem(it, it == maType, it)
             },
             onDismissRequest = {
                 showEmaSelectorDialog = false

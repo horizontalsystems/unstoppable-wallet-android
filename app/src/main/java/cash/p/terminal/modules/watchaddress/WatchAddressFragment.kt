@@ -33,7 +33,7 @@ import cash.p.terminal.ui.compose.components.FormsInputMultiline
 import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.TabItem
+import cash.p.terminal.ui.compose.components.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -149,7 +149,12 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                     menuValue = stringResource(type.titleResId),
                     selectorDialogTitle = stringResource(R.string.Watch_WatchBy),
                     selectorItems = WatchAddressViewModel.Type.values().map {
-                        TabItem(stringResource(it.titleResId), it == type, it)
+                        SelectorItem(
+                            title = stringResource(it.titleResId),
+                            selected = it == type,
+                            item = it,
+                            subtitle = stringResource(it.subtitleResId)
+                        )
                     },
                     onSelectItem = {
                         viewModel.onSetType(it)

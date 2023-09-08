@@ -40,7 +40,7 @@ import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
-import cash.p.terminal.ui.compose.components.TabItem
+import cash.p.terminal.ui.compose.components.SelectorItem
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead1_grey
 import io.horizontalsystems.core.helpers.HudHelper
@@ -78,7 +78,7 @@ fun CreateAccountAdvancedScreen(
                 SelectorDialogCompose(
                     title = stringResource(R.string.CreateWallet_Mnemonic),
                     items = viewModel.mnemonicKinds.map {
-                        TabItem(it.titleLong, it == viewModel.selectedKind, it)
+                        SelectorItem(it.titleLong, it == viewModel.selectedKind, it)
                     },
                     onDismissRequest = {
                         showMnemonicSizeSelectorDialog = false

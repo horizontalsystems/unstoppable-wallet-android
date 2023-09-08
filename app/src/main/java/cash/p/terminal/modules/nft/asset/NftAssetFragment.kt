@@ -477,7 +477,9 @@ private fun AssetContent(
 
     if (showActionSelectorDialog) {
         SelectorDialogCompose(
-            items = NftAssetModule.NftAssetAction.values().map { (TabItem(stringResource(it.title), false, it)) },
+            items = NftAssetModule.NftAssetAction.values().map {
+                (SelectorItem(stringResource(it.title), false, it))
+            },
             onDismissRequest = {
                 showActionSelectorDialog = false
             },

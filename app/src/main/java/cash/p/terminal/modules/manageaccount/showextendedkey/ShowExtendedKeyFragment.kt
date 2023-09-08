@@ -176,7 +176,7 @@ private fun ShowExtendedKeyScreen(
                         SelectorDialogCompose(
                             title = stringResource(R.string.ExtendedKey_Purpose),
                             items = viewModel.purposes.map {
-                                TabItem(it.name, it == viewModel.purpose, it)
+                                SelectorItem(it.name, it == viewModel.purpose, it)
                             },
                             onDismissRequest = {
                                 showPurposeSelectorDialog = false
@@ -190,7 +190,7 @@ private fun ShowExtendedKeyScreen(
                         SelectorDialogCompose(
                             title = stringResource(R.string.ExtendedKey_Blockchain),
                             items = viewModel.blockchains.map {
-                                TabItem(it.name, it == viewModel.blockchain, it)
+                                SelectorItem(it.name, it == viewModel.blockchain, it)
                             },
                             onDismissRequest = {
                                 showBlockchainSelectorDialog = false
@@ -204,7 +204,7 @@ private fun ShowExtendedKeyScreen(
                         SelectorDialogCompose(
                             title = stringResource(R.string.ExtendedKey_Account),
                             items = viewModel.accounts.map {
-                                TabItem(it.toString(), it == viewModel.account, it)
+                                SelectorItem(it.toString(), it == viewModel.account, it)
                             },
                             onDismissRequest = {
                                 showAccountSelectorDialog = false
