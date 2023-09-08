@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.walletconnect.version1.WC1Manager
+import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import kotlinx.parcelize.Parcelize
 
 object MainModule {
@@ -27,7 +27,7 @@ object MainModule {
                 App.releaseNotesManager,
                 App.localStorage,
                 App.wc2SessionManager,
-                App.wc1Manager,
+                App.wc2Manager,
                 wcDeepLink
             ) as T
         }
@@ -81,6 +81,6 @@ object MainModule {
         val showWhatsNew: Boolean,
         val activeWallet: Account?,
         val torEnabled: Boolean,
-        val wcSupportState: WC1Manager.SupportState?
+        val wcSupportState: WC2Manager.SupportState?
     )
 }

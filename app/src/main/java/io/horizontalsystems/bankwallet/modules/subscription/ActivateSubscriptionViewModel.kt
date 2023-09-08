@@ -14,7 +14,6 @@ import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.toHexString
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -109,10 +108,10 @@ class ActivateSubscriptionViewModel(
     }
 
     private fun getSignButtonState() = when {
-        fetchingToken -> WCSessionViewModel.ButtonState.Disabled
-        fetchingMessage -> WCSessionViewModel.ButtonState.Hidden
-        subscriptionInfo != null -> WCSessionViewModel.ButtonState.Enabled
-        else -> WCSessionViewModel.ButtonState.Hidden
+        fetchingToken -> ButtonState.Disabled
+        fetchingMessage -> ButtonState.Hidden
+        subscriptionInfo != null -> ButtonState.Enabled
+        else -> ButtonState.Hidden
     }
 
     fun sign() {
@@ -172,7 +171,11 @@ data class ActivateSubscription(
     val fetchingToken: Boolean,
     val fetchingTokenError: Throwable?,
     val fetchingTokenSuccess: Boolean,
-    val signButtonState: WCSessionViewModel.ButtonState
+    val signButtonState: ButtonState
 )
+
+enum class ButtonState(val visible: Boolean, val enabled: Boolean) {
+    Enabled(true, true), Disabled(true, false), Hidden(false, true)
+}
 
 class NoSubscription : Exception()

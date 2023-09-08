@@ -16,12 +16,10 @@ import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import cash.p.terminal.modules.chart.ChartIndicatorSettingsDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
-import cash.p.terminal.modules.walletconnect.entity.WalletConnectSession
 import cash.p.terminal.modules.walletconnect.entity.WalletConnectV2Session
-import cash.p.terminal.modules.walletconnect.storage.WC1SessionDao
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 55, exportSchema = false, entities = [
+@Database(version = 56, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -29,7 +27,6 @@ import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
     EvmSyncSourceRecord::class,
     LogEntry::class,
     FavoriteCoin::class,
-    WalletConnectSession::class,
     WalletConnectV2Session::class,
     RestoreSettingRecord::class,
     ActiveAccount::class,
@@ -59,7 +56,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
-    abstract fun wc1SessionDao(): WC1SessionDao
     abstract fun wc2SessionDao(): WC2SessionDao
     abstract fun nftDao(): NftDao
     abstract fun proFeaturesDao(): ProFeaturesDao
@@ -108,6 +104,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_52_53,
                             Migration_53_54,
                             Migration_54_55,
+                            Migration_55_56,
                     )
                     .build()
         }

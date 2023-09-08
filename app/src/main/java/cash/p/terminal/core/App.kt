@@ -94,11 +94,7 @@ import cash.p.terminal.modules.pin.PinComponent
 import cash.p.terminal.modules.profeatures.ProFeaturesAuthorizationManager
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesStorage
 import cash.p.terminal.modules.theme.ThemeType
-import cash.p.terminal.modules.walletconnect.storage.WC1SessionStorage
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionStorage
-import cash.p.terminal.modules.walletconnect.version1.WC1Manager
-import cash.p.terminal.modules.walletconnect.version1.WC1RequestManager
-import cash.p.terminal.modules.walletconnect.version1.WC1SessionManager
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.modules.walletconnect.version2.WC2Service
 import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
@@ -162,12 +158,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
-        lateinit var wc1SessionStorage: WC1SessionStorage
-        lateinit var wc1SessionManager: WC1SessionManager
-        lateinit var wc1RequestManager: WC1RequestManager
         lateinit var wc2Service: WC2Service
         lateinit var wc2SessionManager: WC2SessionManager
-        lateinit var wc1Manager: WC1Manager
         lateinit var wc2Manager: WC2Manager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
@@ -356,10 +348,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
-        wc1SessionStorage = WC1SessionStorage(appDatabase)
-        wc1SessionManager = WC1SessionManager(wc1SessionStorage, accountManager, evmSyncSourceManager)
-        wc1RequestManager = WC1RequestManager()
-        wc1Manager = WC1Manager(accountManager, evmBlockchainManager)
         wc2Manager = WC2Manager(accountManager, evmBlockchainManager)
 
         termsManager = TermsManager(localStorage)

@@ -1,16 +1,15 @@
 package cash.p.terminal.modules.settings.main
 
+import cash.p.terminal.BuildConfig
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.LanguageManager
-import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.walletconnect.version1.WC1Manager
-import cash.p.terminal.modules.walletconnect.version1.WC1SessionManager
+import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
@@ -25,11 +24,9 @@ class MainSettingsService(
     private val currencyManager: CurrencyManager,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
-    private val wc1SessionManager: WC1SessionManager,
     private val wc2SessionManager: WC2SessionManager,
-    private val wc1Manager: WC1Manager,
-    private val accountManager: IAccountManager,
-    private val appConfigProvider: AppConfigProvider
+    private val wc2Manager: WC2Manager,
+    private val accountManager: IAccountManager
 ) {
 
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
@@ -68,7 +65,7 @@ class MainSettingsService(
     val pendingRequestCountFlow by wc2SessionManager::pendingRequestCountFlow
 
     val walletConnectSessionCount: Int
-        get() = wc1SessionManager.sessions.count() + wc2SessionManager.sessions.count()
+        get() = wc2SessionManager.sessions.count()
 
     val currentLanguageDisplayName: String
         get() = languageManager.currentLanguageName
@@ -82,10 +79,6 @@ class MainSettingsService(
     fun start() {
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
             backedUpSubject.onNext(it)
-        })
-
-        disposables.add(wc1SessionManager.sessionsObservable.subscribe {
-            walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
         })
 
         disposables.add(wc2SessionManager.sessionsObservable.subscribe {
@@ -105,7 +98,7 @@ class MainSettingsService(
         disposables.clear()
     }
 
-    fun getWalletConnectSupportState(): WC1Manager.SupportState {
-        return wc1Manager.getWalletConnectSupportState()
+    fun getWalletConnectSupportState(): WC2Manager.SupportState {
+        return wc2Manager.getWalletConnectSupportState()
     }
 }

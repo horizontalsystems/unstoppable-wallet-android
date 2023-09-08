@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
-import cash.p.terminal.modules.walletconnect.list.v1.WalletConnectListViewModel
+import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.body_leah
@@ -92,22 +92,6 @@ fun WCSessionList(
                 }
                 Spacer(modifier = Modifier.height(32.dp))
             }
-        }
-        uiState.v1SectionItem?.let { section ->
-            WCSection(
-                section,
-                navController,
-                revealedCardId,
-                onReveal = { id ->
-                    if (revealedCardId != id) {
-                        revealedCardId = id
-                    }
-                },
-                onConceal = {
-                    revealedCardId = null
-                },
-                onDelete = { viewModel.onDelete(it) }
-            )
         }
     }
 }

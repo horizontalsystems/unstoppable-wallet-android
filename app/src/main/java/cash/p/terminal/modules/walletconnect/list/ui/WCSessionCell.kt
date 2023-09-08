@@ -3,7 +3,14 @@ package cash.p.terminal.modules.walletconnect.list.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
@@ -20,7 +27,6 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
-import cash.p.terminal.modules.walletconnect.session.v1.WCSessionModule
 import cash.p.terminal.modules.walletconnect.session.v2.WC2SessionModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.BadgeCount
@@ -47,14 +53,6 @@ fun WCSessionCell(
                         R.id.wc2SessionFragment,
                         WC2SessionModule.prepareParams(
                             session.sessionId
-                        )
-                    )
-                } else {
-                    navController.slideFromBottom(
-                        R.id.wcSessionFragment,
-                        WCSessionModule.prepareParams(
-                            session.sessionId,
-                            null,
                         )
                     )
                 }

@@ -44,8 +44,6 @@ android {
         resValue "string", "walletConnectAppMetaDataName", "pcash"
         resValue "string", "walletConnectAppMetaDataUrl", "p.cash"
         resValue "string", "walletConnectAppMetaDataIcon", "https://raw.githubusercontent.com/piratecash/pcash-wallet-ios/master/UnstoppableWallet/UnstoppableWallet/AppIcon.xcassets/AppIcon.appiconset/p.cash_1024.png"
-        resValue "string", "walletConnectV1PeerMetaName", "Unstoppable Wallet"
-        resValue "string", "walletConnectV1PeerMetaUrl", "https://p.cash"
         resValue "string", "accountsBackupFileSalt", "pcash"
     }
 
@@ -281,9 +279,6 @@ dependencies {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
 
-    // WalletConnect
-    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
-    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     // WalletConnect V2
     implementation(platform("com.walletconnect:android-bom:1.15.0"))
     implementation 'com.walletconnect:sign'

@@ -39,7 +39,7 @@ import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import cash.p.terminal.modules.walletconnect.version1.WC1Manager
+import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -136,20 +136,20 @@ private fun SettingSections(
                 counterBadge = (wcCounter as? CounterType.PendingRequestCounter)?.number?.toString(),
                 onClick = {
                     when (val state = viewModel.getWalletConnectSupportState()) {
-                        WC1Manager.SupportState.Supported -> {
+                        WC2Manager.SupportState.Supported -> {
                             navController.slideFromRight(R.id.wallet_connect_graph)
                         }
-                        WC1Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                        WC2Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                         }
-                        is WC1Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                        is WC2Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup, state.account.name)
                             navController.slideFromBottom(
                                 R.id.backupRequiredDialog,
                                 BackupRequiredDialog.prepareParams(state.account, text)
                             )
                         }
-                        is WC1Manager.SupportState.NotSupported -> {
+                        is WC2Manager.SupportState.NotSupported -> {
                             navController.slideFromBottom(
                                 R.id.wcAccountTypeNotSupportedDialog,
                                 WCAccountTypeNotSupportedDialog.prepareParams(state.accountTypeDescription)
