@@ -71,6 +71,7 @@ fun BalanceCardSwipable(
         )
 
         DraggableCardSimple(
+            key = viewItem.wallet,
             isRevealed = revealed,
             cardOffset = 72f,
             onReveal = { onReveal(viewItem.wallet.hashCode()) },
