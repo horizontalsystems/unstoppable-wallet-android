@@ -44,6 +44,7 @@ object BalanceModule {
                 App.balanceViewTypeManager,
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
+                App.wc2Service
             ) as T
         }
     }
