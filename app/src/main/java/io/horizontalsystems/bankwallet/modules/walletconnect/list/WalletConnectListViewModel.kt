@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.list.v1
+package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,46 +6,36 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.walletconnect.sign.client.Sign
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
-import java.net.UnknownHostException
 
 class WalletConnectListViewModel(
-    private val service: WalletConnectListService,
     private val wC2SessionManager: WC2SessionManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val wc2Service: WC2Service
 ) : ViewModel() {
-    sealed class Route {
-        data class WC1Session(val uri: String) : Route()
-        object Error: Route()
+    enum class ConnectionResult {
+        Success, Error
     }
 
-    var route by mutableStateOf<Route?>(null)
+    var connectionResult by mutableStateOf<ConnectionResult?>(null)
         private set
 
     var initialConnectionPrompted = false
 
-    private var v1SectionItem: Section? = null
     private var v2SectionItem: Section? = null
     private var pairingsNumber = wc2Service.getPairings().size
     private val emptyScreen: Boolean
-        get() = v1SectionItem == null && v2SectionItem == null && pairingsNumber == 0
+        get() = v2SectionItem == null && pairingsNumber == 0
 
     var uiState by mutableStateOf(
         WalletConnectListUiState(
-            v1SectionItem = v1SectionItem,
             v2SectionItem = v2SectionItem,
             pairingsNumber = pairingsNumber,
             emptyScreen = emptyScreen,
@@ -53,24 +43,9 @@ class WalletConnectListViewModel(
     )
         private set
 
-    val killingSessionInProcessLiveEvent = SingleLiveEvent<Unit>()
-    val killingSessionCompletedLiveEvent = SingleLiveEvent<Unit>()
-    val killingSessionFailedLiveEvent = SingleLiveEvent<String>()
-
     private val disposables = CompositeDisposable()
 
     init {
-        service.itemsObservable
-            .subscribeIO {
-                sync(it)
-                emitState()
-            }
-            .let { disposables.add(it) }
-
-        service.sessionKillingStateObservable
-            .subscribeIO { sync(it) }
-            .let { disposables.add(it) }
-
         wC2SessionManager.sessionsObservable
             .subscribeIO {
                 syncV2(it)
@@ -86,79 +61,27 @@ class WalletConnectListViewModel(
                 }
         }
 
-        sync(service.items)
         syncV2(wC2SessionManager.sessions)
         emitState()
     }
 
     fun setConnectionUri(uri: String) {
-        route = when (WalletConnectListModule.getVersionFromUri(uri)) {
-            1 -> Route.WC1Session(uri)
+        connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
             2 -> {
                 wc2Service.pair(uri)
                 null
             }
-            else -> Route.Error
+
+            else -> ConnectionResult.Error
         }
     }
 
     private fun emitState() {
         uiState = WalletConnectListUiState(
-            v1SectionItem = v1SectionItem,
             v2SectionItem = v2SectionItem,
             pairingsNumber = pairingsNumber,
             emptyScreen = emptyScreen
         )
-    }
-
-    fun onDelete(sessionsId: String) {
-        service.kill(sessionsId)
-    }
-
-    private fun sync(state: WC1SessionKillManager.State) {
-        when (state) {
-            is WC1SessionKillManager.State.Failed -> {
-                val errorMessage = if (state.error is UnknownHostException)
-                    Translator.getString(R.string.Hud_Text_NoInternet)
-                else
-                    state.error.message ?: state.error::class.java.simpleName
-
-                killingSessionFailedLiveEvent.postValue(errorMessage)
-            }
-            WC1SessionKillManager.State.Killed -> {
-                killingSessionCompletedLiveEvent.postValue(Unit)
-            }
-            WC1SessionKillManager.State.NotConnected,
-            WC1SessionKillManager.State.Processing -> {
-                killingSessionInProcessLiveEvent.postValue(Unit)
-            }
-        }
-    }
-
-    private fun sync(items: List<WalletConnectListService.Item>) {
-        if (items.isEmpty()) {
-            v1SectionItem = null
-            return
-        }
-        val sessions = mutableListOf<WalletConnectListModule.SessionViewItem>()
-        items.forEach { item ->
-            val itemSessions = item.sessions.map { session ->
-                WalletConnectListModule.SessionViewItem(
-                    sessionId = session.remotePeerId,
-                    title = session.remotePeerMeta.name,
-                    subtitle = item.chain,
-                    url = session.remotePeerMeta.url,
-                    imageUrl = getSuitableIcon(session.remotePeerMeta.icons),
-                )
-            }
-            sessions.addAll(itemSessions)
-        }
-        v1SectionItem = Section(WalletConnectListModule.Version.Version1, sessions)
-    }
-
-    private fun getSuitableIcon(imageUrls: List<String>): String? {
-        return imageUrls.lastOrNull { it.endsWith("png", ignoreCase = true) }
-            ?: imageUrls.lastOrNull()
     }
 
     override fun onCleared() {
@@ -204,12 +127,11 @@ class WalletConnectListViewModel(
     }
 
     fun onHandleRoute() {
-        route = null
+        connectionResult = null
     }
 }
 
 data class WalletConnectListUiState(
-    val v1SectionItem: Section?,
     val v2SectionItem: Section?,
     val pairingsNumber: Int,
     val emptyScreen: Boolean

@@ -12,8 +12,6 @@ import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionServiceState.Invalid
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionServiceState.Killed
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionServiceState.Ready
@@ -49,14 +47,14 @@ class WC2SessionViewModel(
 
     private val disposables = CompositeDisposable()
 
-    private var peerMeta: WCSessionModule.PeerMetaItem? = null
+    private var peerMeta: PeerMetaItem? = null
     private var closeEnabled = false
     private var connecting = false
     private var buttonStates: WCSessionButtonStates? = null
     private var hint: Int? = null
     private var showError: String? = null
-    private var blockchains = listOf<WC2SessionModule.BlockchainViewItem>()
-    private var status: WCSessionViewModel.Status? = null
+    private var blockchains = listOf<BlockchainViewItem>()
+    private var status: Status? = null
     private var pendingRequests = listOf<WC2RequestViewItem>()
 
     var uiState by mutableStateOf(WC2SessionUiState(
@@ -106,7 +104,7 @@ class WC2SessionViewModel(
                 sessionManager.sessions.firstOrNull { it.topic == topic1 }
             if (existingSession != null) {
                 peerMeta = existingSession.metaData?.let {
-                    WCSessionModule.PeerMetaItem(
+                    PeerMetaItem(
                         it.name,
                         it.url,
                         it.description,
@@ -118,11 +116,11 @@ class WC2SessionViewModel(
                 session = existingSession
                 refreshPendingRequests()
                 wcBlockchains = getBlockchainsBySession(existingSession)
-                sessionServiceState = WC2SessionServiceState.Ready
+                sessionServiceState = Ready
             }
         } else {
             wc2service.getNextSessionProposal()?.let { sessionProposal ->
-                peerMeta = WCSessionModule.PeerMetaItem(
+                peerMeta = PeerMetaItem(
                     sessionProposal.name,
                     sessionProposal.url,
                     sessionProposal.description,
@@ -135,7 +133,7 @@ class WC2SessionViewModel(
                 try {
                     wcBlockchains = getBlockchainsByProposal(sessionProposal)
 
-                    sessionServiceState = WC2SessionServiceState.WaitingForApproveSession
+                    sessionServiceState = WaitingForApproveSession
                 } catch (e: WC2SessionManager.RequestDataError) {
                     sessionServiceState = Invalid(e)
                 }
@@ -160,7 +158,7 @@ class WC2SessionViewModel(
                     is WC2Service.Event.SessionSettled -> {
                         val session = event.session
                         peerMeta = session.metaData?.let {
-                            WCSessionModule.PeerMetaItem(
+                            PeerMetaItem(
                                 it.name,
                                 it.url,
                                 it.description,
@@ -171,7 +169,7 @@ class WC2SessionViewModel(
 
                         this.session = session
                         wcBlockchains = getBlockchainsBySession(session)
-                        sessionServiceState = WC2SessionServiceState.Ready
+                        sessionServiceState = Ready
                     }
                     is WC2Service.Event.Error -> {
                         sessionServiceState = Invalid(event.error)
@@ -288,18 +286,18 @@ class WC2SessionViewModel(
     }
 
     private fun getBlockchainViewItems(blockchains: List<WCBlockchain>) = blockchains.map {
-        WC2SessionModule.BlockchainViewItem(
+        BlockchainViewItem(
             it.chainId,
             it.name,
             it.address.shorten(),
         )
     }
 
-    private fun getStatus(connectionState: Boolean?): WCSessionViewModel.Status? {
+    private fun getStatus(connectionState: Boolean?): Status {
         return when (connectionState) {
-            null -> WCSessionViewModel.Status.CONNECTING
-            true -> WCSessionViewModel.Status.ONLINE
-            false -> WCSessionViewModel.Status.OFFLINE
+            null -> Status.CONNECTING
+            true -> Status.ONLINE
+            false -> Status.OFFLINE
         }
     }
 
@@ -422,15 +420,3 @@ class WC2SessionViewModel(
     }
 
 }
-
-data class WC2SessionUiState(
-    val peerMeta: WCSessionModule.PeerMetaItem?,
-    val closeEnabled: Boolean,
-    val connecting: Boolean,
-    val buttonStates: WCSessionButtonStates?,
-    val hint: Int?,
-    val showError: String?,
-    val blockchains: List<WC2SessionModule.BlockchainViewItem>,
-    val status: WCSessionViewModel.Status?,
-    val pendingRequests: List<WC2RequestViewItem>
-)

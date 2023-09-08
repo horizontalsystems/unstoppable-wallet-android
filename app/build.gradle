@@ -44,8 +44,6 @@ android {
         resValue "string", "walletConnectAppMetaDataName", "Unstoppable"
         resValue "string", "walletConnectAppMetaDataUrl", "unstoppable.money"
         resValue "string", "walletConnectAppMetaDataIcon", "https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png"
-        resValue "string", "walletConnectV1PeerMetaName", "Unstoppable Wallet"
-        resValue "string", "walletConnectV1PeerMetaUrl", "https://unstoppable.money"
         resValue "string", "accountsBackupFileSalt", "unstoppable"
     }
 
@@ -281,9 +279,6 @@ dependencies {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
 
-    // WalletConnect
-    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
-    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     // WalletConnect V2
     implementation(platform("com.walletconnect:android-bom:1.15.0"))
     implementation 'com.walletconnect:sign'

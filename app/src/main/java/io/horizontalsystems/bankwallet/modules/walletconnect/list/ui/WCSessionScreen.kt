@@ -24,15 +24,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -65,17 +64,9 @@ fun WCSessionsScreen(
         }
     val uiState = viewModel.uiState
 
-    when (val route = viewModel.route) {
-        is WalletConnectListViewModel.Route.WC1Session -> {
-            navController.slideFromBottom(
-                R.id.wcSessionFragment,
-                WCSessionModule.prepareParams(null, route.uri)
-            )
-            viewModel.onHandleRoute()
-        }
-
-        WalletConnectListViewModel.Route.Error -> {
-            LaunchedEffect(viewModel.route){
+    when (viewModel.connectionResult) {
+        ConnectionResult.Error -> {
+            LaunchedEffect(viewModel.connectionResult) {
                 coroutineScope.launch {
                     delay(300)
                     invalidUrlBottomSheetState.show()
@@ -84,13 +75,13 @@ fun WCSessionsScreen(
             viewModel.onHandleRoute()
         }
 
-        null -> Unit
+        else -> Unit
     }
 
     LaunchedEffect(Unit) {
         if (deepLinkUri != null) {
             viewModel.setConnectionUri(deepLinkUri)
-        } else if (!viewModel.initialConnectionPrompted && uiState.v1SectionItem == null && uiState.v2SectionItem == null) {
+        } else if (!viewModel.initialConnectionPrompted && uiState.v2SectionItem == null) {
             delay(300)
             viewModel.initialConnectionPrompted = true
             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
@@ -148,7 +139,7 @@ fun WCSessionsScreen(
             }
         ) {
             Column(modifier = Modifier.padding(it)) {
-                Column(modifier = Modifier.weight(1f),) {
+                Column(modifier = Modifier.weight(1f)) {
                     if (uiState.emptyScreen) {
                         ListEmptyView(
                             text = stringResource(R.string.WalletConnect_NoConnection),

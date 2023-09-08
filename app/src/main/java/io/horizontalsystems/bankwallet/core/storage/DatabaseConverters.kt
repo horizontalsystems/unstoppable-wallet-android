@@ -3,8 +3,6 @@ package io.horizontalsystems.bankwallet.core.storage
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.trustwallet.walletconnect.models.WCPeerMeta
-import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.CexDepositNetworkRaw
 import io.horizontalsystems.bankwallet.core.providers.CexWithdrawNetworkRaw
@@ -67,26 +65,6 @@ class DatabaseConverters {
         return secretList?.list?.joinToString(separator = ",")?.let {
             App.encryptionManager.encrypt(it)
         }
-    }
-
-    @TypeConverter
-    fun fromWCPeerMeta(peerMeta: WCPeerMeta): String {
-        return gson.toJson(peerMeta)
-    }
-
-    @TypeConverter
-    fun toWCPeerMeta(json: String): WCPeerMeta {
-        return gson.fromJson(json, WCPeerMeta::class.java)
-    }
-
-    @TypeConverter
-    fun fromWCSession(session: WCSession): String {
-        return gson.toJson(session)
-    }
-
-    @TypeConverter
-    fun toWCSession(json: String): WCSession {
-        return gson.fromJson(json, WCSession::class.java)
     }
 
     @TypeConverter

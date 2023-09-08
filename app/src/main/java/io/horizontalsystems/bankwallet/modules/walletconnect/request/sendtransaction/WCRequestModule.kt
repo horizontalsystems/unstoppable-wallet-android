@@ -20,10 +20,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettings
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestChain
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestService
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
@@ -37,93 +34,6 @@ import io.horizontalsystems.marketkit.models.Token
 import java.math.BigInteger
 
 object WCRequestModule {
-
-    class Factory(
-        private val request: WC1SendEthereumTransactionRequest,
-        private val baseService: WC1Service,
-        dAppName: String?
-    ) : ViewModelProvider.Factory {
-        private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
-        private val blockchainType = when (evmKitWrapper.evmKit.chain) {
-            Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
-            Chain.Polygon -> BlockchainType.Polygon
-            Chain.Avalanche -> BlockchainType.Avalanche
-            Chain.Optimism -> BlockchainType.Optimism
-            Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
-            Chain.Gnosis -> BlockchainType.Gnosis
-            Chain.Fantom -> BlockchainType.Fantom
-            else -> BlockchainType.Ethereum
-        }
-        private val token by lazy {
-            getToken(blockchainType)
-        }
-        private val transaction = request.transaction
-        private val transactionData =
-            TransactionData(transaction.to, transaction.value, transaction.data)
-
-        private val gasPrice by lazy { getGasPrice(transaction) }
-
-        private val service by lazy {
-            WCSendEthereumTransactionRequestService(request.id, baseService)
-        }
-        private val gasPriceService: IEvmGasPriceService by lazy {
-            getGasPriceService(gasPrice, evmKitWrapper.evmKit)
-        }
-
-        private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(
-                token,
-                App.marketKit,
-                App.currencyManager,
-                App.coinManager
-            )
-        }
-        private val feeService by lazy {
-            val gasDataService = EvmCommonGasDataService(evmKitWrapper.evmKit)
-            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
-        }
-        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName, service.chain))
-        private val nonceService by lazy { SendEvmNonceService(evmKitWrapper.evmKit, transaction.nonce) }
-        private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
-        private val sendService by lazy {
-            SendEvmTransactionService(
-                SendEvmData(transactionData, additionalInfo),
-                evmKitWrapper,
-                settingsService,
-                App.evmLabelManager
-            )
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
-                WCSendEthereumTransactionRequestViewModel::class.java -> {
-                    WCSendEthereumTransactionRequestViewModel(service) as T
-                }
-                EvmFeeCellViewModel::class.java -> {
-                    EvmFeeCellViewModel(
-                        feeService,
-                        gasPriceService,
-                        coinServiceFactory.baseCoinService
-                    ) as T
-                }
-                SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(
-                        sendService,
-                        coinServiceFactory,
-                        cautionViewItemFactory,
-                        blockchainType = blockchainType,
-                        contactsRepo = App.contactsRepository
-                    ) as T
-                }
-                SendEvmNonceViewModel::class.java -> {
-                    SendEvmNonceViewModel(nonceService) as T
-                }
-                else -> throw IllegalArgumentException()
-            }
-        }
-    }
 
     class FactoryV2(private val requestData: WC2SessionManager.RequestData) : ViewModelProvider.Factory {
         private val service by lazy {

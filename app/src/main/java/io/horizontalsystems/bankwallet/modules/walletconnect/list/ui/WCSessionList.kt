@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -92,22 +92,6 @@ fun WCSessionList(
                 }
                 Spacer(modifier = Modifier.height(32.dp))
             }
-        }
-        uiState.v1SectionItem?.let { section ->
-            WCSection(
-                section,
-                navController,
-                revealedCardId,
-                onReveal = { id ->
-                    if (revealedCardId != id) {
-                        revealedCardId = id
-                    }
-                },
-                onConceal = {
-                    revealedCardId = null
-                },
-                onDelete = { viewModel.onDelete(it) }
-            )
         }
     }
 }

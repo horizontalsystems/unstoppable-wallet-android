@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.session.v2
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2RequestViewItem
 import io.horizontalsystems.ethereumkit.models.Chain
 
 object WC2SessionModule {
@@ -27,12 +29,6 @@ object WC2SessionModule {
 
     fun prepareParams(sessionTopic: String?) = bundleOf(
         SESSION_TOPIC_KEY to sessionTopic
-    )
-
-    data class BlockchainViewItem(
-        val chainId: Int,
-        val name: String,
-        val address: String,
     )
 
     const val SESSION_TOPIC_KEY = "session_topic_id"
@@ -73,4 +69,36 @@ data class WCAccountData(
     val eip: String,
     val chain: Chain,
     val address: String?
+)
+
+data class WC2SessionUiState(
+    val peerMeta: PeerMetaItem?,
+    val closeEnabled: Boolean,
+    val connecting: Boolean,
+    val buttonStates: WCSessionButtonStates?,
+    val hint: Int?,
+    val showError: String?,
+    val blockchains: List<BlockchainViewItem>,
+    val status: Status?,
+    val pendingRequests: List<WC2RequestViewItem>
+)
+
+enum class Status(val value: Int) {
+    OFFLINE(R.string.WalletConnect_Status_Offline),
+    ONLINE(R.string.WalletConnect_Status_Online),
+    CONNECTING(R.string.WalletConnect_Status_Connecting)
+}
+
+data class BlockchainViewItem(
+    val chainId: Int,
+    val name: String,
+    val address: String,
+)
+
+data class PeerMetaItem(
+    val name: String,
+    val url: String,
+    val description: String?,
+    val icon: String?,
+    val accountName: String?,
 )

@@ -16,12 +16,10 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
-import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectV2Session
-import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 55, exportSchema = false, entities = [
+@Database(version = 56, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -29,7 +27,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionD
     EvmSyncSourceRecord::class,
     LogEntry::class,
     FavoriteCoin::class,
-    WalletConnectSession::class,
     WalletConnectV2Session::class,
     RestoreSettingRecord::class,
     ActiveAccount::class,
@@ -59,7 +56,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
-    abstract fun wc1SessionDao(): WC1SessionDao
     abstract fun wc2SessionDao(): WC2SessionDao
     abstract fun nftDao(): NftDao
     abstract fun proFeaturesDao(): ProFeaturesDao
@@ -108,6 +104,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_52_53,
                             Migration_53_54,
                             Migration_54_55,
+                            Migration_55_56,
                     )
                     .build()
         }
