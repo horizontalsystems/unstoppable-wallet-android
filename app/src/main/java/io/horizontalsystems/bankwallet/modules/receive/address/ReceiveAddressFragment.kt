@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.receive.address
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.animation.Crossfade
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -77,6 +79,7 @@ class ReceiveAddressFragment : BaseComposeFragment() {
             return
         }
 
+        val viewContent = LocalContext.current
         val popupDestinationId = arguments?.getInt(POPUP_DESTINATION_ID_KEY)
 
         val viewModel by viewModels<ReceiveAddressViewModel> {
@@ -86,6 +89,13 @@ class ReceiveAddressFragment : BaseComposeFragment() {
         ReceiveAddressScreen(
             viewModel = viewModel,
             navController = navController,
+            onShareClick = { address ->
+                viewContent.startActivity(Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, address)
+                    type = "text/plain"
+                })
+            },
             onCloseClick = {
                 popupDestinationId?.let { destinationId ->
                     if (destinationId != 0) {
@@ -116,7 +126,8 @@ class ReceiveAddressFragment : BaseComposeFragment() {
 private fun ReceiveAddressScreen(
     viewModel: ReceiveAddressViewModel,
     navController: NavController,
-    onCloseClick: () -> Unit
+    onShareClick: (String) -> Unit,
+    onCloseClick: () -> Unit,
 ) {
 
     val localView = LocalView.current
@@ -301,8 +312,8 @@ private fun ReceiveAddressScreen(
                                     VSpacer(16.dp)
                                     ButtonPrimaryDefault(
                                         modifier = Modifier.fillMaxWidth(),
-                                        title = stringResource(R.string.Button_Close),
-                                        onClick = onCloseClick
+                                        title = stringResource(R.string.Button_Share),
+                                        onClick = { onShareClick.invoke(uiState.address) },
                                     )
                                 }
                             }
