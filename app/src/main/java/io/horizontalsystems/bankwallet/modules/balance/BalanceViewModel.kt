@@ -10,6 +10,9 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,6 +24,7 @@ class BalanceViewModel(
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
+    private val wc2Service: WC2Service
 ) : ViewModel(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
@@ -40,6 +44,9 @@ class BalanceViewModel(
 
     val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     var sortType by service::sortType
+
+    var connectionResult by mutableStateOf<WalletConnectListViewModel.ConnectionResult?>(null)
+        private set
 
     init {
         viewModelScope.launch {
@@ -123,6 +130,21 @@ class BalanceViewModel(
 
             emitState()
         }
+    }
+
+    fun setConnectionUri(uri: String) {
+        connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
+            2 -> {
+                wc2Service.pair(uri)
+                null
+            }
+
+            else -> WalletConnectListViewModel.ConnectionResult.Error
+        }
+    }
+
+    fun onHandleRoute() {
+        connectionResult = null
     }
 
     override fun onCleared() {
