@@ -40,7 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.core.helpers.HudHelper
@@ -78,7 +78,7 @@ fun CreateAccountAdvancedScreen(
                 SelectorDialogCompose(
                     title = stringResource(R.string.CreateWallet_Mnemonic),
                     items = viewModel.mnemonicKinds.map {
-                        TabItem(it.titleLong, it == viewModel.selectedKind, it)
+                        SelectorItem(it.titleLong, it == viewModel.selectedKind, it)
                     },
                     onDismissRequest = {
                         showMnemonicSizeSelectorDialog = false

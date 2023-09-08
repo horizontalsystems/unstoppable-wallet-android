@@ -76,7 +76,7 @@ fun TransactionsScreen(
                         SelectorDialogCompose(
                             title = stringResource(R.string.Transactions_Filter_Blockchain),
                             items = filterBlockchains.map {
-                                TabItem(it.item?.name ?: stringResource(R.string.Transactions_Filter_AllBlockchains), it.selected, it)
+                                SelectorItem(it.item?.name ?: stringResource(R.string.Transactions_Filter_AllBlockchains), it.selected, it)
                             },
                             onDismissRequest = {
                                 showFilterBlockchainDialog = false

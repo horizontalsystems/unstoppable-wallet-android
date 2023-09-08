@@ -1101,6 +1101,10 @@
     <string name="Watch_TypeSolanaAddress">Solana Address</string>
     <string name="Watch_TypeTronAddress">Tron Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_TypeEvmAddress_Subtitle">(Ethereum, Binance, …)</string>
+    <string name="Watch_TypeSolanaAddress_Subtitle">(SOL, Solana tokens, …)</string>
+    <string name="Watch_TypeTronAddress_Subtitle">(TRX, Tron tokens, …)</string>
+    <string name="Watch_TypeXPubKey_Subtitle">(Bitcoin, Litecoin, …)</string>
     <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
 
     <!--Manage Account-->

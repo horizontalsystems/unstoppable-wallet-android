@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
@@ -63,7 +63,7 @@ fun EmaSettingsScreen(navController: NavController, indicatorSetting: ChartIndic
         SelectorDialogCompose(
             title = stringResource(R.string.CoinPage_Type),
             items = viewModel.maTypes.map {
-                TabItem(it, it == maType, it)
+                SelectorItem(it, it == maType, it)
             },
             onDismissRequest = {
                 showEmaSelectorDialog = false
