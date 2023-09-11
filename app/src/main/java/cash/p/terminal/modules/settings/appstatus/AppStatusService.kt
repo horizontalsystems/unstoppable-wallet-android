@@ -9,7 +9,6 @@ import cash.p.terminal.core.adapters.BaseTronAdapter
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.util.Date
@@ -71,11 +70,8 @@ class AppStatusService(
         val accountDetails = LinkedHashMap<String, Any>()
 
         accountDetails["Origin"] = account.origin.value
+        accountDetails["Type"] = account.type.description
 
-        val accountType = account.type
-        if (accountType is AccountType.Mnemonic) {
-            accountDetails["Mnemonic"] = accountType.words.count()
-        }
         return accountDetails
     }
 
