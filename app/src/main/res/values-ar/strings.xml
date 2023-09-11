@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">لم يتم تحديد الإعدادات</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">إلغاء</string>
     <string name="Alert_Copy">نسخ</string>
     <string name="Alert_Close">إغلاق</string>
@@ -107,17 +106,8 @@
     <!--Market Global Metrics-->
     <!--Market Search-->
     <string name="Market_Search_Hint">بحث</string>
-    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
-    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
-    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
-    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
-    <string name="TvlRank_Field_Eth">Ethereum</string>
-    <string name="TvlRank_Field_Bsc">Binance</string>
-    <string name="TvlRank_Field_Sol">Solana</string>
-    <string name="TvlRank_Field_Ava">Avalanche</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
     <!--Balance-->
     <string name="Balance_Send">إرسال</string>
     <!--Send NFT-->
@@ -137,7 +127,6 @@
     <!--WalletConnect-->
     <string name="WalletConnect_SendRequest_Title">إرسال</string>
     <string name="WalletConnect_ApproveRequest_Title">قبول</string>
-    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">توقيع</string>
     <string name="WalletConnect_Note">ملاحظة</string>
     <string name="WalletConnect_Pairings_Delete">حذف</string>
@@ -165,7 +154,6 @@
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Understand">فهمت</string>
     <!--Settings-->
-    <string name="Settings_PersonalSupport_Account">Account</string>
     <!-- Blockchain Settings  -->
     <!-- Privacy  -->
     <!-- Security Center -->
@@ -208,23 +196,9 @@
     <string name="RecoveryPhrase_Title">كلمات الاسترجاع</string>
     <!-- Evm Private Key -->
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
-    <string name="ExtendedKey_Blockchain">Blockchain</string>
-    <string name="ExtendedKey_Purpose">Purpose</string>
-    <string name="ExtendedKey_Account">Account</string>
-    <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
-    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
-    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
-    <string name="PrivateKeys_EvmPrivateKey">EVM Private Key</string>
-    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <!-- Public Keys -->
-    <string name="PublicKeys_EvmAddress">EVM Address</string>
-    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
     <!-- Recovery Phrase Verify -->
     <!-- Backup Key -->
     <!--Manage Keys Delete Alert-->
@@ -234,21 +208,13 @@
     <!-- Enable Token -->
     <string name="EnalbeToken_EnableKey">تمكين</string>
     <!-- Add Token -->
-    <string name="AddToken_Dots">…</string>
-    <string name="AddToken_Blockchain">Blockchain</string>
     <!-- Address Format Settings List -->
     <!-- Coin Platforms -->
     <!-- Blockchain Settings -->
     <!-- Tor -->
     <!--Coin Page-->
-    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
     <string name="ActivateSubscription_Title">تفعيل</string>
     <string name="NftAsset_Action_Save">حفظ</string>
-    <string name="NftAsset_Blockchain">Blockchain</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_Cancelled">إلغاء</string>
