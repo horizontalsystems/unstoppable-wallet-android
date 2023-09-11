@@ -11,7 +11,6 @@
     <string name="Suspended">일시 정지</string>
     <string name="Action_Undo">실행 취소</string>
     <string name="Button_Show">표시</string>
-    <string name="Button_Hide">Hide</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Next">다음</string>
     <string name="Button_Enable">활성화</string>
@@ -50,14 +49,11 @@
     <string name="Button_LearnMore">자세히 보기</string>
     <string name="Button_Activate">활성화</string>
     <string name="Button_Sign">가입</string>
-    <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">API 키 가져오기</string>
     <string name="Button_Login">로그인</string>
     <string name="Button_SignUp">회원가입</string>
     <string name="Button_Submit">제출하기</string>
     <string name="Button_TryAgain">다시 시도하십시오.</string>
-    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
-    <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
@@ -68,7 +64,6 @@
     <string name="AccountRecovery_MigrationRecommended">이 지갑은 비밀 단어 목록 및/또는 암호 문구에 비표준 문자를 사용하는 것 같습니다. 잔액이나 거래 내역이 보이지 않으면 아래에서 자세한 내용을 읽어보세요.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <string name="AccountRecovery_MigrationRequired">비표준 호환 지갑입니다. 자세한 내용은 아래를 참조하십시오.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
     <string name="Intro_Wallet_Screen2Description">자신을 잠금하지 말고 다른 사람들이 귀하에게 그렇게 하도록 두지 마십시오.</string>
     <string name="Intro_Wallet_Screen3Title">무경계로</string>
@@ -148,137 +143,28 @@
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <!--Market-->
-    <string name="Market_Field_MarketCap">MCap</string>
-    <string name="Market_Field_Volume">Vol</string>
-    <string name="Market_Field_PriceDiff">Price</string>
-    <string name="Market_Title">Markets</string>
     <string name="Market_Search">검색</string>
-    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
-    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
-    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
-    <string name="Market_Field_HighestCap">Highest Cap</string>
-    <string name="Market_Field_LowestCap">Lowest Cap</string>
-    <string name="Market_Field_HighestVolume">Highest Volume</string>
-    <string name="Market_Field_LowestVolume">Lowest Volume</string>
-    <string name="Market_Field_HighestPrice">Highest Price</string>
-    <string name="Market_Field_LowestPrice">Lowest Price</string>
-    <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total Cap</string>
-    <string name="Market_BtcDominance">BTC Dominance</string>
-    <string name="Market_Volume24h">24h Volume</string>
-    <string name="Market_TvlDeFi">TVL in DeFi</string>
-    <string name="Market_DeFiCap">DeFi Cap</string>
-    <string name="Market_SeeAll">See All</string>
-    <string name="Market_PoweredByHorizontalApi">Powered By Horizontal API</string>
-    <string name="Market_Tab_Overview">Overview</string>
-    <string name="Market_Tab_Posts">News</string>
-    <string name="Market_Tab_Watchlist">Watchlist</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
-    <string name="Market_Category_TopCoins">Top Coins</string>
-    <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
     <!--Market Overview-->
-    <string name="Market_Overview_TopSectors">Top Sectors</string>
     <!--Market Top Platforms-->
-    <string name="MarketTopPlatforms_Title">Top Platforms</string>
-    <string name="MarketTopPlatforms_PlatofrmsRank">Top Blockchain Platforms</string>
     <string name="MarketTopPlatforms_Description">Leading blockchain platforms by the cumulative market of projects built on top.</string>
-    <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
-    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
-    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
-    <string name="MarketGlobalMetrics_Chart">Chart</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
-    <string name="MarketGlobalMetrics_Volume">24h Volume</string>
-    <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
-    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of crypto market.</string>
-    <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">Total market value of DeFi projects.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
-    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
-    <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!--Market Search-->
-    <string name="EmptyResults">No results found</string>
-    <string name="Market_Filters">Filters</string>
-    <string name="Market_AdvancedSearch_Results">Results</string>
     <string name="Market_Search_Hint">검색</string>
     <string name="Market_Search_BrowseCategories">Browse Categories</string>
-    <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">시가총액</string>
-    <string name="Market_Filter_Volume">Trading Volume</string>
-    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
-    <string name="Market_Filter_PricePeriod">Price Period</string>
-    <string name="Market_Filter_PriceChange">Price Change</string>
-    <string name="Market_Filter_Blockchains">Blockchains</string>
-    <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
-    <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
-    <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
-    <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
-    <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
     <string name="Market_Filter_Top_100">상위 100</string>
     <string name="Market_Filter_Top_250">상위 250</string>
-    <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">상위 1000</string>
     <string name="Market_Filter_Top_1500">상위 1500</string>
-    <string name="Market_Filter_ShowResults">Show Results</string>
-    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
-    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
-    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
-    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
-    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
-    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
-    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
     <string name="Market_Filter_Range_0_10M">&lt; 10</string>
-    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
-    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
-    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
-    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
-    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
-    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
-    <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
-    <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
-    <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
-    <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
-    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
-    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
-    <string name="Market_Filter_Range_500M_2B">500M - 2B</string>
-    <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
-    <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
-    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
-    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
-    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
-    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
-    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
-    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
-    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
-    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
-    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
-    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
-    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
-    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
-    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
-    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
-    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
     <string name="TimePeriod_24h">24 시간</string>
     <!--Coin Markets-->
-    <string name="CoinMarket_Title">%s Markets</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">TVL Rank</string>
-    <string name="TvlRank_MultiChain">Multi-Chain</string>
-    <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
-    <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
     <string name="TvlRank_Field_All">모든</string>
     <string name="TvlRank_Field_Eth">Bitcoin Cash</string>
-    <string name="TvlRank_Field_Bsc">Binance</string>
-    <string name="TvlRank_Field_Sol">Solana</string>
-    <string name="TvlRank_Field_Ava">Avalanche</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
-    <string name="TvlRank_Filters_PopupTitle">Filters</string>
     <!--Balance-->
     <string name="Balance_Withdraw">빼다</string>
     <string name="Balance_Title">잔액</string>
@@ -290,7 +176,6 @@
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_AddCoin">코인 추가</string>
@@ -313,7 +198,6 @@
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
     <string name="Send_Fee">수수료</string>
-    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
@@ -347,7 +231,6 @@
     <string name="Send_TxSpeed_High">높음</string>
     <string name="Send_TxSpeed_Recommended">권장</string>
     <string name="Send_TxSpeed_Custom">사용자 지정</string>
-    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogProceed">다음</string>
     <string name="Send_LockTime_Off">끄기</string>
@@ -367,7 +250,6 @@
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">고급의</string>
     <string name="SendEvmSettings_Nonce">트랜잭션 Nonce</string>
-    <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">중고 Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">이 nonce를 사용하여 실행된 트랜잭션이 이미 존재합니다.</string>
     <!-- Fee Settings -->
@@ -376,27 +258,15 @@
     <string name="FeeSettings_FeeLegacy">최대 수수료</string>
     <string name="FeeSettings_FeeLegacy_Info">주어진 거래에 대한 최대 예상 총 수수료입니다. 일반적으로 실제 거래 수수료는 더 낮습니다.</string>
     <string name="FeeSettings_Fee">최대 수수료</string>
-    <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
     <string name="FeeSettings_NetworkFee">네트워크 수수료</string>
-    <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
-    <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
-    <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">네트워크 거래 수수료는 가스 단위로 측정됩니다. 가스 가격은 사용자가 가스 단위당 지출할 의향이 있는 금액입니다. 네트워크가 사용 중일 때는 가스 가격이 높고 유휴 상태일 때는 가스 가격이 낮습니다. 가스 가격이 충분하지 않아 거래가 장기간 보류 상태로 남아 있는 경우가 많습니다.</string>
     <string name="FeeSettings_BaseFee">기본 수수료</string>
-    <string name="FeeSettings_BaseFee_Info">The network protocol determines the base price per gas for each block, called base fee rate. It varies according to the network utilization level from block to block. It can increase or decrease by no more than 12.5% in the next block, making fees more predictable. The value shown here is the current block\'s base fee rate.</string>
-    <string name="FeeSettings_MaxFee">Max Fee Rate (Gwei)</string>
-    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
-    <string name="FeeSettings_MaxMinerTips">Max Priority Fee (Gwei)</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">위험</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">트랜잭션이 잠시 동안 보류 상태로 유지되거나 완전히 실패할 수 있습니다.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">위험</string>
-    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">수수료가 너무 높음</string>
     <string name="FeeSettings_Overpricing">설정된 거래 수수료가 지금 이 거래를 처리하는 데 필요한 것보다 높습니다.</string>
     <string name="FeeSettings_Info_IUnderstand">이해합니다</string>
-    <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">다음 2 블록 타격에 대한 권장 값은 다음과 같습니다.</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
         \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within a reasonable amount of time.
@@ -447,7 +317,6 @@
     <string name="WalletConnect_Disconnecting">연결을 끊는 중...</string>
     <string name="WalletConnect_SignMessageRequest_Title">서명 요청</string>
     <string name="WalletConnect_SignMessageRequest_Domain">도메인</string>
-    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">서명할 메시지</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">인증을 위해 메시지에 서명하십시오</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
@@ -693,17 +562,14 @@
     <string name="Settings_Privacy">개인정보</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_AppStatus">앱 상태</string>
-    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">앱 평가</string>
     <string name="Settings_LaunchScreen">시작 화면</string>
     <string name="Settings_Appearance">모양</string>
     <string name="Settings_Contact_ViaTelegram">텔레그램을 통해</string>
     <string name="Settings_Contact_ViaEmail">이메일로</string>
-    <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Telegram 계정 이름을 입력하여 저희 팀과 개인 지원 채팅을 시작하세요. 문제가 확인되는 즉시 연락을 드리고 문제 해결을 시작하겠습니다.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">이미 비공개 채팅을 요청하셨습니다. Telegram에서 찾아보세요.</string>
     <string name="Settings_PersonalSupport_Account">계정</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">신청 완료</string>
     <string name="Settings_PersonalSupport_Request">요청</string>
     <string name="Settings_PersonalSupport_NewRequest">요청</string>
@@ -739,9 +605,7 @@
     <string name="EvmNetwork_AddNew">신규로 추가</string>
     <string name="EvmNetwork_Added">추가됨</string>
     <string name="EvmNetwork_SyncMode">동기화 모드</string>
-    <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
-    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC 소스 추가</string>
     <string name="AddEvmSyncSource_Name">이름</string>
     <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
@@ -752,19 +616,10 @@
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">복원 소스를 변경한 후 지갑은 Bitcoin 블록체인과 자체적으로 다시 동기화해야 합니다.</string>
     <string name="BtcBlockchainSettings_RestoreSource">매개 변수 복원</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">지갑 복원을 위한 데이터 소스를 선택하십시오. 블록체인에서 복원하는 데 훨씬 더 많은 시간이 걸립니다.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.
-\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
-\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
-\n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionSettings">거래 설정</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">트랜잭션 입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">거래 구조를 변경하여 BTC, LTC, BCH 거래를 추적하기 어렵게 만드십시오.</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
-\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.
-\n\nThere are two options available to Unstoppable users:
-\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.
-\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
     <!--Info screen-->
     <string name="Info_Title">인포</string>
     <!--Setting_Security-->
@@ -779,7 +634,6 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
-    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">권장</string>
@@ -796,7 +650,6 @@
     <string name="SettingsTerms_Bugs">이 앱을 구동하는 코드에 발견되지 않은 소프트웨어 문제가 있을 수 있으며 이로 인해 앱이 오작동할 수 있습니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">연락처</string>
     <!--Setting_Notifications-->
@@ -841,11 +694,9 @@
     <string name="Hud_Text_EmailAddressCopied">이메일 주소 복사됨</string>
     <string name="Hud_Added_To_Watchlist">관심목록에 추가되었습니다</string>
     <string name="Hud_Added_To_Wallet">지갑에 추가됨</string>
-    <string name="Hud_Removed_From_Wallet">Removed from Wallet</string>
     <string name="Hud_Already_In_Wallet">이미 지갑에 추가됨</string>
     <string name="Hud_Removed_from_Watchlist">관심목록에서 제거</string>
     <string name="Hud_Removed">제거됨</string>
-    <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 매니저</string>
     <string name="ManageCoins_Search">이름, 코드 또는 계약 주소</string>
@@ -901,7 +752,6 @@
     <string name="Watch_TypeEvmAddress">EVM 주소</string>
     <string name="Watch_TypeSolanaAddress">Solana 주소</string>
     <string name="Watch_TypeTronAddress">TRON 주소</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">잘못된 xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
@@ -974,29 +824,18 @@
     <string name="EvmPrivateKey_Warning">이 키는 모든 EVM 호환 블록체인용입니다. 누구와도 공유하지 마십시오.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">개인 키 보기</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
-    <string name="ExtendedKey_Blockchain">Blockchain</string>
-    <string name="ExtendedKey_Purpose">Purpose</string>
-    <string name="ExtendedKey_Account">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">개인 키 보기</string>
-    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
-    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">개인 암호</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM 개인 키</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">각 지갑 내에서 EVM 기반 암호화, 즉 이더리움, 바이낸스 스마트 체인 등에 대한 완전한 제어 권한을 부여합니다.</string>
-    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">각 지갑의 자산에 대한 모든 권한을 부여합니다.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">각 지갑 내에서 비트코인 및 기타 UTXO 기반 암호화, 즉 라이트코인, 비트코인 캐시, 대시 등을 완벽하게 제어할 수 있습니다.</string>
     <string name="PrivateKeys_NeverShareWarning">복구 문구를 누구와도 공유하지 마십시오. Unstoppable 팀은 복구 문구를 요구하지 않습니다.</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">공개 키</string>
     <string name="PublicKeys_EvmAddress">EVM 주소</string>
-    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="PublicKeys_EvmAddress_Description">Ethereum, Binance Smart Chain 및 기타 EVM 기반 블록체인에 자산을 보유하고 있는 지갑의 읽기 전용 모니터링을 허용합니다.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Bitcoin 및 기타 UTXO 기반 암호화폐(예: Litecoin, Bitcoin Cash, Dash 등)를 보유한 지갑의 읽기 전용 모니터링을 허용합니다.</string>
     <!-- Recovery Phrase Verify -->
@@ -1040,12 +879,10 @@
     <string name="AddToken_Symbol">심볼</string>
     <string name="AddToken_CoinCode">코인 코드</string>
     <string name="AddToken_Decimals">소수점</string>
-    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">코인 유형</string>
     <string name="AddToken_AlreadyAdded">이미 추가됨</string>
     <string name="AddToken_AddressOrSymbol">계약 주소</string>
     <string name="AddToken_ChooseToken">토큰 선택</string>
-    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidContractAddress">잘못된 계약 주소</string>
     <string name="AddToken_InvalidBep2Symbol">잘못된 BEP2 기호</string>
@@ -1057,7 +894,6 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">네이티브</string>
     <string name="CoinPlatformsSelector_Title">코인 유형</string>
-    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
@@ -1081,239 +917,22 @@
     <!--Coin Page-->
     <string name="Coin_Info">코인 정보</string>
     <string name="Coin_Tab_Overview">금액</string>
-    <string name="Coin_Tab_Market">Markets</string>
-    <string name="Coin_Tab_Details">Analytics</string>
-    <string name="Coin_Tab_Tweets">Tweets</string>
-    <string name="CoinPage_TimeDuration_Today">TDY</string>
-    <string name="CoinPage_TimeDuration_Day">24H</string>
-    <string name="CoinPage_TimeDuration_Week">7D</string>
-    <string name="CoinPage_TimeDuration_Month">1M</string>
-    <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
-    <string name="CoinPage_TimeDuration_Month3">3M</string>
-    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
-    <string name="CoinPage_TimeDuration_Year">1Y</string>
-    <string name="CoinPage_TimeDuration_Year2">2Y</string>
     <string name="CoinPage_TimeDuration_All">모든</string>
-    <string name="CoinPage_Markets">Markets</string>
-    <string name="CoinPage_TradingVolume">Trading Volume</string>
-    <string name="CoinPage_MajorHolders">Major Holders</string>
-    <string name="CoinPage_MajorHolders_InfoDescription">The number of tokens held by the top 10 wallets. Quality projects typically have a widely distributed token.</string>
-    <string name="CoinPage_Audits">Audits</string>
-    <string name="CoinPage_Audits_Empty">No audit reports</string>
-    <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
-    <string name="CoinPage_Audits_Issues">Issues: %d</string>
-    <string name="CoinPage_InvestorData">Investor Data</string>
-    <string name="CoinPage_Treasuries">Treasuries</string>
-    <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
-    <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
-    <string name="CoinPage_Reports">Reports</string>
-    <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_SecurityParams_Privacy">개인정보</string>
     <string name="CoinPage_SecurityParams_Low">낮음</string>
-    <string name="CoinPage_SecurityParams_Medium">Medium</string>
     <string name="CoinPage_SecurityParams_High">높음</string>
-    <string name="CoinPage_SecurityParams_Issuance">Issuance</string>
-    <string name="CoinPage_SecurityParams_Centralized">Centralized</string>
-    <string name="CoinPage_SecurityParams_Decentralized">Decentralized</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance">Confiscation-resistance</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance">Censorship-resistance</string>
-    <string name="CoinPage_SecurityParams_Audits">Audits</string>
-    <string name="CoinPage_Range24">24h Range</string>
-    <string name="CoinPage_About">About</string>
-    <string name="CoinPage_Category">Category</string>
-    <string name="CoinPage_Categories">Categories</string>
-    <string name="CoinPage_Contracts">Contracts</string>
-    <string name="CoinPage_Blockchains">Blockchains</string>
-    <string name="CoinPage_Bips">BIPs</string>
-    <string name="CoinPage_CoinTypes">Coin Types</string>
-    <string name="CoinPage_Links">Links</string>
-    <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">웹사이트</string>
-    <string name="CoinPage_Whitepaper">Whitepaper</string>
-    <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
     <string name="CoinPage_Twitter_NoTweets">아직 트윗이 없습니다</string>
-    <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
-    <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
-    <string name="CoinPage_Twitter_Replied">Replying to %s</string>
-    <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
-    <string name="CoinPage_MarketCap">Market Cap</string>
-    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
-    <string name="CoinPage_inCirculation">In Circulation</string>
-    <string name="CoinPage_TotalSupply">Total Supply</string>
-    <string name="CoinPage_MarketCap_Thousand">K</string>
-    <string name="CoinPage_MarketCap_Million">M</string>
-    <string name="CoinPage_MarketCap_Billion">B</string>
-    <string name="CoinPage_MarketCap_Trillion">T</string>
-    <string name="CoinPage_MarketCap_Quadrillion">Q</string>
-    <string name="CoinPage_MarketCap_TvlRation">MCap / TVL Ratio</string>
-    <string name="CoinPage_MarketCap_TvlRation_Description">The ratio of the project token\'s market cap over its TVL.</string>
-    <string name="CoinPage_Volume">Vol</string>
-    <string name="CoinPage_NoData">No Data</string>
-    <string name="CoinPage_NoDataAvailable">No data available</string>
+    <string name="CoinPage_MarketCap">시가총액</string>
     <string name="CoinPage_AddToWallet">지갑에 추가됨</string>
     <string name="CoinPage_InWallet">지갑에서</string>
-    <string name="CoinPage_Favorite">Favorite</string>
-    <string name="CoinPage_Unfavorite">Unfavorite</string>
-    <string name="CoinPage_Performance_Week">1 Week</string>
-    <string name="CoinPage_Performance_Month">1 Month</string>
-    <string name="CoinPage_ReadMore">Read More</string>
-    <string name="CoinPage_ReadLess">Read Less</string>
-    <string name="CoinPage_ShowMore">Show More</string>
-    <string name="CoinPage_ShowLess">Show Less</string>
-    <string name="CoinPage_LaunchDate">Inception Date</string>
-    <string name="CoinPage_Tvl">Total Value Locked</string>
-    <string name="CoinPage_TvlRank">TVL Rank</string>
-    <string name="CoinPage_TvlRank_Description">The ranking among other protocols is based on the TVL value in USD terms.</string>
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
-    <string name="CoinPage_TvlMCapRatio_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_TvlDescription">Capital is deposited into the platform in the form of loan collateral or liquidity pool.</string>
-    <string name="CoinPage_Contract">%s Contract</string>
-    <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
-    <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
     <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 유통 중인 모든 토큰의 \%%를 보여줍니다. \%%가 낮을수록 코인이 더 많이 분산됩니다.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
-    <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
-    <string name="CoinPage_CoinInvestments_Lead">Lead</string>
-    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
-    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
-    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
-    <string name="CoinPage_Indicators">Indicators</string>
-    <string name="CoinPage_MovingAverages">Moving Averages</string>
-    <string name="CoinPage_OscillatorsSettings">Oscillators</string>
-    <string name="CoinPage_EmaSettingsDescription">The EMA, SMA, and WMA are moving averages used in technical analysis:\n\nEMA emphasizes recent prices for quicker reactions.\nSMA averages price data for a general trend view.\nWMA balances sensitivity and noise reduction by linearly weighting recent data.</string>
-    <string name="CoinPage_RsiSettingsDescription">The Relative Strength Index (RSI) is a momentum oscillator that measures price speed and change, identifying overbought (above 70) or oversold (below 30) market conditions. It can also detect price reversals through divergences.</string>
-    <string name="CoinPage_MacdSettingsDescription">The Moving Average Convergence Divergence (MACD) is a momentum indicator that tracks the relationship between two EMAs of a security\'s price. It signals buying or selling opportunities when the MACD line (12-period EMA minus 26-period EMA) crosses the 9-period EMA, known as the signal line.</string>
-    <string name="CoinPage_InsufficientData">Insufficient Data</string>
-    <string name="CoinPage_InsufficientDataError">There are not enough data points to display the EMA 1 indicator. Please adjust the time period to generate a view of the moving average line.Not enough point to display EMA 1.</string>
-    <string name="CoinPage_Type">Type</string>
-    <string name="CoinPage_Period">Period</string>
-    <string name="CoinPage_RsiLength">RSI Length</string>
-    <string name="CoinPage_FastLength">Fast Length</string>
-    <string name="CoinPage_SlowLength">Slow Length</string>
-    <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
-    <string name="CoinPage_IndicatorsAlertText">Indicators available only for Unstoppable Wallet premium users.</string>
-    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
-    <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
-    <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over 30-day period.</string>
-    <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
-    <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes that are being tracked:</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap</string>
-    <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
-    <string name="CoinAnalytics_DexLiquidity_Info2">Chart showing variation in available liquidity for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes that are being tracked:</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TransactionCount_Info5">The total number of tokens transferred over the blockchain over the 30 day period.</string>
-    <string name="CoinAnalytics_Holders_Info1">Total number of unique addresses holding the token on various blockchains.</string>
-    <string name="CoinAnalytics_Holders_Info2">Top 10 wallets holding the token on each blockchain.</string>
-    <string name="CoinAnalytics_Holders_TrackedBlockchains">Tracked blockchains: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
-    <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info4">List of all tokens ranked based on current Total-Value-Locked.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info5">Market Cap / TVL ratio for the project.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info1">Total revenue generated for the token holders over 30-day period. Typically, fees are collected by token stakers or though a token burn mechanism.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
-    <string name="CoinAnalytics_TechIndicators_Info2">Moving Averages (MA): These are commonly used technical indicators that smooth out price data to create a trend-following indicator. They show the average price over a specific time period. There are several types of MAs:\n\nSimple Moving Average (SMA): This calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.\n\nExponential Moving Average (EMA): This gives more weight to recent prices, thereby responding more quickly to recent price changes.</string>
-    <string name="CoinAnalytics_TechIndicators_Info3">Oscillators: These are technical indicators that fluctuate over time within a band (above and below a center line, or between set levels). They are designed to help identify overbought and oversold conditions in a market. Here are some common oscillators:\n\nRelative Strength Index (RSI): This measures the speed and change of price movements. It is usually used to identify overbought or oversold conditions.\n\nMoving Average Convergence Divergence (MACD): This is used to identify potential buy and sell signals. It triggers technical signals when it crosses above (to buy) or below (to sell) its signal line.</string>
-    <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
-    <string name="CoinAnalytics_CexVolume">CEX Volume</string>
-    <string name="CoinAnalytics_CexVolumeRank">CEX Volume Rank</string>
-    <string name="CoinAnalytics_CexVolumeRank_Description">Tokens ranked by trading volume for the token on centralized exchanges.</string>
-    <string name="CoinAnalytics_DexVolume">DEX Volume</string>
-    <string name="CoinAnalytics_DexVolumeRank">DEX Volume Rank</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens ranked by trading volume for the token on decentralized exchanges.</string>
-    <string name="CoinAnalytics_DexLiquidity">DEX Liquidity</string>
-    <string name="CoinAnalytics_DexLiquidityRank">DEX Liquidity Rank</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens ranked by available liquidity on decentralized exchanges.</string>
-    <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
-    <string name="CoinAnalytics_ActiveAddressesRank">Active Addresses Rank</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens ranked by number of unique addresses transacting with the token.</string>
-    <string name="CoinAnalytics_TransactionCount">Transaction Count</string>
-    <string name="CoinAnalytics_TransactionCountRank">Tx Count Rank</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens ranked by number of transactions on a blockchain.</string>
-    <string name="CoinAnalytics_Holders">Holders</string>
-    <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
-    <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total Value Locked)</string>
-    <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
-    <string name="CoinAnalytics_ProjectRevenue">Project Revenue</string>
-    <string name="CoinAnalytics_ProjectFee">Project Fee</string>
-    <string name="CoinAnalytics_ProjectRevenueRank">Project Revenue Rank</string>
-    <string name="CoinAnalytics_ProjectFeeRank">Project Fee Rank</string>
-    <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
-    <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
-    <string name="CoinAnalytics_OtherData">Other Data</string>
-    <string name="CoinAnalytics_Reports">Reports</string>
-    <string name="CoinAnalytics_Funding">Funding</string>
-    <string name="CoinAnalytics_Treasuries">Treasuries</string>
-    <string name="Coin_Analytics_Audits">Audits</string>
-    <string name="Coin_Analytics_Last30d">last 30d</string>
-    <string name="Coin_Analytics_Current">current</string>
-    <string name="Coin_Analytics_Rank">Rank</string>
-    <string name="Coin_Analytics_30DayRank">30-Day Rank</string>
-    <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
-    <string name="Coin_Analytics_30DayVolume">30-Day Volume</string>
-    <string name="Coin_Analytics_OverallScore">Overall Score</string>
-    <string name="Coin_Analytics_OverallScore_Excellent">Excellent</string>
-    <string name="Coin_Analytics_OverallScore_Good">Good</string>
-    <string name="Coin_Analytics_OverallScore_Fair">Fair</string>
-    <string name="Coin_Analytics_OverallScore_Poor">Poor</string>
-    <string name="Coin_Analytics_OverallScore_CexVolume">The overall score is based on the average daily trading volume on centralized exchanges over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_DexVolume">The overall score is based on the average daily trading volume on decentralized exchanges over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_DexLiquidity">The overall score is based on the total available liquidity on decentralized exchanges.</string>
-    <string name="Coin_Analytics_OverallScore_ActiveAddresses">The overall score is based on the average daily active addresses over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
-    <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding respective token.</string>
-    <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
     <string name="Coin_Analytics_Details">상세 정보</string>
-    <string name="Coin_Analytics_SelectPeriod">Select Period</string>
-    <string name="Coin_Analytics_Period_30m">30 minutes</string>
     <string name="Coin_Analytics_Period_1h">1시간</string>
-    <string name="Coin_Analytics_Period_4h">4 hours</string>
-    <string name="Coin_Analytics_Period_8h">8 hours</string>
-    <string name="Coin_Analytics_Period_1d">1 day</string>
-    <string name="Coin_Analytics_Period_1w">1 week</string>
-    <string name="Coin_Analytics_Indicators_StrongBuy">Strong Buy</string>
-    <string name="Coin_Analytics_Indicators_StrongSell">Strong Sell</string>
-    <string name="Coin_Analytics_Indicators_Sell">Sell</string>
-    <string name="Coin_Analytics_Indicators_Buy">Buy</string>
-    <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
-    <string name="Coin_Analytics_Indicators_NoData">No Data</string>
     <string name="ActivateSubscription_Title">활성화</string>
-    <string name="ActivateSubscription_Wallet">Wallet</string>
     <string name="ActivateSubscription_Address">주소</string>
-    <string name="ActivateSubscription_MessageToSign">Message to Sign</string>
-    <string name="ActivateSubscription_SignMessageDescription">You need to sign this message to activate your subscription.</string>
-    <string name="ActivateSubscription_NoSubscriptionError">Your wallet address does not have a subscription to premium features, you need to purchase it to activate the subscription.</string>
-    <string name="SubscriptionInfo_Title">Premium Features</string>
-    <string name="SubscriptionInfo_Analytics_Title">Cryptocurrency Analytics</string>
-    <string name="SubscriptionInfo_Analytics_Info">Access comprehensive market and on-chain stats about each token.</string>
-    <string name="SubscriptionInfo_Indicators_Title">Price Trend Indicators</string>
-    <string name="SubscriptionInfo_Indicators_Info">Discover uptrending tokens based on technical analysis indicators.</string>
-    <string name="SubscriptionInfo_PersonalSupport_Title">Personal Support</string>
-    <string name="SubscriptionInfo_PersonalSupport_Info">Contact our team directly over Telegram for personal assistance.</string>
-    <string name="SubscriptionInfo_GetPremium">Get Premium</string>
-    <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">평균 7일</string>
     <string name="Nfts_PriceType_Days_30">평균 30일</string>
@@ -1325,7 +944,6 @@
     <string name="Nfts_PriceMode">가격 모드</string>
     <string name="NftAsset_Overview">개요</string>
     <string name="NftAsset_Activity">활동</string>
-    <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">공유</string>
     <string name="NftAsset_Action_Save">저장</string>
     <string name="NftAsset_OwnedCount">가진 갯수</string>
@@ -1346,12 +964,7 @@
     <string name="NftAsset_TokenStandard">토큰 표준</string>
     <string name="NftAsset_Blockchain">블록 체인</string>
     <string name="NftAsset_Links_Website">웹사이트</string>
-    <string name="NftAsset_Links_OpenSea">OpenSea</string>
-    <string name="NftAsset_Links_Discord">Discord</string>
-    <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">OpenSea API 제공</string>
-    <string name="Nft_TopCollections">Top NFT Collections</string>
-    <string name="Nft_TopCollections_Description">Leading NFT collections by trading volume.</string>
     <!-- NFT Collection -->
     <string name="NftCollection_Overview">개요</string>
     <string name="NftCollection_Items">항목</string>
@@ -1360,7 +973,6 @@
     <string name="NftCollection_AveragePrice">모든 시간 평균</string>
     <string name="NftCollection_ItemsCount">%d 아이템</string>
     <string name="NftCollection_TodaysSales">오늘의 판매자</string>
-    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">NFT당 ~%s</string>
     <string name="NftCollection_Royalty">고귀함</string>
     <string name="NftCollection_InceptionDate">개시일</string>
@@ -1381,12 +993,6 @@
     <string name="NftCollection_EventType_Mint">민트</string>
     <string name="NftCollection_EventType_Unknown">알 수 없음</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Top Losers</string>
-    <string name="RateList_Posts">News</string>
-    <string name="Market_DaysAgo">%dd. ago</string>
-    <string name="Market_HoursAgo">%dh. ago</string>
-    <string name="Market_MinutesAgo">%dm. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">동기화 오류</string>
     <string name="BalanceSyncError_ButtonRetry">재시도</string>
@@ -1395,25 +1001,14 @@
     <string name="BalanceSyncError_ReportButtonExplanation">나중에 보고할 수 있도록 에러 텍스트가 클립보드에 복사됩니다.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">팔로우</string>
-    <string name="CoinPage_Chart_Locked">Locked</string>
-    <string name="ProUsersInfo_Title">Pro Users</string>
     <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
-    <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
-    <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
-    <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidity and Rank</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Active Addresses</string>
-    <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
     <string name="ProUsersInfo_Features_TxVolume">트랜잭션 거래량</string>
-    <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
     <string name="Hud_Text_LearnMore">추후 공개</string>
     <string name="Hud_Text_Activate">활성화</string>
-    <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - 경계 없이 사용. 중요한 시장 데이터, 분석 도구, 온체인 데이터를 기반으로 하는 유용한 차트를 보여줌으로써 프로젝트를 명확하게 볼 수 있습니다.</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">유형 선택</string>
     <string name="NftAssetActivity_Empty">아직 항목 활동이 없습니다</string>
-    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키 저장소 에러</string>
     <string name="Alert_KeysInvalidatedDescription">안드로이드 잠금 화면이 변경 되어 지갑을 보유한 암호화된 데이터가 최근에 무효화되었습니다.</string>
@@ -1479,7 +1074,6 @@
     <string name="CexDeposit_Title">침전 %s</string>
     <string name="CexDeposit_CopyAddress">주소 복사</string>
     <string name="CexDeposit_ShareAddress">주소 공유</string>
-    <string name="CexDeposit_Memo">Memo (Tag)</string>
     <string name="CexDeposit_Network">회로망</string>
     <string name="CexDeposit_AddressDescription">입금 주소: %s</string>
     <string name="CexDeposit_DepositWarning">이 주소로는 %s만 보내주세요. 다른 종류의 토큰을 이 주소로 보내면 최종적으로 손실이 발생합니다.</string>
