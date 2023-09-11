@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.badge
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.subscribeIO
@@ -33,7 +34,7 @@ class TokenBalanceViewModel(
     private val connectivityManager: ConnectivityManager,
 ) : ViewModel() {
 
-    private val title = wallet.token.coin.code
+    private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
     private val disposables = CompositeDisposable()
 
     private var balanceViewItem: BalanceViewItem? = null

@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -171,7 +172,7 @@ private fun TokenBalanceHeader(
             text = if (balanceViewItem.primaryValue.visible) balanceViewItem.primaryValue.value else "*****",
             color = if (balanceViewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
             style = ComposeAppTheme.typography.title2R,
-            maxLines = 1,
+            textAlign = TextAlign.Center,
         )
         VSpacer(height = 6.dp)
         if (balanceViewItem.syncingTextValue != null) {
