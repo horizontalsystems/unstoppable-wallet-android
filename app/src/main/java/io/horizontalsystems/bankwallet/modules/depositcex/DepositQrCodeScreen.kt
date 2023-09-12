@@ -118,7 +118,7 @@ fun DepositQrCodeScreen(
                     )
                 }
             ) {
-                Crossfade(targetState = uiState.loading) { loading ->
+                Crossfade(targetState = uiState.loading, label = "") { loading ->
                     Column(modifier = Modifier.padding(it)) {
                         if (loading) {
                             Loading()
@@ -165,6 +165,19 @@ fun DepositQrCodeScreen(
                                                 contentScale = ContentScale.FillWidth,
                                                 contentDescription = null
                                             )
+                                            Box(
+                                                modifier = Modifier
+                                                    .clip(RoundedCornerShape(8.dp))
+                                                    .background(ComposeAppTheme.colors.white)
+                                                    .size(40.dp),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Image(
+                                                    modifier = Modifier.size(32.dp),
+                                                    painter = painterResource(id = R.drawable.launcher_main_preview),
+                                                    contentDescription = null
+                                                )
+                                            }
                                         }
                                     }
                                     VSpacer(12.dp)
