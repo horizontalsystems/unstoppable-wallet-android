@@ -317,17 +317,7 @@
     <string name="CoinMarket_Title">%s Markets</string>
 
     <!--TVL Rank-->
-    <string name="TvlRank_Title">TVL Rank</string>
     <string name="TvlRank_MultiChain">Multi-Chain</string>
-    <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
-    <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
-    <string name="TvlRank_Field_All">All</string>
-    <string name="TvlRank_Field_Eth">Ethereum</string>
-    <string name="TvlRank_Field_Bsc">Binance</string>
-    <string name="TvlRank_Field_Sol">Solana</string>
-    <string name="TvlRank_Field_Ava">Avalanche</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
-    <string name="TvlRank_Filters_PopupTitle">Filters</string>
 
     <!--Balance-->
 
@@ -1103,10 +1093,10 @@
     <string name="Watch_TypeSolanaAddress">Solana Address</string>
     <string name="Watch_TypeTronAddress">Tron Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_TypeEvmAddress_Subtitle">(Ethereum, Binance, …)</string>
-    <string name="Watch_TypeSolanaAddress_Subtitle">(SOL, Solana tokens, …)</string>
-    <string name="Watch_TypeTronAddress_Subtitle">(TRX, Tron tokens, …)</string>
-    <string name="Watch_TypeXPubKey_Subtitle">(Bitcoin, Litecoin, …)</string>
+    <string name="Watch_TypeEvmAddress_Subtitle" translatable="false">(Ethereum, Binance, …)</string>
+    <string name="Watch_TypeSolanaAddress_Subtitle" translatable="false">(SOL, Solana tokens, …)</string>
+    <string name="Watch_TypeTronAddress_Subtitle" translatable="false">(TRX, Tron tokens, …)</string>
+    <string name="Watch_TypeXPubKey_Subtitle" translatable="false">(Bitcoin, Litecoin, …)</string>
     <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
 
     <!--Manage Account-->

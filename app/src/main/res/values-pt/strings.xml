@@ -268,17 +268,7 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">Rank TVL</string>
     <string name="TvlRank_MultiChain">Multi-Cadeia</string>
-    <string name="TvlRank_Field_HighestTvl">Maior capitalização</string>
-    <string name="TvlRank_Field_LowestTvl">Menor capitalização</string>
-    <string name="TvlRank_Field_All">Todas</string>
-    <string name="TvlRank_Field_Eth">Ethereum</string>
-    <string name="TvlRank_Field_Bsc">Binance</string>
-    <string name="TvlRank_Field_Sol">Solona</string>
-    <string name="TvlRank_Field_Ava">Avalache</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
-    <string name="TvlRank_Filters_PopupTitle">Filtros</string>
     <!--Balance-->
     <string name="Balance_Withdraw">Sacar</string>
     <string name="Balance_Title">Saldo</string>

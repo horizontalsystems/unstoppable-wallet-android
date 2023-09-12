@@ -268,17 +268,7 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s 市场</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">锁仓排名</string>
     <string name="TvlRank_MultiChain">多链</string>
-    <string name="TvlRank_Field_HighestTvl">最高锁仓</string>
-    <string name="TvlRank_Field_LowestTvl">最低锁仓</string>
-    <string name="TvlRank_Field_All">所有</string>
-    <string name="TvlRank_Field_Eth">Ethreum</string>
-    <string name="TvlRank_Field_Bsc">Binance</string>
-    <string name="TvlRank_Field_Sol">Solana</string>
-    <string name="TvlRank_Field_Ava">Avalanche</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
-    <string name="TvlRank_Filters_PopupTitle">过滤器</string>
     <!--Balance-->
     <string name="Balance_Withdraw">提取</string>
     <string name="Balance_Title">余额</string>

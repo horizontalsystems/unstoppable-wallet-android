@@ -268,17 +268,7 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">Rango TVL</string>
     <string name="TvlRank_MultiChain">Cadena múltiple</string>
-    <string name="TvlRank_Field_HighestTvl">TVL más alto</string>
-    <string name="TvlRank_Field_LowestTvl">TVL más bajo</string>
-    <string name="TvlRank_Field_All">Todo</string>
-    <string name="TvlRank_Field_Eth">Ethereum</string>
-    <string name="TvlRank_Field_Bsc">Binance</string>
-    <string name="TvlRank_Field_Sol">Solana</string>
-    <string name="TvlRank_Field_Ava">Avalanche</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
-    <string name="TvlRank_Filters_PopupTitle">Filtros</string>
     <!--Balance-->
     <string name="Balance_Withdraw">Retirar</string>
     <string name="Balance_Title">Saldo</string>
