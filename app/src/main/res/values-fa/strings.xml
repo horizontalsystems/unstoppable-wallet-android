@@ -180,7 +180,6 @@
     <string name="Send_TxSpeed_High">بالا</string>
     <string name="Send_TxSpeed_Recommended">توصیه شده</string>
     <string name="Send_TxSpeed_Custom">شخصی سازی</string>
-    <string name="Send_TxSpeed_CustomFeeHint">شنبه/بایت</string>
     <string name="Send_DialogFee">قیمت:</string>
     <string name="Send_DialogProceed">بعدي</string>
     <string name="Send_LockTime_Off">خاموش</string>
@@ -197,7 +196,6 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">تنظیمات قیمت</string>
     <string name="FeeSettings_Reset">تنظیم مجدد</string>
-    <string name="FeeSettings_GasLimit">محدودیت گاز</string>
     <string name="FeeSettings_GasPrice_Info">کارمزد تراکنش در شبکه بر حسب واحد گاز سنجیده می شود. قیمت گاز مبلغی است که کاربر مایل است برای هر واحد گاز هزینه کند. وقتی شبکه شلوغ است، قیمت گاز بالاست و وقتی خلوت است پایین. قیمت ناکافی گاز اغلب دلیلی برای معلق ماندن یک معامله برای مدت طولانی است.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">پرمخاطره</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">پرمخاطره</string>
@@ -536,7 +534,6 @@
     <string name="Hud_Text_EmailAddressCopied">آدرس ایمیل کپی شد</string>
     <string name="Hud_Added_To_Watchlist">به فهرست تماشا افزوده شد</string>
     <string name="Hud_Removed_from_Watchlist">از فهرست تماشا برداشته شد</string>
-    <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
@@ -688,7 +685,6 @@
     <string name="Coin_Analytics_Details">جزئیات</string>
     <string name="Coin_Analytics_Period_1h">۱ ساعت</string>
     <string name="ActivateSubscription_Address">آدرس</string>
-    <string name="Nfts_Title">NFTها</string>
     <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
     <string name="Nfts_PriceType_Days_30">30 دی اوت</string>
     <string name="Nfts_PriceType_LastSale">آخرین فروش</string>
