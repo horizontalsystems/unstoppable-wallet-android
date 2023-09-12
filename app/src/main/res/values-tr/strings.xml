@@ -8,8 +8,10 @@
     <string name="Alert_Close">Kapat</string>
     <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Alert_Restart">Yeniden başlat</string>
+    <string name="Suspended">SUSPENDED</string>
     <string name="Action_Undo">GERİ ALMA</string>
     <string name="Button_Show">Göster</string>
+    <string name="Button_Hide">Hide</string>
     <string name="Button_Cancel">İptal</string>
     <string name="Button_Next">İleri</string>
     <string name="Button_Enable">Etkinleştir</string>
@@ -52,6 +54,7 @@
     <string name="Button_SignUp">Üye olmak</string>
     <string name="Button_Submit">Onayla</string>
     <string name="Button_TryAgain">Tekrar deneyin</string>
+    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error">Hata</string>
     <string name="Any">Herhangi</string>
     <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
@@ -169,6 +172,7 @@
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
     <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
     <string name="Balance_AddCoin">Para Ekle</string>
@@ -184,6 +188,16 @@
     <string name="Balance_NoWalletAlert">Henüz cüzdan yok</string>
     <string name="Balance_NoCoinsAlert">Eklenmiş jetonunuz yok.\nKullanacağınız jetonları ekleyin</string>
     <string name="Balance_WatchAccount_NoBalance">Bu cüzdan adresinde bakiye bulunmuyor</string>
+    <string name="Balance_NoAssetsToSwap">Takas edilecek varlığınız yok.</string>
+    <string name="Balance_Network">Ağ</string>
+    <string name="Balance_NetworkSelectDescription">Bir ağ seçin ve para yatırmak için bir adres alın.</string>
+    <string name="Balance_ReceiveAddressHint">%s yatırmak için adresiniz</string>
+    <string name="Balance_ReceiveWatchAddressHint">%s adresini izle</string>
+    <string name="Balance_ReceiveWarningText">Bu adrese yalnızca %s gönderin. Bu adrese başka türden jetonların gönderilmesi nihai kayıplarına neden olacaktır.</string>
+    <string name="Balance_Receive_AddressFormat">Adres Formatı</string>
+    <string name="Balance_Receive_Account">Hesap</string>
+    <string name="Balance_Receive_NotActive">Aktif değil</string>
+    <string name="Balance_LockedAmount_Title">Kilitli</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Gönder</string>
     <string name="SendNft_Error_NotEnoughtBalance">Yetersiz bakiye</string>
@@ -197,6 +211,7 @@
     <string name="Send_Advanced">İleri düzey</string>
     <string name="Send_Hodler_Description">TimeLock yalnızca BIP44 adreslerine (1 ile başlar) göndermek için çalışır</string>
     <string name="Send_Confirmation_Title">Onayla</string>
+    <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
     <string name="Send_Confirmation_Amount">Tutar</string>
     <string name="Send_Confirmation_To">Alan</string>
@@ -224,6 +239,7 @@
     <string name="Send_TxSpeed_High">Hızlı</string>
     <string name="Send_TxSpeed_Recommended">Tavsiye Edilen</string>
     <string name="Send_TxSpeed_Custom">Özel</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogProceed">İleri</string>
     <string name="Send_LockTime_Off">Kapat</string>
@@ -255,7 +271,9 @@
     <string name="FeeSettings_Fee_Info">Bu işlem için ödenecek maksimum tahmini işlem ücreti, aşağıdaki gaz limiti, maksimum ücret oranı ve maksimum öncelik ücreti değerlerine göre hesaplanır. Ödenen gerçek ücret normalde daha düşük olacaktır.</string>
     <string name="FeeSettings_NetworkFee">Ağ Ücreti</string>
     <string name="FeeSettings_NetworkFee_Info">Ağda belirli bir işlemi göndermenin tahmini maliyeti.</string>
+    <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">İşlem karmaşıklığı \"gaz\" adı verilen birimlerle ölçülür. Yürütülen akıllı sözleşmeye bağlı olarak değişir. Gaz Limiti, onu yürütmek için gereken tahmini maksimum gazdır. Kullanılan gerçek gaz normalde daha düşük olacaktır.</string>
+    <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
     <string name="FeeSettings_BaseFee">Baz Ücret</string>
     <string name="FeeSettings_BaseFee_Info">Ağ protokolü, her blok için gaz başına taban fiyatı belirler ve buna baz ücret oranı denir. Bloktan bloğa ağ kullanım seviyesine göre değişir. Bir sonraki blokta% 12,5\'ten fazla artamaz veya azalabilir ve bu da ücretleri daha öngörülebilir hale getirir. Burada gösterilen değer, geçerli bloğun temel ücret oranıdır.</string>
@@ -320,6 +338,7 @@
     <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
     <string name="WalletConnect_Disconnecting">Bağlantı kesiliyor</string>
     <string name="WalletConnect_SignMessageRequest_Title">İmza Talebi</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Lütfen doğrulamak için bir mesajı imzalayın</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
@@ -345,6 +364,8 @@
     <string name="WalletConnect_NotSupportedDescription">Mevcut cüzdan türünüz %s WalletConnect\'i desteklemiyor</string>
     <string name="WalletConnect_Unnamed">İsimsiz</string>
     <string name="WalletConnect_DAppUnknown">Bilinmeyen dApp</string>
+    <string name="WalletConnect_Pairings">Pairings</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Hepsini Sil</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Eşleştirilmiş tüm dAps\'leri silmek istiyor musunuz?</string>
     <string name="WalletConnect_Pairings_Delete">Sil</string>
@@ -402,6 +423,7 @@
     <string name="Swap_AmountEstimated">(tah)</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
+    <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Ayarları</string>
     <string name="SwapSettings_Service">Hizmet</string>
@@ -462,6 +484,8 @@
     <string name="Transactions_Completed">Tamamlandı</string>
     <string name="Transactions_Processing">İşleniyor</string>
     <string name="Transactions_Send">Gönder</string>
+    <string name="Transactions_Burn">Burn</string>
+    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Onayla</string>
     <string name="Transactions_Swap">Takas</string>
     <string name="Transactions_Failed">Başarısız</string>
@@ -560,11 +584,16 @@
     <string name="Settings_Privacy">Gizlilik</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_AppStatus">Uygulama Durumu</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
     <string name="Settings_Appearance">Görünüm</string>
     <string name="Settings_Contact_ViaTelegram">Telegram aracılığıyla</string>
     <string name="Settings_Contact_ViaEmail">E-posta yoluyla</string>
+    <string name="Settings_PersonalSupport">Personal Support</string>
+    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
+    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
+    <string name="Settings_PersonalSupport_Account">Hesap</string>
     <string name="Settings_PersonalSupport_Request">İstek</string>
     <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
     <string name="Settings_Donate">Bağış yapmak</string>
@@ -824,6 +853,7 @@
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_Blockchain">Blockchains</string>
+    <string name="ExtendedKey_Account">Hesap</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Gizli Anahtar</string>
@@ -949,6 +979,7 @@
     <string name="Coin_Analytics_Period_1h">1 saat</string>
     <string name="ActivateSubscription_Address">Adres</string>
     <string name="SubscriptionInfo_Title">Premium Ayrıcalıkları</string>
+    <string name="SubscriptionInfo_PersonalSupport_Title">Personal Support</string>
     <string name="Nfts_Title">NFT\'ler</string>
     <string name="Nfts_PriceType_Days_7">Ortalama 7G</string>
     <string name="Nfts_PriceType_Days_30">Ortalama 30G</string>
@@ -1006,6 +1037,7 @@
     <string name="NftCollection_EventType_Custom">Özel</string>
     <string name="NftCollection_EventType_Payout">Ödeme</string>
     <string name="NftCollection_EventType_BulkCancel">Toplu İptal</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
     <!-- Balance Sync Error -->
@@ -1016,6 +1048,7 @@
     <string name="BalanceSyncError_ReportButtonExplanation">Bildirmeye karar verirseniz hata metni clipboardnıza kopyalanır.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">Bizi Takip Et</string>
+    <string name="CoinPage_Chart_Locked">Kilitli</string>
     <string name="ProUsersInfo_Features_Authenticating">Doğrulanıyor...</string>
     <string name="Hud_Text_LearnMore">Çok Yakında</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, and useful charts based on on-chain data that will help give you a clear view of projects</string>
