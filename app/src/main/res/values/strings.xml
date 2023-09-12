@@ -351,6 +351,7 @@
     <string name="Balance_NoAssetsToSend">You have no assets to send.</string>
     <string name="Balance_NoAssetsToSwap">You have no assets to swap.</string>
     <string name="Balance_Network">Network</string>
+    <string name="Balance_Format">Format</string>
     <string name="Balance_NetworkSelectDescription">Choose network to get an address to receive.</string>
     <string name="Balance_ReceiveAddressHint">Your address for depositing %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Watch address of %s</string>
