@@ -5,15 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.ICexProvider
 import cash.p.terminal.modules.balance.BalanceSortType
-import cash.p.terminal.modules.balance.BalanceViewHelper
+import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewType
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
 import cash.p.terminal.modules.balance.BalanceXRateRepository
@@ -32,6 +29,7 @@ class BalanceCexViewModel(
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
     private val balanceViewTypeManager: BalanceViewTypeManager,
+    private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceCexRepository: BalanceCexRepositoryWrapper,
     private val xRateRepository: BalanceXRateRepository,
     private val balanceCexSorter: BalanceCexSorter,
@@ -40,13 +38,11 @@ class BalanceCexViewModel(
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
 
-    val sortTypes =
-        listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
+    val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     private var sortType = localStorage.sortType
 
     private val currency by xRateRepository::baseCurrency
 
-    private var expandedItemId: String? = null
     private var isRefreshing = false
     private var viewItems = mutableListOf<BalanceCexViewItem>()
     private var isActiveScreen = false
@@ -178,65 +174,17 @@ class BalanceCexViewModel(
         totalBalance.setTotalServiceItems(totalServiceItems)
     }
 
-    private fun lockedCoinValue(
-        balance: BigDecimal,
-        hideBalance: Boolean,
-        coinDecimals: Int,
-        coinCode: String
-    ): DeemedValue<String> {
-        val visible = !hideBalance && balance > BigDecimal.ZERO
-        val value = App.numberFormatter.formatCoinFull(balance, coinCode, coinDecimals)
-
-        return DeemedValue(value, false, visible)
-    }
-
     private fun createBalanceCexViewItem(
         cexAsset: CexAsset,
         latestRate: CoinPrice?
     ): BalanceCexViewItem {
-        val expanded = cexAsset.id == expandedItemId
-        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
-            balance = cexAsset.freeBalance + cexAsset.lockedBalance,
-            visible = !balanceHidden,
-            fullFormat = expanded,
-            coinDecimals = cexAsset.decimals,
-            dimmed = false,
-            coinPrice = latestRate,
-            currency = currency,
-            balanceViewType = balanceViewType
-        )
-        val fiatLockedVisibility = !balanceHidden && cexAsset.lockedBalance > BigDecimal.ZERO
-
-        return BalanceCexViewItem(
-            coinIconUrl = cexAsset.coin?.imageUrl,
-            coinIconPlaceholder = R.drawable.coin_placeholder,
-            coinCode = cexAsset.id,
-            badge = null,
-            primaryValue = primaryValue,
-            exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
-            diff = latestRate?.diff,
-            secondaryValue = secondaryValue,
-            coinValueLocked = lockedCoinValue(
-                balance = cexAsset.lockedBalance,
-                hideBalance = balanceHidden,
-                coinDecimals = cexAsset.decimals,
-                coinCode = cexAsset.id
-            ),
-            fiatValueLocked = BalanceViewHelper.currencyValue(
-                balance = cexAsset.lockedBalance,
-                coinPrice = latestRate,
-                visible = fiatLockedVisibility,
-                fullFormat = true,
-                currency = currency,
-                dimmed = false
-            ),
-            expanded = expanded,
-            coinUid = cexAsset.coin?.uid,
-            assetId = cexAsset.id,
+        return balanceViewItemFactory.cexViewItem(
             cexAsset = cexAsset,
-            coinPrice = latestRate,
-            depositEnabled = cexAsset.depositEnabled,
-            withdrawEnabled = cexAsset.withdrawEnabled,
+            currency = currency,
+            latestRate = latestRate,
+            hideBalance = balanceHidden,
+            balanceViewType = balanceViewType,
+            fullFormat = false
         )
     }
 
@@ -287,19 +235,6 @@ class BalanceCexViewModel(
             emitState()
         }
     }
-
-    fun onClickItem(viewItem: BalanceCexViewItem) {
-        expandedItemId = when (viewItem.assetId) {
-            expandedItemId -> null
-            else -> viewItem.assetId
-        }
-
-        viewItems = viewItems.map {
-            it.copy(expanded = it.assetId == expandedItemId)
-        }.toMutableList()
-
-        emitState()
-    }
 }
 
 data class UiState(
@@ -319,9 +254,8 @@ data class BalanceCexViewItem(
     val exchangeValue: DeemedValue<String>,
     val diff: BigDecimal?,
     val secondaryValue: DeemedValue<String>,
-    val coinValueLocked: DeemedValue<String>,
+    val coinValueLocked: DeemedValue<String?>,
     val fiatValueLocked: DeemedValue<String>,
-    val expanded: Boolean,
     val coinUid: String?,
     val assetId: String,
     val coinPrice: CoinPrice?,

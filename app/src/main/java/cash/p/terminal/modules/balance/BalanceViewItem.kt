@@ -7,12 +7,15 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.swappable
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
@@ -300,4 +303,72 @@ class BalanceViewItemFactory {
             isWatchAccount = watchAccount
         )
     }
+
+    fun cexViewItem(
+        cexAsset: CexAsset,
+        currency: Currency,
+        latestRate: CoinPrice?,
+        hideBalance: Boolean,
+        balanceViewType: BalanceViewType,
+        fullFormat: Boolean
+    ): BalanceCexViewItem {
+        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
+            balance = cexAsset.freeBalance + cexAsset.lockedBalance,
+            visible = !hideBalance,
+            fullFormat = fullFormat,
+            coinDecimals = cexAsset.decimals,
+            dimmed = false,
+            coinPrice = latestRate,
+            currency = currency,
+            balanceViewType = balanceViewType
+        )
+        val fiatLockedVisibility = !hideBalance && cexAsset.lockedBalance > BigDecimal.ZERO
+
+        return BalanceCexViewItem(
+            coinIconUrl = cexAsset.coin?.imageUrl,
+            coinIconPlaceholder = R.drawable.coin_placeholder,
+            coinCode = cexAsset.id,
+            badge = null,
+            primaryValue = primaryValue,
+            exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
+            diff = latestRate?.diff,
+            secondaryValue = secondaryValue,
+            coinValueLocked = lockedCoinValue(
+                balance = cexAsset.lockedBalance,
+                hideBalance = hideBalance,
+                coinDecimals = cexAsset.decimals,
+                coinCode = cexAsset.id
+            ),
+            fiatValueLocked = BalanceViewHelper.currencyValue(
+                balance = cexAsset.lockedBalance,
+                coinPrice = latestRate,
+                visible = fiatLockedVisibility,
+                fullFormat = fullFormat,
+                currency = currency,
+                dimmed = false
+            ),
+            coinUid = cexAsset.coin?.uid,
+            assetId = cexAsset.id,
+            cexAsset = cexAsset,
+            coinPrice = latestRate,
+            depositEnabled = cexAsset.depositEnabled,
+            withdrawEnabled = cexAsset.withdrawEnabled,
+        )
+    }
+
+    private fun lockedCoinValue(
+        balance: BigDecimal,
+        hideBalance: Boolean,
+        coinDecimals: Int,
+        coinCode: String
+    ): DeemedValue<String?> {
+        if (balance <= BigDecimal.ZERO) {
+            return DeemedValue(null, false, false)
+        }
+        val visible = !hideBalance
+        val value = App.numberFormatter.formatCoinFull(balance, coinCode, coinDecimals)
+
+        return DeemedValue(value, false, visible)
+    }
+
 }
