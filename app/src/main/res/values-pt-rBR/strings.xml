@@ -272,6 +272,18 @@
     <string name="Balance_NoWalletAlert">Você ainda não tem nenhuma carteira instalada.\nCrie uma nova carteira ou restaure uma já existente </string>
     <string name="Balance_NoCoinsAlert">Você não tem moedas adicionadas.\nAdicione as moedas que você usará</string>
     <string name="Balance_WatchAccount_NoBalance">Este endereço da carteira não tem nenhum saldo</string>
+    <string name="Balance_NoAssetsToSend">Você não tem ativos para enviar.</string>
+    <string name="Balance_NoAssetsToSwap">Você não tem nenhum ativo para trocar.</string>
+    <string name="Balance_Network">Rede</string>
+    <string name="Balance_NetworkSelectDescription">Escolha rede para receber um endereço.</string>
+    <string name="Balance_ReceiveAddressHint">Seu endereço para o depósito %s</string>
+    <string name="Balance_ReceiveWatchAddressHint">Endereço do relógio do %s</string>
+    <string name="Balance_ReceiveWarningText">Envie apenas %s para este endereço. Enviar outros tipos de tokens para este endereço resultará em sua perda suprema.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Selecione um formato de endereço para obter um endereço a receber.</string>
+    <string name="Balance_Receive_AddressFormat">Formato do Endereço</string>
+    <string name="Balance_Receive_Account">Conta</string>
+    <string name="Balance_Receive_NotActive">Não ativo</string>
+    <string name="Balance_LockedAmount_Title">Bloqueado</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <string name="SendNft_Error_NotEnoughtBalance">Saldo insuficiente</string>
@@ -580,6 +592,7 @@
     <string name="TransactionInfo_Approval">Aprovação de troca</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Date">Data</string>
+    <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Serviço</string>
     <string name="TransactionInfo_RawTransaction">Transação bruta</string>
     <string name="TransactionInfo_ContactName">Nome do Contato</string>
@@ -641,6 +654,7 @@
     <string name="Settings_Title">Configurações</string>
     <string name="Settings_SecurityCenter">Segurança</string>
     <string name="Settings_Notifications">Notificações</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Moeda base</string>
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_Theme">Tema</string>
@@ -648,13 +662,17 @@
     <string name="Settings_Privacy">Privacidade</string>
     <string name="Settings_ShareThisWallet">Indique para amigos</string>
     <string name="Settings_AppStatus">Status do app</string>
+    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Avalie-Nos</string>
     <string name="Settings_LaunchScreen">Tela Inicial</string>
     <string name="Settings_Appearance">Aparência</string>
+    <string name="Settings_Contact_ViaTelegram">via Telegram</string>
+    <string name="Settings_Contact_ViaEmail">via E-mail</string>
     <string name="Settings_PersonalSupport">Suporte Pessoal</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Digite seu nome de conta Telegram para começar um chat de suporte pessoal com a nossa equipe. Entraremos em contato com você e começaremos a trabalhar em seu problema assim que virmos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Você já pediu um chat privado, encontre-o no Telegram</string>
     <string name="Settings_PersonalSupport_Account">Conta</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Solicitado</string>
     <string name="Settings_PersonalSupport_Request">Solicitar</string>
     <string name="Settings_PersonalSupport_NewRequest">Nova solicitação</string>
@@ -662,6 +680,8 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">Juntos, com o seu apoio, podemos fazer este aplicativo ainda melhor!</string>
     <string name="Settings_Donate">Doar</string>
+    <string name="Settings_Donate_GetAddress">Obter endereço</string>
+    <string name="Settings_Donate_Addresses">Endereços</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">DEFINIÇÕES DO TAB</string>
     <string name="Appearance_LaunchScreen">TELA DE INÍCIO</string>
@@ -685,6 +705,7 @@
     <string name="Privacy_BulletedText3">A carteira não coleta nenhum dado sobre os usuários.</string>
     <string name="Privacy_BulletedText4">Não há nenhuma conta de usuário ou banco de dados mantendo os dados do usuário em algum lugar.</string>
     <!-- Security Center -->
+    <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Adicionar novo</string>
     <string name="EvmNetwork_Added">Adicionado</string>
@@ -789,6 +810,8 @@
     <string name="Hud_Already_In_Wallet">Já adicionado à carteira</string>
     <string name="Hud_Removed_from_Watchlist">Removido da Lista</string>
     <string name="Hud_Removed">Removido</string>
+    <string name="Hud_UnknownError">%s</string>
+    <string name="Hud_WaitForSynchronization">Aguarde a sincronização</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gerenciador de Moedas</string>
     <string name="ManageCoins_Search">Nome, código ou endereço do contrato</string>
@@ -810,6 +833,7 @@
 \nEmbora a carteira Unstoppable suporte ambos, recomenda-se usar uma carteira Bitcoin Cash operando no formato TYPE145.</string>
     <string name="ManageCoins_ContractAddress">ENDEREÇO DE CONTRACT</string>
     <!-- Experimental Feature -->
+    <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Os recursos abaixo são experimentais e devem ser usados com cautela. Enquanto nós testamos minuciosamente esses recursos usando nossos próprios fundos cripto, nós não podemos garantir que eles funcionarão como esperado em todos os casos possíveis.</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Isso permite que você envie Bitcoins que não podem ser gastos até uma data especificada. \n\nO destinatário de tais transações deve usar o aplicativo de carteira Unstoppable versão 0.10 ou mais recente, com o formato de endereço BIP44 para Bitcoin. \n\nSomente a carteira Unstoppable pode identificar corretamente tais transações na rede Bitcoin, bem como permitir que o receptor gaste esses Bitcoins após o período de bloqueio expirar. \n\nSe você é um HOLDER, você pode usar este recurso para se forçar a manter seus Bitcoins enviando tais transações para si mesmo. \n\nSendo um recurso experimental, o valor máximo por transação é limitado a 0,5 BTC.</string>
@@ -871,6 +895,7 @@
     <string name="ManageAccount_WatchAddresses">Observar endereços</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Selecione a carteira para troca rápida</string>
     <string name="ManageAccount_DeleteWarning">Você quer parar de acompanhar este endereço da carteira?</string>
+    <string name="Balance_Receive_BackupRequired_Description">Você precisa fazer backup de %1$s</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Configurações de Rede</string>
     <string name="NetworkSettings_SwithesAutomatically">muda automaticamente</string>
@@ -894,6 +919,7 @@
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Carteira de Backup</string>
     <string name="BackupRecoveryPhrase_Description">Fazer backup desta carteira criando uma cópia de sua frase de recuperação. Será necessário para acessar a carteira se seu telefone for perdido, roubado, quebrado, etc.</string>
+    <string name="BackupRecoveryPhrase_Backup">Backup</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Backup Manual</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Backup Local</string>
     <string name="BackupRecoveryPhrase_Later">Mais tarde</string>
@@ -922,6 +948,7 @@
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">Chave Raiz BIP32</string>
     <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
     <string name="ExtendedKey_Purpose">Propósito</string>
     <string name="ExtendedKey_Account">Conta</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Toque para mostrar a chave privada</string>
@@ -948,7 +975,9 @@
     <string name="RecoveryPhraseVerify_Title">Verificar</string>
     <string name="RecoveryPhraseVerify_Description">Selecione duas palavras solicitadas da sua frase de recuperação de carteira</string>
     <!-- Backup Key -->
+    <string name="BackupKey_Title">Backup</string>
     <string name="BackupKey_Description">As frases de recuperação que serão mostradas a seguir são a única maneira de restaurar seus fundos caso seu telefone seja perdido, roubado, quebrado etc.\n\nCertifique-se de que ninguém está olhando para sua tela.</string>
+    <string name="BackupKey_ButtonBackup">Backup</string>
     <string name="BackupConfirmKey_Description">Digite as frases de recuperação na ordem correta para confirmar</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">As palavras inseridas estão vazias ou inválidas</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Palavra vazia</string>
@@ -983,10 +1012,12 @@
     <string name="AddToken_Symbol">Símbolo</string>
     <string name="AddToken_CoinCode">Código da Moeda</string>
     <string name="AddToken_Decimals">Decimais</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Coin Type(s)</string>
     <string name="AddToken_AlreadyAdded">JÁ ADICIONADO</string>
     <string name="AddToken_AddressOrSymbol">Endereço do Contrato</string>
     <string name="AddToken_ChooseToken">Escolha os tokens</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token já está na lista de moedas</string>
     <string name="AddToken_InvalidContractAddress">Endereço do contrato inválido</string>
     <string name="AddToken_InvalidBep2Symbol">Símbolo BEP2 inválido</string>
@@ -1010,6 +1041,7 @@
     <string name="Tor_Connection_Title">Conexão</string>
     <string name="Tor_Connection_Enable">Ativar Tor</string>
     <string name="Tor_Connection_Disable">Desativar Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Iniciando o Tor...</string>
     <string name="Tor_Status_Error">Erro ao iniciar o Tor!</string>
     <string name="TorPage_Connecting">Conectando Tor…</string>
@@ -1023,6 +1055,7 @@
     <string name="Coin_Tab_Overview">Preço</string>
     <string name="Coin_Tab_Market">Mercados</string>
     <string name="Coin_Tab_Details">Análises</string>
+    <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">HOJE</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2S</string>
     <string name="CoinPage_TimeDuration_Year">1A</string>
@@ -1058,8 +1091,10 @@
     <string name="CoinPage_Categories">Categorias</string>
     <string name="CoinPage_Contracts">Contratos</string>
     <string name="CoinPage_CoinTypes">Tipos de moeda</string>
+    <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guia</string>
     <string name="CoinPage_Website">Site</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NotAvailable">Nenhum twitter disponível</string>
     <string name="CoinPage_Twitter_NoTweets">Não há tweets ainda</string>
     <string name="CoinPage_Twitter_Quoted">Citação @%s</string>
@@ -1257,9 +1292,11 @@
     <string name="NftAsset_Properties">Propriedades</string>
     <string name="NftAsset_Description">Descrição</string>
     <string name="NftAsset_Details">Detalhes</string>
+    <string name="NftAsset_Links">Links</string>
     <string name="NftAsset_ContractAddress">Endereço do Contrato</string>
     <string name="NftAsset_TokenId">ID do Token</string>
     <string name="NftAsset_TokenStandard">Critérios do Token</string>
+    <string name="NftAsset_Blockchain">Blockchain</string>
     <string name="NftAsset_Links_Website">Site</string>
     <string name="PoweredBy_OpenSeaAPI">Desenvolvido por API do OpenSea</string>
     <string name="Nft_TopCollections">Principais Coleções NFT</string>
