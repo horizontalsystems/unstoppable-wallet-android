@@ -351,6 +351,9 @@
     <fragment
         android:id="@+id/tokenBalanceFragment"
         android:name="io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment" />
+    <fragment
+        android:id="@+id/cexAssetFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.balance.cex.asset.CexAssetFragment" />
     <dialog
         android:id="@+id/wcErrorNoAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />

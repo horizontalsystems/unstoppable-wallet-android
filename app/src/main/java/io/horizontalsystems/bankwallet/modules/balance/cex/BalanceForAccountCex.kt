@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.balance.cex
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -30,12 +28,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
+import io.horizontalsystems.bankwallet.modules.balance.cex.asset.CexAssetFragment
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceSortingSelector
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceTitleRow
 import io.horizontalsystems.bankwallet.modules.balance.ui.TotalBalanceRow
 import io.horizontalsystems.bankwallet.modules.balance.ui.wallets
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.depositcex.DepositCexFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -139,9 +136,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                 items = uiState.viewItems,
                                 key = { it.assetId },
                             ) { item ->
-                                BalanceCardCex(navController, item) {
-                                    viewModel.onClickItem(item)
-                                }
+                                BalanceCardCex(navController, item)
                             }
                         }
                     }
@@ -155,8 +150,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
 @Composable
 fun BalanceCardCex(
     navController: NavController,
-    viewItem: BalanceCexViewItem,
-    onClick: () -> Unit
+    viewItem: BalanceCexViewItem
 ) {
     Column(
         modifier = Modifier
@@ -167,7 +161,12 @@ fun BalanceCardCex(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = onClick
+                onClick = {
+                    navController.slideFromRight(
+                        R.id.cexAssetFragment,
+                        CexAssetFragment.prepareParams(viewItem.cexAsset)
+                    )
+                }
             )
     ) {
         CellMultilineClear(height = 64.dp) {
@@ -268,14 +267,11 @@ fun BalanceCardCex(
                 Spacer(modifier = Modifier.width(16.dp))
             }
         }
-
-        ExpandableContentCex(viewItem, navController)
     }
 }
 
-
 @Composable
-private fun WalletIconCex(iconUrl: String?, placeholder: Int) {
+fun WalletIconCex(iconUrl: String?, placeholder: Int) {
     Box(
         modifier = Modifier
             .width(64.dp)
@@ -290,109 +286,3 @@ private fun WalletIconCex(iconUrl: String?, placeholder: Int) {
         )
     }
 }
-
-
-@Composable
-private fun ExpandableContentCex(
-    viewItem: BalanceCexViewItem,
-    navController: NavController
-) {
-    AnimatedVisibility(
-        visible = viewItem.expanded,
-        enter = expandVertically() + fadeIn(),
-        exit = shrinkVertically() + fadeOut()
-    ) {
-        Column {
-            LockedValueRow(viewItem)
-            Divider(
-                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 6.dp),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-            ButtonsRowCex(viewItem, navController)
-        }
-    }
-}
-
-@Composable
-private fun LockedValueRow(viewItem: BalanceCexViewItem) {
-    AnimatedVisibility(
-        visible = viewItem.coinValueLocked.visible,
-        enter = expandVertically() + fadeIn(),
-        exit = shrinkVertically() + fadeOut()
-    ) {
-        Column {
-            Divider(
-                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 6.dp),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-            Row(
-                modifier = Modifier
-                    .height(25.dp)
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_lock_16),
-                    contentDescription = "lock icon"
-                )
-                Text(
-                    modifier = Modifier.padding(start = 6.dp),
-                    text = viewItem.coinValueLocked.value,
-                    color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = viewItem.fiatValueLocked.value,
-                    color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun ButtonsRowCex(viewItem: BalanceCexViewItem, navController: NavController) {
-
-    Row(
-        modifier = Modifier.padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ButtonPrimaryYellow(
-            modifier = Modifier.weight(1f),
-            title = stringResource(R.string.Balance_Withdraw),
-            enabled = viewItem.withdrawEnabled,
-            onClick = {},
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        ButtonPrimaryDefault(
-            modifier = Modifier.weight(1f),
-            title = stringResource(R.string.Balance_Deposit),
-            enabled = viewItem.depositEnabled,
-            onClick = {
-                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(viewItem.cexAsset))
-            },
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        ButtonPrimaryCircle(
-            icon = R.drawable.ic_chart_24,
-            contentDescription = stringResource(R.string.Coin_Info),
-            enabled = viewItem.coinUid != null,
-            onClick = {
-                viewItem.coinUid?.let { coinUid ->
-                    navController.slideFromRight(
-                        R.id.coinFragment,
-                        CoinFragment.prepareParams(coinUid)
-                    )
-                }
-            },
-        )
-    }
-}
-

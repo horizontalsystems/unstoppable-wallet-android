@@ -1207,7 +1207,7 @@
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Public Keys</string>
     <string name="PublicKeys_EvmAddress">EVM Address</string>
-    <string name="PublicKeys_AccountExtendedPublicKey"translatable="false">Account Extended Public Key</string>
+    <string name="PublicKeys_AccountExtendedPublicKey" translatable="false">Account Extended Public Key</string>
     <string name="PublicKeys_EvmAddress_Description">Allows read-only monitoring of wallets holding assets on Ethereum, Binance Smart Chain and other EVM based blockchains.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Allows read-only monitoring of wallets holding Bitcoin and other UTXO based crypto (i.e Litecoin, Bitcoin Cash, Dash etc.).</string>
 
