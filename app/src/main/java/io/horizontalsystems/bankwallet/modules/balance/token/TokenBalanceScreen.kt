@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +44,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
@@ -58,7 +60,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -190,13 +194,15 @@ private fun TokenBalanceHeader(
         }
         VSpacer(height = 24.dp)
         ButtonsRow(viewItem = balanceViewItem, navController = navController, viewModel = viewModel)
-        LockedBalanceCell(balanceViewItem)
+        LockedBalanceCell(balanceViewItem, navController)
     }
 }
 
 @Composable
-private fun LockedBalanceCell(balanceViewItem: BalanceViewItem) {
+private fun LockedBalanceCell(balanceViewItem: BalanceViewItem, navController: NavController) {
     if (balanceViewItem.coinValueLocked.value != null) {
+        val infoTitle = stringResource(R.string.Info_LockTime_Title)
+        val infoText = stringResource(R.string.Info_LockTime_Description_Static)
         VSpacer(height = 8.dp)
         RowUniversal(
             modifier = Modifier
@@ -210,6 +216,19 @@ private fun LockedBalanceCell(balanceViewItem: BalanceViewItem) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+            HSpacer(8.dp)
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+                    navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(infoTitle, infoText))
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
             Spacer(Modifier.weight(1f))
             Text(
                 modifier = Modifier.padding(start = 6.dp),
