@@ -318,6 +318,7 @@
     <string name="Balance_ReceiveWatchAddressHint">Отслеживаемый адрес %s</string>
     <string name="Balance_ReceiveWarningText">Отправка только %s на этот адрес. Отправка других типов токенов на этот адрес приведет к их окончательной потере.</string>
     <string name="Balance_Receive_AddressFormatDescription">Выберите формат адреса для получения адреса.</string>
+    <string name="Balance_Receive_AddressFormat">Формат адреса</string>
     <string name="Balance_Receive_Account">Аккаунт</string>
     <string name="Balance_Receive_NotActive">Не активен</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
