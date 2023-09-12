@@ -87,41 +87,41 @@ fun TokenBalanceScreen(
             )
         }
     ) { paddingValues ->
-            val transactionItems = uiState.transactions
-            if (transactionItems.isNullOrEmpty()) {
-                Column(Modifier.padding(paddingValues)) {
-                    uiState.balanceViewItem?.let {
-                        TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
-                    }
-                    if (transactionItems == null) {
-                        ListEmptyView(
-                            text = stringResource(R.string.Transactions_WaitForSync),
-                            icon = R.drawable.ic_clock
-                        )
-                    } else {
-                        ListEmptyView(
-                            text = stringResource(R.string.Transactions_EmptyList),
-                            icon = R.drawable.ic_outgoingraw
-                        )
-                    }
+        val transactionItems = uiState.transactions
+        if (transactionItems.isNullOrEmpty()) {
+            Column(Modifier.padding(paddingValues)) {
+                uiState.balanceViewItem?.let {
+                    TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
                 }
-            } else {
-                val listState = rememberLazyListState()
-                LazyColumn(Modifier.padding(paddingValues), state = listState) {
-                    item {
-                        uiState.balanceViewItem?.let {
-                            TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
-                        }
-                    }
-
-                    transactionList(
-                        transactionsMap = transactionItems,
-                        willShow = { viewModel.willShow(it) },
-                        onClick = { onTransactionClick(it, viewModel, transactionsViewModel, navController) },
-                        onBottomReached = { viewModel.onBottomReached() }
+                if (transactionItems == null) {
+                    ListEmptyView(
+                        text = stringResource(R.string.Transactions_WaitForSync),
+                        icon = R.drawable.ic_clock
+                    )
+                } else {
+                    ListEmptyView(
+                        text = stringResource(R.string.Transactions_EmptyList),
+                        icon = R.drawable.ic_outgoingraw
                     )
                 }
             }
+        } else {
+            val listState = rememberLazyListState()
+            LazyColumn(Modifier.padding(paddingValues), state = listState) {
+                item {
+                    uiState.balanceViewItem?.let {
+                        TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
+                    }
+                }
+
+                transactionList(
+                    transactionsMap = transactionItems,
+                    willShow = { viewModel.willShow(it) },
+                    onClick = { onTransactionClick(it, viewModel, transactionsViewModel, navController) },
+                    onBottomReached = { viewModel.onBottomReached() }
+                )
+            }
+        }
     }
 
 }
@@ -130,7 +130,7 @@ fun TokenBalanceScreen(
 private fun onTransactionClick(
     transactionViewItem: TransactionViewItem,
     tokenBalanceViewModel: TokenBalanceViewModel,
-    transactionsViewModel  : TransactionsViewModel,
+    transactionsViewModel: TransactionsViewModel,
     navController: NavController
 ) {
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
@@ -148,19 +148,19 @@ private fun TokenBalanceHeader(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 18.dp, end = 18.dp, top = 18.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        VSpacer(height = (24.dp))
         WalletIcon(
             viewItem = balanceViewItem,
             viewModel = viewModel,
             navController = navController,
         )
-        VSpacer(height = 6.dp)
+        VSpacer(height = 12.dp)
         Text(
             modifier = Modifier
+                .padding(horizontal = 16.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
@@ -313,8 +313,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
     }
 
     Row(
-        modifier = Modifier.padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 4.dp, bottom = 16.dp)
     ) {
         if (viewItem.isWatchAccount) {
             ButtonPrimaryDefault(

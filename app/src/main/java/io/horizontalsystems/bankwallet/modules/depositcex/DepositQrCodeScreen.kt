@@ -57,8 +57,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -283,9 +282,9 @@ private fun DetailCell(
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
-        body_grey(title)
+        subhead2_grey(title)
         HSpacer(16.dp)
-        body_leah(
+        subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value,
             textAlign = TextAlign.End,
