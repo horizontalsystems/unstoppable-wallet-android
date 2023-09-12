@@ -286,6 +286,7 @@
     <string name="Balance_Withdraw">Вывод средств</string>
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
+    <string name="Balance_Swap">Обменять</string>
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Receive">Получить</string>
     <string name="Balance_Address">Адрес</string>
@@ -309,6 +310,17 @@
     <string name="Balance_NoWalletAlert">У вас пока нет установленных кошельков.\nСоздайте новый кошелек или восстановите существующий кошелек </string>
     <string name="Balance_NoCoinsAlert">У вас нет добавленных монет.\nДобавьте монеты, которые вы будете использовать</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
+    <string name="Balance_NoAssetsToSend">У вас нет активов для отправки.</string>
+    <string name="Balance_NoAssetsToSwap">У вас нет активов для обмена.</string>
+    <string name="Balance_Network">Сеть</string>
+    <string name="Balance_NetworkSelectDescription">Выберите сеть для получения адреса.</string>
+    <string name="Balance_ReceiveAddressHint">Ваш адрес для депозита %s</string>
+    <string name="Balance_ReceiveWatchAddressHint">Отслеживаемый адрес %s</string>
+    <string name="Balance_ReceiveWarningText">Отправка только %s на этот адрес. Отправка других типов токенов на этот адрес приведет к их окончательной потере.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Выберите формат адреса для получения адреса.</string>
+    <string name="Balance_Receive_Account">Аккаунт</string>
+    <string name="Balance_Receive_NotActive">Не активен</string>
+    <string name="Balance_LockedAmount_Title">Заблокировано</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <string name="SendNft_Error_NotEnoughtBalance">Недостаточно средств</string>
@@ -382,7 +394,9 @@
     <string name="FeeSettings_Fee_Info">Максимальная предполагаемая комиссия за транзакцию, которая будет уплачена за данную транзакцию, рассчитанная на основе значений лимита газа, максимальной ставки комиссии и максимальной приоритетной комиссии, указанных ниже. Фактический размер комиссии обычно ниже.</string>
     <string name="FeeSettings_NetworkFee">Комиссия сети</string>
     <string name="FeeSettings_NetworkFee_Info">Ориентировочная стоимость отправки данной транзакции по сети.</string>
+    <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Единица сложности транзакций - газ, она варьирует в зависимости от выполняемого смарт-контракта. Лимит газа - это предполагаемый максимальный размер газа, необходимый для выполнения смарт-контракта. Обычно используется меньшее количество газа.</string>
+    <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Комиссия за сетевую транзакцию измеряется в единицах газа. Цена газа – это сумма, которую пользователь готов заплатить за единицу газа. Когда сеть занята, цены на газ повышаются, а во время простоя они наоборот снижаются. Слишком низкая цена газа зачастую является основанием для длительного сохранения отложенного статуса транзакции.</string>
     <string name="FeeSettings_BaseFee">Базовая комиссия</string>
     <string name="FeeSettings_BaseFee_Info">Сетевой протокол определяет базовую стоимость газа для каждого блока, которая называется базовая ставка комиссии. Он варьирует в зависимости от уровня загрузки сети от блока к блоку. В следующем блоке он может увеличиться или уменьшиться не более чем на 12.5%, что делает взимаемый тариф более предсказуемым. Здесь отражена базовая ставка комиссии текущего блока.</string>
@@ -842,6 +856,7 @@
     <string name="Hud_Removed_from_Watchlist">Удалить из избранного</string>
     <string name="Hud_Removed">Удалено</string>
     <string name="Hud_UnknownError">%s</string>
+    <string name="Hud_WaitForSynchronization">Дождитесь синхронизации</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Токены</string>
     <string name="ManageCoins_Search">Название, код или адрес контракта</string>
@@ -898,6 +913,10 @@
     <string name="Watch_TypeSolanaAddress">Solana адрес</string>
     <string name="Watch_TypeTronAddress">Tron адрес</string>
     <string name="Watch_TypeXPubKey">xPubKey аккаунта</string>
+    <string name="Watch_TypeEvmAddress_Subtitle">(Ethereum, Binance, …)</string>
+    <string name="Watch_TypeSolanaAddress_Subtitle">(SOL, Solana tokens, …)</string>
+    <string name="Watch_TypeTronAddress_Subtitle">(TRX, Tron tokens, …)</string>
+    <string name="Watch_TypeXPubKey_Subtitle">(Bitcoin, Litecoin, …)</string>
     <string name="Watch_Error_InvalidXPubKey">Неправильный xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Название</string>
