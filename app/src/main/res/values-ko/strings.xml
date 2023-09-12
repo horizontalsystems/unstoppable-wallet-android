@@ -11,6 +11,7 @@
     <string name="Suspended">일시 정지</string>
     <string name="Action_Undo">실행 취소</string>
     <string name="Button_Show">표시</string>
+    <string name="Button_Hide">Hide</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Next">다음</string>
     <string name="Button_Enable">활성화</string>
@@ -49,11 +50,15 @@
     <string name="Button_LearnMore">자세히 보기</string>
     <string name="Button_Activate">활성화</string>
     <string name="Button_Sign">가입</string>
+    <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">API 키 가져오기</string>
     <string name="Button_Login">로그인</string>
     <string name="Button_SignUp">회원가입</string>
     <string name="Button_Submit">제출하기</string>
     <string name="Button_TryAgain">다시 시도하십시오.</string>
+    <string name="Button_Share">공유</string>
+    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
+    <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
@@ -64,6 +69,7 @@
     <string name="AccountRecovery_MigrationRecommended">이 지갑은 비밀 단어 목록 및/또는 암호 문구에 비표준 문자를 사용하는 것 같습니다. 잔액이나 거래 내역이 보이지 않으면 아래에서 자세한 내용을 읽어보세요.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <string name="AccountRecovery_MigrationRequired">비표준 호환 지갑입니다. 자세한 내용은 아래를 참조하십시오.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
     <string name="Intro_Wallet_Screen2Description">자신을 잠금하지 말고 다른 사람들이 귀하에게 그렇게 하도록 두지 마십시오.</string>
     <string name="Intro_Wallet_Screen3Title">무경계로</string>
@@ -143,6 +149,8 @@
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <!--Market-->
+    <string name="Market_Field_MarketCap">MCap</string>
+    <string name="Market_Field_Volume">Vol</string>
     <string name="Market_Search">검색</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
@@ -191,6 +199,17 @@
     <string name="Balance_NoWalletAlert">아직 지갑이 없습니다</string>
     <string name="Balance_NoCoinsAlert">추가된 코인이 없습니다.\n사용할 코인을 추가하세요.</string>
     <string name="Balance_WatchAccount_NoBalance">이 지갑 주소에는 잔액이 없습니다</string>
+    <string name="Balance_NoAssetsToSend">자산을 보낼 수 없습니다.</string>
+    <string name="Balance_NoAssetsToSwap">자산을 교환할 수 없습니다.</string>
+    <string name="Balance_Network">회로망</string>
+    <string name="Balance_NetworkSelectDescription">네트워크를 선택하고 입금할 주소를 받으세요.</string>
+    <string name="Balance_ReceiveAddressHint">입금 주소: %s</string>
+    <string name="Balance_ReceiveWatchAddressHint">%s의 시계 주소</string>
+    <string name="Balance_ReceiveWarningText">이 주소로는 %s만 보내주세요. 다른 종류의 토큰을 이 주소로 보내면 최종적으로 손실이 발생합니다.</string>
+    <string name="Balance_Receive_AddressFormat">주소 형식</string>
+    <string name="Balance_Receive_Account">계정</string>
+    <string name="Balance_Receive_NotActive">비활성화됨</string>
+    <string name="Balance_LockedAmount_Title">잠김</string>
     <!--Send NFT-->
     <string name="SendNft_Title">전송</string>
     <string name="SendNft_Error_NotEnoughtBalance">잔고 부족</string>
@@ -198,6 +217,7 @@
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
     <string name="Send_Fee">수수료</string>
+    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
@@ -231,6 +251,7 @@
     <string name="Send_TxSpeed_High">높음</string>
     <string name="Send_TxSpeed_Recommended">권장</string>
     <string name="Send_TxSpeed_Custom">사용자 지정</string>
+    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogProceed">다음</string>
     <string name="Send_LockTime_Off">끄기</string>
@@ -250,6 +271,7 @@
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">고급의</string>
     <string name="SendEvmSettings_Nonce">트랜잭션 Nonce</string>
+    <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">중고 Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">이 nonce를 사용하여 실행된 트랜잭션이 이미 존재합니다.</string>
     <!-- Fee Settings -->
@@ -258,7 +280,11 @@
     <string name="FeeSettings_FeeLegacy">최대 수수료</string>
     <string name="FeeSettings_FeeLegacy_Info">주어진 거래에 대한 최대 예상 총 수수료입니다. 일반적으로 실제 거래 수수료는 더 낮습니다.</string>
     <string name="FeeSettings_Fee">최대 수수료</string>
+    <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
     <string name="FeeSettings_NetworkFee">네트워크 수수료</string>
+    <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
+    <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
     <string name="FeeSettings_GasPrice_Info">네트워크 거래 수수료는 가스 단위로 측정됩니다. 가스 가격은 사용자가 가스 단위당 지출할 의향이 있는 금액입니다. 네트워크가 사용 중일 때는 가스 가격이 높고 유휴 상태일 때는 가스 가격이 낮습니다. 가스 가격이 충분하지 않아 거래가 장기간 보류 상태로 남아 있는 경우가 많습니다.</string>
     <string name="FeeSettings_BaseFee">기본 수수료</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">위험</string>
@@ -650,6 +676,7 @@
     <string name="SettingsTerms_Bugs">이 앱을 구동하는 코드에 발견되지 않은 소프트웨어 문제가 있을 수 있으며 이로 인해 앱이 오작동할 수 있습니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">연락처</string>
     <!--Setting_Notifications-->
@@ -825,6 +852,7 @@
     <string name="EvmPrivateKey_ShowPrivateKey">개인 키 보기</string>
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Account">계정</string>
     <string name="ExtendedKey_TapToShowPrivateKey">개인 키 보기</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">개인 암호</string>
@@ -918,12 +946,14 @@
     <string name="Coin_Info">코인 정보</string>
     <string name="Coin_Tab_Overview">금액</string>
     <string name="CoinPage_TimeDuration_All">모든</string>
+    <string name="CoinPage_MajorHolders_InfoDescription">The number of tokens held by the top 10 wallets. Quality projects typically have a widely distributed token.</string>
     <string name="CoinPage_SecurityParams_Privacy">개인정보</string>
     <string name="CoinPage_SecurityParams_Low">낮음</string>
     <string name="CoinPage_SecurityParams_High">높음</string>
     <string name="CoinPage_Website">웹사이트</string>
     <string name="CoinPage_Twitter_NoTweets">아직 트윗이 없습니다</string>
     <string name="CoinPage_MarketCap">시가총액</string>
+    <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_AddToWallet">지갑에 추가됨</string>
     <string name="CoinPage_InWallet">지갑에서</string>
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
@@ -933,6 +963,7 @@
     <string name="Coin_Analytics_Period_1h">1시간</string>
     <string name="ActivateSubscription_Title">활성화</string>
     <string name="ActivateSubscription_Address">주소</string>
+    <string name="SubscriptionInfo_PersonalSupport_Title">Personal Support</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">평균 7일</string>
     <string name="Nfts_PriceType_Days_30">평균 30일</string>
@@ -1001,6 +1032,7 @@
     <string name="BalanceSyncError_ReportButtonExplanation">나중에 보고할 수 있도록 에러 텍스트가 클립보드에 복사됩니다.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">팔로우</string>
+    <string name="CoinPage_Chart_Locked">잠김</string>
     <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
     <string name="ProUsersInfo_Features_TxVolume">트랜잭션 거래량</string>
     <string name="Hud_Text_LearnMore">추후 공개</string>
