@@ -66,7 +66,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
@@ -251,10 +251,10 @@ private fun ReceiveAddressScreen(
                                                     .fillMaxWidth()
                                                     .padding(horizontal = 16.dp),
                                             ) {
-                                                body_grey(
+                                                subhead2_grey(
                                                     text = item.title,
                                                 )
-                                                body_leah(
+                                                subhead1_leah(
                                                     text = item.value,
                                                     modifier = Modifier
                                                         .padding(start = 16.dp)
