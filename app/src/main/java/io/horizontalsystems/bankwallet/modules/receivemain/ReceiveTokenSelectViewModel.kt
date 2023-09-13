@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.isDefault
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
+import io.horizontalsystems.bankwallet.core.sortedByFilter
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.entities.Account
@@ -69,6 +70,13 @@ class ReceiveTokenSelectViewModel(
         } else {
             marketKit.fullCoins(tmpQuery)
         }
+
+        val sorted = fullCoins.sortedByFilter(tmpQuery ?: "")
+        val (enabled, disabled) = sorted.partition { fullCoin ->
+            walletManager.activeWallets.any { it.coin == fullCoin.coin }
+        }
+
+        fullCoins = enabled + disabled
     }
 
 
