@@ -2,6 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parâmetro não está definido</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Alert_Close">Fechar</string>
@@ -17,6 +18,7 @@
     <string name="Button_Disable">Desativar</string>
     <string name="Button_ScanQr">Escanear QR Code</string>
     <string name="Button_Close">Fechar</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Done">Concluído</string>
     <string name="Button_Retry">Tentar de novo</string>
     <string name="Button_Change">Alterar</string>
@@ -54,9 +56,11 @@
     <string name="Button_SignUp">Criar conta</string>
     <string name="Button_Submit">Submeter</string>
     <string name="Button_TryAgain">Tentar novamente</string>
+    <string name="Button_Share">Partilhar</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
     <string name="Error">Erro</string>
+    <string name="NotAvailable">N/A</string>
     <string name="Any">Qualquer</string>
     <string name="SyncError">Erro de sincronização. Tente novamente</string>
     <string name="PercentTitle">Percentual</string>
@@ -102,6 +106,7 @@
     <string name="Language_Czech">Tcheco</string>
     <string name="Language_Portuguese">Português</string>
     <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">GM!</string>
     <string name="RateApp_Description_Rate_This_App">Gostou da Unstoppable? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
     <string name="RateApp_Button_RateIt">Avaliar</string>
     <string name="RateApp_Button_NotNow">Agora não</string>
@@ -210,6 +215,7 @@
     <string name="Market_Filter_Volume24h">Volume de Operações (24h)</string>
     <string name="Market_Filter_PricePeriod">Período de Preço</string>
     <string name="Market_Filter_PriceChange">Mudança de Preço</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">BTC superado</string>
     <string name="Market_Filter_OutperformedEth">ETH superado</string>
     <string name="Market_Filter_OutperformedBnb">BNB superado</string>
@@ -217,24 +223,36 @@
     <string name="Market_Filter_PriceCloseToAtl">Preço próximo a ATL</string>
     <string name="Market_Filter_ShowResults">Mostrar Resultados</string>
     <string name="Market_Filter_ShowResults_Counter">Mostrar Resultados: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
     <string name="Market_Filter_Range_100M_1B">100M — 1B</string>
     <string name="Market_Filter_Range_1B_5B">1B — 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
+    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
+    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
     <string name="Market_Filter_Range_40M_200M">40M — 200M</string>
     <string name="Market_Filter_Range_200M_2B">200M — 2B</string>
     <string name="Market_Filter_Range_2B_10B">2B — 10B</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
+    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
     <string name="Market_Filter_Range_50M_200M">50M — 200M</string>
     <string name="Market_Filter_Range_200M_1B">200M — 1B</string>
     <string name="Market_Filter_Range_1B_10B">1B — 10B</string>
     <string name="Market_Filter_Range_10B_50B">10B — 50B</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
+    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
     <string name="Market_Filter_Range_500M_2B">500M — 2B</string>
     <string name="Market_Filter_Range_10B_100B">10B — 100B</string>
     <string name="Market_Filter_Range_100B_500B">100B — 500B</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
     <string name="Market_Filter_TimePeriod_1D">1 Dia</string>
     <string name="Market_Filter_TimePeriod_1W">1 Semana</string>
     <string name="Market_Filter_TimePeriod_2W">2 Semanas</string>
     <string name="Market_Filter_TimePeriod_1M">1 Meses</string>
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Ano</string>
+    <string name="TimePeriod_24h">24h</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
@@ -243,6 +261,7 @@
     <string name="Balance_Withdraw">Sacar</string>
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Send">Enviar</string>
+    <string name="Balance_Swap">Trocar</string>
     <string name="Balance_Deposit">Receber</string>
     <string name="Balance_Receive">Receber</string>
     <string name="Balance_Address">Endereço</string>
@@ -250,6 +269,7 @@
     <string name="Balance_SyncedUntil">até %s</string>
     <string name="Balance_Syncing">Sincronizando...</string>
     <string name="Balance_SearchingTransactions">Procurando transações...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando… %s%%</string>
     <string name="Balance_AddCoins">Adicionar Moedas</string>
     <string name="Balance_AddCoin">Adicionar Moeda</string>
@@ -268,11 +288,15 @@
     <string name="Balance_NoAssetsToSend">Você não tem ativos para enviar.</string>
     <string name="Balance_NoAssetsToSwap">Você não tem nenhum ativo para trocar.</string>
     <string name="Balance_Network">Rede</string>
+    <string name="Balance_Format">Formato</string>
     <string name="Balance_NetworkSelectDescription">Escolha rede para receber um endereço.</string>
     <string name="Balance_ReceiveAddressHint">Seu endereço para o depósito %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Endereço do relógio do %s</string>
     <string name="Balance_ReceiveWarningText">Envie apenas %s para este endereço. Enviar outros tipos de tokens para este endereço resultará em sua perda suprema.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Escolha um formato para fornecer um endereço a receber.</string>
     <string name="Balance_Receive_AddressFormat">Formato do Endereço</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">O formato de endereço em dinheiro é preferido para receber Bitcoin Cash (BCH) devido à sua experiência e compatibilidade melhoradas. No entanto, ambos os formatos de endereço podem ser usados internamente para receber BCH, independentemente do formato de endereço do remetente.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">O formato Nativo SegWit é preferido em Bitcoin para melhorar a taxa de transferência e a segurança. Todos os formatos de endereço (Taproot, SegWit, Legacy) podem ser usados intermudanças para receber BTC independentemente do formato de endereço do remetente, permitindo transações ininterruptas entre diferentes tipos de moedas.</string>
     <string name="Balance_Receive_Account">Conta</string>
     <string name="Balance_Receive_NotActive">Não ativo</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
@@ -398,6 +422,7 @@
     <string name="WalletConnect_ApproveRequest_Title">Aprovar</string>
     <string name="WalletConnect_SwapRequest_Title">Trocar</string>
     <string name="WalletConnect_UnknownRequest_Title">Chamada de Contrato</string>
+    <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_SignedTransactions">Transações Assinadas</string>
     <string name="WalletConnect_Approve_Hint">Ao clicar em conectar, você permite que este aplicativo visualize seu endereço público. Esta é uma importante etapa de segurança para proteger seus dados contra possíveis riscos de phishing.</string>
     <string name="WalletConnect_Ready_Hint">Você pode ir ao navegador. Não feche esta página enquanto interage no navegador.</string>
@@ -494,6 +519,8 @@
     <string name="Swap_MinimumGot">Valor garantido</string>
     <string name="Swap_PoweredBy">Fornecido por</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
+    <string name="Swap_AmountEstimated">(est)</string>
+    <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moeda</string>
     <!-- Swap Settings -->
@@ -509,6 +536,7 @@
     <string name="SwapSettings_RecipientPlaceholder">Endereço ou Domínio</string>
     <string name="SwapSettings_FeeSettingsAlert">Uma taxa de serviço para a ação de troca na plataforma normalmente 0,3% ou 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Sem prazo</string>
+    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">É provável que sua transação falhe.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Tolerância do Slippage não pode ser maior que %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Endereço inválido</string>
@@ -555,6 +583,7 @@
     <string name="Transactions_Processing">Processando</string>
     <string name="Transactions_Send">Enviar</string>
     <string name="Transactions_Burn">Queimar</string>
+    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Aprovar</string>
     <string name="Transactions_Swap">Trocar</string>
     <string name="Transactions_Failed">Falhou</string>
@@ -580,6 +609,7 @@
     <string name="TransactionInfo_Transaction">Transação</string>
     <string name="TransactionInfo_Title">Informações sobre a transação</string>
     <string name="TransactionInfo_Approval">Aprovação de troca</string>
+    <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Date">Data</string>
     <string name="TransactionInfo_Id">ID</string>
@@ -626,6 +656,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">A transação já foi confirmada</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">O remetente enviou esses fundos com um bloqueio de gastos que expirará em %s.\n\nNão se preocupe, os Bitcoins recebidos já são seus, mas até que o período de bloqueio expire, você não poderá gastá-los na rede Bitcoin.</string>
+    <string name="Info_LockTime_Description_Static">O remetente enviou esses fundos com um fechamento de gastos que expirará na data mostrada. \n\nNão se preocupe, o Bitcoin recebido já é seu, mas até que o período de bloqueio expire, você não pode gastá-los na rede Bitcoin.</string>
     <string name="Info_DoubleSpend_Title">Gasto Duplo</string>
     <string name="Info_DoubleSpend_Description">Risco de Gasto Duplo! Existe outra transação na Blockchain que está tentando gastar entradas usadas nesta transação. Apenas uma transação será aceita pela rede</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
@@ -669,6 +700,8 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">Juntos, com o seu apoio, podemos fazer este aplicativo ainda melhor!</string>
     <string name="Settings_Donate">Doar</string>
+    <string name="Settings_DonateToken">Doe %s</string>
+    <string name="Settings_DonateWith">Doar com</string>
     <string name="Settings_Donate_GetAddress">Obter endereço</string>
     <string name="Settings_Donate_Addresses">Endereços</string>
     <string name="Appearance_Theme">TEMA</string>
@@ -1036,7 +1069,12 @@
     <string name="Coin_Tab_Details">Análises</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">HOJE</string>
+    <string name="CoinPage_TimeDuration_Day">24H</string>
+    <string name="CoinPage_TimeDuration_Week">7D</string>
+    <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2S</string>
+    <string name="CoinPage_TimeDuration_Month3">3M</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1A</string>
     <string name="CoinPage_TimeDuration_Year2">2A</string>
     <string name="CoinPage_TimeDuration_All">Todas</string>
@@ -1068,6 +1106,8 @@
     <string name="CoinPage_Category">Categoria</string>
     <string name="CoinPage_Categories">Categorias</string>
     <string name="CoinPage_Contracts">Contratos</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Tipos de moeda</string>
     <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guia</string>
@@ -1083,6 +1123,7 @@
     <string name="CoinPage_DilutedMarketCap">Cap. De Mercado diluído</string>
     <string name="CoinPage_inCirculation">Em Circulação</string>
     <string name="CoinPage_TotalSupply">Fornecimento total</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
     <string name="CoinPage_MarketCap_TvlRation">Proporção de Capital de M. / TVL</string>
     <string name="CoinPage_MarketCap_TvlRation_Description">A proporção do limite de mercado do token do projeto sobre sua TVL.</string>
     <string name="CoinPage_Volume">Volume</string>
@@ -1182,6 +1223,7 @@
     <string name="CoinAnalytics_TransactionCount">Contagem de transações</string>
     <string name="CoinAnalytics_TransactionCountRank">Ranking de Contador Tx</string>
     <string name="CoinAnalytics_TransactionCountRank_Description">Tokens classificados por número de transações em uma blockchain.</string>
+    <string name="CoinAnalytics_Holders">Holders</string>
     <string name="CoinAnalytics_ProjectTvl">Projeto TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projeto TVB (Total de Valor Bloqueado)</string>
     <string name="CoinAnalytics_TvlRatio">Proporção de Capital de M. / TVB</string>
@@ -1218,6 +1260,7 @@
     <string name="Coin_Analytics_TechnicalIndicators">Indicadores Técnicos</string>
     <string name="Coin_Analytics_Details">Detalhes</string>
     <string name="Coin_Analytics_SelectPeriod">Selecionar Período</string>
+    <string name="Coin_Analytics_Period_30m">30 minutes</string>
     <string name="Coin_Analytics_Period_1h">1 hora</string>
     <string name="Coin_Analytics_Period_4h">4 horas</string>
     <string name="Coin_Analytics_Period_8h">8 horas</string>
@@ -1302,6 +1345,7 @@
     <string name="NftCollection_EventType_Custom">Personalizado</string>
     <string name="NftCollection_EventType_Payout">Pagamento</string>
     <string name="NftCollection_EventType_BulkCancel">Cancelar vários</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Desconhecido</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Maiores Altas</string>
