@@ -62,7 +62,7 @@ private fun ContactOptionsScreen(
     val context = LocalContext.current
     ComposeAppTheme {
         BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.ic_email),
+            iconPainter = painterResource(R.drawable.ic_mail_24),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = stringResource(R.string.SettingsContact_Title),
             onCloseClick = onCloseClick

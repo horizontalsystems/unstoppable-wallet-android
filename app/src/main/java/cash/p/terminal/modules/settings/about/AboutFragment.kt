@@ -220,7 +220,7 @@ private fun SettingSections(
         listOf {
             HsSettingCell(
                 R.string.SettingsContact_Title,
-                R.drawable.ic_email,
+                R.drawable.ic_mail_24,
                 onClick = showContactOptions
             )
         }
