@@ -310,7 +310,8 @@ class BalanceViewItemFactory {
         latestRate: CoinPrice?,
         hideBalance: Boolean,
         balanceViewType: BalanceViewType,
-        fullFormat: Boolean
+        fullFormat: Boolean,
+        adapterState: AdapterState
     ): BalanceCexViewItem {
         val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
             balance = cexAsset.freeBalance + cexAsset.lockedBalance,
@@ -323,6 +324,7 @@ class BalanceViewItemFactory {
             balanceViewType = balanceViewType
         )
         val fiatLockedVisibility = !hideBalance && cexAsset.lockedBalance > BigDecimal.ZERO
+        val errorMessage = (adapterState as? AdapterState.NotSynced)?.error?.message
 
         return BalanceCexViewItem(
             coinIconUrl = cexAsset.coin?.imageUrl,
@@ -353,6 +355,13 @@ class BalanceViewItemFactory {
             coinPrice = latestRate,
             depositEnabled = cexAsset.depositEnabled,
             withdrawEnabled = cexAsset.withdrawEnabled,
+            syncingProgress = when (adapterState) {
+                is AdapterState.Syncing -> SyncingProgress(50)
+                else -> SyncingProgress(null)
+            },
+            failedIconVisible = adapterState is AdapterState.NotSynced,
+            errorMessage = errorMessage,
+            adapterState = adapterState
         )
     }
 
