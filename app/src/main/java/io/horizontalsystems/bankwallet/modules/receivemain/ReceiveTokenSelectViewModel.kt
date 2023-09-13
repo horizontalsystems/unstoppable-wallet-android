@@ -12,6 +12,7 @@ import cash.p.terminal.core.eligibleTokens
 import cash.p.terminal.core.isDefault
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.nativeTokenQueries
+import cash.p.terminal.core.sortedByFilter
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.Account
@@ -69,6 +70,13 @@ class ReceiveTokenSelectViewModel(
         } else {
             marketKit.fullCoins(tmpQuery)
         }
+
+        val sorted = fullCoins.sortedByFilter(tmpQuery ?: "")
+        val (enabled, disabled) = sorted.partition { fullCoin ->
+            walletManager.activeWallets.any { it.coin == fullCoin.coin }
+        }
+
+        fullCoins = enabled + disabled
     }
 
 
