@@ -6,6 +6,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
@@ -25,9 +26,14 @@ class SendTokenSelectFragment : BaseComposeFragment() {
             onClickItem = {
                 when {
                     it.sendEnabled -> {
+                        val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                         navController.slideFromRight(
                             R.id.sendXFragment,
-                            SendFragment.prepareParams(it.wallet, R.id.sendTokenSelectFragment)
+                            SendFragment.prepareParams(
+                                it.wallet,
+                                R.id.sendTokenSelectFragment,
+                                sendTitle
+                            )
                         )
                     }
 
