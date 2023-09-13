@@ -262,14 +262,7 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">TVL Rank</string>
     <string name="TvlRank_MultiChain">Multi-Chain</string>
-    <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
-    <string name="TvlRank_Field_LowestTvl">Niedrigste TVL</string>
-    <string name="TvlRank_Field_All">Alle</string>
-    <string name="TvlRank_Field_Eth">Ethereum</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
-    <string name="TvlRank_Filters_PopupTitle">Filter</string>
     <!--Balance-->
     <string name="Balance_Withdraw">Abheben</string>
     <string name="Balance_Title">Guthaben</string>
@@ -305,7 +298,6 @@
     <string name="Balance_ReceiveAddressHint">Ihre Adresse für %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Beobachtungsadresse von %s</string>
     <string name="Balance_ReceiveWarningText">Senden Sie nur %s an diese Adresse. Das Senden anderer Arten von Tokens an diese Adresse führt zu ihrem ultimativen Verlust.</string>
-    <string name="Balance_Receive_AddressFormatDescription">Wählen Sie ein Adressformat aus, um eine Adresse zu erhalten.</string>
     <string name="Balance_Receive_AddressFormat">Adressformatierung</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
@@ -380,7 +372,6 @@
     <string name="FeeSettings_NetworkFee">Netzwerkgebühr</string>
     <string name="FeeSettings_NetworkFee_Info">Einschätzung der Kosten für den Versand einer angegebenen Transaktion im Netzwerk.</string>
     <string name="FeeSettings_GasLimit_Info">Die Transaktionskomplexität wird in Einheiten mit dem Namen \"Gas\" gemessen, die je nach ausgeführten intelligenten Verträgen variieren. Das Gaslimit ist das geschätzte Höchstgas, das benötigt wird, um es auszuführen. Das tatsächliche Gas wird normalerweise niedriger sein.</string>
-    <string name="FeeSettings_GasPrice">Gas price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Die Gebühr für Transaktionen im Netzwerk wird in Gaseinheiten gemessen. Der Gaspreis ist der Betrag, den ein Nutzer für eine Einheit Gas auszugeben bereit ist. Wenn das Netzwerk ausgelastet ist, sind die Gaspreise hoch, und niedrig, wenn es nicht genutzt wird. Ein unzureichender Gaspreis ist oft ein Grund dafür, dass eine Transaktion über einen längeren Zeitraum aussteht.</string>
     <string name="FeeSettings_BaseFee">Basisgebühr</string>
     <string name="FeeSettings_BaseFee_Info">Das Netzwerkprotokoll bestimmt den Basispreis pro Gas für jeden Block, sogenannte Basisgebühren. Sie variiert je nach Netzwerkauslastung von Block zu Block. Sie kann im nächsten Block um nicht mehr als 12,5% steigen oder sinken, was die Gebühren berechenbarer macht. Der hier angezeigte Wert ist die Basisgebühr des aktuellen Blocks.</string>
@@ -841,7 +832,6 @@
     <string name="Hud_Already_In_Wallet">Bereits im Wallet enthalten</string>
     <string name="Hud_Removed_from_Watchlist">Aus Merkliste entfernt</string>
     <string name="Hud_Removed">Entfernt</string>
-    <string name="Hud_UnknownError">%s </string>
     <string name="Hud_WaitForSynchronization">Warten auf Synchronisation</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
@@ -973,7 +963,6 @@
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
-    <string name="AccountExtendedPublicKey_Short">Account xPrivKey</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Private Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
@@ -1090,7 +1079,6 @@
     <string name="CoinPage_Audits_PoweredBy">Angetrieben von Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">Issues: %d</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
-    <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filter</string>
     <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
@@ -1161,7 +1149,6 @@
     <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
-    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nnicht gefunden</string>
     <string name="CoinPage_Indicators">Indicators</string>
@@ -1247,7 +1234,6 @@
     <string name="CoinAnalytics_OtherData">Other Data</string>
     <string name="CoinAnalytics_Reports">Reports</string>
     <string name="CoinAnalytics_Funding">Funding</string>
-    <string name="CoinAnalytics_Treasuries">Treasuries</string>
     <string name="Coin_Analytics_Audits">Audits</string>
     <string name="Coin_Analytics_Last30d">last 30d</string>
     <string name="Coin_Analytics_Current">current</string>
@@ -1297,7 +1283,6 @@
     <string name="SubscriptionInfo_PersonalSupport_Info">Kontaktieren Sie unser Team direkt über Telegram für persönliche Hilfe.</string>
     <string name="SubscriptionInfo_GetPremium">Premium erhalten</string>
     <string name="SubscriptionInfo_HavePremium">Ich habe bereits Premium</string>
-    <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Durchschnitt 7D</string>
     <string name="Nfts_PriceType_Days_30">Durchschnitt 30D</string>
     <string name="Nfts_PriceType_LastSale">Letzter Verkauf</string>
@@ -1308,7 +1293,6 @@
     <string name="Nfts_PriceMode">Preismodus</string>
     <string name="NftAsset_Overview">Übersicht</string>
     <string name="NftAsset_Activity">Aktivität</string>
-    <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Teilen</string>
     <string name="NftAsset_Action_Save">Speichern</string>
     <string name="NftAsset_OwnedCount">Eigene Anzahl</string>
@@ -1329,9 +1313,6 @@
     <string name="NftAsset_TokenStandard">Token-Standard</string>
     <string name="NftAsset_Blockchain">Blockchain</string>
     <string name="NftAsset_Links_Website">Webseite</string>
-    <string name="NftAsset_Links_OpenSea">OpenSea</string>
-    <string name="NftAsset_Links_Discord">Discord</string>
-    <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">Unterstützt von OpenSea API</string>
     <string name="Nft_TopCollections">Top NFT Collections</string>
     <string name="Nft_TopCollections_Description">Leading NFT collections by trading volume.</string>
@@ -1464,7 +1445,6 @@
     <string name="CexDeposit_Title">Auftragen %s</string>
     <string name="CexDeposit_CopyAddress">Adresse kopieren</string>
     <string name="CexDeposit_ShareAddress">Adresse teilen</string>
-    <string name="CexDeposit_Memo">Memo (Tag)</string>
     <string name="CexDeposit_Network">Netzwerk</string>
     <string name="CexDeposit_AddressDescription">Ihre Adresse für %s</string>
     <string name="CexDeposit_DepositWarning">Senden Sie nur %s an diese Adresse. Das Senden anderer Arten von Tokens an diese Adresse führt zu ihrem ultimativen Verlust.</string>
