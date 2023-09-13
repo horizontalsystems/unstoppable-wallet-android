@@ -473,3 +473,24 @@ val TokenType.meta: String?
         is TokenType.Bep2 -> this.symbol
         else -> null
     }
+
+val BlockchainType.Companion.supported: List<BlockchainType>
+    get() = listOf(
+        BlockchainType.Bitcoin,
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Gnosis,
+        BlockchainType.Fantom,
+        BlockchainType.Zcash,
+        BlockchainType.Dash,
+        BlockchainType.BitcoinCash,
+        BlockchainType.Litecoin,
+        BlockchainType.BinanceChain,
+        BlockchainType.Solana,
+        BlockchainType.ECash,
+        BlockchainType.Tron,
+    )

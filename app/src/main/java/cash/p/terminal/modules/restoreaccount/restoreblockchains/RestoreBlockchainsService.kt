@@ -12,6 +12,7 @@ import cash.p.terminal.core.nativeTokenQueries
 import cash.p.terminal.core.order
 import cash.p.terminal.core.restoreSettingTypes
 import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
@@ -56,26 +57,6 @@ class RestoreBlockchainsService(
             itemsObservable.onNext(value)
         }
 
-    private val blockchainTypes = listOf(
-        BlockchainType.Bitcoin,
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.Zcash,
-        BlockchainType.Dash,
-        BlockchainType.BitcoinCash,
-        BlockchainType.Litecoin,
-        BlockchainType.BinanceChain,
-        BlockchainType.Solana,
-        BlockchainType.ECash,
-        BlockchainType.Tron,
-    )
-
     init {
         blockchainTokensService.approveTokensObservable
             .subscribeIO {
@@ -106,7 +87,7 @@ class RestoreBlockchainsService(
     }
 
     private fun syncInternalItems() {
-        val allowedBlockchainTypes = blockchainTypes.filter { it.supports(accountType) }
+        val allowedBlockchainTypes = BlockchainType.supported.filter { it.supports(accountType) }
         val tokenQueries = allowedBlockchainTypes
             .map { it.nativeTokenQueries }
             .flatten()
