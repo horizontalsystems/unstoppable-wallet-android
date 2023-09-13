@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.restoreSettingTypes
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -56,26 +57,6 @@ class RestoreBlockchainsService(
             itemsObservable.onNext(value)
         }
 
-    private val blockchainTypes = listOf(
-        BlockchainType.Bitcoin,
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.Zcash,
-        BlockchainType.Dash,
-        BlockchainType.BitcoinCash,
-        BlockchainType.Litecoin,
-        BlockchainType.BinanceChain,
-        BlockchainType.Solana,
-        BlockchainType.ECash,
-        BlockchainType.Tron,
-    )
-
     init {
         blockchainTokensService.approveTokensObservable
             .subscribeIO {
@@ -106,7 +87,7 @@ class RestoreBlockchainsService(
     }
 
     private fun syncInternalItems() {
-        val allowedBlockchainTypes = blockchainTypes.filter { it.supports(accountType) }
+        val allowedBlockchainTypes = BlockchainType.supported.filter { it.supports(accountType) }
         val tokenQueries = allowedBlockchainTypes
             .map { it.nativeTokenQueries }
             .flatten()
