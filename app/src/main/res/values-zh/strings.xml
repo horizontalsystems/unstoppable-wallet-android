@@ -260,13 +260,7 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s 市场</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">锁仓排名</string>
     <string name="TvlRank_MultiChain">多链</string>
-    <string name="TvlRank_Field_HighestTvl">最高锁仓</string>
-    <string name="TvlRank_Field_LowestTvl">最低锁仓</string>
-    <string name="TvlRank_Field_All">所有</string>
-    <string name="TvlRank_Field_Eth">Ethreum</string>
-    <string name="TvlRank_Filters_PopupTitle">过滤器</string>
     <!--Balance-->
     <string name="Balance_Withdraw">提取</string>
     <string name="Balance_Title">余额</string>
@@ -302,7 +296,6 @@
     <string name="Balance_ReceiveAddressHint">您存放 %s 的地址</string>
     <string name="Balance_ReceiveWatchAddressHint">观看 %s 的地址</string>
     <string name="Balance_ReceiveWarningText">只发送 %s 到此地址。向此地址发送其他类型的令牌将导致其最终丢失。</string>
-    <string name="Balance_Receive_AddressFormatDescription">选择一个地址格式来接收地址。</string>
     <string name="Balance_Receive_AddressFormat">地址格式</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
@@ -345,7 +338,6 @@
     <string name="Send_TxSpeed_High">高</string>
     <string name="Send_TxSpeed_Recommended">推荐</string>
     <string name="Send_TxSpeed_Custom">自定义</string>
-    <string name="Send_TxSpeed_CustomFeeHint">聪/字节</string>
     <string name="Send_DialogFee">费用：</string>
     <string name="Send_DialogProceed">继续</string>
     <string name="Send_LockTime_Off">关</string>
@@ -377,7 +369,6 @@
     <string name="FeeSettings_Fee_Info">需为此交易支付的最高估计交易费用是根据以下燃料限制（gas limit）、最高费率和最高优先级费用价值计算得出。支付的实际费用通常会较低。</string>
     <string name="FeeSettings_NetworkFee">网络费</string>
     <string name="FeeSettings_NetworkFee_Info">在网络上发送给定交易的估计费用。</string>
-    <string name="FeeSettings_GasLimit">GAS限制</string>
     <string name="FeeSettings_GasLimit_Info">交易复杂度以被称为“gas”（燃料）的单位度量。它将根据被执行的智能合同而变化。Gas Limit（燃料限制）是执行它所需要的估计最大燃料。使用的实际燃料通常会较低。</string>
     <string name="FeeSettings_GasPrice_Info">网上交易费用将按燃料单位计量。燃料价格是用户愿意按单位消费的金额。 当网络忙碌时，燃料价格就高，空闲时价格就低。 燃料价格不足常常是交易被长期搁置的一个原因。</string>
     <string name="FeeSettings_BaseFee">基础费用</string>
@@ -836,7 +827,6 @@
     <string name="Hud_Already_In_Wallet">已经加入钱包</string>
     <string name="Hud_Removed_from_Watchlist">从关注列表移除</string>
     <string name="Hud_Removed">已删除</string>
-    <string name="Hud_UnknownError">%s</string>
     <string name="Hud_WaitForSynchronization">等待同步</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理</string>
@@ -966,8 +956,6 @@
     <string name="EvmPrivateKey_ShowPrivateKey">点击显示私钥</string>
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
-    <string name="ExtendedKey_Purpose">目的</string>
-    <string name="ExtendedKey_Account">账户</string>
     <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">私钥</string>
@@ -1085,7 +1073,6 @@
     <string name="CoinPage_Audits_PoweredBy">由 Defiyield.app 提供支持</string>
     <string name="CoinPage_Audits_Issues">发布: %d</string>
     <string name="CoinPage_InvestorData">投资数据</string>
-    <string name="CoinPage_Treasuries">国库券</string>
     <string name="CoinPage_Treasuries_FilterTitle">筛选器</string>
     <string name="CoinPage_Treasuries_PoweredBy">由Bitcointreasuries.net提供</string>
     <string name="CoinPage_Reports">报告</string>
@@ -1181,13 +1168,10 @@
     <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">正在追踪的DEX：</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity_Info2">Chart showing variation in available liquidity for the token on leading decentralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">正在追踪的DEX：</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
     <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
@@ -1243,7 +1227,6 @@
     <string name="CoinAnalytics_OtherData">其它数据</string>
     <string name="CoinAnalytics_Reports">报告</string>
     <string name="CoinAnalytics_Funding">资金支持</string>
-    <string name="CoinAnalytics_Treasuries">国库券</string>
     <string name="Coin_Analytics_Audits">审计</string>
     <string name="Coin_Analytics_Last30d">最近30天</string>
     <string name="Coin_Analytics_Current">当前</string>
@@ -1293,7 +1276,6 @@
     <string name="SubscriptionInfo_PersonalSupport_Info">通过 Telegram 直接联系我们的团队以获取个人帮助。</string>
     <string name="SubscriptionInfo_GetPremium">成为付费会员</string>
     <string name="SubscriptionInfo_HavePremium">我已经有高级版</string>
-    <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">平均7天</string>
     <string name="Nfts_PriceType_Days_30">平均30天</string>
     <string name="Nfts_PriceType_LastSale">收盘价</string>
