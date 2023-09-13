@@ -157,6 +157,7 @@
     <!--Market Search-->
     <string name="Market_Search_Hint">Ara</string>
     <string name="Market_Search_BrowseCategories">Browse Categories</string>
+    <string name="Market_Filter_ChooseSet">Choose Set</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <!--Balance-->
@@ -188,11 +189,15 @@
     <string name="Balance_WatchAccount_NoBalance">Bu cüzdan adresinde bakiye bulunmuyor</string>
     <string name="Balance_NoAssetsToSwap">Takas edilecek varlığınız yok.</string>
     <string name="Balance_Network">Ağ</string>
+    <string name="Balance_Format">Biçim</string>
     <string name="Balance_NetworkSelectDescription">Bir ağ seçin ve para yatırmak için bir adres alın.</string>
     <string name="Balance_ReceiveAddressHint">%s yatırmak için adresiniz</string>
     <string name="Balance_ReceiveWatchAddressHint">%s adresini izle</string>
     <string name="Balance_ReceiveWarningText">Bu adrese yalnızca %s gönderin. Bu adrese başka türden jetonların gönderilmesi nihai kayıplarına neden olacaktır.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Adresinizi almak için bir adres biçimi seçin.</string>
     <string name="Balance_Receive_AddressFormat">Adres Formatı</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Geliştirilmiş kullanıcı deneyimi ve uyumluluğu nedeniyle Bitcoin Cash (BCH) almak için Nakit Adresi formatı tercih edilmektedir. Ancak gönderenin adres formatı ne olursa olsun, BCH\'yi almak için her iki adres formatı da birbirinin yerine kullanılabilir.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Bitcoin\'de daha iyi bir verimlilik ve güvenlik için yerel SegWit formatı tercih edilir. Tüm adres formatları (Taproot, SegWit, Legacy), gönderenin adres formatına bakılmaksızın BTC almak için birbirinin yerine kullanılabilir ve farklı para birimlerinde kesintisiz işlemlere olanak tanır.</string>
     <string name="Balance_Receive_Account">Hesap</string>
     <string name="Balance_Receive_NotActive">Aktif değil</string>
     <string name="Balance_LockedAmount_Title">Kilitli</string>
@@ -553,6 +558,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">İşlem zaten blokta</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
+    <string name="Info_LockTime_Description_Static">Gönderici bu fonları belirtilen tarihte sona erecek şekilde bir harcama kilidiyle gönderdi.\n\nEndişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları Bitcoin ağında harcayamazsınız.</string>
     <string name="Info_DoubleSpend_Title">Çifte Harcama</string>
     <string name="Info_DoubleSpend_Description">Çifte Harcama Riski! Blockchain\'de, bu işlemde kullanılan girdileri harcamaya çalışan başka bir işlem var. Ağ tarafından yalnızca bir işlem kabul edilecektir</string>
     <string name="Info_DoubleSpend_ThisTx">Bu Tx</string>
@@ -588,9 +594,14 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
     <string name="Settings_PersonalSupport_Account">Hesap</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Request">İstek</string>
     <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
     <string name="Settings_Donate">Bağış yapmak</string>
+    <string name="Settings_DonateToken">Bağış yapmak %s</string>
+    <string name="Settings_DonateWith">Bağış yapın</string>
+    <string name="Settings_Donate_GetAddress">Adresi al</string>
+    <string name="Settings_Donate_Addresses">Adresler</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">TAB AYARLARI</string>
     <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
