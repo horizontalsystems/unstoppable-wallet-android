@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -139,7 +140,7 @@ class AppConfigProvider {
             BlockchainType.Gnosis to "0x731352dcF66014156B1560B832B56069e7b38ab1",
             BlockchainType.Fantom to "0x731352dcF66014156B1560B832B56069e7b38ab1",
             BlockchainType.Tron to "TXKA3SxjLsUL4n6j3v2h85fzb4V7Th6yh6"
-        )
+        ).toList().sortedBy { (key, _) -> key.order }.toMap()
     }
 
 }

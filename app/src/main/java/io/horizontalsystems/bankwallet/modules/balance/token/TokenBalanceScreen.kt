@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +44,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
@@ -58,7 +60,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -87,41 +91,41 @@ fun TokenBalanceScreen(
             )
         }
     ) { paddingValues ->
-            val transactionItems = uiState.transactions
-            if (transactionItems.isNullOrEmpty()) {
-                Column(Modifier.padding(paddingValues)) {
-                    uiState.balanceViewItem?.let {
-                        TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
-                    }
-                    if (transactionItems == null) {
-                        ListEmptyView(
-                            text = stringResource(R.string.Transactions_WaitForSync),
-                            icon = R.drawable.ic_clock
-                        )
-                    } else {
-                        ListEmptyView(
-                            text = stringResource(R.string.Transactions_EmptyList),
-                            icon = R.drawable.ic_outgoingraw
-                        )
-                    }
+        val transactionItems = uiState.transactions
+        if (transactionItems.isNullOrEmpty()) {
+            Column(Modifier.padding(paddingValues)) {
+                uiState.balanceViewItem?.let {
+                    TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
                 }
-            } else {
-                val listState = rememberLazyListState()
-                LazyColumn(Modifier.padding(paddingValues), state = listState) {
-                    item {
-                        uiState.balanceViewItem?.let {
-                            TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
-                        }
-                    }
-
-                    transactionList(
-                        transactionsMap = transactionItems,
-                        willShow = { viewModel.willShow(it) },
-                        onClick = { onTransactionClick(it, viewModel, transactionsViewModel, navController) },
-                        onBottomReached = { viewModel.onBottomReached() }
+                if (transactionItems == null) {
+                    ListEmptyView(
+                        text = stringResource(R.string.Transactions_WaitForSync),
+                        icon = R.drawable.ic_clock
+                    )
+                } else {
+                    ListEmptyView(
+                        text = stringResource(R.string.Transactions_EmptyList),
+                        icon = R.drawable.ic_outgoingraw
                     )
                 }
             }
+        } else {
+            val listState = rememberLazyListState()
+            LazyColumn(Modifier.padding(paddingValues), state = listState) {
+                item {
+                    uiState.balanceViewItem?.let {
+                        TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
+                    }
+                }
+
+                transactionList(
+                    transactionsMap = transactionItems,
+                    willShow = { viewModel.willShow(it) },
+                    onClick = { onTransactionClick(it, viewModel, transactionsViewModel, navController) },
+                    onBottomReached = { viewModel.onBottomReached() }
+                )
+            }
+        }
     }
 
 }
@@ -130,7 +134,7 @@ fun TokenBalanceScreen(
 private fun onTransactionClick(
     transactionViewItem: TransactionViewItem,
     tokenBalanceViewModel: TokenBalanceViewModel,
-    transactionsViewModel  : TransactionsViewModel,
+    transactionsViewModel: TransactionsViewModel,
     navController: NavController
 ) {
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
@@ -148,19 +152,19 @@ private fun TokenBalanceHeader(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 18.dp, end = 18.dp, top = 18.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        VSpacer(height = (24.dp))
         WalletIcon(
             viewItem = balanceViewItem,
             viewModel = viewModel,
             navController = navController,
         )
-        VSpacer(height = 6.dp)
+        VSpacer(height = 12.dp)
         Text(
             modifier = Modifier
+                .padding(horizontal = 16.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
@@ -190,13 +194,15 @@ private fun TokenBalanceHeader(
         }
         VSpacer(height = 24.dp)
         ButtonsRow(viewItem = balanceViewItem, navController = navController, viewModel = viewModel)
-        LockedBalanceCell(balanceViewItem)
+        LockedBalanceCell(balanceViewItem, navController)
     }
 }
 
 @Composable
-private fun LockedBalanceCell(balanceViewItem: BalanceViewItem) {
+private fun LockedBalanceCell(balanceViewItem: BalanceViewItem, navController: NavController) {
     if (balanceViewItem.coinValueLocked.value != null) {
+        val infoTitle = stringResource(R.string.Info_LockTime_Title)
+        val infoText = stringResource(R.string.Info_LockTime_Description_Static)
         VSpacer(height = 8.dp)
         RowUniversal(
             modifier = Modifier
@@ -210,6 +216,19 @@ private fun LockedBalanceCell(balanceViewItem: BalanceViewItem) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+            HSpacer(8.dp)
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+                    navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(infoTitle, infoText))
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
             Spacer(Modifier.weight(1f))
             Text(
                 modifier = Modifier.padding(start = 6.dp),
@@ -313,8 +332,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
     }
 
     Row(
-        modifier = Modifier.padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 4.dp, bottom = 16.dp)
     ) {
         if (viewItem.isWatchAccount) {
             ButtonPrimaryDefault(
@@ -328,9 +346,10 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 icon = R.drawable.ic_arrow_up_right_24,
                 title = stringResource(R.string.Balance_Send),
                 onClick = {
+                    val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
                     navController.slideFromRight(
                         R.id.sendXFragment,
-                        SendFragment.prepareParams(viewItem.wallet)
+                        SendFragment.prepareParams(viewItem.wallet, sendTitle)
                     )
                 },
                 enabled = viewItem.sendEnabled

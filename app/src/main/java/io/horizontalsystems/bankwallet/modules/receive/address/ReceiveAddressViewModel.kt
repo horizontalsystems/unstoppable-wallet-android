@@ -109,20 +109,28 @@ class ReceiveAddressViewModel(
             )
         }
 
-        var value = when (val tokenType = wallet.token.type) {
-            is TokenType.Derived -> tokenType.derivation.accountTypeDerivation.rawName
+        var networkValue = when (val tokenType = wallet.token.type) {
+            is TokenType.Derived -> {
+                "${tokenType.derivation.accountTypeDerivation.addressType} (${ tokenType.derivation.accountTypeDerivation.rawName})"
+            }
             is TokenType.AddressTyped -> Translator.getString(tokenType.type.bitcoinCashCoinType.title)
             else -> wallet.token.blockchain.name
         }
 
         if (!isMainNet) {
-            value += " (TestNet)"
+            networkValue += " (TestNet)"
+        }
+
+        val networkTitleRes = if(wallet.token.type is TokenType.Derived) {
+            R.string.Balance_Format
+        } else {
+            R.string.Balance_Network
         }
 
         items.add(
             DescriptionItem.Value(
-                title = Translator.getString(R.string.Balance_Network),
-                value = value
+                title = Translator.getString(networkTitleRes),
+                value = networkValue
             )
         )
 

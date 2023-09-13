@@ -41,6 +41,7 @@ import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexDepositNetwork
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.receive.address.adaptiveIconPainterResource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -118,7 +119,7 @@ fun DepositQrCodeScreen(
                     )
                 }
             ) {
-                Crossfade(targetState = uiState.loading) { loading ->
+                Crossfade(targetState = uiState.loading, label = "") { loading ->
                     Column(modifier = Modifier.padding(it)) {
                         if (loading) {
                             Loading()
@@ -165,6 +166,22 @@ fun DepositQrCodeScreen(
                                                 contentScale = ContentScale.FillWidth,
                                                 contentDescription = null
                                             )
+                                            Box(
+                                                modifier = Modifier
+                                                    .clip(RoundedCornerShape(8.dp))
+                                                    .background(ComposeAppTheme.colors.white)
+                                                    .size(40.dp),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Image(
+                                                    modifier = Modifier.size(32.dp),
+                                                    painter = adaptiveIconPainterResource(
+                                                        id = R.mipmap.launcher_main,
+                                                        fallbackDrawable = R.drawable.launcher_main_preview
+                                                    ),
+                                                    contentDescription = null
+                                                )
+                                            }
                                         }
                                     }
                                     VSpacer(12.dp)
@@ -222,7 +239,7 @@ fun DepositQrCodeScreen(
                                 Column(Modifier.padding(horizontal = 24.dp)) {
                                     ButtonPrimaryYellow(
                                         modifier = Modifier.fillMaxWidth(),
-                                        title = stringResource(R.string.CexDeposit_CopyAddress),
+                                        title = stringResource(R.string.Button_Copy),
                                         onClick = {
                                             TextHelper.copyText(address.address)
                                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -231,7 +248,7 @@ fun DepositQrCodeScreen(
                                     VSpacer(16.dp)
                                     ButtonPrimaryDefault(
                                         modifier = Modifier.fillMaxWidth(),
-                                        title = stringResource(R.string.CexDeposit_ShareAddress),
+                                        title = stringResource(R.string.Button_Share),
                                         onClick = {
                                             ShareCompat.IntentBuilder(context)
                                                 .setType("text/plain")

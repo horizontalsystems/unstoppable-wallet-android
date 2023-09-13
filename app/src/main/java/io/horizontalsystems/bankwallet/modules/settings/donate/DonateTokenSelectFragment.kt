@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
@@ -38,12 +39,18 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
         val navController = findNavController()
         TokenSelectScreen(
             navController = navController,
-            title = stringResource(R.string.Balance_Send),
+            title = stringResource(R.string.Settings_DonateWith),
             onClickItem = {
                 val donateAddress: String? = App.appConfigProvider.donateAddresses[it.wallet.token.blockchainType]
+                val sendTitle = Translator.getString(R.string.Settings_DonateToken, it.wallet.token.fullCoin.coin.code)
                 navController.slideFromRight(
                     R.id.sendXFragment,
-                    SendFragment.prepareParams(it.wallet, R.id.sendTokenSelectFragment, donateAddress)
+                    SendFragment.prepareParams(
+                        it.wallet,
+                        R.id.sendTokenSelectFragment,
+                        sendTitle,
+                        donateAddress,
+                    )
                 )
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),

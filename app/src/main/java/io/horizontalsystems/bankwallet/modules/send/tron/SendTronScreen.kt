@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 
 @Composable
 fun SendTronScreen(
+    title: String,
     navController: NavController,
     viewModel: SendTronViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
@@ -47,7 +48,6 @@ fun SendTronScreen(
 
 
     ComposeAppTheme {
-        val fullCoin = wallet.token.fullCoin
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -55,7 +55,7 @@ fun SendTronScreen(
         }
 
         SendScreen(
-            fullCoin = fullCoin,
+            title = title,
             onCloseClick = { navController.popBackStack() }
         ) {
             AvailableBalance(

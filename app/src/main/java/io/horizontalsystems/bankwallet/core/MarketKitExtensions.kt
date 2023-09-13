@@ -210,6 +210,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Avalanche,
         BlockchainType.Zcash,
         BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
         BlockchainType.Litecoin,
         BlockchainType.Dash,
         BlockchainType.BinanceChain,
@@ -218,7 +219,6 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
         BlockchainType.Solana,
-        BlockchainType.ECash,
     ).forEachIndexed { index, blockchainType ->
         map[blockchainType] = index
     }
@@ -242,6 +242,28 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Tron -> R.drawable.tron_trc20
         else -> R.drawable.coin_placeholder
     }
+
+val BlockchainType.title: String
+    get() = when (this) {
+    BlockchainType.Bitcoin -> "Bitcoin"
+    BlockchainType.BitcoinCash -> "Bitcoin Cash"
+    BlockchainType.ECash -> "Ecash"
+    BlockchainType.Litecoin -> "Litecoin"
+    BlockchainType.Dash -> "Dash"
+    BlockchainType.Zcash -> "Zcash"
+    BlockchainType.Ethereum -> "Ethereum"
+    BlockchainType.BinanceSmartChain -> "BNB Smart Chain"
+    BlockchainType.Polygon -> "Polygon"
+    BlockchainType.Avalanche -> "Avalanche"
+    BlockchainType.ArbitrumOne -> "ArbitrumOne"
+    BlockchainType.BinanceChain -> "BNB Beacon Coin"
+    BlockchainType.Optimism -> "Optimism"
+    BlockchainType.Solana -> "Solana"
+    BlockchainType.Gnosis -> "Gnosis"
+    BlockchainType.Fantom -> "Fantom"
+    BlockchainType.Tron -> "Tron"
+    is BlockchainType.Unsupported -> this.uid
+}
 
 val BlockchainType.supportedNftTypes: List<NftType>
     get() = when (this) {
@@ -452,3 +474,24 @@ val TokenType.meta: String?
         is TokenType.Bep2 -> this.symbol
         else -> null
     }
+
+val BlockchainType.Companion.supported: List<BlockchainType>
+    get() = listOf(
+        BlockchainType.Bitcoin,
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Gnosis,
+        BlockchainType.Fantom,
+        BlockchainType.Zcash,
+        BlockchainType.Dash,
+        BlockchainType.BitcoinCash,
+        BlockchainType.Litecoin,
+        BlockchainType.BinanceChain,
+        BlockchainType.Solana,
+        BlockchainType.ECash,
+        BlockchainType.Tron,
+    )
