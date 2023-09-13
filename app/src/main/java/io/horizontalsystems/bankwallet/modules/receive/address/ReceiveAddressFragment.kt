@@ -66,7 +66,7 @@ import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_grey
 import cash.p.terminal.ui.compose.components.body_jacob
-import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
@@ -251,10 +251,10 @@ private fun ReceiveAddressScreen(
                                                     .fillMaxWidth()
                                                     .padding(horizontal = 16.dp),
                                             ) {
-                                                body_grey(
+                                                subhead2_grey(
                                                     text = item.title,
                                                 )
-                                                body_leah(
+                                                subhead1_leah(
                                                     text = item.value,
                                                     modifier = Modifier
                                                         .padding(start = 16.dp)
