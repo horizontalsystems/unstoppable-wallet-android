@@ -266,6 +266,7 @@
     <string name="Balance_Withdraw">Retraits</string>
     <string name="Balance_Title">Solde</string>
     <string name="Balance_Send">Envoyer</string>
+    <string name="Balance_Swap">Echanger</string>
     <string name="Balance_Deposit">Dépôts</string>
     <string name="Balance_Receive">Recevoir</string>
     <string name="Balance_Address">Adresse</string>
@@ -292,11 +293,15 @@
     <string name="Balance_NoAssetsToSend">Vous n\'avez pas d\'actifs à envoyer.</string>
     <string name="Balance_NoAssetsToSwap">Vous n\'avez pas d\'actifs à échanger.</string>
     <string name="Balance_Network">Réseau</string>
+    <string name="Balance_Format">Format</string>
     <string name="Balance_NetworkSelectDescription">Choisissez le réseau pour recevoir une adresse.</string>
     <string name="Balance_ReceiveAddressHint">Votre adresse pour le dépôt %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Adresse de la montre de %s</string>
     <string name="Balance_ReceiveWarningText">Envoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Choisissez un format pour fournir une adresse à recevoir.</string>
     <string name="Balance_Receive_AddressFormat">Format de l\'adresse</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Le format d\'adresse en espèces est préféré pour recevoir Bitcoin Cash (BCH) en raison de son expérience utilisateur améliorée et de sa compatibilité. Cependant, les deux formats d\'adresse peuvent être utilisés de façon interchangeable pour recevoir le BCH, quel que soit le format de l\'adresse de l\'expéditeur.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Le format Native SegWit est préféré dans Bitcoin pour améliorer le débit et la sécurité. Tous les formats d\'adresse (Taproot, SegWit, Legacy) peuvent être utilisés de manière interchangeable pour recevoir BTC quel que soit le format d\'adresse de l\'expéditeur, permettant des transactions transparentes entre différents types de pièces.</string>
     <string name="Balance_Receive_Account">Compte</string>
     <string name="Balance_Receive_NotActive">Non actif</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
@@ -653,6 +658,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction déjà dans le block</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un verrouillage des dépenses qui expirera sur le %s.\n\n Pas d\'inquiétude, les Bitcoins reçus sont déjà à vous mais jusqu\'à l\'expiration de la période de verrouillage, vous ne pouvez pas les dépenser sur le réseau Bitcoin.</string>
+    <string name="Info_LockTime_Description_Static">L\'expéditeur a envoyé ces fonds avec un délai prédéfini qui se terminera à la date indiquée.\n\nPas de soucis, les Bitcoins reçues sont déjà à vous mais vous devez attendre l\'expiration de la période de verrouillage pour les dépenser sur le réseau Bitcoin.</string>
     <string name="Info_DoubleSpend_Title">Double dépense</string>
     <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser les intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau</string>
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
@@ -696,6 +702,8 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
+    <string name="Settings_DonateToken">Donate %s</string>
+    <string name="Settings_DonateWith">Donnez avec</string>
     <string name="Settings_Donate_GetAddress">Obtenir une adresse</string>
     <string name="Settings_Donate_Addresses">Adresses</string>
     <string name="Appearance_Theme">Thème</string>
@@ -890,6 +898,7 @@
     <string name="Watch_TypeEvmAddress">Adresse EVM</string>
     <string name="Watch_TypeSolanaAddress">Adresse Solana</string>
     <string name="Watch_TypeTronAddress">Adresse du Tron</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">xPubKey invalide</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
@@ -963,6 +972,7 @@
     <string name="EvmPrivateKey_Warning">Cette clé est pour toutes les blockchains compatibles EVM. Ne la partagez avec personne.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Appuyez pour afficher la clé privée</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Appuyez pour afficher la clé privée</string>
     <!-- Private Keys -->
@@ -970,6 +980,7 @@
     <string name="PrivateKeys_EvmPrivateKey">Clé privée EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Permet un contrôle total des crypto-monnaies basées sur l\'EVM, c\'est-à-dire Ethereum, Binance Smart Chain, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Permet d\'exercer un contrôle total sur les actifs du portefeuille correspondant.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Permet un contrôle total du Bitcoin et des autres crypto-monnaies basées sur l\'UTXO, c\'est-à-dire Litecoin, Bitcoin Cash, Dash, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_NeverShareWarning">Ne partagez jamais votre phrase de récupération avec quiconque. Une équipe imparable ne demandera jamais votre phrase de récupération.</string>
     <!-- Public Keys -->
@@ -1023,8 +1034,10 @@
     <string name="AddToken_AlreadyAdded">DÉJÀ AJOUTÉ</string>
     <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
     <string name="AddToken_ChooseToken">Choisir les jetons</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidContractAddress">Adresse du contrat invalide</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
     <string name="AddEvmToken_Bep2NotFound">Symbole BEP2 introuvable</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Adresse du contrat introuvable dans la blockchain %s</string>
     <!-- Address Format Settings List -->
@@ -1037,6 +1050,7 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommendé)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
@@ -1044,6 +1058,7 @@
     <string name="Tor_Connection_Title">Connexion</string>
     <string name="Tor_Connection_Enable">Activer Tor</string>
     <string name="Tor_Connection_Disable">Désactiver Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Démarrage de Tor...</string>
     <string name="Tor_Status_Error">Erreur lors du démarrage de Tor !</string>
     <string name="TorPage_Connecting">Connexion à Tor…</string>
@@ -1166,6 +1181,7 @@
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Graphique montrant la variation valeur totale verrouillée dans les contrats intelligents du projet sur une période de 1 an.</string>
@@ -1194,6 +1210,7 @@
     <string name="CoinAnalytics_Holders">Titres</string>
     <string name="CoinAnalytics_ProjectTvl">Projet TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projet TVL (valeur totale verrouillée)</string>
+    <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Revenus du projet</string>
     <string name="CoinAnalytics_ProjectFee">Frais de projet</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Classement en fonction des revenus du projet</string>
@@ -1213,6 +1230,7 @@
     <string name="Coin_Analytics_30DayUniqueAddress">Adresses uniques de 30 jours</string>
     <string name="Coin_Analytics_30DayVolume">Volume sur 30 jours</string>
     <string name="Coin_Analytics_OverallScore">Sous total</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Excellent</string>
     <string name="Coin_Analytics_OverallScore_Good">Bon</string>
     <string name="Coin_Analytics_OverallScore_Fair">Équitable</string>
     <string name="Coin_Analytics_OverallScore_Poor">Mauvais</string>
@@ -1230,6 +1248,8 @@
     <string name="Coin_Analytics_Period_1h">1 heure</string>
     <string name="Coin_Analytics_Period_4h">4 heures</string>
     <string name="Coin_Analytics_Period_8h">8 heures</string>
+    <string name="Coin_Analytics_Period_1d">1 day</string>
+    <string name="Coin_Analytics_Period_1w">1 week</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">Achat fort</string>
     <string name="Coin_Analytics_Indicators_StrongSell">Vente forte</string>
     <string name="Coin_Analytics_Indicators_Sell">Vendre</string>
@@ -1279,6 +1299,7 @@
     <string name="NftAsset_ContractAddress">Adresse du contrat</string>
     <string name="NftAsset_TokenId">Identifiant du token</string>
     <string name="NftAsset_TokenStandard">Standard du token</string>
+    <string name="NftAsset_Blockchain">Blockchain</string>
     <string name="NftAsset_Links_Website">Site Web</string>
     <string name="PoweredBy_OpenSeaAPI">Propulsé par OpenSea API</string>
     <string name="Nft_TopCollections">Top des collections NFT</string>
@@ -1291,6 +1312,7 @@
     <string name="NftCollection_AveragePrice">Moyenne du temps</string>
     <string name="NftCollection_ItemsCount">%d éléments</string>
     <string name="NftCollection_TodaysSales">Vendeurs d\'aujourd\'hui</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s par NFT</string>
     <string name="NftCollection_Royalty">Redevance</string>
     <string name="NftCollection_InceptionDate">Date de création</string>
