@@ -131,6 +131,7 @@
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">%s 生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
@@ -292,11 +293,18 @@
     <string name="Balance_NoAssetsToSend">您没有要发送的资产。</string>
     <string name="Balance_NoAssetsToSwap">您目前没有可供交换的资产。</string>
     <string name="Balance_Network">網絡</string>
+    <string name="Balance_Format">格式</string>
     <string name="Balance_NetworkSelectDescription">选择要接收地址的网络。</string>
     <string name="Balance_ReceiveAddressHint">您存放 %s 的地址</string>
     <string name="Balance_ReceiveWatchAddressHint">观看 %s 的地址</string>
     <string name="Balance_ReceiveWarningText">只发送 %s 到此地址。向此地址发送其他类型的令牌将导致其最终丢失。</string>
+    <string name="Balance_Receive_AddressFormatDescription">选择要接收的地址的格式。</string>
     <string name="Balance_Receive_AddressFormat">地址格式</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">现金地址格式更适合接收比特币现金(BCH)，因为它提高了用户体验和兼容性。 然而，无论发件人的地址格式如何，两种地址格式都可以互换地用于接收BCCH。</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">本机SegWit格式是比特币中为了改进输送和安全性而偏爱的。 所有地址格式 (Taproot, SegWit, Legacy) 可以互换使用来接收BTC ，而不论发送者的地址格式。 启用跨越不同种类的无缝交易。</string>
+    <string name="Balance_Receive_Account">账户</string>
+    <string name="Balance_Receive_NotActive">不活动</string>
+    <string name="Balance_LockedAmount_Title">锁住</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <string name="SendNft_Error_NotEnoughtBalance">余额不足</string>
@@ -456,6 +464,8 @@
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_Unnamed">未命名</string>
     <string name="WalletConnect_DAppUnknown">未知的 dApp</string>
+    <string name="WalletConnect_Pairings">Pairings</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">全部刪除</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">您想要删除所有配对的 dApps？</string>
     <string name="WalletConnect_Pairings_Delete">删除</string>
@@ -648,6 +658,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">交易已在区块中</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的加密货币已经属于您，但在锁定期限结束前，您无法在网络上消费它们。</string>
+    <string name="Info_LockTime_Description_Static">汇款人通过将在所显示日期失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
     <string name="Info_DoubleSpend_Title">双复支付</string>
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
     <string name="Info_DoubleSpend_ThisTx">此交易</string>
@@ -691,6 +702,9 @@
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
     <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
     <string name="Settings_Donate">捐助</string>
+    <string name="Settings_DonateToken">捐赠%s</string>
+    <string name="Settings_DonateWith">捐赠方式</string>
+    <string name="Settings_Donate_GetAddress">获取地址</string>
     <string name="Settings_Donate_Addresses">地址</string>
     <string name="Appearance_Theme">主题</string>
     <string name="Appearance_Tab">TAB设置</string>
@@ -883,6 +897,7 @@
     <string name="Watch_TypeEvmAddress">EVM 地址</string>
     <string name="Watch_TypeSolanaAddress">Solana 地址</string>
     <string name="Watch_TypeTronAddress">Tron 地址</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">无效的 xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
@@ -905,6 +920,7 @@
     <string name="ManageAccount_WatchAddresses">观察地址</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">选择钱包以快速切换</string>
     <string name="ManageAccount_DeleteWarning">您要停止监视这个钱包地址吗？</string>
+    <string name="Balance_Receive_BackupRequired_Description">您需要备份 %1$s</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">网络设置</string>
     <string name="NetworkSettings_SwithesAutomatically">自动切换</string>
@@ -955,6 +971,7 @@
     <string name="EvmPrivateKey_Warning">此密钥适用于所有EVM兼容的区块链。请不要与任何人分享。</string>
     <string name="EvmPrivateKey_ShowPrivateKey">点击显示私钥</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
     <!-- Private Keys -->
@@ -962,6 +979,7 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">授予对基于加密货币的EVM的完全控制，即在相应钱包内的以太坊、币安智能链等。</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">授予对相应钱包上的资产的完全控制。</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">授予对比特币和基于加密货币的其他未花费交易输出（UTXO）的完全控制，即在相应钱包内的莱特币、比特币现金、达世币等。</string>
     <string name="PrivateKeys_NeverShareWarning">永远不会与任何人分享您的恢复短语。无法阻止的团队将永远不会要求您的恢复短语。</string>
     <!-- Public Keys -->
@@ -1109,6 +1127,7 @@
     <string name="CoinPage_DilutedMarketCap">稀释市值</string>
     <string name="CoinPage_inCirculation">流通量</string>
     <string name="CoinPage_TotalSupply">总供应</string>
+    <string name="CoinPage_MarketCap_Thousand">千</string>
     <string name="CoinPage_MarketCap_Million">百万</string>
     <string name="CoinPage_MarketCap_Billion">十亿</string>
     <string name="CoinPage_MarketCap_Trillion">万亿</string>
@@ -1317,6 +1336,7 @@
     <string name="NftCollection_AveragePrice">全部时间平均值</string>
     <string name="NftCollection_ItemsCount">%d条新闻</string>
     <string name="NftCollection_TodaysSales">今天的卖家</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s 每NFT</string>
     <string name="NftCollection_Royalty">荣耀</string>
     <string name="NftCollection_InceptionDate">起始日期</string>
@@ -1353,6 +1373,7 @@
     <string name="ReleaseNotes_FollowUs">关注我们</string>
     <string name="CoinPage_Chart_Locked">锁住</string>
     <string name="ProUsersInfo_Title">专业用户</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">附加令牌信息</string>
     <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
