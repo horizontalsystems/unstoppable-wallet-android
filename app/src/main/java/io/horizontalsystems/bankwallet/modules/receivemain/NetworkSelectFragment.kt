@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -38,6 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.FullCoin
 
 class NetworkSelectFragment : BaseComposeFragment() {
 
@@ -53,7 +55,19 @@ class NetworkSelectFragment : BaseComposeFragment() {
             HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
             navController.popBackStack()
         } else {
-            NetworkSelectScreen(navController, coinUid, popupDestinationId)
+            val initViewModel = viewModel(initializer = {
+                NetworkSelectInitViewModel(coinUid)
+            })
+
+            val activeAccount = initViewModel.activeAccount
+            val fullCoin = initViewModel.fullCoin
+
+            if (activeAccount != null && fullCoin != null) {
+                NetworkSelectScreen(navController, popupDestinationId, activeAccount, fullCoin)
+            } else {
+                HudHelper.showErrorMessage(LocalView.current, "Active account and/or full coin is null")
+                navController.popBackStack()
+            }
         }
     }
 
@@ -70,10 +84,11 @@ class NetworkSelectFragment : BaseComposeFragment() {
 @Composable
 fun NetworkSelectScreen(
     navController: NavController,
-    coinUid: String,
     popupDestinationId: Int?,
+    activeAccount: Account,
+    fullCoin: FullCoin,
 ) {
-    val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(coinUid))
+    val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(activeAccount, fullCoin))
 
     ComposeAppTheme {
         Scaffold(
@@ -98,14 +113,16 @@ fun NetworkSelectScreen(
                         text = stringResource(R.string.Balance_NetworkSelectDescription)
                     )
                     VSpacer(20.dp)
-                    CellUniversalLawrenceSection(viewModel.coinWallets) { wallet ->
-                        val blockchain = wallet.token.blockchain
+                    CellUniversalLawrenceSection(viewModel.eligibleTokens) { token ->
+                        val blockchain = token.blockchain
                         SectionUniversalItem {
                             NetworkCell(
                                 title = blockchain.name,
                                 subtitle = blockchain.description,
                                 imageUrl = blockchain.type.imageUrl,
                                 onClick = {
+                                    val wallet = viewModel.getOrCreateWallet(token)
+
                                     navController.slideFromRight(
                                         R.id.receiveFragment,
                                         bundleOf(
