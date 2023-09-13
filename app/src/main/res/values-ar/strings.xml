@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">لم يتم تحديد الإعدادات</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">إلغاء</string>
     <string name="Alert_Copy">نسخ</string>
     <string name="Alert_Close">إغلاق</string>
@@ -109,11 +108,6 @@
     <string name="Market_Search_Hint">بحث</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
-    <string name="TvlRank_Field_Eth">Ethereum</string>
-    <string name="TvlRank_Field_Bsc">Binance</string>
-    <string name="TvlRank_Field_Sol">Solana</string>
-    <string name="TvlRank_Field_Ava">Avalanche</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
     <!--Balance-->
     <string name="Balance_Send">إرسال</string>
     <!--Send NFT-->
@@ -160,7 +154,6 @@
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Understand">فهمت</string>
     <!--Settings-->
-    <string name="Settings_PersonalSupport_Account">Account</string>
     <!-- Blockchain Settings  -->
     <!-- Privacy  -->
     <!-- Security Center -->
@@ -203,8 +196,8 @@
     <string name="RecoveryPhrase_Title">كلمات الاسترجاع</string>
     <!-- Evm Private Key -->
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
+
     <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_EvmPrivateKey">EVM Private Key</string>
@@ -220,8 +213,6 @@
     <!-- Enable Token -->
     <string name="EnalbeToken_EnableKey">تمكين</string>
     <!-- Add Token -->
-    <string name="AddToken_Dots">…</string>
-    <string name="AddToken_Blockchain">Blockchain</string>
     <!-- Address Format Settings List -->
     <!-- Coin Platforms -->
     <!-- Blockchain Settings -->
@@ -229,7 +220,6 @@
     <!--Coin Page-->
     <string name="ActivateSubscription_Title">تفعيل</string>
     <string name="NftAsset_Action_Save">حفظ</string>
-    <string name="NftAsset_Blockchain">Blockchain</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_Cancelled">إلغاء</string>

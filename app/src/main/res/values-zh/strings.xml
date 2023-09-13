@@ -56,6 +56,7 @@
     <string name="Button_SignUp">注册</string>
     <string name="Button_Submit">提交</string>
     <string name="Button_TryAgain">再试一次</string>
+    <string name="Button_Share">分享</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
@@ -265,6 +266,7 @@
     <string name="Balance_Withdraw">提取</string>
     <string name="Balance_Title">余额</string>
     <string name="Balance_Send">发送​​</string>
+    <string name="Balance_Swap">掉期交易</string>
     <string name="Balance_Deposit">接收</string>
     <string name="Balance_Receive">接收</string>
     <string name="Balance_Address">地址</string>
@@ -288,6 +290,21 @@
     <string name="Balance_NoWalletAlert">尚无钱包</string>
     <string name="Balance_NoCoinsAlert">您没有添加的硬币。\n添加您将使用的硬币</string>
     <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
+    <string name="Balance_NoAssetsToSend">您没有要发送的资产。</string>
+    <string name="Balance_NoAssetsToSwap">您目前没有可供交换的资产。</string>
+    <string name="Balance_Network">網絡</string>
+    <string name="Balance_Format">格式</string>
+    <string name="Balance_NetworkSelectDescription">选择要接收地址的网络。</string>
+    <string name="Balance_ReceiveAddressHint">您存放 %s 的地址</string>
+    <string name="Balance_ReceiveWatchAddressHint">观看 %s 的地址</string>
+    <string name="Balance_ReceiveWarningText">只发送 %s 到此地址。向此地址发送其他类型的令牌将导致其最终丢失。</string>
+    <string name="Balance_Receive_AddressFormatDescription">选择要接收的地址的格式。</string>
+    <string name="Balance_Receive_AddressFormat">地址格式</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">现金地址格式更适合接收比特币现金(BCH)，因为它提高了用户体验和兼容性。 然而，无论发件人的地址格式如何，两种地址格式都可以互换地用于接收BCCH。</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">本机SegWit格式是比特币中为了改进输送和安全性而偏爱的。 所有地址格式 (Taproot, SegWit, Legacy) 可以互换使用来接收BTC ，而不论发送者的地址格式。 启用跨越不同种类的无缝交易。</string>
+    <string name="Balance_Receive_Account">账户</string>
+    <string name="Balance_Receive_NotActive">不活动</string>
+    <string name="Balance_LockedAmount_Title">锁住</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <string name="SendNft_Error_NotEnoughtBalance">余额不足</string>
@@ -641,6 +658,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">交易已在区块中</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的加密货币已经属于您，但在锁定期限结束前，您无法在网络上消费它们。</string>
+    <string name="Info_LockTime_Description_Static">汇款人通过将在所显示日期失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
     <string name="Info_DoubleSpend_Title">双复支付</string>
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
     <string name="Info_DoubleSpend_ThisTx">此交易</string>
@@ -684,6 +702,10 @@
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
     <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
     <string name="Settings_Donate">捐助</string>
+    <string name="Settings_DonateToken">捐赠%s</string>
+    <string name="Settings_DonateWith">捐赠方式</string>
+    <string name="Settings_Donate_GetAddress">获取地址</string>
+    <string name="Settings_Donate_Addresses">地址</string>
     <string name="Appearance_Theme">主题</string>
     <string name="Appearance_Tab">TAB设置</string>
     <string name="Appearance_LaunchScreen">局域网SCREEN</string>
@@ -819,6 +841,8 @@
     <string name="Hud_Already_In_Wallet">已经加入钱包</string>
     <string name="Hud_Removed_from_Watchlist">从关注列表移除</string>
     <string name="Hud_Removed">已删除</string>
+    <string name="Hud_WaitForSynchronization">等待同步</string>
+
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理</string>
     <string name="ManageCoins_Search">姓名、代码或合同地址</string>
@@ -897,6 +921,7 @@
     <string name="ManageAccount_WatchAddresses">观察地址</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">选择钱包以快速切换</string>
     <string name="ManageAccount_DeleteWarning">您要停止监视这个钱包地址吗？</string>
+    <string name="Balance_Receive_BackupRequired_Description">您需要备份 %1$s</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">网络设置</string>
     <string name="NetworkSettings_SwithesAutomatically">自动切换</string>
@@ -1103,7 +1128,7 @@
     <string name="CoinPage_DilutedMarketCap">稀释市值</string>
     <string name="CoinPage_inCirculation">流通量</string>
     <string name="CoinPage_TotalSupply">总供应</string>
-    <string name="CoinPage_MarketCap_Thousand">K</string>
+    <string name="CoinPage_MarketCap_Thousand">千</string>
     <string name="CoinPage_MarketCap_Million">百万</string>
     <string name="CoinPage_MarketCap_Billion">十亿</string>
     <string name="CoinPage_MarketCap_Trillion">万亿</string>

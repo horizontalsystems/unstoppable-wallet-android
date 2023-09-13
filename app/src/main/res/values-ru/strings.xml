@@ -56,6 +56,7 @@
     <string name="Button_SignUp">Регистрация</string>
     <string name="Button_Submit">Подтвердить</string>
     <string name="Button_TryAgain">Попробовать ещё раз</string>
+    <string name="Button_Share">Поделиться</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
@@ -267,6 +268,7 @@
     <string name="Balance_Withdraw">Вывод средств</string>
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
+    <string name="Balance_Swap">Обменять</string>
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Receive">Получить</string>
     <string name="Balance_Address">Адрес</string>
@@ -290,6 +292,21 @@
     <string name="Balance_NoWalletAlert">У вас пока нет установленных кошельков.\nСоздайте новый кошелек или восстановите существующий кошелек </string>
     <string name="Balance_NoCoinsAlert">У вас нет добавленных монет.\nДобавьте монеты, которые вы будете использовать</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
+    <string name="Balance_NoAssetsToSend">У вас нет активов для отправки.</string>
+    <string name="Balance_NoAssetsToSwap">У вас нет активов для обмена.</string>
+    <string name="Balance_Network">Сеть</string>
+    <string name="Balance_Format">Формат</string>
+    <string name="Balance_NetworkSelectDescription">Выберите сеть для получения адреса.</string>
+    <string name="Balance_ReceiveAddressHint">Ваш адрес для депозита %s</string>
+    <string name="Balance_ReceiveWatchAddressHint">Отслеживаемый адрес %s</string>
+    <string name="Balance_ReceiveWarningText">Отправка только %s на этот адрес. Отправка других типов токенов на этот адрес приведет к их окончательной потере.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Выберите формат для предоставления адреса для получения.</string>
+    <string name="Balance_Receive_AddressFormat">Формат адреса</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Формат Cash Address предпочтителен для получения Bitcoin Cash (BCH) из-за улучшенного пользовательского опыта и совместимости. Однако, оба формата адреса могут использоваться взаимозаменяемо для получения BCH, независимо от формата адреса отправителя.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Формат Native SegWit предпочтителен в Биткойне для повышения пропускной способности и безопасности. Все форматы адресов (Taproot, SegWit, Legacy) могут использоваться взаимозаменяемо для получения BTC независимо от формата адреса отправителя, что обеспечивает бесперебойные транзакции между различными типами монет.</string>
+    <string name="Balance_Receive_Account">Аккаунт</string>
+    <string name="Balance_Receive_NotActive">Не активен</string>
+    <string name="Balance_LockedAmount_Title">Заблокировано</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <string name="SendNft_Error_NotEnoughtBalance">Недостаточно средств</string>
@@ -643,6 +660,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Транзакция уже в блоке</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
+    <string name="Info_LockTime_Description_Static">Эти средства были отправлены с временной блокировкой, которая истекает в указанную дату.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете их потратить в сети Bitcoin.</string>
     <string name="Info_DoubleSpend_Title">Двойная трата</string>
     <string name="Info_DoubleSpend_Description">Риск двойной траты! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
@@ -686,6 +704,10 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
     <string name="Settings_Donate">Поддержать</string>
+    <string name="Settings_DonateToken">Пожертвовать %s</string>
+    <string name="Settings_DonateWith">Поддержи нас</string>
+    <string name="Settings_Donate_GetAddress">Получить адрес</string>
+    <string name="Settings_Donate_Addresses">Адреса</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
@@ -817,6 +839,7 @@
     <string name="Hud_Already_In_Wallet">Уже добавлено в кошелек</string>
     <string name="Hud_Removed_from_Watchlist">Удалить из избранного</string>
     <string name="Hud_Removed">Удалено</string>
+    <string name="Hud_WaitForSynchronization">Дождитесь синхронизации</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Токены</string>
     <string name="ManageCoins_Search">Название, код или адрес контракта</string>
@@ -895,6 +918,7 @@
     <string name="ManageAccount_WatchAddresses">Просмотр кошелька</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Выберите кошелек для быстрого переключения</string>
     <string name="ManageAccount_DeleteWarning">Вы хотите приостановить просмотр этого адреса кошелька?</string>
+    <string name="Balance_Receive_BackupRequired_Description">Вам нужно сделать резервную копию %1$s</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Настройки сети</string>
     <string name="NetworkSettings_SwithesAutomatically">переходит автоматически</string>
