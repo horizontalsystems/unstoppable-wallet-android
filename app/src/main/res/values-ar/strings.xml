@@ -197,13 +197,8 @@
     <!-- Evm Private Key -->
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
-
-    <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
     <!-- Private Keys -->
-    <string name="PrivateKeys_EvmPrivateKey">EVM Private Key</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <!-- Public Keys -->
-    <string name="PublicKeys_EvmAddress">EVM Address</string>
     <!-- Recovery Phrase Verify -->
     <!-- Backup Key -->
     <!--Manage Keys Delete Alert-->
