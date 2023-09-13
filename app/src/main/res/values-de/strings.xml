@@ -56,6 +56,7 @@
     <string name="Button_SignUp">Lege ein Benutzerkonto an</string>
     <string name="Button_Submit">Jetzt anmelden</string>
     <string name="Button_TryAgain">Bitte versuche es noch einmal</string>
+    <string name="Button_Share">Teilen</string>
     <string name="Error_OutOfRange">Es muss mindestens %1$s enthalten und darf maximal %2$s Zeichen lang sein</string>
     <string name="Error_NotInteger">Die von Dir angegebenen Zahlen sind nicht richtig</string>
     <string name="Error">Fehler</string>
@@ -170,7 +171,9 @@
     <string name="Market_TvlDeFi">TVL in DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">Alle anzeigen</string>
+    <string name="Market_PoweredByApi">Powered by CoinGeko API</string>
     <string name="Market_PoweredByHorizontalApi">Powered by Horizontal API</string>
+    <string name="Market_PoweredByDefiLlamaApi">Powered by DefiLlama API</string>
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Merkliste</string>
@@ -266,6 +269,7 @@
     <string name="Balance_Withdraw">Abheben</string>
     <string name="Balance_Title">Guthaben</string>
     <string name="Balance_Send">Senden</string>
+    <string name="Balance_Swap">Tauschen</string>
     <string name="Balance_Deposit">Anfordern</string>
     <string name="Balance_Receive">Empfangen</string>
     <string name="Balance_Address">Adresse</string>
@@ -289,6 +293,21 @@
     <string name="Balance_NoWalletAlert">Sie haben noch keine installierten Wallets.\nErstellen Sie eine neue Wallet oder stellen Sie eine vorhandene wieder her </string>
     <string name="Balance_NoCoinsAlert">Sie haben keine Münzen hinzugefügt.\nFügen Sie die Münzen hinzu, die Sie verwenden werden</string>
     <string name="Balance_WatchAccount_NoBalance">Diese Wallet-Adresse hat keinen Kontostand</string>
+    <string name="Balance_NoAssetsToSend">Sie haben keine Assets zu senden.</string>
+    <string name="Balance_NoAssetsToSwap">Du hast keine Vermögenswerte zum Tauschen.</string>
+    <string name="Balance_Network">Netzwerk</string>
+    <string name="Balance_Format">Format</string>
+    <string name="Balance_NetworkSelectDescription">Wählen Sie das Netzwerk aus, um eine Adresse zu erhalten.</string>
+    <string name="Balance_ReceiveAddressHint">Ihre Adresse für %s</string>
+    <string name="Balance_ReceiveWatchAddressHint">Beobachtungsadresse von %s</string>
+    <string name="Balance_ReceiveWarningText">Senden Sie nur %s an diese Adresse. Das Senden anderer Arten von Tokens an diese Adresse führt zu ihrem ultimativen Verlust.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Wählen Sie ein Format für die Angabe einer Adresse, die empfangen werden soll.</string>
+    <string name="Balance_Receive_AddressFormat">Adressformatierung</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Das Cash Address Format wird bevorzugt für den Erhalt von Bitcoin Cash (BCH) aufgrund seiner verbesserten Benutzerfreundlichkeit und Kompatibilität bevorzugt. Beide Adressformate können jedoch unabhängig vom Adressformat des Absenders austauschbar genutzt werden, um BCH zu empfangen.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Das Native SegWit Format wird in Bitcoin bevorzugt für einen verbesserten Durchsatz und mehr Sicherheit. Alle Adressformate (Taproot, SegWit, Legacy) können unabhängig vom Adressformat des Absenders zum Empfang von BTC verwendet werden ermöglicht nahtlose Transaktionen über verschiedene Münztypen.</string>
+    <string name="Balance_Receive_Account">Konto</string>
+    <string name="Balance_Receive_NotActive">Nicht aktiv</string>
+    <string name="Balance_LockedAmount_Title">Locked</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
     <string name="SendNft_Error_NotEnoughtBalance">Nicht genügend Guthaben</string>
@@ -642,6 +661,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaktion bereits im Block</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Der Absender hat diese Geldmittel mit einer Ausgabesperre versehen, die am %s abläuft.\n\nKeine Sorge, die empfangenen Bitcoins gehören bereits Ihnen, aber bis zum Ablauf der Sperrfrist können Sie diese nicht im Bitcoin-Netzwerk ausgeben.</string>
+    <string name="Info_LockTime_Description_Static">Der Sender hat dieses Guthaben mit einer Ausgabesperre versehen, die zu dem angezeigten Datum abläuft.\n\nKeine Sorge, die erhaltenen Bitcoin sind bereits Ihre. Die Bitcoins sind nur zeitweise gesperrt, so dass Sie sie erst nach Ablauf der Sperrzeit im Bitcoin-Netzwerk ausgeben können.</string>
     <string name="Info_DoubleSpend_Title">Double-Spend</string>
     <string name="Info_DoubleSpend_Description">Double-Spend-Risiko! Es gibt eine weitere Transaktion auf der Blockchain, die versucht, die in dieser Transaktion verwendeten Inputs auszugeben. Nur eine Transaktion wird vom Netzwerk akzeptiert</string>
     <string name="Info_DoubleSpend_ThisTx">Dieser Tx</string>
@@ -685,6 +705,10 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Telegram öffnen</string>
     <string name="Settings_Donate_Info">Gemeinsam können wir mit Ihrer Unterstützung diese App noch besser machen!</string>
     <string name="Settings_Donate">Spenden</string>
+    <string name="Settings_DonateToken">%s Spenden</string>
+    <string name="Settings_DonateWith">Spenden mit</string>
+    <string name="Settings_Donate_GetAddress">Adresse erhalten</string>
+    <string name="Settings_Donate_Addresses">Adressen</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
     <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>
@@ -823,6 +847,7 @@
     <string name="Hud_Already_In_Wallet">Bereits im Wallet enthalten</string>
     <string name="Hud_Removed_from_Watchlist">Aus Merkliste entfernt</string>
     <string name="Hud_Removed">Entfernt</string>
+    <string name="Hud_WaitForSynchronization">Warten auf Synchronisation</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_Search">Name, Code oder Vertragsadresse</string>
@@ -901,6 +926,7 @@
     <string name="ManageAccount_WatchAddresses">Watch-Adresse</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Wallet für Schnellwechsel auswählen</string>
     <string name="ManageAccount_DeleteWarning">Möchten Sie die Beobachtung dieser Wallet-Adresse beenden?</string>
+    <string name="Balance_Receive_BackupRequired_Description">Sie müssen %1$s sichern</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Netzwerkeinstellungen</string>
     <string name="NetworkSettings_SwithesAutomatically">wechselt automatisch</string>

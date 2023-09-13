@@ -56,6 +56,7 @@
     <string name="Button_SignUp">S\'Inscrire</string>
     <string name="Button_Submit">Je me connecte</string>
     <string name="Button_TryAgain">Veuillez Réessayer</string>
+    <string name="Button_Share">Partager</string>
     <string name="Error_OutOfRange">Il doit contenir au moins %1$s et faire un maximum de %2$s caractères</string>
     <string name="Error_NotInteger">Les chiffres que vous avez fournis sont incorrects</string>
     <string name="Error">Erreur</string>
@@ -265,6 +266,7 @@
     <string name="Balance_Withdraw">Retraits</string>
     <string name="Balance_Title">Solde</string>
     <string name="Balance_Send">Envoyer</string>
+    <string name="Balance_Swap">Echanger</string>
     <string name="Balance_Deposit">Dépôts</string>
     <string name="Balance_Receive">Recevoir</string>
     <string name="Balance_Address">Adresse</string>
@@ -288,6 +290,21 @@
     <string name="Balance_NoWalletAlert">Vous n\'avez pas encore de portefeuilles installés.\nCréez un nouveau portefeuille ou restaurez un portefeuille existant </string>
     <string name="Balance_NoCoinsAlert">Vous n\'avez pas de pièces ajoutées.\nAjoutez les pièces que vous utiliserez</string>
     <string name="Balance_WatchAccount_NoBalance">Cette adresse de portefeuille n\'a pas de solde</string>
+    <string name="Balance_NoAssetsToSend">Vous n\'avez pas d\'actifs à envoyer.</string>
+    <string name="Balance_NoAssetsToSwap">Vous n\'avez pas d\'actifs à échanger.</string>
+    <string name="Balance_Network">Réseau</string>
+    <string name="Balance_Format">Format</string>
+    <string name="Balance_NetworkSelectDescription">Choisissez le réseau pour recevoir une adresse.</string>
+    <string name="Balance_ReceiveAddressHint">Votre adresse pour le dépôt %s</string>
+    <string name="Balance_ReceiveWatchAddressHint">Adresse de la montre de %s</string>
+    <string name="Balance_ReceiveWarningText">Envoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Choisissez un format pour fournir une adresse à recevoir.</string>
+    <string name="Balance_Receive_AddressFormat">Format de l\'adresse</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Le format d\'adresse en espèces est préféré pour recevoir Bitcoin Cash (BCH) en raison de son expérience utilisateur améliorée et de sa compatibilité. Cependant, les deux formats d\'adresse peuvent être utilisés de façon interchangeable pour recevoir le BCH, quel que soit le format de l\'adresse de l\'expéditeur.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Le format Native SegWit est préféré dans Bitcoin pour améliorer le débit et la sécurité. Tous les formats d\'adresse (Taproot, SegWit, Legacy) peuvent être utilisés de manière interchangeable pour recevoir BTC quel que soit le format d\'adresse de l\'expéditeur, permettant des transactions transparentes entre différents types de pièces.</string>
+    <string name="Balance_Receive_Account">Compte</string>
+    <string name="Balance_Receive_NotActive">Non actif</string>
+    <string name="Balance_LockedAmount_Title">Verrouillé</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <string name="SendNft_Error_NotEnoughtBalance">Solde insuffisant</string>
@@ -365,9 +382,9 @@
     <string name="FeeSettings_BaseFee">Frais de base</string>
     <string name="FeeSettings_BaseFee_Info">Le protocole réseau détermine le prix de base par gaz pour chaque bloc, appelé tarif de base. Il varie selon le niveau d\'utilisation du réseau de bloc en bloc. Il peut augmenter ou diminuer de 12,5 % au maximum dans le prochain bloc, ce qui rend les frais plus prévisibles. La valeur affichée ici est le taux de frais de base du bloc actuel.</string>
     <string name="FeeSettings_MaxFee">Taux de frais max (Gwei)</string>
-    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
+    <string name="FeeSettings_MaxFee_Info">Cela correspond au montant maximal du prix auquel l\'utilisateur achète le gaz. Ce prix doit couvrir le taux minimal des frais de transaction du réseau, il doit aussi devenir la priorité avec laquelle une transaction sera traitée. L\'origine de l\'estimation de la valeur, indiquée ici, se trouve dans une analyse, selon laquelle la valeur serait calculée en ajoutant le taux minimal des frais de transaction du bloc successif à la priorité de l\'utilisateur avec la quelle une transaction sera traitée. Le taux actuel des frais de transaction à payer, sera revu à la baisse et ajusté automatiquement. La fixation du taux du prix en dessous du taux plancher actuel, serait, d\'une part, un soulagement parce qu\'elle limiterait les frais à payer, d\'autre part, il faut compter avec un temps de confirmation moyen plus long des transactions, voire un blocage de la transaction.</string>
     <string name="FeeSettings_MaxMinerTips">Frais de priorité max (Gwei)</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Les utilisateurs paient des frais de priorité pour encourager une transaction à être confirmée plus rapidement. Ils sont parfois appelés conseils. Le taux de frais de priorité max est le prix supplémentaire maximum par gaz que l\'utilisateur est prêt à payer en plus du taux de frais de base. La valeur montrée ici est suggérée en fonction des conditions de réseau prévues. Les frais de priorité réels seront normalement inférieurs. Le fait de le définir à zéro peut entraîner un long délai d\'attente pour la confirmation de la transaction, car il est placé à la fin de la file d\'attente des transactions en attente de tous les utilisateurs.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risqué</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transaction risque de rester en attente pendant un certain temps ou d\'échouer complètement.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risqué</string>
@@ -447,7 +464,7 @@
     <string name="WalletConnect_NotSupportedDescription">Votre type de portefeuille actuel %s ne prend pas en charge WalletConnect</string>
     <string name="WalletConnect_Unnamed">Inconnu</string>
     <string name="WalletConnect_DAppUnknown">DApp inconnu</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
+    <string name="WalletConnect_Pairings">Paires de Devises</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Tout Supprimer</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Voulez-vous supprimer tous les dApss appariés ?</string>
@@ -498,13 +515,13 @@
     <string name="Swap_Revoking">Révocation en cours...</string>
     <string name="Swap_Approve">Approuver</string>
     <string name="Swap_Approving">Approbation</string>
-    <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_Swapping">Swapping de Crypto</string>
     <string name="Swap_MaximumPaid">Montant maximum payé</string>
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
     <string name="Swap_SelectSwapProvider_Title">Fournisseur swap</string>
     <string name="Swap_AmountEstimated">(est)</string>
-    <string name="Swap_AmountMin">(min)</string>
+    <string name="Swap_AmountMin">(montant minimal)</string>
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
@@ -530,7 +547,7 @@
     <string name="SwapSettings_Error_InvalidDeadline">Date limite invalide</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
     <!-- Swap Confirmation -->
-    <string name="Swap_Confirmation">Confirmation</string>
+    <string name="Swap_Confirmation">Valider</string>
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
     <string name="Swap_Confirmation_Maximum">Maximum</string>
     <string name="Swap_Confirmation_Estimated">Estimé</string>
@@ -558,7 +575,7 @@
     <string name="Deposit_Your_Address">Votre address</string>
     <string name="Deposit_Address">Adresse</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Transactions</string>
+    <string name="Transactions_Title">Virements</string>
     <string name="Transactions_FilterAll">TOUS</string>
     <string name="Transactions_EmptyList">Vous n\'avez encore aucune transaction en cours ou passée</string>
     <string name="Transactions_WaitForSync">Veuillez attendre la fin de la synchronisation.</string>
@@ -589,7 +606,7 @@
     <string name="Transactions_Approvals">Approbations</string>
     <string name="Transactions_Unknown">Transaction inconnue</string>
     <string name="Transactions_Unknown_Description">La transaction ne peut pas être analysée</string>
-    <string name="Transactions_Multiple">Multiple</string>
+    <string name="Transactions_Multiple">Multiples</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transaction</string>
     <string name="TransactionInfo_Title">Informations sur la transaction</string>
@@ -641,6 +658,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction déjà dans le block</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un verrouillage des dépenses qui expirera sur le %s.\n\n Pas d\'inquiétude, les Bitcoins reçus sont déjà à vous mais jusqu\'à l\'expiration de la période de verrouillage, vous ne pouvez pas les dépenser sur le réseau Bitcoin.</string>
+    <string name="Info_LockTime_Description_Static">L\'expéditeur a envoyé ces fonds avec un délai prédéfini qui se terminera à la date indiquée.\n\nPas de soucis, les Bitcoins reçues sont déjà à vous mais vous devez attendre l\'expiration de la période de verrouillage pour les dépenser sur le réseau Bitcoin.</string>
     <string name="Info_DoubleSpend_Title">Double dépense</string>
     <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser les intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau</string>
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
@@ -684,6 +702,10 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
+    <string name="Settings_DonateToken">Donate %s</string>
+    <string name="Settings_DonateWith">Donnez avec</string>
+    <string name="Settings_Donate_GetAddress">Obtenir une adresse</string>
+    <string name="Settings_Donate_Addresses">Adresses</string>
     <string name="Appearance_Theme">Thème</string>
     <string name="Appearance_Tab">PARAMÈTRES DES TAB</string>
     <string name="Appearance_LaunchScreen">ÉCRAN DE LÉCHARGEMENT</string>
@@ -818,6 +840,8 @@
     <string name="Hud_Already_In_Wallet">Déjà ajouté au portefeuille</string>
     <string name="Hud_Removed_from_Watchlist">Retirer de la liste de suivi</string>
     <string name="Hud_Removed">Supprimer</string>
+    <string name="Hud_WaitForSynchronization">Attendez la synchronisation</string>
+
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
     <string name="ManageCoins_Search">Nom, code ou adresse du contrat</string>
@@ -898,6 +922,7 @@
     <string name="ManageAccount_WatchAddresses">Adresse à suivre</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Sélectionnez le portefeuille pour un changement rapide</string>
     <string name="ManageAccount_DeleteWarning">Voulez-vous arrêter de surveiller cette adresse de portefeuille ?</string>
+    <string name="Balance_Receive_BackupRequired_Description">Vous devez sauvegarder %1$s</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Paramètres réseau</string>
     <string name="NetworkSettings_SwithesAutomatically">bacsule automatiquement</string>
@@ -1048,7 +1073,6 @@
     <string name="Coin_Tab_Overview">Prix</string>
     <string name="Coin_Tab_Market">Marchés</string>
     <string name="Coin_Tab_Details">Analyses</string>
-    <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Aujourd\'hui</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7J</string>
@@ -1160,6 +1184,7 @@
     <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over a 30-day period.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
     <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
@@ -1189,9 +1214,6 @@
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total des revenus générés pour les détenteurs de tokens sur une période de 30 jours. Généralement, les frais sont perçus par les détenteurs de tokens ou bien par le biais d\'un mécanisme de brûlage de tokens.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info2">Classement du token basé sur les revenus générés sur une période de 30 jours pour les stakers de token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Liste de tous les tokens classés en fonction des revenus générés pour les stakers de tokens sur des intervalles de 24h / 7J / 1M.</string>
-    <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
-    <string name="CoinAnalytics_TechIndicators_Info2">Moving Averages (MA): These are commonly used technical indicators that smooth out price data to create a trend-following indicator. They show the average price over a specific time period. There are several types of MAs:\n\nSimple Moving Average (SMA): This calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.\n\nExponential Moving Average (EMA): This gives more weight to recent prices, thereby responding more quickly to recent price changes.</string>
-    <string name="CoinAnalytics_TechIndicators_Info3">Oscillators: These are technical indicators that fluctuate over time within a band (above and below a center line, or between set levels). They are designed to help identify overbought and oversold conditions in a market. Here are some common oscillators:\n\nRelative Strength Index (RSI): This measures the speed and change of price movements. It is usually used to identify overbought or oversold conditions.\n\nMoving Average Convergence Divergence (MACD): This is used to identify potential buy and sell signals. It triggers technical signals when it crosses above (to buy) or below (to sell) its signal line.</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Ce projet n\'a pas de données d\'analyse</string>
     <string name="CoinAnalytics_CexVolume">Volume CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Rang de volume CEX</string>

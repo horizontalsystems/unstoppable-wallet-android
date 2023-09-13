@@ -2,7 +2,7 @@ Wallet Unstoppable ist der digitale dezentralisierte Ablageort, der zur Bewirtsc
 
 Es wurde entwickelt, um Datenschutz bewussten Menschen zu helfen, die Kryptowährungen bewirtschaften und gleichzeitig optimal und professionell in Kryptowährungen investieren möchten.
 
-Folgendes sollte bei der Konzipierung von Unstoppabble in den Vordergrund gestellt werden:
+Unstoppable is built with the following in mind:
 
 - Die freie Verwaltung des Kapitals >> Es wurde mit dem Ziel entwickelt, den Nutzern eine echte Kapitalverwaltungslösung zu bieten, die es ihnen ermöglicht, die freie Verwaltung zu wählen.
 
