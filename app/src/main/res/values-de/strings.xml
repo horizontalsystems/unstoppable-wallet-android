@@ -171,7 +171,9 @@
     <string name="Market_TvlDeFi">TVL in DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">Alle anzeigen</string>
+    <string name="Market_PoweredByApi">Powered by CoinGeko API</string>
     <string name="Market_PoweredByHorizontalApi">Powered by Horizontal API</string>
+    <string name="Market_PoweredByDefiLlamaApi">Powered by DefiLlama API</string>
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Merkliste</string>
@@ -294,11 +296,18 @@
     <string name="Balance_NoAssetsToSend">Sie haben keine Assets zu senden.</string>
     <string name="Balance_NoAssetsToSwap">Du hast keine Vermögenswerte zum Tauschen.</string>
     <string name="Balance_Network">Netzwerk</string>
+    <string name="Balance_Format">Format</string>
     <string name="Balance_NetworkSelectDescription">Wählen Sie das Netzwerk aus, um eine Adresse zu erhalten.</string>
     <string name="Balance_ReceiveAddressHint">Ihre Adresse für %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Beobachtungsadresse von %s</string>
     <string name="Balance_ReceiveWarningText">Senden Sie nur %s an diese Adresse. Das Senden anderer Arten von Tokens an diese Adresse führt zu ihrem ultimativen Verlust.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Wählen Sie ein Format für die Angabe einer Adresse, die empfangen werden soll.</string>
     <string name="Balance_Receive_AddressFormat">Adressformatierung</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Das Cash Address Format wird bevorzugt für den Erhalt von Bitcoin Cash (BCH) aufgrund seiner verbesserten Benutzerfreundlichkeit und Kompatibilität bevorzugt. Beide Adressformate können jedoch unabhängig vom Adressformat des Absenders austauschbar genutzt werden, um BCH zu empfangen.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Das Native SegWit Format wird in Bitcoin bevorzugt für einen verbesserten Durchsatz und mehr Sicherheit. Alle Adressformate (Taproot, SegWit, Legacy) können unabhängig vom Adressformat des Absenders zum Empfang von BTC verwendet werden ermöglicht nahtlose Transaktionen über verschiedene Münztypen.</string>
+    <string name="Balance_Receive_Account">Konto</string>
+    <string name="Balance_Receive_NotActive">Nicht aktiv</string>
+    <string name="Balance_LockedAmount_Title">Locked</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
     <string name="SendNft_Error_NotEnoughtBalance">Nicht genügend Guthaben</string>
@@ -417,6 +426,7 @@
     <string name="WalletConnect_ApproveRequest_Title">Bestätigen</string>
     <string name="WalletConnect_SwapRequest_Title">Tauschen</string>
     <string name="WalletConnect_UnknownRequest_Title">Anforderung</string>
+    <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_SignedTransactions">Signierte Transaktion</string>
     <string name="WalletConnect_Approve_Hint">Indem Sie auf \"Genehmigen\" klicken, erlauben Sie dieser App, Ihre öffentliche Adresse anzuzeigen. Dies ist ein wichtiger Sicherheitsschritt, um Ihre Daten vor potenziellen Phishing-Risiken zu schützen.</string>
     <string name="WalletConnect_Ready_Hint">Sie können den Browser aufrufen. Schließen Sie diese Seite nicht, während Sie im Browser interagieren.</string>
@@ -425,6 +435,8 @@
     <string name="WalletConnect_NotSupportedV2">Wallet Connect v2 wird nicht unterstützt</string>
     <string name="WalletConnect_Requirement">Anforderung</string>
     <string name="WalletConnect_Alert">Alarm</string>
+    <string name="WalletConnect_Status_Offline">Offline</string>
+    <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Verbinde…</string>
     <string name="WalletConnect_NewConnect">Neue Verbindung</string>
     <string name="WalletConnect_Disconnecting">Verbindung wird getrennt</string>
@@ -649,6 +661,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaktion bereits im Block</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Der Absender hat diese Geldmittel mit einer Ausgabesperre versehen, die am %s abläuft.\n\nKeine Sorge, die empfangenen Bitcoins gehören bereits Ihnen, aber bis zum Ablauf der Sperrfrist können Sie diese nicht im Bitcoin-Netzwerk ausgeben.</string>
+    <string name="Info_LockTime_Description_Static">Der Sender hat dieses Guthaben mit einer Ausgabesperre versehen, die zu dem angezeigten Datum abläuft.\n\nKeine Sorge, die erhaltenen Bitcoin sind bereits Ihre. Die Bitcoins sind nur zeitweise gesperrt, so dass Sie sie erst nach Ablauf der Sperrzeit im Bitcoin-Netzwerk ausgeben können.</string>
     <string name="Info_DoubleSpend_Title">Double-Spend</string>
     <string name="Info_DoubleSpend_Description">Double-Spend-Risiko! Es gibt eine weitere Transaktion auf der Blockchain, die versucht, die in dieser Transaktion verwendeten Inputs auszugeben. Nur eine Transaktion wird vom Netzwerk akzeptiert</string>
     <string name="Info_DoubleSpend_ThisTx">Dieser Tx</string>
@@ -692,6 +705,8 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Telegram öffnen</string>
     <string name="Settings_Donate_Info">Gemeinsam können wir mit Ihrer Unterstützung diese App noch besser machen!</string>
     <string name="Settings_Donate">Spenden</string>
+    <string name="Settings_DonateToken">%s Spenden</string>
+    <string name="Settings_DonateWith">Spenden mit</string>
     <string name="Settings_Donate_GetAddress">Adresse erhalten</string>
     <string name="Settings_Donate_Addresses">Adressen</string>
     <string name="Appearance_Theme">THEMA</string>
@@ -888,6 +903,7 @@
     <string name="Watch_TypeEvmAddress">EVM-Adresse</string>
     <string name="Watch_TypeSolanaAddress">Solana-Adresse</string>
     <string name="Watch_TypeTronAddress">Tron Adresse</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">Ungültiger xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
@@ -961,6 +977,7 @@
     <string name="EvmPrivateKey_Warning">Dieser Schlüssel ist für alle EVM-kompatiblen Blockchains. Teilen Sie ihn niemandem mit.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
     <!-- Private Keys -->
@@ -968,6 +985,7 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Gewährt volle Kontrolle über EVM-basierte Kryptos, d.h. Ethereum, Binance Smart Chain etc innerhalb der jeweiligen Wallet.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Gewährt die volle Kontrolle über die Vermögenswerte auf der jeweiligen Brieftasche.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Gewährt volle Kontrolle über Bitcoin und andere auf UTXO basierende Kryptos, z.B. Litecoin, Bitcoin Cash, Dash, etc. innerhalb der jeweiligen Wallet.</string>
     <string name="PrivateKeys_NeverShareWarning">Teilen Sie niemals Ihre Wiederherstellungsphrase mit niemandem. Das unaufhaltsame Team wird niemals nach Ihrer Wiederherstellungsphrase fragen.</string>
     <!-- Public Keys -->
