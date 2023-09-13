@@ -19,6 +19,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.title
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -72,7 +73,7 @@ fun DonateScreen(
                 App.appConfigProvider.donateAddresses.forEach { (blockchainType, address) ->
                     DonateAddress(
                         coinImageUrl = blockchainType.imageUrl,
-                        coinName = blockchainType.toString(),
+                        coinName = blockchainType.title,
                         address = address
                     )
                     VSpacer(24.dp)
