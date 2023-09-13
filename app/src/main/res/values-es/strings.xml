@@ -225,12 +225,7 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">Rango TVL</string>
     <string name="TvlRank_MultiChain">Cadena múltiple</string>
-    <string name="TvlRank_Field_HighestTvl">TVL más alto</string>
-    <string name="TvlRank_Field_LowestTvl">TVL más bajo</string>
-    <string name="TvlRank_Field_All">Todo</string>
-    <string name="TvlRank_Filters_PopupTitle">Filtros</string>
     <!--Balance-->
     <string name="Balance_Withdraw">Retirar</string>
     <string name="Balance_Title">Saldo</string>
@@ -896,7 +891,6 @@
     <string name="EvmPrivateKey_ShowPrivateKey">Toca para mostrar la clave privada</string>
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
-    <string name="ExtendedKey_Purpose">Propósito</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Toca para mostrar la clave privada</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Claves privadas</string>
@@ -1084,7 +1078,6 @@
     <string name="CoinPage_IndicatorsAlertText">Indicadores disponibles sólo para usuarios premium de Wallet imparables.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes que están siendo seguidos:</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes que están siendo seguidos:</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">Blockchains seguidos: Ethereum, Binance Smart Chain, Optismo, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polígono</string>
     <string name="CoinAnalytics_TechIndicators_Info1">Resumen: Esta es una visión general de los técnicos de un activo, considerando una variedad de indicadores técnicos y plazos. Proporciona un punto de vista de consenso (Compra, Venta o Neutral) basado en estos indicadores.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Promedio de movimiento (MA): Estos son indicadores técnicos comúnmente utilizados que suavizan los datos de precios para crear un indicador que sigue la tendencia. Ellos muestran el precio medio en un período de tiempo determinado. Hay varios tipos de EMg:\n\nMedia simple de movimiento (SMA): Esto calcula el promedio de un rango de precios seleccionado. por lo general cerrando los precios, por el número de períodos en ese rango.\n\nMedia de movimiento exponencial (EMA): Esto da más peso a los precios recientes, respondiendo así más rápidamente a los cambios recientes de precios.</string>
@@ -1163,7 +1156,6 @@
     <string name="SubscriptionInfo_PersonalSupport_Info">Póngase en contacto con nuestro equipo directamente a través de Telegram para obtener asistencia personal.</string>
     <string name="SubscriptionInfo_GetPremium">Hazte usuario Premium</string>
     <string name="SubscriptionInfo_HavePremium">Ya tengo Premium</string>
-    <string name="Nfts_Title">NFTS</string>
     <string name="Nfts_PriceType_Days_7">Promedio 7D.</string>
     <string name="Nfts_PriceType_Days_30">Promedio 30D.</string>
     <string name="Nfts_PriceType_LastSale">Última venta</string>
@@ -1174,7 +1166,6 @@
     <string name="Nfts_PriceMode">Modo precio</string>
     <string name="NftAsset_Overview">Información General</string>
     <string name="NftAsset_Activity">Actividad</string>
-    <string name="NftAsset_OpenSea">Abierto</string>
     <string name="NftAsset_Action_Share">Compartir</string>
     <string name="NftAsset_Action_Save">Guardar</string>
     <string name="NftAsset_OwnedCount">Cuenta de posesiones</string>
@@ -1194,7 +1185,6 @@
     <string name="NftAsset_TokenId">ID del token</string>
     <string name="NftAsset_TokenStandard">Token estándar</string>
     <string name="NftAsset_Links_Website">Sitio Web</string>
-    <string name="NftAsset_Links_OpenSea">Abierto</string>
     <string name="PoweredBy_OpenSeaAPI">Desarrollado por OpenSea API</string>
     <string name="Nft_TopCollections">Mejores colecciones NFT</string>
     <string name="Nft_TopCollections_Description">Líder de cobranzas NFT por volumen de operación.</string>
@@ -1321,7 +1311,6 @@
     <string name="CexDeposit_Title">Depositar %s</string>
     <string name="CexDeposit_CopyAddress">Copiar la dirección</string>
     <string name="CexDeposit_ShareAddress">Compartir Dirección</string>
-    <string name="CexDeposit_Memo">Memo (Etiqueta)</string>
     <string name="CexDeposit_Network">La red</string>
     <string name="CexDeposit_AddressDescription">Tu dirección para depositar %s</string>
     <string name="CexDeposit_DepositWarning">Enviar sólo %s a esta dirección. Enviar otros tipos de tokens a esta dirección dará como resultado su pérdida definitiva.</string>
