@@ -252,6 +252,18 @@
     <string name="Balance_NoWalletAlert">Aún no tiene ninguna cartera instalada.\nCrear una nueva cartera o restaurar una existente </string>
     <string name="Balance_NoCoinsAlert">No tienes monedas añadidas.\nAñade las monedas que usarás</string>
     <string name="Balance_WatchAccount_NoBalance">Esta dirección de billetera no tiene saldo</string>
+    <string name="Balance_NoAssetsToSend">No tiene activos para enviar.</string>
+    <string name="Balance_NoAssetsToSwap">No tiene activos para intercambiar.</string>
+    <string name="Balance_Network">La red</string>
+    <string name="Balance_Format">Formatear</string>
+    <string name="Balance_NetworkSelectDescription">Elija una red y obtenga una dirección a recibir.</string>
+    <string name="Balance_ReceiveAddressHint">Tu dirección para depositar %s</string>
+    <string name="Balance_ReceiveWatchAddressHint">Ver dirección de %s</string>
+    <string name="Balance_ReceiveWarningText">Enviar sólo %s a esta dirección. Enviar otros tipos de tokens a esta dirección dará como resultado su pérdida definitiva.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Elija un formato para proporcionar una dirección a recibir.</string>
+    <string name="Balance_Receive_AddressFormat">Formato de Dirección</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">El formato de Dirección de Efectivo es preferido para recibir Bitcoin Cash (BCH) debido a su mejor experiencia de usuario y compatibilidad. Sin embargo, ambos formatos de dirección se pueden utilizar de forma intercambiable para recibir BCH, independientemente del formato de dirección del remitente.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">El formato de SegWit nativo es preferido en Bitcoin para un mejor rendimiento y seguridad. Todos los formatos de dirección (Tapproot, SegWit, Legacy) pueden utilizarse de forma intercambiable para recibir BTC independientemente del formato de dirección del remitente, habilitando transacciones perfectas en diferentes tipos de moneda.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <string name="SendNft_Error_NotEnoughtBalance">Saldo insuficiente</string>
@@ -594,6 +606,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">La transacción ya está en bloque</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">El remitente envió estos fondos con un bloqueo del gasto que expirará %s.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que el período de bloqueo expire, no puedes gastarlos en la red Bitcoin.</string>
+    <string name="Info_LockTime_Description_Static">El remitente envió estos fondos con un bloqueo del gasto que expirará en la fecha mostrada.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que el período de bloqueo expire, no puedes gastarlos en la red Bitcoin.</string>
     <string name="Info_DoubleSpend_Title">Doble gasto</string>
     <string name="Info_DoubleSpend_Description">¡Riesgo de doble gasto! Hay otra transacción en blockchain que intenta gastar entradas usadas en esta transacción. Solo una transacción será aceptada por la red</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
@@ -635,6 +648,10 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">¡Junto con tu apoyo, podemos hacer esta aplicación aún mejor!</string>
     <string name="Settings_Donate">Donar</string>
+    <string name="Settings_DonateToken">Donar %s</string>
+    <string name="Settings_DonateWith">Donar con</string>
+    <string name="Settings_Donate_GetAddress">Obtener dirección</string>
+    <string name="Settings_Donate_Addresses">Dirección</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">ESPECIALES DE OBJETO</string>
     <string name="Appearance_LaunchScreen">ACTUALIZAR SCREEN</string>
@@ -662,6 +679,7 @@
     <string name="EvmNetwork_AddNew">Añadir Nuevo</string>
     <string name="EvmNetwork_Added">Añadido</string>
     <string name="EvmNetwork_SyncMode">Modo de sincronización</string>
+    <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">Url RPC</string>
     <string name="AddEvmSyncSource_AddRPCSource">Añadir fuente RPC</string>
@@ -764,6 +782,7 @@
     <string name="Hud_Already_In_Wallet">Ya se ha añadido al monedero</string>
     <string name="Hud_Removed_from_Watchlist">Eliminado de la Lista de Seguimiento</string>
     <string name="Hud_Removed">Extraído</string>
+    <string name="Hud_WaitForSynchronization">Esperar sincronización</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gestor de monedas</string>
     <string name="ManageCoins_Search">Nombre, código o dirección del contrato</string>
