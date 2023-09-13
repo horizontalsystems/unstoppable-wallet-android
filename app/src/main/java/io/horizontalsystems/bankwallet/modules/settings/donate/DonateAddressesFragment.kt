@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -72,7 +73,7 @@ fun DonateScreen(
                 App.appConfigProvider.donateAddresses.forEach { (blockchainType, address) ->
                     DonateAddress(
                         coinImageUrl = blockchainType.imageUrl,
-                        coinName = blockchainType.toString(),
+                        coinName = blockchainType.title,
                         address = address
                     )
                     VSpacer(24.dp)
