@@ -238,14 +238,7 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">Rank TVL</string>
     <string name="TvlRank_MultiChain">Multi-Cadeia</string>
-    <string name="TvlRank_Field_HighestTvl">Maior capitalização</string>
-    <string name="TvlRank_Field_LowestTvl">Menor capitalização</string>
-    <string name="TvlRank_Field_All">Todas</string>
-    <string name="TvlRank_Field_Sol">Solona</string>
-    <string name="TvlRank_Field_Ava">Avalache</string>
-    <string name="TvlRank_Filters_PopupTitle">Filtros</string>
     <!--Balance-->
     <string name="Balance_Withdraw">Sacar</string>
     <string name="Balance_Title">Saldo</string>
@@ -279,7 +272,6 @@
     <string name="Balance_ReceiveAddressHint">Seu endereço para o depósito %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Endereço do relógio do %s</string>
     <string name="Balance_ReceiveWarningText">Envie apenas %s para este endereço. Enviar outros tipos de tokens para este endereço resultará em sua perda suprema.</string>
-    <string name="Balance_Receive_AddressFormatDescription">Selecione um formato de endereço para obter um endereço a receber.</string>
     <string name="Balance_Receive_AddressFormat">Formato do Endereço</string>
     <string name="Balance_Receive_Account">Conta</string>
     <string name="Balance_Receive_NotActive">Não ativo</string>
@@ -356,9 +348,7 @@
     <string name="FeeSettings_Fee_Info">A taxa máxima estimada de transação a ser paga por esta transação, calculado com base no limite do gás, a taxa máxima e os valores da taxa máxima de prioridade abaixo. A taxa real paga normalmente será menor.</string>
     <string name="FeeSettings_NetworkFee">Taxa de Rede</string>
     <string name="FeeSettings_NetworkFee_Info">O custo estimado do envio de determinada transação na rede.</string>
-    <string name="FeeSettings_GasLimit">Limite de gás</string>
     <string name="FeeSettings_GasLimit_Info">A complexidade da transação é medida em unidades chamadas \"gas\". Ela varia dependendo do contrato inteligente ser executado. O Limite de Gas é estimado o gas máximo necessário para o executar. O gas real utilizado normalmente será mais baixo.</string>
-    <string name="FeeSettings_GasPrice">Preço do gas (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">A taxa para transação na rede é medida em unidades de gás. O preço do gás é a quantidade que um usuário está disposto a gastar por unidade de gás. Quando a rede está ocupada, os preços do gás são altos e baixos quando está inativa. Um preço de gás insuficiente é frequentemente uma razão para que uma transação permaneça pendente por um período prolongado.</string>
     <string name="FeeSettings_BaseFee">Taxa Base</string>
     <string name="FeeSettings_BaseFee_Info">O protocolo de rede determina o preço base por gas para cada bloco, a taxa base. Varia de acordo com o nível de utilização da rede de bloco para bloco. Ele pode aumentar ou diminuir em não mais do que 12,5% no próximo bloco, tornando as taxas mais previsíveis. O valor mostrado aqui é a taxa base de taxa atual do bloco.</string>
@@ -662,7 +652,6 @@
     <string name="Settings_Privacy">Privacidade</string>
     <string name="Settings_ShareThisWallet">Indique para amigos</string>
     <string name="Settings_AppStatus">Status do app</string>
-    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Avalie-Nos</string>
     <string name="Settings_LaunchScreen">Tela Inicial</string>
     <string name="Settings_Appearance">Aparência</string>
@@ -810,7 +799,6 @@
     <string name="Hud_Already_In_Wallet">Já adicionado à carteira</string>
     <string name="Hud_Removed_from_Watchlist">Removido da Lista</string>
     <string name="Hud_Removed">Removido</string>
-    <string name="Hud_UnknownError">%s</string>
     <string name="Hud_WaitForSynchronization">Aguarde a sincronização</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gerenciador de Moedas</string>
@@ -948,19 +936,11 @@
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">Chave Raiz BIP32</string>
     <!-- Account Extended Keys -->
-    <string name="ExtendedKey_Blockchain">Blockchain</string>
-    <string name="ExtendedKey_Purpose">Propósito</string>
-    <string name="ExtendedKey_Account">Conta</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Toque para mostrar a chave privada</string>
-    <string name="AccountExtendedPrivateKey">Chave Privada Estendida da Conta</string>
-    <string name="AccountExtendedPublicKey">Chave Pública Estendida da Conta</string>
-    <string name="AccountExtendedPrivateKey_Short">Conta xPrivKey</string>
-    <string name="AccountExtendedPublicKey_Short">Conta xPubkey</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Chave Privada</string>
     <string name="PrivateKeys_EvmPrivateKey">Chave Privada EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Concede controle total sobre cripto baseado em EVM i.e Ethereum, Binance Smart Chain, etc. dentro da respectiva carteira.</string>
-    <string name="PrivateKeys_Bip32RootKey">Chave Raiz BIP32</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Concede controle total sobre os ativos da respectiva carteira.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Chave Privada Estendida da Conta</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Concede controle total sobre Bitcoin e outras criptomoedas baseadas em UTXO, ou seja, Litecoin, Bitcoin Cash, Dash etc. dentro da respectiva carteira.</string>
@@ -968,7 +948,6 @@
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Chaves públicas</string>
     <string name="PublicKeys_EvmAddress">Endereço EVM</string>
-    <string name="PublicKeys_AccountExtendedPublicKey">Chave Pública Estendida da Conta</string>
     <string name="PublicKeys_EvmAddress_Description">Permite o monitoramento somente leitura de carteiras mantendo ativos na Ethereum, na Binance Smart Chain e em outras blockchains baseadas em EVM.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Permite monitoramento somente leitura das carteiras segurando Bitcoin e outras cripto baseadas em UTXO (ou seja, Litecoin, Bitcoin Cash, Dash etc.).</string>
     <!-- Recovery Phrase Verify -->
@@ -1070,7 +1049,6 @@
     <string name="CoinPage_Audits_PoweredBy">Desenvolvido por Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">Problemas: %d</string>
     <string name="CoinPage_InvestorData">Dados do investidor</string>
-    <string name="CoinPage_Treasuries">Tesouros</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filtros</string>
     <string name="CoinPage_Treasuries_PoweredBy">Desenvolvido por Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Relatórios</string>
@@ -1134,7 +1112,6 @@
     <string name="CoinPage_MajorHolders_InTopWallets">nos Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Número total de Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Conduzir</string>
-    <string name="CoinPage_NftBannerTitle">NFT Unstoppable</string>
     <string name="CoinPage_NftBannerDescription">Obtenha acesso aos recursos avançados de carteiraFazendo Holdin NFTs Unstoppable.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNão encontrado</string>
     <string name="CoinPage_Indicators">Indicadores</string>
@@ -1219,7 +1196,6 @@
     <string name="CoinAnalytics_OtherData">Outros dados</string>
     <string name="CoinAnalytics_Reports">Relatórios</string>
     <string name="CoinAnalytics_Funding">Financiamento</string>
-    <string name="CoinAnalytics_Treasuries">Tesouros</string>
     <string name="Coin_Analytics_Audits">Auditorias</string>
     <string name="Coin_Analytics_Last30d">últimos 30d</string>
     <string name="Coin_Analytics_Current">atual</string>
