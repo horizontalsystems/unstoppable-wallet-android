@@ -4,19 +4,40 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.order
+import cash.p.terminal.core.eligibleTokens
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
 
 class NetworkSelectViewModel(
-    private val coinUid: String,
+    val activeAccount: Account,
+    val fullCoin: FullCoin,
     private val walletManager: IWalletManager
 ) : ViewModel() {
+    val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
 
-    val coinWallets = walletManager.activeWallets.filter { it.coin.uid == coinUid }.sortedBy { it.token.blockchainType.order }
+    fun getOrCreateWallet(token: Token): Wallet {
+        return walletManager
+            .activeWallets
+            .find { it.token == token }
+            ?: createWallet(token)
+    }
 
-    class Factory(private val coinUid: String) : ViewModelProvider.Factory {
+    private fun createWallet(token: Token): Wallet {
+        val wallet = Wallet(token, activeAccount)
+
+        walletManager.save(listOf(wallet))
+        return wallet
+    }
+
+    class Factory(
+        private val activeAccount: Account,
+        private val fullCoin: FullCoin
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return NetworkSelectViewModel(coinUid, App.walletManager) as T
+            return NetworkSelectViewModel(activeAccount, fullCoin, App.walletManager) as T
         }
     }
 }
