@@ -841,7 +841,6 @@
     <string name="Hud_Removed_from_Watchlist">Retirer de la liste de suivi</string>
     <string name="Hud_Removed">Supprimer</string>
     <string name="Hud_WaitForSynchronization">Attendez la synchronisation</string>
-
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
     <string name="ManageCoins_Search">Nom, code ou adresse du contrat</string>
@@ -1062,6 +1061,7 @@
     <string name="Coin_Tab_Overview">Prix</string>
     <string name="Coin_Tab_Market">Marchés</string>
     <string name="Coin_Tab_Details">Analyses</string>
+    <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Aujourd\'hui</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7J</string>
@@ -1174,28 +1174,6 @@
     <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
-    <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
-    <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes that are being tracked:</string>
-    <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
-    <string name="CoinAnalytics_DexLiquidity_Info2">Chart showing variation in available liquidity for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes that are being tracked:</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TransactionCount_Info5">The total number of tokens transferred over the blockchain over the 30 day period.</string>
-    <string name="CoinAnalytics_Holders_Info1">Total number of unique addresses holding the token on various blockchains.</string>
-    <string name="CoinAnalytics_Holders_Info2">Top 10 wallets holding the token on each blockchain.</string>
-    <string name="CoinAnalytics_Holders_TrackedBlockchains">Tracked blockchains: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
-    <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Graphique montrant la variation valeur totale verrouillée dans les contrats intelligents du projet sur une période de 1 an.</string>
     <string name="CoinAnalytics_ProjectTVL_Info3">Rang du token en fonction de la valeur totale verrouillée actuelle.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">Liste de tous les tokens classés en fonction de la valeur totale verrouillée.</string>

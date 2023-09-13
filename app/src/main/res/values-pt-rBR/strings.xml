@@ -833,7 +833,6 @@
     <string name="Hud_Removed_from_Watchlist">Removido da Lista</string>
     <string name="Hud_Removed">Removido</string>
     <string name="Hud_WaitForSynchronization">Aguarde a sincronização</string>
-
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gerenciador de Moedas</string>
     <string name="ManageCoins_Search">Nome, código ou endereço do contrato</string>
