@@ -141,7 +141,7 @@ private fun TokenBalanceHeader(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         VSpacer(height = (24.dp))
-        WalletIconCex(balanceViewItem.coinIconUrl, balanceViewItem.coinIconPlaceholder)
+        WalletIconCex(balanceViewItem)
         VSpacer(height = 12.dp)
         Text(
             modifier = Modifier

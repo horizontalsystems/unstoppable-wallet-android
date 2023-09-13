@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
@@ -71,7 +72,8 @@ class CexAssetViewModel(
             latestRate = latestRate,
             hideBalance = balanceHidden,
             balanceViewType = BalanceViewType.CoinThenFiat,
-            fullFormat = true
+            fullFormat = true,
+            adapterState = AdapterState.Synced
         )
     }
 
@@ -100,8 +102,9 @@ class CexAssetViewModel(
                 App.balanceHiddenManager,
                 BalanceXRateRepository(App.currencyManager, App.marketKit),
                 BalanceViewItemFactory(),
-                App.connectivityManager
-            ) as T
+                App.connectivityManager,
+
+                ) as T
         }
     }
 

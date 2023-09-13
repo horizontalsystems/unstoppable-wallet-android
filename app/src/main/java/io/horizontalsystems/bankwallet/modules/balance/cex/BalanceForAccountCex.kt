@@ -2,6 +2,7 @@ package cash.p.terminal.modules.balance.cex
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,10 +19,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
@@ -36,6 +41,7 @@ import cash.p.terminal.modules.balance.ui.wallets
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -171,7 +177,7 @@ fun BalanceCardCex(
     ) {
         CellMultilineClear(height = 64.dp) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                WalletIconCex(viewItem.coinIconUrl, viewItem.coinIconPlaceholder)
+                WalletIconCex(viewItem)
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -271,18 +277,54 @@ fun BalanceCardCex(
 }
 
 @Composable
-fun WalletIconCex(iconUrl: String?, placeholder: Int) {
+fun WalletIconCex(
+    viewItem: BalanceCexViewItem
+) {
     Box(
         modifier = Modifier
             .width(64.dp)
             .fillMaxHeight(),
         contentAlignment = Alignment.Center
     ) {
-        CoinImage(
-            iconUrl = iconUrl,
-            placeholder = placeholder,
-            modifier = Modifier
-                .size(32.dp)
-        )
+        viewItem.syncingProgress.progress?.let { progress ->
+            AndroidView(
+                modifier = Modifier
+                    .size(52.dp),
+                factory = { context ->
+                    RotatingCircleProgressView(context)
+                },
+                update = { view ->
+                    val color = when (viewItem.syncingProgress.dimmed) {
+                        true -> R.color.grey_50
+                        false -> R.color.grey
+                    }
+                    view.setProgressColored(progress, view.context.getColor(color))
+                }
+            )
+        }
+        if (viewItem.failedIconVisible) {
+            val view = LocalView.current
+            val clickableModifier = if (viewItem.errorMessage != null) {
+                Modifier.clickable(onClick = { HudHelper.showErrorMessage(view, viewItem.errorMessage) })
+            } else {
+                Modifier
+            }
+
+            Image(
+                modifier = Modifier
+                    .size(32.dp)
+                    .then(clickableModifier),
+                painter = painterResource(id = R.drawable.ic_attention_24),
+                contentDescription = "coin icon",
+                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian)
+            )
+        } else {
+            CoinImage(
+                iconUrl = viewItem.coinIconUrl,
+                placeholder = viewItem.coinIconPlaceholder,
+                modifier = Modifier
+                    .size(32.dp)
+            )
+        }
     }
 }
