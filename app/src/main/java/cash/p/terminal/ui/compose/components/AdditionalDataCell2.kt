@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.ComposeAppTheme
 
 @Composable
 fun AdditionalDataCell2(content: @Composable() (RowScope.() -> Unit)) {

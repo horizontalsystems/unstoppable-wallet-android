@@ -28,6 +28,7 @@ import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 
 @Composable
 fun SendEvmScreen(
+    title: String,
     navController: NavController,
     viewModel: SendEvmViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
@@ -46,7 +47,6 @@ fun SendEvmScreen(
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
-        val fullCoin = wallet.token.fullCoin
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -54,7 +54,7 @@ fun SendEvmScreen(
         }
 
         SendScreen(
-            fullCoin = fullCoin,
+            title = title,
             onCloseClick = { navController.popBackStack() }
         ) {
             AvailableBalance(

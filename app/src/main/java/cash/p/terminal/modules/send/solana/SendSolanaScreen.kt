@@ -28,6 +28,7 @@ import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 
 @Composable
 fun SendSolanaScreen(
+    title: String,
     navController: NavController,
     viewModel: SendSolanaViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
@@ -47,7 +48,6 @@ fun SendSolanaScreen(
 
 
     ComposeAppTheme {
-        val fullCoin = wallet.token.fullCoin
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -55,7 +55,7 @@ fun SendSolanaScreen(
         }
 
         SendScreen(
-            fullCoin = fullCoin,
+            title = title,
             onCloseClick = { navController.popBackStack() }
         ) {
             AvailableBalance(

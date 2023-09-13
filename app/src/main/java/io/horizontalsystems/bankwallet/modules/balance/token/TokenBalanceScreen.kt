@@ -346,9 +346,10 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 icon = R.drawable.ic_arrow_up_right_24,
                 title = stringResource(R.string.Balance_Send),
                 onClick = {
+                    val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
                     navController.slideFromRight(
                         R.id.sendXFragment,
-                        SendFragment.prepareParams(viewItem.wallet)
+                        SendFragment.prepareParams(viewItem.wallet, sendTitle)
                     )
                 },
                 enabled = viewItem.sendEnabled

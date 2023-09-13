@@ -51,6 +51,7 @@ const val TransactionInputsSortInfoPage = "transaction_input_sort_info_settings"
 
 @Composable
 fun SendBitcoinNavHost(
+    title: String,
     fragmentNavController: NavController,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
@@ -63,6 +64,7 @@ fun SendBitcoinNavHost(
     ) {
         composable(SendBtcPage) {
             SendBitcoinScreen(
+                title,
                 fragmentNavController,
                 navController,
                 viewModel,
@@ -84,6 +86,7 @@ fun SendBitcoinNavHost(
 
 @Composable
 fun SendBitcoinScreen(
+    title: String,
     fragmentNavController: NavController,
     composeNavController: NavController,
     viewModel: SendBitcoinViewModel,
@@ -107,7 +110,6 @@ fun SendBitcoinScreen(
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
-        val fullCoin = wallet.token.fullCoin
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -116,7 +118,7 @@ fun SendBitcoinScreen(
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
+                title = TranslatableString.PlainString(title),
                 navigationIcon = {
                     HsBackButton(onClick = { fragmentNavController.popBackStack() })
                 },

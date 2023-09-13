@@ -52,6 +52,7 @@ class SendFragment : BaseFragment() {
             try {
                 val arguments = requireArguments()
                 val wallet = arguments.parcelable<Wallet>(walletKey) ?: throw IllegalStateException("Wallet is Null!")
+                val title = arguments.getString(titleKey) ?: ""
                 val sendEntryPointDestId = arguments.getInt(sendEntryPointDestIdKey)
                 val predefinedAddress = arguments.getString(predefinedAddressKey)
 
@@ -71,6 +72,7 @@ class SendFragment : BaseFragment() {
                         }
                         setContent {
                             SendBitcoinNavHost(
+                                title,
                                 findNavController(),
                                 sendBitcoinViewModel,
                                 amountInputModeViewModel,
@@ -86,6 +88,7 @@ class SendFragment : BaseFragment() {
                         }
                         setContent {
                             SendBinanceScreen(
+                                title,
                                 findNavController(),
                                 sendBinanceViewModel,
                                 amountInputModeViewModel,
@@ -101,6 +104,7 @@ class SendFragment : BaseFragment() {
                         }
                         setContent {
                             SendZCashScreen(
+                                title,
                                 findNavController(),
                                 sendZCashViewModel,
                                 amountInputModeViewModel,
@@ -125,6 +129,7 @@ class SendFragment : BaseFragment() {
                         val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendEvmScreen(
+                                title,
                                 findNavController(),
                                 sendEvmViewModel,
                                 amountInputModeViewModel,
@@ -138,6 +143,7 @@ class SendFragment : BaseFragment() {
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendSolanaScreen(
+                                title,
                                 findNavController(),
                                 sendSolanaViewModel,
                                 amountInputModeViewModel,
@@ -151,6 +157,7 @@ class SendFragment : BaseFragment() {
                         val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendTronScreen(
+                                title,
                                 findNavController(),
                                 sendTronViewModel,
                                 amountInputModeViewModel,
@@ -173,15 +180,23 @@ class SendFragment : BaseFragment() {
     companion object {
         private const val walletKey = "walletKey"
         private const val sendEntryPointDestIdKey = "sendEntryPointDestIdKey"
+        private const val titleKey = "titleKey"
         private const val predefinedAddressKey = "predefinedAddressKey"
 
-        fun prepareParams(wallet: Wallet) = bundleOf(
-            walletKey to wallet
+        fun prepareParams(wallet: Wallet, title: String) = bundleOf(
+            walletKey to wallet,
+            titleKey to title
         )
 
-        fun prepareParams(wallet: Wallet, sendEntryPointDestId: Int, predefinedAddress: String? = null) = bundleOf(
+        fun prepareParams(
+            wallet: Wallet,
+            sendEntryPointDestId: Int,
+            title: String,
+            predefinedAddress: String? = null
+        ) = bundleOf(
             walletKey to wallet,
             sendEntryPointDestIdKey to sendEntryPointDestId,
+            titleKey to title,
             predefinedAddressKey to predefinedAddress
         )
     }

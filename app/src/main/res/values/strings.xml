@@ -836,6 +836,8 @@
 
     <string name="Settings_Donate_Info">Together, with your support, we can make this app even better!</string>
     <string name="Settings_Donate">Donate</string>
+    <string name="Settings_DonateToken">Donate %s</string>
+    <string name="Settings_DonateWith">Donate with</string>
     <string name="Settings_Donate_GetAddress">Get Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
 
