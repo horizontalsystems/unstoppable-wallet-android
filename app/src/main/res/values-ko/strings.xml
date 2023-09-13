@@ -171,8 +171,6 @@
     <string name="TimePeriod_24h">24 시간</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
-    <string name="TvlRank_Field_All">모든</string>
-    <string name="TvlRank_Field_Eth">Bitcoin Cash</string>
     <!--Balance-->
     <string name="Balance_Withdraw">빼다</string>
     <string name="Balance_Title">잔액</string>
@@ -251,7 +249,6 @@
     <string name="Send_TxSpeed_High">높음</string>
     <string name="Send_TxSpeed_Recommended">권장</string>
     <string name="Send_TxSpeed_Custom">사용자 지정</string>
-    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogProceed">다음</string>
     <string name="Send_LockTime_Off">끄기</string>
@@ -283,7 +280,6 @@
     <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
     <string name="FeeSettings_NetworkFee">네트워크 수수료</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
-    <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
     <string name="FeeSettings_GasPrice_Info">네트워크 거래 수수료는 가스 단위로 측정됩니다. 가스 가격은 사용자가 가스 단위당 지출할 의향이 있는 금액입니다. 네트워크가 사용 중일 때는 가스 가격이 높고 유휴 상태일 때는 가스 가격이 낮습니다. 가스 가격이 충분하지 않아 거래가 장기간 보류 상태로 남아 있는 경우가 많습니다.</string>
     <string name="FeeSettings_BaseFee">기본 수수료</string>
@@ -852,7 +848,6 @@
     <string name="EvmPrivateKey_ShowPrivateKey">개인 키 보기</string>
     <!-- Bip32 Root Key -->
     <!-- Account Extended Keys -->
-    <string name="ExtendedKey_Account">계정</string>
     <string name="ExtendedKey_TapToShowPrivateKey">개인 키 보기</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">개인 암호</string>
@@ -964,7 +959,6 @@
     <string name="ActivateSubscription_Title">활성화</string>
     <string name="ActivateSubscription_Address">주소</string>
     <string name="SubscriptionInfo_PersonalSupport_Title">Personal Support</string>
-    <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">평균 7일</string>
     <string name="Nfts_PriceType_Days_30">평균 30일</string>
     <string name="Nfts_PriceType_LastSale">마지막 판매</string>
