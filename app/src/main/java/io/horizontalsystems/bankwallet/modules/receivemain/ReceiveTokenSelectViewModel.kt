@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.core.sortedByFilter
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
+import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -88,7 +89,7 @@ class ReceiveTokenSelectViewModel(
         }
     }
 
-    fun getCoinForReceiveType(fullCoin: FullCoin): CoinForReceiveType? {
+    suspend fun getCoinForReceiveType(fullCoin: FullCoin): CoinForReceiveType? {
         val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
 
         return when {
@@ -143,17 +144,22 @@ class ReceiveTokenSelectViewModel(
         }
     }
 
-    private fun getOrCreateWallet(token: Token): Wallet {
+    private suspend fun getOrCreateWallet(token: Token): Wallet {
         return walletManager
             .activeWallets
             .find { it.token == token }
             ?: createWallet(token)
     }
 
-    private fun createWallet(token: Token): Wallet {
+    private suspend fun createWallet(token: Token): Wallet {
         val wallet = Wallet(token, activeAccount)
 
         walletManager.save(listOf(wallet))
+
+        Utils.waitUntil(1000L, 100L) {
+            App.adapterManager.getReceiveAdapterForWallet(wallet) != null
+        }
+
         return wallet
     }
 
