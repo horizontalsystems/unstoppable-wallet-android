@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
@@ -16,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
 import io.horizontalsystems.bankwallet.modules.balance.ITotalBalance
+import io.horizontalsystems.bankwallet.modules.balance.SyncingProgress
 import io.horizontalsystems.bankwallet.modules.balance.TotalBalance
 import io.horizontalsystems.bankwallet.modules.balance.TotalService
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -61,8 +63,8 @@ class BalanceCexViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            balanceCexRepository.itemsFlow.collect {
-                handleUpdatedItems(it)
+            balanceCexRepository.itemsFlow.collect { (assets, adapterState) ->
+                handleUpdatedItems(assets, adapterState)
             }
         }
 
@@ -106,7 +108,8 @@ class BalanceCexViewModel(
                 if (latestRates.containsKey(coinUid)) {
                     viewItems[i] = createBalanceCexViewItem(
                         cexAsset = viewItem.cexAsset,
-                        latestRate = latestRates[coinUid]
+                        latestRate = latestRates[coinUid],
+                        adapterState = viewItem.adapterState
                     )
                 }
             }
@@ -132,11 +135,11 @@ class BalanceCexViewModel(
         val latestRates = xRateRepository.getLatestRates()
 
         viewItems.replaceAll { viewItem ->
-            createBalanceCexViewItem(viewItem.cexAsset, viewItem.coinUid?.let { latestRates[it] })
+            createBalanceCexViewItem(viewItem.cexAsset, viewItem.coinUid?.let { latestRates[it] }, viewItem.adapterState)
         }
     }
 
-    private fun handleUpdatedItems(items: List<CexAsset>?) {
+    private fun handleUpdatedItems(items: List<CexAsset>?, adapterState: AdapterState) {
         if (items != null) {
             isActiveScreen = true
 
@@ -144,7 +147,7 @@ class BalanceCexViewModel(
             val latestRates = xRateRepository.getLatestRates()
 
             viewItems = items.map { cexAsset ->
-                createBalanceCexViewItem(cexAsset, cexAsset.coin?.let { latestRates[it.uid] })
+                createBalanceCexViewItem(cexAsset, cexAsset.coin?.let { latestRates[it.uid] }, adapterState)
             }.toMutableList()
 
             sortItems()
@@ -176,7 +179,8 @@ class BalanceCexViewModel(
 
     private fun createBalanceCexViewItem(
         cexAsset: CexAsset,
-        latestRate: CoinPrice?
+        latestRate: CoinPrice?,
+        adapterState: AdapterState
     ): BalanceCexViewItem {
         return balanceViewItemFactory.cexViewItem(
             cexAsset = cexAsset,
@@ -184,7 +188,9 @@ class BalanceCexViewModel(
             latestRate = latestRate,
             hideBalance = balanceHidden,
             balanceViewType = balanceViewType,
-            fullFormat = false
+            fullFormat = false,
+            adapterState
+
         )
     }
 
@@ -261,7 +267,11 @@ data class BalanceCexViewItem(
     val coinPrice: CoinPrice?,
     val cexAsset: CexAsset,
     val depositEnabled: Boolean,
-    val withdrawEnabled: Boolean
+    val withdrawEnabled: Boolean,
+    val syncingProgress: SyncingProgress,
+    val failedIconVisible: Boolean,
+    val errorMessage: String?,
+    val adapterState: AdapterState
 ) {
     val fiatValue by lazy { coinPrice?.value?.let { cexAsset.freeBalance.times(it) } }
 }
