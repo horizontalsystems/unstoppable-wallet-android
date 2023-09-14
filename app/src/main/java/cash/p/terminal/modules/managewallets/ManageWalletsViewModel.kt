@@ -2,15 +2,15 @@ package cash.p.terminal.modules.managewallets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class ManageWalletsViewModel(
     private val service: ManageWalletsService,
@@ -19,14 +19,12 @@ class ManageWalletsViewModel(
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
 
-    private var disposables = CompositeDisposable()
-
     init {
-        service.itemsObservable
-            .subscribeIO { sync(it) }
-            .let { disposables.add(it) }
-
-        sync(service.items)
+        viewModelScope.launch {
+            service.itemsFlow.collect {
+                sync(it)
+            }
+        }
     }
 
     private fun sync(items: List<ManageWalletsService.Item>) {
@@ -63,7 +61,6 @@ class ManageWalletsViewModel(
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
-        disposables.clear()
     }
 
     data class BirthdayHeightViewItem(
