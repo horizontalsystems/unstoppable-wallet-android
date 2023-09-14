@@ -1,0 +1,49 @@
+Unstoppable wallet is purposely built as a decentralized management tool for cryptocurrencies.
+
+It is engineered to serve privacy-conscious individuals looking to manage and invest in cryptocurrencies in a sovereign and professional manner.
+
+Unstoppable is built with the following in mind:
+
+- Capital Should Be Free >> It’s built to provide users with genuinely independent control over their capital.
+
+- Capital Should Be Borderless >> It works outside the traditional finance layer and acts as a Swiss knife to the world of decentralized finances (DeFi).
+
+- Capital Should Be Private >> It doesn’t leak private data, it has no means to track users, and takes extra measures to ensure privacy on multiple layers.
+
+If the above rhymes well with you then Unstoppable is for you! And we are here to focus on your unique needs and serve you in the best possible manner.
+
+If you're merely looking for a plain way to store Bitcoin or Ethereum this app might not be for you.
+
+WALLET FEATURES:
+
+- Non-Custodial Multi-wallet >> Manage any number of cryptocurrencies across multiple portfolio-style wallets in a non-custodial manner. This wallet is like your own bank where you are the only client and the only one in charge. It’s designed to keep assets secure and easy to restore even if the phone is stolen and tampered with.
+
+- Investment Oriented Wallet >> Unstoppable brings unmatched cryptocurrency market analytics to your device: advanced sorting, curated categorization, extensive search filtering, and event-based alerting features.
+
+- Universal Wallet >> It supports all mainstream blockchains and is built in a standard compliant manner enabling users to use just one wallet app for everything crypto.
+
+- A Bitcoin Wallet >> The wallet packs some of the most advanced Bitcoin features available: SPV enabled, BIP 44/49/84/69 compliant, Bitcoin timelocks, custom transaction fees, and more.
+
+- A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. Also, the ability to interact with any smart contract-powered service on the blockchain via the WalletConnect protocol.
+
+- Ethereum Wallet >> Full support for Ethereum blockchain, its growing ecosystem of tokens (ERC20, NFT tokens, etc.), and other decentralized services such as ENS (Ethereum Name Service).
+
+- Ethereum L2 Wallet >> Artbitrum, Optimism, Polygon support.
+
+- Avalanche Wallet >> Full support for Avalanche C-Chain blockchain.
+
+- Binance Wallet >> Full support for original Binance Chain (incl. BEP2) and Binance Smart Chain.
+
+- NFT Wallet >> Full support for Non Fungible tokens (NFTs).
+
+- Crypto Academy >> The app includes two courses meant to onboard newcomers into the world of cryptocurrencies and the DeFi ecosystem in an easy-to-digest manner covering essential aspects of cryptocurrency security, storage, privacy, transacting, and exchanging.
+
+- Wallet for Privacy Coins >> Fully supports major privacy coins (ZCash, DASH) in an SPV manner. One of the very few wallets capable of supporting fully shielded Zcash transactions as well as the ability to privatize Bitcoin transactions.
+
+- Decentralized Wallet >> Designed to work with most major blockchains in a decentralized manner where an app doesn't depend on some server of a wallet provider to send/receive transactions but interacts with blockchain networks directly.
+
+- Privacy Focused >> Designed to allow for privacy even in the most privacy-breaching scenarios. There are no user accounts keeping your records, no identity checks that risk exposing your financials to the world, and no interaction with traditional finance layers. The app is partially TOR enabled and VPN support is coming soon.
+
+- Fully Open Source >> The most transparent wallet application built to date. The entire 4-year production process of the app is openly accessible online along with 100% of its code for anyone to evaluate or reuse in other projects. Verified and audited by third parties.
+
+Be Unstoppable!  😎
