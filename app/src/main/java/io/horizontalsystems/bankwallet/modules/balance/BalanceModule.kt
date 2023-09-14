@@ -29,7 +29,7 @@ object BalanceModule {
                 App.balanceHiddenManager
             )
             return BalanceViewModel(
-                BalanceService.getInstance(),
+                BalanceService.getInstance("wallet"),
                 BalanceViewItemFactory(),
                 App.balanceViewTypeManager,
                 TotalBalance(totalService, App.balanceHiddenManager),
@@ -56,7 +56,7 @@ object BalanceModule {
                 App.balanceViewTypeManager,
                 BalanceViewItemFactory(),
                 BalanceCexRepositoryWrapper(App.cexAssetManager, App.connectivityManager),
-                BalanceXRateRepository(App.currencyManager, App.marketKit),
+                BalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
                 BalanceCexSorter(),
                 App.cexProviderManager,
             ) as T

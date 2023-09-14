@@ -108,7 +108,7 @@ class TokenSelectViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TokenSelectViewModel(
-                service = BalanceService.getInstance(),
+                service = BalanceService.getInstance("wallet"),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
                 itemsFilter = null,
@@ -121,7 +121,7 @@ class TokenSelectViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TokenSelectViewModel(
-                service = BalanceService.getInstance(),
+                service = BalanceService.getInstance("wallet"),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
                 itemsFilter = {
