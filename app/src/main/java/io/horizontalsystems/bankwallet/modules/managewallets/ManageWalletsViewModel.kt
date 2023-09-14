@@ -2,15 +2,15 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class ManageWalletsViewModel(
     private val service: ManageWalletsService,
@@ -19,14 +19,12 @@ class ManageWalletsViewModel(
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
 
-    private var disposables = CompositeDisposable()
-
     init {
-        service.itemsObservable
-            .subscribeIO { sync(it) }
-            .let { disposables.add(it) }
-
-        sync(service.items)
+        viewModelScope.launch {
+            service.itemsFlow.collect {
+                sync(it)
+            }
+        }
     }
 
     private fun sync(items: List<ManageWalletsService.Item>) {
@@ -63,7 +61,6 @@ class ManageWalletsViewModel(
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
-        disposables.clear()
     }
 
     data class BirthdayHeightViewItem(
