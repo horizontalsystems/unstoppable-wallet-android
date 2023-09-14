@@ -10,26 +10,19 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.eligibleTokens
 import cash.p.terminal.core.isDefault
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.nativeTokenQueries
-import cash.p.terminal.core.sortedByFilter
-import cash.p.terminal.core.supported
-import cash.p.terminal.core.supports
+import cash.p.terminal.core.utils.Utils
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.Wallet
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
 
 class ReceiveTokenSelectViewModel(
-    private val marketKit: MarketKitWrapper,
     private val walletManager: IWalletManager,
-    private val activeAccount: Account
+    private val activeAccount: Account,
+    private val fullCoinsProvider: FullCoinsProvider
 ) : ViewModel() {
-    private var query: String? = null
-    private val predefinedTokens: List<Token>
     private var fullCoins: List<FullCoin> = listOf()
 
     var uiState by mutableStateOf(
@@ -39,14 +32,7 @@ class ReceiveTokenSelectViewModel(
     )
 
     init {
-        val allowedBlockchainTypes =
-            BlockchainType.supported.filter { it.supports(activeAccount.type) }
-        val tokenQueries = allowedBlockchainTypes
-            .map { it.nativeTokenQueries }
-            .flatten()
-        val supportedNativeTokens = marketKit.tokens(tokenQueries)
-        val activeTokens = walletManager.activeWallets.map { it.token }
-        predefinedTokens = activeTokens + supportedNativeTokens
+        fullCoinsProvider.setActiveWallets(walletManager.activeWallets)
 
         refreshItems()
         emitState()
@@ -54,7 +40,7 @@ class ReceiveTokenSelectViewModel(
 
     fun updateFilter(q: String) {
         viewModelScope.launch {
-            query = q
+            fullCoinsProvider.setQuery(q)
             refreshItems()
 
             emitState()
@@ -62,21 +48,7 @@ class ReceiveTokenSelectViewModel(
     }
 
     private fun refreshItems() {
-        val tmpQuery = query
-
-        fullCoins = if (tmpQuery.isNullOrBlank()) {
-            val coinUids = predefinedTokens.map { it.coin.uid }
-            marketKit.fullCoins(coinUids)
-        } else {
-            marketKit.fullCoins(tmpQuery)
-        }
-
-        val sorted = fullCoins.sortedByFilter(tmpQuery ?: "")
-        val (enabled, disabled) = sorted.partition { fullCoin ->
-            walletManager.activeWallets.any { it.coin == fullCoin.coin }
-        }
-
-        fullCoins = enabled + disabled
+        fullCoins = fullCoinsProvider.getItems()
     }
 
 
@@ -160,10 +132,14 @@ class ReceiveTokenSelectViewModel(
     class Factory(private val activeAccount: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveTokenSelectViewModel(
+            val fullCoinsProvider = FullCoinsProvider(
                 App.marketKit,
-                App.walletManager,
                 activeAccount
+            )
+            return ReceiveTokenSelectViewModel(
+                App.walletManager,
+                activeAccount,
+                fullCoinsProvider
             ) as T
         }
     }
