@@ -84,16 +84,20 @@ class ManageWalletsService(
     }
 
     private fun sortItems() {
+        var comparator = compareByDescending<Item> {
+            it.enabled
+        }
+
+        if (filter.isBlank()) {
+            comparator = comparator.thenBy {
+                it.token.blockchain.type.order
+            }
+        }
+
         sortedItems = fullCoins
             .map { getItemsForFullCoin(it) }
             .flatten()
-            .sortedWith(
-                compareByDescending<Item> {
-                    it.enabled
-                }.thenBy {
-                    it.token.blockchain.type.order
-                }
-            )
+            .sortedWith(comparator)
     }
 
     private fun getItemsForFullCoin(fullCoin: FullCoin): List<Item> {
