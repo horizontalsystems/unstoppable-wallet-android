@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.receivemain
 
+import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.nativeTokenQueries
 import cash.p.terminal.core.sortedByFilter
@@ -46,8 +47,9 @@ class FullCoinsProvider(
         val tmpQuery = query
 
         val fullCoins = if (tmpQuery.isNullOrBlank()) {
-            val coinUids = predefinedTokens.map { it.coin.uid }
-            marketKit.fullCoins(coinUids)
+            val (custom, regular) = predefinedTokens.partition { it.isCustom }
+            val coinUids = regular.map { it.coin.uid }
+            custom.map { it.fullCoin } + marketKit.fullCoins(coinUids)
         } else if (isContractAddress(tmpQuery)) {
             val tokens = marketKit.tokens(tmpQuery)
             val coinUids = tokens.map { it.coin.uid }
