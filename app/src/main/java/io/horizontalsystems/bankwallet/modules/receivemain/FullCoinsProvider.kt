@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
@@ -47,6 +48,10 @@ class FullCoinsProvider(
         val fullCoins = if (tmpQuery.isNullOrBlank()) {
             val coinUids = predefinedTokens.map { it.coin.uid }
             marketKit.fullCoins(coinUids)
+        } else if (isContractAddress(tmpQuery)) {
+            val tokens = marketKit.tokens(tmpQuery)
+            val coinUids = tokens.map { it.coin.uid }
+            marketKit.fullCoins(coinUids)
         } else {
             marketKit.fullCoins(tmpQuery)
         }
@@ -57,4 +62,12 @@ class FullCoinsProvider(
                 activeWallets.any { it.coin == fullCoin.coin }
             }
     }
+
+    private fun isContractAddress(filter: String) = try {
+        AddressValidator.validate(filter)
+        true
+    } catch (e: AddressValidator.AddressValidationException) {
+        false
+    }
+
 }

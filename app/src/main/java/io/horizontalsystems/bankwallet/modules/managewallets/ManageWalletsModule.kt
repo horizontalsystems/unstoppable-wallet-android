@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.receivemain.FullCoinsProvider
 
 object ManageWalletsModule {
 
@@ -15,11 +16,14 @@ object ManageWalletsModule {
         }
 
         private val manageWalletsService by lazy {
+            val activeAccount = App.accountManager.activeAccount
             ManageWalletsService(
-                App.marketKit,
                 App.walletManager,
-                App.accountManager,
-                restoreSettingsService
+                restoreSettingsService,
+                App.accountManager.activeAccount?.let { account ->
+                    FullCoinsProvider(App.marketKit, account)
+                },
+                activeAccount
             )
         }
 
