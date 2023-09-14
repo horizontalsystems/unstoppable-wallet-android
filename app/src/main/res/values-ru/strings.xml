@@ -56,6 +56,7 @@
     <string name="Button_SignUp">Sign Up</string>
     <string name="Button_Submit">Submit</string>
     <string name="Button_TryAgain">Try Again</string>
+    <string name="Button_Share">Share</string>
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">Ошибка</string>
@@ -171,7 +172,9 @@
     <string name="Market_TvlDeFi">TVL в DeFi</string>
     <string name="Market_DeFiCap">Капитализация DeFi</string>
     <string name="Market_SeeAll">Посмотреть всё</string>
+    <string name="Market_PoweredByApi">Powered By CoinGeko API</string>
     <string name="Market_PoweredByHorizontalApi">Работает на Horizontal API</string>
+    <string name="Market_PoweredByDefiLlamaApi">Powered By DefiLlama API</string>
     <string name="Market_Tab_Overview">Обзор</string>
     <string name="Market_Tab_Posts">Новости</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
@@ -258,33 +261,16 @@
     <string name="Market_Filter_TimePeriod_1M">1 Месяц</string>
     <string name="Market_Filter_TimePeriod_6M">6 Месяцев</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Год</string>
-    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
-    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
-    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
-    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
-    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
-    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
-    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
-    <string name="Market_Filter_PriceChange_Negative_75_minus">&lt; -75%</string>
     <string name="TimePeriod_24h">24ч</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Рынки</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">Рейтинг TVL</string>
     <string name="TvlRank_MultiChain">Мультичейн</string>
-    <string name="TvlRank_Field_HighestTvl">Наивысшему TVL</string>
-    <string name="TvlRank_Field_LowestTvl">Наименьшему TVL</string>
-    <string name="TvlRank_Field_All">Все</string>
-    <string name="TvlRank_Field_Eth">Ethereum</string>
-    <string name="TvlRank_Field_Bsc">Binance</string>
-    <string name="TvlRank_Field_Sol">Solana</string>
-    <string name="TvlRank_Field_Ava">Avalanche</string>
-    <string name="TvlRank_Field_Mat">Polygon</string>
-    <string name="TvlRank_Filters_PopupTitle">Фильтры</string>
     <!--Balance-->
     <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
+    <string name="Balance_Swap">Swap</string>
     <string name="Balance_Deposit">Deposit</string>
     <string name="Balance_Receive">Получить</string>
     <string name="Balance_Address">Адрес</string>
@@ -308,6 +294,21 @@
     <string name="Balance_NoWalletAlert">У вас пока нет установленных кошельков.\nСоздайте новый кошелек или восстановите существующий кошелек </string>
     <string name="Balance_NoCoinsAlert">У вас нет добавленных монет.\nДобавьте монеты, которые вы будете использовать</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
+    <string name="Balance_NoAssetsToSend">You have no assets to send.</string>
+    <string name="Balance_NoAssetsToSwap">You have no assets to swap.</string>
+    <string name="Balance_Network">Network</string>
+    <string name="Balance_Format">Format</string>
+    <string name="Balance_NetworkSelectDescription">Choose network to get an address to receive.</string>
+    <string name="Balance_ReceiveAddressHint">Your address for depositing %s</string>
+    <string name="Balance_ReceiveWatchAddressHint">Watch address of %s</string>
+    <string name="Balance_ReceiveWarningText">Send only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Choose a format for providing an address to receive.</string>
+    <string name="Balance_Receive_AddressFormat">Address Format</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">The Cash Address format is preferred for receiving Bitcoin Cash (BCH) due to its improved user experience and compatibility. However, both address formats can be used interchangeably to receive BCH, regardless of the sender\'s address format.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">The Native SegWit format is preferred in Bitcoin for improved throughput and security. All address formats (Taproot, SegWit, Legacy) can be used interchangeably to receive BTC regardless of the sender\'s address format, enabling seamless transactions across different coin types.</string>
+    <string name="Balance_Receive_Account">Account</string>
+    <string name="Balance_Receive_NotActive">Not active</string>
+    <string name="Balance_LockedAmount_Title">Locked</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <string name="SendNft_Error_NotEnoughtBalance">Недостаточно средств</string>
@@ -349,7 +350,6 @@
     <string name="Send_TxSpeed_High">Высокая</string>
     <string name="Send_TxSpeed_Recommended">Рекомендовано</string>
     <string name="Send_TxSpeed_Custom">Индивидуальная</string>
-    <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
     <string name="Send_DialogFee">Комиссия</string>
     <string name="Send_DialogProceed">Далее</string>
     <string name="Send_LockTime_Off">Выкл.</string>
@@ -381,9 +381,7 @@
     <string name="FeeSettings_Fee_Info">Максимальная предполагаемая комиссия за транзакцию, которая будет уплачена за данную транзакцию, рассчитанная на основе значений лимита газа, максимальной ставки комиссии и максимальной приоритетной комиссии, указанных ниже. Фактический размер комиссии обычно ниже.</string>
     <string name="FeeSettings_NetworkFee">Network Fee</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
-    <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">Единица сложности транзакций - газ, она варьирует в зависимости от выполняемого смарт-контракта. Лимит газа - это предполагаемый максимальный размер газа, необходимый для выполнения смарт-контракта. Обычно используется меньшее количество газа.</string>
-    <string name="FeeSettings_GasPrice">Gas Price (Gwei)</string>
     <string name="FeeSettings_GasPrice_Info">Комиссия за сетевую транзакцию измеряется в единицах газа. Цена газа – это сумма, которую пользователь готов заплатить за единицу газа. Когда сеть занята, цены на газ повышаются, а во время простоя они наоборот снижаются. Слишком низкая цена газа зачастую является основанием для длительного сохранения отложенного статуса транзакции.</string>
     <string name="FeeSettings_BaseFee">Базовая комиссия</string>
     <string name="FeeSettings_BaseFee_Info">Сетевой протокол определяет базовую стоимость газа для каждого блока, которая называется базовая ставка комиссии. Он варьирует в зависимости от уровня загрузки сети от блока к блоку. В следующем блоке он может увеличиться или уменьшиться не более чем на 12.5%, что делает взимаемый тариф более предсказуемым. Здесь отражена базовая ставка комиссии текущего блока.</string>
@@ -445,7 +443,6 @@
     <string name="WalletConnect_Disconnecting">Отключение</string>
     <string name="WalletConnect_SignMessageRequest_Title">Запрос на подпись</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Домен</string>
-    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Пожалуйста, подпишите сообщение для аутентификации</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
@@ -665,6 +662,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Транзакция уже в блоке</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
+    <string name="Info_LockTime_Description_Static">The sender sent these funds with a spending lock that will expire on the shown date. \n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you cannot spend them on the Bitcoin network.</string>
     <string name="Info_DoubleSpend_Title">Двойная трата</string>
     <string name="Info_DoubleSpend_Description">Риск двойной траты! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
@@ -691,7 +689,6 @@
     <string name="Settings_Privacy">Конфиденциальность</string>
     <string name="Settings_ShareThisWallet">Рассказать друзьям</string>
     <string name="Settings_AppStatus">Статус приложения</string>
-    <string name="Settings_WalletConnect">WalletConnect</string>
     <string name="Settings_RateUs">Оцените наше приложение</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="Settings_Appearance">Оформление</string>
@@ -709,7 +706,10 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Open Telegram</string>
     <string name="Settings_Donate_Info">Together, with your support, we can make this app even better!</string>
     <string name="Settings_Donate">Donate</string>
-    <string name="Settings_Donate_CoinAddress">%s address</string>
+    <string name="Settings_DonateToken">Donate %s</string>
+    <string name="Settings_DonateWith">Donate with</string>
+    <string name="Settings_Donate_GetAddress">Get Address</string>
+    <string name="Settings_Donate_Addresses">Addresses</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
@@ -841,7 +841,7 @@
     <string name="Hud_Already_In_Wallet">Уже добавлено в кошелек</string>
     <string name="Hud_Removed_from_Watchlist">Удалить из избранного</string>
     <string name="Hud_Removed">Удалено</string>
-    <string name="Hud_UnknownError">%s</string>
+    <string name="Hud_WaitForSynchronization">Wait for synchronization</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Токены</string>
     <string name="ManageCoins_Search">Название, код или адрес контракта</string>
@@ -920,6 +920,7 @@
     <string name="ManageAccount_WatchAddresses">Просмотр кошелька</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Выберите кошелек для быстрого переключения</string>
     <string name="ManageAccount_DeleteWarning">Вы хотите приостановить просмотр этого адреса кошелька?</string>
+    <string name="Balance_Receive_BackupRequired_Description">You need to backup %1$s</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Настройки сети</string>
     <string name="NetworkSettings_SwithesAutomatically">переходит автоматически</string>
@@ -972,19 +973,11 @@
     <!-- Bip32 Root Key -->
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
-    <string name="ExtendedKey_Blockchain">Blockchain</string>
-    <string name="ExtendedKey_Purpose">Purpose</string>
-    <string name="ExtendedKey_Account">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
-    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
-    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
-    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Предоставляет полный контроль над криптовалютами на базе EVM, т.е. Ethereum, Binance Smart Chain и т.д. в пределах соответствующего кошелька.</string>
-    <string name="PrivateKeys_Bip32RootKey">BIP32 Root Key</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Предоставляет полный контроль над активами на соответствующем кошельке.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Предоставляет полный контроль над Bitcoin и другими криптовалютами на базе UTXO, такими как Litecoin, Bitcoin Cash, Dash и т.д. в пределах соответствующего кошелька.</string>
@@ -992,7 +985,6 @@
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Публичные ключи</string>
     <string name="PublicKeys_EvmAddress">EVM адрес</string>
-    <string name="PublicKeys_AccountExtendedPublicKey">Account Extended Public Key</string>
     <string name="PublicKeys_EvmAddress_Description">Позволяет отслеживать кошельки с активами на Ethereum, Binance Smart Chain и других блокчейнах на базе EVM, только для чтения.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Позволяет осуществлять мониторинг кошельков, содержащих Bitcoin и другие криптовалюты на основе UTXO (например, Litecoin, Bitcoin Cash, Dash и т.д.), только для чтения.</string>
     <!-- Recovery Phrase Verify -->
@@ -1099,7 +1091,6 @@
     <string name="CoinPage_Audits_PoweredBy">При поддержке Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">Запросы: %d</string>
     <string name="CoinPage_InvestorData">Данные инвестора</string>
-    <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Фильтры</string>
     <string name="CoinPage_Treasuries_PoweredBy">Работает на Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Отчёты</string>
@@ -1170,7 +1161,6 @@
     <string name="CoinPage_MajorHolders_InTopWallets">в топ-10 держателей</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Всего держателей: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Лид</string>
-    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Получите доступ к расширенным функциям Unstoppable Кошелька.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nне найден</string>
     <string name="CoinPage_Indicators">Indicators</string>
@@ -1197,14 +1187,10 @@
     <string name="CoinAnalytics_DexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих децентрализованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_DexVolume_Info4">Список всех токенов, ранжированных по объему торговли на децентрализованных биржах за 24ч/7дн/1мес.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">Отслеживаемые DEX биржи:</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Sushiswap</string>
-    <string name="CoinAnalytics_DexVolume_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Общая ликвидность, доступная в настоящий момент для токена на ведущих децентрализованных биржах.</string>
     <string name="CoinAnalytics_DexLiquidity_Info2">График, отражающий колебания доступной ликвидности для токена на ведущих децентрализованных биржах за 1 год.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">Список всех токенов, ранжированных по доступной ликвидности на ведущих децентрализованных биржах.</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">Отслеживаемые DEX биржи:</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info1">Ethereum : Uniswap V2/3, Balancer V1/2, Bancor V2, Curve, Sushiswap</string>
-    <string name="CoinAnalytics_DexLiquidity_TrackedDexes_Info2">Binance-Smart-Chain : PancakeSwap, DODO V1/2</string>
     <string name="CoinAnalytics_ActiveAddresses_Info1">Общее количество уникальных ежедневных активных адресов за 24 часа.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">График, показывающий вариацию количества ежедневных активных адресов в течение 1 года.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">Общее количество уникальных адресов блокчейна, с которых проводились транзакции с токеном за 30 дней.</string>
@@ -1260,7 +1246,6 @@
     <string name="CoinAnalytics_OtherData">Другие данные</string>
     <string name="CoinAnalytics_Reports">Отчёты</string>
     <string name="CoinAnalytics_Funding">Финансирование</string>
-    <string name="CoinAnalytics_Treasuries">Treasuries</string>
     <string name="Coin_Analytics_Audits">Аудиты</string>
     <string name="Coin_Analytics_Last30d">последние 30д</string>
     <string name="Coin_Analytics_Current">текущее</string>
@@ -1310,7 +1295,6 @@
     <string name="SubscriptionInfo_PersonalSupport_Info">Contact our team directly over Telegram for personal assistance.</string>
     <string name="SubscriptionInfo_GetPremium">Get Premium</string>
     <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
-    <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">7Д сред.</string>
     <string name="Nfts_PriceType_Days_30">30Д сред.</string>
     <string name="Nfts_PriceType_LastSale">Последняя продажа</string>
@@ -1321,7 +1305,6 @@
     <string name="Nfts_PriceMode">Режим цены</string>
     <string name="NftAsset_Overview">Обзор</string>
     <string name="NftAsset_Activity">Активность</string>
-    <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Поделиться</string>
     <string name="NftAsset_Action_Save">Сохранить</string>
     <string name="NftAsset_OwnedCount">Собственный счет</string>
@@ -1342,9 +1325,6 @@
     <string name="NftAsset_TokenStandard">Стандарт токена</string>
     <string name="NftAsset_Blockchain">Блокчейн</string>
     <string name="NftAsset_Links_Website">Веб-сайт</string>
-    <string name="NftAsset_Links_OpenSea">OpenSea</string>
-    <string name="NftAsset_Links_Discord">Discord</string>
-    <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">При поддержке OpenSea API</string>
     <string name="Nft_TopCollections">Топ NFT коллекции</string>
     <string name="Nft_TopCollections_Description">Ведущие коллекции NFT по объему торгов.</string>
@@ -1475,7 +1455,6 @@
     <string name="CexDeposit_Title">Deposit %s</string>
     <string name="CexDeposit_CopyAddress">Copy Address</string>
     <string name="CexDeposit_ShareAddress">Share Address</string>
-    <string name="CexDeposit_Memo">Memo (Tag)</string>
     <string name="CexDeposit_Network">Network</string>
     <string name="CexDeposit_AddressDescription">Your address for depositing %s</string>
     <string name="CexDeposit_DepositWarning">Send only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
