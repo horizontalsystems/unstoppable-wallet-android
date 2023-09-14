@@ -200,10 +200,10 @@ class BalanceService(
     }
 
     companion object {
-        fun getInstance(): BalanceService {
+        fun getInstance(tag: String): BalanceService {
             return BalanceService(
                 BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
-                BalanceXRateRepository(App.currencyManager, App.marketKit),
+                BalanceXRateRepository(tag, App.currencyManager, App.marketKit),
                 BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
                 App.localStorage,
                 App.connectivityManager,

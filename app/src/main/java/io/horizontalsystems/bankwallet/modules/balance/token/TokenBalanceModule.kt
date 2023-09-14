@@ -23,7 +23,7 @@ class TokenBalanceModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val balanceService = TokenBalanceService(
                 wallet,
-                BalanceXRateRepository(App.currencyManager, App.marketKit),
+                BalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
                 BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
             )
 
