@@ -100,7 +100,7 @@ class CexAssetViewModel(
             return CexAssetViewModel(
                 cexAsset,
                 App.balanceHiddenManager,
-                BalanceXRateRepository(App.currencyManager, App.marketKit),
+                BalanceXRateRepository("cex-asset", App.currencyManager, App.marketKit),
                 BalanceViewItemFactory(),
                 App.connectivityManager,
 

@@ -65,7 +65,7 @@ object BalanceModule {
                 App.localStorage,
                 App.balanceViewTypeManager,
                 BalanceViewItemFactory(),
-                BalanceCexRepositoryWrapper(App.cexAssetManager),
+                BalanceCexRepositoryWrapper(App.cexAssetManager, App.connectivityManager),
                 BalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
                 BalanceCexSorter(),
                 App.cexProviderManager,
