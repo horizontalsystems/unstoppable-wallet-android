@@ -19,7 +19,9 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class ManageWalletsService(
     private val walletManager: IWalletManager,
@@ -28,18 +30,15 @@ class ManageWalletsService(
     private val account: Account?
 ) : Clearable {
 
-    val itemsObservable = PublishSubject.create<List<Item>>()
-    var items: List<Item> = listOf()
-        private set(value) {
-            field = value
-            itemsObservable.onNext(value)
-        }
+    private val _itemsFlow = MutableStateFlow<List<Item>>(listOf())
+    val itemsFlow
+        get() = _itemsFlow.asStateFlow()
 
     val accountType: AccountType?
         get() = account?.type
 
     private var fullCoins = listOf<FullCoin>()
-    private var sortedItems = listOf<Item>()
+    private var items = listOf<Item>()
 
     private val disposables = CompositeDisposable()
 
@@ -94,7 +93,7 @@ class ManageWalletsService(
             }
         }
 
-        sortedItems = fullCoins
+        items = fullCoins
             .map { getItemsForFullCoin(it) }
             .flatten()
             .sortedWith(comparator)
@@ -139,7 +138,7 @@ class ManageWalletsService(
     }
 
     private fun syncState() {
-        items = sortedItems
+        _itemsFlow.update { items }
     }
 
     private fun handleUpdated(wallets: List<Wallet>) {
@@ -155,7 +154,7 @@ class ManageWalletsService(
     }
 
     private fun updateSortedItems(token: Token, enable: Boolean) {
-        sortedItems = sortedItems.map { item ->
+        items = items.map { item ->
             if (item.token == token) {
                 item.copy(enabled = enable)
             } else {
