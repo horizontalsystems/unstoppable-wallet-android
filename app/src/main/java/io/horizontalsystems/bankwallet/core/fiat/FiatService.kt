@@ -70,7 +70,7 @@ class FiatService(
 
         syncLatestRate(marketKit.coinPrice(token.coin.uid, currency.code))
 
-        latestRateDisposable = marketKit.coinPriceObservable(token.coin.uid, currency.code)
+        latestRateDisposable = marketKit.coinPriceObservable("fiat-service", token.coin.uid, currency.code)
             .distinct()
             .subscribeOn(Schedulers.io())
             .subscribe {

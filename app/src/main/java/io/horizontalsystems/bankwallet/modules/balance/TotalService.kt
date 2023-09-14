@@ -9,10 +9,14 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
@@ -120,7 +124,7 @@ class TotalService(
 
         baseToken?.let { platformCoin ->
             coinPriceUpdatesJob = coroutineScope.launch {
-                marketKit.coinPriceObservable(platformCoin.coin.uid, currency.code)
+                marketKit.coinPriceObservable("total", platformCoin.coin.uid, currency.code)
                     .asFlow()
                     .collect {
                         coinPrice = it
