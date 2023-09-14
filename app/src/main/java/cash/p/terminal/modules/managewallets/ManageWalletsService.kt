@@ -1,20 +1,19 @@
 package cash.p.terminal.modules.managewallets
 
 import cash.p.terminal.core.Clearable
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.eligibleTokens
-import cash.p.terminal.core.isCustom
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.isDefault
+import cash.p.terminal.core.isNative
 import cash.p.terminal.core.managers.RestoreSettings
+import cash.p.terminal.core.order
 import cash.p.terminal.core.restoreSettingTypes
-import cash.p.terminal.core.sortedByFilter
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
-import io.horizontalsystems.ethereumkit.core.AddressValidator
+import cash.p.terminal.modules.receivemain.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
@@ -23,10 +22,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class ManageWalletsService(
-    private val marketKit: MarketKitWrapper,
     private val walletManager: IWalletManager,
-    accountManager: IAccountManager,
     private val restoreSettingsService: RestoreSettingsService,
+    private val fullCoinsProvider: FullCoinsProvider?,
+    private val account: Account?
 ) : Clearable {
 
     val itemsObservable = PublishSubject.create<List<Item>>()
@@ -39,8 +38,6 @@ class ManageWalletsService(
     val accountType: AccountType?
         get() = account?.type
 
-    private val account: Account? = accountManager.activeAccount
-    private var wallets = setOf<Wallet>()
     private var fullCoins = listOf<FullCoin>()
     private var sortedItems = listOf<Item>()
 
@@ -71,40 +68,15 @@ class ManageWalletsService(
     }
 
     private fun isEnabled(token: Token): Boolean {
-        return wallets.any { it.token == token }
+        return walletManager.activeWallets.any { it.token == token }
     }
 
     private fun sync(walletList: List<Wallet>) {
-        wallets = walletList.toSet()
+        fullCoinsProvider?.setActiveWallets(walletList)
     }
 
     private fun fetchFullCoins(): List<FullCoin> {
-        return if (filter.isBlank()) {
-            val account = this.account ?: return emptyList()
-            val featuredFullCoins = marketKit.fullCoins("", 100).toMutableList()
-                .filter { it.eligibleTokens(account.type).isNotEmpty() }
-
-            val featuredCoins = featuredFullCoins.map { it.coin }
-            val enabledFullCoins = marketKit.fullCoins(
-                coinUids = wallets.filter { !featuredCoins.contains(it.coin) }.map { it.coin.uid }
-            )
-            val customFullCoins = wallets.filter { it.token.isCustom }.map { it.token.fullCoin }
-
-            featuredFullCoins + enabledFullCoins + customFullCoins
-        } else if (isContractAddress(filter)) {
-            val tokens = marketKit.tokens(filter)
-            val coinUids = tokens.map { it.coin.uid }
-            marketKit.fullCoins(coinUids)
-        } else {
-            marketKit.fullCoins(filter, 20)
-        }
-    }
-
-    private fun isContractAddress(filter: String) = try {
-        AddressValidator.validate(filter)
-        true
-    } catch (e: AddressValidator.AddressValidationException) {
-        false
+        return fullCoinsProvider?.getItems() ?: listOf()
     }
 
     private fun syncFullCoins() {
@@ -112,31 +84,43 @@ class ManageWalletsService(
     }
 
     private fun sortItems() {
-        fullCoins = fullCoins.sortedByFilter(filter)
         sortedItems = fullCoins
             .map { getItemsForFullCoin(it) }
             .flatten()
-            .sortedByDescending { it.enabled }
+            .sortedWith(
+                compareByDescending<Item> {
+                    it.enabled
+                }.thenBy {
+                    it.token.blockchain.type.order
+                }
+            )
     }
 
     private fun getItemsForFullCoin(fullCoin: FullCoin): List<Item> {
         val accountType = account?.type ?: return listOf()
+        val eligibleTokens = fullCoin.eligibleTokens(accountType)
 
-        val items = mutableListOf<Item>()
-        fullCoin.eligibleTokens(accountType).forEach { token ->
-            items.add(getItemForToken(token))
+        val tokens = if (filter.isNotBlank()) {
+            eligibleTokens
+        } else if (
+            eligibleTokens.all { it.type is TokenType.Derived } ||
+            eligibleTokens.all { it.type is TokenType.AddressTyped }
+        ) {
+            eligibleTokens.filter { isEnabled(it) || it.type.isDefault }
+        } else {
+            eligibleTokens.filter { isEnabled(it) || it.type.isNative }
         }
 
-        return items
+        return tokens.map { getItemForToken(it) }
     }
 
     private fun getItemForToken(token: Token): Item {
         val enabled = isEnabled(token)
 
         return Item(
-                token = token,
-                enabled = enabled,
-                hasInfo = hasInfo(token, enabled)
+            token = token,
+            enabled = enabled,
+            hasInfo = hasInfo(token, enabled)
         )
     }
 
@@ -190,6 +174,7 @@ class ManageWalletsService(
 
     fun setFilter(filter: String) {
         this.filter = filter
+        fullCoinsProvider?.setQuery(filter)
 
         syncFullCoins()
         sortItems()
@@ -207,10 +192,12 @@ class ManageWalletsService(
     }
 
     fun disable(token: Token) {
-        wallets.firstOrNull { it.token == token }?.let {
-            walletManager.delete(listOf(it))
-            updateSortedItems(token, false)
-        }
+        walletManager.activeWallets
+            .firstOrNull { it.token == token }
+            ?.let {
+                walletManager.delete(listOf(it))
+                updateSortedItems(token, false)
+            }
     }
 
     override fun clear() {

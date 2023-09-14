@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import cash.p.terminal.modules.receivemain.FullCoinsProvider
 
 object ManageWalletsModule {
 
@@ -15,11 +16,14 @@ object ManageWalletsModule {
         }
 
         private val manageWalletsService by lazy {
+            val activeAccount = App.accountManager.activeAccount
             ManageWalletsService(
-                App.marketKit,
                 App.walletManager,
-                App.accountManager,
-                restoreSettingsService
+                restoreSettingsService,
+                App.accountManager.activeAccount?.let { account ->
+                    FullCoinsProvider(App.marketKit, account)
+                },
+                activeAccount
             )
         }
 
