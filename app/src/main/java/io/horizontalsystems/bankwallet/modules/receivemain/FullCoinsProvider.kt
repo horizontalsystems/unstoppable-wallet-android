@@ -51,9 +51,7 @@ class FullCoinsProvider(
             val coinUids = regular.map { it.coin.uid }
             custom.map { it.fullCoin } + marketKit.fullCoins(coinUids)
         } else if (isContractAddress(tmpQuery)) {
-            val tokens = marketKit.tokens(tmpQuery)
-            val coinUids = tokens.map { it.coin.uid }
-            marketKit.fullCoins(coinUids)
+            marketKit.tokens(tmpQuery).map { it.fullCoin }
         } else {
             marketKit.fullCoins(tmpQuery)
         }
