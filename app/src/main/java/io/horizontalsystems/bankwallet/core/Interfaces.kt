@@ -71,6 +71,7 @@ interface ILocalStorage {
     var amountInputType: AmountInputType?
     var baseCurrencyCode: String?
     var authToken: String?
+    val appId: String?
 
     var baseBitcoinProvider: String?
     var baseLitecoinProvider: String?

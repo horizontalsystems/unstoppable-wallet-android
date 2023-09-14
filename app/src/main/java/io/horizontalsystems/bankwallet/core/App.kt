@@ -202,15 +202,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        val appConfig = AppConfigProvider()
-        appConfigProvider = appConfig
-
         LocalStorageManager(preferences).apply {
             localStorage = this
             pinStorage = this
             thirdKeyboardStorage = this
             marketStorage = this
         }
+
+        val appConfig = AppConfigProvider(localStorage)
+        appConfigProvider = appConfig
 
         torKitManager = TorManager(instance, localStorage)
         subscriptionManager = SubscriptionManager()
@@ -221,6 +221,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             hsApiKey = appConfig.marketApiKey,
             cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
             defiYieldApiKey = appConfig.defiyieldProviderApiKey,
+            appConfigProvider = appConfigProvider,
             subscriptionManager = subscriptionManager
         )
         marketKit.sync()
@@ -305,7 +306,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
         tronAccountManager.start()
 
-        systemInfoManager = SystemInfoManager()
+        systemInfoManager = SystemInfoManager(appConfigProvider)
 
         languageManager = LanguageManager()
         currencyManager = CurrencyManager(localStorage, appConfigProvider)

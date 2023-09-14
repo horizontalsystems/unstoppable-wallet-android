@@ -18,7 +18,8 @@ object MainSettingsModule {
                 App.pinComponent,
                 App.wc2SessionManager,
                 App.wc2Manager,
-                App.accountManager
+                App.accountManager,
+                App.appConfigProvider,
             )
             val viewModel = MainSettingsViewModel(
                 service,
