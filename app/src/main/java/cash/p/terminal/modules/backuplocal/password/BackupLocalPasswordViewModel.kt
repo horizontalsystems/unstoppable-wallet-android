@@ -8,15 +8,18 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.IEnabledWalletStorage
 import cash.p.terminal.core.PasswordError
 import cash.p.terminal.core.managers.EncryptDecryptManager
 import cash.p.terminal.core.managers.PassphraseValidator
+import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
 import cash.p.terminal.modules.backuplocal.BackupLocalModule.WalletBackup
 import io.horizontalsystems.core.toHexString
+import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,6 +29,8 @@ import java.security.MessageDigest
 class BackupLocalPasswordViewModel(
     private val passphraseValidator: PassphraseValidator,
     private val accountManager: IAccountManager,
+    private val storage: IEnabledWalletStorage,
+    private val settingsManager: RestoreSettingsManager,
     accountId: String?,
 ) : ViewModel() {
 
@@ -141,13 +146,28 @@ class BackupLocalPasswordViewModel(
             val encrypted = encryptDecryptManager.encrypt(secretText, key, iv)
             val mac = EncryptDecryptManager.generateMac(key, encrypted.toByteArray())
 
+            val wallets = storage.enabledWallets(accountNonNull.id)
+
+            val enabledWalletsBackup = wallets.mapNotNull {
+                val tokenQuery = TokenQuery.fromId(it.tokenQueryId) ?: return@mapNotNull null
+                val settings = settingsManager.settings(accountNonNull, tokenQuery.blockchainType).values
+                BackupLocalModule.EnabledWalletBackup(
+                    tokenQueryId = it.tokenQueryId,
+                    coinName = it.coinName,
+                    coinCode = it.coinCode,
+                    decimals = it.coinDecimals,
+                    settings = settings.ifEmpty { null }
+                )
+            }
+
             val crypto = BackupLocalModule.BackupCrypto(
                 cipher = "aes-128-ctr",
                 cipherparams = BackupLocalModule.CipherParams(iv),
                 ciphertext = encrypted,
                 kdf = "scrypt",
                 kdfparams = kdfParams,
-                mac = mac.toHexString()
+                mac = mac.toHexString(),
+                enabledWallets = enabledWalletsBackup
             )
 
             val backup = WalletBackup(
@@ -161,6 +181,7 @@ class BackupLocalPasswordViewModel(
 
             val gson = GsonBuilder()
                 .disableHtmlEscaping()
+                .enableComplexMapKeySerialization()
                 .create()
             backupJson = gson.toJson(backup)
             withContext(Dispatchers.Main) {

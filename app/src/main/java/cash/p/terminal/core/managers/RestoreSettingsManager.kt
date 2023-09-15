@@ -1,5 +1,6 @@
 package cash.p.terminal.core.managers
 
+import com.google.gson.annotations.SerializedName
 import cash.p.terminal.R
 import cash.p.terminal.core.IRestoreSettingsStorage
 import cash.p.terminal.core.providers.Translator
@@ -64,6 +65,7 @@ class RestoreSettingsManager(
 }
 
 enum class RestoreSettingType {
+    @SerializedName("birthday_height")
     BirthdayHeight;
 
     companion object {

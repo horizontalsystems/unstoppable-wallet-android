@@ -14,6 +14,8 @@ object BackupLocalPasswordModule {
             return BackupLocalPasswordViewModel(
                 PassphraseValidator(),
                 App.accountManager,
+                App.enabledWalletsStorage,
+                App.restoreSettingsManager,
                 accountId
             ) as T
         }

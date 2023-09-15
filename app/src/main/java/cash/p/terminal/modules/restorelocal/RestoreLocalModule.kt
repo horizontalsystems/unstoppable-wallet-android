@@ -11,7 +11,7 @@ object RestoreLocalModule {
     class Factory(private val backupJsonString: String?, private val fileName: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreLocalViewModel(backupJsonString, App.accountManager, App.accountFactory, fileName) as T
+            return RestoreLocalViewModel(backupJsonString, App.accountManager, App.accountFactory, App.walletManager, App.restoreSettingsManager, fileName) as T
         }
     }
 
