@@ -12,6 +12,7 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 
 class FullCoinsProvider(
     private val marketKit: MarketKitWrapper,
@@ -46,14 +47,29 @@ class FullCoinsProvider(
     fun getItems(): List<FullCoin> {
         val tmpQuery = query
 
+        val (customTokens, regularTokens) = predefinedTokens.partition { it.isCustom }
+
         val fullCoins = if (tmpQuery.isNullOrBlank()) {
-            val (custom, regular) = predefinedTokens.partition { it.isCustom }
-            val coinUids = regular.map { it.coin.uid }
-            custom.map { it.fullCoin } + marketKit.fullCoins(coinUids)
+            val coinUids = regularTokens.map { it.coin.uid }
+            customTokens.map { it.fullCoin } + marketKit.fullCoins(coinUids)
         } else if (isContractAddress(tmpQuery)) {
-            marketKit.tokens(tmpQuery).map { it.fullCoin }
+            val customFullCoins = customTokens
+                .filter {
+                    val type = it.type
+                    type is TokenType.Eip20 && type.address.contains(tmpQuery, true)
+                }
+                .map { it.fullCoin }
+
+            customFullCoins + marketKit.tokens(tmpQuery).map { it.fullCoin }
         } else {
-            marketKit.fullCoins(tmpQuery)
+            val customFullCoins = customTokens
+                .filter {
+                    val coin = it.coin
+                    coin.name.contains(tmpQuery, true) || coin.code.contains(tmpQuery, true)
+                }
+                .map { it.fullCoin }
+
+            customFullCoins + marketKit.fullCoins(tmpQuery)
         }
 
         return fullCoins
