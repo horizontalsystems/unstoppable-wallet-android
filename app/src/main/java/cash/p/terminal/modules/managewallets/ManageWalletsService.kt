@@ -138,7 +138,9 @@ class ManageWalletsService(
     }
 
     private fun syncState() {
-        _itemsFlow.update { items }
+        _itemsFlow.update {
+            buildList { addAll(items) }
+        }
     }
 
     private fun handleUpdated(wallets: List<Wallet>) {
