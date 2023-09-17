@@ -1,13 +1,13 @@
-package io.horizontalsystems.bankwallet.modules.restorelocal
+package cash.p.terminal.modules.restorelocal
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
-import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.DataState
+import cash.p.terminal.R
+import cash.p.terminal.core.managers.PassphraseValidator
+import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.entities.DataState
 
 class RestoreLocalViewModel(
     private val passphraseValidator: PassphraseValidator,

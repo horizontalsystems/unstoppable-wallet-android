@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.restorelocal
+package cash.p.terminal.modules.restorelocal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
-import io.horizontalsystems.bankwallet.entities.DataState
+import cash.p.terminal.core.managers.PassphraseValidator
+import cash.p.terminal.entities.DataState
 
 object RestoreLocalModule {
 
