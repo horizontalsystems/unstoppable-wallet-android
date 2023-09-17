@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backuplocal.password
+package cash.p.terminal.modules.backuplocal.password
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,18 +22,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
-import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import cash.p.terminal.R
+import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
+import cash.p.terminal.ui.compose.components.FormsInputPassword
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui.compose.components.VSpacer
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 

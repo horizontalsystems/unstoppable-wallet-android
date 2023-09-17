@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backuplocal
+package cash.p.terminal.modules.backuplocal
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +12,10 @@ import androidx.navigation.NavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupPasswordScreen
-import io.horizontalsystems.bankwallet.modules.backuplocal.terms.LocalBackupTermsScreen
+import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.composablePage
+import cash.p.terminal.modules.backuplocal.password.LocalBackupPasswordScreen
+import cash.p.terminal.modules.backuplocal.terms.LocalBackupTermsScreen
 import io.horizontalsystems.core.findNavController
 
 class BackupLocalFragment : BaseFragment() {

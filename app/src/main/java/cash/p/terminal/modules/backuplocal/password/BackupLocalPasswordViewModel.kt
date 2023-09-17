@@ -1,14 +1,14 @@
-package io.horizontalsystems.bankwallet.modules.backuplocal.password
+package cash.p.terminal.modules.backuplocal.password
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
-import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.DataState
+import cash.p.terminal.R
+import cash.p.terminal.core.managers.PassphraseValidator
+import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.entities.DataState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
