@@ -1,6 +1,6 @@
 package cash.p.terminal.core.managers
 
-import io.horizontalsystems.bankwallet.core.PasswordError
+import cash.p.terminal.core.PasswordError
 
 class PassphraseValidator {
     private val allowedCharacters = "abcdefghijklmnopqrstuvwxyz0123456789 '\"`&/?!:;.,~*$=+-[](){}<>\\_#@|%"
