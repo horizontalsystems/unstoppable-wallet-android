@@ -20,7 +20,8 @@ class AccountManager(
         private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
 
-    private val cache = AccountsCache()
+    private var activeAccountId: String? = null
+    private var accountsCache = mutableMapOf<String, Account>()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
     private val activeAccountSubject = PublishSubject.create<Optional<Account>>()
@@ -29,10 +30,10 @@ class AccountManager(
     override val activeAccountStateFlow = _activeAccountStateFlow
 
     override val hasNonStandardAccount: Boolean
-        get() = cache.accountsMap.any { it.value.nonStandard }
+        get() = accountsCache.any { it.value.nonStandard }
 
     override val activeAccount: Account?
-        get() = cache.activeAccount
+        get() = activeAccountId?.let { accountsCache[it] }
 
     override val activeAccountObservable: Flowable<Optional<Account>>
         get() = activeAccountSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -41,7 +42,7 @@ class AccountManager(
         get() = storage.isAccountsEmpty
 
     override val accounts: List<Account>
-        get() = cache.accountsMap.map { it.value }
+        get() = accountsCache.map { it.value }
 
     override val accountsFlowable: Flowable<List<Account>>
         get() = accountsSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -52,10 +53,14 @@ class AccountManager(
     private val _newAccountBackupRequiredFlow = MutableStateFlow<Account?>(null)
     override val newAccountBackupRequiredFlow = _newAccountBackupRequiredFlow.asStateFlow()
 
+    private fun updateCache(account: Account) {
+        accountsCache[account.id] = account
+    }
+
     override fun setActiveAccountId(activeAccountId: String?) {
-        if (cache.activeAccountId != activeAccountId) {
+        if (this.activeAccountId != activeAccountId) {
             storage.activeAccountId = activeAccountId
-            cache.activeAccountId = activeAccountId
+            this.activeAccountId = activeAccountId
             activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
             _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
         }
@@ -66,8 +71,9 @@ class AccountManager(
     }
 
     override fun loadAccounts() {
-        cache.set(storage.allAccounts())
-        cache.activeAccountId = storage.activeAccountId
+        val accounts = storage.allAccounts()
+        accountsCache = accounts.associateBy { it.id }.toMutableMap()
+        activeAccountId = storage.activeAccountId
         activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
         _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
     }
@@ -79,7 +85,7 @@ class AccountManager(
     override fun save(account: Account) {
         storage.save(account)
 
-        cache.set(account)
+        updateCache(account)
         accountsSubject.onNext(accounts)
 
         setActiveAccountId(account.id)
@@ -93,7 +99,7 @@ class AccountManager(
     override fun update(account: Account) {
         storage.update(account)
 
-        cache.set(account)
+        updateCache(account)
         accountsSubject.onNext(accounts)
 
         activeAccount?.id?.let {
@@ -105,20 +111,20 @@ class AccountManager(
     }
 
     override fun delete(id: String) {
-        cache.delete(id)
+        accountsCache.remove(id)
         storage.delete(id)
 
         accountsSubject.onNext(accounts)
         accountsDeletedSubject.onNext(Unit)
 
-        if (id == cache.activeAccountId) {
+        if (id == activeAccountId) {
             setActiveAccountId(accounts.firstOrNull()?.id)
         }
     }
 
     override fun clear() {
         storage.clear()
-        cache.set(listOf())
+        accountsCache.clear()
         accountsSubject.onNext(listOf())
         accountsDeletedSubject.onNext(Unit)
         setActiveAccountId(null)
@@ -136,27 +142,6 @@ class AccountManager(
                 .subscribe()
     }
 
-    private class AccountsCache {
-        var activeAccountId: String? = null
-
-        var accountsMap = mutableMapOf<String, Account>()
-            private set
-
-        val activeAccount: Account?
-            get() = activeAccountId?.let { accountsMap[it] }
-
-        fun set(account: Account) {
-            accountsMap[account.id] = account
-        }
-
-        fun set(accounts: List<Account>) {
-            accountsMap = accounts.associateBy { it.id }.toMutableMap()
-        }
-
-        fun delete(id: String) {
-            accountsMap.remove(id)
-        }
-    }
 }
 
 class NoActiveAccount : Exception()
