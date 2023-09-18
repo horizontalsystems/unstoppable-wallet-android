@@ -44,7 +44,7 @@ class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFe
 
     override suspend fun getFeeRates(): FeeRates {
         val bitcoinFeeRate = feeRateProvider.bitcoinFeeRate().await()
-        return FeeRates(bitcoinFeeRate.economyFee, bitcoinFeeRate.minimumFee)
+        return FeeRates(bitcoinFeeRate.halfHourFee, bitcoinFeeRate.minimumFee)
     }
 }
 
