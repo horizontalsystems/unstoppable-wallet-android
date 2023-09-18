@@ -56,6 +56,9 @@ sealed class BlockchainType : Parcelable {
     object Fantom : BlockchainType()
 
     @Parcelize
+    object Tron: BlockchainType()
+
+    @Parcelize
     class Unsupported(val _uid: String) : BlockchainType()
 
     val uid: String
@@ -77,6 +80,7 @@ sealed class BlockchainType : Parcelable {
             is Solana -> "solana"
             is Gnosis -> "gnosis"
             is Fantom -> "fantom"
+            is Tron -> "tron"
             is Unsupported -> this._uid
         }
 
@@ -106,6 +110,7 @@ sealed class BlockchainType : Parcelable {
         Solana -> "solana"
         Gnosis -> "gnosis"
         Fantom -> "fantom"
+        Tron -> "tron"
         is Unsupported -> "unsupported|$uid"
     }
 
@@ -130,6 +135,7 @@ sealed class BlockchainType : Parcelable {
                 "solana" -> Solana
                 "gnosis" -> Gnosis
                 "fantom" -> Fantom
+                "tron" -> Tron
                 else -> Unsupported(uid)
             }
 
