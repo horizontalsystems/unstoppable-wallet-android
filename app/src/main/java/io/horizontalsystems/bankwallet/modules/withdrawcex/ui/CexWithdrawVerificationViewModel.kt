@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.withdrawcex.ui
+package cash.p.terminal.modules.withdrawcex.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
