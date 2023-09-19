@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.pin.set
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 
 object PinSetModule {
@@ -15,9 +14,9 @@ object PinSetModule {
         }
     }
 
-    enum class SetStage(val title: Int) {
-        Enter(R.string.PinSet_Info),
-        Confirm(R.string.PinSet_ConfirmInfo)
+    enum class SetStage {
+        Enter,
+        Confirm
     }
 
     data class PinSetViewState(
