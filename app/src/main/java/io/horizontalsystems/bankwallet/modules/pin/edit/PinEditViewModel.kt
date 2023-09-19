@@ -8,7 +8,8 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
-import io.horizontalsystems.bankwallet.modules.pin.edit.PinEditModule.EditStage.*
+import io.horizontalsystems.bankwallet.modules.pin.edit.PinEditModule.EditStage.Confirm
+import io.horizontalsystems.bankwallet.modules.pin.edit.PinEditModule.EditStage.Enter
 import io.horizontalsystems.bankwallet.modules.pin.edit.PinEditModule.PinEditViewState
 import io.horizontalsystems.core.IPinComponent
 import kotlinx.coroutines.delay
@@ -23,11 +24,10 @@ class PinEditViewModel(
 
     var uiState by mutableStateOf(
         PinEditViewState(
-            stage = Unlock,
+            stage = Enter,
             enteredCount = enteredPin.length,
             finished = false,
             reverseSlideAnimation = false,
-            showShakeAnimation = false,
             error = null
         )
     )
@@ -45,10 +45,6 @@ class PinEditViewModel(
         uiState = uiState.copy(finished = false)
     }
 
-    fun onShakeAnimationFinish() {
-        uiState = uiState.copy(showShakeAnimation = false)
-    }
-
     fun onKeyClick(number: Int) {
         if (enteredPin.length < PinModule.PIN_COUNT) {
 
@@ -61,25 +57,6 @@ class PinEditViewModel(
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 when (uiState.stage) {
-                    Unlock -> {
-                        if (pinComponent.validate(enteredPin)) {
-                            viewModelScope.launch {
-                                delay(500)
-                                enteredPin = ""
-                                uiState = uiState.copy(
-                                    stage = Enter,
-                                    enteredCount = enteredPin.length
-                                )
-                            }
-                        } else {
-                            uiState = uiState.copy(showShakeAnimation = true)
-                            viewModelScope.launch {
-                                delay(500)
-                                enteredPin = ""
-                                uiState = uiState.copy(enteredCount = enteredPin.length)
-                            }
-                        }
-                    }
                     Enter -> {
                         submittedPin = enteredPin
 

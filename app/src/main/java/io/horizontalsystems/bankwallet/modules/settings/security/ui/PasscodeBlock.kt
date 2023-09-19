@@ -82,7 +82,9 @@ fun PasscodeBlock(
             add {
                 RowUniversal(
                     onClick = {
-                        navController.slideFromRight(R.id.editPinFragment)
+                        navController.authorizedAction {
+                            navController.slideFromRight(R.id.editPinFragment)
+                        }
                     },
                     modifier = Modifier.padding(horizontal = 16.dp),
                 ) {
