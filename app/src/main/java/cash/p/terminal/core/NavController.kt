@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import cash.p.terminal.R
 import cash.p.terminal.modules.pin.PinModule
+import cash.p.terminal.modules.pin.SetPinFragment
 import cash.p.terminal.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.getNavigationResult
 
@@ -63,8 +64,8 @@ fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
 }
 
 fun NavController.navigateToSetPin(onSuccess: () -> Unit) {
-    getNavigationResult(PinModule.requestKey) { bundle ->
-        val resultCode = bundle.getInt(PinModule.requestResult)
+    getNavigationResult(SetPinFragment.requestKey) { bundle ->
+        val resultCode = bundle.getInt(SetPinFragment.requestResult)
 
         if (resultCode == PinModule.RESULT_OK) {
             onSuccess.invoke()
