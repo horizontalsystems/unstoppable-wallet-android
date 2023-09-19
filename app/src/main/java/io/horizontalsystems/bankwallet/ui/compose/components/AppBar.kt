@@ -77,6 +77,33 @@ fun AppBar(
 }
 
 @Composable
+fun AppBarX(
+    title: String? = null,
+    navigationIcon: @Composable (() -> Unit)? = null,
+    menuItems: List<MenuItem> = listOf(),
+    showSpinner: Boolean = false,
+    backgroundColor: Color = ComposeAppTheme.colors.tyler
+) {
+    val titleComposable: @Composable () -> Unit = {
+        title?.let {
+            title3_leah(
+                text = title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+
+    AppBar(
+        title = titleComposable,
+        navigationIcon = navigationIcon,
+        menuItems = menuItems,
+        showSpinner = showSpinner,
+        backgroundColor = backgroundColor
+    )
+}
+
+@Composable
 fun AppBar(
     title: @Composable () -> Unit,
     navigationIcon: @Composable (() -> Unit)? = null,
