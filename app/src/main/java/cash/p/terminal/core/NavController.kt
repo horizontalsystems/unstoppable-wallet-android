@@ -2,14 +2,13 @@ package cash.p.terminal.core
 
 import android.os.Bundle
 import androidx.annotation.IdRes
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import cash.p.terminal.R
-import cash.p.terminal.modules.pin.PinInteractionType
 import cash.p.terminal.modules.pin.PinModule
 import cash.p.terminal.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.parcelable
 
 fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
     val navOptions = NavOptions.Builder()
@@ -36,14 +35,13 @@ fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
 fun NavController.authorizedAction(action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
         getNavigationResult(PinModule.requestKey) { bundle ->
-            val resultType = bundle.parcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
-            if (resultType == PinInteractionType.UNLOCK && resultCode == PinModule.RESULT_OK) {
+            if (resultCode == PinModule.RESULT_OK) {
                 action.invoke()
             }
         }
-        slideFromBottom(R.id.pinFragment, PinModule.forUnlock())
+        slideFromBottom(R.id.pinFragment, bundleOf(PinModule.keyShowCancel to true))
     } else {
         action.invoke()
     }
@@ -66,7 +64,6 @@ fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
 
 fun NavController.navigateToSetPin(onSuccess: () -> Unit) {
     getNavigationResult(PinModule.requestKey) { bundle ->
-        val resultType = bundle.parcelable<PinInteractionType>(PinModule.requestType)
         val resultCode = bundle.getInt(PinModule.requestResult)
 
         if (resultCode == PinModule.RESULT_OK) {
