@@ -192,8 +192,8 @@
         android:id="@+id/editPinFragment"
         android:name="cash.p.terminal.modules.pin.EditPinFragment" />
     <fragment
-        android:id="@+id/pinFragment"
-        android:name="cash.p.terminal.modules.pin.PinFragment" />
+        android:id="@+id/unlockPinFragment"
+        android:name="cash.p.terminal.modules.pin.UnlockPinFragment" />
     <fragment
         android:id="@+id/releaseNotesFragment"
         android:name="cash.p.terminal.modules.releasenotes.ReleaseNotesFragment" />
