@@ -16,7 +16,6 @@ object PinEditModule {
     }
 
     enum class EditStage(val title: Int) {
-        Unlock(R.string.EditPin_UnlockInfo),
         Enter(R.string.EditPin_NewPinInfo),
         Confirm(R.string.PinSet_ConfirmInfo)
     }
@@ -26,7 +25,6 @@ object PinEditModule {
         val enteredCount: Int,
         val finished: Boolean,
         val reverseSlideAnimation: Boolean,
-        val showShakeAnimation: Boolean,
         val error: String?,
     )
 

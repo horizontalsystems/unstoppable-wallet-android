@@ -55,19 +55,6 @@ fun PinEdit(
                     reverseAnimation = viewModel.uiState.reverseSlideAnimation
                 ) { stage ->
                     when (stage) {
-                        PinEditModule.EditStage.Unlock -> {
-                            PinTopBlock(
-                                title = {
-                                    subhead2_grey(
-                                        text = stringResource(stage.title),
-                                        textAlign = TextAlign.Center
-                                    )
-                                },
-                                enteredCount = viewModel.uiState.enteredCount,
-                                showShakeAnimation = viewModel.uiState.showShakeAnimation,
-                                onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() }
-                            )
-                        }
                         PinEditModule.EditStage.Enter -> {
                             PinTopBlock(
                                 title = {
