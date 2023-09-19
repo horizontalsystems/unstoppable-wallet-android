@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,14 +18,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.navigateToSetPin
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.core.getNavigationResult
 
 @Composable
 fun PasscodeBlock(
@@ -80,13 +82,7 @@ fun PasscodeBlock(
             add {
                 RowUniversal(
                     onClick = {
-                        navController.getNavigationResult(PinModule.requestKey) {
-                            //just clean result in backStackEntry
-                        }
-                        navController.slideFromRight(
-                            R.id.pinFragment,
-                            PinModule.forEditPin()
-                        )
+                        navController.slideFromRight(R.id.editPinFragment)
                     },
                     modifier = Modifier.padding(horizontal = 16.dp),
                 ) {
