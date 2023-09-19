@@ -186,6 +186,9 @@
         android:id="@+id/coinReportsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment" />
     <fragment
+        android:id="@+id/setPinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.pin.SetPinFragment" />
+    <fragment
         android:id="@+id/pinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.pin.PinFragment" />
     <fragment

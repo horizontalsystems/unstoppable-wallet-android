@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinEdit
-import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
@@ -87,12 +86,6 @@ private fun PinScreen(
             }
             PinInteractionType.EDIT_PIN -> {
                 PinEdit(
-                    dismissWithSuccess = dismissWithSuccess,
-                    onBackPress = onBackPress
-                )
-            }
-            PinInteractionType.SET_PIN -> {
-                PinSet(
                     dismissWithSuccess = dismissWithSuccess,
                     onBackPress = onBackPress
                 )
