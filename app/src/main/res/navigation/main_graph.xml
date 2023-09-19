@@ -186,6 +186,9 @@
         android:id="@+id/coinReportsFragment"
         android:name="cash.p.terminal.modules.coin.reports.CoinReportsFragment" />
     <fragment
+        android:id="@+id/setPinFragment"
+        android:name="cash.p.terminal.modules.pin.SetPinFragment" />
+    <fragment
         android:id="@+id/pinFragment"
         android:name="cash.p.terminal.modules.pin.PinFragment" />
     <fragment

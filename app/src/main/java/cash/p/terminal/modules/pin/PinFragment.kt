@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.pin.ui.PinEdit
-import cash.p.terminal.modules.pin.ui.PinSet
 import cash.p.terminal.modules.pin.ui.PinUnlock
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
@@ -87,12 +86,6 @@ private fun PinScreen(
             }
             PinInteractionType.EDIT_PIN -> {
                 PinEdit(
-                    dismissWithSuccess = dismissWithSuccess,
-                    onBackPress = onBackPress
-                )
-            }
-            PinInteractionType.SET_PIN -> {
-                PinSet(
                     dismissWithSuccess = dismissWithSuccess,
                     onBackPress = onBackPress
                 )

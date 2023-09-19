@@ -17,10 +17,6 @@ object PinModule {
     const val requestType = "pin_request_type"
     const val requestResult = "pin_request_result"
 
-    fun forSetPin(): Bundle {
-        return arguments(PinInteractionType.SET_PIN, true)
-    }
-
     fun forEditPin(): Bundle {
         return arguments(PinInteractionType.EDIT_PIN, false)
     }
@@ -38,7 +34,6 @@ object PinModule {
 
 @Parcelize
 enum class PinInteractionType : Parcelable {
-    SET_PIN,
     UNLOCK,
     EDIT_PIN
 }
