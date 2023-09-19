@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Blockchain
-import java.util.*
+import java.util.UUID
 
 class ContactViewModel(
     private val repository: ContactsRepository,
@@ -57,7 +57,7 @@ class ContactViewModel(
 
     fun onSave() {
         val editedContact = contact.copy(
-            name = uiState.contactName,
+            name = contactName,
             addresses = uiState.addressViewItems.map { it.contactAddress }
         )
         repository.save(editedContact)
@@ -115,7 +115,6 @@ class ContactViewModel(
 
     private fun uiState() = UiState(
         headerTitle = title,
-        contactName = contactName,
         addressViewItems = addressViewItems,
         saveEnabled = isSaveEnabled(),
         confirmBack = hasChanges(),
@@ -127,7 +126,6 @@ class ContactViewModel(
 
     data class UiState(
         val headerTitle: TranslatableString,
-        val contactName: String,
         val addressViewItems: List<AddressViewItem>,
         val saveEnabled: Boolean,
         val confirmBack: Boolean,
