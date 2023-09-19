@@ -1,7 +1,11 @@
 package cash.p.terminal.modules.settings.security.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,14 +18,12 @@ import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.navigateToSetPin
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.pin.PinModule
 import cash.p.terminal.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
-import io.horizontalsystems.core.getNavigationResult
 
 @Composable
 fun PasscodeBlock(
@@ -80,13 +82,7 @@ fun PasscodeBlock(
             add {
                 RowUniversal(
                     onClick = {
-                        navController.getNavigationResult(PinModule.requestKey) {
-                            //just clean result in backStackEntry
-                        }
-                        navController.slideFromRight(
-                            R.id.pinFragment,
-                            PinModule.forEditPin()
-                        )
+                        navController.slideFromRight(R.id.editPinFragment)
                     },
                     modifier = Modifier.padding(horizontal = 16.dp),
                 ) {
