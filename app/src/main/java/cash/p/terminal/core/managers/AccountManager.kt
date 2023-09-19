@@ -26,7 +26,7 @@ class AccountManager(
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
     private val activeAccountSubject = PublishSubject.create<Optional<Account>>()
     private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
-    private var accountsMinLevel = Int.MAX_VALUE
+    private var accountsMinLevel = 0
 
     override val activeAccountStateFlow = _activeAccountStateFlow
 
