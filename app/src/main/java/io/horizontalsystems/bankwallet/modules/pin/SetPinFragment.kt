@@ -21,8 +21,13 @@ class SetPinFragment : BaseComposeFragment() {
     }
 
     private fun dismissWithSuccess() {
-        val bundle = bundleOf(PinModule.requestResult to PinModule.RESULT_OK)
-        setNavigationResult(PinModule.requestKey, bundle)
+        val bundle = bundleOf(requestResult to PinModule.RESULT_OK)
+        setNavigationResult(requestKey, bundle)
         findNavController().popBackStack()
+    }
+
+    companion object {
+        const val requestKey = "setPinRequestKey"
+        const val requestResult = "setPinRequestResult"
     }
 }
