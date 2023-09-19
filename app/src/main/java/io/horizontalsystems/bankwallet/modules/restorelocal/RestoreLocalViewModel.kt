@@ -107,7 +107,13 @@ class RestoreLocalViewModel(
     }
 
     private fun restoreCexAccount(accountType: AccountType) {
-        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true, false)
+        val account = accountFactory.account(
+            accountName,
+            accountType,
+            AccountOrigin.Restored,
+            true,
+            false,
+        )
         accountManager.save(account)
         restored = true
         syncState()

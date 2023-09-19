@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.ActiveAccount
+import io.horizontalsystems.bankwallet.entities.CexType
 import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
@@ -34,9 +38,9 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     override val isAccountsEmpty: Boolean
         get() = dao.getTotalCount() == 0
 
-    override fun allAccounts(): List<Account> {
-        return dao.getAll()
-                .mapNotNull { record ->
+    override fun allAccounts(accountsMinLevel: Int): List<Account> {
+        return dao.getAll(accountsMinLevel)
+                .mapNotNull { record: AccountRecord ->
                     try {
                         val accountType = when (record.type) {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
@@ -57,6 +61,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             record.name,
                             accountType!!,
                             AccountOrigin.valueOf(record.origin),
+                            record.level,
                             record.isBackedUp,
                             record.isFileBackedUp
                         )
@@ -133,15 +138,16 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         }
 
         return AccountRecord(
-                id = account.id,
-                name = account.name,
-                type = accountType,
-                origin = account.origin.value,
-                isBackedUp = account.isBackedUp,
-                isFileBackedUp = account.isFileBackedUp,
-                words = words,
-                passphrase = passphrase,
-                key = key
+            id = account.id,
+            name = account.name,
+            type = accountType,
+            origin = account.origin.value,
+            isBackedUp = account.isBackedUp,
+            isFileBackedUp = account.isFileBackedUp,
+            words = words,
+            passphrase = passphrase,
+            key = key,
+            level = account.level
         )
     }
 
