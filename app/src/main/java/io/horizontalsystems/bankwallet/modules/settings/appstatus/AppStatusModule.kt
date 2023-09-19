@@ -9,15 +9,29 @@ object AppStatusModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val appStatusService = AppStatusService(
-                    App.systemInfoManager,
-                    App.localStorage,
-                    App.accountManager,
-                    App.walletManager,
-                    App.adapterManager,
-                    App.marketKit,
+            val viewModel = AppStatusViewModel(
+                App.systemInfoManager,
+                App.localStorage,
+                App.accountManager,
+                App.walletManager,
+                App.adapterManager,
+                App.marketKit,
             )
-            return AppStatusViewModel(appStatusService) as T
+            return viewModel as T
         }
     }
+
+    sealed class BlockContent {
+        data class Header(val title: String) : BlockContent()
+        data class Text(val text: String) : BlockContent()
+        data class TitleValue(val title: String, val value: String) : BlockContent()
+    }
+
+    data class BlockData(val title: String?, val content: List<BlockContent>)
+
+    data class UiState(
+        val appStatusAsText: String?,
+        val blockViewItems: List<BlockData>,
+    )
+
 }
