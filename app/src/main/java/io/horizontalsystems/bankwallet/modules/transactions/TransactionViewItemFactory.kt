@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
@@ -429,7 +428,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Send),
-            subtitle = record.to?.let { Translator.getString(R.string.Transactions_To, it.shorten()) } ?: "",
+            subtitle = record.to?.let { to -> Translator.getString(R.string.Transactions_To, mapped(to, record.blockchainType)) } ?: "",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -452,7 +451,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = record.from?.let { Translator.getString(R.string.Transactions_From, it.shorten()) } ?: "",
+            subtitle = record.from?.let { from -> Translator.getString(R.string.Transactions_From, mapped(from, record.blockchainType)) } ?: "",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
