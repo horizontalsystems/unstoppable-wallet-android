@@ -4,7 +4,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.shorten
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
@@ -429,7 +428,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Send),
-            subtitle = record.to?.let { Translator.getString(R.string.Transactions_To, it.shorten()) } ?: "",
+            subtitle = record.to?.let { to -> Translator.getString(R.string.Transactions_To, mapped(to, record.blockchainType)) } ?: "",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -452,7 +451,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = record.from?.let { Translator.getString(R.string.Transactions_From, it.shorten()) } ?: "",
+            subtitle = record.from?.let { from -> Translator.getString(R.string.Transactions_From, mapped(from, record.blockchainType)) } ?: "",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
