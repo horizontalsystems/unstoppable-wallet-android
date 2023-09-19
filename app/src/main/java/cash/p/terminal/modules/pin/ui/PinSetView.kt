@@ -14,15 +14,16 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.pin.set.PinSetModule
 import cash.p.terminal.modules.pin.set.PinSetViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.animations.CrossSlide
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.AppBarX
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
 
 @Composable
 fun PinSet(
+    title: String,
+    description: String,
     dismissWithSuccess: () -> Unit,
     onBackPress: () -> Unit,
     viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory())
@@ -35,8 +36,8 @@ fun PinSet(
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
-            AppBar(
-                title = TranslatableString.ResString(R.string.PinSet_Title),
+            AppBarX(
+                title = title,
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 }
@@ -66,7 +67,7 @@ fun PinSet(
                                         )
                                     } else {
                                         subhead2_grey(
-                                            text = stringResource(stage.title),
+                                            text = description,
                                             textAlign = TextAlign.Center
                                         )
                                     }
@@ -78,7 +79,7 @@ fun PinSet(
                             PinTopBlock(
                                 title = {
                                     subhead2_grey(
-                                        text = stringResource(stage.title),
+                                        text = stringResource(R.string.PinSet_ConfirmInfo),
                                         textAlign = TextAlign.Center
                                     )
                                 },
