@@ -192,8 +192,8 @@
         android:id="@+id/editPinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.pin.EditPinFragment" />
     <fragment
-        android:id="@+id/pinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.pin.PinFragment" />
+        android:id="@+id/unlockPinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.pin.UnlockPinFragment" />
     <fragment
         android:id="@+id/releaseNotesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment" />

@@ -41,7 +41,7 @@ fun NavController.authorizedAction(action: () -> Unit) {
                 action.invoke()
             }
         }
-        slideFromBottom(R.id.pinFragment, bundleOf(PinModule.keyShowCancel to true))
+        slideFromBottom(R.id.unlockPinFragment, bundleOf(PinModule.keyShowCancel to true))
     } else {
         action.invoke()
     }

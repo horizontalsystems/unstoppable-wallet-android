@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
 
-class PinFragment : BaseComposeFragment() {
+class UnlockPinFragment : BaseComposeFragment() {
 
     private val attachedToLockScreen: Boolean by lazy {
         arguments?.getBoolean(PinModule.keyAttachedToLockScreen) ?: false

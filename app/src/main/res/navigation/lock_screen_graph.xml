@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/lockScreenFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.pin.PinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.pin.UnlockPinFragment"
         >
         <argument
             android:name="attached_to_lock_screen"
