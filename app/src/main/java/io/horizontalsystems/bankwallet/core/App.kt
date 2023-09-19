@@ -63,6 +63,7 @@ import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
+import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.WalletStorage
@@ -140,6 +141,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var tokenAutoEnableManager: TokenAutoEnableManager
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
+        lateinit var userManager: UserManager
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
         lateinit var proFeatureAuthorizationManager: ProFeaturesAuthorizationManager
@@ -246,6 +248,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         accountCleaner = AccountCleaner()
         accountManager = AccountManager(accountsStorage, accountCleaner)
+        userManager = UserManager(accountManager)
 
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
@@ -266,7 +269,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
-        accountFactory = AccountFactory(accountManager)
+        accountFactory = AccountFactory(accountManager, userManager)
         backupManager = BackupManager(accountManager)
 
 
@@ -333,13 +336,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         addressParserFactory = AddressParserFactory()
 
         pinComponent = PinComponent(
-                pinStorage = pinStorage,
-                encryptionManager = encryptionManager,
-                excludedActivityNames = listOf(
-                        KeyStoreActivity::class.java.name,
-                        LockScreenActivity::class.java.name,
-                        LauncherActivity::class.java.name,
-                )
+            pinStorage = pinStorage,
+            encryptionManager = encryptionManager,
+            excludedActivityNames = listOf(
+                KeyStoreActivity::class.java.name,
+                LockScreenActivity::class.java.name,
+                LauncherActivity::class.java.name,
+            ),
+            userManager = userManager,
         )
 
         backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent).apply {

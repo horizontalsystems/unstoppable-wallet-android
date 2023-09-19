@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.pin.core
 
 import io.horizontalsystems.core.helpers.DateHelper
-import java.util.*
+import java.util.Date
 
 class LockManager(
     private val pinManager: PinManager

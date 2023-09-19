@@ -2,15 +2,25 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CexType
 import java.util.UUID
 
-class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
+class AccountFactory(
+    private val accountManager: IAccountManager,
+    private val userManager: UserManager
+) : IAccountFactory {
 
-    override fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean, fileBackedUp: Boolean): Account {
+    override fun account(
+        name: String,
+        type: AccountType,
+        origin: AccountOrigin,
+        backedUp: Boolean,
+        fileBackedUp: Boolean
+    ): Account {
         val id = UUID.randomUUID().toString()
 
         return Account(
@@ -18,6 +28,7 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
             name = name,
             type = type,
             origin = origin,
+            level = userManager.getUserLevel(),
             isBackedUp = backedUp,
             isFileBackedUp = fileBackedUp
         )
@@ -30,6 +41,7 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
             name = name,
             type = type,
             origin = AccountOrigin.Restored,
+            level = userManager.getUserLevel(),
             isBackedUp = true
         )
     }
