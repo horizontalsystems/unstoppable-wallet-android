@@ -7,15 +7,18 @@ class SecretString(val value: String)
 class SecretList(val list: List<String>)
 
 @Entity(primaryKeys = ["id"])
-data class AccountRecord(var id: String,
-                         var name: String,
-                         var type: String,
-                         var origin: String,
-                         var isBackedUp: Boolean,
-                         var isFileBackedUp: Boolean,
-                         var words: SecretList?,
-                         var passphrase: SecretString?,
-                         var key: SecretString?) {
+data class AccountRecord(
+    val id: String,
+    val name: String,
+    val type: String,
+    val origin: String,
+    val isBackedUp: Boolean,
+    val isFileBackedUp: Boolean,
+    val words: SecretList?,
+    val passphrase: SecretString?,
+    val key: SecretString?,
+    val level: Int
+) {
 
     var deleted = false
 

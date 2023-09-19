@@ -63,6 +63,7 @@ import cash.p.terminal.core.managers.TorManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.managers.TronAccountManager
 import cash.p.terminal.core.managers.TronKitManager
+import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WalletManager
 import cash.p.terminal.core.managers.WalletStorage
@@ -80,7 +81,6 @@ import cash.p.terminal.core.storage.EnabledWalletsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
 import cash.p.terminal.core.storage.NftStorage
 import cash.p.terminal.core.storage.RestoreSettingsStorage
-import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -94,9 +94,6 @@ import cash.p.terminal.modules.market.topplatforms.TopPlatformsRepository
 import cash.p.terminal.modules.pin.PinComponent
 import cash.p.terminal.modules.profeatures.ProFeaturesAuthorizationManager
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesStorage
-import cash.p.terminal.modules.settings.appearance.AppIconService
-import cash.p.terminal.modules.settings.appearance.LaunchScreenService
-import cash.p.terminal.modules.theme.ThemeService
 import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionStorage
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
@@ -144,6 +141,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var tokenAutoEnableManager: TokenAutoEnableManager
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
+        lateinit var userManager: UserManager
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
         lateinit var proFeatureAuthorizationManager: ProFeaturesAuthorizationManager
@@ -251,6 +249,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         accountCleaner = AccountCleaner()
         accountManager = AccountManager(accountsStorage, accountCleaner)
+        userManager = UserManager(accountManager)
 
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
@@ -269,7 +268,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
-        accountFactory = AccountFactory(accountManager)
+        accountFactory = AccountFactory(accountManager, userManager)
         backupManager = BackupManager(accountManager)
 
 
@@ -336,13 +335,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         addressParserFactory = AddressParserFactory()
 
         pinComponent = PinComponent(
-                pinStorage = pinStorage,
-                encryptionManager = encryptionManager,
-                excludedActivityNames = listOf(
-                        KeyStoreActivity::class.java.name,
-                        LockScreenActivity::class.java.name,
-                        LauncherActivity::class.java.name,
-                )
+            pinStorage = pinStorage,
+            encryptionManager = encryptionManager,
+            excludedActivityNames = listOf(
+                KeyStoreActivity::class.java.name,
+                LockScreenActivity::class.java.name,
+                LauncherActivity::class.java.name,
+            ),
+            userManager = userManager,
         )
 
         backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent).apply {

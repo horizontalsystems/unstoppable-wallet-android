@@ -2,15 +2,25 @@ package cash.p.terminal.core.factories
 
 import cash.p.terminal.core.IAccountFactory
 import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CexType
 import java.util.UUID
 
-class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
+class AccountFactory(
+    private val accountManager: IAccountManager,
+    private val userManager: UserManager
+) : IAccountFactory {
 
-    override fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean, fileBackedUp: Boolean): Account {
+    override fun account(
+        name: String,
+        type: AccountType,
+        origin: AccountOrigin,
+        backedUp: Boolean,
+        fileBackedUp: Boolean
+    ): Account {
         val id = UUID.randomUUID().toString()
 
         return Account(
@@ -18,6 +28,7 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
             name = name,
             type = type,
             origin = origin,
+            level = userManager.getUserLevel(),
             isBackedUp = backedUp,
             isFileBackedUp = fileBackedUp
         )
@@ -30,8 +41,8 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
             name = name,
             type = type,
             origin = AccountOrigin.Restored,
-            isBackedUp = true,
-            isFileBackedUp = fileBackedUp
+            level = userManager.getUserLevel(),
+            isBackedUp = true
         )
     }
 

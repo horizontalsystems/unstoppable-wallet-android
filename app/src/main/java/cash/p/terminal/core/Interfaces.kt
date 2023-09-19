@@ -147,6 +147,7 @@ interface IAccountManager {
     fun clear()
     fun clearAccounts()
     fun onHandledBackupRequiredNewAccount()
+    fun setLevel(level: Int)
 }
 
 interface IBackupManager {
@@ -155,8 +156,14 @@ interface IBackupManager {
 }
 
 interface IAccountFactory {
-    fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean, fileBackedUp: Boolean): Account
-    fun watchAccount(name: String, type: AccountType, fileBackedUp: Boolean): Account
+    fun account(
+        name: String,
+        type: AccountType,
+        origin: AccountOrigin,
+        backedUp: Boolean,
+        fileBackedUp: Boolean
+    ): Account
+    fun watchAccount(name: String, type: AccountType): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
     fun getNextCexAccountName(cexType: CexType): String
@@ -345,7 +352,7 @@ interface IAccountsStorage {
     var activeAccountId: String?
     val isAccountsEmpty: Boolean
 
-    fun allAccounts(): List<Account>
+    fun allAccounts(accountsMinLevel: Int): List<Account>
     fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)

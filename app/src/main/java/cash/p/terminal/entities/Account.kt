@@ -26,6 +26,7 @@ data class Account(
     val name: String,
     val type: AccountType,
     val origin: AccountOrigin,
+    val level: Int,
     val isBackedUp: Boolean = false,
     val isFileBackedUp: Boolean = false,
 ) : Parcelable {

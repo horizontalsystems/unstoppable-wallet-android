@@ -55,7 +55,7 @@ class PinUnlockViewModel(
     }
 
     fun onBiometricsUnlock() {
-        pinComponent.onUnlock()
+        pinComponent.onBiometricUnlock()
         lockoutManager.dropFailedAttempts()
         uiState = uiState.copy(unlocked = true)
     }
@@ -136,16 +136,16 @@ class PinUnlockViewModel(
     }
 
     private fun unlock(pin: String): Boolean {
-        val valid = pinComponent.validate(pin)
-        if (valid) {
-            pinComponent.onUnlock()
+        val pinLevel = pinComponent.xxxPin(pin)
+        if (pinLevel != null) {
+            pinComponent.onUnlock(pinLevel)
             lockoutManager.dropFailedAttempts()
         } else {
             lockoutManager.didFailUnlock()
             updateLockoutState()
         }
 
-        return valid
+        return pinLevel != null
     }
 
 }

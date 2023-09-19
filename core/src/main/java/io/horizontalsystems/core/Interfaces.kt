@@ -3,7 +3,7 @@ package io.horizontalsystems.core
 import android.app.Activity
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 import io.reactivex.Flowable
-import java.util.*
+import java.util.Date
 import javax.crypto.SecretKey
 
 interface ICoreApp {
@@ -42,8 +42,10 @@ interface IPinComponent {
     fun updateLastExitDateBeforeRestart()
     fun store(pin: String)
     fun validate(pin: String): Boolean
+    fun xxxPin(pin: String): Int?
     fun clear()
-    fun onUnlock()
+    fun onUnlock(pinLevel: Int)
+    fun onBiometricUnlock()
     fun shouldShowPin(activity: Activity): Boolean
     fun lock()
 }

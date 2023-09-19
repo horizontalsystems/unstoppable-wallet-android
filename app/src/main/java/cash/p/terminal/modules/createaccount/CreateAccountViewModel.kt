@@ -67,7 +67,7 @@ class CreateAccountViewModel(
             accountType,
             AccountOrigin.Created,
             false,
-            false
+            false,
         )
 
         accountManager.save(account)

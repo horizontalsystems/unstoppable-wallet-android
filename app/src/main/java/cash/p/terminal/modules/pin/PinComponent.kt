@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.pin
 
 import android.app.Activity
+import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.modules.pin.core.LockManager
 import cash.p.terminal.modules.pin.core.PinManager
 import io.horizontalsystems.core.IEncryptionManager
@@ -12,7 +13,8 @@ import io.reactivex.Flowable
 class PinComponent(
     private val pinStorage: IPinStorage,
     private val encryptionManager: IEncryptionManager,
-    private val excludedActivityNames: List<String>
+    private val excludedActivityNames: List<String>,
+    private val userManager: UserManager
 ) : IPinComponent {
 
     private val pinManager: PinManager by lazy {
@@ -50,12 +52,27 @@ class PinComponent(
         return pinManager.validate(pin)
     }
 
+    override fun xxxPin(pin: String): Int? {
+        // TODO: stub
+        return when (pin) {
+            "000000" -> 0
+            "111111" -> 1
+            "222222" -> 2
+            else -> null
+        }
+    }
+
     override fun clear() {
         pinManager.clear()
     }
 
-    override fun onUnlock() {
+    override fun onUnlock(pinLevel: Int) {
         appLockManager.onUnlock()
+        userManager.setUserLevel(pinLevel)
+    }
+
+    override fun onBiometricUnlock() {
+        TODO("Not yet implemented")
     }
 
     override fun lock() {
