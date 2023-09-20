@@ -129,19 +129,18 @@ class AccountManager(
     override fun setLevel(level: Int) {
         // if the same level
         if (level == accountsMinLevel) return
-
         accountsMinLevel = level
+
         refreshCache()
 
+        if (!accountsCache.containsKey(activeAccount?.id)) {
+            activeAccount = accounts.firstOrNull()
+            _activeAccountStateFlow.update {
+                ActiveAccountState.ActiveAccount(activeAccount)
+            }
+        }
+
         accountsSubject.onNext(accounts)
-
-        // if there was no active account
-        val tmpActiveAccount = activeAccount ?: return
-
-        // if the active account is available for new level
-        if (accountsCache.containsKey(tmpActiveAccount.id)) return
-
-        setActiveAccountId(accountsCache.values.firstOrNull()?.id)
     }
 
     override fun clearAccounts() {
