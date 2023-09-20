@@ -19,7 +19,6 @@ class AccountManager(
         private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
 
-    private var activeAccountId: String? = null
     private var accountsCache = mutableMapOf<String, Account>()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
@@ -31,8 +30,7 @@ class AccountManager(
     override val hasNonStandardAccount: Boolean
         get() = accountsCache.any { it.value.nonStandard }
 
-    override val activeAccount: Account?
-        get() = activeAccountId?.let { accountsCache[it] }
+    override var activeAccount: Account? = null
 
     override val isAccountsEmpty: Boolean
         get() = storage.isAccountsEmpty
@@ -54,10 +52,12 @@ class AccountManager(
     }
 
     override fun setActiveAccountId(activeAccountId: String?) {
-        if (this.activeAccountId != activeAccountId) {
+        if (activeAccount?.id != activeAccountId) {
             storage.activeAccountId = activeAccountId
-            this.activeAccountId = activeAccountId
-            _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
+            activeAccount = activeAccountId?.let { account(it) }
+            _activeAccountStateFlow.update {
+                ActiveAccountState.ActiveAccount(activeAccount)
+            }
         }
     }
 
@@ -67,7 +67,7 @@ class AccountManager(
 
     override fun initAccounts() {
         refreshCache()
-        activeAccountId = storage.activeAccountId
+        activeAccount = storage.activeAccountId?.let { account(it) }
         _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
     }
 
@@ -113,7 +113,7 @@ class AccountManager(
         accountsSubject.onNext(accounts)
         accountsDeletedSubject.onNext(Unit)
 
-        if (id == activeAccountId) {
+        if (id == activeAccount?.id) {
             setActiveAccountId(accounts.firstOrNull()?.id)
         }
     }
@@ -136,10 +136,10 @@ class AccountManager(
         accountsSubject.onNext(accounts)
 
         // if there was no active account
-        val tmpActiveAccountId = activeAccountId ?: return
+        val tmpActiveAccount = activeAccount ?: return
 
         // if the active account is available for new level
-        if (accountsCache.containsKey(tmpActiveAccountId)) return
+        if (accountsCache.containsKey(tmpActiveAccount.id)) return
 
         setActiveAccountId(accountsCache.values.firstOrNull()?.id)
     }
