@@ -3,12 +3,14 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IWalletStorage
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class WalletManager(
     private val accountManager: IAccountManager,
@@ -19,23 +21,16 @@ class WalletManager(
     override val activeWalletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
 
     private val walletsSet = mutableSetOf<Wallet>()
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
-        accountManager.activeAccountObservable
-            .subscribeIO {
-                handleUpdated(it.orElse(null))
+        coroutineScope.launch {
+            accountManager.activeAccountStateFlow.collect { activeAccountState ->
+                if (activeAccountState is ActiveAccountState.ActiveAccount) {
+                    handleUpdated(activeAccountState.account)
+                }
             }
-            .let {
-                disposables.add(it)
-            }
-    }
-
-    override fun loadWallets() {
-        val activeWallets = accountManager.activeAccount?.let { storage.wallets(it) } ?: listOf()
-
-        setWallets(activeWallets)
-        notifyActiveWallets()
+        }
     }
 
     override fun save(wallets: List<Wallet>) {
@@ -65,7 +60,7 @@ class WalletManager(
         storage.clear()
         walletsSet.clear()
         notifyActiveWallets()
-        disposables.dispose()
+        coroutineScope.cancel()
     }
 
     private fun notifyActiveWallets() {
@@ -88,7 +83,7 @@ class WalletManager(
 
     override fun saveEnabledWallets(enabledWallets: List<EnabledWallet>) {
         storage.handle(enabledWallets)
-        loadWallets()
+        handleUpdated(accountManager.activeAccount)
     }
 
 }
