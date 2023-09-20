@@ -40,6 +40,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 @Composable
 fun PinNumpad(
     showFingerScanner: Boolean = false,
+    showRandomizer: Boolean = false,
     onNumberClick: (Int) -> Unit,
     onDeleteClick: () -> Unit,
     showBiometricPrompt: (() -> Unit)? = null,
@@ -103,24 +104,29 @@ fun PinNumpad(
                 enabled = enabled
             ) { onDeleteClick.invoke() }
         }
-        VSpacer(24.dp)
-        ButtonSecondaryDefault(
-            title = if (isRandomized) {
-                stringResource(R.string.Unlock_Regular)
-            } else {
-                stringResource(R.string.Unlock_Random)
-            },
-            onClick = {
-                isRandomized = !isRandomized
-                numpadNumbers = if (isRandomized) {
-                    generateRandomNumpadNumbers()
-                } else {
-                    generateOriginalNumpadNumbers()
-                }
-            },
-            enabled = enabled
-        )
-        VSpacer(48.dp)
+        Column(
+            modifier = Modifier.height(120.dp)
+        ){
+            VSpacer(24.dp)
+            if (showRandomizer) {
+                ButtonSecondaryDefault(
+                    title = if (isRandomized) {
+                        stringResource(R.string.Unlock_Regular)
+                    } else {
+                        stringResource(R.string.Unlock_Random)
+                    },
+                    onClick = {
+                        isRandomized = !isRandomized
+                        numpadNumbers = if (isRandomized) {
+                            generateRandomNumpadNumbers()
+                        } else {
+                            generateOriginalNumpadNumbers()
+                        }
+                    },
+                    enabled = enabled
+                )
+            }
+        }
     }
 
 }
@@ -215,6 +221,7 @@ fun Preview_Pin() {
                 onNumberClick = { },
                 onDeleteClick = { },
                 showFingerScanner = true,
+                showRandomizer = true,
                 showBiometricPrompt = {
 
                 }
@@ -235,6 +242,7 @@ fun Preview_PinLocked() {
                 onNumberClick = { },
                 onDeleteClick = { },
                 showFingerScanner = true,
+                showRandomizer = true,
                 showBiometricPrompt = {},
                 inputState = InputState.Locked("12:33")
             )

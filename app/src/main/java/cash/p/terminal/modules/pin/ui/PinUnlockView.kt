@@ -92,6 +92,7 @@ fun PinUnlock(
             onNumberClick = { number -> viewModel.onKeyClick(number) },
             onDeleteClick = { viewModel.onDelete() },
             showFingerScanner = viewModel.uiState.fingerScannerEnabled,
+            showRandomizer = true,
             showBiometricPrompt = {
                 showBiometricPrompt = true
             },
