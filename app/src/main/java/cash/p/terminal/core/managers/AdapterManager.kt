@@ -102,12 +102,6 @@ class AdapterManager(
         initAdapters(walletManager.activeWallets)
     }
 
-    override fun preloadAdapters() {
-        handler.post {
-            initAdapters(walletManager.activeWallets)
-        }
-    }
-
     override fun refresh() {
         handler.post {
             adaptersMap.values.forEach { it.refresh() }
