@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,23 +10,26 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockContent
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
@@ -41,6 +46,7 @@ fun AppStatusScreen(
     val uiState = viewModel.uiState
     val clipboardManager = LocalClipboardManager.current
     val localView = LocalView.current
+    val context = LocalContext.current
 
     ComposeAppTheme {
         Scaffold(
@@ -51,17 +57,6 @@ fun AppStatusScreen(
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Alert_Copy),
-                            onClick = {
-                                uiState.appStatusAsText?.let {
-                                    clipboardManager.setText(AnnotatedString(it))
-                                    HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                                }
-                            },
-                        )
-                    )
                 )
             }
         ) {
@@ -71,10 +66,39 @@ fun AppStatusScreen(
                         .weight(1f)
                         .verticalScroll(rememberScrollState())
                 ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                    ) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier.weight(1f),
+                            title = stringResource(R.string.Button_Copy),
+                            onClick = {
+                                uiState.appStatusAsText?.let {
+                                    clipboardManager.setText(AnnotatedString(it))
+                                    HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+                                }
+                            }
+                        )
+                        HSpacer(8.dp)
+                        ButtonPrimaryDefault(
+                            modifier = Modifier.weight(1f),
+                            title = stringResource(R.string.Button_Share),
+                            onClick = {
+                                uiState.appStatusAsText?.let {
+                                    ShareCompat.IntentBuilder(context)
+                                        .setType("text/plain")
+                                        .setText(it)
+                                        .startChooser()
+                                }
+                            }
+                        )
+                    }
                     uiState.blockViewItems.forEach { blockData ->
                         StatusBlock(
                             sectionTitle = blockData.title,
-                            contentItems = blockData.content
+                            contentItems = blockData.content,
                         )
                     }
                     VSpacer(32.dp)
@@ -87,14 +111,9 @@ fun AppStatusScreen(
 @Composable
 private fun StatusBlock(
     sectionTitle: String?,
-    contentItems: List<BlockContent>
+    contentItems: List<BlockContent>,
 ) {
-    if (sectionTitle != null) {
-        VSpacer(24.dp)
-    } else {
-        VSpacer(12.dp)
-    }
-
+    VSpacer(12.dp)
     sectionTitle?.let {
         InfoText(text = it.uppercase())
     }
@@ -128,6 +147,7 @@ private fun StatusBlock(
             }
         }
     }
+    VSpacer(12.dp)
 }
 
 @Preview
@@ -155,8 +175,8 @@ fun StatusBlockPreview() {
     ComposeAppTheme {
         testBlocks.forEach {
             StatusBlock(
-                it.title,
-                it.content
+                sectionTitle = it.title,
+                contentItems = it.content,
             )
         }
     }
