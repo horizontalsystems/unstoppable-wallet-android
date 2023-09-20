@@ -12,7 +12,6 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.util.Optional
 import java.util.concurrent.TimeUnit
 
 class AccountManager(
@@ -24,7 +23,6 @@ class AccountManager(
     private var accountsCache = mutableMapOf<String, Account>()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
-    private val activeAccountSubject = PublishSubject.create<Optional<Account>>()
     private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
     private var accountsMinLevel = 0
 
@@ -35,9 +33,6 @@ class AccountManager(
 
     override val activeAccount: Account?
         get() = activeAccountId?.let { accountsCache[it] }
-
-    override val activeAccountObservable: Flowable<Optional<Account>>
-        get() = activeAccountSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val isAccountsEmpty: Boolean
         get() = storage.isAccountsEmpty
@@ -62,7 +57,6 @@ class AccountManager(
         if (this.activeAccountId != activeAccountId) {
             storage.activeAccountId = activeAccountId
             this.activeAccountId = activeAccountId
-            activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
             _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
         }
     }
@@ -74,7 +68,6 @@ class AccountManager(
     override fun initAccounts() {
         refreshCache()
         activeAccountId = storage.activeAccountId
-        activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
         _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
     }
 
@@ -108,7 +101,6 @@ class AccountManager(
 
         activeAccount?.id?.let {
             if (account.id == it) {
-                activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
                 _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
             }
         }

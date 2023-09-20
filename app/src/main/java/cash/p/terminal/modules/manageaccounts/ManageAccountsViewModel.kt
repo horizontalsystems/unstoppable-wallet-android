@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import kotlinx.coroutines.launch
@@ -29,9 +30,11 @@ class ManageAccountsViewModel(
         }
 
         viewModelScope.launch {
-            accountManager.activeAccountObservable.asFlow()
-                .collect { activeAccount ->
-                    updateViewItems(activeAccount.orElse(null), accountManager.accounts)
+            accountManager.activeAccountStateFlow
+                .collect { activeAccountState ->
+                    if (activeAccountState is ActiveAccountState.ActiveAccount) {
+                        updateViewItems(activeAccountState.account, accountManager.accounts)
+                    }
                 }
         }
 

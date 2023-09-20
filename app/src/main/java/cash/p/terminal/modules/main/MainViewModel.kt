@@ -135,9 +135,13 @@ class MainViewModel(
             updateSettingsBadge()
         })
 
-        disposables.add(accountManager.activeAccountObservable.subscribe {
-            updateTransactionsTabEnabled()
-        })
+        viewModelScope.launch {
+            accountManager.activeAccountStateFlow.collect {
+                if (it is ActiveAccountState.ActiveAccount) {
+                    updateTransactionsTabEnabled()
+                }
+            }
+        }
 
         wcDeepLink?.let {
             wcSupportState = wc2Manager.getWalletConnectSupportState()
