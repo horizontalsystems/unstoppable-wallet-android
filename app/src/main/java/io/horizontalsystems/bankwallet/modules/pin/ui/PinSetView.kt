@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.pin.set.PinSetModule
 import io.horizontalsystems.bankwallet.modules.pin.set.PinSetViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.CrossSlide
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBarX
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
@@ -36,7 +36,7 @@ fun PinSet(
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
-            AppBarX(
+            AppBar(
                 title = title,
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)

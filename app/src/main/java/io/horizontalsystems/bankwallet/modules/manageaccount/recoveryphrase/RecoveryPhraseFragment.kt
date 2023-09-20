@@ -76,7 +76,7 @@ private fun RecoveryPhraseScreen(
         ) {
             Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.RecoveryPhrase_Title),
+                    title = stringResource(R.string.RecoveryPhrase_Title),
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
                     },

@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKe
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.core.findNavController
@@ -55,7 +54,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.PublicKeys_Title),
+                    title = stringResource(R.string.PublicKeys_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     }

@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -87,7 +86,7 @@ private fun BaseCurrencyScreen(
                 modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
             ) {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.SettingsCurrency_Title),
+                    title = stringResource(R.string.SettingsCurrency_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     }

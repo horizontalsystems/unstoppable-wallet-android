@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -64,7 +63,7 @@ fun IndicatorsScreen(navController: NavController) {
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.ResString(R.string.CoinPage_Indicators),
+                title = stringResource(R.string.CoinPage_Indicators),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -46,7 +47,7 @@ private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.PublicKeys_EvmAddress),
+                title = stringResource(R.string.PublicKeys_EvmAddress),
                 navigationIcon = {
                     HsBackButton(onClick = navController::popBackStack)
                 },

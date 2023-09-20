@@ -62,7 +62,6 @@ import io.horizontalsystems.bankwallet.modules.swap.ui.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.ui.SwitchCoinsSection
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard.Opened
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
@@ -156,7 +155,7 @@ private fun SwapMainScreen(
         ) {
             Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Swap),
+                    title = stringResource(R.string.Swap),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

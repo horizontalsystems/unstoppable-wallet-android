@@ -34,7 +34,7 @@ fun MarketScreen(navController: NavController) {
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Market_Title),
+            title = stringResource(R.string.Market_Title),
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Market_Search),

@@ -131,7 +131,7 @@ private fun ImportWalletScreen(
                 backgroundColor = ComposeAppTheme.colors.tyler,
                 topBar = {
                     AppBar(
-                        title = TranslatableString.ResString(R.string.ManageAccounts_ImportWallet),
+                        title = stringResource(R.string.ManageAccounts_ImportWallet),
                         menuItems = listOf(
                             MenuItem(
                                 title = TranslatableString.ResString(R.string.Button_Close),

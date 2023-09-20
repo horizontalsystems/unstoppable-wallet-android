@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -66,7 +65,7 @@ fun AppearanceScreen(navController: NavController) {
             ) {
                 Column {
                     AppBar(
-                        TranslatableString.ResString(R.string.Settings_Appearance),
+                        title = stringResource(R.string.Settings_Appearance),
                         navigationIcon = {
                             HsBackButton(onClick = { navController.popBackStack() })
                         },

@@ -45,7 +45,7 @@ fun SelectNetworkScreen(
                 }
 
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Cex_ChooseNetwork),
+                    title = stringResource(R.string.Cex_ChooseNetwork),
                     navigationIcon = navigationIcon,
                     menuItems = listOf(
                         MenuItem(

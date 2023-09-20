@@ -90,7 +90,7 @@ fun CreateAccountAdvancedScreen(
             }
             Column {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.CreateWallet_Advanced_Title),
+                    title = stringResource(R.string.CreateWallet_Advanced_Title),
                     navigationIcon = {
                         HsBackButton(onClick = onBackClick)
                     },

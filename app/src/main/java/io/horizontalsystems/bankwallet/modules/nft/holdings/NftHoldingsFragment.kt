@@ -40,7 +40,6 @@ import io.horizontalsystems.bankwallet.modules.nft.ui.NftAssetPreview
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellBorderedRowUniversal
@@ -81,7 +80,7 @@ fun NftHoldingsScreen(navController: NavController) {
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Nfts_Title),
+                title = stringResource(R.string.Nfts_Title),
                 navigationIcon = {
                     HsBackButton(onClick = navController::popBackStack)
                 }

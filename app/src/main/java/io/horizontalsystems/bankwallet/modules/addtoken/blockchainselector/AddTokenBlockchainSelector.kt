@@ -15,6 +15,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -22,7 +23,6 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellBorderedRowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.HSSectionRounded
@@ -45,7 +45,7 @@ fun AddTokenBlockchainSelectorScreen(
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Market_Filter_Blockchains),
+                title = stringResource(R.string.Market_Filter_Blockchains),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

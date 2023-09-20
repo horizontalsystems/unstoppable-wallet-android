@@ -2,7 +2,12 @@ package io.horizontalsystems.bankwallet.modules.evmnetwork.addrpc
 
 import android.os.Bundle
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -17,7 +22,12 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 @Composable
 fun AddRpcScreen(
@@ -36,7 +46,7 @@ fun AddRpcScreen(
             .background(ComposeAppTheme.colors.tyler)
     ) {
         AppBar(
-            title = TranslatableString.ResString(R.string.AddEvmSyncSource_AddRPCSource),
+            title = stringResource(R.string.AddEvmSyncSource_AddRPCSource),
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Close),

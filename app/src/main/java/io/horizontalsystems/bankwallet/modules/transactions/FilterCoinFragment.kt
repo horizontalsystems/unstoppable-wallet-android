@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -62,7 +61,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
         Surface(color = ComposeAppTheme.colors.tyler) {
             Column {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Transactions_Filter_ChooseCoin),
+                    title = stringResource(R.string.Transactions_Filter_ChooseCoin),
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
                     }

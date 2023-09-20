@@ -83,7 +83,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                 }
             }
             AppBar(
-                title = TranslatableString.ResString(R.string.ManageAccounts_Title),
+                title = stringResource(R.string.ManageAccounts_Title),
                 navigationIcon = navigationIcon,
                 menuItems = menuItems
             )

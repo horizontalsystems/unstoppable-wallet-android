@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.MemoCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -131,7 +130,7 @@ fun SendTronConfirmationScreen(
     ComposeAppTheme {
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
+                title = stringResource(R.string.Send_Confirmation_Title),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

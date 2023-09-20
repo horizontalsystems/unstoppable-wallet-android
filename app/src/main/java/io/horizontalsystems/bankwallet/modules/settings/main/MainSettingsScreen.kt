@@ -41,7 +41,6 @@ import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
@@ -62,7 +61,7 @@ fun SettingsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.Settings_Title),
+                stringResource(R.string.Settings_Title),
             )
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {

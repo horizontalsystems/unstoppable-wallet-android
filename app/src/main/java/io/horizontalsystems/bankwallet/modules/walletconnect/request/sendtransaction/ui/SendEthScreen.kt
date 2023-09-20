@@ -65,7 +65,7 @@ fun SendEthRequestScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Button_Confirm),
+                title = stringResource(R.string.Button_Confirm),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

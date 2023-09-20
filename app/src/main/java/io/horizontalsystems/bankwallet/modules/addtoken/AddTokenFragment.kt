@@ -120,7 +120,7 @@ private fun AddTokenScreen(
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.AddToken_Title),
+                title = stringResource(R.string.AddToken_Title),
                 navigationIcon = {
                     HsBackButton(onClick = closeScreen)
                 },

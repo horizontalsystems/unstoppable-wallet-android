@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorsDetailsModule.DetailViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -104,7 +103,7 @@ private fun TechnicalIndicatorsDetailsScreen(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.ResString(R.string.Coin_Analytics_Details),
+                title = stringResource(R.string.Coin_Analytics_Details),
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 }

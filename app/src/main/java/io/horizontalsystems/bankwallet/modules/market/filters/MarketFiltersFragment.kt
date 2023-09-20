@@ -80,7 +80,7 @@ private fun AdvancedSearchScreen(
             Surface(color = ComposeAppTheme.colors.tyler) {
                 Column {
                     AppBar(
-                        TranslatableString.ResString(R.string.Market_Filters),
+                        title = stringResource(R.string.Market_Filters),
                         navigationIcon = {
                             HsBackButton(onClick = { navController.popBackStack() })
                         },

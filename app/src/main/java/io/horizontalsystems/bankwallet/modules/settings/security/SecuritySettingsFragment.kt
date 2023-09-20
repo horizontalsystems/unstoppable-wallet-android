@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTor
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -116,7 +115,7 @@ private fun SecurityCenterScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.Settings_SecurityCenter),
+                title = stringResource(R.string.Settings_SecurityCenter),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

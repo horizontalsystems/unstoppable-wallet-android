@@ -109,7 +109,7 @@ private fun CreateAccountIntroScreen(
         Surface(color = ComposeAppTheme.colors.tyler) {
             Column(Modifier.fillMaxSize()) {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),
+                    title = stringResource(R.string.ManageAccounts_CreateNewWallet),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Create),
