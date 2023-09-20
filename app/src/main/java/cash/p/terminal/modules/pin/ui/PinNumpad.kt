@@ -111,12 +111,12 @@ fun PinNumpad(
                 stringResource(R.string.Unlock_Random)
             },
             onClick = {
-                numpadNumbers = if (isRandomized) {
-                    generateOriginalNumpadNumbers()
-                } else {
-                    generateRandomNumpadNumbers()
-                }
                 isRandomized = !isRandomized
+                numpadNumbers = if (isRandomized) {
+                    generateRandomNumpadNumbers()
+                } else {
+                    generateOriginalNumpadNumbers()
+                }
             },
             enabled = enabled
         )
