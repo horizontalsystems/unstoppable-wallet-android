@@ -475,7 +475,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             rateAppManager.onAppLaunch()
             nftMetadataSyncer.start()
             accountManager.loadAccounts()
-            adapterManager.preloadAdapters()
             accountManager.clearAccounts()
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
