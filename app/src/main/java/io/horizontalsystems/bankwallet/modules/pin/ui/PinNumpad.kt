@@ -17,6 +17,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule.InputState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
 
 
@@ -40,38 +46,43 @@ fun PinNumpad(
     inputState: InputState = InputState.Enabled()
 ) {
 
+    var numpadNumbers by remember { mutableStateOf(generateOriginalNumpadNumbers()) }
+    var isRandomized by remember { mutableStateOf(false) }
     val enabled = inputState is InputState.Enabled
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            NumberKey(1, "", enabled) { number -> onNumberClick(number) }
-            NumberKey(2, "abc", enabled) { number -> onNumberClick(number) }
-            NumberKey(3, "def", enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[0], enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[1], enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[2], enabled) { number -> onNumberClick(number) }
         }
+        VSpacer(16.dp)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            NumberKey(4, "ghi", enabled) { number -> onNumberClick(number) }
-            NumberKey(5, "jkl", enabled) { number -> onNumberClick(number) }
-            NumberKey(6, "mno", enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[3], enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[4], enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[5], enabled) { number -> onNumberClick(number) }
         }
+        VSpacer(16.dp)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            NumberKey(7, "pqrs", enabled) { number -> onNumberClick(number) }
-            NumberKey(8, "tuv", enabled) { number -> onNumberClick(number) }
-            NumberKey(9, "wxyz", enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[6], enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[7], enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[8], enabled) { number -> onNumberClick(number) }
         }
+        VSpacer(16.dp)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -84,7 +95,7 @@ fun PinNumpad(
             ) {
                 showBiometricPrompt?.invoke()
             }
-            NumberKey(0, null, enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers[9], enabled) { number -> onNumberClick(number) }
             ImageKey(
                 image = R.drawable.ic_backspace,
                 contentDescription = stringResource(R.string.Button_Delete),
@@ -92,15 +103,39 @@ fun PinNumpad(
                 enabled = enabled
             ) { onDeleteClick.invoke() }
         }
-        Spacer(Modifier.height(56.dp))
+        VSpacer(24.dp)
+        ButtonSecondaryDefault(
+            title = if (isRandomized) {
+                stringResource(R.string.Unlock_Regular)
+            } else {
+                stringResource(R.string.Unlock_Random)
+            },
+            onClick = {
+                numpadNumbers = if (isRandomized) {
+                    generateOriginalNumpadNumbers()
+                } else {
+                    generateRandomNumpadNumbers()
+                }
+                isRandomized = !isRandomized
+            },
+            enabled = enabled
+        )
+        VSpacer(48.dp)
     }
 
+}
+
+private fun generateOriginalNumpadNumbers(): List<Int> {
+    return listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)
+}
+
+private fun generateRandomNumpadNumbers(): List<Int> {
+    return listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0).shuffled()
 }
 
 @Composable
 private fun NumberKey(
     number: Int,
-    letters: String?,
     enabled: Boolean,
     onClick: (Int) -> Unit
 ) {
@@ -130,14 +165,6 @@ private fun NumberKey(
                 style = ComposeAppTheme.typography.title2R,
                 color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.steel20,
             )
-            letters?.let {
-                Spacer(Modifier.height(1.dp))
-                Text(
-                    text = it.uppercase(),
-                    style = ComposeAppTheme.typography.micro,
-                    color = if (enabled) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.steel20,
-                )
-            }
             Spacer(Modifier.height(4.dp))
         }
     }
