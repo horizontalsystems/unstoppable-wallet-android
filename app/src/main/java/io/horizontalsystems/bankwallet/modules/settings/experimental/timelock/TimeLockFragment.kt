@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.settings.experimental.ActivateCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -43,7 +42,7 @@ private fun ExperimentalScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.ResString(R.string.BitcoinHodling_Title),
+                title = stringResource(R.string.BitcoinHodling_Title),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 }

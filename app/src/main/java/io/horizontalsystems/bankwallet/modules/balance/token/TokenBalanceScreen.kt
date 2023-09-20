@@ -54,7 +54,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.transactionList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
@@ -84,7 +83,7 @@ fun TokenBalanceScreen(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.PlainString(uiState.title),
+                title = uiState.title,
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 }

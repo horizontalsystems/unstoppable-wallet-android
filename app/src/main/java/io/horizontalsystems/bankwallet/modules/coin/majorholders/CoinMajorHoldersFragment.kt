@@ -101,7 +101,7 @@ private fun CoinMajorHoldersScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.PlainString(blockchain.name),
+                title = blockchain.name,
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),

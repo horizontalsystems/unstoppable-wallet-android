@@ -129,7 +129,7 @@ fun ContactScreen(
                     .background(color = ComposeAppTheme.colors.tyler)
             ) {
                 AppBar(
-                    title = uiState.headerTitle,
+                    title = uiState.headerTitle.getString(),
                     navigationIcon = {
                         HsBackButton {
                             confirmNavigateToBack()

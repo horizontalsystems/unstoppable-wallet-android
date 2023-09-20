@@ -36,7 +36,6 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
@@ -70,7 +69,7 @@ fun GuidesScreen(navController: NavController) {
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Guides_Title),
+            title = stringResource(R.string.Guides_Title),
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             }

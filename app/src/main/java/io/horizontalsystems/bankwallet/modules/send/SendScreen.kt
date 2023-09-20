@@ -8,7 +8,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 
@@ -20,7 +19,7 @@ fun SendScreen(
 ) {
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.PlainString(title),
+            title = title,
             navigationIcon = {
                 HsBackButton(onClick = onCloseClick)
             },

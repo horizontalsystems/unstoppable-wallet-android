@@ -116,7 +116,7 @@ private fun OneInchSettingsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                title = TranslatableString.ResString(R.string.SwapSettings_Title),
+                title = stringResource(R.string.SwapSettings_Title),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),

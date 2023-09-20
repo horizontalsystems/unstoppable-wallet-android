@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -50,7 +49,7 @@ private fun ExperimentalScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.ResString(R.string.ExperimentalFeatures_Title),
+                title = stringResource(R.string.ExperimentalFeatures_Title),
                 navigationIcon = {
                     HsBackButton(onClick = onCloseClick)
                 }

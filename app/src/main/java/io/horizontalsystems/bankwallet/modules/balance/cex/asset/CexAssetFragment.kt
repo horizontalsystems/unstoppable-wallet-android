@@ -39,7 +39,6 @@ import io.horizontalsystems.bankwallet.modules.balance.cex.WalletIconCex
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.depositcex.DepositCexFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
@@ -94,7 +93,7 @@ fun CexAssetScreen(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.PlainString(uiState.title),
+                title = uiState.title,
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 }

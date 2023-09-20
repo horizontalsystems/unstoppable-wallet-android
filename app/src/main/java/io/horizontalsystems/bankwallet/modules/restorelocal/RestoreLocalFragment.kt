@@ -177,7 +177,7 @@ private fun RestoreLocalScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.ImportBackupFile_EnterPassword),
+                    title = stringResource(R.string.ImportBackupFile_EnterPassword),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

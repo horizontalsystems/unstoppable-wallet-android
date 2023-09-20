@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -81,7 +80,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.RecoveryPhraseVerify_Title),
+                    title = stringResource(R.string.RecoveryPhraseVerify_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     }

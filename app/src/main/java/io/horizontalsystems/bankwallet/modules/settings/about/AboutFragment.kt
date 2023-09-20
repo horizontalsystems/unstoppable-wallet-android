@@ -40,7 +40,6 @@ import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
 import io.horizontalsystems.bankwallet.modules.settings.privacy.PrivacyScreen
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -100,7 +99,7 @@ private fun AboutScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.SettingsAboutApp_Title),
+                title = stringResource(R.string.SettingsAboutApp_Title),
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 }

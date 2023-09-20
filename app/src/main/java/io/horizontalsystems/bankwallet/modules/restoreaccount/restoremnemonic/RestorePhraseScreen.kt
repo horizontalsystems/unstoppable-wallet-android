@@ -93,7 +93,7 @@ fun RestorePhrase(
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = if (advanced) TranslatableString.ResString(R.string.Restore_Advanced_Title) else TranslatableString.ResString(R.string.ManageAccounts_ImportWallet),
+            title = if (advanced) stringResource(R.string.Restore_Advanced_Title) else stringResource(R.string.ManageAccounts_ImportWallet),
             navigationIcon = {
                 HsBackButton(onClick = onBackClick)
             },

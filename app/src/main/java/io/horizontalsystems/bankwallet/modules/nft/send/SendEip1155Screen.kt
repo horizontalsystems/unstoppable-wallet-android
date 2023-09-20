@@ -3,7 +3,15 @@ package io.horizontalsystems.bankwallet.modules.nft.send
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -34,7 +42,15 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AdditionalDataCell2
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
 @Composable
 fun SendEip1155Screen(
@@ -50,7 +66,7 @@ fun SendEip1155Screen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.SendNft_Title),
+                    title = stringResource(R.string.SendNft_Title),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

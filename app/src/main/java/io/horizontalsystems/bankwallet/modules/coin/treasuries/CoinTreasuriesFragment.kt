@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -72,7 +71,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.CoinPage_Treasuries),
+                title = stringResource(R.string.CoinPage_Treasuries),
                 navigationIcon = {
                     HsBackButton(onClick = { findNavController().popBackStack() })
                 }

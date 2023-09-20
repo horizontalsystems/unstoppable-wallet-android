@@ -95,7 +95,7 @@ private fun ImportBinanceCexAccountScreen(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.PlainString(cex.name),
+                title = cex.name,
                 navigationIcon = {
                     HsBackButton(onClick = onNavigateBack)
                 },

@@ -1,7 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.nft.send
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -40,7 +46,7 @@ fun SendEip721Screen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.SendNft_Title),
+                    title = stringResource(R.string.SendNft_Title),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

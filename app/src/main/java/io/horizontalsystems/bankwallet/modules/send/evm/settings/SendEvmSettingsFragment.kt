@@ -89,7 +89,7 @@ fun SendEvmFeeSettingsScreen(
             .background(color = ComposeAppTheme.colors.tyler)
     ) {
         AppBar(
-            title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+            title = stringResource(R.string.SendEvmSettings_Title),
             navigationIcon = {
                 HsIconButton(onClick = { navController.popBackStack() }) {
                     Icon(

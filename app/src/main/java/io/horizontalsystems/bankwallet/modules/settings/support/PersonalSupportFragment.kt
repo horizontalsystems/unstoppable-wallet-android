@@ -34,7 +34,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -85,7 +84,7 @@ private fun PersonalSupportScreen(navController: NavController) {
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Settings_PersonalSupport),
+                    title = stringResource(R.string.Settings_PersonalSupport),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

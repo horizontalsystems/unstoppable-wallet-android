@@ -8,8 +8,17 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,7 +36,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -53,7 +66,7 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
             ComposeAppTheme {
                 Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
                     AppBar(
-                        title = TranslatableString.ResString(R.string.WidgetList_Config_Title),
+                        title = stringResource(R.string.WidgetList_Config_Title),
                         navigationIcon = null,
                         menuItems = listOf(MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

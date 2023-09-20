@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -41,7 +42,7 @@ private fun InfoScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                title = TranslatableString.ResString(R.string.TransactionInfo_Status),
+                title = stringResource(R.string.TransactionInfo_Status),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),

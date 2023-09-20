@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -62,7 +61,7 @@ private fun FaqScreen(
     val viewState = viewModel.viewState
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Settings_Faq),
+            title = stringResource(R.string.Settings_Faq),
             navigationIcon = {
                 HsBackButton(onClick = onCloseClick)
             }

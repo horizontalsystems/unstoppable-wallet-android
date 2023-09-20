@@ -81,7 +81,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.PlainString(viewModel.viewState.title),
+                title = viewModel.viewState.title,
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
@@ -71,7 +70,7 @@ private fun SearchResultsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.Market_AdvancedSearch_Results),
+                title = stringResource(R.string.Market_AdvancedSearch_Results),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

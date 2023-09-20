@@ -118,7 +118,7 @@ fun SendBitcoinScreen(
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.PlainString(title),
+                title = title,
                 navigationIcon = {
                     HsBackButton(onClick = { fragmentNavController.popBackStack() })
                 },

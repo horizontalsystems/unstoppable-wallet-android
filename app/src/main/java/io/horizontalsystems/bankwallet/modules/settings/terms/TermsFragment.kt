@@ -84,7 +84,7 @@ fun TermsScreen(
             .background(ComposeAppTheme.colors.tyler)
     ) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Settings_Terms),
+            title = stringResource(R.string.Settings_Terms),
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Close),

@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellNews
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -70,7 +69,7 @@ private fun CoinReportsScreen(
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.CoinPage_Reports),
+            title = stringResource(R.string.CoinPage_Reports),
             navigationIcon = {
                 HsBackButton(onClick = onClickNavigation)
             }

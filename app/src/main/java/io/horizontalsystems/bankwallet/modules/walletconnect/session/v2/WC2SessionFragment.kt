@@ -89,7 +89,7 @@ fun WCSessionPage(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                TranslatableString.ResString(R.string.WalletConnect_Title),
+                title = stringResource(R.string.WalletConnect_Title),
                 showSpinner = uiState.connecting,
                 menuItems = listOf(
                     MenuItem(

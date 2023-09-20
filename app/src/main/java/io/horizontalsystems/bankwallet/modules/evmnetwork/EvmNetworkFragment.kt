@@ -121,7 +121,7 @@ private fun EvmNetworkScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.PlainString(viewModel.title),
+                title = viewModel.title,
                 navigationIcon = {
                     Image(
                         painter = rememberAsyncImagePainter(
