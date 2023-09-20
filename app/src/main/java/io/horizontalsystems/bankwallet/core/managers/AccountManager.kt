@@ -71,7 +71,7 @@ class AccountManager(
         return accounts.find { account -> account.id == id }
     }
 
-    override fun loadAccounts() {
+    override fun initAccounts() {
         refreshCache()
         activeAccountId = storage.activeAccountId
         activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
