@@ -38,7 +38,7 @@ fun RestorePrivateKey(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.ResString(R.string.Restore_Advanced_Title),
+                title = stringResource(R.string.Restore_Advanced_Title),
                 navigationIcon = {
                     HsBackButton(onClick = onBackClick)
                 },

@@ -29,7 +29,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -65,7 +64,7 @@ fun WCPairingsScreen(navController: NavController) {
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.WalletConnect_PairedDApps),
+                    title = stringResource(R.string.WalletConnect_PairedDApps),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

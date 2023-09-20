@@ -23,7 +23,6 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellNews
 import cash.p.terminal.ui.compose.components.HsBackButton
@@ -70,7 +69,7 @@ private fun CoinReportsScreen(
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.CoinPage_Reports),
+            title = stringResource(R.string.CoinPage_Reports),
             navigationIcon = {
                 HsBackButton(onClick = onClickNavigation)
             }

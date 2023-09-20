@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -87,7 +86,7 @@ private fun BaseCurrencyScreen(
                 modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
             ) {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.SettingsCurrency_Title),
+                    title = stringResource(R.string.SettingsCurrency_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     }

@@ -31,7 +31,6 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellFooter
 import cash.p.terminal.ui.compose.components.CellMultilineLawrenceSection
@@ -84,7 +83,7 @@ private fun CoinAuditsScreen(
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.CoinPage_Audits),
+            title = stringResource(R.string.CoinPage_Audits),
             navigationIcon = {
                 HsBackButton(onClick = onClickNavigation)
             }

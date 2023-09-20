@@ -2,7 +2,12 @@ package cash.p.terminal.modules.evmnetwork.addrpc
 
 import android.os.Bundle
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -17,7 +22,12 @@ import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.FormsInput
+import cash.p.terminal.ui.compose.components.FormsInputStateWarning
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.MenuItem
 
 @Composable
 fun AddRpcScreen(
@@ -36,7 +46,7 @@ fun AddRpcScreen(
             .background(ComposeAppTheme.colors.tyler)
     ) {
         AppBar(
-            title = TranslatableString.ResString(R.string.AddEvmSyncSource_AddRPCSource),
+            title = stringResource(R.string.AddEvmSyncSource_AddRPCSource),
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Close),

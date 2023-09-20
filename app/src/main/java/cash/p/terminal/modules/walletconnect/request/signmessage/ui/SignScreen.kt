@@ -52,8 +52,7 @@ fun SignMessageRequestScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                TranslatableString.PlainString(stringResource(R.string.WalletConnect_SignMessageRequest_Title)),
-
+                stringResource(R.string.WalletConnect_SignMessageRequest_Title),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),

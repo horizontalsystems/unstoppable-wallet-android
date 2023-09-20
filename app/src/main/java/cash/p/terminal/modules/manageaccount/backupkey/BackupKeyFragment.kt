@@ -56,7 +56,7 @@ fun RecoveryPhraseScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.RecoveryPhrase_Title),
+                    title = stringResource(R.string.RecoveryPhrase_Title),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Info_Title),

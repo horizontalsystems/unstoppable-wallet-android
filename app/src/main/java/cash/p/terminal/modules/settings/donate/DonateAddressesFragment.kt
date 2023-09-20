@@ -18,10 +18,7 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.title
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -56,7 +53,7 @@ fun DonateScreen(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.ResString(R.string.Settings_Donate_Addresses),
+                title = stringResource(R.string.Settings_Donate_Addresses),
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 },

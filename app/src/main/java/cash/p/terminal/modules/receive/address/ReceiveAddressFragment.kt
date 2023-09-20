@@ -152,7 +152,7 @@ private fun ReceiveAddressScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Deposit_Title, uiState.coinCode),
+                    title = stringResource(R.string.Deposit_Title, uiState.coinCode),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

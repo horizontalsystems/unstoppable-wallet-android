@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -159,7 +160,7 @@ private fun TransactionSpeedUpCancelScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
+                    title = stringResource(R.string.Send_Confirmation_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

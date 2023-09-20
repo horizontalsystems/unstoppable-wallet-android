@@ -47,7 +47,7 @@ fun MacdSettingsScreen(navController: NavController, indicatorSetting: ChartIndi
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.PlainString(viewModel.name),
+                title = viewModel.name,
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

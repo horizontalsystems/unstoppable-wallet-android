@@ -108,7 +108,7 @@ fun DepositQrCodeScreen(
                         }
                     }
                     AppBar(
-                        title = TranslatableString.ResString(R.string.CexDeposit_Title, cexAsset.id),
+                        title = stringResource(R.string.CexDeposit_Title, cexAsset.id),
                         navigationIcon = navigationIcon,
                         menuItems = listOf(
                             MenuItem(

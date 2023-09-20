@@ -22,7 +22,6 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -66,7 +65,7 @@ fun AppearanceScreen(navController: NavController) {
             ) {
                 Column {
                     AppBar(
-                        TranslatableString.ResString(R.string.Settings_Appearance),
+                        title = stringResource(R.string.Settings_Appearance),
                         navigationIcon = {
                             HsBackButton(onClick = { navController.popBackStack() })
                         },

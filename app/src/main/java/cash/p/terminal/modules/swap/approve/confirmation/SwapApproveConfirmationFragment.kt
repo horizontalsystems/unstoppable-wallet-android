@@ -169,7 +169,7 @@ private fun SwapApproveConfirmationScreen(
                 }
 
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
+                    title = stringResource(R.string.Send_Confirmation_Title),
                     navigationIcon = navigationIcon,
                     menuItems = listOf(
                         MenuItem(

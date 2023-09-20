@@ -41,7 +41,7 @@ fun LocalBackupTermsScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.LocalBackup_Title),
+                    title = stringResource(R.string.LocalBackup_Title),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

@@ -23,7 +23,6 @@ import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewMode
 import cash.p.terminal.modules.settings.security.ui.PasscodeBlock
 import cash.p.terminal.modules.settings.security.ui.TorBlock
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.HsBackButton
@@ -116,7 +115,7 @@ private fun SecurityCenterScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.Settings_SecurityCenter),
+                title = stringResource(R.string.Settings_SecurityCenter),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

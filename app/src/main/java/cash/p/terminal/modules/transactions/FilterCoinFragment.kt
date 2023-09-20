@@ -31,7 +31,6 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.B2
 import cash.p.terminal.ui.compose.components.Badge
@@ -62,7 +61,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
         Surface(color = ComposeAppTheme.colors.tyler) {
             Column {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Transactions_Filter_ChooseCoin),
+                    title = stringResource(R.string.Transactions_Filter_ChooseCoin),
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
                     }

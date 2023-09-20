@@ -96,7 +96,7 @@ private fun ShowExtendedKeyScreen(
         ) {
             Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
                 AppBar(
-                    title = viewModel.title,
+                    title = viewModel.title.getString(),
                     navigationIcon = {
                         HsBackButton(onClick = navController::popBackStack)
                     },

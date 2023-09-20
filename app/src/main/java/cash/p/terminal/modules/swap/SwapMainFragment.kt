@@ -62,7 +62,6 @@ import cash.p.terminal.modules.swap.ui.SwapError
 import cash.p.terminal.modules.swap.ui.SwitchCoinsSection
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard.Opened
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.compose.observeKeyboardState
 import cash.p.terminal.ui.extensions.BottomSheetHeader
@@ -156,7 +155,7 @@ private fun SwapMainScreen(
         ) {
             Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Swap),
+                    title = stringResource(R.string.Swap),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

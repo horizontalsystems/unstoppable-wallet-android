@@ -94,7 +94,7 @@ fun RestorePhraseNonStandard(
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Restore_NonStandardRestore),
+            title = stringResource(R.string.Restore_NonStandardRestore),
             navigationIcon = {
                 HsBackButton(onClick = onBackClick)
             },

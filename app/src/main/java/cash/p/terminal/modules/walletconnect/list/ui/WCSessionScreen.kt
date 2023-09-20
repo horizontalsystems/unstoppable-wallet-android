@@ -122,7 +122,7 @@ fun WCSessionsScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.WalletConnect_Title),
+                    title = stringResource(R.string.WalletConnect_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

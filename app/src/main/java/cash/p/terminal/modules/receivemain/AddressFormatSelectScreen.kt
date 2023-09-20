@@ -18,7 +18,6 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
@@ -42,7 +41,7 @@ fun AddressFormatSelectScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Balance_Receive_AddressFormat),
+                    title = stringResource(R.string.Balance_Receive_AddressFormat),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

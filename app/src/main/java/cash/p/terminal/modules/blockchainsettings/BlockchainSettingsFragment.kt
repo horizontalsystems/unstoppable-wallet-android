@@ -14,6 +14,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,7 +26,6 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule
 import cash.p.terminal.modules.evmnetwork.EvmNetworkModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
@@ -56,7 +56,7 @@ private fun BlockchainSettingsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.BlockchainSettings_Title),
+                title = stringResource(R.string.BlockchainSettings_Title),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

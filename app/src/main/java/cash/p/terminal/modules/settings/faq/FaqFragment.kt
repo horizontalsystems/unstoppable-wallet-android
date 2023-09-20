@@ -23,7 +23,6 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.markdown.MarkdownFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
@@ -62,7 +61,7 @@ private fun FaqScreen(
     val viewState = viewModel.viewState
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Settings_Faq),
+            title = stringResource(R.string.Settings_Faq),
             navigationIcon = {
                 HsBackButton(onClick = onCloseClick)
             }

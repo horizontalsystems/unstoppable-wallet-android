@@ -1,6 +1,10 @@
 package cash.p.terminal.modules.walletconnect.request.signmessage.v2
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,7 +22,11 @@ import cash.p.terminal.modules.walletconnect.request.signmessage.ui.SignMessageR
 import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.TextImportantWarning
 
 @Composable
 fun WC2UnsupportedRequestScreen(
@@ -32,8 +40,7 @@ fun WC2UnsupportedRequestScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    TranslatableString.PlainString(stringResource(R.string.WalletConnect_UnsupportedRequest_Title)),
-
+                    title = stringResource(R.string.WalletConnect_UnsupportedRequest_Title),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

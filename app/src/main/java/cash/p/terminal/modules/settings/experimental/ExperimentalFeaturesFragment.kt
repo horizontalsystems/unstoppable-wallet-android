@@ -18,7 +18,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.B2
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -50,7 +49,7 @@ private fun ExperimentalScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.ResString(R.string.ExperimentalFeatures_Title),
+                title = stringResource(R.string.ExperimentalFeatures_Title),
                 navigationIcon = {
                     HsBackButton(onClick = onCloseClick)
                 }

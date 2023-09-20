@@ -77,7 +77,7 @@ fun SendBtcAdvancedSettingsScreen(
         ) {
             Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Send_Advanced),
+                    title = stringResource(R.string.Send_Advanced),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

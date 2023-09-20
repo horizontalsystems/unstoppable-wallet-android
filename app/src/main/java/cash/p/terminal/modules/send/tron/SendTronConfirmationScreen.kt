@@ -38,7 +38,6 @@ import cash.p.terminal.modules.send.ConfirmAmountCell
 import cash.p.terminal.modules.send.MemoCell
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -131,7 +130,7 @@ fun SendTronConfirmationScreen(
     ComposeAppTheme {
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
+                title = stringResource(R.string.Send_Confirmation_Title),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

@@ -28,7 +28,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellBorderedRowUniversal
 import cash.p.terminal.ui.compose.components.HSSectionRounded
@@ -77,7 +76,7 @@ private fun FilterByBlockchainsScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Market_Filter_Blockchains),
+                title = stringResource(R.string.Market_Filter_Blockchains),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 }

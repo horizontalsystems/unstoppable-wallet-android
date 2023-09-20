@@ -22,7 +22,6 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HSpacer
@@ -64,7 +63,7 @@ fun IndicatorsScreen(navController: NavController) {
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.ResString(R.string.CoinPage_Indicators),
+                title = stringResource(R.string.CoinPage_Indicators),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 }

@@ -25,7 +25,6 @@ import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.filters.MarketFiltersViewModel
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
@@ -71,7 +70,7 @@ private fun SearchResultsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.Market_AdvancedSearch_Results),
+                title = stringResource(R.string.Market_AdvancedSearch_Results),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },

@@ -41,7 +41,6 @@ import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.BadgeCount
 import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
@@ -62,7 +61,7 @@ fun SettingsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.Settings_Title),
+                stringResource(R.string.Settings_Title),
             )
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {

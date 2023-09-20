@@ -40,7 +40,6 @@ import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.settings.privacy.PrivacyScreen
 import cash.p.terminal.modules.settings.terms.TermsScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -100,7 +99,7 @@ private fun AboutScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.SettingsAboutApp_Title),
+                title = stringResource(R.string.SettingsAboutApp_Title),
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 }

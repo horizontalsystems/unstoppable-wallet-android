@@ -34,7 +34,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
@@ -85,7 +84,7 @@ private fun PersonalSupportScreen(navController: NavController) {
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Settings_PersonalSupport),
+                    title = stringResource(R.string.Settings_PersonalSupport),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

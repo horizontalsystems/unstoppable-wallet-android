@@ -122,7 +122,7 @@ private fun BaseSwapConfirmationScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
+                    title = stringResource(R.string.Send_Confirmation_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

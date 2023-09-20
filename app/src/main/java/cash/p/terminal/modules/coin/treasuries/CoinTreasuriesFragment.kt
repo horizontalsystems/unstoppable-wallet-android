@@ -31,7 +31,6 @@ import cash.p.terminal.modules.market.tvl.TvlModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
@@ -72,7 +71,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.CoinPage_Treasuries),
+                title = stringResource(R.string.CoinPage_Treasuries),
                 navigationIcon = {
                     HsBackButton(onClick = { findNavController().popBackStack() })
                 }

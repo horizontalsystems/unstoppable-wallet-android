@@ -101,7 +101,7 @@ fun LocalBackupPasswordScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.LocalBackup_SetPassword),
+                    title = stringResource(R.string.LocalBackup_SetPassword),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
                     },

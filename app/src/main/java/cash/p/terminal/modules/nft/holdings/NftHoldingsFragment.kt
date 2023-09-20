@@ -40,7 +40,6 @@ import cash.p.terminal.modules.nft.ui.NftAssetPreview
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
 import cash.p.terminal.ui.compose.components.CellBorderedRowUniversal
@@ -81,7 +80,7 @@ fun NftHoldingsScreen(navController: NavController) {
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Nfts_Title),
+                title = stringResource(R.string.Nfts_Title),
                 navigationIcon = {
                     HsBackButton(onClick = navController::popBackStack)
                 }

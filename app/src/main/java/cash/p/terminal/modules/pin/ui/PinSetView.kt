@@ -15,7 +15,7 @@ import cash.p.terminal.modules.pin.set.PinSetModule
 import cash.p.terminal.modules.pin.set.PinSetViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.animations.CrossSlide
-import cash.p.terminal.ui.compose.components.AppBarX
+import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
@@ -36,7 +36,7 @@ fun PinSet(
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
-            AppBarX(
+            AppBar(
                 title = title,
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)

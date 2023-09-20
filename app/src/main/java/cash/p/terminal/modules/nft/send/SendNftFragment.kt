@@ -125,7 +125,7 @@ private fun ShowErrorMessage(navController: NavController) {
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    title = TranslatableString.ResString(R.string.SendNft_Title),
+                    title = stringResource(R.string.SendNft_Title),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

@@ -36,7 +36,6 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.markdown.MarkdownFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
@@ -70,7 +69,7 @@ fun GuidesScreen(navController: NavController) {
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Guides_Title),
+            title = stringResource(R.string.Guides_Title),
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             }

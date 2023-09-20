@@ -24,7 +24,6 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorsDetailsModule.DetailViewItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -104,7 +103,7 @@ private fun TechnicalIndicatorsDetailsScreen(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = TranslatableString.ResString(R.string.Coin_Analytics_Details),
+                title = stringResource(R.string.Coin_Analytics_Details),
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 }

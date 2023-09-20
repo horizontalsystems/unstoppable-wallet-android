@@ -97,7 +97,7 @@ fun CoinTabs(
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.PlainString(viewModel.fullCoin.coin.code),
+            title = viewModel.fullCoin.coin.code,
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             },
@@ -181,7 +181,7 @@ fun CoinTabs(
 fun CoinNotFound(coinUid: String, navController: NavController) {
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.PlainString(coinUid),
+            title = coinUid,
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             }

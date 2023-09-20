@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -105,7 +106,7 @@ private fun SelectBlockchainsScreen(
         modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
     ) {
         AppBar(
-            title = TranslatableString.ResString(title),
+            title = stringResource(title),
             navigationIcon = {
                 HsBackButton(onClick = { navController.popBackStack() })
             },

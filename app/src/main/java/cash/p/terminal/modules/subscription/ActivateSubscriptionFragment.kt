@@ -71,7 +71,7 @@ fun ActivateSubscriptionScreen(navController: NavController) {
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
-                    TranslatableString.PlainString(stringResource(R.string.ActivateSubscription_Title)),
+                    title = stringResource(R.string.ActivateSubscription_Title),
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

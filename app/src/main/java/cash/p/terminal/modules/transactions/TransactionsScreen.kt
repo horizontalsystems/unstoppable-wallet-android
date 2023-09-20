@@ -51,7 +51,7 @@ fun TransactionsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                title = TranslatableString.ResString(R.string.Transactions_Title),
+                title = stringResource(R.string.Transactions_Title),
                 showSpinner = syncing,
                 menuItems = listOf(
                     MenuItem(
