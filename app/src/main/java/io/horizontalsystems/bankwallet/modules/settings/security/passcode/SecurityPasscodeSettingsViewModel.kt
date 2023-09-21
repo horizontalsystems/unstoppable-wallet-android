@@ -4,15 +4,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class SecurityPasscodeSettingsViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val pinComponent: IPinComponent,
     private val userManager: UserManager
 ) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            pinComponent.pinSetFlowable.asFlow().collect {
+                syncPinSet(pinComponent.isPinSet)
+            }
+        }
+    }
 
     var pinEnabled by mutableStateOf(pinComponent.isPinSet)
         private set
@@ -31,11 +42,6 @@ class SecurityPasscodeSettingsViewModel(
     fun disablePin() {
         pinComponent.clear(userManager.getUserLevel())
         biometricEnabled = false
-        syncPinSet(false)
-    }
-
-    fun didSetPin() {
-        syncPinSet(true)
     }
 
     private fun syncPinSet(pinSet: Boolean) {

@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
-import io.horizontalsystems.bankwallet.core.navigateToSetPin
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -66,9 +65,7 @@ fun PasscodeBlock(
                     checked = viewModel.pinEnabled,
                     onCheckedChange = { checked ->
                         if (checked) {
-                            navController.navigateToSetPin {
-                                viewModel.didSetPin()
-                            }
+                            navController.slideFromRight(R.id.setPinFragment)
                         } else {
                             navController.authorizedAction {
                                 viewModel.disablePin()
