@@ -33,11 +33,6 @@ fun PinUnlock(
         viewModel.unlocked()
     }
 
-    if (viewModel.uiState.canceled) {
-        onCancelClick.invoke()
-        viewModel.canceled()
-    }
-
     if (showBiometricPrompt) {
         BiometricPromptDialog(
             onSuccess = {
@@ -85,7 +80,7 @@ fun PinUnlock(
             showShakeAnimation = viewModel.uiState.showShakeAnimation,
             inputState = viewModel.uiState.inputState,
             onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() },
-            onCancelClick = { viewModel.onCancelClick() }
+            onCancelClick = onCancelClick
         )
 
         PinNumpad(
