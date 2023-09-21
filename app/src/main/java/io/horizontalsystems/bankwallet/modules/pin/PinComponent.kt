@@ -52,6 +52,11 @@ class PinComponent(
         return pinManager.getPinLevel(pin)
     }
 
+    override fun validateCurrentLevel(pin: String): Boolean {
+        val pinLevel = pinManager.getPinLevel(pin) ?: return false
+        return pinLevel == userManager.getUserLevel()
+    }
+
     override fun clear(level: Int) {
         pinManager.clear(level)
     }

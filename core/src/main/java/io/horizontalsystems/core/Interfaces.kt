@@ -42,6 +42,7 @@ interface IPinComponent {
     fun updateLastExitDateBeforeRestart()
     fun store(pin: String, level: Int)
     fun getPinLevel(pin: String): Int?
+    fun validateCurrentLevel(pin: String): Boolean
     fun clear(level: Int)
     fun onUnlock(pinLevel: Int)
     fun onBiometricUnlock()
