@@ -36,7 +36,6 @@ class PinUnlockViewModel(
             enteredCount = 0,
             fingerScannerEnabled = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled,
             unlocked = false,
-            canceled = false,
             showShakeAnimation = false,
             inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
         )
@@ -105,16 +104,8 @@ class PinUnlockViewModel(
         uiState = uiState.copy(unlocked = false)
     }
 
-    fun canceled() {
-        uiState = uiState.copy(canceled = false)
-    }
-
     fun onShakeAnimationFinish() {
         uiState = uiState.copy(showShakeAnimation = false)
-    }
-
-    fun onCancelClick() {
-        uiState = uiState.copy(canceled = true)
     }
 
     private fun updateLockoutState() {

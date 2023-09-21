@@ -37,7 +37,6 @@ object PinUnlockModule {
         val enteredCount: Int,
         val fingerScannerEnabled: Boolean,
         val unlocked: Boolean,
-        val canceled: Boolean,
         val showShakeAnimation: Boolean,
         val inputState: InputState
     )
