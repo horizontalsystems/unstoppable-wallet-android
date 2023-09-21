@@ -10,10 +10,6 @@ import io.horizontalsystems.core.setNavigationResult
 
 class UnlockPinFragment : BaseComposeFragment() {
 
-    private val attachedToLockScreen: Boolean by lazy {
-        arguments?.getBoolean(PinModule.keyAttachedToLockScreen) ?: false
-    }
-
     private val showCancelButton: Boolean by lazy {
         arguments?.getBoolean(PinModule.keyShowCancel) ?: false
     }
@@ -30,29 +26,13 @@ class UnlockPinFragment : BaseComposeFragment() {
     }
 
     private fun dismissWithSuccess() {
-        if (attachedToLockScreen) {
-            activity?.setResult(PinModule.RESULT_OK)
-            activity?.finish()
-            return
-        }
-
-        val bundle = bundleOf(
-            PinModule.requestResult to PinModule.RESULT_OK
-        )
+        val bundle = bundleOf(PinModule.requestResult to PinModule.RESULT_OK)
         setNavigationResult(PinModule.requestKey, bundle)
         findNavController().popBackStack()
     }
 
     private fun onCancelClick() {
-        if (attachedToLockScreen) {
-            activity?.setResult(PinModule.RESULT_CANCELLED)
-            activity?.finish()
-            return
-        }
-
-        val bundle = bundleOf(
-            PinModule.requestResult to PinModule.RESULT_CANCELLED
-        )
+        val bundle = bundleOf(PinModule.requestResult to PinModule.RESULT_CANCELLED)
         setNavigationResult(PinModule.requestKey, bundle)
         findNavController().popBackStack()
     }

@@ -4,21 +4,32 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.navigation.findNavController
-import cash.p.terminal.R
+import androidx.activity.compose.setContent
 import cash.p.terminal.core.BaseActivity
+import cash.p.terminal.modules.pin.PinModule
+import cash.p.terminal.modules.pin.ui.PinUnlock
+import cash.p.terminal.ui.compose.ComposeAppTheme
 
 class LockScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lock_screen)
+
+        setContent {
+            ComposeAppTheme {
+                PinUnlock(
+                    showCancelButton = false,
+                    dismissWithSuccess = {
+                        setResult(PinModule.RESULT_OK)
+                        finish()
+                    },
+                    onCancelClick = {}
+                )
+            }
+        }
 
         onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val navController = findNavController(R.id.lockScreenNavHost)
-                if (navController.currentDestination?.id == navController.graph.startDestinationId) {
-                    finishAffinity()
-                }
+                finishAffinity()
             }
         })
     }
