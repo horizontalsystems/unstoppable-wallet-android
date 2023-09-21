@@ -12,7 +12,7 @@ import io.horizontalsystems.core.CurrentDateProvider
 
 object PinUnlockModule {
 
-    class Factory(private val showCancelButton: Boolean) : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -22,7 +22,6 @@ object PinUnlockModule {
                 )
             )
             return PinUnlockViewModel(
-                showCancelButton,
                 App.pinComponent,
                 lockoutManager,
                 App.systemInfoManager,

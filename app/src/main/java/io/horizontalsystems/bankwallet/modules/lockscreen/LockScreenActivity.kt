@@ -17,12 +17,10 @@ class LockScreenActivity : BaseActivity() {
         setContent {
             ComposeAppTheme {
                 PinUnlock(
-                    showCancelButton = false,
-                    dismissWithSuccess = {
+                    onSuccess = {
                         setResult(PinModule.RESULT_OK)
                         finish()
-                    },
-                    onCancelClick = {}
+                    }
                 )
             }
         }
