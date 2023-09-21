@@ -69,8 +69,7 @@ class BlockchainSettingsService(
     private fun syncBlockchainItems() {
         val btcBlockchainItems = btcBlockchainManager.allBlockchains.map { blockchain ->
             val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
-            val transactionMode = btcBlockchainManager.transactionSortMode(blockchain.type)
-            BlockchainItem.Btc(blockchain, restoreMode, transactionMode)
+            BlockchainItem.Btc(blockchain, restoreMode)
         }
 
         val evmBlockchainItems = evmBlockchainManager.allBlockchains.map { blockchain ->

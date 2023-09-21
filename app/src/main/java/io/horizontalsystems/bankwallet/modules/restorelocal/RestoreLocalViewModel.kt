@@ -94,7 +94,7 @@ class RestoreLocalViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val kdfParams = backup.crypto.kdfparams
             val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: return@launch
-            val enabledWallets = backup.crypto.enabledWallets
+            val enabledWallets = backup.enabledWallets
             if (EncryptDecryptManager.passwordIsCorrect(backup.crypto.mac, backup.crypto.ciphertext, key)) {
                 val decrypted = encryptDecryptManager.decrypt(backup.crypto.ciphertext, key, backup.crypto.cipherparams.iv)
                 try {

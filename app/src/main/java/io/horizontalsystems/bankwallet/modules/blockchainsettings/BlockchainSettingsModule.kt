@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
-import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.solanakit.models.RpcSource
 
@@ -38,8 +37,7 @@ object BlockchainSettingsModule {
 
         class Btc(
             override val blockchain: Blockchain,
-            val restoreMode: BtcRestoreMode,
-            val transactionMode: TransactionDataSortMode
+            val restoreMode: BtcRestoreMode
         ) : BlockchainItem()
 
         class Evm(
