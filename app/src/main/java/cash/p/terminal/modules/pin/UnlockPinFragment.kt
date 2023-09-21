@@ -10,29 +10,23 @@ import io.horizontalsystems.core.setNavigationResult
 
 class UnlockPinFragment : BaseComposeFragment() {
 
-    private val showCancelButton: Boolean by lazy {
-        arguments?.getBoolean(PinModule.keyShowCancel) ?: false
-    }
-
     @Composable
     override fun GetContent() {
         ComposeAppTheme {
             PinUnlock(
-                showCancelButton = showCancelButton,
-                dismissWithSuccess = { dismissWithSuccess() },
-                onCancelClick = { onCancelClick() }
+                showCancelButton = true,
+                dismissWithSuccess = {
+                    closeWithResult(PinModule.RESULT_OK)
+                },
+                onCancelClick = {
+                    closeWithResult(PinModule.RESULT_CANCELLED)
+                }
             )
         }
     }
 
-    private fun dismissWithSuccess() {
-        val bundle = bundleOf(PinModule.requestResult to PinModule.RESULT_OK)
-        setNavigationResult(PinModule.requestKey, bundle)
-        findNavController().popBackStack()
-    }
-
-    private fun onCancelClick() {
-        val bundle = bundleOf(PinModule.requestResult to PinModule.RESULT_CANCELLED)
+    private fun closeWithResult(result: Int) {
+        val bundle = bundleOf(PinModule.requestResult to result)
         setNavigationResult(PinModule.requestKey, bundle)
         findNavController().popBackStack()
     }

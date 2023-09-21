@@ -2,7 +2,6 @@ package cash.p.terminal.core
 
 import android.os.Bundle
 import androidx.annotation.IdRes
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import cash.p.terminal.R
@@ -42,7 +41,7 @@ fun NavController.authorizedAction(action: () -> Unit) {
                 action.invoke()
             }
         }
-        slideFromBottom(R.id.unlockPinFragment, bundleOf(PinModule.keyShowCancel to true))
+        slideFromBottom(R.id.unlockPinFragment)
     } else {
         action.invoke()
     }
