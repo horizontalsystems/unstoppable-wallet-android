@@ -40,14 +40,14 @@ interface IPinComponent {
     fun willEnterForeground(activity: Activity)
     fun didEnterBackground()
     fun updateLastExitDateBeforeRestart()
-    fun store(pin: String)
-    fun validate(pin: String): Boolean
-    fun xxxPin(pin: String): Int?
-    fun clear()
+    fun store(pin: String, level: Int)
+    fun getPinLevel(pin: String): Int?
+    fun clear(level: Int)
     fun onUnlock(pinLevel: Int)
     fun onBiometricUnlock()
     fun shouldShowPin(activity: Activity): Boolean
     fun lock()
+    fun initDefaultPinLevel()
 }
 
 interface IPinStorage {

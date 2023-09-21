@@ -13,32 +13,44 @@ class PinManager(
     val pinSetSubject = PublishSubject.create<Unit>()
 
     val isPinSet: Boolean
-        get() = !pinStorage.pin.isNullOrEmpty()
+        get() = !pins.lastOrNull().isNullOrBlank()
 
-    private val savedPin: String?
+    private val pins: List<String>
         get() {
-            val string = pinStorage.pin ?: return null
-            return if (TextUtils.isEmpty(string)) {
-                null
+            val string = pinStorage.pin
+            return if (string != null && !TextUtils.isEmpty(string)) {
+                encryptionManager.decrypt(string).split(",")
             } else {
-                encryptionManager.decrypt(string)
+                listOf("")
             }
         }
 
     @Throws
-    fun store(pin: String) {
-        pinStorage.pin = encryptionManager.encrypt(pin)
+    fun store(pin: String, level: Int) {
+        val tmp = pins.toMutableList()
+        tmp[level] = pin
+
+        pinStorage.pin = encryptionManager.encrypt(tmp.joinToString(","))
         pinSetSubject.onNext(Unit)
     }
 
-    @Throws
-    fun validate(pin: String): Boolean {
-        return savedPin == pin
+    fun getPinLevel(pin: String): Int? {
+        val index = pins.indexOf(pin)
+        if (index == -1) return null
+
+        return index
     }
 
-    fun clear() {
-        pinStorage.clearPin()
+    fun getPinLevelLast(): Int {
+        return pins.size - 1
+    }
+
+    fun clear(level: Int) {
         pinStorage.biometricAuthEnabled = false
+
+        val tmp = pins.subList(0, level) + listOf("")
+
+        pinStorage.pin = encryptionManager.encrypt(tmp.joinToString(","))
         pinSetSubject.onNext(Unit)
     }
 

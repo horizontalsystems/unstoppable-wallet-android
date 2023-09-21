@@ -23,7 +23,7 @@ class AccountManager(
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
     private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
-    private var accountsMinLevel = 0
+    private var accountsMinLevel: Int? = null
 
     override val activeAccountStateFlow = _activeAccountStateFlow
 
@@ -63,16 +63,6 @@ class AccountManager(
 
     override fun account(id: String): Account? {
         return accounts.find { account -> account.id == id }
-    }
-
-    override fun initAccounts() {
-        refreshCache()
-        activeAccount = storage.activeAccountId?.let { account(it) }
-        _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
-    }
-
-    private fun refreshCache() {
-        accountsCache = storage.allAccounts(accountsMinLevel).associateBy { it.id }.toMutableMap()
     }
 
     override fun onHandledBackupRequiredNewAccount() {
@@ -127,14 +117,13 @@ class AccountManager(
     }
 
     override fun setLevel(level: Int) {
-        // if the same level
         if (level == accountsMinLevel) return
         accountsMinLevel = level
 
-        refreshCache()
+        accountsCache = storage.allAccounts(level).associateBy { it.id }.toMutableMap()
 
         if (!accountsCache.containsKey(activeAccount?.id)) {
-            activeAccount = accounts.firstOrNull()
+            activeAccount = accountsCache[storage.activeAccountId] ?: accounts.firstOrNull()
             _activeAccountStateFlow.update {
                 ActiveAccountState.ActiveAccount(activeAccount)
             }

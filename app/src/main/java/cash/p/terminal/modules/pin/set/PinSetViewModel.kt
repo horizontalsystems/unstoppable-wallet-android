@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.pin.PinModule
 import cash.p.terminal.modules.pin.set.PinSetModule.PinSetViewState
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 
 class PinSetViewModel(
     private val pinComponent: IPinComponent,
+    private val userManager: UserManager,
 ) : ViewModel() {
 
     private var enteredPin = ""
@@ -73,7 +75,7 @@ class PinSetViewModel(
                 } else if (submittedPin.isNotEmpty()) {
                     if (submittedPin == enteredPin) {
                         try {
-                            pinComponent.store(submittedPin)
+                            pinComponent.store(submittedPin, userManager.getUserLevel())
                             uiState = uiState.copy(finished = true)
                         } catch (ex: Exception) {
                             resetWithError(R.string.PinSet_ErrorFailedToSavePin)

@@ -10,7 +10,7 @@ object PinSetModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PinSetViewModel(App.pinComponent) as T
+            return PinSetViewModel(App.pinComponent, App.userManager) as T
         }
     }
 
