@@ -138,7 +138,6 @@ interface IAccountManager {
 
     fun setActiveAccountId(activeAccountId: String?)
     fun account(id: String): Account?
-    fun initAccounts()
     fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)
