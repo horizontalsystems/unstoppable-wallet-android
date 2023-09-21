@@ -41,7 +41,7 @@ fun NavController.authorizedAction(action: () -> Unit) {
                 action.invoke()
             }
         }
-        slideFromBottom(R.id.unlockPinFragment)
+        slideFromBottom(R.id.confirmPinFragment)
     } else {
         action.invoke()
     }

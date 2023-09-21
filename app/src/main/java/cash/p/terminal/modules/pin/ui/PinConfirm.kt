@@ -12,17 +12,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
-import cash.p.terminal.modules.pin.unlock.PinUnlockModule
-import cash.p.terminal.modules.pin.unlock.PinUnlockViewModel
+import cash.p.terminal.modules.pin.unlock.PinConfirmViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.headline1_leah
 import cash.p.terminal.ui.compose.components.headline1_lucian
 
 @Composable
-fun PinUnlock(
+fun PinConfirm(
     onSuccess: () -> Unit,
+    onCancel: () -> Unit,
 ) {
-    val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
+    val viewModel = viewModel<PinConfirmViewModel>(factory = PinConfirmViewModel.Factory())
     var showBiometricPrompt by remember { mutableStateOf(viewModel.uiState.fingerScannerEnabled) }
     var showBiometricDisabledAlert by remember { mutableStateOf(false) }
 
@@ -74,9 +74,11 @@ fun PinUnlock(
                 }
             },
             enteredCount = viewModel.uiState.enteredCount,
+            showCancelButton = true,
             showShakeAnimation = viewModel.uiState.showShakeAnimation,
             inputState = viewModel.uiState.inputState,
             onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() },
+            onCancelClick = onCancel
         )
 
         PinNumpad(
