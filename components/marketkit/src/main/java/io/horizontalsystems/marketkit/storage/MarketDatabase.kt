@@ -1,5 +1,6 @@
 package io.horizontalsystems.marketkit.storage
 
+//import java.util.concurrent.Executors
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -7,11 +8,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.storage.migrations.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
-//import java.util.concurrent.Executors
 import java.util.logging.Logger
-import io.horizontalsystems.marketkit.storage.migrations.*
 
 
 @Database(
@@ -72,7 +72,8 @@ abstract class MarketDatabase : RoomDatabase() {
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .addMigrations(
-                    Migration_6_7,
+                        Migration_6_7,
+                        Migration_8_9
                 )
                 .build()
 
