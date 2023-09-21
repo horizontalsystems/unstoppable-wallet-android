@@ -18,6 +18,12 @@ data class EvmSyncSource(
             is RpcSource.Http -> source.urls[0]
             is RpcSource.WebSocket -> source.url
         }
+
+    val auth: String?
+        get() = when (val source = rpcSource) {
+            is RpcSource.Http -> source.auth
+            is RpcSource.WebSocket -> source.auth
+        }
 }
 
 @Entity(primaryKeys = ["blockchainTypeUid", "url"])

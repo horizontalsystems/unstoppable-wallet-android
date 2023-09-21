@@ -23,6 +23,8 @@ object BackupLocalModule {
         val crypto: BackupCrypto,
         val id: String,
         val type: String,
+        @SerializedName("enabled_wallets")
+        val enabledWallets: List<EnabledWalletBackup>?,
         @SerializedName("manual_backup")
         val manualBackup: Boolean,
         val timestamp: Long,
@@ -35,9 +37,7 @@ object BackupLocalModule {
         val ciphertext: String,
         val kdf: String,
         val kdfparams: KdfParams,
-        val mac: String,
-        @SerializedName("enabled_wallets")
-        val enabledWallets: List<EnabledWalletBackup>?
+        val mac: String
     )
 
     data class EnabledWalletBackup(

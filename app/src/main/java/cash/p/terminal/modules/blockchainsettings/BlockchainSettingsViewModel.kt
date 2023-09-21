@@ -47,9 +47,7 @@ class BlockchainSettingsViewModel(
                 .map { item ->
                     BlockchainSettingsModule.BlockchainViewItem(
                         title = item.blockchain.name,
-                        subtitle = "${Translator.getString(item.restoreMode.title)}, ${
-                            Translator.getString(item.transactionMode.title)
-                        }",
+                        subtitle = Translator.getString(item.restoreMode.title),
                         imageUrl = item.blockchain.type.imageUrl,
                         blockchainItem = item
                     )
