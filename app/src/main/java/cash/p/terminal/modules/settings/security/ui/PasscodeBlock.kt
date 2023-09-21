@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
-import cash.p.terminal.core.navigateToSetPin
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -66,9 +65,7 @@ fun PasscodeBlock(
                     checked = viewModel.pinEnabled,
                     onCheckedChange = { checked ->
                         if (checked) {
-                            navController.navigateToSetPin {
-                                viewModel.didSetPin()
-                            }
+                            navController.slideFromRight(R.id.setPinFragment)
                         } else {
                             navController.authorizedAction {
                                 viewModel.disablePin()
