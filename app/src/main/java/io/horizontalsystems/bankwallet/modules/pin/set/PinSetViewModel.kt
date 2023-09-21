@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 class PinSetViewModel(
     private val pinComponent: IPinComponent,
     private val userManager: UserManager,
+    private val forDuress: Boolean,
 ) : ViewModel() {
 
     private var enteredPin = ""
@@ -75,7 +76,12 @@ class PinSetViewModel(
                 } else if (submittedPin.isNotEmpty()) {
                     if (submittedPin == enteredPin) {
                         try {
-                            pinComponent.store(submittedPin, userManager.getUserLevel())
+                            val level = if (forDuress) {
+                                userManager.getUserLevel() + 1
+                            } else {
+                                userManager.getUserLevel()
+                            }
+                            pinComponent.store(submittedPin, level)
                             uiState = uiState.copy(finished = true)
                         } catch (ex: Exception) {
                             resetWithError(R.string.PinSet_ErrorFailedToSavePin)

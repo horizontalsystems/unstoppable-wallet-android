@@ -28,7 +28,11 @@ class PinManager(
     @Throws
     fun store(pin: String, level: Int) {
         val tmp = pins.toMutableList()
-        tmp[level] = pin
+        if (tmp.size < level + 1) {
+            tmp.add(pin)
+        } else {
+            tmp[level] = pin
+        }
 
         pinStorage.pin = encryptionManager.encrypt(tmp.joinToString(","))
         pinSetSubject.onNext(Unit)
