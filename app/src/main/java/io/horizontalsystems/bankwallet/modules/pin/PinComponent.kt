@@ -40,30 +40,20 @@ class PinComponent(
     override val isPinSet: Boolean
         get() = pinManager.isPinSet
 
-    override fun store(pin: String) {
+    override fun store(pin: String, level: Int) {
         if (appLockManager.isLocked) {
             appLockManager.onUnlock()
         }
 
-        pinManager.store(pin)
+        pinManager.store(pin, level)
     }
 
-    override fun validate(pin: String): Boolean {
-        return pinManager.validate(pin)
+    override fun getPinLevel(pin: String): Int? {
+        return pinManager.getPinLevel(pin)
     }
 
-    override fun xxxPin(pin: String): Int? {
-        // TODO: stub
-        return when (pin) {
-            "000000" -> 0
-            "111111" -> 1
-            "222222" -> 2
-            else -> null
-        }
-    }
-
-    override fun clear() {
-        pinManager.clear()
+    override fun clear(level: Int) {
+        pinManager.clear(level)
     }
 
     override fun onUnlock(pinLevel: Int) {
@@ -71,8 +61,13 @@ class PinComponent(
         userManager.setUserLevel(pinLevel)
     }
 
+    override fun initDefaultPinLevel() {
+        userManager.setUserLevel(pinManager.getPinLevelLast())
+    }
+
     override fun onBiometricUnlock() {
-        TODO("Not yet implemented")
+        appLockManager.onUnlock()
+        userManager.setUserLevel(pinManager.getPinLevelLast())
     }
 
     override fun lock() {
