@@ -4,22 +4,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutManager
+import io.horizontalsystems.bankwallet.modules.pin.core.LockoutManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockoutState
+import io.horizontalsystems.bankwallet.modules.pin.core.LockoutUntilDateFactory
 import io.horizontalsystems.bankwallet.modules.pin.core.OneTimeTimer
 import io.horizontalsystems.bankwallet.modules.pin.core.OneTimerDelegate
-import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule.PinUnlockViewState
+import io.horizontalsystems.bankwallet.modules.pin.core.UptimeProvider
+import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.CurrentDateProvider
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PinUnlockViewModel(
+class PinConfirmViewModel(
     private val pinComponent: IPinComponent,
     private val lockoutManager: ILockoutManager,
     systemInfoManager: ISystemInfoManager,
@@ -29,7 +35,7 @@ class PinUnlockViewModel(
     private var attemptsLeft: Int? = null
 
     var uiState by mutableStateOf(
-        PinUnlockViewState(
+        PinConfirmViewState(
             title = Translator.getString(R.string.Unlock_Passcode),
             error = null,
             enteredCount = 0,
@@ -138,4 +144,31 @@ class PinUnlockViewModel(
         return pinLevel != null
     }
 
+    class Factory : ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val lockoutManager = LockoutManager(
+                CoreApp.pinStorage, UptimeProvider(), LockoutUntilDateFactory(
+                    CurrentDateProvider()
+                )
+            )
+            return PinConfirmViewModel(
+                App.pinComponent,
+                lockoutManager,
+                App.systemInfoManager,
+                OneTimeTimer()
+            ) as T
+        }
+    }
 }
+
+data class PinConfirmViewState(
+    val title: String,
+    val error: String?,
+    val enteredCount: Int,
+    val fingerScannerEnabled: Boolean,
+    val unlocked: Boolean,
+    val showShakeAnimation: Boolean,
+    val inputState: PinUnlockModule.InputState
+)
