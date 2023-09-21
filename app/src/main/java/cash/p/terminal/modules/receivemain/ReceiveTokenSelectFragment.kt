@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -36,6 +37,7 @@ import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
 
 class ReceiveTokenSelectFragment : BaseComposeFragment() {
 
@@ -61,6 +63,7 @@ fun ReceiveTokenSelectScreen(navController: NavController, activeAccount: Accoun
         factory = ReceiveTokenSelectViewModel.Factory(activeAccount)
     )
     val fullCoins = viewModel.uiState.fullCoins
+    val coroutineScope = rememberCoroutineScope()
 
     ComposeAppTheme {
         Scaffold(
@@ -91,40 +94,41 @@ fun ReceiveTokenSelectScreen(navController: NavController, activeAccount: Accoun
                             coinIconUrl = coin.imageUrl,
                             coinIconPlaceholder = coin.imagePlaceholder,
                             onClick = {
-                                val popupDestinationId = navController.currentDestination?.id
+                                coroutineScope.launch {
+                                    val popupDestinationId = navController.currentDestination?.id
 
-                                when (val coinActiveWalletsType = viewModel.getCoinForReceiveType(fullCoin)) {
-                                    CoinForReceiveType.MultipleAddressTypes -> {
-                                        navController.slideFromRight(
-                                            R.id.receiveBchAddressTypeSelectFragment,
-                                            BchAddressTypeSelectFragment.prepareParams(coin.uid, popupDestinationId)
-                                        )
-                                    }
-                                    CoinForReceiveType.MultipleDerivations -> {
-                                        navController.slideFromRight(
-                                            R.id.receiveDerivationSelectFragment,
-                                            DerivationSelectFragment.prepareParams(coin.uid, popupDestinationId)
-                                        )
-                                    }
-                                    CoinForReceiveType.MultipleBlockchains -> {
-                                        navController.slideFromRight(
-                                            R.id.receiveNetworkSelectFragment,
-                                            NetworkSelectFragment.prepareParams(coin.uid, popupDestinationId)
-                                        )
-                                    }
-                                    is CoinForReceiveType.Single -> {
-                                        navController.slideFromRight(
-                                            R.id.receiveFragment,
-                                            bundleOf(
-                                                ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet,
-                                                ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
+                                    when (val coinActiveWalletsType = viewModel.getCoinForReceiveType(fullCoin)) {
+                                        CoinForReceiveType.MultipleAddressTypes -> {
+                                            navController.slideFromRight(
+                                                R.id.receiveBchAddressTypeSelectFragment,
+                                                BchAddressTypeSelectFragment.prepareParams(coin.uid, popupDestinationId)
                                             )
-                                        )
+                                        }
+                                        CoinForReceiveType.MultipleDerivations -> {
+                                            navController.slideFromRight(
+                                                R.id.receiveDerivationSelectFragment,
+                                                DerivationSelectFragment.prepareParams(coin.uid, popupDestinationId)
+                                            )
+                                        }
+                                        CoinForReceiveType.MultipleBlockchains -> {
+                                            navController.slideFromRight(
+                                                R.id.receiveNetworkSelectFragment,
+                                                NetworkSelectFragment.prepareParams(coin.uid, popupDestinationId)
+                                            )
+                                        }
+                                        is CoinForReceiveType.Single -> {
+                                            navController.slideFromRight(
+                                                R.id.receiveFragment,
+                                                bundleOf(
+                                                    ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet,
+                                                    ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
+                                                )
+                                            )
+                                        }
+
+                                        null -> Unit
                                     }
-
-                                    null -> Unit
                                 }
-
                             }
                         )
                     }

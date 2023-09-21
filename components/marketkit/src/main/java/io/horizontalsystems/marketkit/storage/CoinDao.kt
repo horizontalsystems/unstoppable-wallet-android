@@ -47,6 +47,9 @@ interface CoinDao {
     @Query("SELECT * FROM BlockchainEntity WHERE uid IN (:uids)")
     fun getBlockchains(uids: List<String>): List<BlockchainEntity>
 
+    @Query("SELECT * FROM BlockchainEntity")
+    fun getAllBlockchains(): List<BlockchainEntity>
+
     @Query("DELETE FROM Coin")
     fun deleteAllCoins()
 
@@ -54,7 +57,7 @@ interface CoinDao {
     fun deleteAllBlockchains()
 
     @Query("DELETE FROM TokenEntity")
-    fun  deleteAllTokens()
+    fun deleteAllTokens()
 
     @Query("UPDATE Coin set priority=100 WHERE priority IS NULL;")
     fun  fixCoinPriority()

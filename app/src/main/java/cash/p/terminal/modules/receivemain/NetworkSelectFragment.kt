@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -40,6 +41,7 @@ import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
+import kotlinx.coroutines.launch
 
 class NetworkSelectFragment : BaseComposeFragment() {
 
@@ -89,6 +91,7 @@ fun NetworkSelectScreen(
     fullCoin: FullCoin,
 ) {
     val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(activeAccount, fullCoin))
+    val coroutineScope = rememberCoroutineScope()
 
     ComposeAppTheme {
         Scaffold(
@@ -121,15 +124,17 @@ fun NetworkSelectScreen(
                                 subtitle = blockchain.description,
                                 imageUrl = blockchain.type.imageUrl,
                                 onClick = {
-                                    val wallet = viewModel.getOrCreateWallet(token)
+                                    coroutineScope.launch {
+                                        val wallet = viewModel.getOrCreateWallet(token)
 
-                                    navController.slideFromRight(
-                                        R.id.receiveFragment,
-                                        bundleOf(
-                                            ReceiveAddressFragment.WALLET_KEY to wallet,
-                                            ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
+                                        navController.slideFromRight(
+                                            R.id.receiveFragment,
+                                            bundleOf(
+                                                ReceiveAddressFragment.WALLET_KEY to wallet,
+                                                ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
+                                            )
                                         )
-                                    )
+                                    }
                                 }
                             )
                         }

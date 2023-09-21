@@ -1,19 +1,21 @@
 package cash.p.terminal.modules.swap.uniswap
 
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.ExactType
 import cash.p.terminal.modules.swap.SwapMainModule.SwapData.UniswapData
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
 import cash.p.terminal.modules.swap.UniversalSwapTradeData
 import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.TradeError
+import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,7 +73,7 @@ class UniswapV2TradeService(
         swapDataDisposable?.dispose()
         swapDataDisposable = null
 
-        swapDataDisposable = uniswapProvider.swapDataSingle(tokenFrom, tokenTo)
+        swapDataDisposable = swapDataSingle(tokenFrom, tokenTo)
             .subscribeOn(Schedulers.io())
             .subscribe({
                 swapData = it
@@ -90,7 +92,7 @@ class UniswapV2TradeService(
     }
 
     @Throws
-    fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
+    override fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
         return uniswapKit.transactionData(tradeData.getTradeDataV2())
     }
 
@@ -114,7 +116,7 @@ class UniswapV2TradeService(
                 ExactType.ExactFrom -> TradeType.ExactIn
                 ExactType.ExactTo -> TradeType.ExactOut
             }
-            val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
+            val tradeData = tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             state = SwapResultState.Ready(UniswapData(tradeData))
         } catch (e: Throwable) {
             val error = when {
@@ -168,7 +170,7 @@ class UniswapV2TradeService(
     private val TokenType.isWeth: Boolean
         get() = this is TokenType.Eip20 && address.equals(uniswapKit.etherToken().address.hex, true)
     private val Token.isWeth: Boolean
-        get() = (type as? TokenType.Eip20)?.address?.equals(wethAddressHex, ignoreCase = true) ?: false
+        get() = type.isWeth
     private val Token.isNative: Boolean
         get() = type == TokenType.Native
 

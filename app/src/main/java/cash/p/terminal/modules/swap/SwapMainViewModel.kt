@@ -49,7 +49,6 @@ import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
 import io.horizontalsystems.uniswapkit.models.DexType
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.UUID
@@ -178,12 +177,10 @@ class SwapMainViewModel(
                 disposable.add(it)
             }
 
-        allowanceService.stateObservable
-            .subscribeOn(Schedulers.io())
-            .subscribe {
+        allowanceService.stateFlow
+            .collectWith(viewModelScope) {
                 syncSwapDataState()
             }
-            .let { disposable.add(it) }
 
         pendingAllowanceService.stateObservable
             .subscribeIO {
@@ -205,10 +202,11 @@ class SwapMainViewModel(
         setBalance()
         subscribeToTradeService()
         timerService.start()
+        allowanceService.start()
         syncButtonsState()
     }
 
-    private fun getTradeService(provider: ISwapProvider) = when (provider) {
+    private fun getTradeService(provider: ISwapProvider): SwapMainModule.ISwapTradeService = when (provider) {
         SwapMainModule.OneInchProvider -> OneInchTradeService(oneIncKitHelper)
         SwapMainModule.UniswapV3Provider -> UniswapV3TradeService(uniswapV3Kit)
         SwapMainModule.PancakeSwapV3Provider -> UniswapV3TradeService(pancakeSwapV3Kit)
@@ -639,7 +637,7 @@ class SwapMainViewModel(
     }
 
     fun didApprove() {
-
+        pendingAllowanceService.syncAllowance()
     }
 
     fun getSendEvmData(swapData: SwapData.UniswapData): SendEvmData? {
@@ -677,4 +675,5 @@ class SwapMainViewModel(
         tradeService.updateSwapSettings(recipient, slippage, ttl)
         syncSwapDataState()
     }
+
 }

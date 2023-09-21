@@ -90,17 +90,23 @@ data class Analytics(
     val addresses: Addresses?,
     val transactions: Transactions?,
     val revenue: Revenue?,
+    val fee: Fee?,
     val tvl: Tvl?,
     val reports: Int?,
     @SerializedName("funds_invested")
     val fundsInvested: BigDecimal?,
     val treasuries: BigDecimal?,
     val holders: List<HolderBlockchain>?,
+    @SerializedName("holders_rank")
+    val holdersRank: Int?,
+    @SerializedName("holders_rating")
+    val holdersRating: String?,
 ) {
 
     data class ExVolume(
         @SerializedName("rank_30d")
-        val rank30d: Int,
+        val rank30d: Int?,
+        val rating: String?,
         val points: List<VolumePoint>,
     ) {
         fun chartPoints(): List<ChartPoint> {
@@ -115,7 +121,8 @@ data class Analytics(
     }
 
     data class DexLiquidity(
-        val rank: Int,
+        val rank: Int?,
+        val rating: String?,
         val points: List<VolumePoint>,
     ) {
         fun chartPoints(): List<ChartPoint> {
@@ -131,9 +138,10 @@ data class Analytics(
 
     data class Addresses(
         @SerializedName("rank_30d")
-        val rank30d: Int,
+        val rank30d: Int?,
         @SerializedName("count_30d")
-        val count30d: Int,
+        val count30d: Int?,
+        val rating: String?,
         val points: List<CountPoint>,
     ) {
         fun chartPoints(): List<ChartPoint> {
@@ -149,9 +157,10 @@ data class Analytics(
 
     data class Transactions(
         @SerializedName("rank_30d")
-        val rank30d: Int,
+        val rank30d: Int?,
         @SerializedName("volume_30d")
-        val volume30d: BigDecimal,
+        val volume30d: BigDecimal?,
+        val rating: String?,
         val points: List<CountPoint>,
     ) {
         fun chartPoints(): List<ChartPoint> {
@@ -166,8 +175,8 @@ data class Analytics(
     }
 
     data class Tvl(
-        val rank: Int,
-        val ratio: BigDecimal,
+        val rank: Int?,
+        val ratio: BigDecimal?,
         val points: List<TvlPoint>,
     ) {
         fun chartPoints(): List<ChartPoint> {
@@ -211,9 +220,20 @@ data class Analytics(
 
     data class Revenue(
         @SerializedName("rank_30d")
-        val rank30d: Int,
+        val rank30d: Int?,
         @SerializedName("value_30d")
-        val value30d: BigDecimal,
+        val value30d: BigDecimal?,
+        val description: String?,
+        val rating: String?,
+    )
+
+    data class Fee(
+        @SerializedName("rank_30d")
+        val rank30d: Int?,
+        @SerializedName("value_30d")
+        val value30d: BigDecimal?,
+        val description: String?,
+        val rating: String?,
     )
 }
 
@@ -227,23 +247,30 @@ data class AnalyticsPreview(
     val addresses: AddressesPreview?,
     val transactions: TransactionPreview?,
     val revenue: RevenuePreview?,
+    val fee: FeePreview?,
     val tvl: TvlPreview?,
     val reports: Boolean = false,
     @SerializedName("funds_invested")
     val fundsInvested: Boolean = false,
     val treasuries: Boolean = false,
     val holders: Boolean = false,
+    @SerializedName("holders_rank")
+    val holdersRank: Boolean = false,
+    @SerializedName("holders_rating")
+    val holdersRating: Boolean = false,
 ) {
 
     data class VolumePreview(
         @SerializedName("rank_30d")
         val rank30d: Boolean = false,
         val points: Boolean = false,
+        val rating: Boolean = false,
     )
 
     data class LiquidityPreview(
         val rank: Boolean = false,
         val points: Boolean = false,
+        val rating: Boolean = false,
     )
 
     data class AddressesPreview(
@@ -252,6 +279,7 @@ data class AnalyticsPreview(
         @SerializedName("count_30d")
         val count30d: Boolean = false,
         val points: Boolean = false,
+        val rating: Boolean = false,
     )
 
     data class TransactionPreview(
@@ -260,6 +288,7 @@ data class AnalyticsPreview(
         @SerializedName("volume_30d")
         val volume30d: Boolean = false,
         val points: Boolean = false,
+        val rating: Boolean = false,
     )
 
     data class RevenuePreview(
@@ -267,6 +296,15 @@ data class AnalyticsPreview(
         val rank30d: Boolean = false,
         @SerializedName("value_30d")
         val value30d: Boolean = false,
+        val rating: Boolean = false,
+    )
+
+    data class FeePreview(
+        @SerializedName("rank_30d")
+        val rank30d: Boolean = false,
+        @SerializedName("value_30d")
+        val value30d: Boolean = false,
+        val rating: Boolean = false,
     )
 
     data class TvlPreview(
@@ -289,4 +327,9 @@ data class RankMultiValue(
 data class RankValue(
     val uid: String,
     val value: BigDecimal?,
+)
+
+data class SubscriptionResponse(
+    val address: String,
+    val deadline: Long
 )

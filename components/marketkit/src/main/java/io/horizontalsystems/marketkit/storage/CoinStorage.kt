@@ -74,6 +74,9 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
     fun getBlockchains(uids: List<String>): List<Blockchain> =
         coinDao.getBlockchains(uids).map { it.blockchain }
 
+    fun getAllBlockchains(): List<Blockchain> =
+        coinDao.getAllBlockchains().map { it.blockchain }
+
     private fun filterByTokenQuery(query: TokenQuery): String {
         val (type, reference) = query.tokenType.values
 
@@ -82,7 +85,7 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
             "`TokenEntity`.`type` = '$type'"
         )
 
-        if (reference != null) {
+        if (reference.isNotBlank()) {
             conditions.add("`TokenEntity`.`reference` LIKE '%$reference'")
         }
 

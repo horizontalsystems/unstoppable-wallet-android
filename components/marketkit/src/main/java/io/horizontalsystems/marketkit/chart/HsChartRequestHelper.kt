@@ -9,12 +9,10 @@ object HsChartRequestHelper {
 
     fun pointInterval(periodType: HsPeriodType) = when (periodType) {
         is HsPeriodType.ByPeriod -> {
-            when (periodType.timePeriod) {
-                HsTimePeriod.Day1 -> HsPointTimePeriod.Minute30
-                HsTimePeriod.Week1 -> HsPointTimePeriod.Hour4
-                HsTimePeriod.Week2 -> HsPointTimePeriod.Hour8
-                else -> HsPointTimePeriod.Day1
-            }
+            byPeriod(periodType.timePeriod)
+        }
+        is HsPeriodType.ByCustomPoints -> {
+            byPeriod(periodType.timePeriod)
         }
         is HsPeriodType.ByStartTime -> {
             val currentTime = Date().time / 1000
@@ -30,12 +28,23 @@ object HsChartRequestHelper {
         }
     }
 
+    private fun byPeriod(timePeriod: HsTimePeriod) = when (timePeriod) {
+        HsTimePeriod.Day1 -> HsPointTimePeriod.Minute30
+        HsTimePeriod.Week1 -> HsPointTimePeriod.Hour4
+        HsTimePeriod.Week2 -> HsPointTimePeriod.Hour8
+        else -> HsPointTimePeriod.Day1
+    }
+
     fun fromTimestamp(timestamp: Long, periodType: HsPeriodType) = when (periodType) {
         is HsPeriodType.ByPeriod -> {
+            timestamp - periodType.timePeriod.range
+        }
+        is HsPeriodType.ByCustomPoints -> {
             timestamp - periodType.timePeriod.range
         }
         is HsPeriodType.ByStartTime -> {
             periodType.startTime
         }
+
     }
 }

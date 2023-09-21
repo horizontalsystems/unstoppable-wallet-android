@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.enablecoin.blockchaintokens
->>>>>>>> ed55da797 (Rename module):app/src/main/java/cash.p.terminal/modules/enablecoin/blockchaintokens/BlockchainTokensViewModel.kt
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

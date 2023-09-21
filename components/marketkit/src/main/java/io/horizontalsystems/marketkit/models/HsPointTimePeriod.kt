@@ -17,4 +17,10 @@ enum class HsPointTimePeriod(val value: String) {
             Day1 -> 24 * 60 * 60
             Week1 -> 7 * 24 * 60 * 60
         }
+
+    companion object {
+        private val map = values().associateBy(HsPointTimePeriod::value)
+
+        fun fromString(value: String?): HsPointTimePeriod? = map[value]
+    }
 }

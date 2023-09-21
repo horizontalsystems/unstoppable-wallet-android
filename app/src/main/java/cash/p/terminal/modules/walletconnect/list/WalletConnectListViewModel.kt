@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.walletconnect.list
->>>>>>>> 2bfb3d73d (Remove WalletConnect V1):app/src/main/java/cash/p/terminal/modules/walletconnect/list/WalletConnectListViewModel.kt
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,7 +12,6 @@ import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule.Sectio
 import cash.p.terminal.modules.walletconnect.version2.WC2Parser
 import cash.p.terminal.modules.walletconnect.version2.WC2Service
 import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
->>>>>>>> 2bfb3d73d (Remove WalletConnect V1):app/src/main/java/cash/p/terminal/modules/walletconnect/list/WalletConnectListViewModel.kt
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 

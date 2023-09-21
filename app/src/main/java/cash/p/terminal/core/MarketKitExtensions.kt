@@ -107,6 +107,7 @@ val TokenQuery.protocolType: String?
             when (blockchainType) {
                 BlockchainType.Ethereum -> "ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
+                BlockchainType.Tron -> "TRC20"
                 BlockchainType.Polygon -> "Polygon"
                 BlockchainType.Avalanche -> "Avalanche"
                 BlockchainType.Optimism -> "Optimism"

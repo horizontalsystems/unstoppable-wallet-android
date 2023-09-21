@@ -232,6 +232,18 @@ class TransactionInfoViewItemFactory(
                 }
             }
 
+            is TronTransactionRecord -> {
+                itemSections.add(
+                    listOf(
+                        Transaction(
+                            transaction.transaction.contract?.label ?: getString(R.string.Transactions_ContractCall),
+                            "",
+                            TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
+                        )
+                    )
+                )
+            }
+
             is BitcoinIncomingTransactionRecord -> {
                 itemSections.add(getReceiveSectionItems(transaction.value, transaction.from, rates[transaction.value.coinUid]))
 

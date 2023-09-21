@@ -27,10 +27,10 @@ class RateAppManager(
     private val _showRateFlow = MutableStateFlow(false)
     override val showRateAppFlow = _showRateFlow.filterNotNull()
 
-    private val MIN_LAUNCH_COUNT = 10
+    private val MIN_LAUNCH_COUNT = 5
     private val MIN_COINS_COUNT = 2
     private val COUNTDOWN_TIME_INTERVAL: Long = 10 * 1000 // 10 seconds
-    private val REQUEST_TIME_INTERVAL = 40 * 24 * 60 * 60 // 40 Days %)
+    private val REQUEST_TIME_INTERVAL = 40 * 24 * 60 * 60 // 40 Days
 
     private var isCountdownPassed = false
     private var isRequestAllowed = false

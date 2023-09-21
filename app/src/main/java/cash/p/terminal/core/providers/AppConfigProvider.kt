@@ -1,6 +1,9 @@
 package cash.p.terminal.core.providers
 
+import cash.p.terminal.BuildConfig
 import cash.p.terminal.R
+import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.order
 import cash.p.terminal.entities.Currency
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -24,8 +27,6 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val walletConnectAppMetaDataName by lazy { Translator.getString(R.string.walletConnectAppMetaDataName) }
     val walletConnectAppMetaDataUrl by lazy { Translator.getString(R.string.walletConnectAppMetaDataUrl) }
     val walletConnectAppMetaDataIcon by lazy { Translator.getString(R.string.walletConnectAppMetaDataIcon) }
-    val walletConnectV1PeerMetaName by lazy { Translator.getString(R.string.walletConnectV1PeerMetaName) }
-    val walletConnectV1PeerMetaUrl by lazy { Translator.getString(R.string.walletConnectV1PeerMetaUrl) }
     val accountsBackupFileSalt by lazy { Translator.getString(R.string.accountsBackupFileSalt) }
 
     val twitterBearerToken by lazy {

@@ -25,7 +25,7 @@ import io.horizontalsystems.marketkit.storage.migrations.*
         Exchange::class,
         SyncerState::class,
     ],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 @TypeConverters(DatabaseTypeConverters::class)
@@ -36,6 +36,8 @@ abstract class MarketDatabase : RoomDatabase() {
     abstract fun globalMarketInfoDao(): GlobalMarketInfoDao
     abstract fun exchangeDao(): ExchangeDao
     abstract fun syncerStateDao(): SyncerStateDao
+    abstract fun blockchainEntityDao(): BlockchainEntityDao
+    abstract fun tokenEntityDao(): TokenEntityDao
 
     companion object {
 
@@ -55,13 +57,13 @@ abstract class MarketDatabase : RoomDatabase() {
                 .addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         val loadedCount = loadInitialCoins(db, context)
-                        logger.info("Loaded coins count: $loadedCount")
+                        logger.info("onCreate Loaded coins count: $loadedCount")
                     }
 
                     override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
                         super.onDestructiveMigration(db)
                         val loadedCount = loadInitialCoins(db, context)
-                        logger.info("Loaded coins count: $loadedCount")
+                        logger.info("onDestructiveMigration Loaded coins count: $loadedCount")
                     }
                 })
 //                .setQueryCallback({ sqlQuery, bindArgs ->

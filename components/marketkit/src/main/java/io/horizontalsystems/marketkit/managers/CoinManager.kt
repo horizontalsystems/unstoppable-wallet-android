@@ -50,6 +50,9 @@ class CoinManager(
     fun blockchains(uids: List<String>): List<Blockchain> =
         storage.getBlockchains(uids)
 
+    fun allBlockchains(): List<Blockchain> =
+        storage.getAllBlockchains()
+
     fun advancedMarketInfosSingle(top: Int, currencyCode: String): Single<List<MarketInfo>> {
         return hsProvider.advancedMarketInfosSingle(top, currencyCode).map {
             getMarketInfos(it)

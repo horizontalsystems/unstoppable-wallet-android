@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.chart
->>>>>>>> 0ac546280 (All calculation of EMA and WMA):app/src/main/java/cash/p/terminal/modules/chart/ChartIndicatorManager.kt
 
 import cash.p.terminal.core.ILocalStorage
 import io.horizontalsystems.chartview.models.ChartIndicator

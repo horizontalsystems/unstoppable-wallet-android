@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity(
-    primaryKeys = ["coinUid", "blockchainUid", "type"],
+    primaryKeys = ["coinUid", "blockchainUid", "type", "reference"],
     foreignKeys = [
         ForeignKey(
             entity = Coin::class,
@@ -37,5 +37,5 @@ data class TokenEntity(
     val blockchainUid: String,
     val type: String,
     val decimals: Int?,
-    val reference: String?
+    val reference: String
 ) : Parcelable

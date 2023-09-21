@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
+import kotlinx.coroutines.delay
 
 object Utils {
 
@@ -21,6 +22,14 @@ object Utils {
         }
 
         return false
+    }
+
+    suspend fun waitUntil(timeout: Long, checkPeriod: Long, condition: () -> Boolean) {
+        var waited = 0L
+        while (!condition.invoke() && waited < timeout) {
+            delay(checkPeriod)
+            waited += checkPeriod
+        }
     }
 }
 

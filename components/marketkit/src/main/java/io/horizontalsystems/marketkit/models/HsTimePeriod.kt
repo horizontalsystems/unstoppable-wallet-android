@@ -28,22 +28,25 @@ enum class HsTimePeriod(val value: String) {
 sealed class HsPeriodType {
 
     data class ByPeriod(val timePeriod: HsTimePeriod) : HsPeriodType()
+    data class ByCustomPoints(val timePeriod: HsTimePeriod, val pointsCount: Int) : HsPeriodType()
     data class ByStartTime(val startTime: Long) : HsPeriodType()
 
     val range: Long?
         get() = when (this) {
             is ByPeriod -> timePeriod.range
             is ByStartTime -> null
+            is ByCustomPoints -> timePeriod.range
         }
 
     fun serialize() = when (this) {
         is ByPeriod -> "period:${timePeriod.value}"
         is ByStartTime -> "startTime:$startTime"
+        is ByCustomPoints -> "customPoints:${timePeriod.value}:$pointsCount"
     }
 
     companion object {
         fun deserialize(v: String): HsPeriodType? {
-            val (type, value) = v.split(":")
+            val (type, value) = v.split(":", limit = 2)
 
             return when (type) {
                 "period" -> {
@@ -53,6 +56,16 @@ sealed class HsPeriodType {
                         ?.let { ByPeriod(it) }
                 }
                 "startTime" -> ByStartTime(value.toLong())
+                "customPoints" -> {
+                    val (timePeriod, pointsCount) = value.split(":")
+
+                    HsTimePeriod
+                        .values()
+                        .firstOrNull { it.value == timePeriod }
+                        ?.let {
+                            ByCustomPoints(it, pointsCount.toInt())
+                        }
+                }
                 else -> null
             }
         }

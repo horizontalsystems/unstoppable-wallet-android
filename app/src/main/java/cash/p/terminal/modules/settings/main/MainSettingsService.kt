@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.settings.main
 
-import cash.p.terminal.BuildConfig
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.LanguageManager
+import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
@@ -26,7 +26,8 @@ class MainSettingsService(
     private val pinComponent: IPinComponent,
     private val wc2SessionManager: WC2SessionManager,
     private val wc2Manager: WC2Manager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val appConfigProvider: AppConfigProvider
 ) {
 
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
