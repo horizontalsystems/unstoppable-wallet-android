@@ -20,7 +20,6 @@ import cash.p.terminal.modules.pin.core.UptimeProvider
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.CurrentDateProvider
 import io.horizontalsystems.core.IPinComponent
-import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,7 +27,6 @@ import kotlinx.coroutines.launch
 class PinConfirmViewModel(
     private val pinComponent: IPinComponent,
     private val lockoutManager: ILockoutManager,
-    systemInfoManager: ISystemInfoManager,
     private val timer: OneTimeTimer
 ) : ViewModel(), OneTimerDelegate {
 
@@ -36,10 +34,8 @@ class PinConfirmViewModel(
 
     var uiState by mutableStateOf(
         PinConfirmViewState(
-            title = Translator.getString(R.string.Unlock_Passcode),
             error = null,
             enteredCount = 0,
-            fingerScannerEnabled = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled,
             unlocked = false,
             showShakeAnimation = false,
             inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
@@ -58,12 +54,6 @@ class PinConfirmViewModel(
         updateLockoutState()
     }
 
-    fun onBiometricsUnlock() {
-        pinComponent.onBiometricUnlock()
-        lockoutManager.dropFailedAttempts()
-        uiState = uiState.copy(unlocked = true)
-    }
-
     fun onKeyClick(number: Int) {
         if (enteredPin.length < PinModule.PIN_COUNT) {
 
@@ -74,7 +64,7 @@ class PinConfirmViewModel(
             )
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
-                if (unlock(enteredPin)) {
+                if (confirm(enteredPin)) {
                     uiState = uiState.copy(unlocked = true)
                 } else {
                     uiState = uiState.copy(
@@ -131,17 +121,16 @@ class PinConfirmViewModel(
         }
     }
 
-    private fun unlock(pin: String): Boolean {
-        val pinLevel = pinComponent.getPinLevel(pin)
-        if (pinLevel != null) {
-            pinComponent.onUnlock(pinLevel)
+    private fun confirm(pin: String): Boolean {
+        val valid = pinComponent.validateCurrentLevel(pin)
+        if (valid) {
             lockoutManager.dropFailedAttempts()
         } else {
             lockoutManager.didFailUnlock()
             updateLockoutState()
         }
 
-        return pinLevel != null
+        return valid
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -156,7 +145,6 @@ class PinConfirmViewModel(
             return PinConfirmViewModel(
                 App.pinComponent,
                 lockoutManager,
-                App.systemInfoManager,
                 OneTimeTimer()
             ) as T
         }
@@ -164,10 +152,8 @@ class PinConfirmViewModel(
 }
 
 data class PinConfirmViewState(
-    val title: String,
     val error: String?,
     val enteredCount: Int,
-    val fingerScannerEnabled: Boolean,
     val unlocked: Boolean,
     val showShakeAnimation: Boolean,
     val inputState: PinUnlockModule.InputState
