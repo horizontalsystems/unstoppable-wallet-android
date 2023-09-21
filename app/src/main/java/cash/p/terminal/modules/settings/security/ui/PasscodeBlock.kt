@@ -94,6 +94,24 @@ fun PasscodeBlock(
                     )
                 }
             }
+            add {
+                RowUniversal(
+                    onClick = {
+                        navController.authorizedAction {
+                            navController.slideFromRight(R.id.setDuressPinFragment)
+                        }
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
+                    body_leah(text = "Set Duress Pin")
+                    Spacer(Modifier.weight(1f))
+                    Icon(
+                        painter = painterResource(R.drawable.ic_arrow_right),
+                        tint = ComposeAppTheme.colors.grey,
+                        contentDescription = null,
+                    )
+                }
+            }
         }
     }
 
