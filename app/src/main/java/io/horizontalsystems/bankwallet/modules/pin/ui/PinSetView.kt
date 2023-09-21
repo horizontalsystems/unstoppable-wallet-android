@@ -26,7 +26,8 @@ fun PinSet(
     description: String,
     dismissWithSuccess: () -> Unit,
     onBackPress: () -> Unit,
-    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory())
+    forDuress: Boolean = false,
+    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory(forDuress))
 ) {
     if (viewModel.uiState.finished) {
         dismissWithSuccess.invoke()
