@@ -3,9 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,136 +15,123 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.settings.security.SecurityCenterCell
+import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.body_lucian
 
 @Composable
 fun PasscodeBlock(
-    viewModel: SecurityPasscodeSettingsViewModel,
+    viewModel: SecuritySettingsViewModel,
     navController: NavController,
 ) {
+    val uiState = viewModel.uiState
 
-    Spacer(Modifier.height(12.dp))
-
-    val blocks = mutableListOf<@Composable () -> Unit>().apply {
+    VSpacer(height = 8.dp)
+    CellUniversalLawrenceSection(buildList<@Composable () -> Unit> {
         add {
-            RowUniversal(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                verticalPadding = 0.dp,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_passcode),
-                    tint = ComposeAppTheme.colors.grey,
-                    modifier = Modifier
-                        .padding(vertical = 12.dp)
-                        .size(24.dp),
-                    contentDescription = null,
-                )
-                Spacer(Modifier.width(16.dp))
-                body_leah(
-                    text = stringResource(R.string.SettingsSecurity_EnablePin),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
-                )
-                if (!viewModel.pinEnabled) {
-                    Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_attention_red_20),
+            SecurityCenterCell(
+                start = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_passcode),
+                        tint = ComposeAppTheme.colors.jacob,
+                        modifier = Modifier.size(24.dp),
                         contentDescription = null,
                     )
-                    Spacer(Modifier.width(16.dp))
+                },
+                center = {
+                    val text = if (uiState.pinEnabled) {
+                        R.string.SettingsSecurity_EditPin
+                    } else {
+                        R.string.SettingsSecurity_EnablePin
+                    }
+                    body_jacob(
+                        text = stringResource(text),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
+                end = {
+                    if (!uiState.pinEnabled) {
+                        Image(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_attention_red_20),
+                            contentDescription = null,
+                        )
+                    }
+                },
+                onClick = {
+                    if (!uiState.pinEnabled) {
+                        navController.slideFromRight(R.id.setPinFragment)
+                    } else {
+                        navController.authorizedAction {
+                            navController.slideFromRight(R.id.editPinFragment)
+                        }
+                    }
                 }
-                HsSwitch(
-                    checked = viewModel.pinEnabled,
-                    onCheckedChange = { checked ->
-                        if (checked) {
-                            navController.slideFromRight(R.id.setPinFragment)
-                        } else {
-                            navController.authorizedAction {
-                                viewModel.disablePin()
-                            }
+            )
+        }
+        if (uiState.pinEnabled) {
+            add {
+                SecurityCenterCell(
+                    start = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_delete_20),
+                            tint = ComposeAppTheme.colors.lucian,
+                            modifier = Modifier.size(24.dp),
+                            contentDescription = null,
+                        )
+                    },
+                    center = {
+                        body_lucian(
+                            text = stringResource(R.string.SettingsSecurity_DisablePin),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
+                    onClick = {
+                        navController.authorizedAction {
+                            viewModel.disablePin()
                         }
                     }
                 )
             }
         }
-        if (viewModel.pinEnabled) {
-            add {
-                RowUniversal(
-                    onClick = {
-                        navController.authorizedAction {
-                            navController.slideFromRight(R.id.editPinFragment)
-                        }
-                    },
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                ) {
-                    body_leah(text = stringResource(R.string.SettingsSecurity_EditPin))
-                    Spacer(Modifier.weight(1f))
-                    Icon(
-                        painter = painterResource(R.drawable.ic_arrow_right),
-                        tint = ComposeAppTheme.colors.grey,
-                        contentDescription = null,
-                    )
-                }
-            }
-            add {
-                RowUniversal(
-                    onClick = {
-                        navController.authorizedAction {
-                            navController.slideFromRight(R.id.setDuressPinFragment)
-                        }
-                    },
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                ) {
-                    body_leah(text = "Set Duress Pin")
-                    Spacer(Modifier.weight(1f))
-                    Icon(
-                        painter = painterResource(R.drawable.ic_arrow_right),
-                        tint = ComposeAppTheme.colors.grey,
-                        contentDescription = null,
-                    )
-                }
-            }
-        }
-    }
-
-    CellUniversalLawrenceSection(blocks)
+    })
 
     if (viewModel.biometricSettingsVisible) {
         Spacer(Modifier.height(32.dp))
-        CellUniversalLawrenceSection(
-            listOf {
-                RowUniversal(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    verticalPadding = 0.dp,
-                    onClick = { viewModel.setBiometricAuth(!viewModel.biometricEnabled) }
-                ) {
+        CellUniversalLawrenceSection {
+            SecurityCenterCell(
+                start = {
                     Icon(
                         painter = painterResource(R.drawable.icon_touch_id_24),
                         tint = ComposeAppTheme.colors.grey,
                         contentDescription = null,
-                        modifier = Modifier.padding(vertical = 12.dp)
+                        modifier = Modifier.size(24.dp),
                     )
-                    Spacer(Modifier.width(16.dp))
+                },
+                center = {
                     body_leah(
                         text = stringResource(R.string.SettingsSecurity_Biometric_Authentication),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f).padding(end = 8.dp)
                     )
+                },
+                end = {
                     HsSwitch(
-                        checked = viewModel.biometricEnabled,
+                        checked = uiState.biometricsEnabled,
                         onCheckedChange = { enabled ->
                             viewModel.setBiometricAuth(enabled)
                         },
                     )
                 }
-            }
-        )
+            )
+        }
     }
 }
