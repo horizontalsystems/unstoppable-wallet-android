@@ -317,7 +317,7 @@ dependencies {
 
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
-    def coil_version = "2.2.2"
+    def coil_version = "2.4.0"
     implementation "io.coil-kt:coil-compose:$coil_version"
     implementation "io.coil-kt:coil-svg:$coil_version"
     implementation("io.coil-kt:coil-gif:$coil_version")
