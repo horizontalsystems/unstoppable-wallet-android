@@ -28,10 +28,14 @@ class PinManager(
     @Throws
     fun store(pin: String, level: Int) {
         val tmp = pins.toMutableList()
-        if (tmp.size < level + 1) {
+
+        val lastIndex = tmp.lastIndex
+        if (lastIndex >= level) {
+            tmp[level] = pin
+        } else if (lastIndex + 1 == level) {
             tmp.add(pin)
         } else {
-            tmp[level] = pin
+            throw IllegalStateException()
         }
 
         pinStorage.pin = encryptionManager.encrypt(tmp.joinToString(","))
@@ -49,10 +53,15 @@ class PinManager(
         return pins.size - 1
     }
 
-    fun clear(level: Int) {
-        pinStorage.biometricAuthEnabled = false
-
+    fun disablePin(level: Int) {
         val tmp = pins.subList(0, level) + listOf("")
+
+        pinStorage.pin = encryptionManager.encrypt(tmp.joinToString(","))
+        pinSetSubject.onNext(Unit)
+    }
+
+    fun disableDuressPin(level: Int) {
+        val tmp = pins.subList(0, level)
 
         pinStorage.pin = encryptionManager.encrypt(tmp.joinToString(","))
         pinSetSubject.onNext(Unit)

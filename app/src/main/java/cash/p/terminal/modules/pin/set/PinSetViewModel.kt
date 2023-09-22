@@ -76,12 +76,11 @@ class PinSetViewModel(
                 } else if (submittedPin.isNotEmpty()) {
                     if (submittedPin == enteredPin) {
                         try {
-                            val level = if (forDuress) {
-                                userManager.getUserLevel() + 1
+                            if (forDuress) {
+                                pinComponent.setDuressPin(submittedPin)
                             } else {
-                                userManager.getUserLevel()
+                                pinComponent.setPin(submittedPin)
                             }
-                            pinComponent.store(submittedPin, level)
                             uiState = uiState.copy(finished = true)
                         } catch (ex: Exception) {
                             resetWithError(R.string.PinSet_ErrorFailedToSavePin)

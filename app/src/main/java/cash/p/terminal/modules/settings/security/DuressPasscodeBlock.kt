@@ -48,10 +48,7 @@ fun DuressPasscodeBlock(
                     )
                 },
                 onClick = {
-                    if (!uiState.duressPinEnabled) {
-                        navController.slideFromRight(R.id.setDuressPinFragment)
-                    } else {
-                    }
+                    navController.slideFromRight(R.id.setDuressPinFragment)
                 }
             )
         }
@@ -74,7 +71,7 @@ fun DuressPasscodeBlock(
                         )
                     },
                     onClick = {
-
+                        viewModel.disableDuressPin()
                     }
                 )
             }

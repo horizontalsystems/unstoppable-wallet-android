@@ -40,12 +40,16 @@ class PinComponent(
     override val isPinSet: Boolean
         get() = pinManager.isPinSet
 
-    override fun store(pin: String, level: Int) {
+    override fun setPin(pin: String) {
         if (appLockManager.isLocked) {
             appLockManager.onUnlock()
         }
 
-        pinManager.store(pin, level)
+        pinManager.store(pin, userManager.getUserLevel())
+    }
+
+    override fun setDuressPin(pin: String) {
+        pinManager.store(pin, userManager.getUserLevel() + 1)
     }
 
     override fun getPinLevel(pin: String): Int? {
@@ -57,12 +61,16 @@ class PinComponent(
         return pinLevel == userManager.getUserLevel()
     }
 
-    override fun isPinSetForLevel(level: Int): Boolean {
-        return pinManager.isPinSetForLevel(level)
+    override fun isDuressPinSet(): Boolean {
+        return pinManager.isPinSetForLevel(userManager.getUserLevel() + 1)
     }
 
-    override fun clear(level: Int) {
-        pinManager.clear(level)
+    override fun disablePin() {
+        pinManager.disablePin(userManager.getUserLevel())
+    }
+
+    override fun disableDuressPin() {
+        pinManager.disableDuressPin(userManager.getUserLevel() + 1)
     }
 
     override fun onUnlock(pinLevel: Int) {
