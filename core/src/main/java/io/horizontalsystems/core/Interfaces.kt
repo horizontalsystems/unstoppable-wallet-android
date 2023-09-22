@@ -40,11 +40,13 @@ interface IPinComponent {
     fun willEnterForeground(activity: Activity)
     fun didEnterBackground()
     fun updateLastExitDateBeforeRestart()
-    fun store(pin: String, level: Int)
+    fun setPin(pin: String)
+    fun setDuressPin(pin: String)
     fun getPinLevel(pin: String): Int?
     fun validateCurrentLevel(pin: String): Boolean
-    fun isPinSetForLevel(level: Int): Boolean
-    fun clear(level: Int)
+    fun isDuressPinSet(): Boolean
+    fun disablePin()
+    fun disableDuressPin()
     fun onUnlock(pinLevel: Int)
     fun onBiometricUnlock()
     fun shouldShowPin(activity: Activity): Boolean
