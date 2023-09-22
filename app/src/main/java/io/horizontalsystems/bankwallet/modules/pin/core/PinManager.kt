@@ -28,14 +28,17 @@ class PinManager(
     @Throws
     fun store(pin: String, level: Int) {
         val tmp = pins.toMutableList()
-
         val lastIndex = tmp.lastIndex
-        if (lastIndex >= level) {
-            tmp[level] = pin
-        } else if (lastIndex + 1 == level) {
-            tmp.add(pin)
-        } else {
-            throw IllegalStateException()
+
+        when {
+            pins.indexOf(pin) != level -> throw IllegalStateException()
+            lastIndex >= level -> {
+                tmp[level] = pin
+            }
+            lastIndex + 1 == level -> {
+                tmp.add(pin)
+            }
+            else -> throw IllegalStateException()
         }
 
         pinStorage.pin = encryptionManager.encrypt(tmp.joinToString(","))
