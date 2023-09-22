@@ -22,7 +22,7 @@ class SecuritySettingsViewModel(
 
     private var pinEnabled = pinComponent.isPinSet
     private var biometricsEnabled = pinComponent.isBiometricAuthEnabled
-    private var duressPinEnabled = pinComponent.isPinSetForLevel(userManager.getUserLevel() + 1)
+    private var duressPinEnabled = pinComponent.isDuressPinSet()
     private var balanceAutoHideEnabled = balanceHiddenManager.balanceAutoHidden
 
     var uiState by mutableStateOf(
@@ -39,7 +39,7 @@ class SecuritySettingsViewModel(
         viewModelScope.launch {
             pinComponent.pinSetFlowable.asFlow().collect {
                 pinEnabled = pinComponent.isPinSet
-                duressPinEnabled = pinComponent.isPinSetForLevel(userManager.getUserLevel() + 1)
+                duressPinEnabled = pinComponent.isDuressPinSet()
                 emitState()
             }
         }
@@ -63,8 +63,13 @@ class SecuritySettingsViewModel(
     }
 
     fun disablePin() {
-        pinComponent.clear(userManager.getUserLevel())
+        pinComponent.disablePin()
         biometricsEnabled = false
+        emitState()
+    }
+
+    fun disableDuressPin() {
+        pinComponent.disableDuressPin()
         emitState()
     }
 
