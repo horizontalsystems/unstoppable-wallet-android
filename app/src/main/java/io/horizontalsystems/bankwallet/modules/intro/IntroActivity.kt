@@ -187,7 +187,10 @@ private fun SlidingContent(
     slideData: IntroModule.IntroSliderData,
     nightMode: Boolean
 ) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Spacer(Modifier.weight(2f))
         Image(
             modifier = Modifier.size(width = 326.dp, height = 326.dp),
