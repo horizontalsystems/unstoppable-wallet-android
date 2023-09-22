@@ -179,39 +179,6 @@ fun AppearanceScreen(navController: NavController) {
                                 viewModel.onEnterBalanceViewType(option)
                             }
                         }
-
-                        Spacer(modifier = Modifier.height(32.dp))
-
-                        CellUniversalLawrenceSection(
-                            listOf {
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                ) {
-                                    Image(
-                                        modifier = Modifier.size(24.dp),
-                                        painter = painterResource(id = R.drawable.ic_off_24),
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-                                    )
-
-                                    body_leah(
-                                        text = stringResource(id = R.string.Appearance_BalanceAutoHide),
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .padding(horizontal = 16.dp)
-                                    )
-
-                                    HsSwitch(
-                                        checked = uiState.balanceAutoHideEnabled,
-                                        onCheckedChange = {
-                                            viewModel.onSetBalanceAutoHidden(it)
-                                        }
-                                    )
-
-                                }
-
-                            }
-                        )
                         Spacer(modifier = Modifier.height(24.dp))
 
                         HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
