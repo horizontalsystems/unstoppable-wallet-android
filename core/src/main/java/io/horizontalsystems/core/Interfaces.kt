@@ -39,19 +39,18 @@ interface IPinComponent {
 
     fun willEnterForeground(activity: Activity)
     fun didEnterBackground()
-    fun updateLastExitDateBeforeRestart()
     fun setPin(pin: String)
     fun setDuressPin(pin: String)
-    fun getPinLevel(pin: String): Int?
-    fun validateCurrentLevel(pin: String): Boolean
-    fun isDuressPinSet(): Boolean
     fun disablePin()
     fun disableDuressPin()
-    fun onUnlock(pinLevel: Int)
+    fun isDuressPinSet(): Boolean
+    fun unlock(pin: String): Boolean
+    fun validateCurrentLevel(pin: String): Boolean
     fun onBiometricUnlock()
-    fun shouldShowPin(activity: Activity): Boolean
-    fun lock()
     fun initDefaultPinLevel()
+    fun lock()
+    fun updateLastExitDateBeforeRestart()
+    fun shouldShowPin(activity: Activity): Boolean
 }
 
 interface IPinStorage {

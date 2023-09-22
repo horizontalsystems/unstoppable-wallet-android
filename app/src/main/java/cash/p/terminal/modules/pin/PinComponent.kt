@@ -52,10 +52,6 @@ class PinComponent(
         pinManager.store(pin, userManager.getUserLevel() + 1)
     }
 
-    override fun getPinLevel(pin: String): Int? {
-        return pinManager.getPinLevel(pin)
-    }
-
     override fun validateCurrentLevel(pin: String): Boolean {
         val pinLevel = pinManager.getPinLevel(pin) ?: return false
         return pinLevel == userManager.getUserLevel()
@@ -73,9 +69,13 @@ class PinComponent(
         pinManager.disableDuressPin(userManager.getUserLevel() + 1)
     }
 
-    override fun onUnlock(pinLevel: Int) {
+    override fun unlock(pin: String): Boolean {
+        val pinLevel = pinManager.getPinLevel(pin) ?: return false
+
         appLockManager.onUnlock()
         userManager.setUserLevel(pinLevel)
+
+        return true
     }
 
     override fun initDefaultPinLevel() {

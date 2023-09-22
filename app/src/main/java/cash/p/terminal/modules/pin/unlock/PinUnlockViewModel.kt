@@ -126,16 +126,14 @@ class PinUnlockViewModel(
     }
 
     private fun unlock(pin: String): Boolean {
-        val pinLevel = pinComponent.getPinLevel(pin)
-        if (pinLevel != null) {
-            pinComponent.onUnlock(pinLevel)
+        if (pinComponent.unlock(pin)) {
             lockoutManager.dropFailedAttempts()
+            return true
         } else {
             lockoutManager.didFailUnlock()
             updateLockoutState()
+            return false
         }
-
-        return pinLevel != null
     }
 
 }
