@@ -58,4 +58,9 @@ class PinManager(
         pinSetSubject.onNext(Unit)
     }
 
+    fun isPinSetForLevel(level: Int): Boolean {
+        val pin = pins.getOrNull(level)
+        return !pin.isNullOrBlank()
+    }
+
 }

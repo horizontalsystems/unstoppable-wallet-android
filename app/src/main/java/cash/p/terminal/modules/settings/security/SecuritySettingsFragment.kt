@@ -1,15 +1,21 @@
 package cash.p.terminal.modules.settings.security
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -17,15 +23,20 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.settings.security.passcode.SecurityPasscodeSettingsModule
-import cash.p.terminal.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
+import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsModule
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewModel
 import cash.p.terminal.modules.settings.security.ui.PasscodeBlock
 import cash.p.terminal.modules.settings.security.ui.TorBlock
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import kotlin.system.exitProcess
@@ -36,7 +47,7 @@ class SecuritySettingsFragment : BaseComposeFragment() {
         SecurityTorSettingsModule.Factory()
     }
 
-    private val passcodeViewModel by viewModels<SecurityPasscodeSettingsViewModel> {
+    private val securitySettingsViewModel by viewModels<SecuritySettingsViewModel> {
         SecurityPasscodeSettingsModule.Factory()
     }
 
@@ -44,7 +55,7 @@ class SecuritySettingsFragment : BaseComposeFragment() {
     override fun GetContent() {
         ComposeAppTheme {
             SecurityCenterScreen(
-                passcodeViewModel = passcodeViewModel,
+                securitySettingsViewModel = securitySettingsViewModel,
                 torViewModel = torViewModel,
                 navController = findNavController(),
                 showAppRestartAlert = { showAppRestartAlert() },
@@ -100,7 +111,7 @@ class SecuritySettingsFragment : BaseComposeFragment() {
 
 @Composable
 private fun SecurityCenterScreen(
-    passcodeViewModel: SecurityPasscodeSettingsViewModel,
+    securitySettingsViewModel: SecuritySettingsViewModel,
     torViewModel: SecurityTorSettingsViewModel,
     navController: NavController,
     showAppRestartAlert: () -> Unit,
@@ -112,37 +123,96 @@ private fun SecurityCenterScreen(
         torViewModel.appRestarted()
     }
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
+    val uiState = securitySettingsViewModel.uiState
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
             AppBar(
                 title = stringResource(R.string.Settings_SecurityCenter),
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
+        }
+    ) {
+        Column(
+            Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
+        ) {
+            PasscodeBlock(
+                securitySettingsViewModel,
+                navController
+            )
 
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)
-            ) {
+            VSpacer(height = 32.dp)
 
-                item {
-                    PasscodeBlock(
-                        passcodeViewModel,
-                        navController
-                    )
-                }
-
-                item {
-                    Spacer(Modifier.height(24.dp))
-                    HeaderText(stringResource(R.string.SecurityCenter_Internet))
-                    TorBlock(
-                        torViewModel,
-                        showAppRestartAlert,
-                    )
-                }
+            CellUniversalLawrenceSection {
+                SecurityCenterCell(
+                    start = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_off_24),
+                            tint = ComposeAppTheme.colors.grey,
+                            modifier = Modifier.size(24.dp),
+                            contentDescription = null
+                        )
+                    },
+                    center = {
+                        body_leah(
+                            text = stringResource(id = R.string.Appearance_BalanceAutoHide),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
+                    end = {
+                        HsSwitch(
+                            checked = uiState.balanceAutoHideEnabled,
+                            onCheckedChange = {
+                                securitySettingsViewModel.onSetBalanceAutoHidden(it)
+                            }
+                        )
+                    }
+                )
             }
+            InfoText(text = stringResource(R.string.Appearance_BalanceAutoHide_Description))
+
+            TorBlock(
+                torViewModel,
+                showAppRestartAlert,
+            )
+
+            DuressPasscodeBlock(
+                securitySettingsViewModel,
+                navController
+            )
+            InfoText(text = stringResource(R.string.SettingsSecurity_DuressPinDescription))
+
+            VSpacer(height = 32.dp)
         }
     }
+}
 
+@Composable
+fun SecurityCenterCell(
+    start: @Composable RowScope.() -> Unit,
+    center: @Composable RowScope.() -> Unit,
+    end: @Composable() (RowScope.() -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
+    ) {
+        start.invoke(this)
+        Spacer(Modifier.width(16.dp))
+        center.invoke(this)
+        end?.let {
+            Spacer(
+                Modifier
+                    .defaultMinSize(minWidth = 8.dp)
+                    .weight(1f)
+            )
+            end.invoke(this)
+        }
+    }
 }

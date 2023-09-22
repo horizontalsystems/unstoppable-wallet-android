@@ -57,6 +57,10 @@ class PinComponent(
         return pinLevel == userManager.getUserLevel()
     }
 
+    override fun isPinSetForLevel(level: Int): Boolean {
+        return pinManager.isPinSetForLevel(level)
+    }
+
     override fun clear(level: Int) {
         pinManager.clear(level)
     }

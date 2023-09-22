@@ -802,7 +802,7 @@
     <!--Settings-->
 
     <string name="Settings_Title">Settings</string>
-    <string name="Settings_SecurityCenter">Security</string>
+    <string name="Settings_SecurityCenter">Security Center</string>
     <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
@@ -850,6 +850,7 @@
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
+    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
 
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
@@ -919,10 +920,15 @@
     <!--Setting_Security-->
 
     <string name="SettingsSecurity_Privacy">Privacy</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
-    <string name="SettingsSecurity_EnablePin">Passcode</string>
+    <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
+    <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_SetDuressPin">Set Duress Passcode</string>
+    <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
+    <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
+    <string name="SettingsSecurity_DuressPinDescription">A specialized mode designed to keep selected wallets safe under coercion.</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart P.CASH Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
