@@ -17,8 +17,8 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 89
-        versionName "0.35.0"
+        versionCode 90
+        versionName "0.35.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -290,8 +290,6 @@ dependencies {
     // Ethereum Name Service
     implementation "org.web3j:core:4.9.0"
 
-    // in case native file tor.so not loading, do full gradle clean and build.
-    implementation 'com.github.horizontalsystems:tor-kit-android:13750c4'
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
@@ -344,6 +342,13 @@ dependencies {
     testImplementation "org.spekframework.spek2:spek-dsl-jvm:2.0.9"
     testRuntimeOnly "org.spekframework.spek2:spek-runner-junit5:2.0.9"
     testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    //Android Tor
+    implementation 'info.guardianproject:tor-android:0.4.7.14'
+    implementation 'info.guardianproject:jtorctl:0.4.5.7'
+
+    api 'com.jaredrummler:android-shell:1.0.0'
+    api 'com.offbynull.portmapper:portmapper:2.0.5'
 }
 
 configurations.all {
