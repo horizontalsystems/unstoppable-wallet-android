@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -100,7 +101,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Continue),
                     onClick = {
-
+                        navController.slideFromRight(R.id.setDuressPinSelectAccounts)
                     },
                 )
             }
