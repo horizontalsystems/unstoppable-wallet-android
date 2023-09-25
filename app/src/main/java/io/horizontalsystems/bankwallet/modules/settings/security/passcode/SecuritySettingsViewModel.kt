@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
-import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import kotlinx.coroutines.launch
@@ -15,7 +14,6 @@ import kotlinx.coroutines.reactive.asFlow
 class SecuritySettingsViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val pinComponent: IPinComponent,
-    private val userManager: UserManager,
     private val balanceHiddenManager: BalanceHiddenManager
 ) : ViewModel() {
     val biometricSettingsVisible = systemInfoManager.biometricAuthSupported
@@ -64,6 +62,7 @@ class SecuritySettingsViewModel(
 
     fun disablePin() {
         pinComponent.disablePin()
+        pinComponent.isBiometricAuthEnabled = false
         biometricsEnabled = false
         emitState()
     }
