@@ -63,10 +63,12 @@ class PinComponent(
 
     override fun disablePin() {
         pinManager.disablePin(userManager.getUserLevel())
+        userManager.disallowAccountsForDuress()
     }
 
     override fun disableDuressPin() {
         pinManager.disableDuressPin(userManager.getUserLevel() + 1)
+        userManager.disallowAccountsForDuress()
     }
 
     override fun unlock(pin: String): Boolean {

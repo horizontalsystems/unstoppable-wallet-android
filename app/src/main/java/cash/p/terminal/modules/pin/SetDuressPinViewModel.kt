@@ -13,7 +13,7 @@ class SetDuressPinViewModel(
     fun onDuressPinSet() {
         val accountIds = input?.accountIds
         if (!accountIds.isNullOrEmpty()) {
-            userManager.makeAccountsAvailableInDuress(accountIds)
+            userManager.allowAccountsForDuress(accountIds)
         }
     }
 

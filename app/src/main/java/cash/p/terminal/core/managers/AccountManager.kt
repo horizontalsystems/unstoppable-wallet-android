@@ -87,6 +87,10 @@ class AccountManager(
         storage.updateLevels(accountIds, level)
     }
 
+    override fun updateMaxLevel(level: Int) {
+        storage.updateMaxLevel(level)
+    }
+
     override fun update(account: Account) {
         storage.update(account)
 

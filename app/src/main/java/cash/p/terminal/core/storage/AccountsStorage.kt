@@ -91,6 +91,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         dao.updateLevels(accountIds, level)
     }
 
+    override fun updateMaxLevel(level: Int) {
+        dao.updateMaxLevel(level)
+    }
+
     override fun delete(id: String) {
         dao.delete(id)
     }
