@@ -23,14 +23,15 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
         )
     }
 
-    override fun watchAccount(name: String, type: AccountType): Account {
+    override fun watchAccount(name: String, type: AccountType, fileBackedUp: Boolean): Account {
         val id = UUID.randomUUID().toString()
         return Account(
             id = id,
             name = name,
             type = type,
             origin = AccountOrigin.Restored,
-            isBackedUp = true
+            isBackedUp = true,
+            isFileBackedUp = fileBackedUp
         )
     }
 

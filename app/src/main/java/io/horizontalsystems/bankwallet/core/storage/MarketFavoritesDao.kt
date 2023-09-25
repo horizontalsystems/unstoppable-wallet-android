@@ -8,6 +8,9 @@ interface MarketFavoritesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(favoriteCoin: FavoriteCoin)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(favoriteCoins: List<FavoriteCoin>)
+
     @Query("DELETE FROM FavoriteCoin WHERE coinUid = :coinUid")
     fun delete(coinUid: String)
 

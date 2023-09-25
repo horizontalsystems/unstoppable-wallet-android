@@ -22,12 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -75,11 +73,11 @@ private fun ImportWalletScreen(
                     inputStream.bufferedReader().use { br ->
                         val jsonString = br.readText()
                         //validate json format
-                        val json = Gson().fromJson(jsonString, BackupLocalModule.WalletBackup::class.java)
+//                        val json = Gson().fromJson(jsonString, FullBackup::class.java)
                         //Gson will set field as null if the json file doesn't have the matching field
-                        if (json.version == null || json.crypto == null){
-                            throw Exception("Invalid json format")
-                        }
+//                        if (json.version == null || json.crypto == null){
+//                            throw Exception("Invalid json format")
+//                        }
                         navController.navigateWithTermsAccepted {
                             val fileName = context.getFileName(uriNonNull)
                             navController.slideFromBottom(

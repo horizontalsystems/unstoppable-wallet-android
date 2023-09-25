@@ -50,7 +50,9 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
 
     companion object {
         private val map = values().associateBy(AppIcon::name)
+        private val titleMap = values().associateBy(AppIcon::titleText)
 
         fun fromString(type: String?): AppIcon? = map[type]
+        fun fromTitle(title: String?): AppIcon? = titleMap[title]
     }
 }

@@ -80,6 +80,7 @@ import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
@@ -93,6 +94,9 @@ import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsR
 import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
+import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
+import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionStorage
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
@@ -183,6 +187,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var cexProviderManager: CexProviderManager
         lateinit var cexAssetManager: CexAssetManager
         lateinit var chartIndicatorManager: ChartIndicatorManager
+        lateinit var backupProvider: BackupProvider
     }
 
     override fun onCreate() {
@@ -261,8 +266,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
         tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
-
-        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
@@ -387,6 +390,32 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         cexProviderManager = CexProviderManager(accountManager)
         cexAssetManager = CexAssetManager(marketKit, appDatabase.cexAssetsDao())
         chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
+
+        backupProvider = BackupProvider(
+            localStorage = localStorage,
+            languageManager = languageManager,
+            walletStorage = enabledWalletsStorage,
+            settingsManager = restoreSettingsManager,
+            accountManager = accountManager,
+            accountFactory = accountFactory,
+            walletManager = walletManager,
+            restoreSettingsManager = restoreSettingsManager,
+            blockchainSettingsStorage = blockchainSettingsStorage,
+            evmBlockchainManager = evmBlockchainManager,
+            marketFavoritesManager = marketFavoritesManager,
+            balanceViewTypeManager = balanceViewTypeManager,
+            appIconService = AppIconService(localStorage),
+            themeService = ThemeService(localStorage),
+            chartIndicatorManager = chartIndicatorManager,
+            balanceHiddenManager = balanceHiddenManager,
+            baseTokenManager = baseTokenManager,
+            launchScreenService = LaunchScreenService(localStorage),
+            currencyManager = currencyManager,
+            btcBlockchainManager = btcBlockchainManager,
+            evmSyncSourceManager = evmSyncSourceManager,
+            solanaRpcSourceManager = solanaRpcSourceManager,
+            contactsRepository = contactsRepository
+        )
 
         startTasks()
     }

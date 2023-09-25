@@ -1,10 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup
 
+import android.util.Log
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
@@ -14,10 +18,18 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
+import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
@@ -31,6 +43,8 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 
 class BackupProvider(
@@ -39,10 +53,12 @@ class BackupProvider(
     private val walletStorage: IEnabledWalletStorage,
     private val settingsManager: RestoreSettingsManager,
     private val accountManager: IAccountManager,
-
+    private val accountFactory: IAccountFactory,
+    private val walletManager: IWalletManager,
+    private val restoreSettingsManager: RestoreSettingsManager,
+    private val blockchainSettingsStorage: BlockchainSettingsStorage,
     private val evmBlockchainManager: EvmBlockchainManager,
-
-    private val manager: MarketFavoritesManager,
+    private val marketFavoritesManager: MarketFavoritesManager,
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val appIconService: AppIconService,
     private val themeService: ThemeService,
@@ -51,14 +67,165 @@ class BackupProvider(
     private val baseTokenManager: BaseTokenManager,
     private val launchScreenService: LaunchScreenService,
     private val currencyManager: CurrencyManager,
-
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
-
     private val contactsRepository: ContactsRepository
 ) {
     private val encryptDecryptManager = EncryptDecryptManager()
+
+    private fun decrypted(crypto: BackupLocalModule.BackupCrypto, passphrase: String): ByteArray {
+        val kdfParams = crypto.kdfparams
+        val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: throw RestoreException.EncryptionKeyException
+
+        if (EncryptDecryptManager.passwordIsCorrect(crypto.mac, crypto.ciphertext, key)) {
+            return encryptDecryptManager.decrypt(crypto.ciphertext, key, crypto.cipherparams.iv)
+        } else {
+            throw RestoreException.InvalidPasswordException
+        }
+    }
+
+    @Throws
+    fun accountType(backup: BackupLocalModule.WalletBackup, passphrase: String): AccountType {
+        val decrypted = decrypted(backup.crypto, passphrase)
+        return BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
+    }
+
+    fun restoreCexAccount(accountType: AccountType, accountName: String) {
+        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true, true)
+        accountManager.save(account)
+    }
+
+    private fun restoreWithWallets(
+        type: AccountType,
+        accountName: String,
+        enabledWalletBackups: List<BackupLocalModule.EnabledWalletBackup>
+    ) {
+        val account = if (type.isWatchAccountType) {
+            accountFactory.watchAccount(accountName, type, true)
+        } else {
+            accountFactory.account(accountName, type, AccountOrigin.Restored, false, true)
+        }
+        accountManager.save(account)
+
+        val enabledWallets = enabledWalletBackups.map {
+            EnabledWallet(
+                tokenQueryId = it.tokenQueryId,
+                accountId = account.id,
+                coinName = it.coinName,
+                coinCode = it.coinCode,
+                coinDecimals = it.decimals
+            )
+        }
+        walletManager.saveEnabledWallets(enabledWallets)
+
+        enabledWalletBackups.forEach { backup ->
+            TokenQuery.fromId(backup.tokenQueryId)?.let { tokenQuery ->
+                if (!backup.settings.isNullOrEmpty()) {
+                    val restoreSettings = RestoreSettings()
+                    backup.settings.forEach { (restoreSettingType, value) ->
+                        restoreSettings[restoreSettingType] = value
+                    }
+                    restoreSettingsManager.save(restoreSettings, account, tokenQuery.blockchainType)
+                }
+            }
+        }
+    }
+
+    suspend fun restore(fullBackup: FullBackup, passphrase: String) {
+        fullBackup.wallets?.let { wallets ->
+            wallets.forEach {
+
+                when (val type = accountType(it.backup, passphrase)) {
+                    is AccountType.Cex -> {
+                        restoreCexAccount(type, it.name)
+                    }
+
+                    is AccountType.EvmAddress,
+                    is AccountType.EvmPrivateKey,
+                    is AccountType.HdExtendedKey,
+                    is AccountType.Mnemonic,
+                    is AccountType.SolanaAddress,
+                    is AccountType.TronAddress -> {
+                        restoreWithWallets(type, it.name, it.backup.enabledWallets ?: listOf())
+                    }
+                }
+            }
+        }
+
+        fullBackup.watchlist?.let { coinUids ->
+            marketFavoritesManager.addAll(coinUids)
+        }
+
+        fullBackup.settings?.let { settings ->
+            balanceViewTypeManager.setViewType(settings.balanceViewType)
+
+            withContext(Dispatchers.Main) {
+                try {
+                    themeService.setThemeType(settings.currentTheme)
+                    languageManager.currentLocaleTag = settings.language
+                } catch (e: Exception) {
+                    Log.e("ee", "error restore", e)
+                }
+            }
+
+            if (settings.chartIndicatorsEnabled) {
+                chartIndicatorManager.enable()
+            } else {
+                chartIndicatorManager.disable()
+            }
+
+            balanceHiddenManager.setBalanceAutoHidden(settings.balanceAutoHidden)
+
+            settings.conversionTokenQueryId?.let { baseTokenManager.setBaseTokenQueryId(it) }
+
+            settings.swapProviders.forEach {
+                localStorage.setSwapProviderId(BlockchainType.fromUid(it.blockchainTypeId), it.provider)
+            }
+
+            launchScreenService.setLaunchScreen(settings.launchScreen)
+            localStorage.marketsTabEnabled = settings.marketsTabEnabled
+            currencyManager.setBaseCurrencyCode(settings.baseCurrency)
+            localStorage.isLockTimeEnabled = settings.lockTimeEnabled
+
+
+            settings.btcModes.forEach { btcMode ->
+                val blockchainType = BlockchainType.fromUid(btcMode.blockchainTypeId)
+
+                val restoreMode = BtcRestoreMode.values().firstOrNull { it.raw == btcMode.restoreMode }
+                restoreMode?.let { btcBlockchainManager.save(it, blockchainType) }
+
+                val sortMode = TransactionDataSortMode.values().firstOrNull { it.raw == btcMode.sortMode }
+                sortMode?.let { btcBlockchainManager.save(sortMode, blockchainType) }
+            }
+
+            settings.evmSyncSources.custom.forEach { syncSource ->
+                val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
+                val auth = syncSource.auth?.let {
+                    val decryptedAuth = decrypted(it, passphrase)
+                    String(decryptedAuth, Charsets.UTF_8)
+                }
+                evmSyncSourceManager.saveSyncSource(blockchainType, syncSource.url, auth)
+            }
+
+            settings.evmSyncSources.selected.forEach { syncSource ->
+                val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
+                blockchainSettingsStorage.save(syncSource.url, blockchainType)
+            }
+
+            blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
+
+//            Log.e("ee", "appIcon: title=${settings.appIcon}, enum=${AppIcon.fromTitle(settings.appIcon)}")
+//            AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
+        }
+
+        fullBackup.contacts?.let {
+            val decrypted = decrypted(it, passphrase)
+            val contactsBackupJson = String(decrypted, Charsets.UTF_8)
+
+            contactsRepository.restore(contactsBackupJson)
+        }
+    }
 
     @Throws
     fun backup(passphrase: String): String {
@@ -67,7 +234,7 @@ class BackupProvider(
             WalletBackup2(it.name, accountBackup)
         }
 
-        val watchlist = manager.getAll().map { it.coinUid }
+        val watchlist = marketFavoritesManager.getAll().map { it.coinUid }
 
         val swapProviders = evmBlockchainManager.allBlockchainTypes.map { blockchainType ->
             val provider = localStorage.getSwapProviderId(blockchainType) ?: SwapMainModule.OneInchProvider.id
@@ -82,14 +249,14 @@ class BackupProvider(
 
         val selectedEvmSyncSources = evmBlockchainManager.allBlockchains.map { blockchain ->
             val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
-            EvmSyncSource(blockchain.uid, syncSource.url.toString(), null)
+            EvmSyncSourceBackup(blockchain.uid, syncSource.url.toString(), null)
         }
 
         val customEvmSyncSources = evmBlockchainManager.allBlockchains.map { blockchain ->
             val customEvmSyncSources = evmSyncSourceManager.customSyncSources(blockchain.type)
             customEvmSyncSources.map { syncSource ->
                 val auth = syncSource.auth?.let { encrypted(it, passphrase) }
-                EvmSyncSource(blockchain.uid, syncSource.url.toString(), auth)
+                EvmSyncSourceBackup(blockchain.uid, syncSource.url.toString(), auth)
             }
         }.flatten()
 
@@ -235,7 +402,7 @@ data class BtcMode(
     val sortMode: String
 )
 
-data class EvmSyncSource(
+data class EvmSyncSourceBackup(
     @SerializedName("blockchain_type_id")
     val blockchainTypeId: String,
     val url: String,
@@ -243,8 +410,8 @@ data class EvmSyncSource(
 )
 
 data class EvmSyncSources(
-    val selected: List<EvmSyncSource>,
-    val custom: List<EvmSyncSource>
+    val selected: List<EvmSyncSourceBackup>,
+    val custom: List<EvmSyncSourceBackup>
 )
 
 data class SolanaSyncSource(
@@ -285,3 +452,8 @@ data class Settings(
     @SerializedName("solana_sync_source")
     val solanaSyncSource: SolanaSyncSource
 )
+
+sealed class RestoreException(message: String) : Exception(message) {
+    object EncryptionKeyException : RestoreException("Couldn't get key from passphrase.")
+    object InvalidPasswordException : RestoreException(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword))
+}

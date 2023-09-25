@@ -90,7 +90,7 @@ class WatchAddressService(
 
     fun watchTokens(accountType: AccountType, tokens: List<Token>, name: String? = null) {
         val accountName = name ?: accountFactory.getNextWatchAccountName()
-        val account = accountFactory.watchAccount(accountName, accountType)
+        val account = accountFactory.watchAccount(name = accountName, type = accountType, fileBackedUp = false)
 
         accountManager.save(account)
 
