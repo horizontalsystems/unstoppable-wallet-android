@@ -192,6 +192,9 @@
         android:id="@+id/editPinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.pin.EditPinFragment" />
     <fragment
+        android:id="@+id/setDuressPinIntroFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.pin.SetDuressPinIntroFragment" />
+    <fragment
         android:id="@+id/setDuressPinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.pin.SetDuressPinFragment" />
     <fragment

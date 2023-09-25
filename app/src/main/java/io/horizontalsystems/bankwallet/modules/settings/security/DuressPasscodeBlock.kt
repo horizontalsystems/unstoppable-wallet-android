@@ -48,7 +48,7 @@ fun DuressPasscodeBlock(
                     )
                 },
                 onClick = {
-                    navController.slideFromRight(R.id.setDuressPinFragment)
+                    navController.slideFromRight(R.id.setDuressPinIntroFragment)
                 }
             )
         }
