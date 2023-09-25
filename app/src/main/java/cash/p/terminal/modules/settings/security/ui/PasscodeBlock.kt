@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
+import cash.p.terminal.core.ensurePinSet
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.settings.security.SecurityCenterCell
 import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
@@ -128,7 +129,9 @@ fun PasscodeBlock(
                         checked = uiState.biometricsEnabled,
                         onCheckedChange = { enabled ->
                             if (enabled) {
-                                viewModel.enableBiometrics()
+                                navController.ensurePinSet {
+                                    viewModel.enableBiometrics()
+                                }
                             } else {
                                 viewModel.disableBiometrics()
                             }
