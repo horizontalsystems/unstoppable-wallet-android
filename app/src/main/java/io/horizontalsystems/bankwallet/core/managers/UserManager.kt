@@ -16,7 +16,11 @@ class UserManager(
         accountManager.setLevel(level)
     }
 
-    fun makeAccountsAvailableInDuress(accountIds: List<String>) {
+    fun allowAccountsForDuress(accountIds: List<String>) {
         accountManager.updateAccountLevels(accountIds, getUserLevel() + 1)
+    }
+
+    fun disallowAccountsForDuress() {
+        accountManager.updateMaxLevel(getUserLevel())
     }
 }
