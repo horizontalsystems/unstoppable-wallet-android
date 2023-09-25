@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
+import cash.p.terminal.core.ensurePinSet
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -49,10 +50,16 @@ fun DuressPasscodeBlock(
                     )
                 },
                 onClick = {
-                    navController.authorizedAction {
-                        if (uiState.duressPinEnabled) {
-                            navController.slideFromRight(R.id.editDuressPinFragment)
-                        } else {
+                    if (uiState.pinEnabled) {
+                        navController.authorizedAction {
+                            if (uiState.duressPinEnabled) {
+                                navController.slideFromRight(R.id.editDuressPinFragment)
+                            } else {
+                                navController.slideFromRight(R.id.setDuressPinIntroFragment)
+                            }
+                        }
+                    } else {
+                        navController.ensurePinSet {
                             navController.slideFromRight(R.id.setDuressPinIntroFragment)
                         }
                     }
