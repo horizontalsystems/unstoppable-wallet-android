@@ -83,6 +83,10 @@ class AccountManager(
         }
     }
 
+    override fun updateAccountLevels(accountIds: List<String>, level: Int) {
+        storage.updateLevels(accountIds, level)
+    }
+
     override fun update(account: Account) {
         storage.update(account)
 
