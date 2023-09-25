@@ -195,6 +195,9 @@
         android:id="@+id/setDuressPinIntroFragment"
         android:name="cash.p.terminal.modules.pin.SetDuressPinIntroFragment" />
     <fragment
+        android:id="@+id/setDuressPinSelectAccounts"
+        android:name="cash.p.terminal.modules.pin.SetDuressPinSelectAccountsFragment" />
+    <fragment
         android:id="@+id/setDuressPinFragment"
         android:name="cash.p.terminal.modules.pin.SetDuressPinFragment" />
     <fragment
