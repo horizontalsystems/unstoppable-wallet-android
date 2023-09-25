@@ -953,6 +953,9 @@
     <string name="DuressPin_Notes_PasscodeChange_Title">Passcode Change</string>
     <string name="DuressPin_Notes_PasscodeChange_Description">Changing the passcode in the Duress Mode will also change the current PIN code for that mode.</string>
 
+    <string name="DuressPinSelectAccounts_Title">Select Wallet</string>
+    <string name="DuressPinSelectAccounts_Description">Select the wallets that will be displayed in duress mode.</string>
+
     <!--Setting_Terms-->
 
     <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
