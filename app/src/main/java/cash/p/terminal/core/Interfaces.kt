@@ -145,6 +145,7 @@ interface IAccountManager {
     fun clearAccounts()
     fun onHandledBackupRequiredNewAccount()
     fun setLevel(level: Int)
+    fun updateAccountLevels(accountIds: List<String>, level: Int)
 }
 
 interface IBackupManager {
@@ -357,6 +358,7 @@ interface IAccountsStorage {
     fun clear()
     fun getDeletedAccountIds(): List<String>
     fun clearDeleted()
+    fun updateLevels(accountIds: List<String>, level: Int)
 }
 
 interface IEnabledWalletStorage {

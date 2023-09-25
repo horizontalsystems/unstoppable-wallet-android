@@ -15,4 +15,8 @@ class UserManager(
         currentUserLevel = level
         accountManager.setLevel(level)
     }
+
+    fun makeAccountsAvailableInDuress(accountIds: List<String>) {
+        accountManager.updateAccountLevels(accountIds, getUserLevel() + 1)
+    }
 }

@@ -31,7 +31,7 @@ class PinManager(
         val lastIndex = tmp.lastIndex
 
         when {
-            pins.indexOf(pin) != level -> throw IllegalStateException()
+            pins.indexOf(pin) != -1 && pins.indexOf(pin) != level -> throw IllegalStateException()
             lastIndex >= level -> {
                 tmp[level] = pin
             }
