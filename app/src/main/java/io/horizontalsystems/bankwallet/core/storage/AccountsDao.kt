@@ -19,6 +19,9 @@ interface AccountsDao {
     @Query("UPDATE AccountRecord SET level = :level WHERE id IN(:accountIds)")
     fun updateLevels(accountIds: List<String>, level: Int)
 
+    @Query("UPDATE AccountRecord SET level = :level WHERE level > :level")
+    fun updateMaxLevel(level: Int)
+
     @Query("SELECT * FROM AccountRecord WHERE deleted = 0 AND level >= :accountsMinLevel")
     fun getAll(accountsMinLevel: Int): List<AccountRecord>
 
