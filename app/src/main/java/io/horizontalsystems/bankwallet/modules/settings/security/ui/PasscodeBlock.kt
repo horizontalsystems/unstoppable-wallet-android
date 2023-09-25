@@ -127,7 +127,11 @@ fun PasscodeBlock(
                     HsSwitch(
                         checked = uiState.biometricsEnabled,
                         onCheckedChange = { enabled ->
-                            viewModel.setBiometricAuth(enabled)
+                            if (enabled) {
+                                viewModel.enableBiometrics()
+                            } else {
+                                viewModel.disableBiometrics()
+                            }
                         },
                     )
                 }
