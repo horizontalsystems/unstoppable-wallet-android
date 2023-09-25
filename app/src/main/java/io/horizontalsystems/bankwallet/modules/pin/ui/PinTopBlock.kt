@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule.InputState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -37,11 +36,9 @@ fun PinTopBlock(
     modifier: Modifier = Modifier,
     title: @Composable ColumnScope.() -> Unit,
     enteredCount: Int,
-    showCancelButton: Boolean = false,
     showShakeAnimation: Boolean = false,
     inputState: InputState = InputState.Enabled(),
-    onShakeAnimationFinish: (() -> Unit)? = null,
-    onCancelClick: (() -> Unit)? = null
+    onShakeAnimationFinish: (() -> Unit)? = null
 ) {
     Column(
         modifier = modifier
@@ -69,13 +66,6 @@ fun PinTopBlock(
                 subhead2_leah(
                     text = inputState.attemptsLeft?.let { stringResource(R.string.Unlock_AttemptsLeft, it) } ?: ""
                 )
-                if (showCancelButton) {
-                    VSpacer(16.dp)
-                    ButtonSecondaryTransparent(
-                        title = stringResource(R.string.Button_Cancel),
-                        onClick = { onCancelClick?.invoke() }
-                    )
-                }
             }
             is InputState.Locked -> {
                 Image(
@@ -117,7 +107,6 @@ fun Preview_PinTopBlockEnabled() {
             PinTopBlock(
                 title = { headline1_leah(text = "text") },
                 enteredCount = 3,
-                showCancelButton = true,
                 showShakeAnimation = false,
             )
         }
@@ -135,7 +124,6 @@ fun Preview_PinTopBlockLocked() {
             PinTopBlock(
                 title = { headline1_leah(text = "text") },
                 enteredCount = 3,
-                showCancelButton = true,
                 showShakeAnimation = false,
                 inputState = InputState.Locked("12:33")
             )
