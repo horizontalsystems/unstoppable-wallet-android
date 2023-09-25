@@ -156,7 +156,7 @@ interface IBackupManager {
 
 interface IAccountFactory {
     fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean, fileBackedUp: Boolean): Account
-    fun watchAccount(name: String, type: AccountType): Account
+    fun watchAccount(name: String, type: AccountType, fileBackedUp: Boolean): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
     fun getNextCexAccountName(cexType: CexType): String

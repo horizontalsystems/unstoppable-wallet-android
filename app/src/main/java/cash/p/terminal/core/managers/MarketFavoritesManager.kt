@@ -26,6 +26,12 @@ class MarketFavoritesManager(
         marketWidgetManager.updateWatchListWidgets()
     }
 
+    fun addAll(coinUids: List<String>) {
+        dao.insertAll(coinUids.map { FavoriteCoin(it) })
+        dataUpdatedSubject.onNext(Unit)
+        marketWidgetManager.updateWatchListWidgets()
+    }
+
     fun remove(coinUid: String) {
         dao.delete(coinUid)
         dataUpdatedSubject.onNext(Unit)

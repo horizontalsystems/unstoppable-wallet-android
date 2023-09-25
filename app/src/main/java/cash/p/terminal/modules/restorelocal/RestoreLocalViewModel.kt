@@ -8,28 +8,21 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.managers.EncryptDecryptManager
-import cash.p.terminal.core.managers.RestoreSettings
-import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.entities.EnabledWallet
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
-import io.horizontalsystems.marketkit.models.TokenQuery
+import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
+import cash.p.terminal.modules.backuplocal.fullbackup.FullBackup
+import cash.p.terminal.modules.backuplocal.fullbackup.RestoreException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RestoreLocalViewModel(
     private val backupJsonString: String?,
-    private val accountManager: IAccountManager,
     private val accountFactory: IAccountFactory,
-    private val walletManager: IWalletManager,
-    private val restoreSettingsManager: RestoreSettingsManager,
+    private val backupProvider: BackupProvider,
     fileName: String?,
 ) : ViewModel() {
 
@@ -37,7 +30,7 @@ class RestoreLocalViewModel(
     private var passphraseState: DataState.Error? = null
     private var showButtonSpinner = false
     private var walletBackup: BackupLocalModule.WalletBackup? = null
-    private val encryptDecryptManager = EncryptDecryptManager()
+    private var fullBackup: FullBackup? = null
     private var parseError: Exception? = null
     private var accountType: AccountType? = null
     private var manualBackup = false
@@ -72,6 +65,13 @@ class RestoreLocalViewModel(
                     .disableHtmlEscaping()
                     .enableComplexMapKeySerialization()
                     .create()
+
+                fullBackup = try {
+                    gson.fromJson(backupJsonString, FullBackup::class.java)
+                } catch (ex: Exception) {
+                    null
+                }
+
                 walletBackup = gson.fromJson(backupJsonString, BackupLocalModule.WalletBackup::class.java)
                 manualBackup = walletBackup?.manualBackup ?: false
             } catch (e: Exception) {
@@ -88,32 +88,36 @@ class RestoreLocalViewModel(
     }
 
     fun onImportClick() {
-        val backup = walletBackup ?: return
+        when {
+            fullBackup != null -> {
+                fullBackup?.let { restoreFullBackup(it) }
+            }
+
+            walletBackup != null -> {
+                walletBackup?.let { restoreSingleWallet(it, accountName) }
+            }
+
+            else -> {
+
+            }
+        }
+    }
+
+    private fun restoreFullBackup(fullBackup: FullBackup) {
         showButtonSpinner = true
         syncState()
+
         viewModelScope.launch(Dispatchers.IO) {
-            val kdfParams = backup.crypto.kdfparams
-            val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: return@launch
-            val enabledWallets = backup.enabledWallets
-            if (EncryptDecryptManager.passwordIsCorrect(backup.crypto.mac, backup.crypto.ciphertext, key)) {
-                val decrypted = encryptDecryptManager.decrypt(backup.crypto.ciphertext, key, backup.crypto.cipherparams.iv)
-                try {
-                    val type = BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
-                    if (type is AccountType.Cex) {
-                        restoreCexAccount(type)
-                        return@launch
-                    } else if (!enabledWallets.isNullOrEmpty()) {
-                        restoreWithWallets(type, enabledWallets)
-                        return@launch
-                    } else {
-                        accountType = type
-                    }
-                } catch (e: IllegalStateException) {
-                    parseError = e
-                }
-            } else {
+            try {
+                backupProvider.restore(fullBackup, passphrase)
+
+                restored = true
+            } catch (keyException: RestoreException.EncryptionKeyException) {
+                parseError = keyException
+            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             }
+
             showButtonSpinner = false
             withContext(Dispatchers.Main) {
                 syncState()
@@ -121,45 +125,32 @@ class RestoreLocalViewModel(
         }
     }
 
-    private fun restoreWithWallets(
-        type: AccountType,
-        enabledWalletBackups: List<BackupLocalModule.EnabledWalletBackup>
-    ) {
-        val account = accountFactory.account(accountName, type, AccountOrigin.Restored, false, true)
-        accountManager.save(account)
+    @Throws
+    private fun restoreSingleWallet(backup: BackupLocalModule.WalletBackup, accountName: String) {
+        showButtonSpinner = true
+        syncState()
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val type = backupProvider.accountType(backup, passphrase)
+                if (type is AccountType.Cex) {
+                    backupProvider.restoreCexAccount(type, accountName)
 
-        val enabledWallets = enabledWalletBackups.map {
-            EnabledWallet(
-                tokenQueryId = it.tokenQueryId,
-                accountId = account.id,
-                coinName = it.coinName,
-                coinCode = it.coinCode,
-                coinDecimals = it.decimals
-            )
-        }
-        walletManager.saveEnabledWallets(enabledWallets)
-
-        enabledWalletBackups.forEach { backup ->
-            TokenQuery.fromId(backup.tokenQueryId)?.let { tokenQuery ->
-                if (!backup.settings.isNullOrEmpty()) {
-                    val restoreSettings = RestoreSettings()
-                    backup.settings.forEach { (restoreSettingType, value) ->
-                        restoreSettings[restoreSettingType] = value
-                    }
-                    restoreSettingsManager.save(restoreSettings, account, tokenQuery.blockchainType)
+                    restored = true
+                } else {
+                    accountType = type
                 }
+            } catch (keyException: RestoreException.EncryptionKeyException) {
+                parseError = keyException
+            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
+                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+            } catch (e: IllegalStateException) {
+                parseError = e
+            }
+            showButtonSpinner = false
+            withContext(Dispatchers.Main) {
+                syncState()
             }
         }
-
-        restored = true
-        syncState()
-    }
-
-    private fun restoreCexAccount(accountType: AccountType) {
-        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true, true)
-        accountManager.save(account)
-        restored = true
-        syncState()
     }
 
     fun onSelectCoinsShown() {

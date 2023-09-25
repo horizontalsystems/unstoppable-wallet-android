@@ -1,5 +1,9 @@
 package cash.p.terminal.modules.settings.appearance
 
+import android.content.ComponentName
+import android.content.pm.PackageManager
+import android.util.Log
+import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.ui.compose.Select
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,10 +19,24 @@ class AppIconService(private val localStorage: ILocalStorage) {
     val optionsFlow = _optionsFlow.asStateFlow()
 
     fun setAppIcon(appIcon: AppIcon) {
+
+        Log.e("ee", "setAppIcon: $appIcon")
+
         localStorage.appIcon = appIcon
 
         _optionsFlow.update {
             Select(appIcon, appIcons)
+        }
+
+        val enabled = PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        val disabled = PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+
+        AppIcon.values().forEach { item ->
+            App.instance.packageManager.setComponentEnabledSetting(
+                ComponentName(App.instance, item.launcherName),
+                if (appIcon == item) enabled else disabled,
+                PackageManager.DONT_KILL_APP
+            )
         }
     }
 }

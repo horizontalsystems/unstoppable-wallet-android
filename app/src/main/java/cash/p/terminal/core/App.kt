@@ -80,6 +80,7 @@ import cash.p.terminal.core.storage.EnabledWalletsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
 import cash.p.terminal.core.storage.NftStorage
 import cash.p.terminal.core.storage.RestoreSettingsStorage
+import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -93,6 +94,9 @@ import cash.p.terminal.modules.market.topplatforms.TopPlatformsRepository
 import cash.p.terminal.modules.pin.PinComponent
 import cash.p.terminal.modules.profeatures.ProFeaturesAuthorizationManager
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesStorage
+import cash.p.terminal.modules.settings.appearance.AppIconService
+import cash.p.terminal.modules.settings.appearance.LaunchScreenService
+import cash.p.terminal.modules.theme.ThemeService
 import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionStorage
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
@@ -183,6 +187,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var cexProviderManager: CexProviderManager
         lateinit var cexAssetManager: CexAssetManager
         lateinit var chartIndicatorManager: ChartIndicatorManager
+        lateinit var backupProvider: BackupProvider
     }
 
     override fun onCreate() {
@@ -261,8 +266,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
         tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
-
-        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
@@ -387,6 +390,32 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         cexProviderManager = CexProviderManager(accountManager)
         cexAssetManager = CexAssetManager(marketKit, appDatabase.cexAssetsDao())
         chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
+
+        backupProvider = BackupProvider(
+            localStorage = localStorage,
+            languageManager = languageManager,
+            walletStorage = enabledWalletsStorage,
+            settingsManager = restoreSettingsManager,
+            accountManager = accountManager,
+            accountFactory = accountFactory,
+            walletManager = walletManager,
+            restoreSettingsManager = restoreSettingsManager,
+            blockchainSettingsStorage = blockchainSettingsStorage,
+            evmBlockchainManager = evmBlockchainManager,
+            marketFavoritesManager = marketFavoritesManager,
+            balanceViewTypeManager = balanceViewTypeManager,
+            appIconService = AppIconService(localStorage),
+            themeService = ThemeService(localStorage),
+            chartIndicatorManager = chartIndicatorManager,
+            balanceHiddenManager = balanceHiddenManager,
+            baseTokenManager = baseTokenManager,
+            launchScreenService = LaunchScreenService(localStorage),
+            currencyManager = currencyManager,
+            btcBlockchainManager = btcBlockchainManager,
+            evmSyncSourceManager = evmSyncSourceManager,
+            solanaRpcSourceManager = solanaRpcSourceManager,
+            contactsRepository = contactsRepository
+        )
 
         startTasks()
     }
