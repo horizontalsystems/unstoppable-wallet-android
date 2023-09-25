@@ -1,0 +1,9 @@
+RunAsDaemon 1
+AvoidDiskWrites 0
+ControlPort Auto
+SOCKSPort 9050
+DNSPort 0
+TransPort 0
+HTTPTunnelPort 8118
+CookieAuthentication 1
+DisableNetwork 1
