@@ -16,6 +16,7 @@
     <application
         android:name=".core.App"
         android:allowBackup="false"
+        android:extractNativeLibs="true"
         android:icon="@mipmap/launcher_main"
         android:label="@string/App_Name"
         android:networkSecurityConfig="@xml/network_security_config"
