@@ -19,14 +19,13 @@ class SecuritySettingsViewModel(
     val biometricSettingsVisible = systemInfoManager.biometricAuthSupported
 
     private var pinEnabled = pinComponent.isPinSet
-    private var biometricsEnabled = pinComponent.isBiometricAuthEnabled
     private var duressPinEnabled = pinComponent.isDuressPinSet()
     private var balanceAutoHideEnabled = balanceHiddenManager.balanceAutoHidden
 
     var uiState by mutableStateOf(
         SecuritySettingsUiState(
             pinEnabled = pinEnabled,
-            biometricsEnabled = biometricsEnabled,
+            biometricsEnabled = pinComponent.isBiometricAuthEnabled,
             duressPinEnabled = duressPinEnabled,
             balanceAutoHideEnabled = balanceAutoHideEnabled,
         )
@@ -47,23 +46,26 @@ class SecuritySettingsViewModel(
         viewModelScope.launch {
             uiState = SecuritySettingsUiState(
                 pinEnabled = pinEnabled,
-                biometricsEnabled = biometricsEnabled,
+                biometricsEnabled = pinComponent.isBiometricAuthEnabled,
                 duressPinEnabled = duressPinEnabled,
                 balanceAutoHideEnabled = balanceAutoHideEnabled
             )
         }
     }
 
-    fun setBiometricAuth(enabled: Boolean) {
-        pinComponent.isBiometricAuthEnabled = enabled
-        biometricsEnabled = enabled
+    fun enableBiometrics() {
+        pinComponent.isBiometricAuthEnabled = true
+        emitState()
+    }
+
+    fun disableBiometrics() {
+        pinComponent.isBiometricAuthEnabled = false
         emitState()
     }
 
     fun disablePin() {
         pinComponent.disablePin()
         pinComponent.isBiometricAuthEnabled = false
-        biometricsEnabled = false
         emitState()
     }
 
