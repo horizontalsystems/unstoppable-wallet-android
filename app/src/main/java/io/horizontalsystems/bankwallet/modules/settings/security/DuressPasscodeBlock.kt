@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
+import io.horizontalsystems.bankwallet.core.ensurePinSet
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -49,10 +50,16 @@ fun DuressPasscodeBlock(
                     )
                 },
                 onClick = {
-                    navController.authorizedAction {
-                        if (uiState.duressPinEnabled) {
-                            navController.slideFromRight(R.id.editDuressPinFragment)
-                        } else {
+                    if (uiState.pinEnabled) {
+                        navController.authorizedAction {
+                            if (uiState.duressPinEnabled) {
+                                navController.slideFromRight(R.id.editDuressPinFragment)
+                            } else {
+                                navController.slideFromRight(R.id.setDuressPinIntroFragment)
+                            }
+                        }
+                    } else {
+                        navController.ensurePinSet {
                             navController.slideFromRight(R.id.setDuressPinIntroFragment)
                         }
                     }
