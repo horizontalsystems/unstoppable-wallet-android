@@ -78,7 +78,9 @@ fun DuressPasscodeBlock(
                         )
                     },
                     onClick = {
-                        viewModel.disableDuressPin()
+                        navController.authorizedAction {
+                            viewModel.disableDuressPin()
+                        }
                     }
                 )
             }
