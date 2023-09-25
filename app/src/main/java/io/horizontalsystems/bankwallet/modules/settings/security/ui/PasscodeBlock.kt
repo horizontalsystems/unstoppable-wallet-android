@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
+import io.horizontalsystems.bankwallet.core.ensurePinSet
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.settings.security.SecurityCenterCell
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
@@ -128,7 +129,9 @@ fun PasscodeBlock(
                         checked = uiState.biometricsEnabled,
                         onCheckedChange = { enabled ->
                             if (enabled) {
-                                viewModel.enableBiometrics()
+                                navController.ensurePinSet {
+                                    viewModel.enableBiometrics()
+                                }
                             } else {
                                 viewModel.disableBiometrics()
                             }
