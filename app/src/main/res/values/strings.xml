@@ -945,6 +945,8 @@
 
     <string name="SetDuressPin_Title">Set Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
+    <string name="EditDuressPin_Title">Edit Duress Passcode</string>
+    <string name="EditDuressPin_Description">New passcode for Duress Mode</string>
 
     <string name="DuressPin_Title">Duress Passcode</string>
     <string name="DuressPin_Description">This mode allows user to setup multiple unlock app PINs where a desired PIN shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
