@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.about
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,8 +29,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
-import io.horizontalsystems.bankwallet.core.managers.RateAppManager
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
@@ -45,6 +41,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawre
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
@@ -194,36 +191,8 @@ private fun SettingSections(
             )
         })
     )
-
-    Spacer(Modifier.height(32.dp))
-
-    CellUniversalLawrenceSection(
-        listOf({
-            HsSettingCell(
-                R.string.Settings_RateUs,
-                R.drawable.ic_star_20,
-                onClick = { RateAppManager.openPlayMarket(context) }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_ShareThisWallet,
-                R.drawable.ic_share_20,
-                onClick = { shareAppLink(viewModel.appWebPageLink, context) }
-            )
-        })
-    )
-
-    Spacer(Modifier.height(32.dp))
-
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.SettingsContact_Title,
-                R.drawable.ic_mail_24,
-                onClick = showContactOptions
-            )
-        }
-    )
+    
+    VSpacer(32.dp)
 }
 
 @Composable
@@ -255,19 +224,6 @@ fun AboutHeader(appVersion: String) {
             )
         }
     }
-}
-
-private fun shareAppLink(appLink: String, context: Context) {
-    val shareMessage = Translator.getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
-    val shareIntent = Intent(Intent.ACTION_SEND)
-    shareIntent.type = "text/plain"
-    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-    context.startActivity(
-        Intent.createChooser(
-            shareIntent,
-            Translator.getString(R.string.SettingsShare_Title)
-        )
-    )
 }
 
 @Preview
