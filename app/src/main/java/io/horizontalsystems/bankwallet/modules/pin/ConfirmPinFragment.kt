@@ -1,33 +1,32 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.core.os.bundleOf
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinConfirm
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.setNavigationResult
+import kotlinx.parcelize.Parcelize
 
 class ConfirmPinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent() {
+        val navController = findNavController()
         ComposeAppTheme {
             PinConfirm(
                 onSuccess = {
-                    closeWithResult(PinModule.RESULT_OK)
+                    navController.setNavigationResultX(Result(true))
+                    navController.popBackStack()
                 },
                 onCancel = {
-                    closeWithResult(PinModule.RESULT_CANCELLED)
+                    navController.popBackStack()
                 }
             )
         }
     }
 
-    private fun closeWithResult(result: Int) {
-        val bundle = bundleOf(PinModule.requestResult to result)
-        setNavigationResult(PinModule.requestKey, bundle)
-        findNavController().popBackStack()
-    }
-
+    @Parcelize
+    data class Result(val success: Boolean) : Parcelable
 }
