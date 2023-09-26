@@ -207,6 +207,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         LocalStorageManager(preferences).apply {
             localStorage = this
             pinStorage = this
+            lockoutStorage = this
             thirdKeyboardStorage = this
             marketStorage = this
         }
