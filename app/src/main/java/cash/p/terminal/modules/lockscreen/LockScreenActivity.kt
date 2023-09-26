@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import cash.p.terminal.core.BaseActivity
-import cash.p.terminal.modules.pin.PinModule
 import cash.p.terminal.modules.pin.ui.PinUnlock
 import cash.p.terminal.ui.compose.ComposeAppTheme
 
@@ -18,7 +17,7 @@ class LockScreenActivity : BaseActivity() {
             ComposeAppTheme {
                 PinUnlock(
                     onSuccess = {
-                        setResult(PinModule.RESULT_OK)
+                        setResult(RESULT_OK)
                         finish()
                     }
                 )
@@ -27,7 +26,8 @@ class LockScreenActivity : BaseActivity() {
 
         onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                finishAffinity()
+                setResult(RESULT_CANCELED)
+                finish()
             }
         })
     }
