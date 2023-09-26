@@ -125,7 +125,6 @@ class AccountManager(
     }
 
     override fun setLevel(level: Int) {
-        if (level == accountsMinLevel) return
         accountsMinLevel = level
 
         accountsCache = storage.allAccounts(level).associateBy { it.id }.toMutableMap()
