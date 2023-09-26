@@ -40,12 +40,12 @@ import java.math.BigDecimal
 
 class SendEvmSettingsFragment : BaseComposeFragment() {
 
-    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
-    private val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
-    private val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
-
     @Composable
     override fun GetContent() {
+        val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+        val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+        val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+
         ComposeAppTheme {
             val feeSettingsViewModel = viewModel<ViewModel>(
                 factory = EvmFeeModule.Factory(
@@ -112,6 +112,7 @@ fun SendEvmFeeSettingsScreen(
             is LegacyFeeSettingsViewModel -> {
                 LegacyFeeSettings(feeSettingsViewModel, navController)
             }
+
             is Eip1559FeeSettingsViewModel -> {
                 Eip1559FeeSettings(feeSettingsViewModel, navController)
             }

@@ -4,30 +4,26 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITorManager
+import io.horizontalsystems.bankwallet.core.tor.ConnectionStatus
+import io.horizontalsystems.bankwallet.core.tor.Tor
+import io.horizontalsystems.bankwallet.core.tor.torcore.TorConstants
+import io.horizontalsystems.bankwallet.core.tor.torcore.TorOperator
+import io.horizontalsystems.bankwallet.core.tor.torutils.TorConnectionManager
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
-import io.horizontalsystems.tor.ConnectionStatus
-import io.horizontalsystems.tor.Tor
-import io.horizontalsystems.tor.TorKit
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.concurrent.Executors
 
-class TorManager(
-    context: Context,
-    val localStorage: ILocalStorage
-) : ITorManager {
+class TorManager(context: Context, val localStorage: ILocalStorage) : ITorManager, TorOperator.Listener {
 
     private val logger = AppLogger("tor status")
     private val _torStatusFlow = MutableStateFlow(TorStatus.Closed)
     override val torStatusFlow = _torStatusFlow
 
     private val executorService = Executors.newCachedThreadPool()
-    private val disposables = CompositeDisposable()
-    private val kit: TorKit by lazy {
-        TorKit(context)
+    private val torOperator: TorOperator by lazy {
+        TorOperator(Tor.Settings(context), this)
     }
 
     init {
@@ -37,21 +33,15 @@ class TorManager(
     }
 
     override fun start() {
-        disposables.add(kit.torInfoSubject
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ torInfo ->
-                    _torStatusFlow.update { getStatus(torInfo) }
-                }, {
-                    logger.warning("Tor exception", it)
-                })
-        )
+        enableProxy()
         executorService.execute {
-            kit.startTor(false)
+            torOperator.start()
         }
     }
 
     override fun stop(): Single<Boolean> {
-        return kit.stopTor()
+        disableProxy()
+        return torOperator.stop()
     }
 
     override fun setTorAsEnabled() {
@@ -67,13 +57,30 @@ class TorManager(
     override val isTorEnabled: Boolean
         get() = localStorage.torEnabled
 
-    private fun getStatus(torinfo: Tor.Info): TorStatus {
-        return when (torinfo.connection.status) {
+    override fun statusUpdate(torInfo: Tor.Info) {
+        _torStatusFlow.update { getStatus(torInfo) }
+    }
+
+    private fun getStatus(torInfo: Tor.Info): TorStatus {
+        return when (torInfo.connection.status) {
             ConnectionStatus.CONNECTED -> TorStatus.Connected
             ConnectionStatus.CONNECTING -> TorStatus.Connecting
             ConnectionStatus.CLOSED -> TorStatus.Closed
             ConnectionStatus.FAILED -> TorStatus.Failed
         }
+    }
+
+    private fun enableProxy() {
+        TorConnectionManager.setSystemProxy(
+            true,
+            TorConstants.IP_LOCALHOST,
+            TorConstants.HTTP_PROXY_PORT_DEFAULT,
+            TorConstants.SOCKS_PROXY_PORT_DEFAULT
+        )
+    }
+
+    private fun disableProxy() {
+        TorConnectionManager.disableSystemProxy()
     }
 
 }
