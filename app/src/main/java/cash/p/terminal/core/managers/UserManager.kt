@@ -5,11 +5,9 @@ import cash.p.terminal.core.IAccountManager
 class UserManager(
     private val accountManager: IAccountManager
 ) {
-    private var currentUserLevel: Int? = null
+    private var currentUserLevel = Int.MAX_VALUE
 
-    fun getUserLevel(): Int {
-        return currentUserLevel!!
-    }
+    fun getUserLevel() = currentUserLevel
 
     fun setUserLevel(level: Int) {
         currentUserLevel = level
@@ -17,10 +15,10 @@ class UserManager(
     }
 
     fun allowAccountsForDuress(accountIds: List<String>) {
-        accountManager.updateAccountLevels(accountIds, getUserLevel() + 1)
+        accountManager.updateAccountLevels(accountIds, currentUserLevel + 1)
     }
 
     fun disallowAccountsForDuress() {
-        accountManager.updateMaxLevel(getUserLevel())
+        accountManager.updateMaxLevel(currentUserLevel)
     }
 }
