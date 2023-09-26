@@ -14,6 +14,7 @@ interface ICoreApp {
     var keyProvider: IKeyProvider
     var pinComponent: IPinComponent
     var pinStorage: IPinStorage
+    var lockoutStorage: ILockoutStorage
     var thirdKeyboardStorage: IThirdKeyboard
     var instance: CoreApp
 }
@@ -53,13 +54,14 @@ interface IPinComponent {
     fun shouldShowPin(activity: Activity): Boolean
 }
 
-interface IPinStorage {
+interface ILockoutStorage {
     var failedAttempts: Int?
     var lockoutUptime: Long?
+}
+
+interface IPinStorage {
     var biometricAuthEnabled: Boolean
     var pin: String?
-
-    fun clearPin()
 }
 
 interface IThirdKeyboard {

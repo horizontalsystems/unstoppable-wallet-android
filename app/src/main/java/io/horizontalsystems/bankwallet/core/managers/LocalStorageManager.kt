@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
+import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -29,7 +30,7 @@ import java.util.UUID
 
 class LocalStorageManager(
     private val preferences: SharedPreferences
-) : ILocalStorage, IPinStorage, IThirdKeyboard, IMarketStorage {
+) : ILocalStorage, IPinStorage, ILockoutStorage, IThirdKeyboard, IMarketStorage {
 
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
@@ -276,10 +277,6 @@ class LocalStorageManager(
         set(value) {
             preferences.edit().putString(PIN, value).apply()
         }
-
-    override fun clearPin() {
-        preferences.edit().remove(PIN).apply()
-    }
 
     //used only in db migration
     override var syncMode: SyncMode?
