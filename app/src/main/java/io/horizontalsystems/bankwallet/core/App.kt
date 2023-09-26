@@ -92,6 +92,7 @@ import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCo
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.bankwallet.modules.pin.PinComponent
+import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
@@ -206,7 +207,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         LocalStorageManager(preferences).apply {
             localStorage = this
-            pinStorage = this
+            pinSettingsStorage = this
             lockoutStorage = this
             thirdKeyboardStorage = this
             marketStorage = this
@@ -337,14 +338,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         addressParserFactory = AddressParserFactory()
 
         pinComponent = PinComponent(
-            pinStorage = pinStorage,
-            encryptionManager = encryptionManager,
+            pinSettingsStorage = pinSettingsStorage,
             excludedActivityNames = listOf(
                 KeyStoreActivity::class.java.name,
                 LockScreenActivity::class.java.name,
                 LauncherActivity::class.java.name,
             ),
             userManager = userManager,
+            pinDbStorage = PinDbStorage(appDatabase.pinDao())
         )
 
         backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent).apply {

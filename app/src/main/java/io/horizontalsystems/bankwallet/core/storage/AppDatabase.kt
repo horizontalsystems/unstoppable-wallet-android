@@ -14,6 +14,8 @@ import io.horizontalsystems.bankwallet.entities.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftMetadataSyncRecord
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
+import io.horizontalsystems.bankwallet.modules.pin.core.Pin
+import io.horizontalsystems.bankwallet.modules.pin.core.PinDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectV2Session
@@ -41,6 +43,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionD
     TokenAutoEnabledBlockchain::class,
     CexAssetRaw::class,
     ChartIndicatorSetting::class,
+    Pin::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -63,6 +66,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun evmMethodLabelDao(): EvmMethodLabelDao
     abstract fun syncerStateDao(): SyncerStateDao
     abstract fun tokenAutoEnabledBlockchainDao(): TokenAutoEnabledBlockchainDao
+    abstract fun pinDao(): PinDao
 
     companion object {
 

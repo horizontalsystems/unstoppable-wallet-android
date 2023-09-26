@@ -3,22 +3,22 @@ package io.horizontalsystems.bankwallet.modules.pin
 import android.app.Activity
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockManager
+import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.pin.core.PinManager
-import io.horizontalsystems.core.IEncryptionManager
 import io.horizontalsystems.core.IPinComponent
-import io.horizontalsystems.core.IPinStorage
+import io.horizontalsystems.core.IPinSettingsStorage
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 
 class PinComponent(
-    private val pinStorage: IPinStorage,
-    private val encryptionManager: IEncryptionManager,
+    private val pinSettingsStorage: IPinSettingsStorage,
     private val excludedActivityNames: List<String>,
-    private val userManager: UserManager
+    private val userManager: UserManager,
+    private val pinDbStorage: PinDbStorage
 ) : IPinComponent {
 
     private val pinManager: PinManager by lazy {
-        PinManager(encryptionManager, pinStorage)
+        PinManager(pinDbStorage)
     }
 
     private val appLockManager: LockManager by lazy {
@@ -32,9 +32,9 @@ class PinComponent(
         get() = appLockManager.isLocked && isPinSet
 
     override var isBiometricAuthEnabled: Boolean
-        get() = pinStorage.biometricAuthEnabled
+        get() = pinSettingsStorage.biometricAuthEnabled
         set(value) {
-            pinStorage.biometricAuthEnabled = value
+            pinSettingsStorage.biometricAuthEnabled = value
         }
 
     override val isPinSet: Boolean

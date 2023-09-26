@@ -14,7 +14,7 @@ abstract class CoreApp : Application() {
         override lateinit var keyStoreManager: IKeyStoreManager
         override lateinit var keyProvider: IKeyProvider
         override lateinit var pinComponent: IPinComponent
-        override lateinit var pinStorage: IPinStorage
+        override lateinit var pinSettingsStorage: IPinSettingsStorage
         override lateinit var lockoutStorage: ILockoutStorage
         override lateinit var thirdKeyboardStorage: IThirdKeyboard
 
