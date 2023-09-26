@@ -13,7 +13,7 @@ interface ICoreApp {
     var keyStoreManager: IKeyStoreManager
     var keyProvider: IKeyProvider
     var pinComponent: IPinComponent
-    var pinStorage: IPinStorage
+    var pinSettingsStorage: IPinSettingsStorage
     var lockoutStorage: ILockoutStorage
     var thirdKeyboardStorage: IThirdKeyboard
     var instance: CoreApp
@@ -59,7 +59,7 @@ interface ILockoutStorage {
     var lockoutUptime: Long?
 }
 
-interface IPinStorage {
+interface IPinSettingsStorage {
     var biometricAuthEnabled: Boolean
     var pin: String?
 }

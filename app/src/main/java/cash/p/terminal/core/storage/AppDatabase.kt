@@ -14,6 +14,8 @@ import cash.p.terminal.entities.nft.NftCollectionRecord
 import cash.p.terminal.entities.nft.NftMetadataSyncRecord
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import cash.p.terminal.modules.chart.ChartIndicatorSettingsDao
+import cash.p.terminal.modules.pin.core.Pin
+import cash.p.terminal.modules.pin.core.PinDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
 import cash.p.terminal.modules.walletconnect.entity.WalletConnectV2Session
@@ -41,6 +43,7 @@ import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
     TokenAutoEnabledBlockchain::class,
     CexAssetRaw::class,
     ChartIndicatorSetting::class,
+    Pin::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -63,6 +66,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun evmMethodLabelDao(): EvmMethodLabelDao
     abstract fun syncerStateDao(): SyncerStateDao
     abstract fun tokenAutoEnabledBlockchainDao(): TokenAutoEnabledBlockchainDao
+    abstract fun pinDao(): PinDao
 
     companion object {
 

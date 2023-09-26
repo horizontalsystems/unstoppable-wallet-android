@@ -92,6 +92,7 @@ import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsReposit
 import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import cash.p.terminal.modules.market.topplatforms.TopPlatformsRepository
 import cash.p.terminal.modules.pin.PinComponent
+import cash.p.terminal.modules.pin.core.PinDbStorage
 import cash.p.terminal.modules.profeatures.ProFeaturesAuthorizationManager
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesStorage
 import cash.p.terminal.modules.theme.ThemeType
@@ -207,7 +208,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         LocalStorageManager(preferences).apply {
             localStorage = this
-            pinStorage = this
+            pinSettingsStorage = this
             lockoutStorage = this
             thirdKeyboardStorage = this
             marketStorage = this
@@ -336,14 +337,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         addressParserFactory = AddressParserFactory()
 
         pinComponent = PinComponent(
-            pinStorage = pinStorage,
-            encryptionManager = encryptionManager,
+            pinSettingsStorage = pinSettingsStorage,
             excludedActivityNames = listOf(
                 KeyStoreActivity::class.java.name,
                 LockScreenActivity::class.java.name,
                 LauncherActivity::class.java.name,
             ),
             userManager = userManager,
+            pinDbStorage = PinDbStorage(appDatabase.pinDao())
         )
 
         backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent).apply {
