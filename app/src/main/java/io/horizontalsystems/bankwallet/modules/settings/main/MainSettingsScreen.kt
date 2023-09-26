@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
+import android.content.Context
+import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -30,6 +32,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -85,6 +88,7 @@ private fun SettingSections(
     val wcCounter by viewModel.wcCounterLiveData.observeAsState()
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
     val language by viewModel.languageLiveData.observeAsState()
+    val context = LocalContext.current
 
     CellUniversalLawrenceSection(
         listOf {
@@ -124,7 +128,7 @@ private fun SettingSections(
         })
     )
 
-    Spacer(Modifier.height(32.dp))
+    VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
         listOf {
@@ -160,7 +164,7 @@ private fun SettingSections(
         }
     )
 
-    Spacer(Modifier.height(32.dp))
+    VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
         listOf(
@@ -215,7 +219,7 @@ private fun SettingSections(
         )
     )
 
-    Spacer(Modifier.height(32.dp))
+    VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
         listOf {
@@ -229,7 +233,7 @@ private fun SettingSections(
         }
     )
 
-    Spacer(Modifier.height(32.dp))
+    VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
         listOf({
@@ -251,7 +255,7 @@ private fun SettingSections(
         })
     )
 
-    Spacer(Modifier.height(32.dp))
+    VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
         listOf {
@@ -266,7 +270,31 @@ private fun SettingSections(
         }
     )
 
-    Spacer(Modifier.height(32.dp))
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.Settings_RateUs,
+                R.drawable.ic_star_20,
+                onClick = { RateAppManager.openPlayMarket(context) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_ShareThisWallet,
+                R.drawable.ic_share_20,
+                onClick = { shareAppLink(viewModel.appWebPageLink, context) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.SettingsContact_Title,
+                R.drawable.ic_mail_24,
+                onClick = { navController.slideFromBottom(R.id.contactOptionsDialog) },
+            )
+        })
+    )
+
+    VSpacer(32.dp)
 }
 
 @Composable
@@ -358,6 +386,19 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
             text = stringResource(R.string.Settings_CompanyName),
         )
     }
+}
+
+private fun shareAppLink(appLink: String, context: Context) {
+    val shareMessage = Translator.getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
+    val shareIntent = Intent(Intent.ACTION_SEND)
+    shareIntent.type = "text/plain"
+    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+    context.startActivity(
+        Intent.createChooser(
+            shareIntent,
+            Translator.getString(R.string.SettingsShare_Title)
+        )
+    )
 }
 
 @Preview

@@ -23,6 +23,7 @@ class MainSettingsViewModel(
     val baseCurrencyLiveData = MutableLiveData(service.baseCurrency)
     val languageLiveData = MutableLiveData(service.currentLanguageDisplayName)
     val appVersion by service::appVersion
+    val appWebPageLink by service::appWebPageLink
 
     private var wcSessionsCount = service.walletConnectSessionCount
     private var wc2PendingRequestCount = 0

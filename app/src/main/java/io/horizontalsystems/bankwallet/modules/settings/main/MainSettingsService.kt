@@ -30,6 +30,7 @@ class MainSettingsService(
     private val appConfigProvider: AppConfigProvider
 ) {
 
+    val appWebPageLink = appConfigProvider.appWebPageLink
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
     val backedUpObservable: Observable<Boolean> get() = backedUpSubject
 
