@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.pin.core
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Entity
 import androidx.room.Insert
@@ -33,7 +32,6 @@ class PinDbStorage(private val pinDao: PinDao) {
 
     fun getLevel(passcode: String): Int? {
         return pinDao.getAll().find {
-            Log.e("AAA", "$it")
             it.passcode?.value == passcode
         }?.level
     }
