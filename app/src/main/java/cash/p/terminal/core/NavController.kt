@@ -7,7 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import cash.p.terminal.R
-import cash.p.terminal.modules.pin.PinModule
+import cash.p.terminal.modules.pin.ConfirmPinFragment
 import cash.p.terminal.modules.pin.SetPinFragment
 import cash.p.terminal.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.getNavigationResult
@@ -37,14 +37,11 @@ fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
 
 fun NavController.authorizedAction(action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
-        getNavigationResult(PinModule.requestKey) { bundle ->
-            val resultCode = bundle.getInt(PinModule.requestResult)
-
-            if (resultCode == PinModule.RESULT_OK) {
+        slideFromBottomForResult<ConfirmPinFragment.Result>(R.id.confirmPinFragment) {
+            if (it.success) {
                 action.invoke()
             }
         }
-        slideFromBottom(R.id.confirmPinFragment)
     } else {
         action.invoke()
     }
@@ -73,6 +70,21 @@ fun NavController.ensurePinSet(action: () -> Unit) {
             action.invoke()
         }
     }
+}
+
+fun <T: Parcelable> NavController.slideFromBottomForResult(
+    @IdRes resId: Int,
+    args: Bundle? = null,
+    onResult: (T) -> Unit
+) {
+    val navOptions = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_from_bottom)
+        .setExitAnim(android.R.anim.fade_out)
+        .setPopEnterAnim(android.R.anim.fade_in)
+        .setPopExitAnim(R.anim.slide_to_bottom)
+        .build()
+
+    navigateForResult(resId, args, navOptions, onResult)
 }
 
 fun <T: Parcelable> NavController.slideFromRightForResult(
