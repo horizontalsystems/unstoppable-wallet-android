@@ -3,7 +3,7 @@ package io.horizontalsystems.core
 import android.app.Application
 import android.content.Context
 import io.horizontalsystems.core.helpers.LocaleHelper
-import java.util.*
+import java.util.Locale
 
 abstract class CoreApp : Application() {
 
@@ -15,6 +15,7 @@ abstract class CoreApp : Application() {
         override lateinit var keyProvider: IKeyProvider
         override lateinit var pinComponent: IPinComponent
         override lateinit var pinStorage: IPinStorage
+        override lateinit var lockoutStorage: ILockoutStorage
         override lateinit var thirdKeyboardStorage: IThirdKeyboard
 
         override lateinit var instance: CoreApp

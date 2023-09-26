@@ -2,19 +2,19 @@ package io.horizontalsystems.pin
 
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.core.IPinStorage
 import cash.p.terminal.modules.pin.core.ILockoutUntilDateFactory
 import cash.p.terminal.modules.pin.core.LockoutManager
 import cash.p.terminal.modules.pin.core.LockoutState
 import cash.p.terminal.modules.pin.core.UptimeProvider
+import io.horizontalsystems.core.ILockoutStorage
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
-import java.util.*
+import java.util.Date
 
 class LockoutManagerTest {
 
-    private val localStorage = Mockito.mock(IPinStorage::class.java)
+    private val localStorage = Mockito.mock(ILockoutStorage::class.java)
     private val uptimeProvider = Mockito.mock(UptimeProvider::class.java)
     private val lockoutUntilDateFactory = Mockito.mock(ILockoutUntilDateFactory::class.java)
     private val lockoutManager = LockoutManager(localStorage, uptimeProvider, lockoutUntilDateFactory)

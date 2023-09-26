@@ -138,7 +138,7 @@ class PinConfirmViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val lockoutManager = LockoutManager(
-                CoreApp.pinStorage, UptimeProvider(), LockoutUntilDateFactory(
+                CoreApp.lockoutStorage, UptimeProvider(), LockoutUntilDateFactory(
                     CurrentDateProvider()
                 )
             )

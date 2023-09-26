@@ -1,9 +1,9 @@
 package cash.p.terminal.modules.pin.core
 
-import io.horizontalsystems.core.IPinStorage
+import io.horizontalsystems.core.ILockoutStorage
 
 class LockoutManager(
-    private val localStorage: IPinStorage,
+    private val localStorage: ILockoutStorage,
     private val uptimeProvider: UptimeProvider,
     private val lockoutUntilDateFactory: ILockoutUntilDateFactory
 ) : ILockoutManager {
