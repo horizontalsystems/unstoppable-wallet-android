@@ -12,14 +12,10 @@ class MainActivityViewModel(userManager: UserManager) : ViewModel() {
 
     val navigateToMainLiveData = MutableLiveData(false)
 
-    private var userLevel = userManager.currentUserLevelFlow.value
-
     init {
         viewModelScope.launch {
             userManager.currentUserLevelFlow.collect {
-                if (it != userLevel) {
-                    navigateToMainLiveData.postValue(true)
-                }
+                navigateToMainLiveData.postValue(true)
             }
         }
     }
