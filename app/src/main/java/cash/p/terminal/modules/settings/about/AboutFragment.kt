@@ -1,7 +1,5 @@
 package cash.p.terminal.modules.settings.about
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,8 +29,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
-import cash.p.terminal.core.managers.RateAppManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.releasenotes.ReleaseNotesScreen
 import cash.p.terminal.modules.settings.appstatus.AppStatusScreen
@@ -45,6 +41,7 @@ import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoTextBody
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
@@ -194,36 +191,8 @@ private fun SettingSections(
             )
         })
     )
-
-    Spacer(Modifier.height(32.dp))
-
-    CellUniversalLawrenceSection(
-        listOf({
-        /*    HsSettingCell(
-                R.string.Settings_RateUs,
-                R.drawable.ic_star_20,
-                onClick = { RateAppManager.openPlayMarket(context) }
-            )
-        }, {*/
-            HsSettingCell(
-                R.string.Settings_ShareThisWallet,
-                R.drawable.ic_share_20,
-                onClick = { shareAppLink(viewModel.appWebPageLink, context) }
-            )
-        })
-    )
-
-    Spacer(Modifier.height(32.dp))
-
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.SettingsContact_Title,
-                R.drawable.ic_mail_24,
-                onClick = showContactOptions
-            )
-        }
-    )
+    
+    VSpacer(32.dp)
 }
 
 @Composable
@@ -255,19 +224,6 @@ fun AboutHeader(appVersion: String) {
             )
         }
     }
-}
-
-private fun shareAppLink(appLink: String, context: Context) {
-    val shareMessage = Translator.getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
-    val shareIntent = Intent(Intent.ACTION_SEND)
-    shareIntent.type = "text/plain"
-    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-    context.startActivity(
-        Intent.createChooser(
-            shareIntent,
-            Translator.getString(R.string.SettingsShare_Title)
-        )
-    )
 }
 
 @Preview
