@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
@@ -25,7 +26,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
             return
         }
         val viewModel by viewModels<TokenBalanceViewModel> { TokenBalanceModule.Factory(wallet) }
-        val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
+        val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
         ComposeAppTheme {
             TokenBalanceScreen(
