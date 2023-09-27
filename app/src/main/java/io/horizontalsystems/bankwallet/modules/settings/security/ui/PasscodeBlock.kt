@@ -129,7 +129,7 @@ fun PasscodeBlock(
                         checked = uiState.biometricsEnabled,
                         onCheckedChange = { enabled ->
                             if (enabled) {
-                                navController.ensurePinSet {
+                                navController.ensurePinSet(R.string.PinSet_ForDuress) {
                                     viewModel.enableBiometrics()
                                 }
                             } else {
