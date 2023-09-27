@@ -1,8 +1,6 @@
 package cash.p.terminal.modules.pin
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -29,6 +27,7 @@ import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsCheckbox
 import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
@@ -60,48 +59,8 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
             )
-        }
-    ) {
-        Column(
-            Modifier
-                .fillMaxHeight()
-                .padding(it)
-                .verticalScroll(rememberScrollState())
-        ) {
-            InfoText(text = stringResource(R.string.DuressPinSelectAccounts_Description))
-
-            CellUniversalLawrenceSection(items) { account ->
-                RowUniversal(
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                ) {
-                    Column {
-                        body_leah(text = account.name)
-                        VSpacer(height = 1.dp)
-                        if (!account.hasAnyBackup) {
-                            subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
-                        } else {
-                            subhead2_grey(
-                                text = account.type.detailedDescription,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1
-                            )
-                        }
-                    }
-                    HFillSpacer(minWidth = 8.dp)
-                    HsCheckbox(
-                        checked = selected.contains(account.id),
-                        onCheckedChange = { checked ->
-                            if (checked) {
-                                selected.add(account.id)
-                            } else {
-                                selected.remove(account.id)
-                            }
-                        },
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
+        },
+        bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
                     modifier = Modifier
@@ -113,6 +72,54 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
                     },
                 )
             }
+        }
+    ) { innerPaddings ->
+        if (items.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .padding(innerPaddings)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                InfoText(text = stringResource(R.string.DuressPinSelectAccounts_Description))
+
+                CellUniversalLawrenceSection(items) { account ->
+                    RowUniversal(
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    ) {
+                        Column {
+                            body_leah(text = account.name)
+                            VSpacer(height = 1.dp)
+                            if (!account.hasAnyBackup) {
+                                subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
+                            } else {
+                                subhead2_grey(
+                                    text = account.type.detailedDescription,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1
+                                )
+                            }
+                        }
+                        HFillSpacer(minWidth = 8.dp)
+                        HsCheckbox(
+                            checked = selected.contains(account.id),
+                            onCheckedChange = { checked ->
+                                if (checked) {
+                                    selected.add(account.id)
+                                } else {
+                                    selected.remove(account.id)
+                                }
+                            },
+                        )
+                    }
+                }
+                VSpacer(height = 32.dp)
+            }
+        } else {
+            ListEmptyView(
+                paddingValues = innerPaddings,
+                text = stringResource(R.string.DuressPinSelectAccounts_EmptyList),
+                icon = R.drawable.ic_empty_wallet
+            )
         }
     }
 
