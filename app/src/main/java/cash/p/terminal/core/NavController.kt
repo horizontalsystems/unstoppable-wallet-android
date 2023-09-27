@@ -11,6 +11,7 @@ import cash.p.terminal.modules.pin.ConfirmPinFragment
 import cash.p.terminal.modules.pin.SetPinFragment
 import cash.p.terminal.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.parcelable
 import java.util.UUID
 
 fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
@@ -62,11 +63,11 @@ fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
     }
 }
 
-fun NavController.ensurePinSet(action: () -> Unit) {
+fun NavController.ensurePinSet(descriptionResId: Int, action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
         action.invoke()
     } else {
-        slideFromRightForResult<SetPinFragment.Result>(R.id.setPinFragment) {
+        slideFromRightForResult<SetPinFragment.Result>(R.id.setPinFragment, SetPinFragment.Input(descriptionResId)) {
             action.invoke()
         }
     }
@@ -74,7 +75,7 @@ fun NavController.ensurePinSet(action: () -> Unit) {
 
 fun <T: Parcelable> NavController.slideFromBottomForResult(
     @IdRes resId: Int,
-    args: Bundle? = null,
+    input: Parcelable? = null,
     onResult: (T) -> Unit
 ) {
     val navOptions = NavOptions.Builder()
@@ -84,12 +85,12 @@ fun <T: Parcelable> NavController.slideFromBottomForResult(
         .setPopExitAnim(R.anim.slide_to_bottom)
         .build()
 
-    navigateForResult(resId, args, navOptions, onResult)
+    navigateForResult(resId, input, navOptions, onResult)
 }
 
 fun <T: Parcelable> NavController.slideFromRightForResult(
     @IdRes resId: Int,
-    args: Bundle? = null,
+    input: Parcelable? = null,
     onResult: (T) -> Unit
 ) {
     val navOptions = NavOptions.Builder()
@@ -99,19 +100,21 @@ fun <T: Parcelable> NavController.slideFromRightForResult(
         .setPopExitAnim(R.anim.slide_to_right)
         .build()
 
-    navigateForResult(resId, args, navOptions, onResult)
+    navigateForResult(resId, input, navOptions, onResult)
 }
 
 private fun <T : Parcelable> NavController.navigateForResult(
     resId: Int,
-    args: Bundle?,
+    input: Parcelable?,
     navOptions: NavOptions,
     onResult: (T) -> Unit,
 ) {
     val key = UUID.randomUUID().toString()
     getNavigationResultX(key, onResult)
     val bundle = bundleOf("resultKey" to key)
-    args?.let { bundle.putAll(it) }
+    input?.let {
+        bundle.putParcelable("input", it)
+    }
     navigate(resId, bundle, navOptions)
 }
 
@@ -123,6 +126,10 @@ private fun <T: Parcelable> NavController.getNavigationResultX(key: String, onRe
             backStackEntry.savedStateHandle.remove<T>(key)
         }
     }
+}
+
+inline fun <reified T: Parcelable> NavController.getInput() : T? {
+    return currentBackStackEntry?.arguments?.parcelable("input")
 }
 
 fun <T: Parcelable> NavController.setNavigationResultX(result: T, destinationId: Int? = null) {

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.pin.ui.PinSet
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -16,10 +17,12 @@ class SetPinFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent() {
         val navController = findNavController()
+        val input = navController.getInput<Input>()
+
         ComposeAppTheme {
             PinSet(
                 title = stringResource(R.string.PinSet_Title),
-                description = stringResource(R.string.PinSet_Info),
+                description = stringResource(input?.descriptionResId ?: R.string.PinSet_Info),
                 dismissWithSuccess = {
                     navController.setNavigationResultX(Result(true))
                     navController.popBackStack()
@@ -28,6 +31,9 @@ class SetPinFragment : BaseComposeFragment() {
             )
         }
     }
+
+    @Parcelize
+    data class Input(val descriptionResId: Int) : Parcelable
 
     @Parcelize
     data class Result(val success: Boolean) : Parcelable
