@@ -14,8 +14,8 @@ import io.horizontalsystems.bankwallet.modules.pin.unlock.PinConfirmViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.headline1_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
 @Composable
 fun PinConfirm(
@@ -50,13 +50,13 @@ fun PinConfirm(
                 title = {
                     val error = viewModel.uiState.error
                     if (error != null) {
-                        headline1_lucian(
+                        subhead2_lucian(
                             text = error,
                             textAlign = TextAlign.Center
                         )
                     } else {
-                        headline1_leah(
-                            text = stringResource(R.string.Unlock_Passcode),
+                        subhead2_grey(
+                            text = stringResource(R.string.Unlock_EnterPasscode),
                             textAlign = TextAlign.Center
                         )
                     }
