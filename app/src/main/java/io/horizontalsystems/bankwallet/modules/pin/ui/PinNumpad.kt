@@ -7,11 +7,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -46,47 +43,28 @@ fun PinNumpad(
     showBiometricPrompt: (() -> Unit)? = null,
     inputState: InputState = InputState.Enabled()
 ) {
-
     var numpadNumbers by remember { mutableStateOf(generateOriginalNumpadNumbers()) }
     var isRandomized by remember { mutableStateOf(false) }
     val enabled = inputState is InputState.Enabled
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            NumberKey(numpadNumbers[0], enabled) { number -> onNumberClick(number) }
-            NumberKey(numpadNumbers[1], enabled) { number -> onNumberClick(number) }
-            NumberKey(numpadNumbers[2], enabled) { number -> onNumberClick(number) }
+        val windowed = numpadNumbers.windowed(size = 3, step = 3)
+        windowed.forEach {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                it.forEach {
+                    NumberKey(it, enabled) { onNumberClick(it) }
+                }
+            }
+            VSpacer(16.dp)
         }
-        VSpacer(16.dp)
+
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            NumberKey(numpadNumbers[3], enabled) { number -> onNumberClick(number) }
-            NumberKey(numpadNumbers[4], enabled) { number -> onNumberClick(number) }
-            NumberKey(numpadNumbers[5], enabled) { number -> onNumberClick(number) }
-        }
-        VSpacer(16.dp)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            NumberKey(numpadNumbers[6], enabled) { number -> onNumberClick(number) }
-            NumberKey(numpadNumbers[7], enabled) { number -> onNumberClick(number) }
-            NumberKey(numpadNumbers[8], enabled) { number -> onNumberClick(number) }
-        }
-        VSpacer(16.dp)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             ImageKey(
                 image = R.drawable.icon_touch_id_24,
@@ -96,19 +74,21 @@ fun PinNumpad(
             ) {
                 showBiometricPrompt?.invoke()
             }
-            NumberKey(numpadNumbers[9], enabled) { number -> onNumberClick(number) }
+            NumberKey(numpadNumbers.last(), enabled) { onNumberClick(it) }
             ImageKey(
                 image = R.drawable.ic_backspace,
                 contentDescription = stringResource(R.string.Button_Delete),
                 visible = true,
                 enabled = enabled
-            ) { onDeleteClick.invoke() }
+            ) {
+                onDeleteClick.invoke()
+            }
         }
         Column(
-            modifier = Modifier.height(120.dp)
+            modifier = Modifier.height(100.dp)
         ){
-            VSpacer(24.dp)
             if (showRandomizer) {
+                VSpacer(24.dp)
                 ButtonSecondaryDefault(
                     title = if (isRandomized) {
                         stringResource(R.string.Unlock_Regular)
@@ -158,21 +138,14 @@ private fun NumberKey(
                     HudHelper.vibrate(context)
                     onClick.invoke(number)
                 }
-            )
+            ),
+        contentAlignment = Alignment.Center
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(Modifier.height(2.dp))
-            Text(
-                text = number.toString(),
-                style = ComposeAppTheme.typography.title2R,
-                color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.steel20,
-            )
-            Spacer(Modifier.height(4.dp))
-        }
+        Text(
+            text = number.toString(),
+            style = ComposeAppTheme.typography.title2R,
+            color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.steel20,
+        )
     }
 }
 

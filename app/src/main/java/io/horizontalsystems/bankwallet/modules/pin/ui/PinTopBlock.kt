@@ -26,10 +26,9 @@ import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule.InputState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 
 @Composable
 fun PinTopBlock(
@@ -40,17 +39,22 @@ fun PinTopBlock(
     inputState: InputState = InputState.Enabled(),
     onShakeAnimationFinish: (() -> Unit)? = null
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        when (inputState) {
-            is InputState.Enabled -> {
-                title()
-                Spacer(Modifier.height(16.dp))
+    when (inputState) {
+        is InputState.Enabled -> {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    title()
+                    Spacer(Modifier.height(16.dp))
+                }
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.shake(
@@ -58,16 +62,29 @@ fun PinTopBlock(
                         onAnimationFinish = { onShakeAnimationFinish?.invoke() }
                     )
                 ) {
-                    for (i in 1..PinModule.PIN_COUNT) {
-                        IndicatorCircle(i <= enteredCount)
+                    repeat(PinModule.PIN_COUNT) {
+                        IndicatorCircle(it < enteredCount)
                     }
                 }
-                VSpacer(16.dp)
-                subhead2_leah(
-                    text = inputState.attemptsLeft?.let { stringResource(R.string.Unlock_AttemptsLeft, it) } ?: ""
-                )
+
+                Column(
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Spacer(Modifier.height(16.dp))
+                    subhead2_jacob(
+                        text = inputState.attemptsLeft?.let { stringResource(R.string.Unlock_AttemptsLeft, it) } ?: ""
+                    )
+                }
             }
-            is InputState.Locked -> {
+        }
+        is InputState.Locked -> {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Image(
                     painter = painterResource(R.drawable.icon_lock_48),
                     contentDescription = null
@@ -81,7 +98,6 @@ fun PinTopBlock(
                 )
             }
         }
-
     }
 }
 
