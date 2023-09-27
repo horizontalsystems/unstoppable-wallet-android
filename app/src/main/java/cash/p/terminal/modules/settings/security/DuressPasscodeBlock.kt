@@ -59,7 +59,7 @@ fun DuressPasscodeBlock(
                             }
                         }
                     } else {
-                        navController.ensurePinSet(R.string.PinSet_ForBiometrics) {
+                        navController.ensurePinSet(R.string.PinSet_ForDuress) {
                             navController.slideFromRight(R.id.setDuressPinIntroFragment)
                         }
                     }
