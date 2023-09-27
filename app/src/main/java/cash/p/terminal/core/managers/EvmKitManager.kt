@@ -30,7 +30,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import java.net.URL
+import java.net.URI
 
 class EvmKitManager(
     val chain: Chain,
@@ -200,10 +200,10 @@ class EvmKitManager(
     override fun didEnterBackground() = Unit
 }
 
-val RpcSource.urls: List<URL>
+val RpcSource.uris: List<URI>
     get() = when (this) {
-        is RpcSource.WebSocket -> listOf(url)
-        is RpcSource.Http -> urls
+        is RpcSource.WebSocket -> listOf(uri)
+        is RpcSource.Http -> uris
     }
 
 class EvmKitWrapper(

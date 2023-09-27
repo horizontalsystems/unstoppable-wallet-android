@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import java.net.URL
+import java.net.URI
 
 class EvmSyncSourceManager(
     private val appConfigProvider: AppConfigProvider,
@@ -69,7 +69,7 @@ class EvmSyncSourceManager(
                 evmSyncSource(
                     type,
                     "LlamaNodes",
-                    RpcSource.Http(listOf(URL("https://eth.llamarpc.com")), null),
+                    RpcSource.Http(listOf(URI("https://eth.llamarpc.com")), null),
                     defaultTransactionSource(type)
                 )
             )
@@ -89,7 +89,7 @@ class EvmSyncSourceManager(
                 evmSyncSource(
                     type,
                     "Omnia",
-                    RpcSource.Http(listOf(URL("https://endpoints.omniatech.io/v1/bsc/mainnet/public")), null),
+                    RpcSource.Http(listOf(URI("https://endpoints.omniatech.io/v1/bsc/mainnet/public")), null),
                     defaultTransactionSource(type)
                 )
             )
@@ -103,7 +103,7 @@ class EvmSyncSourceManager(
                 evmSyncSource(
                     type,
                     "LlamaNodes",
-                    RpcSource.Http(listOf(URL("https://polygon.llamarpc.com")), null),
+                    RpcSource.Http(listOf(URI("https://polygon.llamarpc.com")), null),
                     defaultTransactionSource(type)
                 )
             )
@@ -117,7 +117,7 @@ class EvmSyncSourceManager(
                 evmSyncSource(
                     type,
                     "PublicNode",
-                    RpcSource.Http(listOf(URL("https://avalanche-evm.publicnode.com")), null),
+                    RpcSource.Http(listOf(URI("https://avalanche-evm.publicnode.com")), null),
                     defaultTransactionSource(type)
                 )
             )
@@ -132,7 +132,7 @@ class EvmSyncSourceManager(
                     type,
                     "Omnia",
                     RpcSource.Http(
-                        listOf(URL("https://endpoints.omniatech.io/v1/op/mainnet/public")),
+                        listOf(URI("https://endpoints.omniatech.io/v1/op/mainnet/public")),
                         null
                     ),
                     defaultTransactionSource(type)
@@ -148,7 +148,7 @@ class EvmSyncSourceManager(
                 evmSyncSource(
                     type,
                     "Omnia",
-                    RpcSource.Http(listOf(URL("https://endpoints.omniatech.io/v1/arbitrum/one/public")), null),
+                    RpcSource.Http(listOf(URI("https://endpoints.omniatech.io/v1/arbitrum/one/public")), null),
                     defaultTransactionSource(type)
                 )
             )
@@ -162,7 +162,7 @@ class EvmSyncSourceManager(
                 evmSyncSource(
                     type,
                     "Ankr",
-                    RpcSource.Http(listOf(URL("https://rpc.ankr.com/gnosis")), null),
+                    RpcSource.Http(listOf(URI("https://rpc.ankr.com/gnosis")), null),
                     defaultTransactionSource(type)
                 )
             )
@@ -176,7 +176,7 @@ class EvmSyncSourceManager(
                 evmSyncSource(
                     type,
                     "Ankr",
-                    RpcSource.Http(listOf(URL("https://rpc.ankr.com/fantom")), null),
+                    RpcSource.Http(listOf(URI("https://rpc.ankr.com/fantom")), null),
                     defaultTransactionSource(type)
                 )
             )
@@ -191,9 +191,9 @@ class EvmSyncSourceManager(
                 val uri = Uri.parse(record.url)
                 val rpcSource = when (uri.scheme) {
                     "http",
-                    "https" -> RpcSource.Http(listOf(URL(record.url)), record.auth)
+                    "https" -> RpcSource.Http(listOf(URI(record.url)), record.auth)
                     "ws",
-                    "wss" -> RpcSource.WebSocket(URL(record.url), record.auth)
+                    "wss" -> RpcSource.WebSocket(URI(record.url), record.auth)
                     else -> return@mapNotNull null
                 }
                 EvmSyncSource(
@@ -216,7 +216,7 @@ class EvmSyncSourceManager(
     ) =
         EvmSyncSource(
             id = "${blockchainType.uid}|${name}|${transactionSource.name}|${
-                rpcSource.urls.joinToString(separator = ",") { it.toString() }
+                rpcSource.uris.joinToString(separator = ",") { it.toString() }
             }",
             name = name,
             rpcSource = rpcSource,
@@ -230,7 +230,7 @@ class EvmSyncSourceManager(
         val syncSources = allSyncSources(blockchainType)
 
         val syncSourceUrl = blockchainSettingsStorage.evmSyncSourceUrl(blockchainType)
-        val syncSource = syncSources.firstOrNull { it.url.toString() == syncSourceUrl }
+        val syncSource = syncSources.firstOrNull { it.uri.toString() == syncSourceUrl }
 
         return syncSource ?: syncSources[0]
     }
@@ -238,7 +238,7 @@ class EvmSyncSourceManager(
     fun getHttpSyncSource(blockchainType: BlockchainType): EvmSyncSource? {
         val syncSources = allSyncSources(blockchainType)
         blockchainSettingsStorage.evmSyncSourceUrl(blockchainType)?.let { url ->
-            syncSources.firstOrNull { it.url.toString() == url && it.isHttp }?.let { syncSource ->
+            syncSources.firstOrNull { it.uri.toString() == url && it.isHttp }?.let { syncSource ->
                 return syncSource
             }
         }
@@ -247,7 +247,7 @@ class EvmSyncSourceManager(
     }
 
     fun save(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
-        blockchainSettingsStorage.save(syncSource.url.toString(), blockchainType)
+        blockchainSettingsStorage.save(syncSource.uri.toString(), blockchainType)
         syncSourceSubject.onNext(blockchainType)
     }
 
@@ -260,7 +260,7 @@ class EvmSyncSourceManager(
 
         evmSyncSourceStorage.save(record)
 
-        customSyncSources(blockchainType).firstOrNull { it.url.toString() == url }?.let {
+        customSyncSources(blockchainType).firstOrNull { it.uri.toString() == url }?.let {
             save(it, blockchainType)
         }
 
@@ -270,7 +270,7 @@ class EvmSyncSourceManager(
     fun delete(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
         val isCurrent = getSyncSource(blockchainType) == syncSource
 
-        evmSyncSourceStorage.delete(blockchainType.uid, syncSource.url.toString())
+        evmSyncSourceStorage.delete(blockchainType.uid, syncSource.uri.toString())
 
         if (isCurrent) {
             syncSourceSubject.onNext(blockchainType)

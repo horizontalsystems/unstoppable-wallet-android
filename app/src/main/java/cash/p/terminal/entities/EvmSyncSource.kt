@@ -3,7 +3,7 @@ package cash.p.terminal.entities
 import androidx.room.Entity
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionSource
-import java.net.URL
+import java.net.URI
 
 data class EvmSyncSource(
     val id: String,
@@ -13,10 +13,10 @@ data class EvmSyncSource(
 ) {
     val isHttp: Boolean = rpcSource is RpcSource.Http
 
-    val url: URL
+    val uri: URI
         get() = when (val source = rpcSource) {
-            is RpcSource.Http -> source.urls[0]
-            is RpcSource.WebSocket -> source.url
+            is RpcSource.Http -> source.uris[0]
+            is RpcSource.WebSocket -> source.uri
         }
 
     val auth: String?
