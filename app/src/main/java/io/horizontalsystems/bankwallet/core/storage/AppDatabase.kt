@@ -109,6 +109,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_53_54,
                             Migration_54_55,
                             Migration_55_56,
+                            Migration_56_57,
                     )
                     .build()
         }
