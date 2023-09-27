@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
-import io.horizontalsystems.bankwallet.core.managers.urls
+import io.horizontalsystems.bankwallet.core.managers.uris
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -44,8 +44,8 @@ class EvmNetworkViewModel(
     private fun viewItems(evmSyncSources: List<EvmSyncSource>): List<ViewItem> {
         currentSyncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
         return evmSyncSources.map { evmSyncSource ->
-            val url = if (evmSyncSource.rpcSource.urls.size == 1)
-                evmSyncSource.rpcSource.urls.first().toString()
+            val url = if (evmSyncSource.rpcSource.uris.size == 1)
+                evmSyncSource.rpcSource.uris.first().toString()
             else
                 Translator.getString(R.string.NetworkSettings_SwithesAutomatically)
 
