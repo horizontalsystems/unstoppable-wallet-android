@@ -1744,6 +1744,7 @@
     <!--Unlock-->
     <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">Passcode</string>
+    <string name="Unlock_EnterPasscode">Enter Passcode</string>
     <string name="Unlock_Incorrect">Incorrect</string>
     <string name="Unlock_BiometricScanner">Biometrics Scanner</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Enter passcode or try again later</string>

@@ -14,8 +14,8 @@ import cash.p.terminal.modules.pin.unlock.PinConfirmViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.headline1_leah
-import cash.p.terminal.ui.compose.components.headline1_lucian
+import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.subhead2_lucian
 
 @Composable
 fun PinConfirm(
@@ -50,13 +50,13 @@ fun PinConfirm(
                 title = {
                     val error = viewModel.uiState.error
                     if (error != null) {
-                        headline1_lucian(
+                        subhead2_lucian(
                             text = error,
                             textAlign = TextAlign.Center
                         )
                     } else {
-                        headline1_leah(
-                            text = stringResource(R.string.Unlock_Passcode),
+                        subhead2_grey(
+                            text = stringResource(R.string.Unlock_EnterPasscode),
                             textAlign = TextAlign.Center
                         )
                     }

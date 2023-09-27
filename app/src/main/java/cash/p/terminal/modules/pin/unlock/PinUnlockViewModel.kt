@@ -30,7 +30,6 @@ class PinUnlockViewModel(
 
     var uiState by mutableStateOf(
         PinUnlockViewState(
-            title = Translator.getString(R.string.Unlock_Passcode),
             error = null,
             enteredCount = 0,
             fingerScannerEnabled = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled,
