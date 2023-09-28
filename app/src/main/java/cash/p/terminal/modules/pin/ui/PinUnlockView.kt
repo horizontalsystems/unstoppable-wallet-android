@@ -24,7 +24,6 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.pin.unlock.PinUnlockModule
 import cash.p.terminal.modules.pin.unlock.PinUnlockViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.title3_leah
 
 @Composable
@@ -91,9 +90,7 @@ fun PinUnlock(
         ) {
             PinTopBlock(
                 modifier = Modifier.weight(1f),
-                title = {
-                    subhead2_grey(text = stringResource(R.string.Unlock_EnterPasscode))
-                },
+                title = stringResource(R.string.Unlock_EnterPasscode),
                 enteredCount = uiState.enteredCount,
                 showShakeAnimation = uiState.showShakeAnimation,
                 inputState = uiState.inputState,

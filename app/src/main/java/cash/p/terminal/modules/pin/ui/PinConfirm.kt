@@ -13,7 +13,6 @@ import cash.p.terminal.modules.pin.unlock.PinConfirmViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.subhead2_grey
 
 @Composable
 fun PinConfirm(
@@ -45,9 +44,7 @@ fun PinConfirm(
         ) {
             PinTopBlock(
                 modifier = Modifier.weight(1f),
-                title = {
-                    subhead2_grey(text = stringResource(R.string.Unlock_EnterPasscode))
-                },
+                title = stringResource(R.string.Unlock_EnterPasscode),
                 enteredCount = viewModel.uiState.enteredCount,
                 showShakeAnimation = viewModel.uiState.showShakeAnimation,
                 inputState = viewModel.uiState.inputState,
