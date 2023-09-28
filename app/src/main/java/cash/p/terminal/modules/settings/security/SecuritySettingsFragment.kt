@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.settings.security
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -177,7 +176,7 @@ private fun SecurityCenterScreen(
             }
             InfoText(
                 text = stringResource(R.string.Appearance_BalanceAutoHide_Description),
-                paddingValues = PaddingValues(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 32.dp)
+                paddingBottom = 32.dp
             )
 
             TorBlock(

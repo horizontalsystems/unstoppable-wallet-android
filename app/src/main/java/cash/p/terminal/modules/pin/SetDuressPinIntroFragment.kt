@@ -3,7 +3,6 @@ package cash.p.terminal.modules.pin
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -73,7 +72,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
         ) {
             InfoText(
                 text = stringResource(R.string.DuressPin_Description),
-                paddingValues = PaddingValues(32.dp, 12.dp, 32.dp, 32.dp)
+                paddingBottom = 32.dp
             )
             HeaderText(text = stringResource(R.string.DuressPin_Notes))
 

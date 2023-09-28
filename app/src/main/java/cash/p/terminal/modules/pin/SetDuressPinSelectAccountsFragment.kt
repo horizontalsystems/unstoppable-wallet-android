@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.pin
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -85,7 +84,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
         ) {
             InfoText(
                 text = stringResource(R.string.DuressPinSelectAccounts_Description),
-                paddingValues = PaddingValues(32.dp, 12.dp, 32.dp, 32.dp)
+                paddingBottom = 32.dp
             )
 
             if (regularAccounts.isNotEmpty()) {

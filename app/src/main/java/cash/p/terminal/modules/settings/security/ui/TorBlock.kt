@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.settings.security.ui
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -58,6 +57,6 @@ fun TorBlock(
 
     InfoText(
         text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),
-        paddingValues = PaddingValues(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 32.dp)
+        paddingBottom = 32.dp
     )
 }
