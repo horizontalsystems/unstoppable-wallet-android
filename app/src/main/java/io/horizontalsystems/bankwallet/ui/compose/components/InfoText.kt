@@ -1,20 +1,20 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun InfoText(
     text: String,
-    paddingValues: PaddingValues = PaddingValues(horizontal = 32.dp, vertical = 12.dp),
+    paddingBottom: Dp = 12.dp,
 ) {
     subhead2_grey(
-        modifier = Modifier.padding(paddingValues),
+        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = paddingBottom),
         text = text
     )
 }
