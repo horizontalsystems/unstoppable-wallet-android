@@ -9,13 +9,12 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun InfoText(text: String, paddingValues: PaddingValues? = null) {
-    val padding = paddingValues?.let {
-        Modifier.padding(it)
-    } ?: Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
-
+fun InfoText(
+    text: String,
+    paddingValues: PaddingValues = PaddingValues(horizontal = 32.dp, vertical = 12.dp),
+) {
     subhead2_grey(
-        modifier = padding,
+        modifier = Modifier.padding(paddingValues),
         text = text
     )
 }
