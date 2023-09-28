@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
@@ -26,14 +26,15 @@ import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule.InputState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
-import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
 @Composable
 fun PinTopBlock(
     modifier: Modifier = Modifier,
-    title: @Composable ColumnScope.() -> Unit,
+    title: String,
+    error: String? = null,
     enteredCount: Int,
     showShakeAnimation: Boolean = false,
     inputState: InputState = InputState.Enabled(),
@@ -51,7 +52,16 @@ fun PinTopBlock(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    title()
+                    if (error != null) {
+                        subhead2_lucian(
+                            text = error,
+                        )
+                    } else {
+                        subhead2_grey(
+                            text = title,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                     Spacer(Modifier.height(16.dp))
                 }
 
@@ -121,7 +131,7 @@ fun Preview_PinTopBlockEnabled() {
                 .background(color = ComposeAppTheme.colors.tyler)
         ) {
             PinTopBlock(
-                title = { headline1_leah(text = "text") },
+                title = "text",
                 enteredCount = 3,
                 showShakeAnimation = false,
             )
@@ -138,7 +148,7 @@ fun Preview_PinTopBlockLocked() {
                 .background(color = ComposeAppTheme.colors.tyler)
         ) {
             PinTopBlock(
-                title = { headline1_leah(text = "text") },
+                title = "text",
                 enteredCount = 3,
                 showShakeAnimation = false,
                 inputState = InputState.Locked("12:33")
