@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.core.IPinComponent
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
 
@@ -20,9 +18,6 @@ class SecurityTorSettingsViewModel(
 
     private val logger = AppLogger("SecurityTorSettingsViewModel")
 
-    var torConnectionStatus by mutableStateOf(TorStatus.Closed)
-        private set
-
     var torCheckEnabled by mutableStateOf(torManager.isTorEnabled)
         private set
 
@@ -31,14 +26,6 @@ class SecurityTorSettingsViewModel(
 
     var restartApp by mutableStateOf(false)
         private set
-
-
-    init {
-        torManager.torStatusFlow
-            .onEach { connectionStatus ->
-                torConnectionStatus = connectionStatus
-            }.launchIn(viewModelScope)
-    }
 
     fun setTorEnabledWithChecks(enabled: Boolean) {
         torCheckEnabled = enabled
