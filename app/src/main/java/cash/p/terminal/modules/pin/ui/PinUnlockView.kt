@@ -33,10 +33,15 @@ fun PinUnlock(
     onSuccess: () -> Unit,
 ) {
     val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
-    var showBiometricPrompt by remember { mutableStateOf(viewModel.uiState.fingerScannerEnabled) }
+    val uiState = viewModel.uiState
+    var showBiometricPrompt by remember {
+        mutableStateOf(
+            uiState.fingerScannerEnabled && uiState.inputState is PinUnlockModule.InputState.Enabled
+        )
+    }
     var showBiometricDisabledAlert by remember { mutableStateOf(false) }
 
-    if (viewModel.uiState.unlocked) {
+    if (uiState.unlocked) {
         onSuccess.invoke()
         viewModel.unlocked()
     }
@@ -88,28 +93,28 @@ fun PinUnlock(
             PinTopBlock(
                 modifier = Modifier.weight(1f),
                 title = {
-                    val error = viewModel.uiState.error
+                    val error = uiState.error
                     if (error != null) {
                         subhead2_lucian(text = error)
                     } else {
                         subhead2_grey(text = stringResource(R.string.Unlock_EnterPasscode),)
                     }
                 },
-                enteredCount = viewModel.uiState.enteredCount,
-                showShakeAnimation = viewModel.uiState.showShakeAnimation,
-                inputState = viewModel.uiState.inputState,
+                enteredCount = uiState.enteredCount,
+                showShakeAnimation = uiState.showShakeAnimation,
+                inputState = uiState.inputState,
                 onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() },
             )
 
             PinNumpad(
                 onNumberClick = { number -> viewModel.onKeyClick(number) },
                 onDeleteClick = { viewModel.onDelete() },
-                showFingerScanner = viewModel.uiState.fingerScannerEnabled,
+                showFingerScanner = uiState.fingerScannerEnabled,
                 showRandomizer = true,
                 showBiometricPrompt = {
                     showBiometricPrompt = true
                 },
-                inputState = viewModel.uiState.inputState
+                inputState = uiState.inputState
             )
         }
     }
