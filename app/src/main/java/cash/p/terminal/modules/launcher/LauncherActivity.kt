@@ -30,7 +30,6 @@ class LauncherActivity : AppCompatActivity() {
                 val unlockResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                     when (result.resultCode) {
                         RESULT_OK -> openMain()
-                        RESULT_CANCELED -> finishAffinity()
                     }
                 }
 
