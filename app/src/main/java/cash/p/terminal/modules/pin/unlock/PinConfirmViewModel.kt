@@ -6,9 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.pin.PinModule
 import cash.p.terminal.modules.pin.core.ILockoutManager
 import cash.p.terminal.modules.pin.core.LockoutManager
@@ -34,7 +32,6 @@ class PinConfirmViewModel(
 
     var uiState by mutableStateOf(
         PinConfirmViewState(
-            error = null,
             enteredCount = 0,
             unlocked = false,
             showShakeAnimation = false,
@@ -59,7 +56,6 @@ class PinConfirmViewModel(
 
             enteredPin += number.toString()
             uiState = uiState.copy(
-                error = null,
                 enteredCount = enteredPin.length
             )
 
@@ -68,7 +64,6 @@ class PinConfirmViewModel(
                     uiState = uiState.copy(unlocked = true)
                 } else {
                     uiState = uiState.copy(
-                        error = Translator.getString(R.string.Unlock_Incorrect),
                         showShakeAnimation = true
                     )
                     viewModelScope.launch {
@@ -88,7 +83,6 @@ class PinConfirmViewModel(
         if (enteredPin.isNotEmpty()) {
             enteredPin = enteredPin.dropLast(1)
             uiState = uiState.copy(
-                error = null,
                 enteredCount = enteredPin.length,
                 showShakeAnimation = false
             )
@@ -152,7 +146,6 @@ class PinConfirmViewModel(
 }
 
 data class PinConfirmViewState(
-    val error: String?,
     val enteredCount: Int,
     val unlocked: Boolean,
     val showShakeAnimation: Boolean,

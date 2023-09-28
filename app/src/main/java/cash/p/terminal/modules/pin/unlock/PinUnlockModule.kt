@@ -31,7 +31,6 @@ object PinUnlockModule {
     }
 
     data class PinUnlockViewState(
-        val error: String?,
         val enteredCount: Int,
         val fingerScannerEnabled: Boolean,
         val unlocked: Boolean,
