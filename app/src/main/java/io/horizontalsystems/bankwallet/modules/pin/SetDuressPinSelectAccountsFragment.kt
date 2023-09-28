@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -126,12 +127,17 @@ private fun ItemsSection(
     title: String,
     items: List<Account>,
     selected: SnapshotStateList<String>,
-    function: (Account, Boolean) -> Unit,
+    onToggle: (Account, Boolean) -> Unit,
 ) {
     HeaderText(text = title)
     CellUniversalLawrenceSection(items) { account ->
+        val checked = selected.contains(account.id)
         RowUniversal(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clickable {
+                    onToggle.invoke(account, !checked)
+                }
         ) {
             Column {
                 body_leah(text = account.name)
@@ -148,9 +154,9 @@ private fun ItemsSection(
             }
             HFillSpacer(minWidth = 8.dp)
             HsCheckbox(
-                checked = selected.contains(account.id),
+                checked = checked,
                 onCheckedChange = {
-                    function.invoke(account, it)
+                    onToggle.invoke(account, it)
                 },
             )
         }
