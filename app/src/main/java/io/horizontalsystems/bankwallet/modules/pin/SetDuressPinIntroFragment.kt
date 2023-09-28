@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -101,7 +102,11 @@ fun SetDuressPinIntroScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Continue),
                     onClick = {
-                        navController.slideFromRight(R.id.setDuressPinSelectAccounts)
+                        if (App.accountManager.accounts.isNotEmpty()) {
+                            navController.slideFromRight(R.id.setDuressPinSelectAccounts)
+                        } else {
+                            navController.slideFromRight(R.id.setDuressPinFragment)
+                        }
                     },
                 )
             }
