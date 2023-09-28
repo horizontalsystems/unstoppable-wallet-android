@@ -3,6 +3,7 @@ package cash.p.terminal.modules.pin
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,9 +22,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -51,6 +52,8 @@ class SetDuressPinIntroFragment : BaseComposeFragment() {
 
 @Composable
 fun SetDuressPinIntroScreen(navController: NavController) {
+    val viewModel = viewModel<SetDuressPinIntroViewModel>(factory = SetDuressPinIntroViewModel.Factory())
+
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
@@ -68,7 +71,10 @@ fun SetDuressPinIntroScreen(navController: NavController) {
                 .padding(it)
                 .verticalScroll(rememberScrollState())
         ) {
-            InfoText(text = stringResource(R.string.DuressPin_Description))
+            InfoText(
+                text = stringResource(R.string.DuressPin_Description),
+                paddingValues = PaddingValues(32.dp, 12.dp, 32.dp, 32.dp)
+            )
             HeaderText(text = stringResource(R.string.DuressPin_Notes))
 
             Column(
@@ -76,11 +82,14 @@ fun SetDuressPinIntroScreen(navController: NavController) {
                     .padding(horizontal = 16.dp)
                     .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
             ) {
-                NotesCell(
-                    icon = painterResource(id = R.drawable.icon_touch_id_24),
-                    title = stringResource(id = R.string.DuressPin_Notes_Biometrics_Title),
-                    description = stringResource(id = R.string.DuressPin_Notes_Biometrics_Description)
-                )
+                if (viewModel.biometricAuthSupported) {
+                    NotesCell(
+                        icon = painterResource(id = R.drawable.icon_touch_id_24),
+                        title = stringResource(id = R.string.DuressPin_Notes_Biometrics_Title),
+                        description = stringResource(id = R.string.DuressPin_Notes_Biometrics_Description)
+                    )
+                }
+
                 NotesCell(
                     icon = painterResource(id = R.drawable.ic_passcode),
                     title = stringResource(id = R.string.DuressPin_Notes_PasscodeDisabling_Title),
@@ -102,7 +111,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Continue),
                     onClick = {
-                        if (App.accountManager.accounts.isNotEmpty()) {
+                        if (viewModel.shouldShowSelectAccounts) {
                             navController.slideFromRight(R.id.setDuressPinSelectAccounts)
                         } else {
                             navController.slideFromRight(R.id.setDuressPinFragment)
