@@ -5,8 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockoutState
@@ -30,7 +28,6 @@ class PinUnlockViewModel(
 
     var uiState by mutableStateOf(
         PinUnlockViewState(
-            error = null,
             enteredCount = 0,
             fingerScannerEnabled = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled,
             unlocked = false,
@@ -62,7 +59,6 @@ class PinUnlockViewModel(
 
             enteredPin += number.toString()
             uiState = uiState.copy(
-                error = null,
                 enteredCount = enteredPin.length
             )
 
@@ -71,7 +67,6 @@ class PinUnlockViewModel(
                     uiState = uiState.copy(unlocked = true)
                 } else {
                     uiState = uiState.copy(
-                        error = Translator.getString(R.string.Unlock_Incorrect),
                         showShakeAnimation = true
                     )
                     viewModelScope.launch {
@@ -91,7 +86,6 @@ class PinUnlockViewModel(
         if (enteredPin.isNotEmpty()) {
             enteredPin = enteredPin.dropLast(1)
             uiState = uiState.copy(
-                error = null,
                 enteredCount = enteredPin.length,
                 showShakeAnimation = false
             )

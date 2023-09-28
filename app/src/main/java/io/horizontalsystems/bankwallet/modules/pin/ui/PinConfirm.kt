@@ -7,7 +7,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinConfirmViewModel
@@ -15,7 +14,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
 @Composable
 fun PinConfirm(
@@ -48,18 +46,7 @@ fun PinConfirm(
             PinTopBlock(
                 modifier = Modifier.weight(1f),
                 title = {
-                    val error = viewModel.uiState.error
-                    if (error != null) {
-                        subhead2_lucian(
-                            text = error,
-                            textAlign = TextAlign.Center
-                        )
-                    } else {
-                        subhead2_grey(
-                            text = stringResource(R.string.Unlock_EnterPasscode),
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    subhead2_grey(text = stringResource(R.string.Unlock_EnterPasscode))
                 },
                 enteredCount = viewModel.uiState.enteredCount,
                 showShakeAnimation = viewModel.uiState.showShakeAnimation,

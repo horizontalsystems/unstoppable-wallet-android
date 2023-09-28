@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 
 @Composable
@@ -93,12 +92,7 @@ fun PinUnlock(
             PinTopBlock(
                 modifier = Modifier.weight(1f),
                 title = {
-                    val error = uiState.error
-                    if (error != null) {
-                        subhead2_lucian(text = error)
-                    } else {
-                        subhead2_grey(text = stringResource(R.string.Unlock_EnterPasscode),)
-                    }
+                    subhead2_grey(text = stringResource(R.string.Unlock_EnterPasscode))
                 },
                 enteredCount = uiState.enteredCount,
                 showShakeAnimation = uiState.showShakeAnimation,
