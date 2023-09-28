@@ -26,8 +26,7 @@ class LockScreenActivity : BaseActivity() {
 
         onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                setResult(RESULT_CANCELED)
-                finish()
+                finishAffinity()
             }
         })
     }
