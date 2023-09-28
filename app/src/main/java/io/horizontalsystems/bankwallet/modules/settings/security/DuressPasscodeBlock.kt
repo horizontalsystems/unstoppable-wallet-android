@@ -31,7 +31,7 @@ fun DuressPasscodeBlock(
             SecurityCenterCell(
                 start = {
                     Icon(
-                        painter = painterResource(R.drawable.ic_passcode),
+                        painter = painterResource(R.drawable.ic_switch_wallet_24),
                         tint = ComposeAppTheme.colors.jacob,
                         modifier = Modifier.size(24.dp),
                         contentDescription = null,
