@@ -960,7 +960,8 @@
 
     <string name="DuressPinSelectAccounts_Title">Select Wallet</string>
     <string name="DuressPinSelectAccounts_Description">Select the wallets that will be displayed in duress mode.</string>
-    <string name="DuressPinSelectAccounts_EmptyList">You don\'t have any wallets. You can add them later.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
 
     <!--Setting_Terms-->
 
