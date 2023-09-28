@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.modules.pin.unlock.PinConfirmViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun PinConfirm(
@@ -45,9 +44,7 @@ fun PinConfirm(
         ) {
             PinTopBlock(
                 modifier = Modifier.weight(1f),
-                title = {
-                    subhead2_grey(text = stringResource(R.string.Unlock_EnterPasscode))
-                },
+                title = stringResource(R.string.Unlock_EnterPasscode),
                 enteredCount = viewModel.uiState.enteredCount,
                 showShakeAnimation = viewModel.uiState.showShakeAnimation,
                 inputState = viewModel.uiState.inputState,
