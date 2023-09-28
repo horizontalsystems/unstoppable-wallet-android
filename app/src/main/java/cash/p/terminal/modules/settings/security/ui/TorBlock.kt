@@ -1,6 +1,12 @@
 package cash.p.terminal.modules.settings.security.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -11,7 +17,12 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 
 @Composable
 fun TorBlock(
@@ -66,5 +77,6 @@ fun TorBlock(
 
     InfoText(
         text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),
+        paddingValues = PaddingValues(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 32.dp)
     )
 }
