@@ -162,7 +162,7 @@ class SendZCashViewModel(
                 addressState.address!!.hex,
                 memoState.memo,
                 logger
-            ).blockingGet()
+            )
 
             logger.info("success")
             sendResult = SendResult.Sent
