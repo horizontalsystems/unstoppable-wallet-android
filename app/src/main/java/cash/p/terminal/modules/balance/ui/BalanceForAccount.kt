@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.utils.ModuleField
@@ -39,10 +40,13 @@ import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
+import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.modules.swap.settings.Caution
+import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
+import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -126,7 +130,30 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
                                 icon = R.drawable.ic_qr_scan_20,
                                 onClick = {
-                                    qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+                                    when (val state = viewModel.getWalletConnectSupportState()) {
+                                        WC2Manager.SupportState.Supported -> {
+                                            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+                                        }
+
+                                        WC2Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                                            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                                        }
+
+                                        is WC2Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                                            val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup, state.account.name)
+                                            navController.slideFromBottom(
+                                                R.id.backupRequiredDialog,
+                                                BackupRequiredDialog.prepareParams(state.account, text)
+                                            )
+                                        }
+
+                                        is WC2Manager.SupportState.NotSupported -> {
+                                            navController.slideFromBottom(
+                                                R.id.wcAccountTypeNotSupportedDialog,
+                                                WCAccountTypeNotSupportedDialog.prepareParams(state.accountTypeDescription)
+                                            )
+                                        }
+                                    }
                                 }
                             )
                         )
