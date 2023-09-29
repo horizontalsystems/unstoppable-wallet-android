@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
@@ -74,7 +73,7 @@ class BalanceViewItemFactory {
     private fun getSyncingProgress(state: AdapterState?, blockchainType: BlockchainType): SyncingProgress {
         return when (state) {
             is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(blockchainType), false)
-            is AdapterState.SearchingTxs, is AdapterState.Zcash -> SyncingProgress(10, true)
+            is AdapterState.SearchingTxs -> SyncingProgress(10, true)
             else -> SyncingProgress(null, false)
         }
     }
@@ -115,12 +114,6 @@ class BalanceViewItemFactory {
                 }
             }
             is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
-            is AdapterState.Zcash -> {
-                when (state.zcashState) {
-                    is ZcashAdapter.ZcashState.DownloadingBlocks -> Translator.getString(R.string.Balance_DownloadingBlocks)
-                    is ZcashAdapter.ZcashState.ScanningBlocks -> Translator.getString(R.string.Balance_ScanningBlocks)
-                }
-            }
             else -> null
         }
 
@@ -145,24 +138,6 @@ class BalanceViewItemFactory {
                     Translator.getString(R.string.Balance_FoundTx, state.count.toString())
                 } else {
                     null
-                }
-            }
-            is AdapterState.Zcash -> {
-                when (val zcash = state.zcashState) {
-                    is ZcashAdapter.ZcashState.DownloadingBlocks -> {
-                        if (zcash.blockProgress.current != null && zcash.blockProgress.total != null) {
-                            "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
-                        } else {
-                            ""
-                        }
-                    }
-                    is ZcashAdapter.ZcashState.ScanningBlocks -> {
-                        if (zcash.blockProgress.current != null && zcash.blockProgress.total != null) {
-                            "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
-                        } else {
-                            ""
-                        }
-                    }
                 }
             }
             else -> null
