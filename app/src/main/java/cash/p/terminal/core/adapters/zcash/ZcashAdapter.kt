@@ -108,9 +108,7 @@ class ZcashAdapter(
         return Zatoshi(value)
     }
 
-    private var syncState: AdapterState = AdapterState.Zcash(
-        ZcashState.DownloadingBlocks(BlockProgress(null, null))
-    )
+    private var syncState: AdapterState = AdapterState.Syncing()
         set(value) {
             if (value != field) {
                 field = value
@@ -333,13 +331,6 @@ class ZcashAdapter(
         object InvalidAddress : ZcashError()
         object SendToSelfNotAllowed : ZcashError()
     }
-
-    sealed class ZcashState{
-        class DownloadingBlocks(val blockProgress: BlockProgress): ZcashState()
-        class ScanningBlocks(val blockProgress: BlockProgress): ZcashState()
-    }
-
-    class BlockProgress(val current: Long?, val total: Long?)
 
     companion object {
         private const val ALIAS_PREFIX = "zcash_"
