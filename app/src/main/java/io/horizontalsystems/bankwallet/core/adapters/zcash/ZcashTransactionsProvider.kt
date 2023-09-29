@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.core.adapters.zcash
 
 import cash.z.ecc.android.sdk.SdkSynchronizer
-import cash.z.ecc.android.sdk.model.PendingTransaction
 import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionRecipient
-import cash.z.ecc.android.sdk.model.isMined
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -21,20 +19,18 @@ class ZcashTransactionsProvider(
     private val synchronizer: SdkSynchronizer
 ) {
 
-    private val confirmedTransactions = mutableListOf<ZcashTransaction>()
-    private val pendingTransactions = mutableListOf<ZcashTransaction>()
+    private val transactions = mutableListOf<ZcashTransaction>()
     private val newTransactionsSubject = PublishSubject.create<List<ZcashTransaction>>()
 
     private fun getAllTransactionsSorted(): List<ZcashTransaction> {
-        return confirmedTransactions.union(pendingTransactions).sortedDescending()
+        return transactions.sortedDescending()
     }
 
     @Synchronized
-    fun onClearedTransactions(transactions: List<TransactionOverview>) {
+    fun onTransactions(transactionOverviews: List<TransactionOverview>) {
         synchronizer.coroutineScope.launch {
-            val newTransactions = transactions.filter { tx ->
-                val minedHeight = tx.minedHeight
-                minedHeight != null && minedHeight.value > 0 && !confirmedTransactions.any { it.id == tx.id }
+            val newTransactions = transactionOverviews.filter { tx ->
+                transactions.none { it.rawId == tx.rawId }
             }
 
             if (newTransactions.isNotEmpty()) {
@@ -54,19 +50,8 @@ class ZcashTransactionsProvider(
                     ZcashTransaction(it, recipient, null)
                 }
                 newTransactionsSubject.onNext(newZcashTransactions)
-                confirmedTransactions.addAll(newZcashTransactions)
+                transactions.addAll(newZcashTransactions)
             }
-        }
-    }
-
-    @Synchronized
-    fun onPendingTransactions(transactions: List<PendingTransaction>) {
-        val newTransactions = transactions.filter { tx -> tx.rawTransactionId?.byteArray?.isEmpty() == false && !tx.isMined() && !pendingTransactions.any { it.id == tx.id } }
-
-        if (newTransactions.isNotEmpty()) {
-            val newZcashTransactions = newTransactions.map { ZcashTransaction(it, receiveAddress) }
-            newTransactionsSubject.onNext(newZcashTransactions)
-            pendingTransactions.addAll(newZcashTransactions)
         }
     }
 

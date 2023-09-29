@@ -4,7 +4,8 @@ import android.content.Context
 import cash.z.ecc.android.sdk.CloseableSynchronizer
 import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
-import cash.z.ecc.android.sdk.block.CompactBlockProcessor
+import cash.z.ecc.android.sdk.WalletInitMode
+import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
@@ -64,20 +65,25 @@ class ZcashAdapter(
     override val isMainNet: Boolean = true
 
     init {
-        val birthday = when (wallet.account.origin) {
+        val birthday: BlockHeight?
+        val walletInitMode: WalletInitMode
+
+        when (wallet.account.origin) {
             AccountOrigin.Created -> {
-                runBlocking {
+                birthday = runBlocking {
                     BlockHeight.ofLatestCheckpoint(context, network)
                 }
+                walletInitMode = WalletInitMode.NewWallet
             }
             AccountOrigin.Restored -> {
-                restoreSettings.birthdayHeight
+                birthday = restoreSettings.birthdayHeight
                     ?.let { height ->
                         max(network.saplingActivationHeight.value, height)
                     }
                     ?.let {
                         BlockHeight.new(network, it)
                     }
+                walletInitMode = WalletInitMode.RestoreWallet
             }
         }
 
@@ -87,7 +93,8 @@ class ZcashAdapter(
             alias = getValidAliasFromAccountId(wallet.account.id),
             lightWalletEndpoint = lightWalletEndpoint,
             seed = seed,
-            birthday = birthday
+            birthday = birthday,
+            walletInitMode = walletInitMode
         )
 
         receiveAddress = runBlocking { synchronizer.getSaplingAddress(zcashAccount) }
@@ -218,40 +225,11 @@ class ZcashAdapter(
         }
     }
 
-    override fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit> =
-            Single.create { emitter ->
-                try {
-                    val spendingKey = runBlocking {
-                            DerivationTool.deriveUnifiedSpendingKey(seed, network, zcashAccount)
-                        }
-                    logger.info("call synchronizer.sendToAddress")
-                    // use a scope that automatically cancels when the synchronizer stops
-                    val scope = (synchronizer as SdkSynchronizer).coroutineScope
-                    // don't return until the transaction creation is complete
-                    synchronizer
-                        .sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
-                        .filter { it.isSubmitSuccess() || it.isFailure() }
-                        .take(1)
-                        .onEach {
-                            if (it.isSubmitSuccess()) {
-                                emitter.onSuccess(Unit)
-                            } else {
-                                FailedTransaction(it.errorMessage).let { error ->
-                                    logger.warning("send error", error)
-                                    emitter.onError(error)
-                                }
-                            }
-                        }
-                        .catch {
-                            logger.warning("send error", it)
-                            emitter.onError(it)
-                        }
-                        .launchIn(scope)
-                } catch (error: Throwable) {
-                    logger.warning("send error", error)
-                    emitter.onError(error)
-                }
-            }
+    override suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long {
+        val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, zcashAccount)
+        logger.info("call synchronizer.sendToAddress")
+        return synchronizer.sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
+    }
 
     // Subscribe to a synchronizer on its own scope and begin responding to events
     @OptIn(FlowPreview::class)
@@ -264,12 +242,11 @@ class ZcashAdapter(
         //       related viewModelScope instead of the synchronizer's scope.
         //       synchronizer.coroutineScope cannot be accessed until the synchronizer is started
         val scope = synchronizer.coroutineScope
-        synchronizer.clearedTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onClearedTransactions)
-        synchronizer.pendingTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onPendingTransactions)
+        synchronizer.transactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onTransactions)
         synchronizer.status.collectWith(scope, ::onStatus)
-        synchronizer.progress.distinctUntilChanged().collectWith(scope, ::onDownloadProgress)
+        synchronizer.progress.collectWith(scope, ::onDownloadProgress)
         synchronizer.saplingBalances.collectWith(scope, ::onBalance)
-        synchronizer.processorInfo.distinctUntilChanged().collectWith(scope, ::onProcessorInfo)
+        synchronizer.processorInfo.collectWith(scope, ::onProcessorInfo)
     }
 
     private fun onProcessorError(error: Throwable?): Boolean {
@@ -284,40 +261,18 @@ class ZcashAdapter(
         syncState = when (status) {
             Synchronizer.Status.STOPPED -> AdapterState.NotSynced(Exception("stopped"))
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
-            Synchronizer.Status.DOWNLOADING -> AdapterState.Zcash(
-                ZcashState.DownloadingBlocks(BlockProgress(null, null))
-            )
-            Synchronizer.Status.SCANNING -> AdapterState.Zcash(
-                ZcashState.ScanningBlocks(BlockProgress(null, null))
-            )
+            Synchronizer.Status.SYNCING -> AdapterState.Syncing()
             Synchronizer.Status.SYNCED -> AdapterState.Synced
             else -> syncState
         }
     }
 
-    private fun onDownloadProgress(progress: Int) {}
+    private fun onDownloadProgress(progress: PercentDecimal) {
+        syncState = AdapterState.Syncing(progress.toPercentage())
+    }
 
     private fun onProcessorInfo(processorInfo: CompactBlockProcessor.ProcessorInfo) {
-        if (processorInfo.isDownloading){
-            syncState = AdapterState.Zcash(
-                ZcashState.DownloadingBlocks(
-                    BlockProgress(
-                        processorInfo.lastDownloadedHeight?.value,
-                        processorInfo.networkBlockHeight?.value
-                    )
-                )
-            )
-        } else if(processorInfo.isScanning){
-            syncState = AdapterState.Zcash(
-                ZcashState.ScanningBlocks(
-                    BlockProgress(
-                        processorInfo.lastScannedHeight?.value,
-                        processorInfo.networkBlockHeight?.value
-                    )
-                )
-            )
-        }
-
+        syncState = AdapterState.Syncing()
         lastBlockUpdatedSubject.onNext(Unit)
     }
 
