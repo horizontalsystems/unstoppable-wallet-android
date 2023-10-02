@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.backuplocal.fullbackup
 
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import cash.p.terminal.R
@@ -73,6 +74,13 @@ class BackupProvider(
     private val contactsRepository: ContactsRepository
 ) {
     private val encryptDecryptManager = EncryptDecryptManager()
+
+    private val gson: Gson by lazy {
+        GsonBuilder()
+            .disableHtmlEscaping()
+            .enableComplexMapKeySerialization()
+            .create()
+    }
 
     private fun decrypted(crypto: BackupLocalModule.BackupCrypto, passphrase: String): ByteArray {
         val kdfParams = crypto.kdfparams
@@ -227,12 +235,64 @@ class BackupProvider(
         }
     }
 
-    @Throws
-    fun backup(passphrase: String): String {
-        val wallets = accountManager.accounts.map {
-            val accountBackup = accountBackup(it, passphrase)
-            WalletBackup2(it.name, accountBackup)
+    data class BackupItem(
+        val title: String,
+        val subtitle: String
+    )
+
+    data class BackupItems(
+        val wallets: List<Account>,
+        val others: List<BackupItem>
+    )
+
+    fun fullBackupItems(): BackupItems {
+        val accounts = accountManager.accounts
+        val wallets = accounts.filter { !it.isWatchAccount }.sortedBy { it.name.lowercase() }
+
+        val otherBackupItems = buildList<BackupItem> {
+            val watchWallets = accounts.filter { it.isWatchAccount }
+            if (watchWallets.isNotEmpty()) {
+                add(
+                    BackupItem(
+                        title = Translator.getString(R.string.BackupManager_WatchWallets),
+                        subtitle = Translator.getString(R.string.BackupManager_Addresses, watchWallets.size),
+                    )
+                )
+            }
+
+            val watchlist = marketFavoritesManager.getAll()
+            if (watchlist.isNotEmpty()) {
+                add(
+                    BackupItem(
+                        title = Translator.getString(R.string.BackupManager_WatchlistTitle),
+                        subtitle = Translator.getString(R.string.BackupManager_WatchlistDescription),
+                    )
+                )
+            }
         }
+
+        return BackupItems(
+            wallets,
+            otherBackupItems
+        )
+
+    }
+
+    @Throws
+    fun fullBackupJson(accountIds: List<String>, passphrase: String): String {
+        Log.e("eee", "fullBackupJson() accountIds ${accountIds.size}: ${accountIds.joinToString(separator = ",")}")
+
+        accountIds.forEach {
+            Log.e("eee", "separate print accountId: $it")
+        }
+
+        Log.e("eee", "fullBackupJson() selectedAccounts = ${accountManager.accounts.filter { it.isWatchAccount || accountIds.contains(it.id) }.joinToString(separator = ",") { it.name }}")
+        val wallets = accountManager.accounts
+            .filter { it.isWatchAccount || accountIds.contains(it.id) }
+            .map {
+                val accountBackup = accountBackup(it, passphrase)
+                WalletBackup2(it.name, accountBackup)
+            }
 
         val watchlist = marketFavoritesManager.getAll().map { it.coinUid }
 
@@ -264,11 +324,6 @@ class BackupProvider(
 
         val solanaSyncSource = SolanaSyncSource(BlockchainType.Solana.uid, solanaRpcSourceManager.rpcSource.name)
 
-        val contacts = if (contactsRepository.contacts.isNotEmpty())
-            encrypted(contactsRepository.asJsonString, passphrase)
-        else
-            null
-
         val settings = Settings(
             balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
             appIcon = appIconService.optionsFlow.value.selected.titleText,
@@ -287,17 +342,17 @@ class BackupProvider(
             solanaSyncSource = solanaSyncSource,
         )
 
+        val contacts = if (contactsRepository.contacts.isNotEmpty())
+            encrypted(contactsRepository.asJsonString, passphrase)
+        else
+            null
+
         val fullBackup = FullBackup(
             wallets = wallets.ifEmpty { null },
             watchlist = watchlist.ifEmpty { null },
             settings = settings,
             contacts = contacts,
         )
-
-        val gson = GsonBuilder()
-            .disableHtmlEscaping()
-            .enableComplexMapKeySerialization()
-            .create()
 
         return gson.toJson(fullBackup)
     }
@@ -328,7 +383,13 @@ class BackupProvider(
     }
 
     @Throws
-    fun accountBackup(account: Account, passphrase: String): BackupLocalModule.WalletBackup {
+    fun accountBackupJson(account: Account, passphrase: String): String {
+        val backup = accountBackup(account, passphrase)
+        return gson.toJson(backup)
+    }
+
+    @Throws
+    private fun accountBackup(account: Account, passphrase: String): BackupLocalModule.WalletBackup {
         val kdfParams = BackupLocalModule.kdfDefault
         val secretText = BackupLocalModule.getDataForEncryption(account.type)
         val id = getId(secretText)

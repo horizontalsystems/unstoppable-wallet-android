@@ -22,18 +22,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import cash.p.terminal.ui.compose.components.FormsInputPassword
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 import io.horizontalsystems.core.SnackbarDuration
@@ -41,11 +38,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun LocalBackupPasswordScreen(
-    fragmentNavController: NavController,
-    navController: NavController,
-    accountId: String?
+    backupType: BackupType,
+    onBackClick: () -> Unit,
+    onFinish: () -> Unit
 ) {
-    val viewModel = viewModel<BackupLocalPasswordViewModel>(factory = BackupLocalPasswordModule.Factory(accountId))
+    val viewModel = viewModel<BackupLocalPasswordViewModel>(factory = BackupLocalPasswordModule.Factory(backupType))
 
     val view = LocalView.current
     val context = LocalContext.current
@@ -81,9 +78,9 @@ fun LocalBackupPasswordScreen(
         }
     }
 
-    if (uiState.showAccountIsNullError) {
-        Toast.makeText(App.instance, "Account is Null", Toast.LENGTH_SHORT).show()
-        fragmentNavController.popBackStack()
+    if (uiState.error != null) {
+        Toast.makeText(App.instance, uiState.error, Toast.LENGTH_SHORT).show()
+        onFinish()
         viewModel.accountErrorIsShown()
     }
 
@@ -93,7 +90,7 @@ fun LocalBackupPasswordScreen(
 
     if (uiState.closeScreen) {
         viewModel.closeScreenCalled()
-        fragmentNavController.popBackStack()
+        onFinish()
     }
 
     ComposeAppTheme {
@@ -103,17 +100,8 @@ fun LocalBackupPasswordScreen(
                 AppBar(
                     title = stringResource(R.string.LocalBackup_SetPassword),
                     navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = {
-                                fragmentNavController.popBackStack()
-                            }
-                        )
-                    )
+                        HsBackButton(onClick = onBackClick)
+                    }
                 )
             }
         ) {

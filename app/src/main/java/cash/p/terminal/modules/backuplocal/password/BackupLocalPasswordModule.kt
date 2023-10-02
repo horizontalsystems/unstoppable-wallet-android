@@ -8,14 +8,14 @@ import cash.p.terminal.entities.DataState
 
 object BackupLocalPasswordModule {
 
-    class Factory(private val accountId: String?) : ViewModelProvider.Factory {
+    class Factory(private val backupType: BackupType) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return BackupLocalPasswordViewModel(
+                backupType,
                 PassphraseValidator(),
                 App.accountManager,
                 App.backupProvider,
-                accountId
             ) as T
         }
     }
@@ -26,6 +26,7 @@ object BackupLocalPasswordModule {
         val showButtonSpinner: Boolean,
         val backupJson: String?,
         val closeScreen: Boolean,
-        val showAccountIsNullError: Boolean
+        val error: String?
+//        val showAccountIsNullError: Boolean
     )
 }

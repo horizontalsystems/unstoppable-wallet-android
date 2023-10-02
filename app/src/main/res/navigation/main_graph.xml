@@ -99,6 +99,9 @@
         android:id="@+id/blockchainSettingsFragment"
         android:name="cash.p.terminal.modules.blockchainsettings.BlockchainSettingsFragment"/>
     <fragment
+        android:id="@+id/backupManagerFragment"
+        android:name="cash.p.terminal.modules.backuplocal.fullbackup.BackupManagerFragment"/>
+    <fragment
         android:id="@+id/faqListFragment"
         android:name="cash.p.terminal.modules.settings.faq.FaqListFragment"
         android:label="@string/Settings_Faq"/>

@@ -5,28 +5,111 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.GsonBuilder
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.PasswordError
 import cash.p.terminal.core.managers.PassphraseValidator
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+sealed class BackupType {
+    class SingleWalletBackup(val accountId: String) : BackupType()
+    class FullBackup(val accountIds: List<String>) : BackupType()
+}
+
+class CreateLocalBackupService(
+    private val type: BackupType,
+    private val backupProvider: BackupProvider,
+    private val accountManager: IAccountManager
+) {
+
+    private var backupFileName: String = "UW_Backup.json"
+    private var error: String? = null
+    private var backupJson: String? = null
+
+    private val state: State
+        get() = State(backupFileName, error, backupJson)
+
+    private val _stateFlow = MutableStateFlow(state)
+    val stateFlow = _stateFlow.asStateFlow()
+
+    init {
+        if (type is BackupType.SingleWalletBackup) {
+            val account = accountManager.account(type.accountId)
+            if (account == null) {
+                error = "Account is NULL"
+
+                _stateFlow.update { state }
+            } else {
+                val walletName = account.name.replace(" ", "_")
+                backupFileName = "UW_Backup_$walletName.json"
+
+                _stateFlow.update { state }
+            }
+        }
+    }
+
+    fun createBackup(passphrase: String) {
+        try {
+            backupJson = when (type) {
+                is BackupType.FullBackup -> {
+                    backupProvider.fullBackupJson(accountIds = type.accountIds, passphrase = passphrase)
+                }
+
+                is BackupType.SingleWalletBackup -> {
+                    val account = accountManager.account(type.accountId) ?: throw Exception("Account is NULL")
+                    backupProvider.accountBackupJson(account = account, passphrase = passphrase)
+                }
+            }
+        } catch (t: Throwable) {
+            error = t.message ?: t.javaClass.simpleName
+        }
+
+        _stateFlow.update { state }
+
+//        val backup = backupProvider.backup(
+//            passphrase = passphrase
+//        )
+//            val gson = GsonBuilder()
+//                .disableHtmlEscaping()
+//                .enableComplexMapKeySerialization()
+//                .create()
+//            backupJson = gson.toJson(backup)
+//        backupJson = backup
+    }
+
+    fun backupFinished() {
+        val accountIds = when (type) {
+            is BackupType.SingleWalletBackup -> listOf(type.accountId)
+            is BackupType.FullBackup -> type.accountIds
+        }
+        accountIds.forEach { accountId ->
+            accountManager.setFileBackedUp(id = accountId, fileBackedUp = true)
+        }
+    }
+
+    data class State(
+        val backupFileName: String,
+        val error: String?,
+        val backupJson: String?
+    )
+}
+
 class BackupLocalPasswordViewModel(
+    private val type: BackupType,
     private val passphraseValidator: PassphraseValidator,
     private val accountManager: IAccountManager,
     private val backupProvider: BackupProvider,
-    accountId: String?,
 ) : ViewModel() {
 
-    private var account: Account? = null
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
@@ -34,7 +117,7 @@ class BackupLocalPasswordViewModel(
     private var passphraseConfirmState: DataState.Error? = null
     private var showButtonSpinner = false
     private var closeScreen = false
-    private var showAccountIsNullError = false
+    private var error: String? = null
 
     private var backupJson: String? = null
 
@@ -48,21 +131,30 @@ class BackupLocalPasswordViewModel(
             showButtonSpinner = showButtonSpinner,
             backupJson = backupJson,
             closeScreen = closeScreen,
-            showAccountIsNullError = showAccountIsNullError
+            error = error
         )
     )
         private set
 
     init {
-        val account = accountId?.let { accountManager.account(it) }
-        if (account == null) {
-            showAccountIsNullError = true
-            syncState()
-        } else {
-            this.account = account
-            val walletName = account.name.replace(" ", "_")
-            backupFileName = "UW_Backup_$walletName.json"
+        when (type) {
+            is BackupType.SingleWalletBackup -> {
+                val account = accountManager.account(type.accountId)
+                if (account == null) {
+                    error = "Account is NULL"
+
+                } else {
+                    val walletName = account.name.replace(" ", "_")
+                    backupFileName = "UW_Backup_$walletName.json"
+                }
+            }
+
+            is BackupType.FullBackup -> {
+                backupFileName = "UW_App_Backup.json"
+            }
         }
+
+        syncState()
     }
 
     fun onChangePassphrase(v: String) {
@@ -99,10 +191,12 @@ class BackupLocalPasswordViewModel(
         showButtonSpinner = false
         syncState()
         viewModelScope.launch {
-            account?.let {
-                if (!it.isFileBackedUp) {
-                    accountManager.update(it.copy(isFileBackedUp = true))
-                }
+            val accountIds = when (type) {
+                is BackupType.SingleWalletBackup -> listOf(type.accountId)
+                is BackupType.FullBackup -> type.accountIds
+            }
+            accountIds.forEach { accountId ->
+                accountManager.setFileBackedUp(id = accountId, fileBackedUp = true)
             }
             delay(1700) //Wait for showing Snackbar (SHORT duration ~ 1500ms)
             closeScreen = true
@@ -116,7 +210,7 @@ class BackupLocalPasswordViewModel(
     }
 
     fun accountErrorIsShown() {
-        showAccountIsNullError = false
+        error = null
         syncState()
     }
 
@@ -127,17 +221,22 @@ class BackupLocalPasswordViewModel(
     }
 
     private fun saveAccount() {
-        val accountNonNull = account ?: return
         viewModelScope.launch(Dispatchers.IO) {
-            val backup = backupProvider.accountBackup(
-                account = accountNonNull,
-                passphrase = passphrase
-            )
-            val gson = GsonBuilder()
-                .disableHtmlEscaping()
-                .enableComplexMapKeySerialization()
-                .create()
-            backupJson = gson.toJson(backup)
+            try {
+                backupJson = when (type) {
+                    is BackupType.FullBackup -> {
+                        backupProvider.fullBackupJson(accountIds = type.accountIds, passphrase = passphrase)
+                    }
+
+                    is BackupType.SingleWalletBackup -> {
+                        val account = accountManager.account(type.accountId) ?: throw Exception("Account is NULL")
+                        backupProvider.accountBackupJson(account = account, passphrase = passphrase)
+                    }
+                }
+            } catch (t: Throwable) {
+                error = t.message ?: t.javaClass.simpleName
+            }
+
             withContext(Dispatchers.Main) {
                 syncState()
             }
@@ -151,7 +250,7 @@ class BackupLocalPasswordViewModel(
             showButtonSpinner = showButtonSpinner,
             backupJson = backupJson,
             closeScreen = closeScreen,
-            showAccountIsNullError = showAccountIsNullError
+            error = error
         )
     }
 

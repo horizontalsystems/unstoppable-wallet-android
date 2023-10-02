@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.update
 import java.util.concurrent.TimeUnit
 
 class AccountManager(
-        private val storage: IAccountsStorage,
-        private val accountCleaner: IAccountCleaner
+    private val storage: IAccountsStorage,
+    private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
 
     private var accountsCache = mutableMapOf<String, Account>()
@@ -114,6 +114,10 @@ class AccountManager(
         if (id == activeAccount?.id) {
             setActiveAccountId(accounts.firstOrNull()?.id)
         }
+    }
+
+    override fun setFileBackedUp(id: String, fileBackedUp: Boolean) {
+        storage.setFileBackedUp(id, fileBackedUp)
     }
 
     override fun clear() {
