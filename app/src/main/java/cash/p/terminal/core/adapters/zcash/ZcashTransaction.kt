@@ -2,6 +2,8 @@ package cash.p.terminal.core.adapters.zcash
 
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.TransactionOverview
+import cash.z.ecc.android.sdk.model.TransactionState
+import java.util.Date
 
 class ZcashTransaction : Comparable<ZcashTransaction> {
     val rawId: FirstClassByteArray
@@ -24,7 +26,10 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             toAddress = recipient
             expiryHeight = it.expiryHeight?.value?.toInt()
             minedHeight = it.minedHeight?.value
-            timestamp = it.blockTimeEpochSeconds ?: 0
+            timestamp = it.blockTimeEpochSeconds ?: when (it.transactionState) {
+                TransactionState.Pending -> Date().time / 1000
+                else -> 0
+            }
             value = it.netValue.value
             this.memo = memo
             failed = false
