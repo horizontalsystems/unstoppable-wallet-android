@@ -39,10 +39,11 @@ class TokenBalanceService(
         val latestRates = xRateRepository.getLatestRates()
 
         balanceItem = BalanceModule.BalanceItem(
-            wallet,
-            balanceAdapterRepository.balanceData(wallet),
-            balanceAdapterRepository.state(wallet),
-            latestRates[wallet.coin.uid]
+            wallet = wallet,
+            balanceData = balanceAdapterRepository.balanceData(wallet),
+            state = balanceAdapterRepository.state(wallet),
+            sendAllowed = balanceAdapterRepository.sendAllowed(wallet),
+            coinPrice = latestRates[wallet.coin.uid]
         )
 
         xRateRepository.itemObservable
@@ -80,7 +81,8 @@ class TokenBalanceService(
     private fun handleAdapterUpdate() {
         balanceItem = balanceItem?.copy(
             balanceData = balanceAdapterRepository.balanceData(wallet),
-            state = balanceAdapterRepository.state(wallet)
+            state = balanceAdapterRepository.state(wallet),
+            sendAllowed = balanceAdapterRepository.sendAllowed(wallet)
         )
     }
 

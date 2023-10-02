@@ -1,6 +1,10 @@
 package cash.p.terminal.modules.balance
 
-import cash.p.terminal.core.*
+import cash.p.terminal.core.AdapterState
+import cash.p.terminal.core.BalanceData
+import cash.p.terminal.core.Clearable
+import cash.p.terminal.core.IAdapterManager
+import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Wallet
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -98,6 +102,10 @@ class BalanceAdapterRepository(
         return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData
             ?: balanceCache.getCache(wallet)
             ?: BalanceData(BigDecimal.ZERO)
+    }
+
+    fun sendAllowed(wallet: Wallet): Boolean {
+        return adapterManager.getBalanceAdapterForWallet(wallet)?.sendAllowed() ?: false
     }
 
     fun refresh() {
