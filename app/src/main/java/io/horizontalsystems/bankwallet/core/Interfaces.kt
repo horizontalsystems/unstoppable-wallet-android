@@ -257,6 +257,8 @@ interface IBalanceAdapter {
 
     val balanceData: BalanceData
     val balanceUpdatedFlowable: Flowable<Unit>
+
+    fun sendAllowed() = balanceState is AdapterState.Synced
 }
 
 data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDecimal.ZERO) {
