@@ -353,7 +353,6 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">인증을 위해 메시지에 서명하십시오</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
     <string name="WalletConnect_Error_NoWallet">WalletConnect를 사용하려면 먼저 지갑을 생성하거나 가져와야 합니다</string>
-    <string name="WalletConnect_Error_NeedBackup">WalletConnect를 사용하려면 %s을(를) 백업해야 합니다.</string>
     <string name="WalletConnect_Error_WatchAccount">이 기능은 시계 전용 지갑에서는 작동하지 않으므로 복원 또는 생성된 지갑으로 전환해야 합니다 </string>
     <string name="WalletConnect_Error_UnsupportedChainId">지원되지 않는 블록체인입니다</string>
     <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
