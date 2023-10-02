@@ -14,16 +14,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -31,8 +29,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
 @Composable
 fun LocalBackupTermsScreen(
-    fragmentNavController: NavController,
-    navController: NavController,
+    onTermsAccepted: ()-> Unit,
+    onBackClick: () -> Unit,
 ) {
     var termChecked by rememberSaveable { mutableStateOf(false) }
 
@@ -42,15 +40,9 @@ fun LocalBackupTermsScreen(
             topBar = {
                 AppBar(
                     title = stringResource(R.string.LocalBackup_Title),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = {
-                                fragmentNavController.popBackStack()
-                            }
-                        )
-                    )
+                    navigationIcon = {
+                        HsBackButton(onClick = onBackClick)
+                    },
                 )
             }
         ) {
@@ -80,9 +72,7 @@ fun LocalBackupTermsScreen(
                             .padding(start = 16.dp, end = 16.dp),
                         title = stringResource(R.string.Button_Continue),
                         enabled = termChecked,
-                        onClick = {
-                            navController.navigate("password_page")
-                        },
+                        onClick = onTermsAccepted,
                     )
                 }
             }

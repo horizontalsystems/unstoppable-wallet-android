@@ -16,8 +16,8 @@ import java.util.Optional
 import java.util.concurrent.TimeUnit
 
 class AccountManager(
-        private val storage: IAccountsStorage,
-        private val accountCleaner: IAccountCleaner
+    private val storage: IAccountsStorage,
+    private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
 
     private val cache = AccountsCache()
@@ -114,6 +114,10 @@ class AccountManager(
         if (id == cache.activeAccountId) {
             setActiveAccountId(accounts.firstOrNull()?.id)
         }
+    }
+
+    override fun setFileBackedUp(id: String, fileBackedUp: Boolean) {
+        storage.setFileBackedUp(id, fileBackedUp)
     }
 
     override fun clear() {

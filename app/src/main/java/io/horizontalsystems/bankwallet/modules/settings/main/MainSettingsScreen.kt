@@ -125,7 +125,16 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.blockchainSettingsFragment)
                 }
             )
-        })
+        },{
+            HsSettingCell(
+                R.string.BackupManager_Title,
+                R.drawable.ic_file_24,
+                onClick = {
+                    navController.slideFromRight(R.id.backupManagerFragment)
+                }
+            )
+        }
+            )
     )
 
     VSpacer(32.dp)

@@ -147,6 +147,7 @@ interface IAccountManager {
     fun clear()
     fun clearAccounts()
     fun onHandledBackupRequiredNewAccount()
+    fun setFileBackedUp(id: String, fileBackedUp: Boolean)
 }
 
 interface IBackupManager {
@@ -350,6 +351,7 @@ interface IAccountsStorage {
     fun update(account: Account)
     fun delete(id: String)
     fun getNonBackedUpCount(): Flowable<Int>
+    fun setFileBackedUp(id: String, fileBackedUp: Boolean)
     fun clear()
     fun getDeletedAccountIds(): List<String>
     fun clearDeleted()

@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.ActiveAccount
+import io.horizontalsystems.bankwallet.entities.CexType
 import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
@@ -88,6 +92,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
     override fun getNonBackedUpCount(): Flowable<Int> {
         return dao.getNonBackedUpCount()
+    }
+
+    override fun setFileBackedUp(id: String, fileBackedUp: Boolean) {
+        dao.setFileBackedUp(id, fileBackedUp)
     }
 
     override fun clear() {

@@ -43,4 +43,7 @@ interface AccountsDao {
     @Query("DELETE FROM ActiveAccount")
     fun deleteActiveAccount()
 
+    @Query("UPDATE AccountRecord SET isFileBackedUp = :fileBackedUp WHERE id = :id")
+    fun setFileBackedUp(id: String, fileBackedUp: Boolean)
+
 }
