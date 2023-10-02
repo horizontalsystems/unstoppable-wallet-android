@@ -943,10 +943,10 @@
     <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
 
-    <string name="SetDuressPin_Title">Set Duress Passcode</string>
+    <string name="SetDuressPin_Title">Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
     <string name="EditDuressPin_Title">Edit Duress Passcode</string>
-    <string name="EditDuressPin_Description">New passcode for Duress Mode</string>
+    <string name="EditDuressPin_Description">Enter new passcode for Duress Mode</string>
 
     <string name="DuressPin_Title">Duress Passcode</string>
     <string name="DuressPin_Description">This mode allows user to setup multiple unlock app PINs where a desired PIN shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
@@ -1753,7 +1753,7 @@
     <string name="Unlock_Random">Random</string>
 
     <!--Set Pin-->
-    <string name="PinSet_Title">Set Passcode</string>
+    <string name="PinSet_Title">Create Passcode</string>
     <string name="PinSet_Info">Your passcode will be used to unlock your wallet</string>
     <string name="PinSet_ConfirmInfo">Confirm</string>
     <string name="PinSet_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
