@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.BalanceData
+import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -98,6 +102,10 @@ class BalanceAdapterRepository(
         return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData
             ?: balanceCache.getCache(wallet)
             ?: BalanceData(BigDecimal.ZERO)
+    }
+
+    fun sendAllowed(wallet: Wallet): Boolean {
+        return adapterManager.getBalanceAdapterForWallet(wallet)?.sendAllowed() ?: false
     }
 
     fun refresh() {

@@ -215,7 +215,7 @@ class BalanceViewItemFactory {
                 state !is AdapterState.Synced
             ),
             exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
-            sendEnabled = state is AdapterState.Synced,
+            sendEnabled = item.sendAllowed,
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
             syncingTextValue = getSyncingText(state),
             syncedUntilTextValue = getSyncedUntilText(state),
@@ -271,7 +271,7 @@ class BalanceViewItemFactory {
             secondaryValue = secondaryValue,
             exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
             diff = item.coinPrice?.diff,
-            sendEnabled = state is AdapterState.Synced,
+            sendEnabled = item.sendAllowed,
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
             syncingTextValue = getSyncingText(state),
             syncedUntilTextValue = getSyncedUntilText(state),
