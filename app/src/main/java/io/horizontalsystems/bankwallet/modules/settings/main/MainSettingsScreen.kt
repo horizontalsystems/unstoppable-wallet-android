@@ -146,7 +146,7 @@ private fun SettingSections(
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                         }
                         is WC2Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                            val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup, state.account.name)
+                            val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                             navController.slideFromBottom(
                                 R.id.backupRequiredDialog,
                                 BackupRequiredDialog.prepareParams(state.account, text)
