@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,10 +19,14 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.Account
+import cash.p.terminal.modules.backuplocal.BackupLocalFragment
 import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaultWithIcon
+import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -79,25 +81,52 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                 navController.popBackStack()
             }
         ) {
+            VSpacer(12.dp)
             TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 text = text
             )
-            Spacer(Modifier.height(20.dp))
-            ButtonPrimaryYellow(
+            VSpacer(32.dp)
+            ButtonPrimaryYellowWithIcon(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
-                title = stringResource(R.string.BackupRecoveryPhrase_Backup),
+                title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup),
+                icon = R.drawable.ic_edit_24,
+                iconTint = ComposeAppTheme.colors.dark,
                 onClick = {
-                    navController.popBackStack()
                     navController.slideFromBottom(
                         R.id.backupKeyFragment,
                         BackupKeyModule.prepareParams(account)
                     )
                 }
             )
-            Spacer(Modifier.height(32.dp))
+            VSpacer(12.dp)
+            ButtonPrimaryDefaultWithIcon(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                title = stringResource(R.string.BackupRecoveryPhrase_LocalBackup),
+                icon = R.drawable.ic_file_24,
+                iconTint = ComposeAppTheme.colors.claude,
+                onClick = {
+                    navController.slideFromBottom(
+                        R.id.backupLocalFragment,
+                        BackupLocalFragment.prepareParams(account.id)
+                    )
+                }
+            )
+            VSpacer(12.dp)
+            ButtonPrimaryTransparent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                title = stringResource(R.string.BackupRecoveryPhrase_Later),
+                onClick = {
+                    navController.popBackStack()
+                }
+            )
+            VSpacer(32.dp)
         }
     }
 }
