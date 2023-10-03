@@ -103,9 +103,9 @@ class ZcashAdapter(
         synchronizer.onChainErrorHandler = ::onChainError
     }
 
-    private fun defaultFee(height: Long? = null): Zatoshi {
-        val value = if (height == null || height > feeChangeHeight) 1_000L else 10_000L
-        return Zatoshi(value)
+    private fun defaultFee(): Zatoshi {
+//        val value = if (height == null || height > feeChangeHeight) 1_000L else 10_000L
+        return Zatoshi(10_000L)
     }
 
     private var syncState: AdapterState = AdapterState.Syncing()
@@ -244,7 +244,7 @@ class ZcashAdapter(
         //       related viewModelScope instead of the synchronizer's scope.
         //       synchronizer.coroutineScope cannot be accessed until the synchronizer is started
         val scope = synchronizer.coroutineScope
-        synchronizer.transactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onTransactions)
+        synchronizer.transactions.collectWith(scope, transactionsProvider::onTransactions)
         synchronizer.status.collectWith(scope, ::onStatus)
         synchronizer.progress.collectWith(scope, ::onDownloadProgress)
         synchronizer.saplingBalances.collectWith(scope, ::onBalance)
@@ -294,7 +294,7 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = defaultFee(transaction.minedHeight).convertZatoshiToZec(decimalCount),
+                fee = null,
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
@@ -313,7 +313,7 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = defaultFee(transaction.minedHeight).convertZatoshiToZec(decimalCount),
+                fee = null,
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
