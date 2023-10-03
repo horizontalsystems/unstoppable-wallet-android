@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTor
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -117,6 +118,12 @@ private fun SecurityCenterScreen(
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
 ) {
+
+    DisposableLifecycleCallbacks(
+        onResume = {
+            securitySettingsViewModel.update()
+        },
+    )
 
     if (torViewModel.restartApp) {
         restartApp()
