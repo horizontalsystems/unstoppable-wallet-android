@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
 import android.app.Activity
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockManager
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
@@ -22,7 +23,7 @@ class PinComponent(
     }
 
     private val appLockManager: LockManager by lazy {
-        LockManager(pinManager)
+        LockManager(pinManager, App.localStorage)
     }
 
     override val pinSetFlowable: Flowable<Unit>

@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
+import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
@@ -65,6 +66,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean
     var amountInputType: AmountInputType?
     var baseCurrencyCode: String?

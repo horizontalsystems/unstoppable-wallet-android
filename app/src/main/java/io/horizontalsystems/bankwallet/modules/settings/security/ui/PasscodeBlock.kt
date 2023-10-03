@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.ensurePinSet
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
 import io.horizontalsystems.bankwallet.modules.settings.security.SecurityCenterCell
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -104,6 +105,22 @@ fun PasscodeBlock(
             }
         }
     })
+
+    if (uiState.pinEnabled) {
+        VSpacer(32.dp)
+        CellUniversalLawrenceSection(
+            listOf {
+                HsSettingCell(
+                    R.string.Settings_AutoLock,
+                    R.drawable.ic_lock_20,
+                    value = stringResource(uiState.autoLockIntervalName),
+                    onClick = {
+                        navController.slideFromRight(R.id.autoLockIntervalsFragment)
+                    }
+                )
+            }
+        )
+    }
 
     if (viewModel.biometricSettingsVisible) {
         Spacer(Modifier.height(32.dp))

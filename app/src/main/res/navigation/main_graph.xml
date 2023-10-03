@@ -99,6 +99,9 @@
         android:id="@+id/blockchainSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsFragment"/>
     <fragment
+        android:id="@+id/autoLockIntervalsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockIntervalsFragment" />
+    <fragment
         android:id="@+id/faqListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment"
         android:label="@string/Settings_Faq"/>
