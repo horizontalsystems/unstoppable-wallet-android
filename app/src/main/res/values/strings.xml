@@ -536,7 +536,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">You need to backup %s before you can use WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
     <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
@@ -802,7 +802,7 @@
     <!--Settings-->
 
     <string name="Settings_Title">Settings</string>
-    <string name="Settings_SecurityCenter">Security</string>
+    <string name="Settings_SecurityCenter">Security Center</string>
     <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
@@ -850,6 +850,7 @@
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
+    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
 
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
@@ -933,10 +934,15 @@
     <!--Setting_Security-->
 
     <string name="SettingsSecurity_Privacy">Privacy</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
-    <string name="SettingsSecurity_EnablePin">Passcode</string>
+    <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
+    <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_SetDuressPin">Set Duress Passcode</string>
+    <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
+    <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
+    <string name="SettingsSecurity_DuressPinDescription">A specialized mode designed to keep selected wallets safe under coercion.</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
@@ -950,6 +956,26 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
     <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
+
+    <string name="SetDuressPin_Title">Duress Passcode</string>
+    <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
+    <string name="EditDuressPin_Title">Edit Duress Passcode</string>
+    <string name="EditDuressPin_Description">Enter new passcode for Duress Mode</string>
+
+    <string name="DuressPin_Title">Duress Passcode</string>
+    <string name="DuressPin_Description">This mode allows user to setup multiple unlock app PINs where a desired PIN shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
+    <string name="DuressPin_Notes">NOTES</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Biometrics</string>
+    <string name="DuressPin_Notes_Biometrics_Description">The Biometric Authentication feature will work to unlock the Duress Mode. You can disable Biometric Authentication for convenience.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Passcode Disabling</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Disabling the passcode in the main mode will automatically reset the duress mode.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Passcode Change</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Changing the passcode in the Duress Mode will also change the current PIN code for that mode.</string>
+
+    <string name="DuressPinSelectAccounts_Title">Select Wallet</string>
+    <string name="DuressPinSelectAccounts_Description">Select the wallets that will be displayed in duress mode.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
 
     <!--Setting_Terms-->
 
@@ -1728,7 +1754,9 @@
     <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
 
     <!--Unlock-->
+    <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">Passcode</string>
+    <string name="Unlock_EnterPasscode">Enter Passcode</string>
     <string name="Unlock_Incorrect">Incorrect</string>
     <string name="Unlock_BiometricScanner">Biometrics Scanner</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
@@ -1739,11 +1767,13 @@
     <string name="Unlock_Random">Random</string>
 
     <!--Set Pin-->
-    <string name="PinSet_Title">Set Passcode</string>
+    <string name="PinSet_Title">Create Passcode</string>
     <string name="PinSet_Info">Your passcode will be used to unlock your wallet</string>
     <string name="PinSet_ConfirmInfo">Confirm</string>
     <string name="PinSet_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="PinSet_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>
+    <string name="PinSet_ForDuress">Set a passcode to enable Duress Mode</string>
 
     <!--Edit Pin-->
     <string name="EditPin_Title">Edit Passcode</string>

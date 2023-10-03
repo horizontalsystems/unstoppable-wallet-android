@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
+import retrofit2.HttpException
 import java.io.IOException
 import io.horizontalsystems.marketkit.models.ChartPoint as MarketKitChartPoint
 
@@ -48,6 +49,8 @@ class CoinOverviewChartService(
         try {
             chartStartTime = marketKit.chartStartTimeSingle(coinUid).await()
         } catch (e: IOException) {
+            Log.e("CoinOverviewChartService", "start error: ", e)
+        } catch (e: HttpException) {
             Log.e("CoinOverviewChartService", "start error: ", e)
         }
 

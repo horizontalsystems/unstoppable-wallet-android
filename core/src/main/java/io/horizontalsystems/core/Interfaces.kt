@@ -3,7 +3,7 @@ package io.horizontalsystems.core
 import android.app.Activity
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 import io.reactivex.Flowable
-import java.util.*
+import java.util.Date
 import javax.crypto.SecretKey
 
 interface ICoreApp {
@@ -13,7 +13,8 @@ interface ICoreApp {
     var keyStoreManager: IKeyStoreManager
     var keyProvider: IKeyProvider
     var pinComponent: IPinComponent
-    var pinStorage: IPinStorage
+    var pinSettingsStorage: IPinSettingsStorage
+    var lockoutStorage: ILockoutStorage
     var thirdKeyboardStorage: IThirdKeyboard
     var instance: CoreApp
 }
@@ -39,22 +40,28 @@ interface IPinComponent {
 
     fun willEnterForeground(activity: Activity)
     fun didEnterBackground()
-    fun updateLastExitDateBeforeRestart()
-    fun store(pin: String)
-    fun validate(pin: String): Boolean
-    fun clear()
-    fun onUnlock()
-    fun shouldShowPin(activity: Activity): Boolean
+    fun setPin(pin: String)
+    fun setDuressPin(pin: String)
+    fun disablePin()
+    fun disableDuressPin()
+    fun isDuressPinSet(): Boolean
+    fun unlock(pin: String): Boolean
+    fun validateCurrentLevel(pin: String): Boolean
+    fun onBiometricUnlock()
+    fun initDefaultPinLevel()
     fun lock()
+    fun updateLastExitDateBeforeRestart()
+    fun shouldShowPin(activity: Activity): Boolean
 }
 
-interface IPinStorage {
+interface ILockoutStorage {
     var failedAttempts: Int?
     var lockoutUptime: Long?
+}
+
+interface IPinSettingsStorage {
     var biometricAuthEnabled: Boolean
     var pin: String?
-
-    fun clearPin()
 }
 
 interface IThirdKeyboard {

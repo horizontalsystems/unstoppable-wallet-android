@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
@@ -39,10 +40,13 @@ import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -126,7 +130,30 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
                                 icon = R.drawable.ic_qr_scan_20,
                                 onClick = {
-                                    qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+                                    when (val state = viewModel.getWalletConnectSupportState()) {
+                                        WC2Manager.SupportState.Supported -> {
+                                            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+                                        }
+
+                                        WC2Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                                            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                                        }
+
+                                        is WC2Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                                            val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
+                                            navController.slideFromBottom(
+                                                R.id.backupRequiredDialog,
+                                                BackupRequiredDialog.prepareParams(state.account, text)
+                                            )
+                                        }
+
+                                        is WC2Manager.SupportState.NotSupported -> {
+                                            navController.slideFromBottom(
+                                                R.id.wcAccountTypeNotSupportedDialog,
+                                                WCAccountTypeNotSupportedDialog.prepareParams(state.accountTypeDescription)
+                                            )
+                                        }
+                                    }
                                 }
                             )
                         )

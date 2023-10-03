@@ -1,41 +1,47 @@
 package io.horizontalsystems.bankwallet.modules.pin.ui
 
 import androidx.biometric.BiometricPrompt
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.headline1_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 
 @Composable
 fun PinUnlock(
-    showCancelButton: Boolean,
-    dismissWithSuccess: () -> Unit,
-    onCancelClick: () -> Unit,
-    viewModel: PinUnlockViewModel = viewModel(factory = PinUnlockModule.Factory(showCancelButton))
+    onSuccess: () -> Unit,
 ) {
-    var showBiometricPrompt by remember { mutableStateOf(viewModel.uiState.fingerScannerEnabled) }
+    val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
+    val uiState = viewModel.uiState
+    var showBiometricPrompt by remember {
+        mutableStateOf(
+            uiState.fingerScannerEnabled && uiState.inputState is PinUnlockModule.InputState.Enabled
+        )
+    }
     var showBiometricDisabledAlert by remember { mutableStateOf(false) }
 
-    if (viewModel.uiState.unlocked) {
-        dismissWithSuccess.invoke()
+    if (uiState.unlocked) {
+        onSuccess.invoke()
         viewModel.unlocked()
-    }
-
-    if (viewModel.uiState.canceled) {
-        onCancelClick.invoke()
-        viewModel.canceled()
     }
 
     if (showBiometricPrompt) {
@@ -59,44 +65,48 @@ fun PinUnlock(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = ComposeAppTheme.colors.tyler)
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                title3_leah(
+                    text = stringResource(R.string.Unlock_Title),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
     ) {
-        PinTopBlock(
-            modifier = Modifier.weight(1f),
-            title = {
-                val error = viewModel.uiState.error
-                if (error != null) {
-                    headline1_lucian(
-                        text = error,
-                        textAlign = TextAlign.Center
-                    )
-                } else {
-                    headline1_leah(
-                        text = viewModel.uiState.title,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            },
-            enteredCount = viewModel.uiState.enteredCount,
-            showCancelButton = viewModel.cancelButtonVisible,
-            showShakeAnimation = viewModel.uiState.showShakeAnimation,
-            inputState = viewModel.uiState.inputState,
-            onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() },
-            onCancelClick = { viewModel.onCancelClick() }
-        )
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+        ) {
+            PinTopBlock(
+                modifier = Modifier.weight(1f),
+                title = stringResource(R.string.Unlock_EnterPasscode),
+                enteredCount = uiState.enteredCount,
+                showShakeAnimation = uiState.showShakeAnimation,
+                inputState = uiState.inputState,
+                onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() },
+            )
 
-        PinNumpad(
-            onNumberClick = { number -> viewModel.onKeyClick(number) },
-            onDeleteClick = { viewModel.onDelete() },
-            showFingerScanner = viewModel.uiState.fingerScannerEnabled,
-            showRandomizer = true,
-            showBiometricPrompt = {
-                showBiometricPrompt = true
-            },
-            inputState = viewModel.uiState.inputState
-        )
+            PinNumpad(
+                onNumberClick = { number -> viewModel.onKeyClick(number) },
+                onDeleteClick = { viewModel.onDelete() },
+                showFingerScanner = uiState.fingerScannerEnabled,
+                showRandomizer = true,
+                showBiometricPrompt = {
+                    showBiometricPrompt = true
+                },
+                inputState = uiState.inputState
+            )
+        }
     }
 }

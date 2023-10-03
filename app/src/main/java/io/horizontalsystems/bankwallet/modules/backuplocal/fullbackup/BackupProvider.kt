@@ -309,14 +309,14 @@ class BackupProvider(
 
         val selectedEvmSyncSources = evmBlockchainManager.allBlockchains.map { blockchain ->
             val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
-            EvmSyncSourceBackup(blockchain.uid, syncSource.url.toString(), null)
+            EvmSyncSourceBackup(blockchain.uid, syncSource.uri.toString(), null)
         }
 
         val customEvmSyncSources = evmBlockchainManager.allBlockchains.map { blockchain ->
             val customEvmSyncSources = evmSyncSourceManager.customSyncSources(blockchain.type)
             customEvmSyncSources.map { syncSource ->
                 val auth = syncSource.auth?.let { encrypted(it, passphrase) }
-                EvmSyncSourceBackup(blockchain.uid, syncSource.url.toString(), auth)
+                EvmSyncSourceBackup(blockchain.uid, syncSource.uri.toString(), auth)
             }
         }.flatten()
 

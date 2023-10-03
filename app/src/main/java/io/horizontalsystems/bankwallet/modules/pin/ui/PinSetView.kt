@@ -8,7 +8,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.set.PinSetModule
@@ -17,8 +16,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.CrossSlide
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
 @Composable
 fun PinSet(
@@ -26,7 +23,8 @@ fun PinSet(
     description: String,
     dismissWithSuccess: () -> Unit,
     onBackPress: () -> Unit,
-    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory())
+    forDuress: Boolean = false,
+    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory(forDuress))
 ) {
     if (viewModel.uiState.finished) {
         dismissWithSuccess.invoke()
@@ -58,31 +56,14 @@ fun PinSet(
                     when (stage) {
                         PinSetModule.SetStage.Enter -> {
                             PinTopBlock(
-                                title = {
-                                    val error = viewModel.uiState.error
-                                    if (error != null) {
-                                        subhead2_lucian(
-                                            text = error,
-                                            textAlign = TextAlign.Center
-                                        )
-                                    } else {
-                                        subhead2_grey(
-                                            text = description,
-                                            textAlign = TextAlign.Center
-                                        )
-                                    }
-                                },
+                                title = description,
+                                error = viewModel.uiState.error,
                                 enteredCount = viewModel.uiState.enteredCount,
                             )
                         }
                         PinSetModule.SetStage.Confirm -> {
                             PinTopBlock(
-                                title = {
-                                    subhead2_grey(
-                                        text = stringResource(R.string.PinSet_ConfirmInfo),
-                                        textAlign = TextAlign.Center
-                                    )
-                                },
+                                title = stringResource(R.string.PinSet_ConfirmInfo),
                                 enteredCount = viewModel.uiState.enteredCount,
                             )
                         }

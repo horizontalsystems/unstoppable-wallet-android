@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.marketkit.models.Blockchain
 import java.net.MalformedURLException
-import java.net.URL
+import java.net.URI
 
 class AddRpcViewModel(
     private val blockchain: Blockchain,
@@ -39,11 +39,11 @@ class AddRpcViewModel(
     }
 
     fun onAddClick() {
-        val sourceUrl: URL
+        val sourceUri: URI
 
         try {
-            sourceUrl = URL(url)
-            val hasRequiredProtocol = listOf("https", "wss").contains(sourceUrl.protocol)
+            sourceUri = URI(url)
+            val hasRequiredProtocol = listOf("https", "wss").contains(sourceUri.scheme)
             if (!hasRequiredProtocol) {
                 throw MalformedURLException()
             }
@@ -55,7 +55,7 @@ class AddRpcViewModel(
 
         val existingSources = evmSyncSourceManager.allSyncSources(blockchain.type)
 
-        if (existingSources.any { it.url == sourceUrl}) {
+        if (existingSources.any { it.uri == sourceUri}) {
             urlCaution = Caution(Translator.getString(R.string.AddEvmSyncSource_Warning_UrlExists), Caution.Type.Warning)
             syncState()
             return

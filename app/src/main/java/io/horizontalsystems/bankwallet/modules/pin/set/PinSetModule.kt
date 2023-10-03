@@ -6,11 +6,11 @@ import io.horizontalsystems.bankwallet.core.App
 
 object PinSetModule {
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val forDuress: Boolean) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PinSetViewModel(App.pinComponent) as T
+            return PinSetViewModel(App.pinComponent, App.userManager, forDuress) as T
         }
     }
 

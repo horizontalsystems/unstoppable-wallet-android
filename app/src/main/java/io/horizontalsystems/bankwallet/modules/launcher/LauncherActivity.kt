@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 
 class LauncherActivity : AppCompatActivity() {
     private val viewModel by viewModels<LaunchViewModel> { LaunchModule.Factory() }
@@ -30,8 +29,7 @@ class LauncherActivity : AppCompatActivity() {
             LaunchViewModel.Page.Unlock -> {
                 val unlockResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                     when (result.resultCode) {
-                        PinModule.RESULT_OK -> openMain()
-                        PinModule.RESULT_CANCELLED -> finishAffinity()
+                        RESULT_OK -> openMain()
                     }
                 }
 

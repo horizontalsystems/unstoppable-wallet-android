@@ -1,45 +1,40 @@
 package io.horizontalsystems.bankwallet.modules.pin.core
 
-import android.text.TextUtils
-import io.horizontalsystems.core.IEncryptionManager
-import io.horizontalsystems.core.IPinStorage
 import io.reactivex.subjects.PublishSubject
 
-class PinManager(
-    private val encryptionManager: IEncryptionManager,
-    private val pinStorage: IPinStorage
-) {
-
+class PinManager(private val pinDbStorage: PinDbStorage, ) {
     val pinSetSubject = PublishSubject.create<Unit>()
 
     val isPinSet: Boolean
-        get() = !pinStorage.pin.isNullOrEmpty()
-
-    private val savedPin: String?
-        get() {
-            val string = pinStorage.pin ?: return null
-            return if (TextUtils.isEmpty(string)) {
-                null
-            } else {
-                encryptionManager.decrypt(string)
-            }
-        }
+        get() = pinDbStorage.isLastLevelPinSet()
 
     @Throws
-    fun store(pin: String) {
-        pinStorage.pin = encryptionManager.encrypt(pin)
+    fun store(pin: String, level: Int) {
+        pinDbStorage.store(pin, level)
         pinSetSubject.onNext(Unit)
     }
 
-    @Throws
-    fun validate(pin: String): Boolean {
-        return savedPin == pin
+    fun getPinLevel(pin: String): Int? {
+        return pinDbStorage.getLevel(pin)
     }
 
-    fun clear() {
-        pinStorage.clearPin()
-        pinStorage.biometricAuthEnabled = false
+    fun getPinLevelLast(): Int {
+        return pinDbStorage.getPinLevelLast()
+    }
+
+    fun disablePin(level: Int) {
+        pinDbStorage.clearPasscode(level)
+        pinDbStorage.deleteAllFromLevel(level + 1)
         pinSetSubject.onNext(Unit)
+    }
+
+    fun disableDuressPin(level: Int) {
+        pinDbStorage.deleteAllFromLevel(level)
+        pinSetSubject.onNext(Unit)
+    }
+
+    fun isPinSetForLevel(level: Int): Boolean {
+        return pinDbStorage.isPinSetForLevel(level)
     }
 
 }

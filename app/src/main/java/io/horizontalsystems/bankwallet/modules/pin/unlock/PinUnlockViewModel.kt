@@ -5,8 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockoutState
@@ -20,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PinUnlockViewModel(
-    val cancelButtonVisible: Boolean,
     private val pinComponent: IPinComponent,
     private val lockoutManager: ILockoutManager,
     systemInfoManager: ISystemInfoManager,
@@ -31,12 +28,9 @@ class PinUnlockViewModel(
 
     var uiState by mutableStateOf(
         PinUnlockViewState(
-            title = Translator.getString(R.string.Unlock_Passcode),
-            error = null,
             enteredCount = 0,
             fingerScannerEnabled = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled,
             unlocked = false,
-            canceled = false,
             showShakeAnimation = false,
             inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
         )
@@ -55,7 +49,7 @@ class PinUnlockViewModel(
     }
 
     fun onBiometricsUnlock() {
-        pinComponent.onUnlock()
+        pinComponent.onBiometricUnlock()
         lockoutManager.dropFailedAttempts()
         uiState = uiState.copy(unlocked = true)
     }
@@ -65,7 +59,6 @@ class PinUnlockViewModel(
 
             enteredPin += number.toString()
             uiState = uiState.copy(
-                error = null,
                 enteredCount = enteredPin.length
             )
 
@@ -74,7 +67,6 @@ class PinUnlockViewModel(
                     uiState = uiState.copy(unlocked = true)
                 } else {
                     uiState = uiState.copy(
-                        error = Translator.getString(R.string.Unlock_Incorrect),
                         showShakeAnimation = true
                     )
                     viewModelScope.launch {
@@ -94,7 +86,6 @@ class PinUnlockViewModel(
         if (enteredPin.isNotEmpty()) {
             enteredPin = enteredPin.dropLast(1)
             uiState = uiState.copy(
-                error = null,
                 enteredCount = enteredPin.length,
                 showShakeAnimation = false
             )
@@ -105,16 +96,8 @@ class PinUnlockViewModel(
         uiState = uiState.copy(unlocked = false)
     }
 
-    fun canceled() {
-        uiState = uiState.copy(canceled = false)
-    }
-
     fun onShakeAnimationFinish() {
         uiState = uiState.copy(showShakeAnimation = false)
-    }
-
-    fun onCancelClick() {
-        uiState = uiState.copy(canceled = true)
     }
 
     private fun updateLockoutState() {
@@ -136,16 +119,14 @@ class PinUnlockViewModel(
     }
 
     private fun unlock(pin: String): Boolean {
-        val valid = pinComponent.validate(pin)
-        if (valid) {
-            pinComponent.onUnlock()
+        if (pinComponent.unlock(pin)) {
             lockoutManager.dropFailedAttempts()
+            return true
         } else {
             lockoutManager.didFailUnlock()
             updateLockoutState()
+            return false
         }
-
-        return valid
     }
 
 }

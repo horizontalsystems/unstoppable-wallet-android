@@ -12,17 +12,16 @@ import io.horizontalsystems.core.CurrentDateProvider
 
 object PinUnlockModule {
 
-    class Factory(private val showCancelButton: Boolean) : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val lockoutManager = LockoutManager(
-                CoreApp.pinStorage, UptimeProvider(), LockoutUntilDateFactory(
+                CoreApp.lockoutStorage, UptimeProvider(), LockoutUntilDateFactory(
                     CurrentDateProvider()
                 )
             )
             return PinUnlockViewModel(
-                showCancelButton,
                 App.pinComponent,
                 lockoutManager,
                 App.systemInfoManager,
@@ -32,12 +31,9 @@ object PinUnlockModule {
     }
 
     data class PinUnlockViewState(
-        val title: String,
-        val error: String?,
         val enteredCount: Int,
         val fingerScannerEnabled: Boolean,
         val unlocked: Boolean,
-        val canceled: Boolean,
         val showShakeAnimation: Boolean,
         val inputState: InputState
     )

@@ -253,10 +253,7 @@ private fun MainScreen(
             }
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {
                 clearActivityData.invoke()
-                val text = stringResource(
-                    R.string.WalletConnect_Error_NeedBackup,
-                    wcSupportState.account.name
-                )
+                val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
                 fragmentNavController.slideFromBottom(
                     R.id.backupRequiredDialog,
                     BackupRequiredDialog.prepareParams(wcSupportState.account, text)

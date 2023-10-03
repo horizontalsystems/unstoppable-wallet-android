@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.set.PinSetModule.PinSetViewState
@@ -17,6 +18,8 @@ import kotlinx.coroutines.launch
 
 class PinSetViewModel(
     private val pinComponent: IPinComponent,
+    private val userManager: UserManager,
+    private val forDuress: Boolean,
 ) : ViewModel() {
 
     private var enteredPin = ""
@@ -73,7 +76,11 @@ class PinSetViewModel(
                 } else if (submittedPin.isNotEmpty()) {
                     if (submittedPin == enteredPin) {
                         try {
-                            pinComponent.store(submittedPin)
+                            if (forDuress) {
+                                pinComponent.setDuressPin(submittedPin)
+                            } else {
+                                pinComponent.setPin(submittedPin)
+                            }
                             uiState = uiState.copy(finished = true)
                         } catch (ex: Exception) {
                             resetWithError(R.string.PinSet_ErrorFailedToSavePin)

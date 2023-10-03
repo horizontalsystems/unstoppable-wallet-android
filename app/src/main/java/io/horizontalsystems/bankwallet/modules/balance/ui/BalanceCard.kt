@@ -198,35 +198,48 @@ fun BalanceCardInner(
                     Box(
                         modifier = Modifier.weight(1f),
                     ) {
-                        when (type) {
-                            BalanceCardSubtitleType.Rate -> {
-                                if (viewItem.exchangeValue.visible) {
-                                    Row {
-                                        Text(
-                                            text = viewItem.exchangeValue.value,
-                                            color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                                            style = ComposeAppTheme.typography.subhead2,
-                                            maxLines = 1,
-                                        )
-                                        Text(
-                                            modifier = Modifier.padding(start = 4.dp),
-                                            text = RateText(viewItem.diff),
-                                            color = RateColor(viewItem.diff),
-                                            style = ComposeAppTheme.typography.subhead2,
-                                            maxLines = 1,
-                                        )
+                        if (viewItem.syncingTextValue != null) {
+                            subhead2_grey(
+                                text = viewItem.syncingTextValue,
+                                maxLines = 1,
+                            )
+                        } else {
+                            when (type) {
+                                BalanceCardSubtitleType.Rate -> {
+                                    if (viewItem.exchangeValue.visible) {
+                                        Row {
+                                            Text(
+                                                text = viewItem.exchangeValue.value,
+                                                color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                                                style = ComposeAppTheme.typography.subhead2,
+                                                maxLines = 1,
+                                            )
+                                            Text(
+                                                modifier = Modifier.padding(start = 4.dp),
+                                                text = RateText(viewItem.diff),
+                                                color = RateColor(viewItem.diff),
+                                                style = ComposeAppTheme.typography.subhead2,
+                                                maxLines = 1,
+                                            )
+                                        }
                                     }
                                 }
-                            }
-                            BalanceCardSubtitleType.CoinName -> {
-                                subhead2_grey(text = viewItem.coinTitle)
+
+                                BalanceCardSubtitleType.CoinName -> {
+                                    subhead2_grey(text = viewItem.coinTitle)
+                                }
                             }
                         }
                     }
                     Box(
                         modifier = Modifier.padding(start = 16.dp),
                     ) {
-                        if (viewItem.secondaryValue.visible) {
+                        if (viewItem.syncedUntilTextValue != null) {
+                            subhead2_grey(
+                                text = viewItem.syncedUntilTextValue,
+                                maxLines = 1,
+                            )
+                        } else if (viewItem.secondaryValue.visible) {
                             Text(
                                 text = viewItem.secondaryValue.value,
                                 color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,

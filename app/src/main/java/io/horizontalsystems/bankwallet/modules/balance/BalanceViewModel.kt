@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -24,7 +25,8 @@ class BalanceViewModel(
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
-    private val wc2Service: WC2Service
+    private val wc2Service: WC2Service,
+    private val wC2Manager: WC2Manager
 ) : ViewModel(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
@@ -197,6 +199,10 @@ class BalanceViewModel(
             tmpAccount.hasAnyBackup -> ReceiveAllowedState.Allowed
             else -> ReceiveAllowedState.BackupRequired(tmpAccount)
         }
+    }
+
+    fun getWalletConnectSupportState(): WC2Manager.SupportState {
+        return wC2Manager.getWalletConnectSupportState()
     }
 
     sealed class SyncError {

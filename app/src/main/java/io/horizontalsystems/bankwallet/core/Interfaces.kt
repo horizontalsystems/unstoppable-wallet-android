@@ -50,7 +50,6 @@ import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.Date
-import java.util.Optional
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 import io.horizontalsystems.tronkit.models.Address as TronAddress
 
@@ -131,7 +130,6 @@ interface IAccountManager {
     val hasNonStandardAccount: Boolean
     val activeAccount: Account?
     val activeAccountStateFlow: Flow<ActiveAccountState>
-    val activeAccountObservable: Flowable<Optional<Account>>
     val isAccountsEmpty: Boolean
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
@@ -140,13 +138,15 @@ interface IAccountManager {
 
     fun setActiveAccountId(activeAccountId: String?)
     fun account(id: String): Account?
-    fun loadAccounts()
     fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)
     fun clear()
     fun clearAccounts()
     fun onHandledBackupRequiredNewAccount()
+    fun setLevel(level: Int)
+    fun updateAccountLevels(accountIds: List<String>, level: Int)
+    fun updateMaxLevel(level: Int)
     fun setFileBackedUp(id: String, fileBackedUp: Boolean)
 }
 
@@ -156,7 +156,13 @@ interface IBackupManager {
 }
 
 interface IAccountFactory {
-    fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean, fileBackedUp: Boolean): Account
+    fun account(
+        name: String,
+        type: AccountType,
+        origin: AccountOrigin,
+        backedUp: Boolean,
+        fileBackedUp: Boolean
+    ): Account
     fun watchAccount(name: String, type: AccountType, fileBackedUp: Boolean): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
@@ -346,7 +352,7 @@ interface IAccountsStorage {
     var activeAccountId: String?
     val isAccountsEmpty: Boolean
 
-    fun allAccounts(): List<Account>
+    fun allAccounts(accountsMinLevel: Int): List<Account>
     fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)
@@ -355,6 +361,8 @@ interface IAccountsStorage {
     fun clear()
     fun getDeletedAccountIds(): List<String>
     fun clearDeleted()
+    fun updateLevels(accountIds: List<String>, level: Int)
+    fun updateMaxLevel(level: Int)
 }
 
 interface IEnabledWalletStorage {
