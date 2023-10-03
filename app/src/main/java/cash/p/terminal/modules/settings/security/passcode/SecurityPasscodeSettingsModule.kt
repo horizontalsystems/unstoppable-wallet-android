@@ -12,7 +12,8 @@ object SecurityPasscodeSettingsModule {
             return SecuritySettingsViewModel(
                 App.systemInfoManager,
                 App.pinComponent,
-                App.balanceHiddenManager
+                App.balanceHiddenManager,
+                App.localStorage,
             ) as T
         }
     }

@@ -1,10 +1,12 @@
 package cash.p.terminal.modules.pin.core
 
+import cash.p.terminal.core.ILocalStorage
 import io.horizontalsystems.core.helpers.DateHelper
 import java.util.Date
 
 class LockManager(
-    private val pinManager: PinManager
+    private val pinManager: PinManager,
+    private val localStorage: ILocalStorage
 ) {
 
     var isLocked: Boolean = true
@@ -25,8 +27,10 @@ class LockManager(
             return
         }
 
+        val autoLockInterval = localStorage.autoLockInterval
         val secondsAgo = DateHelper.getSecondsAgo(appLastVisitTime)
-        if (secondsAgo > lockTimeout) {
+
+        if (secondsAgo >= autoLockInterval.intervalInSeconds) {
             isLocked = true
         }
     }

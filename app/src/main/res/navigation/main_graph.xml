@@ -102,6 +102,9 @@
         android:id="@+id/backupManagerFragment"
         android:name="cash.p.terminal.modules.backuplocal.fullbackup.BackupManagerFragment"/>
     <fragment
+        android:id="@+id/autoLockIntervalsFragment"
+        android:name="cash.p.terminal.modules.settings.security.autolock.AutoLockIntervalsFragment" />
+    <fragment
         android:id="@+id/faqListFragment"
         android:name="cash.p.terminal.modules.settings.faq.FaqListFragment"
         android:label="@string/Settings_Faq"/>

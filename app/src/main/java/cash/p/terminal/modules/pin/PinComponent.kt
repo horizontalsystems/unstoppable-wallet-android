@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.pin
 
 import android.app.Activity
+import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.modules.pin.core.LockManager
 import cash.p.terminal.modules.pin.core.PinDbStorage
@@ -22,7 +23,7 @@ class PinComponent(
     }
 
     private val appLockManager: LockManager by lazy {
-        LockManager(pinManager)
+        LockManager(pinManager, App.localStorage)
     }
 
     override val pinSetFlowable: Flowable<Unit>

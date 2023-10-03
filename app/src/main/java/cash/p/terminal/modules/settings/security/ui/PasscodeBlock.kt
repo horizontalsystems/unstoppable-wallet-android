@@ -16,6 +16,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.ensurePinSet
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.settings.security.SecurityCenterCell
 import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -104,6 +105,22 @@ fun PasscodeBlock(
             }
         }
     })
+
+    if (uiState.pinEnabled) {
+        VSpacer(32.dp)
+        CellUniversalLawrenceSection(
+            listOf {
+                HsSettingCell(
+                    R.string.Settings_AutoLock,
+                    R.drawable.ic_lock_20,
+                    value = stringResource(uiState.autoLockIntervalName),
+                    onClick = {
+                        navController.slideFromRight(R.id.autoLockIntervalsFragment)
+                    }
+                )
+            }
+        )
+    }
 
     if (viewModel.biometricSettingsVisible) {
         Spacer(Modifier.height(32.dp))

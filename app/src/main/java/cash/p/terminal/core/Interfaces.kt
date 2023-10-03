@@ -29,6 +29,7 @@ import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.Value
 import cash.p.terminal.modules.settings.appearance.AppIcon
+import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.settings.security.tor.TorStatus
 import cash.p.terminal.modules.settings.terms.TermsModule
 import cash.p.terminal.modules.theme.ThemeType
@@ -65,6 +66,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean
     var amountInputType: AmountInputType?
     var baseCurrencyCode: String?

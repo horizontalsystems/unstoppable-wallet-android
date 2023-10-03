@@ -18,6 +18,7 @@ import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.settings.appearance.AppIcon
+import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.theme.ThemeType
 import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinSettingsStorage
@@ -77,6 +78,7 @@ class LocalStorageManager(
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
     private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
     private val APP_ID = "app_id"
+    private val APP_AUTO_LOCK_INTERVAL = "app_auto_lock_interval"
 
     private val gson by lazy { Gson() }
 
@@ -462,6 +464,14 @@ class LocalStorageManager(
     override fun setSwapProviderId(blockchainType: BlockchainType, providerId: String) {
         preferences.edit().putString(getSwapProviderKey(blockchainType), providerId).apply()
     }
+
+    override var autoLockInterval: AutoLockInterval
+        get() = preferences.getString(APP_AUTO_LOCK_INTERVAL, null)?.let {
+            AutoLockInterval.fromRaw(it)
+        } ?: AutoLockInterval.AFTER_1_MIN
+        set(value) {
+            preferences.edit().putString(APP_AUTO_LOCK_INTERVAL, value.raw).apply()
+        }
 
     private fun getSwapProviderKey(blockchainType: BlockchainType): String {
         return SWAP_PROVIDER + blockchainType.uid
