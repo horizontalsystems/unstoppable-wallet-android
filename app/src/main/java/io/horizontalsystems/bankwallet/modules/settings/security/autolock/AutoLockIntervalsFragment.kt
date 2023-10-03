@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.core.findNavController
 
 class AutoLockIntervalsFragment : BaseComposeFragment() {
@@ -89,7 +89,7 @@ private fun IntervalCell(
         onClick = { onClick.invoke(item) }
     ) {
         HSpacer(16.dp)
-        subhead2_leah(
+        body_leah(
             modifier = Modifier.weight(1f),
             text = stringResource(item.title)
         )
