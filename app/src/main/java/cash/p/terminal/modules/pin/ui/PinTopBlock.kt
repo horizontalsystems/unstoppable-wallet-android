@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
@@ -52,16 +51,7 @@ fun PinTopBlock(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    if (error != null) {
-                        subhead2_lucian(
-                            text = error,
-                        )
-                    } else {
-                        subhead2_grey(
-                            text = title,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    subhead2_grey(text = title)
                     Spacer(Modifier.height(16.dp))
                 }
 
@@ -81,9 +71,16 @@ fun PinTopBlock(
                     modifier = Modifier.weight(1f),
                 ) {
                     Spacer(Modifier.height(16.dp))
-                    subhead2_jacob(
-                        text = inputState.attemptsLeft?.let { stringResource(R.string.Unlock_AttemptsLeft, it) } ?: ""
-                    )
+                    when {
+                        error != null -> {
+                            subhead2_lucian(text = error)
+                        }
+                        inputState.attemptsLeft != null -> {
+                            subhead2_jacob(
+                                text = stringResource(R.string.Unlock_AttemptsLeft, inputState.attemptsLeft)
+                            )
+                        }
+                    }
                 }
             }
         }
