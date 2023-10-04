@@ -39,7 +39,7 @@ fun DescriptionMarkdown(
     AndroidView(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         factory = {
             TextView(it).also { aboutText ->
                 aboutText.doOnPreDraw {

@@ -83,7 +83,6 @@ enum class HudMessageType{
 
 data class CoinOverviewViewItem(
     val roi: List<RoiViewItem>,
-    val categories: List<String>,
     val links: List<CoinLink>,
     val about: String,
     val marketData: MutableList<CoinDataItem>
