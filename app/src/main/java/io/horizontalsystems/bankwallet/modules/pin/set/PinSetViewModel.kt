@@ -62,17 +62,25 @@ class PinSetViewModel(
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 if (uiState.stage == Enter) {
-                    submittedPin = enteredPin
 
-                    viewModelScope.launch {
-                        delay(500)
+                    if (pinComponent.isUnique(enteredPin, forDuress)) {
+                        submittedPin = enteredPin
+
+                        viewModelScope.launch {
+                            delay(500)
+                            enteredPin = ""
+                            uiState = uiState.copy(
+                                stage = Confirm,
+                                enteredCount = enteredPin.length,
+                            )
+                        }
+                    } else {
                         enteredPin = ""
                         uiState = uiState.copy(
-                            stage = Confirm,
                             enteredCount = enteredPin.length,
+                            error = Translator.getString(R.string.PinSet_ErrorPinInUse),
                         )
                     }
-
                 } else if (submittedPin.isNotEmpty()) {
                     if (submittedPin == enteredPin) {
                         try {
