@@ -37,4 +37,10 @@ class PinManager(private val pinDbStorage: PinDbStorage, ) {
         return pinDbStorage.isPinSetForLevel(level)
     }
 
+    fun isUnique(pin: String, userLevel: Int): Boolean {
+        val pinLevel = pinDbStorage.getLevel(pin) ?: return true
+
+        return pinLevel == userLevel
+    }
+
 }

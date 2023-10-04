@@ -1785,6 +1785,7 @@
     <string name="PinSet_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>
     <string name="PinSet_ForDuress">Set a passcode to enable Duress Mode</string>
+    <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
 
     <!--Edit Pin-->
     <string name="EditPin_Title">Edit Passcode</string>

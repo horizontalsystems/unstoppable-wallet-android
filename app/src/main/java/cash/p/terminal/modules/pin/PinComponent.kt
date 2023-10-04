@@ -41,6 +41,15 @@ class PinComponent(
     override val isPinSet: Boolean
         get() = pinManager.isPinSet
 
+    override fun isUnique(pin: String, forDuress: Boolean): Boolean {
+        val level = if (forDuress) {
+            userManager.getUserLevel() + 1
+        } else {
+            userManager.getUserLevel()
+        }
+        return pinManager.isUnique(pin, level)
+    }
+
     override fun setPin(pin: String) {
         if (appLockManager.isLocked) {
             appLockManager.onUnlock()
