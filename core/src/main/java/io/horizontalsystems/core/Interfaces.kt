@@ -52,6 +52,7 @@ interface IPinComponent {
     fun lock()
     fun updateLastExitDateBeforeRestart()
     fun shouldShowPin(activity: Activity): Boolean
+    fun isUnique(pin: String, forDuress: Boolean): Boolean
 }
 
 interface ILockoutStorage {

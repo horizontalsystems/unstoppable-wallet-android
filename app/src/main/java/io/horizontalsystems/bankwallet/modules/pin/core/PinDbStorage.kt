@@ -15,14 +15,8 @@ class PinDbStorage(private val pinDao: PinDao) {
     }
 
     fun store(passcode: String, level: Int) {
-        val passcodeAlreadyInUse = pinDao.getAll().any { it.passcode?.value == passcode }
-
-        if (passcodeAlreadyInUse) {
-            throw IllegalStateException("passcodeAlreadyInUse")
-        } else {
-            val pin = Pin(level, SecretString(passcode))
-            pinDao.insert(pin)
-        }
+        val pin = Pin(level, SecretString(passcode))
+        pinDao.insert(pin)
     }
 
     fun clearPasscode(level: Int) {
