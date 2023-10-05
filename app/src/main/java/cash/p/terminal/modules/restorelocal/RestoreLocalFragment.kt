@@ -161,7 +161,7 @@ private fun RestoreLocalScreen(
         }
     }
 
-    uiState.accountType?.let { accountType ->
+    uiState.showSelectCoins?.let { accountType ->
         mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true)
         val keyboardController = LocalSoftwareKeyboardController.current
         coroutineScope.launch {

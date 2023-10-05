@@ -103,10 +103,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         return dao.getNonBackedUpCount()
     }
 
-    override fun setFileBackedUp(id: String, fileBackedUp: Boolean) {
-        dao.setFileBackedUp(id, fileBackedUp)
-    }
-
     override fun clear() {
         dao.deleteAll()
     }

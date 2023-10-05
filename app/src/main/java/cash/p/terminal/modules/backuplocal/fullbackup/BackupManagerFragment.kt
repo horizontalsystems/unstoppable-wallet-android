@@ -62,7 +62,7 @@ private fun FullBackupNavHost(fragmentNavController: NavController) {
                 },
                 onCreateBackup = {
                     fragmentNavController.authorizedAction {
-                        fragmentNavController.slideFromRight(R.id.backupLocalFragment/*, BackupLocalFragment.prepareParams(account.id)*/)
+                        fragmentNavController.slideFromRight(R.id.backupLocalFragment)
                     }
                 }
             )

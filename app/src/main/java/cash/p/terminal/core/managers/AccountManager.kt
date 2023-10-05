@@ -83,6 +83,26 @@ class AccountManager(
         }
     }
 
+    override fun import(accounts: List<Account>) {
+        for (account in accounts) {
+            storage.save(account)
+            updateCache(account)
+        }
+
+        accountsSubject.onNext(accounts)
+
+        if (activeAccount == null) {
+            accounts.minByOrNull { it.name.lowercase() }?.let { account ->
+                setActiveAccountId(account.id)
+                if (!account.isBackedUp && !account.isFileBackedUp) {
+                    _newAccountBackupRequiredFlow.update {
+                        account
+                    }
+                }
+            }
+        }
+    }
+
     override fun updateAccountLevels(accountIds: List<String>, level: Int) {
         storage.updateLevels(accountIds, level)
     }
@@ -99,6 +119,7 @@ class AccountManager(
 
         activeAccount?.id?.let {
             if (account.id == it) {
+                activeAccount = account
                 _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
             }
         }
@@ -114,10 +135,6 @@ class AccountManager(
         if (id == activeAccount?.id) {
             setActiveAccountId(accounts.firstOrNull()?.id)
         }
-    }
-
-    override fun setFileBackedUp(id: String, fileBackedUp: Boolean) {
-        storage.setFileBackedUp(id, fileBackedUp)
     }
 
     override fun clear() {
@@ -150,9 +167,9 @@ class AccountManager(
         }
 
         Single.timer(3, TimeUnit.SECONDS)
-                .flatMap { clearAsync }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            .flatMap { clearAsync }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
 }

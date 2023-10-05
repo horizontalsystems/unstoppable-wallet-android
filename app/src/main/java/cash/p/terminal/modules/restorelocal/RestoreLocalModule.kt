@@ -19,7 +19,7 @@ object RestoreLocalModule {
         val passphraseState: DataState.Error?,
         val showButtonSpinner: Boolean,
         val parseError: Exception?,
-        val accountType: AccountType?,
+        val showSelectCoins: AccountType?,
         val manualBackup: Boolean,
         val restored: Boolean
     )

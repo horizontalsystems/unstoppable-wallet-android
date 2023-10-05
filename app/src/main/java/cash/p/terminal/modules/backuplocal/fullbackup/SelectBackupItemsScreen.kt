@@ -18,9 +18,11 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsCheckbox
 import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
@@ -63,8 +65,8 @@ fun SelectBackupItemsScreen(
                 when (uiState.viewState) {
                     ViewState.Success -> {
                         item {
-                            CellUniversalLawrenceSection(uiState.wallets, showFrame = true) { wallet ->
-
+                            HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
+                            CellUniversalLawrenceSection(items = uiState.wallets, showFrame = true) { wallet ->
                                 RowUniversal(
                                     modifier = Modifier.padding(horizontal = 16.dp),
                                     onClick = { viewModel.toggle(wallet) }
@@ -72,8 +74,8 @@ fun SelectBackupItemsScreen(
 
                                     Column(modifier = Modifier.weight(1f)) {
                                         body_leah(text = wallet.name)
-                                        if (wallet.manualBackupRequired) {
-                                            subhead2_lucian(text = stringResource(id = R.string.BackupManager_ManualBackupRequired))
+                                        if (wallet.backupRequired) {
+                                            subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
                                         } else {
                                             subhead2_grey(
                                                 text = wallet.type,
@@ -90,6 +92,27 @@ fun SelectBackupItemsScreen(
                                     )
                                 }
                             }
+                        }
+
+                        item {
+                            VSpacer(height = 24.dp)
+                            HeaderText(text = stringResource(id = R.string.BackupManager_Other))
+                            CellUniversalLawrenceSection(items = uiState.otherBackupItems, showFrame = true) { item ->
+                                RowUniversal(
+                                    modifier = Modifier.padding(horizontal = 16.dp)
+                                ) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        body_leah(text = item.title)
+                                        subhead2_grey(
+                                            text = item.subtitle,
+                                            overflow = TextOverflow.Ellipsis,
+                                            maxLines = 1
+                                        )
+                                    }
+                                }
+                            }
+
+                            VSpacer(height = 32.dp)
                         }
                     }
 

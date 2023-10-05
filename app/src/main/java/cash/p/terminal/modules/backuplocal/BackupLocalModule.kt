@@ -27,6 +27,8 @@ object BackupLocalModule {
         val enabledWallets: List<EnabledWalletBackup>?,
         @SerializedName("manual_backup")
         val manualBackup: Boolean,
+        @SerializedName("file_backup")
+        val fileBackup: Boolean,
         val timestamp: Long,
         val version: Int
     )
