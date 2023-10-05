@@ -328,7 +328,20 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             appDatabase.syncerStateDao()
         )
 
-        val adapterFactory = AdapterFactory(instance, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, solanaKitManager, tronKitManager, backgroundManager, restoreSettingsManager, coinManager, evmLabelManager)
+        val adapterFactory = AdapterFactory(
+            context = instance,
+            btcBlockchainManager = btcBlockchainManager,
+            evmBlockchainManager = evmBlockchainManager,
+            evmSyncSourceManager = evmSyncSourceManager,
+            binanceKitManager = binanceKitManager,
+            solanaKitManager = solanaKitManager,
+            tronKitManager = tronKitManager,
+            backgroundManager = backgroundManager,
+            restoreSettingsManager = restoreSettingsManager,
+            coinManager = coinManager,
+            evmLabelManager = evmLabelManager,
+            localStorage = localStorage
+        )
         adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager, solanaKitManager, tronKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 

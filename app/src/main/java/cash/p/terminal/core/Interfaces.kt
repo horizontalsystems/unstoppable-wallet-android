@@ -66,6 +66,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var zcashAccountIds: Set<String>
     var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean
     var amountInputType: AmountInputType?

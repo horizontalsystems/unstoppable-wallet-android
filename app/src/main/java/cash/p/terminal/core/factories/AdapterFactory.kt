@@ -3,10 +3,34 @@ package cash.p.terminal.core.factories
 import android.content.Context
 import cash.p.terminal.core.IAdapter
 import cash.p.terminal.core.ICoinManager
+import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ITransactionsAdapter
-import cash.p.terminal.core.adapters.*
+import cash.p.terminal.core.adapters.BinanceAdapter
+import cash.p.terminal.core.adapters.BitcoinAdapter
+import cash.p.terminal.core.adapters.BitcoinCashAdapter
+import cash.p.terminal.core.adapters.DashAdapter
+import cash.p.terminal.core.adapters.ECashAdapter
+import cash.p.terminal.core.adapters.Eip20Adapter
+import cash.p.terminal.core.adapters.EvmAdapter
+import cash.p.terminal.core.adapters.EvmTransactionsAdapter
+import cash.p.terminal.core.adapters.LitecoinAdapter
+import cash.p.terminal.core.adapters.SolanaAdapter
+import cash.p.terminal.core.adapters.SolanaTransactionConverter
+import cash.p.terminal.core.adapters.SolanaTransactionsAdapter
+import cash.p.terminal.core.adapters.SplAdapter
+import cash.p.terminal.core.adapters.Trc20Adapter
+import cash.p.terminal.core.adapters.TronAdapter
+import cash.p.terminal.core.adapters.TronTransactionConverter
+import cash.p.terminal.core.adapters.TronTransactionsAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
-import cash.p.terminal.core.managers.*
+import cash.p.terminal.core.managers.BinanceKitManager
+import cash.p.terminal.core.managers.BtcBlockchainManager
+import cash.p.terminal.core.managers.EvmBlockchainManager
+import cash.p.terminal.core.managers.EvmLabelManager
+import cash.p.terminal.core.managers.EvmSyncSourceManager
+import cash.p.terminal.core.managers.RestoreSettingsManager
+import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
@@ -26,6 +50,7 @@ class AdapterFactory(
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
     private val evmLabelManager: EvmLabelManager,
+    private val localStorage: ILocalStorage,
 ) {
 
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
@@ -89,7 +114,7 @@ class AdapterFactory(
                 DashAdapter(wallet, syncMode, backgroundManager)
             }
             BlockchainType.Zcash -> {
-                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType))
+                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType), localStorage)
             }
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,

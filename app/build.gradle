@@ -274,7 +274,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:solana-kit-android:f9d9f4a'
     implementation 'com.github.horizontalsystems:tron-kit-android:67f8d53'
     // Zcash SDK
-    implementation "cash.z.ecc.android:zcash-android-sdk:2.0.0"
+    implementation "cash.z.ecc.android:zcash-android-sdk:2.0.1"
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }

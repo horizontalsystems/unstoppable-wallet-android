@@ -6,6 +6,7 @@ import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.WalletInitMode
 import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
+import cash.z.ecc.android.sdk.ext.ZcashSdk
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
@@ -40,8 +41,10 @@ class ZcashAdapter(
     context: Context,
     private val wallet: Wallet,
     restoreSettings: RestoreSettings,
+    private val localStorage: ILocalStorage,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
+    private val existingWallet = localStorage.zcashAccountIds.contains(wallet.account.id)
     private val confirmationsThreshold = 10
     private val decimalCount = 8
     private val network: ZcashNetwork = ZcashNetwork.Mainnet
@@ -65,26 +68,24 @@ class ZcashAdapter(
     override val isMainNet: Boolean = true
 
     init {
-        val birthday: BlockHeight?
-        val walletInitMode: WalletInitMode
+        val walletInitMode = if (existingWallet) {
+            WalletInitMode.ExistingWallet
+        } else when (wallet.account.origin) {
+            AccountOrigin.Created -> WalletInitMode.NewWallet
+            AccountOrigin.Restored -> WalletInitMode.RestoreWallet
+        }
 
-        when (wallet.account.origin) {
-            AccountOrigin.Created -> {
-                birthday = runBlocking {
-                    BlockHeight.ofLatestCheckpoint(context, network)
+        val birthday = when (wallet.account.origin) {
+            AccountOrigin.Created -> runBlocking {
+                BlockHeight.ofLatestCheckpoint(context, network)
+            }
+            AccountOrigin.Restored -> restoreSettings.birthdayHeight
+                ?.let { height ->
+                    max(network.saplingActivationHeight.value, height)
                 }
-                walletInitMode = WalletInitMode.NewWallet
-            }
-            AccountOrigin.Restored -> {
-                birthday = restoreSettings.birthdayHeight
-                    ?.let { height ->
-                        max(network.saplingActivationHeight.value, height)
-                    }
-                    ?.let {
-                        BlockHeight.new(network, it)
-                    }
-                walletInitMode = WalletInitMode.RestoreWallet
-            }
+                ?.let {
+                    BlockHeight.new(network, it)
+                }
         }
 
         synchronizer = Synchronizer.newBlocking(
@@ -103,11 +104,6 @@ class ZcashAdapter(
         synchronizer.onChainErrorHandler = ::onChainError
     }
 
-    private fun defaultFee(): Zatoshi {
-//        val value = if (height == null || height > feeChangeHeight) 1_000L else 10_000L
-        return Zatoshi(10_000L)
-    }
-
     private var syncState: AdapterState = AdapterState.Syncing()
         set(value) {
             if (value != field) {
@@ -118,6 +114,9 @@ class ZcashAdapter(
 
     override fun start() {
         subscribe(synchronizer as SdkSynchronizer)
+        if (!existingWallet) {
+            localStorage.zcashAccountIds += wallet.account.id
+        }
     }
 
     override fun stop() {
@@ -204,7 +203,7 @@ class ZcashAdapter(
     override val availableBalance: BigDecimal
         get() {
             val available = synchronizer.saplingBalances.value?.available ?: Zatoshi(0)
-            val defaultFee = defaultFee()
+            val defaultFee = ZcashSdk.MINERS_FEE
 
             return if (available <= defaultFee) {
                 BigDecimal.ZERO
@@ -215,7 +214,7 @@ class ZcashAdapter(
         }
 
     override val fee: BigDecimal
-        get() = defaultFee().convertZatoshiToZec(decimalCount)
+        get() = ZcashSdk.MINERS_FEE.convertZatoshiToZec(decimalCount)
 
     override suspend fun validate(address: String): ZCashAddressType {
         if (address == receiveAddress) throw ZcashError.SendToSelfNotAllowed
