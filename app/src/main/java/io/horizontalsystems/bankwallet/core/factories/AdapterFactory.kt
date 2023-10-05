@@ -3,10 +3,34 @@ package io.horizontalsystems.bankwallet.core.factories
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.adapters.*
+import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.ECashAdapter
+import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.EvmAdapter
+import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
+import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.SplAdapter
+import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.TronAdapter
+import io.horizontalsystems.bankwallet.core.adapters.TronTransactionConverter
+import io.horizontalsystems.bankwallet.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
+import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
@@ -26,6 +50,7 @@ class AdapterFactory(
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
     private val evmLabelManager: EvmLabelManager,
+    private val localStorage: ILocalStorage,
 ) {
 
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
@@ -89,7 +114,7 @@ class AdapterFactory(
                 DashAdapter(wallet, syncMode, backgroundManager)
             }
             BlockchainType.Zcash -> {
-                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType))
+                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType), localStorage)
             }
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
