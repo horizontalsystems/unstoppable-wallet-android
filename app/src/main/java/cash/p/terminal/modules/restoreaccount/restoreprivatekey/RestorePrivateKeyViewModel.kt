@@ -6,12 +6,17 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
+import cash.p.terminal.core.hexToByteArray
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.*
+import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.EmptyText
+import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NoValidKey
+import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NonPrivateKey
+import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NotSupportedDerivedType
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
+import java.math.BigInteger
 
 class RestorePrivateKeyViewModel(
     accountFactory: IAccountFactory,
@@ -55,6 +60,10 @@ class RestorePrivateKeyViewModel(
             throw EmptyText
         }
 
+        if (!isValidEthereumPrivateKey(textCleaned)) {
+            throw NoValidKey
+        }
+
         try {
             val extendedKey = HDExtendedKey(textCleaned)
             if (!extendedKey.isPublic) {
@@ -80,5 +89,26 @@ class RestorePrivateKeyViewModel(
         }
 
         throw NoValidKey
+    }
+
+    fun isValidEthereumPrivateKey(privateKeyHex: String): Boolean {
+        //key should be 32 bytes long
+        privateKeyHex.hexToByteArray().let {
+            if (it.size != 32) {
+                return false
+            }
+        }
+
+        // Convert the hex private key to a BigInteger
+        val privateKeyBigInt = BigInteger(privateKeyHex, 16)
+
+        // Define the order of the secp256k1 curve (n)
+        val secp256k1Order = BigInteger(
+            "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+            16
+        )
+
+        // Check if the private key is greater than zero and less than the order
+        return privateKeyBigInt > BigInteger.ZERO && privateKeyBigInt < secp256k1Order
     }
 }
