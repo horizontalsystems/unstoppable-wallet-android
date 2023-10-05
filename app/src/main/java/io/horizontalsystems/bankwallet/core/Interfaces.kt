@@ -139,6 +139,7 @@ interface IAccountManager {
     fun setActiveAccountId(activeAccountId: String?)
     fun account(id: String): Account?
     fun save(account: Account)
+    fun import(accounts: List<Account>)
     fun update(account: Account)
     fun delete(id: String)
     fun clear()
@@ -147,7 +148,6 @@ interface IAccountManager {
     fun setLevel(level: Int)
     fun updateAccountLevels(accountIds: List<String>, level: Int)
     fun updateMaxLevel(level: Int)
-    fun setFileBackedUp(id: String, fileBackedUp: Boolean)
 }
 
 interface IBackupManager {
@@ -357,7 +357,6 @@ interface IAccountsStorage {
     fun update(account: Account)
     fun delete(id: String)
     fun getNonBackedUpCount(): Flowable<Int>
-    fun setFileBackedUp(id: String, fileBackedUp: Boolean)
     fun clear()
     fun getDeletedAccountIds(): List<String>
     fun clearDeleted()

@@ -18,7 +18,7 @@ class SelectBackupItemsViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var wallets: List<WalletBackupViewItem> = emptyList()
-    private var otherBackupItems: List<BackupProvider.BackupItem> = emptyList()
+    private var otherBackupItems: List<BackupItem> = emptyList()
 
     var uiState by mutableStateOf(
         UIState(
@@ -40,7 +40,7 @@ class SelectBackupItemsViewModel(
                     account = account,
                     name = account.name,
                     type = account.type.detailedDescription,
-                    manualBackupRequired = !account.isBackedUp,
+                    backupRequired = !account.isBackedUp && !account.isFileBackedUp,
                     selected = true
                 )
             }
@@ -72,14 +72,14 @@ class SelectBackupItemsViewModel(
     data class UIState(
         val viewState: ViewState,
         val wallets: List<WalletBackupViewItem>,
-        val otherBackupItems: List<BackupProvider.BackupItem>
+        val otherBackupItems: List<BackupItem>
     )
 
     data class WalletBackupViewItem(
         val account: Account,
         val name: String,
         val type: String,
-        val manualBackupRequired: Boolean,
+        val backupRequired: Boolean,
         val selected: Boolean
     )
 

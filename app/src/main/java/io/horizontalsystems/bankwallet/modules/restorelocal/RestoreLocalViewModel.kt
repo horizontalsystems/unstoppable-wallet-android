@@ -32,7 +32,7 @@ class RestoreLocalViewModel(
     private var walletBackup: BackupLocalModule.WalletBackup? = null
     private var fullBackup: FullBackup? = null
     private var parseError: Exception? = null
-    private var accountType: AccountType? = null
+    private var showSelectCoins: AccountType? = null
     private var manualBackup = false
     private var restored = false
 
@@ -51,7 +51,7 @@ class RestoreLocalViewModel(
             passphraseState = null,
             showButtonSpinner = showButtonSpinner,
             parseError = parseError,
-            accountType = accountType,
+            showSelectCoins = showSelectCoins,
             manualBackup = manualBackup,
             restored = restored
         )
@@ -59,7 +59,7 @@ class RestoreLocalViewModel(
         private set
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val gson = GsonBuilder()
                     .disableHtmlEscaping()
@@ -67,7 +67,9 @@ class RestoreLocalViewModel(
                     .create()
 
                 fullBackup = try {
-                    gson.fromJson(backupJsonString, FullBackup::class.java)
+                    val backup = gson.fromJson(backupJsonString, FullBackup::class.java)
+                    backup.settings.language // if single walletBackup it will throw exception
+                    backup
                 } catch (ex: Exception) {
                     null
                 }
@@ -109,8 +111,7 @@ class RestoreLocalViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                backupProvider.restore(fullBackup, passphrase)
-
+                backupProvider.restoreFullBackup(fullBackup, passphrase)
                 restored = true
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
@@ -134,10 +135,12 @@ class RestoreLocalViewModel(
                 val type = backupProvider.accountType(backup, passphrase)
                 if (type is AccountType.Cex) {
                     backupProvider.restoreCexAccount(type, accountName)
-
                     restored = true
+                } else if (backup.enabledWallets.isNullOrEmpty()) {
+                    showSelectCoins = type
                 } else {
-                    accountType = type
+                    backupProvider.restoreWalletBackup(type, accountName, backup, true)
+                    restored = true
                 }
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
@@ -154,7 +157,7 @@ class RestoreLocalViewModel(
     }
 
     fun onSelectCoinsShown() {
-        accountType = null
+        showSelectCoins = null
         syncState()
     }
 
@@ -163,7 +166,7 @@ class RestoreLocalViewModel(
             passphraseState = passphraseState,
             showButtonSpinner = showButtonSpinner,
             parseError = parseError,
-            accountType = accountType,
+            showSelectCoins = showSelectCoins,
             manualBackup = manualBackup,
             restored = restored
         )

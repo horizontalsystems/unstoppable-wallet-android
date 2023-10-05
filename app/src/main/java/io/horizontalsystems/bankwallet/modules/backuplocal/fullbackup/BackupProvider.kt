@@ -104,18 +104,20 @@ class BackupProvider(
         accountManager.save(account)
     }
 
-    private fun restoreWithWallets(
+    fun restoreWalletBackup(
         type: AccountType,
         accountName: String,
-        enabledWalletBackups: List<BackupLocalModule.EnabledWalletBackup>
+        backup: BackupLocalModule.WalletBackup,
+        fileBackup: Boolean
     ) {
         val account = if (type.isWatchAccountType) {
             accountFactory.watchAccount(accountName, type, true)
         } else {
-            accountFactory.account(accountName, type, AccountOrigin.Restored, false, true)
+            accountFactory.account(accountName, type, AccountOrigin.Restored, backup.manualBackup, fileBackup)
         }
         accountManager.save(account)
 
+        val enabledWalletBackups = backup.enabledWallets ?: listOf()
         val enabledWallets = enabledWalletBackups.map {
             EnabledWallet(
                 tokenQueryId = it.tokenQueryId,
@@ -127,11 +129,11 @@ class BackupProvider(
         }
         walletManager.saveEnabledWallets(enabledWallets)
 
-        enabledWalletBackups.forEach { backup ->
-            TokenQuery.fromId(backup.tokenQueryId)?.let { tokenQuery ->
-                if (!backup.settings.isNullOrEmpty()) {
+        enabledWalletBackups.forEach { enabledWalletBackup ->
+            TokenQuery.fromId(enabledWalletBackup.tokenQueryId)?.let { tokenQuery ->
+                if (!enabledWalletBackup.settings.isNullOrEmpty()) {
                     val restoreSettings = RestoreSettings()
-                    backup.settings.forEach { (restoreSettingType, value) ->
+                    enabledWalletBackup.settings.forEach { (restoreSettingType, value) ->
                         restoreSettings[restoreSettingType] = value
                     }
                     restoreSettingsManager.save(restoreSettings, account, tokenQuery.blockchainType)
@@ -140,32 +142,66 @@ class BackupProvider(
         }
     }
 
-    suspend fun restore(fullBackup: FullBackup, passphrase: String) {
-        fullBackup.wallets?.let { wallets ->
-            wallets.forEach {
+    private fun importWalletBackups(walletBackups: List<WalletBackup2>, passphrase: String) {
+        val accounts = mutableListOf<Account>()
+        val enabledWallets = mutableListOf<EnabledWallet>()
 
-                when (val type = accountType(it.backup, passphrase)) {
-                    is AccountType.Cex -> {
-                        restoreCexAccount(type, it.name)
-                    }
+        walletBackups.forEach { walletBackup2 ->
+            val backup = walletBackup2.backup
+            val type = accountType(backup, passphrase)
+            val name = walletBackup2.name
 
-                    is AccountType.EvmAddress,
-                    is AccountType.EvmPrivateKey,
-                    is AccountType.HdExtendedKey,
-                    is AccountType.Mnemonic,
-                    is AccountType.SolanaAddress,
-                    is AccountType.TronAddress -> {
-                        restoreWithWallets(type, it.name, it.backup.enabledWallets ?: listOf())
+            val account = if (type.isWatchAccountType) {
+                accountFactory.watchAccount(name, type, true)
+            } else if (type is AccountType.Cex) {
+                accountFactory.account(name, type, AccountOrigin.Restored, true, true)
+            } else {
+                accountFactory.account(name, type, AccountOrigin.Restored, backup.manualBackup, backup.fileBackup)
+            }
+            accounts.add(account)
+
+            val enabledWalletBackups = backup.enabledWallets ?: listOf()
+            val wallets = enabledWalletBackups.map {
+                EnabledWallet(
+                    tokenQueryId = it.tokenQueryId,
+                    accountId = account.id,
+                    coinName = it.coinName,
+                    coinCode = it.coinCode,
+                    coinDecimals = it.decimals
+                )
+            }
+            enabledWallets.addAll(wallets)
+
+            enabledWalletBackups.forEach { enabledWalletBackup ->
+                TokenQuery.fromId(enabledWalletBackup.tokenQueryId)?.let { tokenQuery ->
+                    if (!enabledWalletBackup.settings.isNullOrEmpty()) {
+                        val restoreSettings = RestoreSettings()
+                        enabledWalletBackup.settings.forEach { (restoreSettingType, value) ->
+                            restoreSettings[restoreSettingType] = value
+                        }
+                        restoreSettingsManager.save(restoreSettings, account, tokenQuery.blockchainType)
                     }
                 }
             }
+        }
+
+        if (accounts.isNotEmpty()) {
+            accountManager.import(accounts)
+            walletManager.saveEnabledWallets(enabledWallets)
+        }
+    }
+
+    @Throws
+    suspend fun restoreFullBackup(fullBackup: FullBackup, passphrase: String) {
+        fullBackup.wallets?.let { wallets ->
+            importWalletBackups(wallets, passphrase)
         }
 
         fullBackup.watchlist?.let { coinUids ->
             marketFavoritesManager.addAll(coinUids)
         }
 
-        fullBackup.settings?.let { settings ->
+        fullBackup.settings.let { settings ->
             balanceViewTypeManager.setViewType(settings.balanceViewType)
 
             withContext(Dispatchers.Main) {
@@ -235,21 +271,11 @@ class BackupProvider(
         }
     }
 
-    data class BackupItem(
-        val title: String,
-        val subtitle: String
-    )
-
-    data class BackupItems(
-        val wallets: List<Account>,
-        val others: List<BackupItem>
-    )
-
     fun fullBackupItems(): BackupItems {
         val accounts = accountManager.accounts
         val wallets = accounts.filter { !it.isWatchAccount }.sortedBy { it.name.lowercase() }
 
-        val otherBackupItems = buildList<BackupItem> {
+        val otherBackupItems = buildList {
             val watchWallets = accounts.filter { it.isWatchAccount }
             if (watchWallets.isNotEmpty()) {
                 add(
@@ -269,28 +295,83 @@ class BackupProvider(
                     )
                 )
             }
+
+            val contacts = contactsRepository.contacts
+            if (contacts.isNotEmpty()) {
+                add(
+                    BackupItem(
+                        title = Translator.getString(R.string.Contacts),
+                        subtitle = Translator.getString(R.string.BackupManager_Addresses, contacts.size)
+                    )
+                )
+            }
+
+            add(
+                BackupItem(
+                    title = Translator.getString(R.string.BlockchainSettings_Title),
+                    subtitle = Translator.getString(R.string.BackupManager_BlockchainSettingsDescription)
+                )
+            )
+
+            add(
+                BackupItem(
+                    title = Translator.getString(R.string.Info_LockTime_Title),
+                    subtitle = if (localStorage.isLockTimeEnabled)
+                        Translator.getString(R.string.BackupManager_Enabled)
+                    else
+                        Translator.getString(R.string.BackupManager_Disabled)
+                )
+            )
+
+            add(
+                BackupItem(
+                    title = Translator.getString(R.string.CoinPage_Indicators),
+                    subtitle = "MA, MACD, RSI"
+                )
+            )
+
+            add(
+                BackupItem(
+                    title = Translator.getString(R.string.BackupManager_LanguageAndCurrency),
+                    subtitle = "${languageManager.currentLanguageName}, ${currencyManager.baseCurrency.code}"
+                )
+            )
+
+            add(
+                BackupItem(
+                    title = Translator.getString(R.string.Settings_Appearance),
+                    subtitle = Translator.getString(R.string.BackupManager_AppearanceSettingsDescription)
+                )
+            )
         }
 
-        return BackupItems(
-            wallets,
-            otherBackupItems
-        )
-
+        return BackupItems(wallets, otherBackupItems)
     }
 
     @Throws
-    fun fullBackupJson(accountIds: List<String>, passphrase: String): String {
+    fun createWalletBackup(account: Account, passphrase: String): String {
+        val backup = walletBackup(account, passphrase)
+        return gson.toJson(backup)
+    }
+
+    @Throws
+    fun createFullBackup(accountIds: List<String>, passphrase: String): String {
         Log.e("eee", "fullBackupJson() accountIds ${accountIds.size}: ${accountIds.joinToString(separator = ",")}")
 
         accountIds.forEach {
             Log.e("eee", "separate print accountId: $it")
         }
 
-        Log.e("eee", "fullBackupJson() selectedAccounts = ${accountManager.accounts.filter { it.isWatchAccount || accountIds.contains(it.id) }.joinToString(separator = ",") { it.name }}")
+        Log.e(
+            "eee",
+            "fullBackupJson() selectedAccounts = ${
+                accountManager.accounts.filter { it.isWatchAccount || accountIds.contains(it.id) }.joinToString(separator = ",") { it.name }
+            }"
+        )
         val wallets = accountManager.accounts
             .filter { it.isWatchAccount || accountIds.contains(it.id) }
             .map {
-                val accountBackup = accountBackup(it, passphrase)
+                val accountBackup = walletBackup(it, passphrase)
                 WalletBackup2(it.name, accountBackup)
             }
 
@@ -352,6 +433,7 @@ class BackupProvider(
             watchlist = watchlist.ifEmpty { null },
             settings = settings,
             contacts = contacts,
+            timestamp = System.currentTimeMillis() / 1000,
         )
 
         return gson.toJson(fullBackup)
@@ -383,13 +465,7 @@ class BackupProvider(
     }
 
     @Throws
-    fun accountBackupJson(account: Account, passphrase: String): String {
-        val backup = accountBackup(account, passphrase)
-        return gson.toJson(backup)
-    }
-
-    @Throws
-    private fun accountBackup(account: Account, passphrase: String): BackupLocalModule.WalletBackup {
+    private fun walletBackup(account: Account, passphrase: String): BackupLocalModule.WalletBackup {
         val kdfParams = BackupLocalModule.kdfDefault
         val secretText = BackupLocalModule.getDataForEncryption(account.type)
         val id = getId(secretText)
@@ -428,12 +504,23 @@ class BackupProvider(
             type = BackupLocalModule.getAccountTypeString(account.type),
             enabledWallets = enabledWalletsBackup,
             manualBackup = account.isBackedUp,
+            fileBackup = account.isFileBackedUp,
             timestamp = System.currentTimeMillis() / 1000,
             version = 2
         )
     }
 
 }
+
+data class BackupItem(
+    val title: String,
+    val subtitle: String
+)
+
+data class BackupItems(
+    val wallets: List<Account>,
+    val others: List<BackupItem>
+)
 
 data class WalletBackup2(
     val name: String,
@@ -443,8 +530,9 @@ data class WalletBackup2(
 data class FullBackup(
     val wallets: List<WalletBackup2>?,
     val watchlist: List<String>?,
-    val settings: Settings?,
-    val contacts: BackupLocalModule.BackupCrypto?
+    val settings: Settings,
+    val contacts: BackupLocalModule.BackupCrypto?,
+    val timestamp: Long
 )
 
 data class SwapProvider(

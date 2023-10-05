@@ -872,11 +872,19 @@
     <string name="BackupManager_CreateBackup">Create New Backup</string>
 
     <string name="BackupManager_BаckupFile">Backup File</string>
-    <string name="BackupManager_ManualBackupRequired">Manual Backup Required</string>
+    <string name="BackupManager_Wallets">WALLETS</string>
+    <string name="BackupManager_Other">OTHER</string>
+
+    <string name="BackupManager_BackupRequired">Backup Required</string>
     <string name="BackupManager_WatchWallets">Watch Wallets</string>
     <string name="BackupManager_Addresses">%s Addresses</string>
     <string name="BackupManager_WatchlistTitle">Watchlist</string>
     <string name="BackupManager_WatchlistDescription">Favorite coins</string>
+    <string name="BackupManager_BlockchainSettingsDescription">Sync and Restore Source</string>
+    <string name="BackupManager_Enabled">Enabled</string>
+    <string name="BackupManager_Disabled">Disabled</string>
+    <string name="BackupManager_LanguageAndCurrency">Language and Currency</string>
+    <string name="BackupManager_AppearanceSettingsDescription">All Settings</string>
 
 
     <!-- Privacy  -->
