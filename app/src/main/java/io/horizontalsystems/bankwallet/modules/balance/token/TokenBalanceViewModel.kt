@@ -62,6 +62,8 @@ class TokenBalanceViewModel(
             balanceHiddenManager.balanceHiddenFlow.collect {
                 balanceService.balanceItem?.let {
                     updateBalanceViewItem(it)
+                    transactionViewItem2Factory.updateCache()
+                    transactionsService.refreshList()
                 }
             }
         }

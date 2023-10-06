@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -42,10 +43,25 @@ import java.util.Date
 
 class TransactionViewItemFactory(
     private val evmLabelManager: EvmLabelManager,
-    private val contactsRepository: ContactsRepository
+    private val contactsRepository: ContactsRepository,
+    private val balanceHiddenManager: BalanceHiddenManager,
 ) {
 
+    private var showAmount = !balanceHiddenManager.balanceHidden
     private val cache = mutableMapOf<String, Map<Long, TransactionViewItem>>()
+
+    fun updateCache() {
+        showAmount = !balanceHiddenManager.balanceHidden
+        cache.forEach { (recordUid, map) ->
+            map.forEach { (createdAt, viewItem) ->
+                cache[recordUid] = mapOf(
+                    createdAt to viewItem.copy(
+                        showAmount = showAmount,
+                    )
+                )
+            }
+        }
+    }
 
     fun convertToViewItemCached(transactionItem: TransactionItem): TransactionViewItem {
         cache[transactionItem.record.uid]?.get(transactionItem.createdAt)?.let {
@@ -66,6 +82,7 @@ class TransactionViewItemFactory(
             is TransactionValue.NftValue -> {
                 TransactionViewItem.Icon.Regular(nftMetadata[value.nftUid]?.previewImageUrl, R.drawable.icon_24_nft_placeholder, rectangle = true)
             }
+
             is TransactionValue.CoinValue,
             is TransactionValue.RawValue,
             is TransactionValue.TokenValue -> {
@@ -92,6 +109,7 @@ class TransactionViewItemFactory(
                     frontUrl = nftMetadata[primaryValue.nftUid]?.previewImageUrl
                     frontPlaceHolder = R.drawable.icon_24_nft_placeholder
                 }
+
                 is TransactionValue.CoinValue,
                 is TransactionValue.RawValue,
                 is TransactionValue.TokenValue -> {
@@ -113,6 +131,7 @@ class TransactionViewItemFactory(
                     backUrl = nftMetadata[secondaryValue.nftUid]?.previewImageUrl
                     backPlaceHolder = R.drawable.icon_24_nft_placeholder
                 }
+
                 is TransactionValue.CoinValue,
                 is TransactionValue.RawValue,
                 is TransactionValue.TokenValue -> {
@@ -142,12 +161,15 @@ class TransactionViewItemFactory(
         incomingValues.size == 1 && outgoingValues.isEmpty() -> {
             singleValueIconType(incomingValues[0], nftMetadata)
         }
+
         incomingValues.isEmpty() && outgoingValues.size == 1 -> {
             singleValueIconType(outgoingValues[0], nftMetadata)
         }
+
         incomingValues.size == 1 && outgoingValues.size == 1 -> {
             doubleValueIconType(incomingValues[0], outgoingValues[0], nftMetadata)
         }
+
         else -> {
             TransactionViewItem.Icon.Platform(blockchainType)
         }
@@ -185,12 +207,14 @@ class TransactionViewItemFactory(
                 progress,
                 icon
             )
+
             is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(
                 record,
                 transactionItem.currencyValue,
                 progress,
                 icon
             )
+
             is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(
                 record,
                 transactionItem.currencyValue,
@@ -198,6 +222,7 @@ class TransactionViewItemFactory(
                 lastBlockTimestamp,
                 icon
             )
+
             is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(
                 record,
                 transactionItem.currencyValue,
@@ -205,6 +230,7 @@ class TransactionViewItemFactory(
                 lastBlockTimestamp,
                 icon
             )
+
             is ContractCallTransactionRecord -> {
                 val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(record.incomingEvents, record.outgoingEvents)
                 createViewItemFromContractCallTransactionRecord(
@@ -221,6 +247,7 @@ class TransactionViewItemFactory(
                     nftMetadata = transactionItem.nftMetadata
                 )
             }
+
             is ExternalContractCallTransactionRecord -> {
                 val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(record.incomingEvents, record.outgoingEvents)
                 createViewItemFromExternalContractCallTransactionRecord(
@@ -384,6 +411,7 @@ class TransactionViewItemFactory(
                     icon = icon
                 )
             }
+
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
     }
@@ -405,6 +433,7 @@ class TransactionViewItemFactory(
             subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             icon = icon ?: iconType(record.blockchainType, incomingValues, outgoingValues, mutableMapOf())
         )
@@ -431,6 +460,7 @@ class TransactionViewItemFactory(
             subtitle = record.to?.let { to -> Translator.getString(R.string.Transactions_To, mapped(to, record.blockchainType)) } ?: "",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
             icon = icon ?: singleValueIconType(record.value, nftMetadata)
@@ -454,6 +484,7 @@ class TransactionViewItemFactory(
             subtitle = record.from?.let { from -> Translator.getString(R.string.Transactions_From, mapped(from, record.blockchainType)) } ?: "",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             icon = icon ?: singleValueIconType(record.value)
         )
@@ -484,6 +515,7 @@ class TransactionViewItemFactory(
             subtitle = mapped(record.exchangeAddress, record.blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
         )
@@ -504,6 +536,7 @@ class TransactionViewItemFactory(
             subtitle = mapped(record.exchangeAddress, record.blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
         )
@@ -574,6 +607,7 @@ class TransactionViewItemFactory(
             subtitle = Translator.getString(R.string.Transactions_To, mapped(to, blockchainType)),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(timestamp * 1000),
             sentToSelf = sentToSelf,
             icon = icon ?: singleValueIconType(value, nftMetadata)
@@ -612,6 +646,7 @@ class TransactionViewItemFactory(
             ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(timestamp * 1000),
             icon = icon ?: singleValueIconType(value)
         )
@@ -657,6 +692,7 @@ class TransactionViewItemFactory(
             subtitle = mapped(contractAddress, blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(timestamp * 1000),
             icon = icon ?: iconType(blockchainType, incomingValues, outgoingValues, nftMetadata)
         )
@@ -707,6 +743,7 @@ class TransactionViewItemFactory(
             subtitle = subTitle,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(timestamp * 1000),
             icon = icon ?: iconType(blockchainType, incomingValues, outgoingValues, nftMetadata)
         )
@@ -750,6 +787,7 @@ class TransactionViewItemFactory(
             subtitle = subtitle,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
             doubleSpend = record.conflictingHash != null,
@@ -791,6 +829,7 @@ class TransactionViewItemFactory(
             subtitle = subtitle,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             sentToSelf = false,
             doubleSpend = record.conflictingHash != null,
@@ -822,6 +861,7 @@ class TransactionViewItemFactory(
             subtitle = Translator.getString(R.string.Transactions_To, mapped(record.to, record.blockchainType)),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
             icon = icon ?: singleValueIconType(record.value)
@@ -849,6 +889,7 @@ class TransactionViewItemFactory(
             ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             icon = icon ?: singleValueIconType(record.value)
         )
@@ -885,6 +926,7 @@ class TransactionViewItemFactory(
             subtitle = mapped(spender, blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
+            showAmount = showAmount,
             date = Date(timestamp * 1000),
             icon = icon ?: singleValueIconType(value)
         )
@@ -900,6 +942,7 @@ class TransactionViewItemFactory(
                 val text = nftMetadata[value.nftUid]?.name ?: value.tokenName?.let { "$it #${value.nftUid.tokenId}" } ?: "#${value.nftUid.tokenId}"
                 getColoredValue(text, ColorName.Grey)
             }
+
             is TransactionValue.CoinValue,
             is TransactionValue.RawValue,
             is TransactionValue.TokenValue -> {

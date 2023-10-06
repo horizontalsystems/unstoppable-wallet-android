@@ -25,7 +25,8 @@ object TransactionsModule {
                     TransactionFilterService(),
                     NftMetadataService(App.nftMetadataManager)
                 ),
-                TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository)
+                TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager),
+                App.balanceHiddenManager
             ) as T
         }
     }
