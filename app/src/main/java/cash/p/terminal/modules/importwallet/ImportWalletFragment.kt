@@ -26,6 +26,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.modules.backuplocal.fullbackup.BackupFileValidator
 import cash.p.terminal.modules.backuplocal.password.BackupLocalPasswordViewModel.*
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
@@ -73,11 +74,8 @@ private fun ImportWalletScreen(
                     inputStream.bufferedReader().use { br ->
                         val jsonString = br.readText()
                         //validate json format
-//                        val json = Gson().fromJson(jsonString, FullBackup::class.java)
-                        //Gson will set field as null if the json file doesn't have the matching field
-//                        if (json.version == null || json.crypto == null){
-//                            throw Exception("Invalid json format")
-//                        }
+                        BackupFileValidator().validate(jsonString)
+
                         navController.navigateWithTermsAccepted {
                             val fileName = context.getFileName(uriNonNull)
                             navController.slideFromBottom(
@@ -220,7 +218,7 @@ private fun ImportOption(
     }
 }
 
-fun Context.getFileName(uri: Uri): String? = when(uri.scheme) {
+fun Context.getFileName(uri: Uri): String? = when (uri.scheme) {
     ContentResolver.SCHEME_CONTENT -> getContentFileName(uri)
     else -> uri.path?.let(::File)?.name
 }

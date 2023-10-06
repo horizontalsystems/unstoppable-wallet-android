@@ -36,6 +36,7 @@ import cash.p.terminal.modules.balance.BalanceViewType
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.settings.appearance.AppIconService
 import cash.p.terminal.modules.settings.appearance.LaunchScreenService
 import cash.p.terminal.modules.swap.SwapMainModule
@@ -47,6 +48,25 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
+
+class BackupFileValidator {
+    private val gson: Gson by lazy {
+        GsonBuilder()
+            .disableHtmlEscaping()
+            .enableComplexMapKeySerialization()
+            .create()
+    }
+
+    fun validate(json: String) {
+        val fullBackup = gson.fromJson(json, FullBackup::class.java)
+        val walletBackup = gson.fromJson(json, BackupLocalModule.WalletBackup::class.java)
+
+        if (fullBackup.settings == null && walletBackup.version == null && walletBackup.version !in 1..2) {
+            throw Exception("Invalid json format")
+        }
+    }
+}
+
 
 class BackupProvider(
     private val localStorage: ILocalStorage,
@@ -142,26 +162,13 @@ class BackupProvider(
         }
     }
 
-    private fun importWalletBackups(walletBackups: List<WalletBackup2>, passphrase: String) {
+    private fun restoreWallets(walletBackupItems: List<WalletBackupItem>) {
         val accounts = mutableListOf<Account>()
         val enabledWallets = mutableListOf<EnabledWallet>()
 
-        walletBackups.forEach { walletBackup2 ->
-            val backup = walletBackup2.backup
-            val type = accountType(backup, passphrase)
-            val name = walletBackup2.name
-
-            val account = if (type.isWatchAccountType) {
-                accountFactory.watchAccount(name, type, true)
-            } else if (type is AccountType.Cex) {
-                accountFactory.account(name, type, AccountOrigin.Restored, true, true)
-            } else {
-                accountFactory.account(name, type, AccountOrigin.Restored, backup.manualBackup, backup.fileBackup)
-            }
-            accounts.add(account)
-
-            val enabledWalletBackups = backup.enabledWallets ?: listOf()
-            val wallets = enabledWalletBackups.map {
+        walletBackupItems.forEach {
+            val account = it.account
+            val wallets = it.enabledWallets.map {
                 EnabledWallet(
                     tokenQueryId = it.tokenQueryId,
                     accountId = account.id,
@@ -170,9 +177,11 @@ class BackupProvider(
                     coinDecimals = it.decimals
                 )
             }
+
+            accounts.add(account)
             enabledWallets.addAll(wallets)
 
-            enabledWalletBackups.forEach { enabledWalletBackup ->
+            it.enabledWallets.forEach { enabledWalletBackup ->
                 TokenQuery.fromId(enabledWalletBackup.tokenQueryId)?.let { tokenQuery ->
                     if (!enabledWalletBackup.settings.isNullOrEmpty()) {
                         val restoreSettings = RestoreSettings()
@@ -191,88 +200,133 @@ class BackupProvider(
         }
     }
 
-    @Throws
-    suspend fun restoreFullBackup(fullBackup: FullBackup, passphrase: String) {
-        fullBackup.wallets?.let { wallets ->
-            importWalletBackups(wallets, passphrase)
+    private suspend fun restoreSettings(settings: Settings, passphrase: String) {
+        balanceViewTypeManager.setViewType(settings.balanceViewType)
+
+        withContext(Dispatchers.Main) {
+            try {
+                themeService.setThemeType(settings.currentTheme)
+                languageManager.currentLocaleTag = settings.language
+            } catch (e: Exception) {
+                Log.e("e", "theme type restore", e)
+            }
         }
 
-        fullBackup.watchlist?.let { coinUids ->
-            marketFavoritesManager.addAll(coinUids)
+        if (settings.chartIndicatorsEnabled) {
+            chartIndicatorManager.enable()
+        } else {
+            chartIndicatorManager.disable()
         }
 
-        fullBackup.settings.let { settings ->
-            balanceViewTypeManager.setViewType(settings.balanceViewType)
+        balanceHiddenManager.setBalanceAutoHidden(settings.balanceAutoHidden)
 
-            withContext(Dispatchers.Main) {
-                try {
-                    themeService.setThemeType(settings.currentTheme)
-                    languageManager.currentLocaleTag = settings.language
-                } catch (e: Exception) {
-                    Log.e("ee", "error restore", e)
-                }
+        settings.conversionTokenQueryId?.let { baseTokenManager.setBaseTokenQueryId(it) }
+
+        settings.swapProviders.forEach {
+            localStorage.setSwapProviderId(BlockchainType.fromUid(it.blockchainTypeId), it.provider)
+        }
+
+        launchScreenService.setLaunchScreen(settings.launchScreen)
+        localStorage.marketsTabEnabled = settings.marketsTabEnabled
+        currencyManager.setBaseCurrencyCode(settings.baseCurrency)
+        localStorage.isLockTimeEnabled = settings.lockTimeEnabled
+
+
+        settings.btcModes.forEach { btcMode ->
+            val blockchainType = BlockchainType.fromUid(btcMode.blockchainTypeId)
+
+            val restoreMode = BtcRestoreMode.values().firstOrNull { it.raw == btcMode.restoreMode }
+            restoreMode?.let { btcBlockchainManager.save(it, blockchainType) }
+
+            val sortMode = TransactionDataSortMode.values().firstOrNull { it.raw == btcMode.sortMode }
+            sortMode?.let { btcBlockchainManager.save(sortMode, blockchainType) }
+        }
+
+        settings.evmSyncSources.custom.forEach { syncSource ->
+            val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
+            val auth = syncSource.auth?.let {
+                val decryptedAuth = decrypted(it, passphrase)
+                String(decryptedAuth, Charsets.UTF_8)
             }
+            evmSyncSourceManager.saveSyncSource(blockchainType, syncSource.url, auth)
+        }
 
-            if (settings.chartIndicatorsEnabled) {
-                chartIndicatorManager.enable()
-            } else {
-                chartIndicatorManager.disable()
-            }
+        settings.evmSyncSources.selected.forEach { syncSource ->
+            val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
+            blockchainSettingsStorage.save(syncSource.url, blockchainType)
+        }
 
-            balanceHiddenManager.setBalanceAutoHidden(settings.balanceAutoHidden)
-
-            settings.conversionTokenQueryId?.let { baseTokenManager.setBaseTokenQueryId(it) }
-
-            settings.swapProviders.forEach {
-                localStorage.setSwapProviderId(BlockchainType.fromUid(it.blockchainTypeId), it.provider)
-            }
-
-            launchScreenService.setLaunchScreen(settings.launchScreen)
-            localStorage.marketsTabEnabled = settings.marketsTabEnabled
-            currencyManager.setBaseCurrencyCode(settings.baseCurrency)
-            localStorage.isLockTimeEnabled = settings.lockTimeEnabled
-
-
-            settings.btcModes.forEach { btcMode ->
-                val blockchainType = BlockchainType.fromUid(btcMode.blockchainTypeId)
-
-                val restoreMode = BtcRestoreMode.values().firstOrNull { it.raw == btcMode.restoreMode }
-                restoreMode?.let { btcBlockchainManager.save(it, blockchainType) }
-
-                val sortMode = TransactionDataSortMode.values().firstOrNull { it.raw == btcMode.sortMode }
-                sortMode?.let { btcBlockchainManager.save(sortMode, blockchainType) }
-            }
-
-            settings.evmSyncSources.custom.forEach { syncSource ->
-                val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
-                val auth = syncSource.auth?.let {
-                    val decryptedAuth = decrypted(it, passphrase)
-                    String(decryptedAuth, Charsets.UTF_8)
-                }
-                evmSyncSourceManager.saveSyncSource(blockchainType, syncSource.url, auth)
-            }
-
-            settings.evmSyncSources.selected.forEach { syncSource ->
-                val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
-                blockchainSettingsStorage.save(syncSource.url, blockchainType)
-            }
-
-            blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
+        blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
 
 //            Log.e("ee", "appIcon: title=${settings.appIcon}, enum=${AppIcon.fromTitle(settings.appIcon)}")
 //            AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
+    }
+
+    @Throws
+    suspend fun restoreFullBackup(fullBackup: DecryptedFullBackup, passphrase: String) {
+        if (fullBackup.wallets.isNotEmpty()) {
+            restoreWallets(fullBackup.wallets)
         }
 
+        if (fullBackup.watchlist.isNotEmpty()) {
+            marketFavoritesManager.addAll(fullBackup.watchlist)
+        }
+
+        restoreSettings(fullBackup.settings, passphrase)
+
+        if (fullBackup.contacts.isNotEmpty()) {
+            contactsRepository.restore(fullBackup.contacts)
+        }
+    }
+
+    fun decryptedFullBackup(fullBackup: FullBackup, passphrase: String): DecryptedFullBackup {
+        val walletBackupItems = mutableListOf<WalletBackupItem>()
+
+        fullBackup.wallets?.forEach { walletBackup2 ->
+            val backup = walletBackup2.backup
+            val type = accountType(backup, passphrase)
+            val name = walletBackup2.name
+
+            val account = if (type.isWatchAccountType) {
+                accountFactory.watchAccount(name, type, true)
+            } else if (type is AccountType.Cex) {
+                accountFactory.account(name, type, AccountOrigin.Restored, true, true)
+            } else {
+                accountFactory.account(name, type, AccountOrigin.Restored, backup.manualBackup, backup.fileBackup)
+            }
+
+            walletBackupItems.add(
+                WalletBackupItem(
+                    account = account,
+                    enabledWallets = backup.enabledWallets ?: listOf()
+                )
+            )
+        }
+
+        var contacts = listOf<Contact>()
         fullBackup.contacts?.let {
             val decrypted = decrypted(it, passphrase)
             val contactsBackupJson = String(decrypted, Charsets.UTF_8)
 
-            contactsRepository.restore(contactsBackupJson)
+            contacts = contactsRepository.parseFromJson(contactsBackupJson)
         }
+
+        return DecryptedFullBackup(
+            wallets = walletBackupItems,
+            watchlist = fullBackup.watchlist ?: listOf(),
+            settings = fullBackup.settings,
+            contacts = contacts
+        )
     }
 
-    fun fullBackupItems(): BackupItems {
-        val accounts = accountManager.accounts
+    private fun fullBackupItems(
+        accounts: List<Account>,
+        watchlist: List<String>,
+        contacts: List<Contact>,
+        isLockTimeEnabled: Boolean,
+        language: String,
+        currency: String
+    ): BackupItems {
         val wallets = accounts.filter { !it.isWatchAccount }.sortedBy { it.name.lowercase() }
 
         val otherBackupItems = buildList {
@@ -286,7 +340,6 @@ class BackupProvider(
                 )
             }
 
-            val watchlist = marketFavoritesManager.getAll()
             if (watchlist.isNotEmpty()) {
                 add(
                     BackupItem(
@@ -296,7 +349,6 @@ class BackupProvider(
                 )
             }
 
-            val contacts = contactsRepository.contacts
             if (contacts.isNotEmpty()) {
                 add(
                     BackupItem(
@@ -316,7 +368,7 @@ class BackupProvider(
             add(
                 BackupItem(
                     title = Translator.getString(R.string.Info_LockTime_Title),
-                    subtitle = if (localStorage.isLockTimeEnabled)
+                    subtitle = if (isLockTimeEnabled)
                         Translator.getString(R.string.BackupManager_Enabled)
                     else
                         Translator.getString(R.string.BackupManager_Disabled)
@@ -333,7 +385,7 @@ class BackupProvider(
             add(
                 BackupItem(
                     title = Translator.getString(R.string.BackupManager_LanguageAndCurrency),
-                    subtitle = "${languageManager.currentLanguageName}, ${currencyManager.baseCurrency.code}"
+                    subtitle = "$language, $currency"
                 )
             )
 
@@ -348,6 +400,24 @@ class BackupProvider(
         return BackupItems(wallets, otherBackupItems)
     }
 
+    fun fullBackupItems() = fullBackupItems(
+        accounts = accountManager.accounts,
+        watchlist = marketFavoritesManager.getAll().map { it.coinUid },
+        contacts = contactsRepository.contacts,
+        isLockTimeEnabled = localStorage.isLockTimeEnabled,
+        language = languageManager.currentLanguageName,
+        currency = currencyManager.baseCurrency.code,
+    )
+
+    fun fullBackupItems(decryptedFullBackup: DecryptedFullBackup): BackupItems = fullBackupItems(
+        accounts = decryptedFullBackup.wallets.map { it.account },
+        watchlist = decryptedFullBackup.watchlist,
+        contacts = decryptedFullBackup.contacts,
+        isLockTimeEnabled = decryptedFullBackup.settings.lockTimeEnabled,
+        language = languageManager.getName(decryptedFullBackup.settings.language),
+        currency = decryptedFullBackup.settings.baseCurrency,
+    )
+
     @Throws
     fun createWalletBackup(account: Account, passphrase: String): String {
         val backup = walletBackup(account, passphrase)
@@ -356,18 +426,6 @@ class BackupProvider(
 
     @Throws
     fun createFullBackup(accountIds: List<String>, passphrase: String): String {
-        Log.e("eee", "fullBackupJson() accountIds ${accountIds.size}: ${accountIds.joinToString(separator = ",")}")
-
-        accountIds.forEach {
-            Log.e("eee", "separate print accountId: $it")
-        }
-
-        Log.e(
-            "eee",
-            "fullBackupJson() selectedAccounts = ${
-                accountManager.accounts.filter { it.isWatchAccount || accountIds.contains(it.id) }.joinToString(separator = ",") { it.name }
-            }"
-        )
         val wallets = accountManager.accounts
             .filter { it.isWatchAccount || accountIds.contains(it.id) }
             .map {
@@ -512,13 +570,25 @@ class BackupProvider(
 
 }
 
+data class WalletBackupItem(
+    val account: Account,
+    val enabledWallets: List<BackupLocalModule.EnabledWalletBackup>
+)
+
+data class DecryptedFullBackup(
+    val wallets: List<WalletBackupItem>,
+    val watchlist: List<String>,
+    val settings: Settings,
+    val contacts: List<Contact>
+)
+
 data class BackupItem(
     val title: String,
     val subtitle: String
 )
 
 data class BackupItems(
-    val wallets: List<Account>,
+    val accounts: List<Account>,
     val others: List<BackupItem>
 )
 

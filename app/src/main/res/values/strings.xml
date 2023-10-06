@@ -882,6 +882,8 @@
     <string name="BackupManager_BаckupFile">Backup File</string>
     <string name="BackupManager_Wallets">WALLETS</string>
     <string name="BackupManager_Other">OTHER</string>
+    <string name="BackupManager_Restore">Restore</string>
+    <string name="BackupManager_BackupFileContents">List of contents in the backup file.</string>
 
     <string name="BackupManager_BackupRequired">Backup Required</string>
     <string name="BackupManager_WatchWallets">Watch Wallets</string>

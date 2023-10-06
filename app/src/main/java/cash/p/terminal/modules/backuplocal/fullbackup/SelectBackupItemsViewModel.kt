@@ -35,12 +35,12 @@ class SelectBackupItemsViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             val backupItems = backupProvider.fullBackupItems()
-            wallets = backupItems.wallets.map { account ->
+            wallets = backupItems.accounts.map { account ->
                 WalletBackupViewItem(
                     account = account,
                     name = account.name,
                     type = account.type.detailedDescription,
-                    backupRequired = !account.isBackedUp && !account.isFileBackedUp,
+                    backupRequired = !account.hasAnyBackup,
                     selected = true
                 )
             }

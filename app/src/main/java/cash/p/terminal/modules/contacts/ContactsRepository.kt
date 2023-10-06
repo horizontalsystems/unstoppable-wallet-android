@@ -107,6 +107,15 @@ class ContactsRepository(
         }
     }
 
+    fun restore(contacts: List<Contact>) {
+        contactsMap = contacts.associateBy { it.uid }.toMutableMap()
+        _contactsFlow.update { contacts }
+
+        coroutineScope.launch {
+            writeToFile()
+        }
+    }
+
     fun get(id: String): Contact? {
         return contactsMap[id]
     }
@@ -150,7 +159,7 @@ class ContactsRepository(
         }
     }
 
-    private fun parseFromJson(json: String): List<Contact> {
+    fun parseFromJson(json: String): List<Contact> {
         val listType = object : TypeToken<List<ContactJson>>() {}.type
         val contactsJson: List<ContactJson> = gson.fromJson(json, listType)
 
