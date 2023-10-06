@@ -116,6 +116,7 @@ private fun ImportWalletScreen(
                     cancelText = stringResource(R.string.Button_Cancel),
                     onConfirm = {
                         restoreLauncher.launch(arrayOf("application/json"))
+                        coroutineScope.launch { bottomSheetState.hide() }
                     },
                     onClose = {
                         coroutineScope.launch { bottomSheetState.hide() }

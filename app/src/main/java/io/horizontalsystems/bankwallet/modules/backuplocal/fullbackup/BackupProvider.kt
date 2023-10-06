@@ -48,6 +48,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
+import java.util.UUID
 
 class BackupFileValidator {
     private val gson: Gson by lazy {
@@ -61,7 +62,7 @@ class BackupFileValidator {
         val fullBackup = gson.fromJson(json, FullBackup::class.java)
         val walletBackup = gson.fromJson(json, BackupLocalModule.WalletBackup::class.java)
 
-        if (fullBackup.settings == null && walletBackup.version == null && walletBackup.version !in 1..2) {
+        if (fullBackup.settings == null && walletBackup.version != 2 && walletBackup.version !in 1..2) {
             throw Exception("Invalid json format")
         }
     }
@@ -94,6 +95,7 @@ class BackupProvider(
     private val contactsRepository: ContactsRepository
 ) {
     private val encryptDecryptManager = EncryptDecryptManager()
+    private val version = 2
 
     private val gson: Gson by lazy {
         GsonBuilder()
@@ -492,6 +494,8 @@ class BackupProvider(
             settings = settings,
             contacts = contacts,
             timestamp = System.currentTimeMillis() / 1000,
+            version = version,
+            id = UUID.randomUUID().toString()
         )
 
         return gson.toJson(fullBackup)
@@ -564,7 +568,7 @@ class BackupProvider(
             manualBackup = account.isBackedUp,
             fileBackup = account.isFileBackedUp,
             timestamp = System.currentTimeMillis() / 1000,
-            version = 2
+            version = version
         )
     }
 
@@ -602,7 +606,9 @@ data class FullBackup(
     val watchlist: List<String>?,
     val settings: Settings,
     val contacts: BackupLocalModule.BackupCrypto?,
-    val timestamp: Long
+    val timestamp: Long,
+    val version: Int,
+    val id: String
 )
 
 data class SwapProvider(
