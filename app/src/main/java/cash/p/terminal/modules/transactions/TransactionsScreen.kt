@@ -359,15 +359,18 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                         maxLines = 1,
                     )
                     Spacer(Modifier.weight(1f))
-                    item.primaryValue?.let { coloredValue ->
-                        Text(
-                            text = coloredValue.value,
-                            style = ComposeAppTheme.typography.body,
-                            color = coloredValue.color.compose(),
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                        )
+                    if (item.showAmount) {
+                        item.primaryValue?.let { coloredValue ->
+                            Text(
+                                text = coloredValue.value,
+                                style = ComposeAppTheme.typography.body,
+                                color = coloredValue.color.compose(),
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                            )
+                        }
                     }
+
                     if (item.doubleSpend) {
                         Image(
                             modifier = Modifier.padding(start = 6.dp),
@@ -399,13 +402,15 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                             .padding(end = 8.dp),
                         maxLines = 2,
                     )
-                    item.secondaryValue?.let { coloredValue ->
-                        Text(
-                            text = coloredValue.value,
-                            style = ComposeAppTheme.typography.subhead2,
-                            color = coloredValue.color.compose(),
-                            maxLines = 1,
-                        )
+                    if (item.showAmount) {
+                        item.secondaryValue?.let { coloredValue ->
+                            Text(
+                                text = coloredValue.value,
+                                style = ComposeAppTheme.typography.subhead2,
+                                color = coloredValue.color.compose(),
+                                maxLines = 1,
+                            )
+                        }
                     }
                 }
             }
