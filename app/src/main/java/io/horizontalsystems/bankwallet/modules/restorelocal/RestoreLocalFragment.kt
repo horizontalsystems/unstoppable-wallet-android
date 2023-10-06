@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -40,11 +42,19 @@ import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigureScre
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -90,18 +100,28 @@ private fun RestoreLocalNavHost(
 ) {
     val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
+    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName))
     NavHost(
         navController = navController,
         startDestination = "restore_local",
     ) {
         composable("restore_local") {
             RestoreLocalScreen(
-                backupJsonString = backupJsonString,
-                fileName = fileName,
+                viewModel = viewModel,
                 mainViewModel = mainViewModel,
                 onBackClick = { fragmentNavController.popBackStack() },
                 close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
-            ) { navController.navigate("restore_select_coins") }
+                openSelectCoins = { navController.navigate("restore_select_coins") },
+                openBackupItems = { navController.navigate("backup_file") }
+            )
+        }
+        composablePage("backup_file") {
+            BackupFileItems(
+                viewModel,
+                onNextClick = { viewModel.restoreFullBackup() },
+                onBackClick = { navController.popBackStack() },
+                close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
+            )
         }
         composablePage("restore_select_coins") {
             ManageWalletsScreen(
@@ -125,17 +145,125 @@ private fun RestoreLocalNavHost(
     }
 }
 
+@Composable
+private fun BackupFileItems(
+    viewModel: RestoreLocalViewModel,
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit,
+    close: () -> Unit
+) {
+    val uiState = viewModel.uiState
+    val backupItems = viewModel.uiState.backupItems ?: return
+    val view = LocalView.current
+
+    LaunchedEffect(uiState.restored) {
+        if (uiState.restored) {
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_Restored,
+                icon = R.drawable.icon_add_to_wallet_2_24,
+                iconTint = R.color.white
+            )
+            delay(300)
+            close.invoke()
+        }
+    }
+
+    LaunchedEffect(uiState.parseError) {
+        uiState.parseError?.let { error ->
+            Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
+            onBackClick.invoke()
+        }
+    }
+
+    ComposeAppTheme {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = stringResource(R.string.BackupManager_BаckupFile),
+                    navigationIcon = {
+                        HsBackButton(onClick = onBackClick)
+                    },
+                )
+            },
+            bottomBar = {
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
+                        title = stringResource(R.string.BackupManager_Restore),
+                        onClick = {
+                            onNextClick()
+                        }
+                    )
+                }
+            }
+        ) {
+            LazyColumn(modifier = Modifier.padding(it)) {
+                item {
+                    InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
+                }
+
+                item {
+                    HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
+                    CellUniversalLawrenceSection(items = backupItems.accounts, showFrame = true) { account ->
+                        RowUniversal(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        ) {
+
+                            Column(modifier = Modifier.weight(1f)) {
+                                body_leah(text = account.name)
+                                if (!account.hasAnyBackup) {
+                                    subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
+                                } else {
+                                    subhead2_grey(
+                                        text = account.type.detailedDescription,
+                                        overflow = TextOverflow.Ellipsis,
+                                        maxLines = 1
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    VSpacer(height = 24.dp)
+                    HeaderText(text = stringResource(id = R.string.BackupManager_Other))
+                    CellUniversalLawrenceSection(items = backupItems.others, showFrame = true) { item ->
+                        RowUniversal(
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                body_leah(text = item.title)
+                                subhead2_grey(
+                                    text = item.subtitle,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1
+                                )
+                            }
+                        }
+                    }
+
+                    VSpacer(height = 32.dp)
+                }
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RestoreLocalScreen(
-    backupJsonString: String?,
-    fileName: String?,
+    viewModel: RestoreLocalViewModel,
     mainViewModel: RestoreViewModel,
     onBackClick: () -> Unit,
     close: () -> Unit,
     openSelectCoins: () -> Unit,
+    openBackupItems: () -> Unit
 ) {
-    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName))
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
@@ -169,6 +297,16 @@ private fun RestoreLocalScreen(
             delay(300)
             openSelectCoins.invoke()
             viewModel.onSelectCoinsShown()
+        }
+    }
+
+    if (uiState.showBackupItems) {
+        val keyboardController = LocalSoftwareKeyboardController.current
+        coroutineScope.launch {
+            keyboardController?.hide()
+            delay(300)
+            openBackupItems.invoke()
+            viewModel.onBackupItemsShown()
         }
     }
 
