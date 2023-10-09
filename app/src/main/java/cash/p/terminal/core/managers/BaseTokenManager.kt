@@ -25,6 +25,7 @@ class BaseTokenManager(
     var token = localStorage.balanceTotalCoinUid?.let { balanceTotalCoinUid ->
         tokens.find { it.coin.uid == balanceTotalCoinUid }
     } ?: tokens.firstOrNull()
+        private set
 
     private val _baseTokenFlow = MutableStateFlow(token)
     val baseTokenFlow = _baseTokenFlow.asStateFlow()

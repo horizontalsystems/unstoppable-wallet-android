@@ -27,6 +27,5 @@ object BackupLocalPasswordModule {
         val backupJson: String?,
         val closeScreen: Boolean,
         val error: String?
-//        val showAccountIsNullError: Boolean
     )
 }

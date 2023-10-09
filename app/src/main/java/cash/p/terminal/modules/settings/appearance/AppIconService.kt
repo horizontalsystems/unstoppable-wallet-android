@@ -2,7 +2,6 @@ package cash.p.terminal.modules.settings.appearance
 
 import android.content.ComponentName
 import android.content.pm.PackageManager
-import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.ui.compose.Select
@@ -19,9 +18,6 @@ class AppIconService(private val localStorage: ILocalStorage) {
     val optionsFlow = _optionsFlow.asStateFlow()
 
     fun setAppIcon(appIcon: AppIcon) {
-
-        Log.e("ee", "setAppIcon: $appIcon")
-
         localStorage.appIcon = appIcon
 
         _optionsFlow.update {

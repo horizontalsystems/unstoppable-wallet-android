@@ -34,7 +34,7 @@ class AccountFactory(
         )
     }
 
-    override fun watchAccount(name: String, type: AccountType, fileBackedUp: Boolean): Account {
+    override fun watchAccount(name: String, type: AccountType): Account {
         val id = UUID.randomUUID().toString()
         return Account(
             id = id,
