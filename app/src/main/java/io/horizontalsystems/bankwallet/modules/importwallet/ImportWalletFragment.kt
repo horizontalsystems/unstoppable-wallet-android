@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
@@ -129,13 +128,7 @@ private fun ImportWalletScreen(
                 topBar = {
                     AppBar(
                         title = stringResource(R.string.ManageAccounts_ImportWallet),
-                        menuItems = listOf(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Close),
-                                icon = R.drawable.ic_close,
-                                onClick = { navController.popBackStack() }
-                            )
-                        )
+                        navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
                     )
                 }
             ) {

@@ -19,19 +19,16 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.backupalert.BackupAlert
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -60,7 +57,6 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 
     val viewItems = viewModel.viewItems
     val finish = viewModel.finish
-    val isCloseButtonVisible = viewModel.isCloseButtonVisible
 
     if (finish) {
         navController.popBackStack()
@@ -68,24 +64,9 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            var menuItems: List<MenuItem> = listOf()
-            var navigationIcon: @Composable (() -> Unit)? = null
-
-            if (isCloseButtonVisible) {
-                menuItems = listOf(MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = { navController.popBackStack() }
-                ))
-            } else {
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
-            }
             AppBar(
                 title = stringResource(R.string.ManageAccounts_Title),
-                navigationIcon = navigationIcon,
-                menuItems = menuItems
+                navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
             )
 
             LazyColumn(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -116,7 +97,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                             }
                         },
                         ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                            navController.slideFromBottom(R.id.importWalletFragment, args)
+                            navController.slideFromRight(R.id.importWalletFragment, args)
                         },
                         ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
                             navController.slideFromRight(R.id.watchAddressFragment, args)
