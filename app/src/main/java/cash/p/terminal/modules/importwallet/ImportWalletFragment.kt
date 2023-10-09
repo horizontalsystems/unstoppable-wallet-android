@@ -33,7 +33,6 @@ import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
@@ -129,13 +128,7 @@ private fun ImportWalletScreen(
                 topBar = {
                     AppBar(
                         title = stringResource(R.string.ManageAccounts_ImportWallet),
-                        menuItems = listOf(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Close),
-                                icon = R.drawable.ic_close,
-                                onClick = { navController.popBackStack() }
-                            )
-                        )
+                        navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
                     )
                 }
             ) {
