@@ -420,6 +420,12 @@ class BackupProvider(
         currency = decryptedFullBackup.settings.baseCurrency,
     )
 
+    fun shouldShowMergeWarning(decryptedFullBackup: DecryptedFullBackup?): Boolean {
+        return decryptedFullBackup != null &&
+                (decryptedFullBackup.wallets.isNotEmpty() && accountManager.accounts.isNotEmpty() ||
+                        decryptedFullBackup.contacts.isNotEmpty() && contactsRepository.contacts.isNotEmpty())
+    }
+
     @Throws
     fun createWalletBackup(account: Account, passphrase: String): String {
         val backup = walletBackup(account, passphrase)

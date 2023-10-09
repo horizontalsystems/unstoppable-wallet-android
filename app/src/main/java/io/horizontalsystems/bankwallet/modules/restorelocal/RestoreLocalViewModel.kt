@@ -141,6 +141,10 @@ class RestoreLocalViewModel(
         }
     }
 
+    fun shouldShowMergeWarning(): Boolean {
+       return backupProvider.shouldShowMergeWarning(decryptedFullBackup)
+    }
+
     fun restoreFullBackup() {
         decryptedFullBackup?.let { restoreFullBackup(it) }
     }
