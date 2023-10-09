@@ -1505,6 +1505,7 @@
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Indicators available only for Unstoppable Wallet premium users.</string>
+    <string name="CoinPage_AiGeneratedText">This is an AI generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
 
     // Coin Page -> Analytics
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
