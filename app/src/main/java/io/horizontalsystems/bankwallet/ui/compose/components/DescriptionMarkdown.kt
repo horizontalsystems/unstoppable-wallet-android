@@ -16,23 +16,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.doOnPreDraw
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.LayoutHelper
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonSpansFactory
+import io.noties.markwon.RenderProps
+import io.noties.markwon.core.CoreProps
 import io.noties.markwon.core.spans.LastLineSpacingSpan
 import org.commonmark.node.Heading
 import org.commonmark.node.Paragraph
 
 @Composable
 fun DescriptionMarkdown(
-    textMaxLines: Int,
-    toggleLines: Int,
     text: String,
-    expanded: Boolean,
-    f: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     val markdownRender = remember { buildMarkwon(context) }
@@ -41,19 +38,11 @@ fun DescriptionMarkdown(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp),
         factory = {
-            TextView(it).also { aboutText ->
-                aboutText.doOnPreDraw {
-                    val overflow = aboutText.lineCount > textMaxLines + toggleLines
-
-                    aboutText.maxLines = if (overflow) textMaxLines else Integer.MAX_VALUE
-                    f.invoke(overflow)
-                }
-            }
+            TextView(it)
         },
         update = { aboutText ->
             val aboutTextSpanned = markdownRender.toMarkdown(text)
             aboutText.text = removeLinkSpans(aboutTextSpanned)
-            aboutText.maxLines = if (expanded) Integer.MAX_VALUE else textMaxLines
         }
     )
 }
@@ -63,11 +52,19 @@ private fun buildMarkwon(context: Context): Markwon {
         .usePlugin(object : AbstractMarkwonPlugin() {
 
             override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-                builder.setFactory(Heading::class.java) { _, _ ->
-                    arrayOf(
-                        TextAppearanceSpan(context, R.style.Headline2),
-                        ForegroundColorSpan(context.getColor(R.color.bran))
-                    )
+                builder.setFactory(Heading::class.java) { _, props: RenderProps ->
+                    val level = CoreProps.HEADING_LEVEL.require(props)
+                    if (level == 1) {
+                        arrayOf(
+                            TextAppearanceSpan(context, R.style.Title3NoColor),
+                            ForegroundColorSpan(context.getColor(R.color.leah))
+                        )
+                    } else {
+                        arrayOf(
+                            TextAppearanceSpan(context, R.style.Headline2),
+                            ForegroundColorSpan(context.getColor(R.color.leah))
+                        )
+                    }
                 }
                 builder.setFactory(Paragraph::class.java) { _, _ ->
                     arrayOf(
