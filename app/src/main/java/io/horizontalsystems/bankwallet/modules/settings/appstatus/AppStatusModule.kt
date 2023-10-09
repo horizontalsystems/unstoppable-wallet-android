@@ -16,6 +16,10 @@ object AppStatusModule {
                 App.walletManager,
                 App.adapterManager,
                 App.marketKit,
+                App.evmBlockchainManager,
+                App.binanceKitManager,
+                App.tronKitManager,
+                App.solanaKitManager,
             )
             return viewModel as T
         }
