@@ -10,9 +10,12 @@ import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IAdapterManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.adapters.BaseTronAdapter
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
+import cash.p.terminal.core.managers.BinanceKitManager
+import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockContent
 import io.horizontalsystems.core.ISystemInfoManager
@@ -27,7 +30,11 @@ class AppStatusViewModel(
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
+    private val evmBlockchainManager: EvmBlockchainManager,
+    private val binanceKitManager: BinanceKitManager,
+    private val tronKitManager: TronKitManager,
+    private val solanaKitManager: SolanaKitManager,
 ) : ViewModel() {
 
     private var blockViewItems: List<AppStatusModule.BlockData> = emptyList()
@@ -157,7 +164,7 @@ class AppStatusViewModel(
 
     private fun getBlockchainStatus(): Map<String, Any> {
         val blockchainStatus = LinkedHashMap<String, Any>()
-        val blockchainTypesToDisplay =
+        val bitcoinLikeChains =
             listOf(
                 BlockchainType.Bitcoin,
                 BlockchainType.BitcoinCash,
@@ -167,7 +174,7 @@ class AppStatusViewModel(
             )
 
         walletManager.activeWallets
-            .filter { blockchainTypesToDisplay.contains(it.token.blockchainType) }
+            .filter { bitcoinLikeChains.contains(it.token.blockchainType) }
             .sortedBy { it.token.coin.name }
             .forEach { wallet ->
                 (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
@@ -176,17 +183,31 @@ class AppStatusViewModel(
                 }
             }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Tron }?.let { wallet ->
-            (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.statusInfo?.let { statusInfo ->
-                blockchainStatus["Tron"] = statusInfo
+        evmBlockchainManager.allBlockchains
+            .forEach { blockchain ->
+                evmBlockchainManager.getEvmKitManager(blockchain.type).statusInfo?.let { statusInfo ->
+                    blockchainStatus[blockchain.name] = statusInfo
+                }
             }
+
+        binanceKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Binance Chain"] = statusInfo
         }
+
+        tronKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Tron"] = statusInfo
+        }
+
+        solanaKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Solana"] = statusInfo
+        }
+
         return blockchainStatus
     }
 
     private fun getBlockchainStatusBlock(): List<AppStatusModule.BlockData> {
         val blocks = mutableListOf<AppStatusModule.BlockData>()
-        val blockchainTypesToDisplay =
+        val bitcoinLikeChains =
             listOf(
                 BlockchainType.Bitcoin,
                 BlockchainType.BitcoinCash,
@@ -195,48 +216,66 @@ class AppStatusViewModel(
                 BlockchainType.ECash,
             )
 
-        var sectionTitleNotSet = true
-
         walletManager.activeWallets
-            .filter { blockchainTypesToDisplay.contains(it.token.blockchainType) }
+            .filter { bitcoinLikeChains.contains(it.token.blockchainType) }
             .sortedBy { it.token.coin.name }
-            .forEach { wallet ->
-                val title = if (sectionTitleNotSet) "Blockchain Status" else null
-                (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
-                    val statusTitle = "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}"
-
-                    val item = AppStatusModule.BlockData(
+            .forEach {
+                val wallet = it
+                val title = if (blocks.isEmpty()) "Blockchain Status" else null
+                val block = when (val adapter = adapterManager.getAdapterForWallet(wallet)) {
+                    is BitcoinBaseAdapter -> getBlockchainInfoBlock(
                         title,
-                        listOf(
-                            BlockContent.TitleValue("Blockchain", statusTitle),
-                            BlockContent.Text(formatMapToString(adapter.statusInfo)?.trimEnd() ?: ""),
-                        )
+                        "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}",
+                        adapter.statusInfo
                     )
-                    blocks.add(item)
-                    if (sectionTitleNotSet) {
-                        sectionTitleNotSet = false
-                    }
+
+                    else -> null
+                }
+                block?.let { blocks.add(it) }
+            }
+
+        evmBlockchainManager.allBlockchains
+            .forEach { blockchain ->
+                evmBlockchainManager.getEvmKitManager(blockchain.type).statusInfo?.let { statusInfo ->
+                    val title = if (blocks.isEmpty()) "Blockchain Status" else null
+                    val block = getBlockchainInfoBlock(title, blockchain.name, statusInfo)
+                    blocks.add(block)
                 }
             }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Tron }?.let { wallet ->
-            val title = if (sectionTitleNotSet) "Blockchain Status" else null
-            (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.statusInfo?.let { statusInfo ->
-                val item = AppStatusModule.BlockData(
-                    title,
-                    listOf(
-                        BlockContent.TitleValue("Blockchain", "Tron"),
-                        BlockContent.Text(formatMapToString(statusInfo)?.trimEnd() ?: ""),
-                    )
-                )
-                blocks.add(item)
-                if (sectionTitleNotSet) {
-                    sectionTitleNotSet = false
-                }
-            }
+        binanceKitManager.statusInfo?.let { statusInfo ->
+            val title = if (blocks.isEmpty()) "Blockchain Status" else null
+            val block = getBlockchainInfoBlock(title, "Binance Chain", statusInfo)
+            blocks.add(block)
+        }
+
+        tronKitManager.statusInfo?.let { statusInfo ->
+            val title = if (blocks.isEmpty()) "Blockchain Status" else null
+            val block = getBlockchainInfoBlock(title, "Tron", statusInfo)
+            blocks.add(block)
+        }
+
+        solanaKitManager.statusInfo?.let {
+            val title = if (blocks.isEmpty()) "Blockchain Status" else null
+            val block = getBlockchainInfoBlock(title, "Solana", it)
+            blocks.add(block)
         }
 
         return blocks
+    }
+
+    fun getBlockchainInfoBlock(
+        title: String?,
+        blockchain: String,
+        statusInfo: Map<String, Any>
+    ): AppStatusModule.BlockData {
+        return AppStatusModule.BlockData(
+            title,
+            listOf(
+                BlockContent.TitleValue("Blockchain", blockchain),
+                BlockContent.Text(formatMapToString(statusInfo)?.trimEnd() ?: ""),
+            )
+        )
     }
 
     private fun getMarketLastSyncTimestamps(): Map<String, Any> {
