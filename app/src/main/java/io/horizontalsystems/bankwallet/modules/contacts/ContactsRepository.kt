@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.util.UUID
 import java.util.concurrent.Executors
 
 class ContactsRepository(
@@ -107,9 +108,35 @@ class ContactsRepository(
         }
     }
 
+    private fun getDuplicateContactName(name: String): String {
+        val currentContacts = this.contacts
+        var counter = 2
+        while (currentContacts.any { it.name == "$name ($counter)" }) {
+            counter++
+        }
+        return "$name ($counter)"
+    }
+
     fun restore(contacts: List<Contact>) {
-        contactsMap = contacts.associateBy { it.uid }.toMutableMap()
-        _contactsFlow.update { contacts }
+        val currentContacts = this.contacts
+        val mappedContacts = contacts.map { contact ->
+            val existing = get(contact.uid)
+            if (existing != null) {
+                val uid = UUID.randomUUID().toString()
+                var name = contact.name
+                if (existing.name == contact.name) {
+                    name = getDuplicateContactName(contact.name)
+                }
+                contact.copy(uid = uid, name = name)
+            } else if (currentContacts.any { it.uid != contact.uid && it.name == contact.name }) {
+                contact.copy(name = getDuplicateContactName(contact.name))
+            } else {
+                contact
+            }
+        }
+
+        contactsMap += mappedContacts.associateBy { it.uid }.toMutableMap()
+        _contactsFlow.update { this.contacts }
 
         coroutineScope.launch {
             writeToFile()
