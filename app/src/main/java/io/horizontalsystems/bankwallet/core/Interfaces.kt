@@ -166,7 +166,7 @@ interface IAccountFactory {
         backedUp: Boolean,
         fileBackedUp: Boolean
     ): Account
-    fun watchAccount(name: String, type: AccountType, fileBackedUp: Boolean): Account
+    fun watchAccount(name: String, type: AccountType): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
     fun getNextCexAccountName(cexType: CexType): String

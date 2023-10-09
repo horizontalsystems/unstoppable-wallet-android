@@ -126,17 +126,12 @@ class BackupProvider(
         accountManager.save(account)
     }
 
-    fun restoreWalletBackup(
+    fun restoreSingleWalletBackup(
         type: AccountType,
         accountName: String,
-        backup: BackupLocalModule.WalletBackup,
-        fileBackup: Boolean
+        backup: BackupLocalModule.WalletBackup
     ) {
-        val account = if (type.isWatchAccountType) {
-            accountFactory.watchAccount(accountName, type, true)
-        } else {
-            accountFactory.account(accountName, type, AccountOrigin.Restored, backup.manualBackup, fileBackup)
-        }
+        val account = accountFactory.account(accountName, type, AccountOrigin.Restored, backup.manualBackup, true)
         accountManager.save(account)
 
         val enabledWalletBackups = backup.enabledWallets ?: listOf()
@@ -290,7 +285,7 @@ class BackupProvider(
             val name = walletBackup2.name
 
             val account = if (type.isWatchAccountType) {
-                accountFactory.watchAccount(name, type, true)
+                accountFactory.watchAccount(name, type)
             } else if (type is AccountType.Cex) {
                 accountFactory.account(name, type, AccountOrigin.Restored, true, true)
             } else {

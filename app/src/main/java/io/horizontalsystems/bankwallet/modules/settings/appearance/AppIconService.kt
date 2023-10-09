@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.appearance
 
 import android.content.ComponentName
 import android.content.pm.PackageManager
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -19,9 +18,6 @@ class AppIconService(private val localStorage: ILocalStorage) {
     val optionsFlow = _optionsFlow.asStateFlow()
 
     fun setAppIcon(appIcon: AppIcon) {
-
-        Log.e("ee", "setAppIcon: $appIcon")
-
         localStorage.appIcon = appIcon
 
         _optionsFlow.update {

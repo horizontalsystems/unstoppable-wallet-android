@@ -108,10 +108,6 @@ class RestoreLocalViewModel(
             walletBackup != null -> {
                 walletBackup?.let { restoreSingleWallet(it, accountName) }
             }
-
-            else -> {
-
-            }
         }
     }
 
@@ -185,7 +181,7 @@ class RestoreLocalViewModel(
                 } else if (backup.enabledWallets.isNullOrEmpty()) {
                     showSelectCoins = type
                 } else {
-                    backupProvider.restoreWalletBackup(type, accountName, backup, true)
+                    backupProvider.restoreSingleWalletBackup(type, accountName, backup)
                     restored = true
                 }
             } catch (keyException: RestoreException.EncryptionKeyException) {
