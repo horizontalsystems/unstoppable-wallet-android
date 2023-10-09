@@ -183,7 +183,15 @@ class EvmAccountManager(
 
         try {
             val queries = (foundTokens.map { it.tokenType } + suspiciousTokenTypes).map { TokenQuery(blockchainType, it) }
-            val tokens = marketKit.tokens(queries)
+            val tokens =
+                if (queries.size >= 1000) {
+                    // 1000 is max number of arguments in sqlite
+                    queries.chunked(900) { chunk ->
+                        marketKit.tokens(chunk)
+                    }.flatten()
+                } else {
+                    marketKit.tokens(queries)
+                }
             val tokenInfos = mutableListOf<TokenInfo>()
 
             foundTokens.forEach { foundToken ->

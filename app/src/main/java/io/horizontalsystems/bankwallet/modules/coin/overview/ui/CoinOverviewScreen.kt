@@ -131,7 +131,7 @@ fun CoinOverviewScreen(
             chartViewModel.refresh()
         },
         content = {
-            Crossfade(viewState) { viewState ->
+            Crossfade(viewState, label = "") { viewState ->
                 when (viewState) {
                     ViewState.Loading -> {
                         Loading()
@@ -186,8 +186,6 @@ fun CoinOverviewScreen(
                                     }
                                 }
 
-
-
                                 if (overview.marketData.isNotEmpty()) {
                                     Spacer(modifier = Modifier.height(12.dp))
                                     MarketData(overview.marketData)
@@ -216,11 +214,6 @@ fun CoinOverviewScreen(
                                             LinkHelper.openLinkInAppBrowser(context, it)
                                         },
                                     )
-                                }
-
-                                if (overview.categories.isNotEmpty()) {
-                                    Spacer(modifier = Modifier.height(24.dp))
-                                    Categories(overview.categories)
                                 }
 
                                 if (overview.about.isNotBlank()) {

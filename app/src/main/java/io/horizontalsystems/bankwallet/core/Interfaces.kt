@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
+import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
@@ -65,6 +66,8 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var zcashAccountIds: Set<String>
+    var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean
     var amountInputType: AmountInputType?
     var baseCurrencyCode: String?
@@ -215,7 +218,6 @@ sealed class AdapterState {
     data class Syncing(val progress: Int? = null, val lastBlockDate: Date? = null) : AdapterState()
     data class SearchingTxs(val count: Int) : AdapterState()
     data class NotSynced(val error: Throwable) : AdapterState()
-    data class Zcash(val zcashState: ZcashAdapter.ZcashState) : AdapterState()
 }
 
 interface IBinanceKitManager {
@@ -259,6 +261,8 @@ interface IBalanceAdapter {
 
     val balanceData: BalanceData
     val balanceUpdatedFlowable: Flowable<Unit>
+
+    fun sendAllowed() = balanceState is AdapterState.Synced
 }
 
 data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDecimal.ZERO) {
@@ -322,7 +326,7 @@ interface ISendZcashAdapter {
     val fee: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit>
+    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long
 }
 
 interface IAdapter {

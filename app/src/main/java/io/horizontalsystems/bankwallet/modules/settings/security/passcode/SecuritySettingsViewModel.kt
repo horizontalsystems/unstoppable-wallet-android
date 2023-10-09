@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
@@ -14,7 +15,8 @@ import kotlinx.coroutines.reactive.asFlow
 class SecuritySettingsViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val pinComponent: IPinComponent,
-    private val balanceHiddenManager: BalanceHiddenManager
+    private val balanceHiddenManager: BalanceHiddenManager,
+    private val localStorage: ILocalStorage
 ) : ViewModel() {
     val biometricSettingsVisible = systemInfoManager.biometricAuthSupported
 
@@ -28,6 +30,7 @@ class SecuritySettingsViewModel(
             biometricsEnabled = pinComponent.isBiometricAuthEnabled,
             duressPinEnabled = duressPinEnabled,
             balanceAutoHideEnabled = balanceAutoHideEnabled,
+            autoLockIntervalName = localStorage.autoLockInterval.title,
         )
     )
         private set
@@ -48,7 +51,8 @@ class SecuritySettingsViewModel(
                 pinEnabled = pinEnabled,
                 biometricsEnabled = pinComponent.isBiometricAuthEnabled,
                 duressPinEnabled = duressPinEnabled,
-                balanceAutoHideEnabled = balanceAutoHideEnabled
+                balanceAutoHideEnabled = balanceAutoHideEnabled,
+                autoLockIntervalName = localStorage.autoLockInterval.title,
             )
         }
     }
@@ -79,11 +83,16 @@ class SecuritySettingsViewModel(
         emitState()
         balanceHiddenManager.setBalanceAutoHidden(enabled)
     }
+
+    fun update() {
+        emitState()
+    }
 }
 
 data class SecuritySettingsUiState(
     val pinEnabled: Boolean,
     val biometricsEnabled: Boolean,
     val duressPinEnabled: Boolean,
-    val balanceAutoHideEnabled: Boolean
+    val balanceAutoHideEnabled: Boolean,
+    val autoLockIntervalName: Int
 )

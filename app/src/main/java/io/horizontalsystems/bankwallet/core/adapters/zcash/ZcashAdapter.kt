@@ -4,7 +4,9 @@ import android.content.Context
 import cash.z.ecc.android.sdk.CloseableSynchronizer
 import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
-import cash.z.ecc.android.sdk.block.CompactBlockProcessor
+import cash.z.ecc.android.sdk.WalletInitMode
+import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
+import cash.z.ecc.android.sdk.ext.ZcashSdk
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
@@ -39,8 +41,10 @@ class ZcashAdapter(
     context: Context,
     private val wallet: Wallet,
     restoreSettings: RestoreSettings,
+    private val localStorage: ILocalStorage,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
+    private val existingWallet = localStorage.zcashAccountIds.contains(wallet.account.id)
     private val confirmationsThreshold = 10
     private val decimalCount = 8
     private val network: ZcashNetwork = ZcashNetwork.Mainnet
@@ -64,21 +68,24 @@ class ZcashAdapter(
     override val isMainNet: Boolean = true
 
     init {
+        val walletInitMode = if (existingWallet) {
+            WalletInitMode.ExistingWallet
+        } else when (wallet.account.origin) {
+            AccountOrigin.Created -> WalletInitMode.NewWallet
+            AccountOrigin.Restored -> WalletInitMode.RestoreWallet
+        }
+
         val birthday = when (wallet.account.origin) {
-            AccountOrigin.Created -> {
-                runBlocking {
-                    BlockHeight.ofLatestCheckpoint(context, network)
+            AccountOrigin.Created -> runBlocking {
+                BlockHeight.ofLatestCheckpoint(context, network)
+            }
+            AccountOrigin.Restored -> restoreSettings.birthdayHeight
+                ?.let { height ->
+                    max(network.saplingActivationHeight.value, height)
                 }
-            }
-            AccountOrigin.Restored -> {
-                restoreSettings.birthdayHeight
-                    ?.let { height ->
-                        max(network.saplingActivationHeight.value, height)
-                    }
-                    ?.let {
-                        BlockHeight.new(network, it)
-                    }
-            }
+                ?.let {
+                    BlockHeight.new(network, it)
+                }
         }
 
         synchronizer = Synchronizer.newBlocking(
@@ -87,7 +94,8 @@ class ZcashAdapter(
             alias = getValidAliasFromAccountId(wallet.account.id),
             lightWalletEndpoint = lightWalletEndpoint,
             seed = seed,
-            birthday = birthday
+            birthday = birthday,
+            walletInitMode = walletInitMode
         )
 
         receiveAddress = runBlocking { synchronizer.getSaplingAddress(zcashAccount) }
@@ -96,14 +104,7 @@ class ZcashAdapter(
         synchronizer.onChainErrorHandler = ::onChainError
     }
 
-    private fun defaultFee(height: Long? = null): Zatoshi {
-        val value = if (height == null || height > feeChangeHeight) 1_000L else 10_000L
-        return Zatoshi(value)
-    }
-
-    private var syncState: AdapterState = AdapterState.Zcash(
-        ZcashState.DownloadingBlocks(BlockProgress(null, null))
-    )
+    private var syncState: AdapterState = AdapterState.Syncing()
         set(value) {
             if (value != field) {
                 field = value
@@ -113,6 +114,9 @@ class ZcashAdapter(
 
     override fun start() {
         subscribe(synchronizer as SdkSynchronizer)
+        if (!existingWallet) {
+            localStorage.zcashAccountIds += wallet.account.id
+        }
     }
 
     override fun stop() {
@@ -164,6 +168,10 @@ class ZcashAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
+    override fun sendAllowed(): Boolean {
+        return balanceState is AdapterState.Synced || balanceState is AdapterState.Syncing
+    }
+
     override fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
@@ -195,7 +203,7 @@ class ZcashAdapter(
     override val availableBalance: BigDecimal
         get() {
             val available = synchronizer.saplingBalances.value?.available ?: Zatoshi(0)
-            val defaultFee = defaultFee()
+            val defaultFee = ZcashSdk.MINERS_FEE
 
             return if (available <= defaultFee) {
                 BigDecimal.ZERO
@@ -206,7 +214,7 @@ class ZcashAdapter(
         }
 
     override val fee: BigDecimal
-        get() = defaultFee().convertZatoshiToZec(decimalCount)
+        get() = ZcashSdk.MINERS_FEE.convertZatoshiToZec(decimalCount)
 
     override suspend fun validate(address: String): ZCashAddressType {
         if (address == receiveAddress) throw ZcashError.SendToSelfNotAllowed
@@ -218,40 +226,11 @@ class ZcashAdapter(
         }
     }
 
-    override fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit> =
-            Single.create { emitter ->
-                try {
-                    val spendingKey = runBlocking {
-                            DerivationTool.deriveUnifiedSpendingKey(seed, network, zcashAccount)
-                        }
-                    logger.info("call synchronizer.sendToAddress")
-                    // use a scope that automatically cancels when the synchronizer stops
-                    val scope = (synchronizer as SdkSynchronizer).coroutineScope
-                    // don't return until the transaction creation is complete
-                    synchronizer
-                        .sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
-                        .filter { it.isSubmitSuccess() || it.isFailure() }
-                        .take(1)
-                        .onEach {
-                            if (it.isSubmitSuccess()) {
-                                emitter.onSuccess(Unit)
-                            } else {
-                                FailedTransaction(it.errorMessage).let { error ->
-                                    logger.warning("send error", error)
-                                    emitter.onError(error)
-                                }
-                            }
-                        }
-                        .catch {
-                            logger.warning("send error", it)
-                            emitter.onError(it)
-                        }
-                        .launchIn(scope)
-                } catch (error: Throwable) {
-                    logger.warning("send error", error)
-                    emitter.onError(error)
-                }
-            }
+    override suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long {
+        val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, zcashAccount)
+        logger.info("call synchronizer.sendToAddress")
+        return synchronizer.sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
+    }
 
     // Subscribe to a synchronizer on its own scope and begin responding to events
     @OptIn(FlowPreview::class)
@@ -264,12 +243,11 @@ class ZcashAdapter(
         //       related viewModelScope instead of the synchronizer's scope.
         //       synchronizer.coroutineScope cannot be accessed until the synchronizer is started
         val scope = synchronizer.coroutineScope
-        synchronizer.clearedTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onClearedTransactions)
-        synchronizer.pendingTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onPendingTransactions)
+        synchronizer.transactions.collectWith(scope, transactionsProvider::onTransactions)
         synchronizer.status.collectWith(scope, ::onStatus)
-        synchronizer.progress.distinctUntilChanged().collectWith(scope, ::onDownloadProgress)
+        synchronizer.progress.collectWith(scope, ::onDownloadProgress)
         synchronizer.saplingBalances.collectWith(scope, ::onBalance)
-        synchronizer.processorInfo.distinctUntilChanged().collectWith(scope, ::onProcessorInfo)
+        synchronizer.processorInfo.collectWith(scope, ::onProcessorInfo)
     }
 
     private fun onProcessorError(error: Throwable?): Boolean {
@@ -284,40 +262,18 @@ class ZcashAdapter(
         syncState = when (status) {
             Synchronizer.Status.STOPPED -> AdapterState.NotSynced(Exception("stopped"))
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
-            Synchronizer.Status.DOWNLOADING -> AdapterState.Zcash(
-                ZcashState.DownloadingBlocks(BlockProgress(null, null))
-            )
-            Synchronizer.Status.SCANNING -> AdapterState.Zcash(
-                ZcashState.ScanningBlocks(BlockProgress(null, null))
-            )
+            Synchronizer.Status.SYNCING -> AdapterState.Syncing()
             Synchronizer.Status.SYNCED -> AdapterState.Synced
             else -> syncState
         }
     }
 
-    private fun onDownloadProgress(progress: Int) {}
+    private fun onDownloadProgress(progress: PercentDecimal) {
+        syncState = AdapterState.Syncing(progress.toPercentage())
+    }
 
     private fun onProcessorInfo(processorInfo: CompactBlockProcessor.ProcessorInfo) {
-        if (processorInfo.isDownloading){
-            syncState = AdapterState.Zcash(
-                ZcashState.DownloadingBlocks(
-                    BlockProgress(
-                        processorInfo.lastDownloadedHeight?.value,
-                        processorInfo.networkBlockHeight?.value
-                    )
-                )
-            )
-        } else if(processorInfo.isScanning){
-            syncState = AdapterState.Zcash(
-                ZcashState.ScanningBlocks(
-                    BlockProgress(
-                        processorInfo.lastScannedHeight?.value,
-                        processorInfo.networkBlockHeight?.value
-                    )
-                )
-            )
-        }
-
+        syncState = AdapterState.Syncing()
         lastBlockUpdatedSubject.onNext(Unit)
     }
 
@@ -337,7 +293,7 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = defaultFee(transaction.minedHeight).convertZatoshiToZec(decimalCount),
+                fee = null,
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
@@ -356,7 +312,7 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = defaultFee(transaction.minedHeight).convertZatoshiToZec(decimalCount),
+                fee = null,
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
@@ -378,13 +334,6 @@ class ZcashAdapter(
         object InvalidAddress : ZcashError()
         object SendToSelfNotAllowed : ZcashError()
     }
-
-    sealed class ZcashState{
-        class DownloadingBlocks(val blockProgress: BlockProgress): ZcashState()
-        class ScanningBlocks(val blockProgress: BlockProgress): ZcashState()
-    }
-
-    class BlockProgress(val current: Long?, val total: Long?)
 
     companion object {
         private const val ALIAS_PREFIX = "zcash_"

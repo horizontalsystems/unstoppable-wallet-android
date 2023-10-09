@@ -822,6 +822,7 @@
     <string name="Settings_Appearance">Appearance</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
+    <string name="Settings_AutoLock">Auto-Lock</string>
 
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
@@ -840,6 +841,13 @@
     <string name="Settings_DonateWith">Donate with</string>
     <string name="Settings_Donate_GetAddress">Get Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
+
+    <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
 
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_Tab">TAB SETTINGS</string>
@@ -1415,6 +1423,7 @@
     <string name="CoinPage_SecurityParams_Audits">Audits</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
+    <string name="CoinPage_Overview">Overview</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Categories">Categories</string>
     <string name="CoinPage_Contracts">Contracts</string>
@@ -1787,6 +1796,7 @@
     <string name="PinSet_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>
     <string name="PinSet_ForDuress">Set a passcode to enable Duress Mode</string>
+    <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
 
     <!--Edit Pin-->
     <string name="EditPin_Title">Edit Passcode</string>

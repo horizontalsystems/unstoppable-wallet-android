@@ -102,7 +102,6 @@ class CoinViewFactory(
 
         return CoinOverviewViewItem(
             roi = getRoi(overview.performance),
-            categories = overview.categories.map { it.name },
             links = getLinks(overview, item.guideUrl),
             about = overview.description,
             marketData = getMarketItems(item)

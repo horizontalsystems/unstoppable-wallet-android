@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -16,12 +18,15 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
 
 class TransactionsViewModel(
     private val service: TransactionsService,
-    private val transactionViewItem2Factory: TransactionViewItemFactory
+    private val transactionViewItem2Factory: TransactionViewItemFactory,
+    private val balanceHiddenManager: BalanceHiddenManager
 ) : ViewModel() {
 
     var tmpItemToShow: TransactionItem? = null
@@ -90,6 +95,13 @@ class TransactionsViewModel(
             .let {
                 disposables.add(it)
             }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            balanceHiddenManager.balanceHiddenFlow.collect {
+                transactionViewItem2Factory.updateCache()
+                service.refreshList()
+            }
+        }
     }
 
     fun setFilterTransactionType(filterType: FilterTransactionType) {
@@ -142,6 +154,7 @@ data class TransactionViewItem(
     val primaryValue: ColoredValue?,
     val secondaryValue: ColoredValue?,
     val date: Date,
+    val showAmount: Boolean = true,
     val sentToSelf: Boolean = false,
     val doubleSpend: Boolean = false,
     val locked: Boolean? = null,

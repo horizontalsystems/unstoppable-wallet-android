@@ -237,6 +237,10 @@ class TokenTransactionsService(
 
     private val executorService = Executors.newCachedThreadPool()
 
+    fun refreshList() {
+        itemsSubject.onNext(transactionItems)
+    }
+
     fun loadNext() {
         executorService.submit {
             transactionRecordRepository.loadNext()
