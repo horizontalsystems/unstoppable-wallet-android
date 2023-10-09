@@ -8,7 +8,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,8 +22,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,10 +41,12 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
+import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
+import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -118,7 +127,6 @@ private fun RestoreLocalNavHost(
         composablePage("backup_file") {
             BackupFileItems(
                 viewModel,
-                onNextClick = { viewModel.restoreFullBackup() },
                 onBackClick = { navController.popBackStack() },
                 close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
             )
@@ -145,10 +153,10 @@ private fun RestoreLocalNavHost(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BackupFileItems(
     viewModel: RestoreLocalViewModel,
-    onNextClick: () -> Unit,
     onBackClick: () -> Unit,
     close: () -> Unit
 ) {
@@ -176,78 +184,109 @@ private fun BackupFileItems(
         }
     }
 
+    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.BackupManager_BаckupFile),
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackClick)
+        ModalBottomSheetLayout(
+            sheetState = bottomSheetState,
+            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+            sheetContent = {
+                ConfirmationBottomSheet(
+                    title = stringResource(R.string.BackupManager_MergeTitle),
+                    text = stringResource(R.string.BackupManager_MergeDescription),
+                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                    confirmText = stringResource(R.string.BackupManager_MergeButton),
+                    cautionType = Caution.Type.Warning,
+                    cancelText = stringResource(R.string.Button_Cancel),
+                    onConfirm = {
+                        viewModel.restoreFullBackup()
+                        coroutineScope.launch { bottomSheetState.hide() }
                     },
+                    onClose = {
+                        coroutineScope.launch { bottomSheetState.hide() }
+                    }
                 )
-            },
-            bottomBar = {
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.BackupManager_Restore),
-                        onClick = {
-                            onNextClick()
-                        }
-                    )
-                }
             }
         ) {
-            LazyColumn(modifier = Modifier.padding(it)) {
-                item {
-                    InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
-                }
-
-                item {
-                    HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                    CellUniversalLawrenceSection(items = backupItems.accounts, showFrame = true) { account ->
-                        RowUniversal(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                        ) {
-
-                            Column(modifier = Modifier.weight(1f)) {
-                                body_leah(text = account.name)
-                                if (!account.hasAnyBackup) {
-                                    subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
+            Scaffold(
+                backgroundColor = ComposeAppTheme.colors.tyler,
+                topBar = {
+                    AppBar(
+                        title = stringResource(R.string.BackupManager_BаckupFile),
+                        navigationIcon = {
+                            HsBackButton(onClick = onBackClick)
+                        },
+                    )
+                },
+                bottomBar = {
+                    ButtonsGroupWithShade {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = stringResource(R.string.BackupManager_Restore),
+                            onClick = {
+                                if (viewModel.shouldShowMergeWarning()) {
+                                    coroutineScope.launch { bottomSheetState.show() }
                                 } else {
+                                    viewModel.restoreFullBackup()
+                                }
+                            }
+                        )
+                    }
+                }
+            ) {
+                LazyColumn(modifier = Modifier.padding(it)) {
+                    item {
+                        InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
+                    }
+
+                    item {
+                        HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
+                        CellUniversalLawrenceSection(items = backupItems.accounts, showFrame = true) { account ->
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
+
+                                Column(modifier = Modifier.weight(1f)) {
+                                    body_leah(text = account.name)
+                                    if (!account.hasAnyBackup) {
+                                        subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
+                                    } else {
+                                        subhead2_grey(
+                                            text = account.type.detailedDescription,
+                                            overflow = TextOverflow.Ellipsis,
+                                            maxLines = 1
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    item {
+                        VSpacer(height = 24.dp)
+                        HeaderText(text = stringResource(id = R.string.BackupManager_Other))
+                        CellUniversalLawrenceSection(items = backupItems.others, showFrame = true) { item ->
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    body_leah(text = item.title)
                                     subhead2_grey(
-                                        text = account.type.detailedDescription,
+                                        text = item.subtitle,
                                         overflow = TextOverflow.Ellipsis,
                                         maxLines = 1
                                     )
                                 }
                             }
                         }
-                    }
-                }
 
-                item {
-                    VSpacer(height = 24.dp)
-                    HeaderText(text = stringResource(id = R.string.BackupManager_Other))
-                    CellUniversalLawrenceSection(items = backupItems.others, showFrame = true) { item ->
-                        RowUniversal(
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                body_leah(text = item.title)
-                                subhead2_grey(
-                                    text = item.subtitle,
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1
-                                )
-                            }
-                        }
+                        VSpacer(height = 32.dp)
                     }
-
-                    VSpacer(height = 32.dp)
                 }
             }
         }
