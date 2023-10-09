@@ -20,6 +20,9 @@ abstract class BaseEvmAdapter(
     override val debugInfo: String
         get() = evmKit.debugInfo()
 
+    val statusInfo: Map<String, Any>
+        get() = evmKit.statusInfo()
+
     // ISendEthereumAdapter
 
     protected fun scaleDown(amount: BigDecimal, decimals: Int = decimal): BigDecimal {
