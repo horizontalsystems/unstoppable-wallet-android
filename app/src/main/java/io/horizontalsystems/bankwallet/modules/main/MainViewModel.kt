@@ -282,6 +282,9 @@ class MainViewModel(
 
     private fun syncNavigation() {
         mainNavItems = navigationItems()
+        if (selectedPageIndex >= mainNavItems.size) {
+            selectedPageIndex = mainNavItems.size - 1
+        }
         syncState()
     }
 
