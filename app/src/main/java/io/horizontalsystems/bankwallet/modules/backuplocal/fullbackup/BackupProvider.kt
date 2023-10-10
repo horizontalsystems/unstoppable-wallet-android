@@ -35,6 +35,8 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
+import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
+import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
@@ -85,6 +87,7 @@ class BackupProvider(
     private val appIconService: AppIconService,
     private val themeService: ThemeService,
     private val chartIndicatorManager: ChartIndicatorManager,
+    private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val baseTokenManager: BaseTokenManager,
     private val launchScreenService: LaunchScreenService,
@@ -209,11 +212,7 @@ class BackupProvider(
             }
         }
 
-        if (settings.chartIndicatorsEnabled) {
-            chartIndicatorManager.enable()
-        } else {
-            chartIndicatorManager.disable()
-        }
+        restoreChartSettings(settings.chartIndicatorsEnabled, settings.chartIndicators)
 
         balanceHiddenManager.setBalanceAutoHidden(settings.balanceAutoHidden)
 
@@ -257,6 +256,60 @@ class BackupProvider(
 
 //            Log.e("ee", "appIcon: title=${settings.appIcon}, enum=${AppIcon.fromTitle(settings.appIcon)}")
 //            AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
+    }
+
+    private fun restoreChartSettings(
+        chartIndicatorsEnabled: Boolean,
+        chartIndicators: ChartIndicators
+    ) {
+        if (chartIndicatorsEnabled) {
+            chartIndicatorManager.enable()
+        } else {
+            chartIndicatorManager.disable()
+        }
+
+        val defaultChartSettings = ChartIndicatorSettingsDao.defaultData()
+
+        val rsi = chartIndicators.rsi
+        val rsiDefaults = defaultChartSettings.filter { it.type == ChartIndicatorSetting.IndicatorType.RSI }
+        val rsiChartSettings = rsiDefaults.sortedBy { it.index }.take(rsi.size).map { default ->
+            val imported = rsi[default.index - 1]
+            default.copy(
+                extraData = mapOf(
+                    "period" to imported.period.toString()
+                ),
+                enabled = imported.enabled
+            )
+        }
+
+        val ma = chartIndicators.ma
+        val maDefaults = defaultChartSettings.filter { it.type == ChartIndicatorSetting.IndicatorType.MA }
+        val maChartSettings = maDefaults.sortedBy { it.index }.take(ma.size).map { default ->
+            val imported = ma[default.index - 1]
+            default.copy(
+                extraData = mapOf(
+                    "period" to imported.period.toString(),
+                    "maType" to imported.type.uppercase(),
+                ),
+                enabled = imported.enabled
+            )
+        }
+
+        val macd = chartIndicators.macd
+        val macdDefaults = defaultChartSettings.filter { it.type == ChartIndicatorSetting.IndicatorType.MACD }
+        val macdChartSettings = macdDefaults.sortedBy { it.index }.take(macd.size).map { default ->
+            val imported = macd[default.index - 1]
+            default.copy(
+                extraData = mapOf(
+                    "fast" to imported.fast.toString(),
+                    "slow" to imported.slow.toString(),
+                    "signal" to imported.signal.toString(),
+                ),
+                enabled = imported.enabled
+            )
+        }
+
+        chartIndicatorSettingsDao.insertAll(rsiChartSettings + maChartSettings + macdChartSettings)
     }
 
     @Throws
@@ -466,11 +519,14 @@ class BackupProvider(
 
         val solanaSyncSource = SolanaSyncSource(BlockchainType.Solana.uid, solanaRpcSourceManager.rpcSource.name)
 
+        val chartIndicators = chartIndicators()
+
         val settings = Settings(
             balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
             appIcon = appIconService.optionsFlow.value.selected.titleText,
             currentTheme = themeService.optionsFlow.value.selected,
-            chartIndicatorsEnabled = chartIndicatorManager.isEnabledFlow.value,
+            chartIndicatorsEnabled = localStorage.chartIndicatorsEnabled,
+            chartIndicators = chartIndicators,
             balanceAutoHidden = balanceHiddenManager.balanceAutoHidden,
             conversionTokenQueryId = baseTokenManager.token?.tokenQuery?.id,
             swapProviders = swapProviders,
@@ -500,6 +556,41 @@ class BackupProvider(
         )
 
         return gson.toJson(fullBackup)
+    }
+
+    private fun chartIndicators(): ChartIndicators {
+        val indicators = chartIndicatorSettingsDao.getAllBlocking()
+        val rsi = indicators
+            .filter { it.type == ChartIndicatorSetting.IndicatorType.RSI }
+            .map { chartIndicatorSetting ->
+                val data = chartIndicatorSetting.getTypedDataRsi()
+                RsiBackup(
+                    period = data.period,
+                    enabled = chartIndicatorSetting.enabled
+                )
+            }
+        val ma = indicators
+            .filter { it.type == ChartIndicatorSetting.IndicatorType.MA }
+            .map { chartIndicatorSetting ->
+                val data = chartIndicatorSetting.getTypedDataMA()
+                MaBackup(
+                    type = data.maType.lowercase(),
+                    period = data.period,
+                    enabled = chartIndicatorSetting.enabled
+                )
+            }
+        val macd = indicators
+            .filter { it.type == ChartIndicatorSetting.IndicatorType.MACD }
+            .map { chartIndicatorSetting ->
+                val data = chartIndicatorSetting.getTypedDataMacd()
+                MacdBackup(
+                    fast = data.fast,
+                    slow = data.slow,
+                    signal = data.signal,
+                    enabled = chartIndicatorSetting.enabled
+                )
+            }
+        return ChartIndicators(rsi, ma, macd)
     }
 
     private fun getId(value: ByteArray): String {
@@ -646,6 +737,30 @@ data class SolanaSyncSource(
     val name: String
 )
 
+data class RsiBackup(
+    val period: Int,
+    val enabled: Boolean
+)
+
+data class MaBackup(
+    val type: String,
+    val period: Int,
+    val enabled: Boolean
+)
+
+data class MacdBackup(
+    val fast: Int,
+    val slow: Int,
+    val signal: Int,
+    val enabled: Boolean
+)
+
+data class ChartIndicators(
+    val rsi: List<RsiBackup>,
+    val ma: List<MaBackup>,
+    val macd: List<MacdBackup>
+)
+
 data class Settings(
     @SerializedName("balance_primary_value")
     val balanceViewType: BalanceViewType,
@@ -655,6 +770,8 @@ data class Settings(
     val currentTheme: ThemeType,
     @SerializedName("indicators_shown")
     val chartIndicatorsEnabled: Boolean,
+    @SerializedName("indicators")
+    val chartIndicators: ChartIndicators,
     @SerializedName("balance_auto_hide")
     val balanceAutoHidden: Boolean,
     @SerializedName("conversion_token_query_id")
