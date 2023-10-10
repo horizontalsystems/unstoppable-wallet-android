@@ -30,6 +30,7 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.pin.unlock.PinUnlockModule.InputState
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
+import cash.p.terminal.ui.compose.components.ButtonSecondaryYellow
 import cash.p.terminal.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -89,22 +90,28 @@ fun PinNumpad(
         ){
             if (showRandomizer) {
                 VSpacer(24.dp)
-                ButtonSecondaryDefault(
-                    title = if (isRandomized) {
-                        stringResource(R.string.Unlock_Regular)
+                val onClick = {
+                    isRandomized = !isRandomized
+                    numpadNumbers = if (isRandomized) {
+                        generateRandomNumpadNumbers()
                     } else {
-                        stringResource(R.string.Unlock_Random)
-                    },
-                    onClick = {
-                        isRandomized = !isRandomized
-                        numpadNumbers = if (isRandomized) {
-                            generateRandomNumpadNumbers()
-                        } else {
-                            generateOriginalNumpadNumbers()
-                        }
-                    },
-                    enabled = enabled
-                )
+                        generateOriginalNumpadNumbers()
+                    }
+                }
+
+                if (isRandomized) {
+                    ButtonSecondaryYellow(
+                        title = stringResource(R.string.Unlock_Random),
+                        onClick = onClick,
+                        enabled = enabled,
+                    )
+                } else {
+                    ButtonSecondaryDefault(
+                        title = stringResource(R.string.Unlock_Random),
+                        onClick = onClick,
+                        enabled = enabled,
+                    )
+                }
             }
         }
     }
