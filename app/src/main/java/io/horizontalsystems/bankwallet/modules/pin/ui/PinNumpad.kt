@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule.InputState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -89,22 +90,28 @@ fun PinNumpad(
         ){
             if (showRandomizer) {
                 VSpacer(24.dp)
-                ButtonSecondaryDefault(
-                    title = if (isRandomized) {
-                        stringResource(R.string.Unlock_Regular)
+                val onClick = {
+                    isRandomized = !isRandomized
+                    numpadNumbers = if (isRandomized) {
+                        generateRandomNumpadNumbers()
                     } else {
-                        stringResource(R.string.Unlock_Random)
-                    },
-                    onClick = {
-                        isRandomized = !isRandomized
-                        numpadNumbers = if (isRandomized) {
-                            generateRandomNumpadNumbers()
-                        } else {
-                            generateOriginalNumpadNumbers()
-                        }
-                    },
-                    enabled = enabled
-                )
+                        generateOriginalNumpadNumbers()
+                    }
+                }
+
+                if (isRandomized) {
+                    ButtonSecondaryYellow(
+                        title = stringResource(R.string.Unlock_Random),
+                        onClick = onClick,
+                        enabled = enabled,
+                    )
+                } else {
+                    ButtonSecondaryDefault(
+                        title = stringResource(R.string.Unlock_Random),
+                        onClick = onClick,
+                        enabled = enabled,
+                    )
+                }
             }
         }
     }
