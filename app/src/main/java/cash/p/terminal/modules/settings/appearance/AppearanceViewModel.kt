@@ -144,6 +144,9 @@ class AppearanceViewModel(
     }
 
     fun onSetMarketTabsEnabled(enabled: Boolean) {
+        if (enabled.not() && (launchScreenOptions.selected == LaunchPage.Market || launchScreenOptions.selected == LaunchPage.Watchlist)) {
+            launchScreenService.setLaunchScreen(LaunchPage.Auto)
+        }
         localStorage.marketsTabEnabled = enabled
 
         marketsTabEnabled = enabled
