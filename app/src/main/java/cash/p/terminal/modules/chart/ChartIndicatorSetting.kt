@@ -91,6 +91,9 @@ interface ChartIndicatorSettingsDao {
     @Query("SELECT * FROM ChartIndicatorSetting")
     fun getAll(): Flow<List<ChartIndicatorSetting>>
 
+    @Query("SELECT * FROM ChartIndicatorSetting")
+    fun getAllBlocking(): List<ChartIndicatorSetting>
+
     @Query("SELECT * FROM ChartIndicatorSetting WHERE enabled = 1")
     fun getEnabled(): List<ChartIndicatorSetting>
 

@@ -422,6 +422,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             appIconService = AppIconService(localStorage),
             themeService = ThemeService(localStorage),
             chartIndicatorManager = chartIndicatorManager,
+            chartIndicatorSettingsDao = appDatabase.chartIndicatorSettingsDao(),
             balanceHiddenManager = balanceHiddenManager,
             baseTokenManager = baseTokenManager,
             launchScreenService = LaunchScreenService(localStorage),
