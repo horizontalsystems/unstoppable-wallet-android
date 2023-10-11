@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +25,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 
@@ -64,54 +66,41 @@ fun SelectBackupItemsScreen(
 
                 when (uiState.viewState) {
                     ViewState.Success -> {
-                        item {
-                            HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                            CellUniversalLawrenceSection(items = uiState.wallets, showFrame = true) { wallet ->
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                    onClick = { viewModel.toggle(wallet) }
-                                ) {
+                        if (uiState.wallets.isNotEmpty()) {
+                            item {
+                                HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
+                                CellUniversalLawrenceSection(items = uiState.wallets, showFrame = true) { wallet ->
+                                    RowUniversal(
+                                        modifier = Modifier.padding(horizontal = 16.dp),
+                                        onClick = { viewModel.toggle(wallet) }
+                                    ) {
 
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        body_leah(text = wallet.name)
-                                        if (wallet.backupRequired) {
-                                            subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
-                                        } else {
-                                            subhead2_grey(
-                                                text = wallet.type,
-                                                overflow = TextOverflow.Ellipsis,
-                                                maxLines = 1
-                                            )
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            body_leah(text = wallet.name)
+                                            if (wallet.backupRequired) {
+                                                subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
+                                            } else {
+                                                subhead2_grey(
+                                                    text = wallet.type,
+                                                    overflow = TextOverflow.Ellipsis,
+                                                    maxLines = 1
+                                                )
+                                            }
                                         }
+                                        HsCheckbox(
+                                            checked = wallet.selected,
+                                            onCheckedChange = {
+                                                viewModel.toggle(wallet)
+                                            },
+                                        )
                                     }
-                                    HsCheckbox(
-                                        checked = wallet.selected,
-                                        onCheckedChange = {
-                                            viewModel.toggle(wallet)
-                                        },
-                                    )
                                 }
+                                VSpacer(height = 24.dp)
                             }
                         }
 
                         item {
-                            VSpacer(height = 24.dp)
-                            HeaderText(text = stringResource(id = R.string.BackupManager_Other))
-                            CellUniversalLawrenceSection(items = uiState.otherBackupItems, showFrame = true) { item ->
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        body_leah(text = item.title)
-                                        subhead2_grey(
-                                            text = item.subtitle,
-                                            overflow = TextOverflow.Ellipsis,
-                                            maxLines = 1
-                                        )
-                                    }
-                                }
-                            }
-
+                            OtherBackupItems(uiState.otherBackupItems)
                             VSpacer(height = 32.dp)
                         }
                     }
@@ -120,6 +109,36 @@ fun SelectBackupItemsScreen(
                     ViewState.Loading -> Unit
                 }
 
+            }
+        }
+    }
+}
+
+@Composable
+fun OtherBackupItems(otherBackupItems: List<SelectBackupItemsViewModel.OtherBackupViewItem>) {
+    HeaderText(text = stringResource(id = R.string.BackupManager_Other))
+    CellUniversalLawrenceSection(items = otherBackupItems, showFrame = true) { item ->
+        RowUniversal(
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Row {
+                    body_leah(text = item.title, modifier = Modifier.weight(1f))
+                    item.value?.let {
+                        subhead1_grey(
+                            text = item.value,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                    }
+                }
+                item.subtitle?.let {
+                    subhead2_grey(
+                        text = item.subtitle,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                }
             }
         }
     }
