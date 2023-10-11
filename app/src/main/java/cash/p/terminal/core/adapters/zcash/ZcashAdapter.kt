@@ -11,11 +11,27 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
 import cash.z.ecc.android.sdk.ext.fromHex
-import cash.z.ecc.android.sdk.model.*
+import cash.z.ecc.android.sdk.model.Account
+import cash.z.ecc.android.sdk.model.BlockHeight
+import cash.z.ecc.android.sdk.model.PercentDecimal
+import cash.z.ecc.android.sdk.model.WalletBalance
+import cash.z.ecc.android.sdk.model.Zatoshi
+import cash.z.ecc.android.sdk.model.ZcashNetwork
+import cash.z.ecc.android.sdk.model.defaultForNetwork
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
-import cash.p.terminal.core.*
+import cash.p.terminal.core.AdapterState
+import cash.p.terminal.core.App
+import cash.p.terminal.core.AppLogger
+import cash.p.terminal.core.BalanceData
+import cash.p.terminal.core.IAdapter
+import cash.p.terminal.core.IBalanceAdapter
+import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.core.ISendZcashAdapter
+import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
@@ -32,7 +48,6 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 import kotlin.math.max
@@ -293,7 +308,7 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = null,
+                fee = transaction.feePaid?.let { Zatoshi(it).convertZatoshiToZec(decimalCount) },
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
@@ -312,7 +327,7 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = null,
+                fee = transaction.feePaid?.let { Zatoshi(it).convertZatoshiToZec(decimalCount) },
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
