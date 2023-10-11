@@ -40,6 +40,7 @@ import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import cash.p.terminal.modules.chart.ChartIndicatorSettingsDao
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
+import cash.p.terminal.modules.settings.appearance.AppIcon
 import cash.p.terminal.modules.settings.appearance.AppIconService
 import cash.p.terminal.modules.settings.appearance.LaunchScreenService
 import cash.p.terminal.modules.swap.SwapMainModule
@@ -256,8 +257,9 @@ class BackupProvider(
 
         blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
 
-//            Log.e("ee", "appIcon: title=${settings.appIcon}, enum=${AppIcon.fromTitle(settings.appIcon)}")
-//            AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
+        if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
+            AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
+        }
     }
 
     private fun restoreChartSettings(
@@ -457,7 +459,7 @@ class BackupProvider(
 
         val settings = Settings(
             balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
-            appIcon = appIconService.optionsFlow.value.selected.titleText,
+            appIcon = localStorage.appIcon?.titleText ?: AppIcon.Main.titleText,
             currentTheme = themeService.optionsFlow.value.selected,
             chartIndicatorsEnabled = localStorage.chartIndicatorsEnabled,
             chartIndicators = chartIndicators,
