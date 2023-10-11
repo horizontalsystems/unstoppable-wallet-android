@@ -43,6 +43,7 @@ import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.OtherBackupItems
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
@@ -93,7 +94,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
                 findNavController(),
                 popUpToInclusiveId,
                 popUpInclusive
-            )
+            ) { activity?.let { MainModule.startAsNewTask(it) } }
         }
     }
 
@@ -105,7 +106,8 @@ private fun RestoreLocalNavHost(
     fileName: String?,
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
-    popUpInclusive: Boolean
+    popUpInclusive: Boolean,
+    reloadApp: () -> Unit,
 ) {
     val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
@@ -128,7 +130,8 @@ private fun RestoreLocalNavHost(
             BackupFileItems(
                 viewModel,
                 onBackClick = { navController.popBackStack() },
-                close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
+                close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
+                reloadApp = reloadApp
             )
         }
         composablePage("restore_select_coins") {
@@ -271,7 +274,8 @@ private fun RestoreLocalScreen(
 private fun BackupFileItems(
     viewModel: RestoreLocalViewModel,
     onBackClick: () -> Unit,
-    close: () -> Unit
+    close: () -> Unit,
+    reloadApp: () -> Unit
 ) {
     val uiState = viewModel.uiState
     val walletBackupViewItems = viewModel.uiState.walletBackupViewItems
@@ -288,6 +292,7 @@ private fun BackupFileItems(
             )
             delay(300)
             close.invoke()
+            reloadApp.invoke()
         }
     }
 
