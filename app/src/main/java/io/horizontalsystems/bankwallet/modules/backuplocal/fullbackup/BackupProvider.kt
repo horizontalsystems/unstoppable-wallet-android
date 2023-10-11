@@ -404,10 +404,8 @@ class BackupProvider(
             customRpcsCount = decryptedFullBackup.settings.evmSyncSources.custom.ifEmpty { null }?.size
         )
 
-    fun shouldShowMergeWarning(decryptedFullBackup: DecryptedFullBackup?): Boolean {
-        return decryptedFullBackup != null &&
-                (decryptedFullBackup.wallets.isNotEmpty() && accountManager.accounts.isNotEmpty() ||
-                        decryptedFullBackup.contacts.isNotEmpty() && contactsRepository.contacts.isNotEmpty())
+    fun shouldShowReplaceWarning(decryptedFullBackup: DecryptedFullBackup?): Boolean {
+        return decryptedFullBackup != null && decryptedFullBackup.contacts.isNotEmpty() && contactsRepository.contacts.isNotEmpty()
     }
 
     @Throws
