@@ -573,7 +573,7 @@ class BackupProvider(
             val tokenQuery = TokenQuery.fromId(it.tokenQueryId) ?: return@mapNotNull null
             val settings = settingsManager.settings(account, tokenQuery.blockchainType).values
             BackupLocalModule.EnabledWalletBackup(
-                tokenQueryId = it.tokenQueryId,
+                tokenQueryId = it.tokenQueryId.lowercase(),
                 coinName = it.coinName,
                 coinCode = it.coinCode,
                 decimals = it.coinDecimals,

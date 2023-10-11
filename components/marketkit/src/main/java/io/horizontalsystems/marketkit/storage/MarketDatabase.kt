@@ -1,6 +1,5 @@
 package io.horizontalsystems.marketkit.storage
 
-//import java.util.concurrent.Executors
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -11,6 +10,7 @@ import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.marketkit.storage.migrations.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
+//import java.util.concurrent.Executors
 import java.util.logging.Logger
 
 

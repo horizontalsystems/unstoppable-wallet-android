@@ -99,7 +99,7 @@ sealed class TokenType : Parcelable {
                 "address_type" -> {
                     if (reference.isNotBlank()) {
                         try {
-                            return AddressTyped(AddressType.valueOf(reference))
+                            return AddressTyped(AddressType.valueOf(reference.lowercase().replaceFirstChar(Char::uppercase)))
                         } catch (e: IllegalArgumentException) {
                         }
                     }
@@ -108,7 +108,7 @@ sealed class TokenType : Parcelable {
                 "derived" -> {
                     if (reference.isNotBlank()) {
                         try {
-                            return Derived(Derivation.valueOf(reference))
+                            return Derived(Derivation.valueOf(reference.lowercase().replaceFirstChar(Char::uppercase)))
                         } catch (e: IllegalArgumentException) {
                         }
                     }
