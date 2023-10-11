@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -202,6 +203,12 @@ class AppStatusViewModel(
             blockchainStatus["Solana"] = statusInfo
         }
 
+        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }?.let { wallet ->
+            (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
+                blockchainStatus["Zcash"] = adapter.statusInfo
+            }
+        }
+
         return blockchainStatus
     }
 
@@ -259,6 +266,14 @@ class AppStatusViewModel(
             val title = if (blocks.isEmpty()) "Blockchain Status" else null
             val block = getBlockchainInfoBlock(title, "Solana", it)
             blocks.add(block)
+        }
+
+        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }?.let { wallet ->
+            (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
+                val title = if (blocks.isEmpty()) "Blockchain Status" else null
+                val block = getBlockchainInfoBlock(title, "Zcash", adapter.statusInfo)
+                blocks.add(block)
+            }
         }
 
         return blocks
