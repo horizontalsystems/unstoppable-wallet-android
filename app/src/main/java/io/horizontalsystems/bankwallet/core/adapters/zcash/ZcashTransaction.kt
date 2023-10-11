@@ -14,6 +14,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     val minedHeight: Long?
     val timestamp: Long
     val value: Long
+    val feePaid: Long?
     val memo: String?
     val failed: Boolean
     val isIncoming: Boolean
@@ -31,6 +32,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
                 else -> 0
             }
             value = it.netValue.value
+            feePaid = it.feePaid?.value
             this.memo = memo
             failed = false
             isIncoming = !it.isSentTransaction
