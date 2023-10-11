@@ -85,6 +85,7 @@ fun LocalBackupPasswordScreen(
     }
 
     if (uiState.backupJson != null) {
+        App.pinComponent.keepUnlocked()
         backupLauncher.launch(viewModel.backupFileName)
     }
 
