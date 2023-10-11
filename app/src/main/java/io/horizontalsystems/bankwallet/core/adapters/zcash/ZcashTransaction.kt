@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters.zcash
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionState
+import cash.z.ecc.android.sdk.model.Zatoshi
 import java.util.Date
 
 class ZcashTransaction : Comparable<ZcashTransaction> {
@@ -13,8 +14,8 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     val expiryHeight: Int?
     val minedHeight: Long?
     val timestamp: Long
-    val value: Long
-    val feePaid: Long?
+    val value: Zatoshi
+    val feePaid: Zatoshi?
     val memo: String?
     val failed: Boolean
     val isIncoming: Boolean
@@ -31,8 +32,8 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
                 TransactionState.Pending -> Date().time / 1000
                 else -> 0
             }
-            value = it.netValue.value
-            feePaid = it.feePaid?.value
+            value = it.netValue
+            feePaid = it.feePaid
             this.memo = memo
             failed = false
             isIncoming = !it.isSentTransaction
