@@ -312,7 +312,7 @@ private fun BackupFileItems(
                     iconPainter = painterResource(R.drawable.icon_warning_2_20),
                     iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
                     confirmText = stringResource(R.string.BackupManager_MergeButton),
-                    cautionType = Caution.Type.Warning,
+                    cautionType = Caution.Type.Error,
                     cancelText = stringResource(R.string.Button_Cancel),
                     onConfirm = {
                         viewModel.restoreFullBackup()
@@ -342,7 +342,7 @@ private fun BackupFileItems(
                                 .padding(start = 16.dp, end = 16.dp),
                             title = stringResource(R.string.BackupManager_Restore),
                             onClick = {
-                                if (viewModel.shouldShowMergeWarning()) {
+                                if (viewModel.shouldShowReplaceWarning()) {
                                     coroutineScope.launch { bottomSheetState.show() }
                                 } else {
                                     viewModel.restoreFullBackup()
