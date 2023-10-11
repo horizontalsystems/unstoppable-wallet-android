@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -256,8 +257,9 @@ class BackupProvider(
 
         blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
 
-//            Log.e("ee", "appIcon: title=${settings.appIcon}, enum=${AppIcon.fromTitle(settings.appIcon)}")
-//            AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
+        if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
+            AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
+        }
     }
 
     private fun restoreChartSettings(
@@ -457,7 +459,7 @@ class BackupProvider(
 
         val settings = Settings(
             balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
-            appIcon = appIconService.optionsFlow.value.selected.titleText,
+            appIcon = localStorage.appIcon?.titleText ?: AppIcon.Main.titleText,
             currentTheme = themeService.optionsFlow.value.selected,
             chartIndicatorsEnabled = localStorage.chartIndicatorsEnabled,
             chartIndicators = chartIndicators,
