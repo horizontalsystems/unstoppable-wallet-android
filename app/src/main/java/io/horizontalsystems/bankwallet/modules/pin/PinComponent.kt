@@ -118,4 +118,8 @@ class PinComponent(
     override fun shouldShowPin(activity: Activity): Boolean {
         return isLocked && !excludedActivityNames.contains(activity::class.java.name)
     }
+
+    override fun keepUnlocked() {
+        appLockManager.keepUnlocked()
+    }
 }

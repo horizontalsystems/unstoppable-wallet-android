@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.pin.core
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.core.helpers.DateHelper
 import java.util.Date
 
@@ -13,6 +14,7 @@ class LockManager(
         private set
     private val lockTimeout = 60L
     private var appLastVisitTime: Long = 0
+    private var keepUnlocked = false
 
     fun didEnterBackground() {
         if (isLocked) {
@@ -30,6 +32,13 @@ class LockManager(
         val autoLockInterval = localStorage.autoLockInterval
         val secondsAgo = DateHelper.getSecondsAgo(appLastVisitTime)
 
+        if (keepUnlocked) {
+            keepUnlocked = false
+            if (autoLockInterval == AutoLockInterval.IMMEDIATE && secondsAgo < 60) {
+                return
+            }
+        }
+
         if (secondsAgo >= autoLockInterval.intervalInSeconds) {
             isLocked = true
         }
@@ -46,6 +55,10 @@ class LockManager(
     fun lock() {
         isLocked = true
         appLastVisitTime = 0
+    }
+
+    fun keepUnlocked() {
+        keepUnlocked = true
     }
 
 }
