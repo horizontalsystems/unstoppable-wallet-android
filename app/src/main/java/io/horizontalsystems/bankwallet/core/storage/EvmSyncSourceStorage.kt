@@ -11,6 +11,8 @@ class EvmSyncSourceStorage(appDatabase: AppDatabase) {
         return dao.getEvmSyncSources(blockchainType.uid)
     }
 
+    fun getAll() = dao.getAll()
+
     fun save(evmSyncSourceRecord: EvmSyncSourceRecord) {
         dao.insert(evmSyncSourceRecord)
     }

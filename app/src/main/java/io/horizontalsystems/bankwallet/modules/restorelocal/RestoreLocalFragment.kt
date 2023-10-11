@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -41,6 +40,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.OtherBackupItems
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -153,146 +153,6 @@ private fun RestoreLocalNavHost(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun BackupFileItems(
-    viewModel: RestoreLocalViewModel,
-    onBackClick: () -> Unit,
-    close: () -> Unit
-) {
-    val uiState = viewModel.uiState
-    val backupItems = viewModel.uiState.backupItems ?: return
-    val view = LocalView.current
-
-    LaunchedEffect(uiState.restored) {
-        if (uiState.restored) {
-            HudHelper.showSuccessMessage(
-                contenView = view,
-                resId = R.string.Hud_Text_Restored,
-                icon = R.drawable.icon_add_to_wallet_2_24,
-                iconTint = R.color.white
-            )
-            delay(300)
-            close.invoke()
-        }
-    }
-
-    LaunchedEffect(uiState.parseError) {
-        uiState.parseError?.let { error ->
-            Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
-            onBackClick.invoke()
-        }
-    }
-
-    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-
-    ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = bottomSheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                ConfirmationBottomSheet(
-                    title = stringResource(R.string.BackupManager_MergeTitle),
-                    text = stringResource(R.string.BackupManager_MergeDescription),
-                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
-                    confirmText = stringResource(R.string.BackupManager_MergeButton),
-                    cautionType = Caution.Type.Warning,
-                    cancelText = stringResource(R.string.Button_Cancel),
-                    onConfirm = {
-                        viewModel.restoreFullBackup()
-                        coroutineScope.launch { bottomSheetState.hide() }
-                    },
-                    onClose = {
-                        coroutineScope.launch { bottomSheetState.hide() }
-                    }
-                )
-            }
-        ) {
-            Scaffold(
-                backgroundColor = ComposeAppTheme.colors.tyler,
-                topBar = {
-                    AppBar(
-                        title = stringResource(R.string.BackupManager_BаckupFile),
-                        navigationIcon = {
-                            HsBackButton(onClick = onBackClick)
-                        },
-                    )
-                },
-                bottomBar = {
-                    ButtonsGroupWithShade {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.BackupManager_Restore),
-                            onClick = {
-                                if (viewModel.shouldShowMergeWarning()) {
-                                    coroutineScope.launch { bottomSheetState.show() }
-                                } else {
-                                    viewModel.restoreFullBackup()
-                                }
-                            }
-                        )
-                    }
-                }
-            ) {
-                LazyColumn(modifier = Modifier.padding(it)) {
-                    item {
-                        InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
-                    }
-
-                    item {
-                        HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                        CellUniversalLawrenceSection(items = backupItems.accounts, showFrame = true) { account ->
-                            RowUniversal(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                            ) {
-
-                                Column(modifier = Modifier.weight(1f)) {
-                                    body_leah(text = account.name)
-                                    if (!account.hasAnyBackup) {
-                                        subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
-                                    } else {
-                                        subhead2_grey(
-                                            text = account.type.detailedDescription,
-                                            overflow = TextOverflow.Ellipsis,
-                                            maxLines = 1
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    item {
-                        VSpacer(height = 24.dp)
-                        HeaderText(text = stringResource(id = R.string.BackupManager_Other))
-                        CellUniversalLawrenceSection(items = backupItems.others, showFrame = true) { item ->
-                            RowUniversal(
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    body_leah(text = item.title)
-                                    subhead2_grey(
-                                        text = item.subtitle,
-                                        overflow = TextOverflow.Ellipsis,
-                                        maxLines = 1
-                                    )
-                                }
-                            }
-                        }
-
-                        VSpacer(height = 32.dp)
-                    }
-                }
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun RestoreLocalScreen(
@@ -305,8 +165,8 @@ private fun RestoreLocalScreen(
 ) {
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(uiState.restored) {
         if (uiState.restored) {
@@ -328,10 +188,9 @@ private fun RestoreLocalScreen(
         }
     }
 
-    uiState.showSelectCoins?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true)
-        val keyboardController = LocalSoftwareKeyboardController.current
-        coroutineScope.launch {
+    LaunchedEffect(uiState.showSelectCoins) {
+        uiState.showSelectCoins?.let { accountType ->
+            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true)
             keyboardController?.hide()
             delay(300)
             openSelectCoins.invoke()
@@ -339,9 +198,8 @@ private fun RestoreLocalScreen(
         }
     }
 
-    if (uiState.showBackupItems) {
-        val keyboardController = LocalSoftwareKeyboardController.current
-        coroutineScope.launch {
+    LaunchedEffect(uiState.showBackupItems) {
+        if (uiState.showBackupItems) {
             keyboardController?.hide()
             delay(300)
             openBackupItems.invoke()
@@ -402,6 +260,133 @@ private fun RestoreLocalScreen(
                             viewModel.onImportClick()
                         },
                     )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun BackupFileItems(
+    viewModel: RestoreLocalViewModel,
+    onBackClick: () -> Unit,
+    close: () -> Unit
+) {
+    val uiState = viewModel.uiState
+    val walletBackupViewItems = viewModel.uiState.walletBackupViewItems
+    val otherBackupViewItems = viewModel.uiState.otherBackupViewItems
+    val view = LocalView.current
+
+    LaunchedEffect(uiState.restored) {
+        if (uiState.restored) {
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_Restored,
+                icon = R.drawable.icon_add_to_wallet_2_24,
+                iconTint = R.color.white
+            )
+            delay(300)
+            close.invoke()
+        }
+    }
+
+    LaunchedEffect(uiState.parseError) {
+        uiState.parseError?.let { error ->
+            Toast.makeText(App.instance, error.message ?: error.javaClass.simpleName, Toast.LENGTH_LONG).show()
+            onBackClick.invoke()
+        }
+    }
+
+    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+
+    ComposeAppTheme {
+        ModalBottomSheetLayout(
+            sheetState = bottomSheetState,
+            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+            sheetContent = {
+                ConfirmationBottomSheet(
+                    title = stringResource(R.string.BackupManager_MergeTitle),
+                    text = stringResource(R.string.BackupManager_MergeDescription),
+                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                    confirmText = stringResource(R.string.BackupManager_MergeButton),
+                    cautionType = Caution.Type.Warning,
+                    cancelText = stringResource(R.string.Button_Cancel),
+                    onConfirm = {
+                        viewModel.restoreFullBackup()
+                        coroutineScope.launch { bottomSheetState.hide() }
+                    },
+                    onClose = {
+                        coroutineScope.launch { bottomSheetState.hide() }
+                    }
+                )
+            }
+        ) {
+            Scaffold(
+                backgroundColor = ComposeAppTheme.colors.tyler,
+                topBar = {
+                    AppBar(
+                        title = stringResource(R.string.BackupManager_BаckupFile),
+                        navigationIcon = {
+                            HsBackButton(onClick = onBackClick)
+                        },
+                    )
+                },
+                bottomBar = {
+                    ButtonsGroupWithShade {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = stringResource(R.string.BackupManager_Restore),
+                            onClick = {
+                                if (viewModel.shouldShowMergeWarning()) {
+                                    coroutineScope.launch { bottomSheetState.show() }
+                                } else {
+                                    viewModel.restoreFullBackup()
+                                }
+                            }
+                        )
+                    }
+                }
+            ) {
+                LazyColumn(modifier = Modifier.padding(it)) {
+                    item {
+                        InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
+                    }
+
+                    if (walletBackupViewItems.isNotEmpty()) {
+                        item {
+                            HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
+                            CellUniversalLawrenceSection(items = walletBackupViewItems, showFrame = true) { walletBackupViewItem ->
+                                RowUniversal(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                ) {
+
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        body_leah(text = walletBackupViewItem.name)
+                                        if (walletBackupViewItem.backupRequired) {
+                                            subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
+                                        } else {
+                                            subhead2_grey(
+                                                text = walletBackupViewItem.type,
+                                                overflow = TextOverflow.Ellipsis,
+                                                maxLines = 1
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            VSpacer(height = 24.dp)
+                        }
+                    }
+
+                    item {
+                        OtherBackupItems(otherBackupViewItems)
+                        VSpacer(height = 32.dp)
+                    }
                 }
             }
         }
