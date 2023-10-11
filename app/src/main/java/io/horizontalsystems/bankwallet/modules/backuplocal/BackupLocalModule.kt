@@ -11,7 +11,7 @@ import io.horizontalsystems.tronkit.toBigInteger
 object BackupLocalModule {
     private const val MNEMONIC = "mnemonic"
     private const val PRIVATE_KEY = "private_key"
-    private const val ADDRESS = "address"
+    private const val ADDRESS = "evm_address"
     private const val SOLANA_ADDRESS = "solana_address"
     private const val TRON_ADDRESS = "tron_address"
     private const val HD_EXTENDED_LEY = "hd_extended_key"
