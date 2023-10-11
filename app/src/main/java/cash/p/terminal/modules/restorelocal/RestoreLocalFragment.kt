@@ -43,6 +43,7 @@ import cash.p.terminal.core.composablePopup
 import cash.p.terminal.modules.backuplocal.fullbackup.OtherBackupItems
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
@@ -93,7 +94,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
                 findNavController(),
                 popUpToInclusiveId,
                 popUpInclusive
-            )
+            ) { activity?.let { MainModule.startAsNewTask(it) } }
         }
     }
 
@@ -105,7 +106,8 @@ private fun RestoreLocalNavHost(
     fileName: String?,
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
-    popUpInclusive: Boolean
+    popUpInclusive: Boolean,
+    reloadApp: () -> Unit,
 ) {
     val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
@@ -128,7 +130,8 @@ private fun RestoreLocalNavHost(
             BackupFileItems(
                 viewModel,
                 onBackClick = { navController.popBackStack() },
-                close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
+                close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
+                reloadApp = reloadApp
             )
         }
         composablePage("restore_select_coins") {
@@ -271,7 +274,8 @@ private fun RestoreLocalScreen(
 private fun BackupFileItems(
     viewModel: RestoreLocalViewModel,
     onBackClick: () -> Unit,
-    close: () -> Unit
+    close: () -> Unit,
+    reloadApp: () -> Unit
 ) {
     val uiState = viewModel.uiState
     val walletBackupViewItems = viewModel.uiState.walletBackupViewItems
@@ -288,6 +292,7 @@ private fun BackupFileItems(
             )
             delay(300)
             close.invoke()
+            reloadApp.invoke()
         }
     }
 
