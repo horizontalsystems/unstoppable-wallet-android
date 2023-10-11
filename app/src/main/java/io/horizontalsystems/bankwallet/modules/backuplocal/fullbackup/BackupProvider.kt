@@ -255,7 +255,9 @@ class BackupProvider(
             blockchainSettingsStorage.save(syncSource.url, blockchainType)
         }
 
-        blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
+        settings.solanaSyncSource?.let {
+            blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
+        }
 
         if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
             AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
@@ -732,7 +734,7 @@ data class Settings(
     @SerializedName("evm_sync_sources")
     val evmSyncSources: EvmSyncSources,
     @SerializedName("solana_sync_source")
-    val solanaSyncSource: SolanaSyncSource
+    val solanaSyncSource: SolanaSyncSource?
 )
 
 sealed class RestoreException(message: String) : Exception(message) {
