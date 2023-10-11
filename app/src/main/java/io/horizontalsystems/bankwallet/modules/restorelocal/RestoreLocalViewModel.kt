@@ -145,8 +145,8 @@ class RestoreLocalViewModel(
         }
     }
 
-    fun shouldShowMergeWarning(): Boolean {
-        return backupProvider.shouldShowMergeWarning(decryptedFullBackup)
+    fun shouldShowReplaceWarning(): Boolean {
+        return backupProvider.shouldShowReplaceWarning(decryptedFullBackup)
     }
 
     fun restoreFullBackup() {
