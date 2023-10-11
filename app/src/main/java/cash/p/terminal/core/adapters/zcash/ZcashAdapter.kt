@@ -153,6 +153,14 @@ class ZcashAdapter(
     override val balanceData: BalanceData
         get() = BalanceData(balance, balanceLocked)
 
+    val statusInfo: Map<String, Any>
+        get() {
+            val statusInfo = LinkedHashMap<String, Any>()
+            statusInfo["Last Block Info"] = lastBlockInfo ?: ""
+            statusInfo["Sync State"] = syncState
+            return statusInfo
+        }
+
     private val balance: BigDecimal
         get() {
             val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
