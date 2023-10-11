@@ -12,6 +12,9 @@ interface EvmSyncSourceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: EvmSyncSourceRecord)
 
+    @Query("SELECT * FROM EvmSyncSourceRecord")
+    fun getAll(): List<EvmSyncSourceRecord>
+
     @Query("SELECT * FROM EvmSyncSourceRecord WHERE blockchainTypeUid = :blockchainTypeUid")
     fun getEvmSyncSources(blockchainTypeUid: String): List<EvmSyncSourceRecord>
 

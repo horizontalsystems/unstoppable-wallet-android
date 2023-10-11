@@ -12,11 +12,13 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule.WalletBackup
-import cash.p.terminal.modules.backuplocal.fullbackup.BackupItems
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
+import cash.p.terminal.modules.backuplocal.fullbackup.BackupViewItemFactory
 import cash.p.terminal.modules.backuplocal.fullbackup.DecryptedFullBackup
 import cash.p.terminal.modules.backuplocal.fullbackup.FullBackup
 import cash.p.terminal.modules.backuplocal.fullbackup.RestoreException
+import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.OtherBackupViewItem
+import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.WalletBackupViewItem
 import cash.p.terminal.modules.restorelocal.RestoreLocalModule.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,6 +29,7 @@ class RestoreLocalViewModel(
     private val backupJsonString: String?,
     private val accountFactory: IAccountFactory,
     private val backupProvider: BackupProvider,
+    private val backupViewItemFactory: BackupViewItemFactory,
     fileName: String?,
 ) : ViewModel() {
 
@@ -41,7 +44,8 @@ class RestoreLocalViewModel(
     private var restored = false
 
     private var decryptedFullBackup: DecryptedFullBackup? = null
-    private var backupItems: BackupItems? = null
+    private var walletBackupViewItems: List<WalletBackupViewItem> = emptyList()
+    private var otherBackupViewItems: List<OtherBackupViewItem> = emptyList()
     private var showBackupItems = false
 
     val accountName by lazy {
@@ -62,7 +66,8 @@ class RestoreLocalViewModel(
             showSelectCoins = showSelectCoins,
             manualBackup = manualBackup,
             restored = restored,
-            backupItems = backupItems,
+            walletBackupViewItems = walletBackupViewItems,
+            otherBackupViewItems = otherBackupViewItems,
             showBackupItems = showBackupItems
         )
     )
@@ -118,9 +123,12 @@ class RestoreLocalViewModel(
         return viewModelScope.launch(Dispatchers.IO) {
             try {
                 val decrypted = backupProvider.decryptedFullBackup(it, passphrase)
-                backupItems = backupProvider.fullBackupItems(decrypted)
-                decryptedFullBackup = decrypted
+                val backupItems = backupProvider.fullBackupItems(decrypted)
+                val backupViewItems = backupViewItemFactory.backupViewItems(backupItems)
 
+                walletBackupViewItems = backupViewItems.first
+                otherBackupViewItems = backupViewItems.second
+                decryptedFullBackup = decrypted
                 showBackupItems = true
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
@@ -138,7 +146,7 @@ class RestoreLocalViewModel(
     }
 
     fun shouldShowMergeWarning(): Boolean {
-       return backupProvider.shouldShowMergeWarning(decryptedFullBackup)
+        return backupProvider.shouldShowMergeWarning(decryptedFullBackup)
     }
 
     fun restoreFullBackup() {
@@ -216,7 +224,8 @@ class RestoreLocalViewModel(
             showSelectCoins = showSelectCoins,
             manualBackup = manualBackup,
             restored = restored,
-            backupItems = backupItems,
+            walletBackupViewItems = walletBackupViewItems,
+            otherBackupViewItems = otherBackupViewItems,
             showBackupItems = showBackupItems
         )
     }

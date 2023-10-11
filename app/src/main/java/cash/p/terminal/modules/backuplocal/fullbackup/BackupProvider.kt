@@ -24,6 +24,7 @@ import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
+import cash.p.terminal.core.storage.EvmSyncSourceStorage
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
@@ -94,6 +95,7 @@ class BackupProvider(
     private val currencyManager: CurrencyManager,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
+    private val evmSyncSourceStorage: EvmSyncSourceStorage,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val contactsRepository: ContactsRepository
 ) {
@@ -373,100 +375,34 @@ class BackupProvider(
         accounts: List<Account>,
         watchlist: List<String>,
         contacts: List<Contact>,
-        isLockTimeEnabled: Boolean,
-        language: String,
-        currency: String
+        customRpcsCount: Int?
     ): BackupItems {
-        val wallets = accounts.filter { !it.isWatchAccount }.sortedBy { it.name.lowercase() }
-
-        val otherBackupItems = buildList {
-            val watchWallets = accounts.filter { it.isWatchAccount }
-            if (watchWallets.isNotEmpty()) {
-                add(
-                    BackupItem(
-                        title = Translator.getString(R.string.BackupManager_WatchWallets),
-                        subtitle = Translator.getString(R.string.BackupManager_Addresses, watchWallets.size),
-                    )
-                )
-            }
-
-            if (watchlist.isNotEmpty()) {
-                add(
-                    BackupItem(
-                        title = Translator.getString(R.string.BackupManager_WatchlistTitle),
-                        subtitle = Translator.getString(R.string.BackupManager_WatchlistDescription),
-                    )
-                )
-            }
-
-            if (contacts.isNotEmpty()) {
-                add(
-                    BackupItem(
-                        title = Translator.getString(R.string.Contacts),
-                        subtitle = Translator.getString(R.string.BackupManager_Addresses, contacts.size)
-                    )
-                )
-            }
-
-            add(
-                BackupItem(
-                    title = Translator.getString(R.string.BlockchainSettings_Title),
-                    subtitle = Translator.getString(R.string.BackupManager_BlockchainSettingsDescription)
-                )
-            )
-
-            add(
-                BackupItem(
-                    title = Translator.getString(R.string.Info_LockTime_Title),
-                    subtitle = if (isLockTimeEnabled)
-                        Translator.getString(R.string.BackupManager_Enabled)
-                    else
-                        Translator.getString(R.string.BackupManager_Disabled)
-                )
-            )
-
-            add(
-                BackupItem(
-                    title = Translator.getString(R.string.CoinPage_Indicators),
-                    subtitle = "MA, MACD, RSI"
-                )
-            )
-
-            add(
-                BackupItem(
-                    title = Translator.getString(R.string.BackupManager_LanguageAndCurrency),
-                    subtitle = "$language, $currency"
-                )
-            )
-
-            add(
-                BackupItem(
-                    title = Translator.getString(R.string.Settings_Appearance),
-                    subtitle = Translator.getString(R.string.BackupManager_AppearanceSettingsDescription)
-                )
-            )
-        }
-
-        return BackupItems(wallets, otherBackupItems)
+        val nonWatchAccounts = accounts.filter { !it.isWatchAccount }.sortedBy { it.name.lowercase() }
+        val watchAccounts = accounts.filter { it.isWatchAccount }
+        return BackupItems(
+            accounts = nonWatchAccounts,
+            watchWallets = watchAccounts.ifEmpty { null }?.size,
+            watchlist = watchlist.ifEmpty { null }?.size,
+            contacts = contacts.ifEmpty { null }?.size,
+            customRpc = customRpcsCount,
+        )
     }
 
-    fun fullBackupItems() = fullBackupItems(
-        accounts = accountManager.accounts,
-        watchlist = marketFavoritesManager.getAll().map { it.coinUid },
-        contacts = contactsRepository.contacts,
-        isLockTimeEnabled = localStorage.isLockTimeEnabled,
-        language = languageManager.currentLanguageName,
-        currency = currencyManager.baseCurrency.code,
-    )
+    fun fullBackupItems() =
+        fullBackupItems(
+            accounts = accountManager.accounts,
+            watchlist = marketFavoritesManager.getAll().map { it.coinUid },
+            contacts = contactsRepository.contacts,
+            customRpcsCount = evmSyncSourceStorage.getAll().ifEmpty { null }?.size
+        )
 
-    fun fullBackupItems(decryptedFullBackup: DecryptedFullBackup): BackupItems = fullBackupItems(
-        accounts = decryptedFullBackup.wallets.map { it.account },
-        watchlist = decryptedFullBackup.watchlist,
-        contacts = decryptedFullBackup.contacts,
-        isLockTimeEnabled = decryptedFullBackup.settings.lockTimeEnabled,
-        language = languageManager.getName(decryptedFullBackup.settings.language),
-        currency = decryptedFullBackup.settings.baseCurrency,
-    )
+    fun fullBackupItems(decryptedFullBackup: DecryptedFullBackup) =
+        fullBackupItems(
+            accounts = decryptedFullBackup.wallets.map { it.account },
+            watchlist = decryptedFullBackup.watchlist,
+            contacts = decryptedFullBackup.contacts,
+            customRpcsCount = decryptedFullBackup.settings.evmSyncSources.custom.ifEmpty { null }?.size
+        )
 
     fun shouldShowMergeWarning(decryptedFullBackup: DecryptedFullBackup?): Boolean {
         return decryptedFullBackup != null &&
@@ -685,7 +621,10 @@ data class BackupItem(
 
 data class BackupItems(
     val accounts: List<Account>,
-    val others: List<BackupItem>
+    val watchWallets: Int?,
+    val watchlist: Int?,
+    val contacts: Int?,
+    val customRpc: Int?,
 )
 
 data class WalletBackup2(

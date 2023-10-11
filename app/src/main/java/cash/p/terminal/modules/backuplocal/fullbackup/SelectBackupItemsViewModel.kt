@@ -14,11 +14,12 @@ import kotlinx.coroutines.launch
 
 class SelectBackupItemsViewModel(
     private val backupProvider: BackupProvider,
+    private val backupViewItemFactory: BackupViewItemFactory
 ) : ViewModel() {
 
     private var viewState: ViewState = ViewState.Loading
     private var wallets: List<WalletBackupViewItem> = emptyList()
-    private var otherBackupItems: List<BackupItem> = emptyList()
+    private var otherBackupItems: List<OtherBackupViewItem> = emptyList()
 
     var uiState by mutableStateOf(
         UIState(
@@ -35,16 +36,10 @@ class SelectBackupItemsViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             val backupItems = backupProvider.fullBackupItems()
-            wallets = backupItems.accounts.map { account ->
-                WalletBackupViewItem(
-                    account = account,
-                    name = account.name,
-                    type = account.type.detailedDescription,
-                    backupRequired = !account.hasAnyBackup,
-                    selected = true
-                )
-            }
-            otherBackupItems = backupItems.others
+            val viewItems = backupViewItemFactory.backupViewItems(backupItems)
+
+            wallets = viewItems.first
+            otherBackupItems = viewItems.second
             viewState = ViewState.Success
 
             emitState()
@@ -72,7 +67,7 @@ class SelectBackupItemsViewModel(
     data class UIState(
         val viewState: ViewState,
         val wallets: List<WalletBackupViewItem>,
-        val otherBackupItems: List<BackupItem>
+        val otherBackupItems: List<OtherBackupViewItem>
     )
 
     data class WalletBackupViewItem(
@@ -83,10 +78,16 @@ class SelectBackupItemsViewModel(
         val selected: Boolean
     )
 
+    data class OtherBackupViewItem(
+        val title: String,
+        val value: String? = null,
+        val subtitle: String? = null
+    )
+
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SelectBackupItemsViewModel(App.backupProvider) as T
+            return SelectBackupItemsViewModel(App.backupProvider, BackupViewItemFactory()) as T
         }
     }
 
