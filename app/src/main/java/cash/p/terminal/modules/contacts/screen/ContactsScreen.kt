@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.modules.contacts.ContactsModule
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
@@ -296,6 +297,7 @@ fun ContactsScreen(
                                     }
                                 }
                                 ContactsModule.ContactsAction.Backup -> {
+                                    App.pinComponent.keepUnlocked()
                                     backupLauncher.launch(viewModel.backupFileName)
                                 }
                             }
