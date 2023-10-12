@@ -38,6 +38,7 @@ class EvmSyncSourceManager(
             BlockchainType.ArbitrumOne -> TransactionSource.arbiscan(appConfigProvider.arbiscanApiKey)
             BlockchainType.Gnosis -> TransactionSource.gnosis(appConfigProvider.gnosisscanApiKey)
             BlockchainType.Fantom -> TransactionSource.fantom(appConfigProvider.ftmscanApiKey)
+            BlockchainType.Rootstock -> TransactionSource.rootstock()
             else -> throw Exception("Non-supported EVM blockchain")
         }
     }
@@ -106,6 +107,20 @@ class EvmSyncSourceManager(
                     RpcSource.Http(listOf(URL("https://polygon.llamarpc.com")), null),
                     defaultTransactionSource(type)
                 )
+            )
+            BlockchainType.Rootstock -> listOf(
+                    evmSyncSource(
+                            type,
+                            "Rootstock RPC",
+                            RpcSource.rootstockRpcHttp(),
+                            defaultTransactionSource(type)
+                    ),
+                    evmSyncSource(
+                            type,
+                            "MyCryptoNodes",
+                            RpcSource.Http(listOf(URL("https://mycrypto.rsk.co")), null),
+                            defaultTransactionSource(type)
+                    )
             )
             BlockchainType.Avalanche -> listOf(
                 evmSyncSource(

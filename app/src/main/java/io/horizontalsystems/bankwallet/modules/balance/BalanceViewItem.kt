@@ -88,6 +88,7 @@ class BalanceViewItemFactory {
         BlockchainType.BinanceSmartChain,
         BlockchainType.BinanceChain,
         BlockchainType.Polygon,
+        BlockchainType.Rootstock,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.Solana,

@@ -67,6 +67,7 @@ class TransactionRecordRepository(
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
+                BlockchainType.Rootstock,
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.ArbitrumOne,

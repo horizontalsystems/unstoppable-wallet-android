@@ -92,6 +92,7 @@ class Eip20Adapter(
                 Chain.Ethereum,
                 Chain.BinanceSmartChain,
                 Chain.Polygon,
+                Chain.Rootstock,
                 Chain.Avalanche,
                 Chain.Optimism,
                 Chain.ArbitrumOne,

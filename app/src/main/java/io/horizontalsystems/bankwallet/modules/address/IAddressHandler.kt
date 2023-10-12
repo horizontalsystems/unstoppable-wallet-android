@@ -95,6 +95,7 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
             BlockchainType.BinanceSmartChain,
             BlockchainType.BinanceChain,
             BlockchainType.Polygon,
+            BlockchainType.Rootstock,
             BlockchainType.Optimism,
             BlockchainType.Avalanche,
             BlockchainType.Gnosis,
@@ -121,6 +122,7 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
                 BlockchainType.Polygon -> "MATIC"
                 BlockchainType.Avalanche -> "AVAX"
                 BlockchainType.Ethereum,
+                BlockchainType.Rootstock,
                 BlockchainType.Optimism,
                 BlockchainType.ArbitrumOne,
                 BlockchainType.Gnosis,

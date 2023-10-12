@@ -116,6 +116,7 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Ethereum,
                     BlockchainType.BinanceSmartChain,
                     BlockchainType.Polygon,
+                    BlockchainType.Rootstock,
                     BlockchainType.Avalanche,
                     BlockchainType.Optimism,
                     BlockchainType.Gnosis,

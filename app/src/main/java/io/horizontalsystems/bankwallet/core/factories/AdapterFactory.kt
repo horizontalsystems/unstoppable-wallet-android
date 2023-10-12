@@ -94,6 +94,7 @@ class AdapterFactory(
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
+            BlockchainType.Rootstock,
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
             BlockchainType.Gnosis,
@@ -167,6 +168,7 @@ class AdapterFactory(
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
+            BlockchainType.Rootstock,
             BlockchainType.Optimism,
             BlockchainType.ArbitrumOne -> {
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
@@ -190,6 +192,7 @@ class AdapterFactory(
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
+            BlockchainType.Rootstock,
             BlockchainType.Optimism,
             BlockchainType.ArbitrumOne -> {
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)

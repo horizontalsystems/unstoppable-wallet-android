@@ -68,6 +68,7 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
                 Chain.Optimism,
                 Chain.ArbitrumOne,
                 Chain.Gnosis,
+                Chain.Rootstock
             )
             networkTypes.forEach {
                 EthereumKit.clear(App.instance, it, walletId)

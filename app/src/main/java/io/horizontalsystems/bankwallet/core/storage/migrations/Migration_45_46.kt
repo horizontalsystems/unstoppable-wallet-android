@@ -66,6 +66,9 @@ object Migration_45_46 : Migration(45, 46) {
             is CoinType.Polygon -> {
                 TokenQuery(BlockchainType.Polygon, TokenType.Native)
             }
+            is CoinType.Rootstock -> {
+                TokenQuery(BlockchainType.Rootstock, TokenType.Native)
+            }
             is CoinType.EthereumOptimism -> {
                 TokenQuery(BlockchainType.Optimism, TokenType.Native)
             }
@@ -150,6 +153,9 @@ private sealed class CoinType : Parcelable {
     object Polygon : CoinType()
 
     @Parcelize
+    object Rootstock : CoinType()
+
+    @Parcelize
     object EthereumOptimism : CoinType()
 
     @Parcelize
@@ -229,6 +235,7 @@ private sealed class CoinType : Parcelable {
             is Bep2 -> "bep2|$symbol"
             is Avalanche -> "avalanche|$address"
             is Fantom -> "fantom|$address"
+            is Rootstock -> "rootstock"
             is HarmonyShard0 -> "harmonyShard0|$address"
             is HuobiToken -> "huobiToken|$address"
             is Iotex -> "iotex|$address"
@@ -258,6 +265,7 @@ private sealed class CoinType : Parcelable {
         Ethereum -> "ethereum"
         BinanceSmartChain -> "binanceSmartChain"
         Polygon -> "polygon"
+        Rootstock -> "rootstock"
         EthereumOptimism -> "ethereumOptimism"
         EthereumArbitrumOne -> "ethereumArbitrumOne"
         is Erc20 -> shorted("erc20", address)
@@ -298,6 +306,7 @@ private sealed class CoinType : Parcelable {
                     "ethereum" -> Ethereum
                     "binanceSmartChain" -> BinanceSmartChain
                     "polygon" -> Polygon
+                    "rootstock" -> Rootstock
                     "ethereumOptimism" -> EthereumOptimism
                     "ethereumArbitrumOne" -> EthereumArbitrumOne
                     else -> Unsupported(chunks[0])

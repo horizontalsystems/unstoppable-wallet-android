@@ -24,6 +24,7 @@ class AddTokenService(
         BlockchainType.BinanceSmartChain,
         BlockchainType.Tron,
         BlockchainType.Polygon,
+        BlockchainType.Rootstock,
         BlockchainType.Avalanche,
         BlockchainType.BinanceChain,
         BlockchainType.Gnosis,

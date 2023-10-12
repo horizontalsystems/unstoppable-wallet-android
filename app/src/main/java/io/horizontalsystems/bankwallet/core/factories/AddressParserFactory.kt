@@ -15,6 +15,7 @@ class AddressParserFactory {
         BlockchainType.BinanceSmartChain -> AddressParser("", true)
         BlockchainType.BinanceChain -> AddressParser("binance", true)
         BlockchainType.Polygon,
+        BlockchainType.Rootstock,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne,

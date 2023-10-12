@@ -17,6 +17,7 @@ class EvmBlockchainManager(
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
+            BlockchainType.Rootstock,
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
             BlockchainType.ArbitrumOne,
@@ -51,6 +52,7 @@ class EvmBlockchainManager(
         BlockchainType.Ethereum -> Chain.Ethereum
         BlockchainType.BinanceSmartChain -> Chain.BinanceSmartChain
         BlockchainType.Polygon -> Chain.Polygon
+        BlockchainType.Rootstock -> Chain.Rootstock
         BlockchainType.Avalanche -> Chain.Avalanche
         BlockchainType.Optimism -> Chain.Optimism
         BlockchainType.ArbitrumOne -> Chain.ArbitrumOne

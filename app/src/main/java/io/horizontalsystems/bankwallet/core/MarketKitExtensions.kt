@@ -100,6 +100,7 @@ val TokenQuery.protocolType: String?
                 BlockchainType.BinanceChain -> "BEP2"
                 BlockchainType.Gnosis -> "Gnosis"
                 BlockchainType.Fantom -> "Fantom"
+                BlockchainType.Rootstock -> "Rootstock"
                 else -> null
             }
         }
@@ -114,6 +115,7 @@ val TokenQuery.protocolType: String?
                 BlockchainType.ArbitrumOne -> "Arbitrum"
                 BlockchainType.Gnosis -> "Gnosis"
                 BlockchainType.Fantom -> "Fantom"
+                BlockchainType.Rootstock -> "Rootstock"
                 else -> null
             }
         }
@@ -149,6 +151,7 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
+        BlockchainType.Rootstock,
         BlockchainType.Avalanche -> {
             tokenType is TokenType.Native || tokenType is TokenType.Eip20
         }
@@ -182,6 +185,7 @@ val Blockchain.description: String
         BlockchainType.Solana -> "SOL, SPL tokens"
         BlockchainType.Gnosis -> "xDAI, ERC20 tokens"
         BlockchainType.Fantom -> "FTM, ERC20 tokens"
+        BlockchainType.Rootstock -> "Rootstock, ERC20 tokens"
         BlockchainType.Tron -> "TRX, TRC20 tokens"
         else -> ""
     }
@@ -218,6 +222,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
+        BlockchainType.Rootstock,
         BlockchainType.Solana,
     ).forEachIndexed { index, blockchainType ->
         map[blockchainType] = index
@@ -239,6 +244,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
         BlockchainType.Gnosis -> R.drawable.gnosis_erc20
         BlockchainType.Fantom -> R.drawable.fantom_erc20
+        BlockchainType.Rootstock -> R.drawable.rootstock_erc20
         BlockchainType.Tron -> R.drawable.tron_trc20
         else -> R.drawable.coin_placeholder
     }
@@ -261,6 +267,7 @@ val BlockchainType.title: String
     BlockchainType.Solana -> "Solana"
     BlockchainType.Gnosis -> "Gnosis"
     BlockchainType.Fantom -> "Fantom"
+    BlockchainType.Rootstock -> "Rootstock"
     BlockchainType.Tron -> "Tron"
     is BlockchainType.Unsupported -> this.uid
 }
@@ -280,6 +287,7 @@ val BlockchainType.brandColor: Color?
         BlockchainType.Ethereum -> Color(0xFF6B7196)
         BlockchainType.BinanceSmartChain -> Color(0xFFF3BA2F)
         BlockchainType.Polygon -> Color(0xFF8247E5)
+        BlockchainType.Rootstock -> Color(0xFF9100AA)
         BlockchainType.Avalanche -> Color(0xFFD74F49)
         BlockchainType.Optimism -> Color(0xFFEB3431)
         BlockchainType.ArbitrumOne -> Color(0xFF96BEDC)
@@ -310,6 +318,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain
                     || this == BlockchainType.Polygon
+                    || this == BlockchainType.Rootstock
                     || this == BlockchainType.Avalanche
                     || this == BlockchainType.Optimism
                     || this == BlockchainType.ArbitrumOne
@@ -319,6 +328,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain
                     || this == BlockchainType.Polygon
+                    || this == BlockchainType.Rootstock
                     || this == BlockchainType.Avalanche
                     || this == BlockchainType.Optimism
                     || this == BlockchainType.ArbitrumOne
@@ -481,6 +491,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
+        BlockchainType.Rootstock,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne,

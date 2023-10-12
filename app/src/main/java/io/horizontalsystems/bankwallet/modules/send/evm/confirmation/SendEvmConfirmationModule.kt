@@ -35,6 +35,7 @@ object SendEvmConfirmationModule {
         private val blockchainType = when (evmKitWrapper.evmKit.chain) {
             Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
             Chain.Polygon -> BlockchainType.Polygon
+            Chain.Rootstock -> BlockchainType.Rootstock
             Chain.Avalanche -> BlockchainType.Avalanche
             Chain.Optimism -> BlockchainType.Optimism
             Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
