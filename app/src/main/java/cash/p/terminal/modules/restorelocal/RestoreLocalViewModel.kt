@@ -5,24 +5,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.managers.EncryptDecryptManager
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
-import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
-import cash.p.terminal.modules.backuplocal.fullbackup.FullBackup
-import cash.p.terminal.modules.backuplocal.fullbackup.RestoreException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RestoreLocalViewModel(
     private val backupJsonString: String?,
+    private val accountManager: IAccountManager,
     private val accountFactory: IAccountFactory,
-    private val backupProvider: BackupProvider,
     fileName: String?,
 ) : ViewModel() {
 
@@ -30,7 +30,7 @@ class RestoreLocalViewModel(
     private var passphraseState: DataState.Error? = null
     private var showButtonSpinner = false
     private var walletBackup: BackupLocalModule.WalletBackup? = null
-    private var fullBackup: FullBackup? = null
+    private val encryptDecryptManager = EncryptDecryptManager()
     private var parseError: Exception? = null
     private var accountType: AccountType? = null
     private var manualBackup = false
@@ -61,18 +61,7 @@ class RestoreLocalViewModel(
     init {
         viewModelScope.launch {
             try {
-                val gson = GsonBuilder()
-                    .disableHtmlEscaping()
-                    .enableComplexMapKeySerialization()
-                    .create()
-
-                fullBackup = try {
-                    gson.fromJson(backupJsonString, FullBackup::class.java)
-                } catch (ex: Exception) {
-                    null
-                }
-
-                walletBackup = gson.fromJson(backupJsonString, BackupLocalModule.WalletBackup::class.java)
+                walletBackup = Gson().fromJson(backupJsonString, BackupLocalModule.WalletBackup::class.java)
                 manualBackup = walletBackup?.manualBackup ?: false
             } catch (e: Exception) {
                 parseError = e
@@ -88,69 +77,46 @@ class RestoreLocalViewModel(
     }
 
     fun onImportClick() {
-        when {
-            fullBackup != null -> {
-                fullBackup?.let { restoreFullBackup(it) }
-            }
-
-            walletBackup != null -> {
-                walletBackup?.let { restoreSingleWallet(it, accountName) }
-            }
-
-            else -> {
-
-            }
-        }
-    }
-
-    private fun restoreFullBackup(fullBackup: FullBackup) {
-        showButtonSpinner = true
-        syncState()
-
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                backupProvider.restore(fullBackup, passphrase)
-
-                restored = true
-            } catch (keyException: RestoreException.EncryptionKeyException) {
-                parseError = keyException
-            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
-            }
-
-            showButtonSpinner = false
-            withContext(Dispatchers.Main) {
-                syncState()
-            }
-        }
-    }
-
-    @Throws
-    private fun restoreSingleWallet(backup: BackupLocalModule.WalletBackup, accountName: String) {
+        val backup = walletBackup ?: return
         showButtonSpinner = true
         syncState()
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val type = backupProvider.accountType(backup, passphrase)
-                if (type is AccountType.Cex) {
-                    backupProvider.restoreCexAccount(type, accountName)
-
-                    restored = true
-                } else {
-                    accountType = type
+            val kdfParams = backup.crypto.kdfparams
+            val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: return@launch
+            if (EncryptDecryptManager.passwordIsCorrect(backup.crypto.mac, backup.crypto.ciphertext, key)) {
+                val decrypted = encryptDecryptManager.decrypt(backup.crypto.ciphertext, key, backup.crypto.cipherparams.iv)
+                try {
+                    val type = BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
+                    if (type is AccountType.Cex){
+                        restoreCexAccount(type)
+                        return@launch
+                    } else {
+                        accountType = type
+                    }
+                } catch (e: IllegalStateException) {
+                    parseError = e
                 }
-            } catch (keyException: RestoreException.EncryptionKeyException) {
-                parseError = keyException
-            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
+            } else {
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
-            } catch (e: IllegalStateException) {
-                parseError = e
             }
             showButtonSpinner = false
             withContext(Dispatchers.Main) {
                 syncState()
             }
         }
+    }
+
+    private fun restoreCexAccount(accountType: AccountType) {
+        val account = accountFactory.account(
+            accountName,
+            accountType,
+            AccountOrigin.Restored,
+            true,
+            false,
+        )
+        accountManager.save(account)
+        restored = true
+        syncState()
     }
 
     fun onSelectCoinsShown() {
