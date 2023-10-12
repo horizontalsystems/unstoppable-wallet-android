@@ -259,17 +259,18 @@ fun BalanceItems(
                             painter = painterResource(R.drawable.icon_binocule_24),
                             contentDescription = "binoculars icon"
                         )
-                    } else {
-                        ButtonSecondaryCircle(
-                            icon = R.drawable.ic_manage_2,
-                            contentDescription = stringResource(R.string.ManageCoins_title),
-                            onClick = {
-                                navController.slideFromRight(R.id.manageWalletsFragment)
-                            }
-                        )
+                        HSpacer(16.dp)
                     }
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    ButtonSecondaryCircle(
+                        icon = R.drawable.ic_manage_2,
+                        contentDescription = stringResource(R.string.ManageCoins_title),
+                        onClick = {
+                            navController.slideFromRight(R.id.manageWalletsFragment)
+                        }
+                    )
+
+                    HSpacer(16.dp)
                 }
             }
 
