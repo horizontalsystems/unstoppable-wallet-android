@@ -130,22 +130,22 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         mapOf(
             BlockchainType.Bitcoin to "3G5fwc9PP9Lcb1y3RAYGzoQZs5enJkmdxN",
             BlockchainType.BitcoinCash to "bitcoincash:qr4f0pkvx86vv6cuae48nj83txqhwyt2fgadd9smxg",
-//            BlockchainType.ECash to "ecash:",
+            BlockchainType.ECash to "ecash:qrzcal2fmm6vumxp3g2jndk0fepmt2racya9lc4yxy",
             BlockchainType.Litecoin to "MNbHsci3A8u6UiqjBMMckXzfPrLjeMxdRC",
             BlockchainType.Dash to "XcpUrR8LkohMNB9TfJaC97id6boUhRU3wk",
-            BlockchainType.Zcash to "zs186qysm39t6y9j6mdv67xx6aznzqq988mr7quvj9ptsa6yg5m3xnkhln9ezsh07sjnpuy2tls25p",
+            BlockchainType.Zcash to "zs1hwyqs4mfrynq0ysjmhv8wuau5zam0gwpx8ujfv8epgyufkmmsp6t7cfk9y0th7qyx7fsc5azm08",
             BlockchainType.Ethereum to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
             BlockchainType.BinanceSmartChain to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
-//            BlockchainType.BinanceChain to "",
+            BlockchainType.BinanceChain to "bnb132w7sndlwn340jgqff2m9m4nsddx3hga55nx3l",
             BlockchainType.Polygon to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
             BlockchainType.Avalanche to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
             BlockchainType.Optimism to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
             BlockchainType.ArbitrumOne to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
-//            BlockchainType.Solana to "",
+            BlockchainType.Solana to "CefzHT5zCUncm3yhTLck9bCRYkbjHrKToT1GpPUyqCMa",
             BlockchainType.Gnosis to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
             BlockchainType.Fantom to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
             BlockchainType.Tron to "TV4wYRcDun4iHb4oUgcse4Whptk9JKVui2"
-        )
+        ).toList().sortedBy { (key, _) -> key.order }.toMap()
     }
 
 }
