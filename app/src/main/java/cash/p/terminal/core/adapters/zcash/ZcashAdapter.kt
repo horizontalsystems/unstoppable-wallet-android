@@ -59,6 +59,7 @@ class ZcashAdapter(
     private val localStorage: ILocalStorage,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
+    private var accountBirthday = 0L
     private val existingWallet = localStorage.zcashAccountIds.contains(wallet.account.id)
     private val confirmationsThreshold = 10
     private val decimalCount = 8
@@ -101,6 +102,10 @@ class ZcashAdapter(
                 ?.let {
                     BlockHeight.new(network, it)
                 }
+        }
+
+        birthday?.value?.let {
+            accountBirthday = it
         }
 
         synchronizer = Synchronizer.newBlocking(
@@ -158,6 +163,7 @@ class ZcashAdapter(
             val statusInfo = LinkedHashMap<String, Any>()
             statusInfo["Last Block Info"] = lastBlockInfo ?: ""
             statusInfo["Sync State"] = syncState
+            statusInfo["Birthday Height"] = accountBirthday
             return statusInfo
         }
 
