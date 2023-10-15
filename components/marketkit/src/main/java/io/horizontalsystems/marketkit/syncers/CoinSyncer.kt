@@ -57,7 +57,8 @@ class CoinSyncer(
             response.name,
             response.code.uppercase(),
             response.market_cap_rank,
-            response.coingecko_id
+            response.coingecko_id,
+            response.priority
         )
 
     private fun blockchainEntity(response: BlockchainResponse): BlockchainEntity =

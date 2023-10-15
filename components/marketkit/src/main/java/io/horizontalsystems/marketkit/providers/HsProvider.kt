@@ -18,7 +18,18 @@ import java.util.*
 class HsProvider(baseUrl: String, apiKey: String, appVersion: String, appId: String?) {
 
     // TODO Remove old base URL https://api-dev.blocksdecoded.com/v1 and switch it to new servers
-    private val newBaseUrl: String = "https://p.cash"
+    private val pirateService by lazy {
+        val headerMap = mutableMapOf<String, String>()
+        headerMap["app_platform"] = "android"
+        headerMap["app_version"] = appVersion
+        appId?.let {
+            headerMap["app_id"] = it
+        }
+        headerMap["apikey"] = apiKey
+
+        RetrofitUtils.build("https://p.cash/s1/", headerMap)
+                .create(MarketService::class.java)
+    }
 
     private val service by lazy {
         val headerMap = mutableMapOf<String, String>()
@@ -29,7 +40,7 @@ class HsProvider(baseUrl: String, apiKey: String, appVersion: String, appId: Str
         }
         headerMap["apikey"] = apiKey
 
-        RetrofitUtils.build("${newBaseUrl}/s1/", headerMap)
+        RetrofitUtils.build("${baseUrl}/v1/", headerMap)
             .create(MarketService::class.java)
     }
 
@@ -260,15 +271,15 @@ class HsProvider(baseUrl: String, apiKey: String, appVersion: String, appId: Str
     }
 
     fun allCoinsSingle(): Single<List<CoinResponse>> {
-        return service.getAllCoins()
+        return pirateService.getAllCoins()
     }
 
     fun allBlockchainsSingle(): Single<List<BlockchainResponse>> {
-        return service.getAllBlockchains()
+        return pirateService.getAllBlockchains()
     }
 
     fun allTokensSingle(): Single<List<TokenResponse>> {
-        return service.getAllTokens()
+        return pirateService.getAllTokens()
     }
 
     fun analyticsPreviewSingle(coinUid: String, addresses: List<String>): Single<AnalyticsPreview> {
