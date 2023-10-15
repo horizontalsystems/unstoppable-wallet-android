@@ -120,10 +120,6 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
             coins.forEach { coinDao.insert(it) }
             blockchainEntities.forEach { coinDao.insert(it) }
             tokenEntities.forEach { coinDao.insert(it) }
-            // TODO coin priority is in response https://p.cash/s1/coins/list
-            coinDao.fixCoinPriority()
-            coinDao.fixPiratePriority()
-            coinDao.fixCosantaPriority()
         }
     }
 
