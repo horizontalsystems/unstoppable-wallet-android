@@ -651,6 +651,7 @@
     <string name="Settings_DonateWith">Donar con</string>
     <string name="Settings_Donate_GetAddress">Obtener dirección</string>
     <string name="Settings_Donate_Addresses">Dirección</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">ESPECIALES DE OBJETO</string>
     <string name="Appearance_LaunchScreen">ACTUALIZAR SCREEN</string>
@@ -667,6 +668,10 @@
     <string name="SettingsAboutApp_WhatsNew">Qué novedades hay</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Configuración de Blockchain</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Other">OTROS</string>
+    <string name="BackupManager_MergeTitle">Aviso</string>
+    <string name="BackupManager_Watchlist">Lista de Seguimiento</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable no recopila ningún dato o utiliza herramientas de análisis que puedan exponer cualquier dato sobre sus usuarios. La cartera está diseñada para asegurar un alto nivel de privacidad para sus usuarios.</string>
     <string name="Privacy_BulletedText1">Los datos del usuario siempre permanecen en el dispositivo del usuario.</string>
@@ -678,7 +683,6 @@
     <string name="EvmNetwork_AddNew">Añadir Nuevo</string>
     <string name="EvmNetwork_Added">Añadido</string>
     <string name="EvmNetwork_SyncMode">Modo de sincronización</string>
-    <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">Url RPC</string>
     <string name="AddEvmSyncSource_AddRPCSource">Añadir fuente RPC</string>
@@ -719,6 +723,7 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Recomendado</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Desde Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Más Privado</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Autenticación biométrica</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">El monedero Unstoppable fue creado para aquellos que buscan invertir y almacenar criptomonedas de forma privada e independiente.
 
@@ -1032,6 +1037,7 @@
     <string name="CoinPage_SecurityParams_Audits">Auditorias</string>
     <string name="CoinPage_Range24">Rango de 24h</string>
     <string name="CoinPage_About">Acerca de</string>
+    <string name="CoinPage_Overview">Resumen</string>
     <string name="CoinPage_Category">Categoría</string>
     <string name="CoinPage_Categories">Categorías</string>
     <string name="CoinPage_Contracts">Contratos</string>
