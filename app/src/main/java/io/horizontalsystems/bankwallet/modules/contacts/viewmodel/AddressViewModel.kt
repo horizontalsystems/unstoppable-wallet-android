@@ -11,7 +11,18 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.address.*
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBase58
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBech32
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBinanceChain
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBitcoinCash
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerEns
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerEvm
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerPure
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerSolana
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerTron
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerUdn
+import io.horizontalsystems.bankwallet.modules.address.EnsResolverHolder
+import io.horizontalsystems.bankwallet.modules.address.IAddressHandler
 import io.horizontalsystems.bankwallet.modules.contacts.ContactAddressParser
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
@@ -32,6 +43,7 @@ import kotlinx.coroutines.launch
 class AddressViewModel(
     private val contactUid: String?,
     private val contactsRepository: ContactsRepository,
+    private val udnApiKey: String,
     evmBlockchainManager: EvmBlockchainManager,
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
@@ -121,7 +133,7 @@ class AddressViewModel(
     }
 
     private fun addressParser(blockchain: Blockchain): ContactAddressParser {
-        val udnHandler = AddressHandlerUdn(TokenQuery(blockchain.type, TokenType.Native), "")
+        val udnHandler = AddressHandlerUdn(TokenQuery(blockchain.type, TokenType.Native), "", udnApiKey)
         val domainAddressHandlers = mutableListOf<IAddressHandler>(udnHandler)
         val rawAddressHandlers = mutableListOf<IAddressHandler>()
 
