@@ -192,7 +192,6 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valeur de marché totale de toutes les cryptomonnaies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Le changement historique du ratio entre la capitalisation boursière du Bitcoin et le reste des marchés de cryptomonnaies. \n\nGénéralement, lorsque la domination du Bitcoin tend à la hausse, le reste du marché des cryptomonnaies a une tendance à la baisse et vice versa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Le volume de trading de 24h du marché des cryptomonnaies.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">La variation historique du volume d\'échange quotidien agrégé pour %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Valeur de marché totale des projets DeFi.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Valeur totale verrouillée (TVL) dans DeFi.</string>
@@ -650,7 +649,6 @@
     <string name="SettingsCurrency_Understand">J’ai Compris</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
-    <string name="Settings_SecurityCenter">Centre de Sécurité</string>
     <string name="Settings_ExperimentalFeatures">Expérimental</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
@@ -664,10 +662,12 @@
     <string name="Settings_Appearance">Apparence</string>
     <string name="Settings_Contact_ViaTelegram">par Telegram</string>
     <string name="Settings_Contact_ViaEmail">par e-mail</string>
+    <string name="Settings_AutoLock">Verrouillage automatique</string>
     <string name="Settings_PersonalSupport">Assistance Personnelle</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Entrez le nom de votre compte Telegram pour commencer une conversation de soutien personnelle avec notre équipe. Nous reviendrons vers vous et commencerons à travailler sur votre problème dès que nous le verrons.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Vous avez déjà demandé une conversation privée, la trouver sur Telegram</string>
     <string name="Settings_PersonalSupport_Account">Compte</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Demandé</string>
     <string name="Settings_PersonalSupport_Request">Requête</string>
     <string name="Settings_PersonalSupport_NewRequest">Nouvelle demande</string>
@@ -675,9 +675,15 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
+    <string name="Settings_DonateToken">Donate %s</string>
     <string name="Settings_DonateWith">Donnez avec</string>
     <string name="Settings_Donate_GetAddress">Obtenir une adresse</string>
     <string name="Settings_Donate_Addresses">Adresses</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Immédiat</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 heure</string>
     <string name="Appearance_Theme">Thème</string>
     <string name="Appearance_Tab">PARAMÈTRES DES TAB</string>
@@ -688,6 +694,7 @@
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
     <string name="Appearance_MarketsTab">Onglet Marchés</string>
     <string name="Appearance_BalanceAutoHide">Masquer le Solde Automatiquement</string>
+    <string name="Appearance_BalanceAutoHide_Description">Masque automatiquement le solde à chaque ouverture de l\'application, indépendamment des préférences précédentes.</string>
     <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
     <string name="BalanceViewType_FiatValue">Valeur Fiat</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
@@ -712,6 +719,7 @@
     <string name="BackupManager_Watchlist">Liste de suivi</string>
     <string name="BackupManager_CustomRpc">RPC personnalisé</string>
     <string name="BackupManager_AppSettingsTitle">Paramètres de l\'application</string>
+    <string name="BackupManager_AppSettingsDescription">Langue, Devise, Apparence ...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable ne collecte aucune donnée et n\'utilise aucun outil d\'analyse susceptible d\'exposer des données sur ses utilisateurs. Le portefeuille est conçu pour assurer un haut niveau de confidentialité à ses utilisateurs.</string>
     <string name="Privacy_BulletedText1">Les données de l\'utilisateur restent toujours sur l\'appareil de l\'utilisateur.</string>
@@ -719,6 +727,7 @@
     <string name="Privacy_BulletedText3">Le portefeuille ne partage aucune donnée sur les utilisateurs.</string>
     <string name="Privacy_BulletedText4">Aucun compte utilisateur ni aucune base de données ne conserve les données des utilisateurs à un autre endroit.</string>
     <!-- Security Center -->
+    <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Ajouter un Nouveau</string>
     <string name="EvmNetwork_Added">Ajouté</string>
@@ -752,7 +761,9 @@
     <string name="SettingsSecurity_Biometric_Authentication">Authentification biométrique</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">L\'activation de l\'authentification biométrique peut potentiellement affaiblir la sécurité de votre appareil par rapport à un simple code de verrouillage PIN.</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
+    <string name="SettingsSecurity_DisablePin">Désactiver le code d\'accès</string>
     <string name="SettingsSecurity_EditPin">Modifier le code</string>
+    <string name="SettingsSecurity_DuressPinDescription">Un mode spécialisé conçu pour protéger les portefeuilles sélectionnés en cas de contrainte.</string>
     <string name="SettingsSecurity_ManageKeys">Gérer les portefeuilles</string>
     <string name="SettingsSecurity_AppRestartWarning">Cette opération va redémarrer Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonymisez complètement votre connexion Internet lorsque vous utilisez cette application. Remarque : dans certains cas, la fonction WalletConnect pour les applications DeFi peut être très lente ou ne pas fonctionner du tout.</string>
@@ -765,11 +776,16 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Recommandé</string>
     <string name="SettingsSecurity_SyncModeBlockchain">De la Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Plus Privé</string>
+    <string name="SetDuressPin_Title">Code Duress</string>
+    <string name="SetDuressPin_Description">Définir un code d\'accès pour le mode Duress</string>
+    <string name="EditDuressPin_Title">Modifier le code de détresse</string>
+    <string name="EditDuressPin_Description">Entrez le nouveau mot de passe pour le mode Duress</string>
     <string name="DuressPin_Notes_Biometrics_Title">Authentification biométrique</string>
     <string name="DuressPin_Notes_Biometrics_Description">La fonction d\'authentification biométrique fonctionnera pour déverrouiller le mode Duresse. Vous pouvez désactiver l\'authentification biométrique pour plus de commodité.</string>
     <string name="DuressPin_Notes_PasscodeDisabling_Title">Désactivation du code d\'accès</string>
     <string name="DuressPin_Notes_PasscodeDisabling_Description">La désactivation du mot de passe en mode principal réinitialisera automatiquement le Mode Duresse.</string>
     <string name="DuressPin_Notes_PasscodeChange_Title">Changement de mot de passe</string>
+    <string name="DuressPinSelectAccounts_Description">Sélectionnez les portefeuilles qui seront affichés en mode Duresse.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Unstoppable Wallet est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.
@@ -1151,14 +1167,11 @@
     <string name="CoinPage_SlowLength">Longueur lente</string>
     <string name="CoinPage_SignalSmoothing">Lissage du signal</string>
     <string name="CoinPage_IndicatorsAlertText">Indicateurs disponibles uniquement pour les utilisateurs Premium Unstoppable Wallet.</string>
-    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Graphique montrant la variation valeur totale verrouillée dans les contrats intelligents du projet sur une période de 1 an.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Rang du token en fonction de la valeur totale verrouillée actuelle.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">Liste de tous les tokens classés en fonction de la valeur totale verrouillée.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Rapport entre la capitalisation du marché et la TVL du projet.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total des revenus générés pour les détenteurs de tokens sur une période de 30 jours. Généralement, les frais sont perçus par les détenteurs de tokens ou bien par le biais d\'un mécanisme de brûlage de tokens.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Classement du token basé sur les revenus générés sur une période de 30 jours pour les stakers de token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Liste de tous les tokens classés en fonction des revenus générés pour les stakers de tokens sur des intervalles de 24h / 7J / 1M.</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Ce projet n\'a pas de données d\'analyse</string>
     <string name="CoinAnalytics_CexVolume">Volume CEX</string>
@@ -1166,16 +1179,12 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">Les tokens classés en fonction du volume de trading du token sur les exchanges centralisés.</string>
     <string name="CoinAnalytics_DexVolume">Volume DEX</string>
     <string name="CoinAnalytics_DexVolumeRank">Rang de volume DEX</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Les tokens classés en fonction du volume de trading du token sur les exchanges décentralisés.</string>
     <string name="CoinAnalytics_DexLiquidity">Liquidité DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Classement de liquidité DEX</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Les tokens classés par liquidité disponible sur les exchanges décentralisés.</string>
     <string name="CoinAnalytics_ActiveAddresses">Adresses actives quotidiennes</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Classement des adresses actives</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens classés par nombre d\'adresses uniques effectuant des transactions avec le token.</string>
     <string name="CoinAnalytics_TransactionCount">Nombre de transactions</string>
     <string name="CoinAnalytics_TransactionCountRank">Classement par nombre de tr.</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens classés en fonction du nombre de transactions sur une blockchain.</string>
     <string name="CoinAnalytics_Holders">Titres</string>
     <string name="CoinAnalytics_ProjectTvl">Projet TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projet TVL (valeur totale verrouillée)</string>
@@ -1184,8 +1193,6 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Classement en fonction des revenus du projet</string>
     <string name="CoinAnalytics_ProjectFeeRank">Rang des frais du projet</string>
     <string name="CoinAnalytics_HoldersRank">Classement des porteurs</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens classés en fonction des revenus générés pour les détenteurs via des mécanismes i.e. staking ou token burns.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Les jetons sont classés en fonction des frais générés par les projets respectifs. La manière dont les frais sont perçus varie selon les projets.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Classement des jetons selon les adresses uniques qui les détiennent sur plusieurs chaînes de blocs.</string>
     <string name="CoinAnalytics_OtherData">Autres données</string>
     <string name="CoinAnalytics_Reports">Rapports</string>
@@ -1206,7 +1213,6 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">Le score global est basé sur la moyenne quotidienne des adresses actives au cours des 7 derniers jours.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">Le score global est basé sur la valeur totale verrouillée (actifs sous gestion) sur le projet représenté par le jeton donné.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">Le score global est basé sur le nombre moyen quotidien de transactions sur les 7 derniers jours.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">Le score global est basé sur le nombre total d\'adresses détenant le jeton respectif.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Indicateurs techniques</string>
     <string name="Coin_Analytics_Details">Détailles</string>
     <string name="Coin_Analytics_SelectPeriod">Sélectionnez la période</string>
@@ -1351,6 +1357,9 @@
     <string name="PinSet_ConfirmInfo">Confirmer</string>
     <string name="PinSet_ErrorPinsDontMatch">Le code ne correspond pas. Réessayez.</string>
     <string name="PinSet_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code. Veuillez réessayer.</string>
+    <string name="PinSet_ForBiometrics">Définir un code d\'accès pour activer la biométrie</string>
+    <string name="PinSet_ForDuress">Définir un mot de passe pour activer le mode Duress</string>
+    <string name="PinSet_ErrorPinInUse">Ce mot de passe est déjà utilisé.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Modifier le code </string>
     <string name="EditPin_UnlockInfo">Le code actuel</string>
