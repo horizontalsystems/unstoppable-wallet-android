@@ -229,6 +229,7 @@
     <string name="Balance_SyncedUntil">bis %s</string>
     <string name="Balance_Syncing">Synchronisieren…</string>
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Synchronisiere... %s%%</string>
     <string name="Balance_AddCoins">Coins hinzufügen</string>
     <string name="Balance_AddCoin">Coin hinzufügen</string>
@@ -633,6 +634,7 @@
     <string name="Settings_Appearance">Darstellung</string>
     <string name="Settings_Contact_ViaTelegram">via Telegramm</string>
     <string name="Settings_Contact_ViaEmail">per e-Mail</string>
+    <string name="Settings_AutoLock">Auto-Sperren</string>
     <string name="Settings_PersonalSupport">Persönlicher Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Geben Sie Ihren Telegram-Kontonamen ein, um einen persönlichen Support-Chat mit unserem Team zu starten. Wir werden uns mit Ihnen in Verbindung setzen und anfangen, an Ihrem Problem zu arbeiten, sobald wir es sehen.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Sie haben bereits einen privaten Chat angefordert, finden Sie ihn auf Telegram</string>
@@ -649,27 +651,47 @@
     <string name="Settings_DonateWith">Spenden mit</string>
     <string name="Settings_Donate_GetAddress">Adresse erhalten</string>
     <string name="Settings_Donate_Addresses">Adressen</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Sofort</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 Minute</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 Minuten</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 Minuten</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 Stunde</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
     <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>
+    <string name="Appearance_AppIcon">APP ICON</string>
     <string name="Appearance_BalanceConversion">SALDOKONVERTIERUNG</string>
     <string name="Appearance_BalanceValue">SALDO WERT</string>
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
     <string name="Appearance_MarketsTab">Markt-Tab</string>
     <string name="Appearance_BalanceAutoHide">Auto-Ausblenden ausgleichen</string>
     <string name="Appearance_BalanceAutoHide_Description">Bei jedem Öffnen der App wird der Saldo automatisch ausgeblendet, unabhängig von den vorherigen Einstellungen.</string>
+    <string name="BalanceViewType_CoinValue">Coin Value</string>
+    <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
     <string name="SettingsAboutApp_Site">Webseite</string>
     <string name="SettingsAboutApp_WhatsNew">Das ist neu</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Blockchain Einstellungen</string>
     <!-- Backup Manager -->
+    <string name="BackupManager_Title">Backup-Manager</string>
+    <string name="BackupManager_RestoreBackup">Backup wiederherstellen</string>
+    <string name="BackupManager_CreateBackup">Neue Sicherung erstellen</string>
+    <string name="BackupManager_BаckupFile">Backup-Datei</string>
     <string name="BackupManager_Wallets">WALLETS</string>
     <string name="BackupManager_Other">ANDERE</string>
+    <string name="BackupManager_Restore">Wiederherstellen</string>
+    <string name="BackupManager_BackupFileContents">Liste der Inhalte in der Backup-Datei.</string>
     <string name="BackupManager_MergeTitle">Warnung</string>
+    <string name="BackupManager_MergeButton">Ersetzen</string>
     <string name="BackupManager_MergeDescription">Diese Aktion wird Ihre lokalen Zahlungskontakte überschreiben.</string>
+    <string name="BackupManager_BackupRequired">Sicherung erforderlich</string>
+    <string name="BackupManager_WatchWallets">Watch-Adresse</string>
     <string name="BackupManager_Watchlist">Merkliste</string>
+    <string name="BackupManager_CustomRpc">Custom RPC</string>
+    <string name="BackupManager_AppSettingsTitle">App-Einstellungen</string>
+    <string name="BackupManager_AppSettingsDescription">Sprache, Währung, Erscheinung ...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unaufhaltsam sammelt keine Daten oder verwendet Analysewerkzeuge, die möglicherweise Daten über ihre Nutzer enthüllen. Die Brieftasche ist so konzipiert, dass sie den Benutzern ein hohes Maß an Privatsphäre garantiert.</string>
     <string name="Privacy_BulletedText1">Benutzerdaten bleiben immer auf dem Gerät des Benutzers.</string>
@@ -717,23 +739,39 @@
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_DisablePin">Code deaktivieren</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
+    <string name="SettingsSecurity_SetDuressPin">Duress Modus setzen</string>
     <string name="SettingsSecurity_EditDuressPin">Duress Code bearbeiten</string>
+    <string name="SettingsSecurity_DisableDuressPin">Duress Code deaktivieren</string>
+    <string name="SettingsSecurity_DuressPinDescription">Ein spezialisierter Modus, der entworfen wurde, um ausgewählte Brieftaschen unter Zwang zu schützen.</string>
     <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion wird das Unstoppable Wallet neu starten.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Vollständig anonymisieren Sie Ihr Internet während Sie diese App verwenden. Beachten Sie, dass in einigen Fällen die WalletConnect-Funktion für DeFi-Apps sehr langsam oder gar nicht funktionieren kann.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Die Benachrichtigungen für das Unstoppable-Wallet sind ausgeschaltet. Sie müssen die Benachrichtigungen einschalten und eine Aktualisierung der App im Hintergrund erlauben, um Benachrichtigungen bei Preisänderungen zu erhalten.</string>
     <string name="SettingsSecurity_SortingShuffle">Zufällig</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Zufällige Indizierung</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexikographische Indizierung</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Empfohlen</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Von Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Mehr Privat</string>
+    <string name="SetDuressPin_Title">Duress Code</string>
+    <string name="SetDuressPin_Description">Code für Duress Modus festlegen</string>
     <string name="EditDuressPin_Title">Duress Code bearbeiten</string>
+    <string name="EditDuressPin_Description">Neues Code für Duress Modus eingeben</string>
+    <string name="DuressPin_Title">Duress-Modus</string>
+    <string name="DuressPin_Description">In diesem Modus können Benutzer mehrere Entsperr-App-Passcodes einrichten, bei denen ein gewünschter Passcode nur bestimmte Wallets anzeigt. Entwickelt um ausgewählte Brieftaschen vor Zwang oder Bedrohungen zu schützen.</string>
+    <string name="DuressPin_Notes">HINWEISE</string>
     <string name="DuressPin_Notes_Biometrics_Title">Biometrie-Authentifizierung</string>
+    <string name="DuressPin_Notes_Biometrics_Description">Mit der biometrischen Authentifizierung wird der Duress-Modus freigeschaltet. Sie können die biometrische Authentifizierung für Bequemlichkeit deaktivieren.</string>
     <string name="DuressPin_Notes_PasscodeDisabling_Title">Code deaktivieren</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Das Deaktivieren des Code im Hauptmodus wird den Duress Modus automatisch zurücksetzen.</string>
     <string name="DuressPin_Notes_PasscodeChange_Title">Codeänderung</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Das Ändern des Code im Duress Modus ändert auch den aktuellen Code für diesen Modus.</string>
+    <string name="DuressPinSelectAccounts_Title">Wallets auswählen</string>
+    <string name="DuressPinSelectAccounts_Description">Wählen Sie die Wallets, die im Duress Modus angezeigt werden.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Das Unstoppable Wallet ist für diejenigen gedacht, die in Kryptowährungen auf private und unabhängige Weise investieren und diese sparen möchten.
 
@@ -771,6 +809,7 @@
     <string name="NotificationBottomMenu_LongTerm">Langfristig 6M</string>
     <string name="NotificationBottomMenu_Long">Lang</string>
     <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
     <string name="SettingsLaunchScreen_Balance">Guthaben</string>
     <string name="SettingsLaunchScreen_MarketOverview">Marktübersicht</string>
     <string name="SettingsLaunchScreen_Watchlist">Merkliste</string>
@@ -778,6 +817,7 @@
     <string name="SettingsTheme_Title">Thema</string>
     <string name="SettingsTheme_Dark">Dunkel</string>
     <string name="SettingsTheme_Light">Hell</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt nicht-leeren Vermerk bei Transfer einer Transaktion</string>
     <string name="Binance_Backend_Error_RequiresDigits">Der Vermerk darf nur Zahlen enthalten</string>
@@ -792,6 +832,7 @@
     <string name="Hud_Text_EmailAddressCopied">E-Mail-Adresse kopiert</string>
     <string name="Hud_Added_To_Watchlist">Zur Merkliste hinzugefügt</string>
     <string name="Hud_Added_To_Wallet">Zum Wallet hinzugefügt</string>
+    <string name="Hud_Removed_From_Wallet">Removed from Wallet</string>
     <string name="Hud_Already_In_Wallet">Bereits im Wallet enthalten</string>
     <string name="Hud_Removed_from_Watchlist">Aus Merkliste entfernt</string>
     <string name="Hud_Removed">Entfernt</string>
@@ -1029,6 +1070,8 @@
     <string name="CoinPage_MajorHolders_InfoDescription">The number of tokens held by the top 10 wallets. Quality projects typically have a widely distributed token.</string>
     <string name="CoinPage_Audits">Audits</string>
     <string name="CoinPage_Audits_PoweredBy">Angetrieben von Defiyield.app</string>
+    <string name="CoinPage_Audits_Issues">Issues: %d</string>
+    <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filter</string>
     <string name="CoinPage_SecurityParams_Privacy">Privatsphäre</string>
     <string name="CoinPage_SecurityParams_Low">Niedrig</string>
@@ -1048,6 +1091,8 @@
     <string name="CoinPage_MajorHolders_Description">Das obige Diagramm zeigt die \%% aller in Umlauf befindlichen Token, die an den Top 10 Wallets gehalten werden. Je niedriger die \%% ist, desto mehr ist die Münze verteilt.</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nnicht gefunden</string>
+    <string name="CoinPage_OscillatorsSettings">Oscillators</string>
+    <string name="CoinPage_EmaSettingsDescription">The EMA, SMA, and WMA are moving averages used in technical analysis:\n\nEMA emphasizes recent prices for quicker reactions.\nSMA averages price data for a general trend view.\nWMA balances sensitivity and noise reduction by linearly weighting recent data.</string>
     <string name="CoinPage_MacdSettingsDescription">The Moving Average Convergence Divergence (MACD) is a momentum indicator that tracks the relationship between two EMAs of a security\'s price. It signals buying or selling opportunities when the MACD line (12-period EMA minus 26-period EMA) crosses the 9-period EMA, known as the signal line.</string>
     <string name="CoinPage_InsufficientData">Unzureichende Daten</string>
     <string name="CoinPage_InsufficientDataError">Es gibt nicht genügend Datenpunkte, um den EMA 1-Indikator anzuzeigen. Bitte passen Sie die Zeitspanne an, um eine Ansicht der bewegten Durchschnittslinie zu generieren. Nicht genügend Punkt, um EMA 1 anzuzeigen.</string>
@@ -1064,6 +1109,7 @@
     <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
     <string name="Coin_Analytics_Details">Info</string>
+    <string name="Coin_Analytics_Period_30m">30 Minuten</string>
     <string name="Coin_Analytics_Period_1h">1 Stunde</string>
     <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Address">Adresse</string>
