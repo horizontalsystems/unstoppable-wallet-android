@@ -696,9 +696,22 @@
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Paramètres de la Blockchain</string>
     <!-- Backup Manager -->
+    <string name="BackupManager_Title">Gestionnaire de sauvegarde</string>
+    <string name="BackupManager_RestoreBackup">Restaurer la sauvegarde</string>
+    <string name="BackupManager_CreateBackup">Créer une nouvelle sauvegarde</string>
+    <string name="BackupManager_BаckupFile">Fichier de sauvegarde</string>
+    <string name="BackupManager_Wallets">WALLETS</string>
     <string name="BackupManager_Other">AUTRE</string>
+    <string name="BackupManager_Restore">Restaurer</string>
+    <string name="BackupManager_BackupFileContents">Liste des contenus dans le fichier de sauvegarde.</string>
     <string name="BackupManager_MergeTitle">Attention</string>
+    <string name="BackupManager_MergeButton">Remplacer</string>
+    <string name="BackupManager_MergeDescription">Cette action écrasera vos contacts de paiement locaux.</string>
+    <string name="BackupManager_BackupRequired">Sauvegarde requise</string>
+    <string name="BackupManager_WatchWallets">Regarder les portefeuilles</string>
     <string name="BackupManager_Watchlist">Liste de suivi</string>
+    <string name="BackupManager_CustomRpc">RPC personnalisé</string>
+    <string name="BackupManager_AppSettingsTitle">Paramètres de l\'application</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable ne collecte aucune donnée et n\'utilise aucun outil d\'analyse susceptible d\'exposer des données sur ses utilisateurs. Le portefeuille est conçu pour assurer un haut niveau de confidentialité à ses utilisateurs.</string>
     <string name="Privacy_BulletedText1">Les données de l\'utilisateur restent toujours sur l\'appareil de l\'utilisateur.</string>
@@ -753,6 +766,11 @@
     <string name="SettingsSecurity_SyncModeBlockchain">De la Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Plus Privé</string>
     <string name="DuressPin_Notes_Biometrics_Title">Authentification biométrique</string>
+    <string name="DuressPin_Notes_Biometrics_Description">La fonction d\'authentification biométrique fonctionnera pour déverrouiller le mode Duresse. Vous pouvez désactiver l\'authentification biométrique pour plus de commodité.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Désactivation du code d\'accès</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">La désactivation du mot de passe en mode principal réinitialisera automatiquement le Mode Duresse.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Changement de mot de passe</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Unstoppable Wallet est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.
 
