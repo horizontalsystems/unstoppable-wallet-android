@@ -18,6 +18,7 @@
     <string name="Button_Disable">Deaktivieren</string>
     <string name="Button_ScanQr">Zur scannende QR-Code</string>
     <string name="Button_Close">Schließen</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Done">Fertig</string>
     <string name="Button_Retry">Wiederholen</string>
     <string name="Button_Change">Ändern</string>
@@ -44,7 +45,9 @@
     <string name="Button_Back">Zurück</string>
     <string name="Button_Copy">Kopieren</string>
     <string name="Button_Delete">Löschen</string>
+    <string name="Button_Activate">Activate</string>
     <string name="Button_Sign">Signieren</string>
+    <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">Hol Dir Deine Schlüssel API</string>
     <string name="Button_Login">Anmelden</string>
     <string name="Button_SignUp">Lege ein Benutzerkonto an</string>
@@ -78,6 +81,7 @@
     <string name="CreateWallet_Advanced_Title">Erweitert</string>
     <string name="CreateWallet_Mnemonic">Wiederherstellungsphrase</string>
     <string name="CreateWallet_Wordlist">Wortliste</string>
+    <string name="Passphrase">Passphrase</string>
     <string name="Password">Passwort</string>
     <string name="ConfirmPassphrase">Bestätigen</string>
     <string name="CreateWallet_N_WordsRecommended">%s Wörter (empfohlen)</string>
@@ -125,8 +129,10 @@
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="Select_Coins">Coins auswählen</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Geburtstagshöhe</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Geben Sie die Geburtstagshöhe das Wallet für eine schnellere Synchronisierung ein.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Als neu wiederherstellen</string>
     <string name="Restore_ZCash_NewWallet">Wallet Erstellen</string>
     <string name="Restore_ZCash_NewWallet_Description">Keine Transaktionen vorhanden</string>
@@ -141,10 +147,14 @@
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
+    <string name="Market_Field_MarketCap">MCap</string>
     <string name="Market_Field_Volume">Lautstärke</string>
     <string name="Market_Field_PriceDiff">Preis</string>
     <string name="Market_Title">Märkte</string>
     <string name="Market_Search">Suchen</string>
+    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
+    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
     <string name="Market_Field_HighestCap">Höchste Obergrenze</string>
     <string name="Market_Field_LowestCap">Niedrigste Obergrenze</string>
     <string name="Market_Field_HighestVolume">Höchste Lautstärke</string>
@@ -152,18 +162,38 @@
     <string name="Market_Field_HighestPrice">Höchster Preis</string>
     <string name="Market_Field_LowestPrice">Niedrigster Preis</string>
     <string name="Market_Sort_PopupTitle">Sortieren nach</string>
+    <string name="Market_TotalMarketCap">Total Cap</string>
     <string name="Market_BtcDominance">BTC-Dominanz in Prozent</string>
+    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">Alle anzeigen</string>
     <string name="Market_PoweredByApi">Powered by CoinGeko API</string>
     <string name="Market_PoweredByHorizontalApi">Powered by Horizontal API</string>
     <string name="Market_PoweredByDefiLlamaApi">Powered by DefiLlama API</string>
+    <string name="Market_Tab_Overview">Overview</string>
+    <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Merkliste</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
+    <string name="Market_Category_TopCoins">Top Coins</string>
+    <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
     <!--Market Overview-->
+    <string name="Market_Overview_TopSectors">Top Sectors</string>
     <!--Market Top Platforms-->
+    <string name="MarketTopPlatforms_Title">Top Platforms</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">Top Blockchain-Plattformen</string>
     <string name="MarketTopPlatforms_Description">Führende Blockchain-Plattformen durch den kumulativen Markt von Projekten, die auf der Spitze.</string>
+    <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_Chart">Chart</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin-Dominanz</string>
+    <string name="MarketGlobalMetrics_Volume">24h Volume</string>
+    <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Alle</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
@@ -816,6 +846,7 @@
     <string name="ShowKey_Title">Schlüssel</string>
     <string name="ShowKey_Description">Die Wiederherstellungsphrasen, die als nächstes gezeigt werden, sind die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, falls Ihr Mobiltelefon jemals verloren geht, gestohlen wird, kaputt geht usw.\n\nStellen Sie sicher, dass niemand Ihren Bildschirm beobachtet.</string>
     <string name="ShowKey_ButtonShow">Anzeigen</string>
+    <string name="ShowKey_Passphrase">Passphrase</string>
     <string name="ShowKey_ButtonClose">Schließen</string>
     <string name="ShowKey_TabMnemonicPhrase">Wiederherstellungsphrase</string>
     <string name="ShowKey_TabPrivateKey">Privater Schlüssel</string>
@@ -954,6 +985,7 @@
     <string name="CoinPage_SecurityParams_Privacy">Privatsphäre</string>
     <string name="CoinPage_SecurityParams_Low">Niedrig</string>
     <string name="CoinPage_SecurityParams_High">Hoch</string>
+    <string name="CoinPage_Overview">Overview</string>
     <string name="CoinPage_CoinTypes">Coin Type</string>
     <string name="CoinPage_Website">Webseite</string>
     <string name="CoinPage_Volume">Lautstärke</string>
@@ -967,6 +999,7 @@
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total value Locked)</string>
     <string name="Coin_Analytics_Details">Info</string>
     <string name="Coin_Analytics_Period_1h">1 Stunde</string>
+    <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Address">Adresse</string>
     <string name="SubscriptionInfo_Title">Premium-Funktionen</string>
     <string name="SubscriptionInfo_Analytics_Info">Greifen Sie auf umfassende Markt- und On-Kettenstatistiken zu jedem Token.</string>
@@ -1005,6 +1038,7 @@
     <string name="NftAsset_Links_Website">Webseite</string>
     <string name="PoweredBy_OpenSeaAPI">Unterstützt von OpenSea API</string>
     <!-- NFT Collection -->
+    <string name="NftCollection_Overview">Overview</string>
     <string name="NftCollection_Items">Stück</string>
     <string name="NftCollection_Activity">Aktivität</string>
     <string name="NftCollection_Owners">Besitzer</string>
@@ -1026,6 +1060,7 @@
     <string name="NftCollection_EventType_Unknown">Unbekannt</string>
     <!--Rate list-->
     <string name="RateList_TopLosers">Top Verlierer</string>
+    <string name="RateList_Posts">News</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Sync-Fehler</string>
     <string name="BalanceSyncError_ButtonRetry">Wiederholen</string>
@@ -1034,6 +1069,7 @@
     <string name="BalanceSyncError_ReportButtonExplanation">Der Fehlertext wird in die Zwischenablage kopiert, falls Sie den Fehler melden möchten.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">Folge Uns</string>
+    <string name="Hud_Text_Activate">Activate</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Typ auswählen</string>
     <string name="NftAssetActivity_Empty">Noch keine Artikel-Aktivität</string>
