@@ -191,7 +191,6 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL no DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total de mercado de todas as criptomoedas.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">A mudança histórica na relação entre o capital de mercado do Bitcoin e o resto dos mercados de criptomoedas. \n\nNormalmente, quando o domínio do Bitcoin está tendendo à alta, o resto das tendências do mercado cripto para baixo e vice-versa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">O volume de operação em 24h do mercado de cripto.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">A mudança histórica no volume diário de negociação agregada para %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Valor total de mercado de projetos DeFi.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Valor total bloqueado (TVL) no DeFi.</string>
@@ -647,7 +646,6 @@
     <string name="SettingsCurrency_Understand">Estou ciente</string>
     <!--Settings-->
     <string name="Settings_Title">Configurações</string>
-    <string name="Settings_SecurityCenter">Segurança</string>
     <string name="Settings_Notifications">Notificações</string>
     <string name="Settings_BaseCurrency">Moeda base</string>
     <string name="Settings_Language">Idioma</string>
@@ -1128,13 +1126,10 @@
     <string name="CoinPage_SlowLength">Comprimento Lento</string>
     <string name="CoinPage_SignalSmoothing">Suavização de sinal</string>
     <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium Unstoppable.</string>
-    <string name="CoinAnalytics_CexVolume_Info1">Volume total de trading para o token em corretoras centralizadas durante um período de 30 dias.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Gráfico mostrando a variação no volume diário de negociação do token nas principais corretoras centralizadas durante um período de 1 ano.</string>
-    <string name="CoinAnalytics_CexVolume_Info3">Classificação do Token baseada no volume de trading em principais corretoras centralizadas durante um período de 30 dias.</string>
     <string name="CoinAnalytics_CexVolume_Info4">Lista de todos os tokens com base no volume de trading em corretoras centralizadas ao longo de 24H / 7D / 1M.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Volume total de trading para o token em corretoras centralizadas durante um período de 30 dias.</string>
     <string name="CoinAnalytics_DexVolume_Info2">Gráfico mostrando a variação no volume diário de negociação do token nas principais corretoras centralizadas durante um período de 1 ano.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Classificação do Token baseada no volume de trading em principais corretoras centralizadas durante um período de 30 dias.</string>
     <string name="CoinAnalytics_DexVolume_Info4">Lista de todos os tokens com base no volume de trading em corretoras descentralizadas ao longo de 24H / 7D / 1M.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes que estão sendo rastreados:</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Quantidade total de liquidez disponível para o token em corretoras descentralizadas.</string>
@@ -1146,7 +1141,6 @@
     <string name="CoinAnalytics_ActiveAddresses_Info3">Número total de endereços de blockchain únicos que realizam transações com token em um período de 30 dias.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">Classificação do token com base no número de carteiras ativas que realizam transações com o período de 30 dias do token.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info5">Lista de todos os tokens classificados com base no número de endereços ativos diários que realizam transações com o token em intervalos de 24h / 7D / 1M.</string>
-    <string name="CoinAnalytics_TransactionCount_Info1">Número total de transações únicas na blockchain com token em um período de 30 dias.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Gráfico mostrando a variação na contagem de transações no período de 1 ano.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Ranking do token com base no número de transações com o período de 30 dias do token.</string>
     <string name="CoinAnalytics_TransactionCount_Info4">Lista de todos os tokens classificados com base no número de transações com o token em intervalos de 24h / 7D / 1M.</string>
@@ -1156,11 +1150,9 @@
     <string name="CoinAnalytics_Holders_TrackedBlockchains">Blockchains rastreadas: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Valor-Total-Bloqueado (ou ativos sob gestão) nos contratos inteligentes do projeto.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Gráfico mostrando a variação de Valor-Total-Bloqueado nos contratos inteligentes do projeto durante o período de 1 ano.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Classificação do token com base no Valor-Total-Bloqueado atual.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">Lista de todos os tokens classificados com base no Valor-Total-Bloqueado atual.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Valor de Mercado / proporção TVL para o projeto.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">Receita total gerada para holders do token em um período de 30 dias. Normalmente, as taxas são coletadas por stakers do token ou por meio de um mecanismo de queima de token.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Classificação do token com base na receita gerada ao longo de um período de 30 dias para stakers do token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Lista de todos os tokens classificados com base na receita gerada para stakers do token em intervalos de 24h / 7D / 1M.</string>
     <string name="CoinAnalytics_TechIndicators_Info1">Resumo: Esta é uma visão geral das técnicas de um ativo, considerando uma variedade de indicadores técnicos e prazos. Ele fornece uma visão de consenso (Comprar, Vender ou Neutra) com base nestes indicadores.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Movendo Médias (PMA): Estes são indicadores técnicos usados comumente que suavizam dados de preços para criar um indicador de evolução de seguimento. Eles mostram o preço médio durante um período de tempo específico. Existem vários tipos de MAs:\n\nMédia Simples de Movimento (SMA): Isso calcula a média de uma gama de preços selecionada. usualmente fechando preços, pelo número de períodos desse intervalo.\n\nMédia exponencial em movimento (EMA): Isso dá mais peso aos preços recentes, respondendo assim mais rapidamente às alterações recentes de preços.</string>
@@ -1171,16 +1163,12 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">Tokens classificados por volume de negociação para o token em corretoras centralizadas.</string>
     <string name="CoinAnalytics_DexVolume">Volume DEX</string>
     <string name="CoinAnalytics_DexVolumeRank">Ranking do Volume DEX</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens classificados por volume de negociação para o token em corretoras descentralizadas.</string>
     <string name="CoinAnalytics_DexLiquidity">Liquidez DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Ranking de Liquidez DEX</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens classificados por liquidez disponível em corretoras descentralizadas.</string>
     <string name="CoinAnalytics_ActiveAddresses">Endereços ativos diários</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Ranking de Endereços Ativos</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens classificados pelo número de endereços exclusivos que realizam transações com o token.</string>
     <string name="CoinAnalytics_TransactionCount">Contagem de transações</string>
     <string name="CoinAnalytics_TransactionCountRank">Ranking de Contador Tx</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens classificados por número de transações em uma blockchain.</string>
     <string name="CoinAnalytics_ProjectTvl">Projeto TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projeto TVB (Total de Valor Bloqueado)</string>
     <string name="CoinAnalytics_TvlRatio">Proporção de Capital de M. / TVB</string>
@@ -1189,8 +1177,6 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Ranking da Receita do Projeto</string>
     <string name="CoinAnalytics_ProjectFeeRank">Classificação da Taxa do Projeto</string>
     <string name="CoinAnalytics_HoldersRank">Classificação dos Holders</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens classificados por receitas geradas para os holders através de mecanismos, ou seja, burns por staking ou token.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranqueados de acordo com as taxas geradas pelos respectivos projetos. A forma como as taxas são coletadas varia do projeto para o projeto.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Raking de tokens por endereços únicos guardando-os em várias blockchains.</string>
     <string name="CoinAnalytics_OtherData">Outros dados</string>
     <string name="CoinAnalytics_Reports">Relatórios</string>
@@ -1213,7 +1199,6 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">A pontuação geral é baseada na média diária ativa dos últimos 7 dias.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">A pontuação geral é baseada no valor total bloqueado (ativos sob gerenciação) no projeto representado pelo token fornecido.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">A pontuação geral é baseada na contagem média de transações diárias nos últimos 7 dias.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">A pontuação geral é baseada no número total de endereços mantendo o respectivo token.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Indicadores Técnicos</string>
     <string name="Coin_Analytics_Details">Detalhes</string>
     <string name="Coin_Analytics_SelectPeriod">Selecionar Período</string>
