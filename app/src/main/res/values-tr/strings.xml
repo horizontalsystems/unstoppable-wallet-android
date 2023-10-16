@@ -11,7 +11,6 @@
     <string name="Suspended">SUSPENDED</string>
     <string name="Action_Undo">GERİ ALMA</string>
     <string name="Button_Show">Göster</string>
-    <string name="Button_Hide">Hide</string>
     <string name="Button_Cancel">İptal</string>
     <string name="Button_Next">İleri</string>
     <string name="Button_Enable">Etkinleştir</string>
@@ -54,7 +53,6 @@
     <string name="Button_SignUp">Üye olmak</string>
     <string name="Button_Submit">Onayla</string>
     <string name="Button_TryAgain">Tekrar deneyin</string>
-    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error">Hata</string>
     <string name="Any">Herhangi</string>
     <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
@@ -64,12 +62,13 @@
     <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
-    <string name="Intro_Wallet_Screen2Description">Kendinizi kilitlemeyin ve başkalarının bunu sizin için yapmasına izin vermeyin.</string>
-    <string name="Intro_Wallet_Screen3Title">Sınırları Kaldırın</string>
-    <string name="Intro_Wallet_Screen3Description">Şartların getirdiği engelleri atlatın ve dünyanın her piyasasına erişim sağlayın.</string>
-    <string name="Intro_Wallet_Screen4Title">Gizli Kalın</string>
-    <string name="Intro_Wallet_Screen4Description">Özel ve finansal bilgilerinizi dünyaya açmayın.</string>
+    <string name="Intro_Wallet_Screen1Description">Be Free</string>
+    <string name="Intro_Wallet_Screen2Title">DEX Messenger</string>
+    <string name="Intro_Wallet_Screen2Description">Chat freely and without restrictions (will be available in future updates).</string>
+    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
+    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
+    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Anlıyorum</string>
     <!--Welcome-->
@@ -157,7 +156,6 @@
     <!--Market Search-->
     <string name="Market_Search_Hint">Ara</string>
     <string name="Market_Search_BrowseCategories">Browse Categories</string>
-    <string name="Market_Filter_ChooseSet">Choose Set</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <!--Balance-->
@@ -171,7 +169,6 @@
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
     <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
     <string name="Balance_AddCoin">Para Ekle</string>
@@ -343,6 +340,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Lütfen doğrulamak için bir mesajı imzalayın</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
     <string name="WalletConnect_Error_NoWallet">WalletConnect\'i kullanmadan önce bir cüzdan oluşturmanız veya içe aktarmanız gerekir</string>
+    <string name="WalletConnect_Error_NeedBackup">Kurtarma ifadesinin bir kopyasını oluşturarak bu cüzdanı yedekleyin. Telefonunuzun kaybolması, çalınması, kırılması vb. durumlarda cüzdana erişmek için gerekli olacaktır.</string>
     <string name="WalletConnect_Error_WatchAccount">Bu özellik salt izlenir cüzdanlarda çalışmaz, geri yüklediğiniz veya oluşturduğunuz bir cüzdana geçmeniz gerekiyor </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Desteklenmeyen Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
@@ -589,18 +587,26 @@
     <string name="Settings_Appearance">Görünüm</string>
     <string name="Settings_Contact_ViaTelegram">Telegram aracılığıyla</string>
     <string name="Settings_Contact_ViaEmail">E-posta yoluyla</string>
-    <string name="Settings_PersonalSupport">Personal Support</string>
+    <string name="Settings_AutoLock">Otomatik kilit</string>
+    <string name="Settings_PersonalSupport">Kişisel Destek</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
     <string name="Settings_PersonalSupport_Account">Hesap</string>
     <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Request">İstek</string>
+    <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
     <string name="Settings_Donate">Bağış yapmak</string>
     <string name="Settings_DonateToken">Bağış yapmak %s</string>
     <string name="Settings_DonateWith">Bağış yapın</string>
     <string name="Settings_Donate_GetAddress">Adresi al</string>
     <string name="Settings_Donate_Addresses">Adresler</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Hemen</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 saat</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">TAB AYARLARI</string>
     <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
@@ -608,7 +614,9 @@
     <string name="Appearance_BalanceConversion">BAKIYE ÇEVRIMI</string>
     <string name="Appearance_BalanceValue">BAKIYE DEĞERI</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
+    <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
+    <string name="Appearance_BalanceAutoHide_Description">Uygulama her açıldığında, önceki tercihlere bakılmaksızın bakiyeyi otomatik olarak gizler.</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
     <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
@@ -616,6 +624,24 @@
     <string name="SettingsAboutApp_WhatsNew">Neler yeni</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Blockchain Ayarları</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Yedekleme yöneticisi</string>
+    <string name="BackupManager_RestoreBackup">Yedeği Geri Yükle</string>
+    <string name="BackupManager_CreateBackup">Yeni Yedek Oluştur</string>
+    <string name="BackupManager_BаckupFile">Yedek Dosyası</string>
+    <string name="BackupManager_Wallets">CÜZDANLAR</string>
+    <string name="BackupManager_Other">DİĞER</string>
+    <string name="BackupManager_Restore">Geri Yükle</string>
+    <string name="BackupManager_BackupFileContents">Yedek dosyasındaki içeriklerin listesi.</string>
+    <string name="BackupManager_MergeTitle">Uyarı</string>
+    <string name="BackupManager_MergeButton">Değiştir</string>
+    <string name="BackupManager_MergeDescription">Bu işlem, aygıtta bulunan ödeme kişilerinizin üzerine yazılır.</string>
+    <string name="BackupManager_BackupRequired">Yedekleme Gerekli</string>
+    <string name="BackupManager_WatchWallets">Cüzdan İzle</string>
+    <string name="BackupManager_Watchlist">İzleme Listesi</string>
+    <string name="BackupManager_CustomRpc">Özel RPC</string>
+    <string name="BackupManager_AppSettingsTitle">Uygulama Ayarları</string>
+    <string name="BackupManager_AppSettingsDescription">Dil, Para Birimi, Görünüm...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">P.CASH herhangi bir veri toplamaz veya kullanıcıları hakkında herhangi bir veriyi ifşa edebilecek analiz araçları kullanmaz. P.CASH cüzdanı kullanıcıları için yüksek düzeyde gizlilik sağlamak üzere tasarlanmıştır.</string>
     <string name="Privacy_BulletedText1">Kullanıcı verileri her zaman kullanıcının cihazında kalır.</string>
@@ -663,6 +689,8 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Tavsiye Edilen</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain çıkışlı</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Daha Gizli</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Biyometrik doğrulama</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">CÜZDANLAR</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
 
@@ -678,6 +706,7 @@
     <string name="SettingsTerms_Bugs">Bu uygulamaya güç veren kodda, uygulamanın arızalanmasına neden olabilecek keşfedilmemiş yazılım sorunları olabilir.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
+    <string name="SettingsShare_Text">Be P.CASH</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Iletişim</string>
     <!--Setting_Notifications-->
@@ -967,7 +996,6 @@
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">İzlenen DEX\'ler:</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">İzlenen blok zincirleri: Ethereum, Binance Smart Chain, İyimserlik, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">30 günlük süre boyunca token sahipleri için üretilen toplam gelir. Tipik olarak, ücretler token bahisçileri tarafından veya bir token yakma mekanizması aracılığıyla toplanır.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'ın sıralaması, token bahisçileri için 30 günlük süre boyunca elde edilen gelire dayanmaktadır.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Tüm belirteçlerin listesi, (24 saat / 7D / 1M aralıklarında) bahisçileri için üretilen gelire göre sıralanmıştır.</string>
     <string name="CoinAnalytics_CexVolumeRank">CEX Hacim Sıralaması</string>
     <string name="CoinAnalytics_DexVolumeRank">DEX Hacim Sıralaması</string>
@@ -978,10 +1006,11 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Proje Gelir Sıralaması</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
     <string name="Coin_Analytics_Details">Ayrıntılar</string>
+    <string name="Coin_Analytics_Period_30m">30 dakika</string>
     <string name="Coin_Analytics_Period_1h">1 saat</string>
     <string name="ActivateSubscription_Address">Adres</string>
     <string name="SubscriptionInfo_Title">Premium Ayrıcalıkları</string>
-    <string name="SubscriptionInfo_PersonalSupport_Title">Personal Support</string>
+    <string name="SubscriptionInfo_PersonalSupport_Title">Kişisel Destek</string>
     <string name="Nfts_PriceType_Days_7">Ortalama 7G</string>
     <string name="Nfts_PriceType_Days_30">Ortalama 30G</string>
     <string name="Nfts_PriceType_LastSale">Son İndirim</string>
@@ -1041,6 +1070,10 @@
     <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
+    <string name="RateList_TopGainers">Top Gainers</string>
+    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Posts">News</string>
+    <string name="Market_DaysAgo">%dd. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Senk. hatası</string>
     <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
@@ -1056,6 +1089,7 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">Türü Seç</string>
     <string name="NftAssetActivity_Empty">Henüz öğe etkinliği yok</string>
+    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
@@ -1067,19 +1101,26 @@
     <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
     <string name="OSPin_Prompt_Desciption">Bu uygulama, hassas bilgileri kendi deposunda tutmaktansa Android\'in güvenli deposunda tutmak için telefonun PİN\'ine ihtiyaç duyar.</string>
     <!--Unlock-->
+    <string name="Unlock_Title">Kilidi Aç</string>
     <string name="Unlock_Passcode">Şifre</string>
+    <string name="Unlock_EnterPasscode">Şifre Girin</string>
     <string name="Unlock_Incorrect">Yanlış</string>
     <string name="Unlock_BiometricScanner">Biyometri Tarayıcı</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Parolayı girin veya daha sonra tekrar deneyin</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Biyometrik kimlik. etkisizleştirildi</string>
     <string name="Unlock_WalletDisabledUntil">Engellendi: %s</string>
     <string name="Unlock_AttemptsLeft">%s deneme kaldı</string>
+    <string name="Unlock_Regular">Normal</string>
+    <string name="Unlock_Random">Rastgele</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Şifre belirle</string>
     <string name="PinSet_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>
     <string name="PinSet_ConfirmInfo">Onayla</string>
     <string name="PinSet_ErrorPinsDontMatch">Kod uyuşmadı. Tekrar deneyin.</string>
     <string name="PinSet_ErrorFailedToSavePin">Şifre kaydedilirken hata oluştu. Tekrar deneyin.</string>
+    <string name="PinSet_ForBiometrics">Biyometriyi etkinleştirmek için bir şifre belirleyin</string>
+    <string name="PinSet_ForDuress">Duress Modunu etkinleştirmek için bir şifre kodu ayarlayın</string>
+    <string name="PinSet_ErrorPinInUse">Bu şifre zaten kullanılıyor.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Kod Değiştir</string>
     <string name="EditPin_UnlockInfo">Şimdiki Kod</string>

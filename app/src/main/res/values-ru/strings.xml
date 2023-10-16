@@ -172,7 +172,9 @@
     <string name="Market_TvlDeFi">TVL в DeFi</string>
     <string name="Market_DeFiCap">Капитализация DeFi</string>
     <string name="Market_SeeAll">Посмотреть всё</string>
+    <string name="Market_PoweredByApi">Работает на CoinGeko API</string>
     <string name="Market_PoweredByHorizontalApi">Работает на Horizontal API</string>
+    <string name="Market_PoweredByDefiLlamaApi">Работает на DefiLlama API</string>
     <string name="Market_Tab_Overview">Обзор</string>
     <string name="Market_Tab_Posts">Новости</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
@@ -445,6 +447,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Пожалуйста, подпишите сообщение для аутентификации</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
     <string name="WalletConnect_Error_NoWallet">Вам нужно создать или импортировать кошелек перед использованием WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">Сделайте резервную копию этого кошелька, создав копию его фразы восстановления. Это будет необходимо для доступа к кошельку, если ваш телефон утерян, украден, повреждён и т.д.</string>
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
@@ -691,6 +694,7 @@
     <string name="Settings_Appearance">Оформление</string>
     <string name="Settings_Contact_ViaTelegram">через Telegram</string>
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
+    <string name="Settings_AutoLock">Автоблокировка</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
@@ -707,6 +711,12 @@
     <string name="Settings_DonateWith">Поддержи нас</string>
     <string name="Settings_Donate_GetAddress">Получить адрес</string>
     <string name="Settings_Donate_Addresses">Адреса</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Немедленно</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 минута</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 минут</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 минут</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 минут</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
@@ -716,6 +726,7 @@
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_MarketsTab">Вкладка рынки</string>
     <string name="Appearance_BalanceAutoHide">Автоматическое скрытие баланса</string>
+    <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения, независимо от предыдущих настроек.</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
@@ -723,6 +734,24 @@
     <string name="SettingsAboutApp_WhatsNew">Что нового</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Настройки блокчейна</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Менеджер резерв. копирования</string>
+    <string name="BackupManager_RestoreBackup">Восстановить резервную копию</string>
+    <string name="BackupManager_CreateBackup">Создать новую резерв. копию</string>
+    <string name="BackupManager_BаckupFile">Файл резервной копии</string>
+    <string name="BackupManager_Wallets">КОШЕЛЬКИ</string>
+    <string name="BackupManager_Other">ДРУГИЕ</string>
+    <string name="BackupManager_Restore">Восстановить</string>
+    <string name="BackupManager_BackupFileContents">Список содержимого в файле резервной копии.</string>
+    <string name="BackupManager_MergeTitle">Внимание</string>
+    <string name="BackupManager_MergeButton">Заменить</string>
+    <string name="BackupManager_MergeDescription">Это действие перезапишет ваши локальные контакты.</string>
+    <string name="BackupManager_BackupRequired">Необходима резерв. копия</string>
+    <string name="BackupManager_WatchWallets">Просмотр кошелька</string>
+    <string name="BackupManager_Watchlist">Избранное</string>
+    <string name="BackupManager_CustomRpc">Пользовательские RPC</string>
+    <string name="BackupManager_AppSettingsTitle">Настройки приложения</string>
+    <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">P.CASH не собирает данные и не использует инструменты аналитики, которые могут раскрывать любые данные о своих пользователях. Кошелек разработан для обеспечения высокого уровня конфиденциальности для своих пользователей.</string>
     <string name="Privacy_BulletedText1">Данные пользователя всегда остаются на устройстве пользователя.</string>
@@ -761,7 +790,12 @@
     <string name="SettingsSecurity_Biometric_Authentication">Биометрическая аутентификация</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Активация биометрической аутентификации может потенциально ослабить безопасность вашего устройства по сравнению с простым PIN-кодом.</string>
     <string name="SettingsSecurity_EnablePin">Код доступа</string>
+    <string name="SettingsSecurity_DisablePin">Отключить код доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить код</string>
+    <string name="SettingsSecurity_SetDuressPin">Установить режим Duress</string>
+    <string name="SettingsSecurity_EditDuressPin">Изменить Duress код</string>
+    <string name="SettingsSecurity_DisableDuressPin">Отключить Duress код</string>
+    <string name="SettingsSecurity_DuressPinDescription">Специализированный режим, разработанный для обеспечения безопасности выбранных кошельков в условиях принуждения.</string>
     <string name="SettingsSecurity_ManageKeys">Управление кошельками</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит P.CASH Кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
@@ -774,6 +808,23 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Рекомендовано</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Из блокчейна</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Более приватно</string>
+    <string name="SetDuressPin_Title">Duress код</string>
+    <string name="SetDuressPin_Description">Установите код для режима Duress</string>
+    <string name="EditDuressPin_Title">Изменить Duress код</string>
+    <string name="EditDuressPin_Description">Введите новый код для режима Duress</string>
+    <string name="DuressPin_Title">Режим Duress</string>
+    <string name="DuressPin_Description">Этот режим позволяет пользователю установить несколько паролей для разблокировки приложения, при этом заданный пароль отображает только определенные кошельки. Создан для обеспечения безопасности выбранных кошельков в случае принуждения или угроз.</string>
+    <string name="DuressPin_Notes">ПРИМЕЧАНИЯ</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Биометрическая аутентификация</string>
+    <string name="DuressPin_Notes_Biometrics_Description">Функция биометрической аутентификации будет работать для разблокировки режима Duress Mode. Для удобства можно отключить биометрическую аутентификацию.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Отключение кода доступа</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Отключение пароля в основном режиме автоматически сбросит режим Duress.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Изменить код доступа</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Изменение кода в режиме Duress также изменит текущий код для этого режима.</string>
+    <string name="DuressPinSelectAccounts_Title">Выберите кошельки</string>
+    <string name="DuressPinSelectAccounts_Description">Выберите кошельки, которые будут отображаться в режиме Duress.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">КОШЕЛЬКИ</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ПРОСМОТР КОШЕЛЬКА</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Терминал P.CASH предназначен для доступа к сервисам PirateCash и Cosanta Network.
 \nФункции терминала:
@@ -1104,6 +1155,7 @@
     <string name="CoinPage_SecurityParams_Audits">Аудиты</string>
     <string name="CoinPage_Range24">Диапазон за 24 ч</string>
     <string name="CoinPage_About">О проекте</string>
+    <string name="CoinPage_Overview">Обзор</string>
     <string name="CoinPage_Category">Категория</string>
     <string name="CoinPage_Categories">Категории</string>
     <string name="CoinPage_Contracts">Контракты</string>
@@ -1175,6 +1227,7 @@
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Индикаторы доступны только для премиум-пользователей P.CASH кошелька.</string>
+    <string name="CoinPage_AiGeneratedText">Это описание, сгенерированное искусственным интеллектом на основе предоставленного справочного материала для данной криптовалюты. Оно может содержать ошибки.</string>
     <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_CexVolume_Info2">График, показывающий колебания дневного объема торговли токеном на ведущих централизованных биржах за 1 год.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих централизованных биржах за 30-дневный период.</string>
@@ -1398,19 +1451,26 @@
     <string name="OSPin_Confirm_Desciption">Это приложение требует, чтобы на телефоне был включен пароль (экран блокировки).\n\nВы можете включить его в настройках Android.\n\nПожалуйста, обратите внимание, что после того, как вы отключили PIN-код на уровне ОС,  в безопасном хранилище вашего телефона ранее сохраненные данные стали недействительными. Поэтому Вам нужно восстановить ключи, чтобы вернуться к вашему кошельку.</string>
     <string name="OSPin_Prompt_Desciption">Это приложение требует PIN-код вашего телефона, чтобы сохранить конфиденциальные данные  вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
     <!--Unlock-->
+    <string name="Unlock_Title">Разблокировать</string>
     <string name="Unlock_Passcode">Код доступа</string>
+    <string name="Unlock_EnterPasscode">Введите код доступа</string>
     <string name="Unlock_Incorrect">Неправильно</string>
     <string name="Unlock_BiometricScanner">Биометрический сканер</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Введите код доступа или повторите попытку позже</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Биометрическая аутентификация отключена</string>
     <string name="Unlock_WalletDisabledUntil">Отключено до: %s</string>
     <string name="Unlock_AttemptsLeft">Осталось попыток: %s</string>
+    <string name="Unlock_Regular">Стандартный</string>
+    <string name="Unlock_Random">Случайный</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Установить код доступа</string>
     <string name="PinSet_Info">Код доступа будет использоваться для разблокировки вашего кошелька</string>
     <string name="PinSet_ConfirmInfo">Подтвердить</string>
     <string name="PinSet_ErrorPinsDontMatch">Код не совпадает. Попробуйте еще раз.</string>
     <string name="PinSet_ErrorFailedToSavePin">При сохранении вашего кода произошла ошибка. Повторите попытку.</string>
+    <string name="PinSet_ForBiometrics">Установить секретный код для включения биометрических данных</string>
+    <string name="PinSet_ForDuress">Установите код для включения режима Duress</string>
+    <string name="PinSet_ErrorPinInUse">Этот пароль уже используется.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Изменить код</string>
     <string name="EditPin_UnlockInfo">Текущий код</string>

@@ -62,13 +62,13 @@
     <string name="AccountRecovery_MigrationRecommended">يبدو أن هذه المحفظة تستخدم حرف غير قياسي في عبارة الاسترداد و/أو عبارة المرور. إذا كنت لا ترا رصيد أو معاملات يرجى قراءة أدناه للحصول على التفاصيل.\n\nضع علامة للحصول على المزيد من المعلومات</string>
     <string name="AccountRecovery_MigrationRequired">هذه محفظة غير قياسية. \n\nاضغط للحصول على المزيد من المعلومات</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">كن غير قابل للإيقاف؛ Unstoppable</string>
-    <string name="Intro_Wallet_Screen2Title">أصول خارج السلسلة</string>
-    <string name="Intro_Wallet_Screen2Description">لا تقفل على نفسك ولا تدع الآخرين يفعلون ذلك بك.</string>
-    <string name="Intro_Wallet_Screen3Title">اذهب بلا حدود</string>
-    <string name="Intro_Wallet_Screen3Description">تجاوز الحواجز المشروطة والوصول إلى الأسواق على الصعيد العالمي.</string>
-    <string name="Intro_Wallet_Screen4Title">حافظ على خصوصيتك</string>
-    <string name="Intro_Wallet_Screen4Description">لا تسرب بياناتك الخاصة والمالية إلى العالم.</string>
+    <string name="Intro_Wallet_Screen1Description">Be Free</string>
+    <string name="Intro_Wallet_Screen2Title">DEX Messenger</string>
+    <string name="Intro_Wallet_Screen2Description">Chat freely and without restrictions (will be available in future updates).</string>
+    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
+    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
+    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">فهمت</string>
     <!--Welcome-->
@@ -155,6 +155,7 @@
     <string name="SettingsCurrency_Understand">فهمت</string>
     <!--Settings-->
     <!-- Blockchain Settings  -->
+    <!-- Backup Manager -->
     <!-- Privacy  -->
     <!-- Security Center -->
     <!--Evm Network-->
@@ -164,7 +165,7 @@
     <!--Setting_Security-->
     <!--Setting_Terms-->
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Text">كن غير قابل للإيقاف؛ Unstoppable</string>
+    <string name="SettingsShare_Text">كن غير قابل للإيقاف؛ P.CASH</string>
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
