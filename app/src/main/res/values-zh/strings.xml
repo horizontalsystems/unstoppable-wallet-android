@@ -197,7 +197,6 @@
     <string name="MarketGlobalMetrics_TvlInDefi">DeFi锁定</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">所有加密货币的总市场价值.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">比特币市值与其他加密货币市值之间比率的历史变化。\n\n通常，当比特币主导地位上升时，其他加密市场会下降，反之亦然。</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">加密货币市场24小时交易量.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">%s 每日交易量的历史变化</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">去中心化金融（DeFi）项目的总市场价值.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">去中心金融（DeFi）中的锁定总价值（TVL)</string>
@@ -677,7 +676,6 @@
     <string name="SettingsCurrency_Understand">我理解</string>
     <!--Settings-->
     <string name="Settings_Title">系统设置</string>
-    <string name="Settings_SecurityCenter">安全中心</string>
     <string name="Settings_Notifications">价格通知</string>
     <string name="Settings_ExperimentalFeatures">实验功能</string>
     <string name="Settings_BaseCurrency">基础货币</string>
@@ -812,8 +810,6 @@
     <string name="SetDuressPin_Description">设置口令模式密码</string>
     <string name="EditDuressPin_Title">编辑货币密码</string>
     <string name="EditDuressPin_Description">输入新的密码来复位模式</string>
-    <string name="DuressPin_Title">密码错误</string>
-    <string name="DuressPin_Description">此模式允许用户设置多个解锁应用密码，当需要的密码只显示指定的钱包。 设计用来使选定的钱包在胁迫或威胁下安全。</string>
     <string name="DuressPin_Notes">注意事项</string>
     <string name="DuressPin_Notes_Biometrics_Title">生物认证</string>
     <string name="DuressPin_Notes_Biometrics_Description">生物鉴别认证功能可以解锁时尚模式。您可以禁用生物鉴别认证以方便。</string>
@@ -821,7 +817,6 @@
     <string name="DuressPin_Notes_PasscodeDisabling_Description">在主模式下禁用密码将自动重置压力模式。</string>
     <string name="DuressPin_Notes_PasscodeChange_Title">密码更改</string>
     <string name="DuressPin_Notes_PasscodeChange_Description">更改时尚模式中的密码也会更改当前模式下的密码。</string>
-    <string name="DuressPinSelectAccounts_Title">选择钱包</string>
     <string name="DuressPinSelectAccounts_Description">选择将显示在时尚模式中的钱包。</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">战利品</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">观看战利品</string>
@@ -1227,14 +1222,11 @@
     <string name="CoinPage_SlowLength">慢长度</string>
     <string name="CoinPage_SignalSmoothing">信号平滑化</string>
     <string name="CoinPage_IndicatorsAlertText">指标仅适用于不可阻止的钱包高级用户。</string>
-    <string name="CoinPage_AiGeneratedText">这是一个基于给定的加密货币所提供的参考材料生成的 AI 描述。它可能包含错误。</string>
-    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">正在追踪的DEX：</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">正在追踪的DEX：</string>
     <string name="CoinAnalytics_TransactionCount_Info5">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">已追踪区块链：以太坊、币安智能链、Optimism、Arbitrum、Celo、Cronos、Avalanche、Fantom、Polygon</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_TechIndicators_Info1">概述：这是对资产技术手段的一般概述，考虑到各种技术指标和时间框架。 它根据这些指标提供了一个协商一致的观点(购买、出售或中立)。</string>
     <string name="CoinAnalytics_TechIndicators_Info2">移动平均值：这些是通用的技术指标，可使价格数据平滑使用，从而产生一个趋势跟踪指标。 它们显示了特定时期内的平均价格。 多个类型的MA：\n\n简单移动平均值(SMA)：这个计算了选定的价格范围的平均值。 通常按该范围内的周期数结算价格。\n\n指数移动平均值(EMA)：这使得对最近的价格更加权重，从而对最近的价格变化作出更快的反应。</string>
@@ -1245,16 +1237,12 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">对中心化交易所的代币按交易量排名的代币。</string>
     <string name="CoinAnalytics_DexVolume">DEX交易量</string>
     <string name="CoinAnalytics_DexVolumeRank">DEX交易量排名</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">对去中心化交易所的代币按交易量排名的代币。</string>
     <string name="CoinAnalytics_DexLiquidity">DEX流动性</string>
     <string name="CoinAnalytics_DexLiquidityRank">DEX流通性排名</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">对去中心化交易所上按可用流通性排名的代币。</string>
     <string name="CoinAnalytics_ActiveAddresses">每日活动地址</string>
     <string name="CoinAnalytics_ActiveAddressesRank">活跃地址排名</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">按与代币交易的唯一地址的数量排名的代币。</string>
     <string name="CoinAnalytics_TransactionCount">交易数</string>
     <string name="CoinAnalytics_TransactionCountRank">Tx计数排名</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">按区块链上交易的数量排名的代币。</string>
     <string name="CoinAnalytics_Holders">持有者</string>
     <string name="CoinAnalytics_ProjectTvl">项目TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">项目TVL（锁定总价值)</string>
@@ -1264,8 +1252,6 @@
     <string name="CoinAnalytics_ProjectRevenueRank">项目收入排名</string>
     <string name="CoinAnalytics_ProjectFeeRank">项目收费等级</string>
     <string name="CoinAnalytics_HoldersRank">股東排名</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">按通过如质押或代币销毁等机制为持有者生成的收入排名的代币。</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">按各项目产生的费用排列的代币。收取费用的方式因项目而异。</string>
     <string name="CoinAnalytics_HoldersRank_Description">通过在多个区块链上持有它们的独特地址来排名令牌。</string>
     <string name="CoinAnalytics_OtherData">其它数据</string>
     <string name="CoinAnalytics_Reports">报告</string>
@@ -1288,7 +1274,6 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">总得分是根据过去7天中每日平均活动地址计算的。</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">总体分数是根据给定令牌所代表的项目的总值锁定(管理中的资产)计算的。</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">总的分数是根据过去7天的平均每日交易数计算的。</string>
-    <string name="Coin_Analytics_OverallScore_Holders">总的分数是根据持有相应代币的地址总数计算的。</string>
     <string name="Coin_Analytics_TechnicalIndicators">技术指标</string>
     <string name="Coin_Analytics_Details">详细信息</string>
     <string name="Coin_Analytics_SelectPeriod">选择时间段</string>
