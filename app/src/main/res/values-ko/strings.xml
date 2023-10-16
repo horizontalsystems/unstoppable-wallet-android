@@ -564,7 +564,6 @@
     <string name="SettingsCurrency_Understand">이해합니다</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
-    <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
     <string name="Settings_ExperimentalFeatures">실험적인</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
