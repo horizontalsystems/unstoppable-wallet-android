@@ -38,7 +38,7 @@ object ContactsModule {
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AddressViewModel(contactUid, App.contactsRepository, App.evmBlockchainManager, App.marketKit, contactAddress, definedAddresses) as T
+            return AddressViewModel(contactUid, App.contactsRepository, App.appConfigProvider.udnApiKey, App.evmBlockchainManager, App.marketKit, contactAddress, definedAddresses) as T
         }
     }
 

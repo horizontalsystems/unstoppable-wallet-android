@@ -15,7 +15,7 @@ object AddressInputModule {
             val addressViewModel = AddressViewModel(tokenQuery.blockchainType, App.contactsRepository, initial)
 
             addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
-            addressViewModel.addAddressHandler(AddressHandlerUdn(tokenQuery, coinCode))
+            addressViewModel.addAddressHandler(AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey))
 
             when (tokenQuery.blockchainType) {
                 BlockchainType.Bitcoin,
