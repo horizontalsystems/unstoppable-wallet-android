@@ -233,7 +233,7 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance is trending higher, the rest of the crypto market trends downwards and vice versa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of crypto market.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Total market value of DeFi projects.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
@@ -802,7 +802,7 @@
     <!--Settings-->
 
     <string name="Settings_Title">Settings</string>
-    <string name="Settings_SecurityCenter">Security Center</string>
+    <string name="Settings_SecurityCenter">Security</string>
     <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
@@ -956,7 +956,7 @@
     <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
     <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
-    <string name="SettingsSecurity_SetDuressPin">Set Duress Passcode</string>
+    <string name="SettingsSecurity_SetDuressPin">Set Duress Mode</string>
     <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
     <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
     <string name="SettingsSecurity_DuressPinDescription">A specialized mode designed to keep selected wallets safe under coercion.</string>
@@ -979,8 +979,8 @@
     <string name="EditDuressPin_Title">Edit Duress Passcode</string>
     <string name="EditDuressPin_Description">Enter new passcode for Duress Mode</string>
 
-    <string name="DuressPin_Title">Duress Passcode</string>
-    <string name="DuressPin_Description">This mode allows user to setup multiple unlock app PINs where a desired PIN shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
+    <string name="DuressPin_Title">Duress Mode</string>
+    <string name="DuressPin_Description">This mode allows user to setup multiple unlock app passcodes where a desired passcode shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
     <string name="DuressPin_Notes">NOTES</string>
     <string name="DuressPin_Notes_Biometrics_Title">Biometrics</string>
     <string name="DuressPin_Notes_Biometrics_Description">The Biometric Authentication feature will work to unlock the Duress Mode. You can disable Biometric Authentication for convenience.</string>
@@ -989,7 +989,7 @@
     <string name="DuressPin_Notes_PasscodeChange_Title">Passcode Change</string>
     <string name="DuressPin_Notes_PasscodeChange_Description">Changing the passcode in the Duress Mode will also change the current PIN code for that mode.</string>
 
-    <string name="DuressPinSelectAccounts_Title">Select Wallet</string>
+    <string name="DuressPinSelectAccounts_Title">Select Wallets</string>
     <string name="DuressPinSelectAccounts_Description">Select the wallets that will be displayed in duress mode.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
@@ -1504,17 +1504,17 @@
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Indicators available only for P.CASH Wallet premium users.</string>
-    <string name="CoinPage_AiGeneratedText">This is an AI generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
+    <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
 
     // Coin Page -> Analytics
-    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank is based on trading volume on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
 
     <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank is based on trading volume on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
 
     <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes that are being tracked:</string>
@@ -1536,7 +1536,7 @@
     <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
 
 
-    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over a 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
@@ -1548,12 +1548,12 @@
 
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank is based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">List of all tokens ranked based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Market Cap / TVL ratio for the project.</string>
 
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total revenue generated for the token holders over 30-day period. Typically, fees are collected by token stakers or though a token burn mechanism.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank is based on the revenue generated over a 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
 
     <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
@@ -1567,16 +1567,16 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">Tokens ranked by trading volume for the token on centralized exchanges.</string>
     <string name="CoinAnalytics_DexVolume">DEX Volume</string>
     <string name="CoinAnalytics_DexVolumeRank">DEX Volume Rank</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens ranked by trading volume for the token on decentralized exchanges.</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens are ranked by trading volume for the token on decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity">DEX Liquidity</string>
     <string name="CoinAnalytics_DexLiquidityRank">DEX Liquidity Rank</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens ranked by available liquidity on decentralized exchanges.</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens are ranked by available liquidity on decentralized exchanges.</string>
     <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Active Addresses Rank</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens ranked by number of unique addresses transacting with the token.</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens are ranked by a number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">Transaction Count</string>
     <string name="CoinAnalytics_TransactionCountRank">Tx Count Rank</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens ranked by number of transactions on a blockchain.</string>
+    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens are ranked by number of transactions on a blockchain.</string>
     <string name="CoinAnalytics_Holders">Holders</string>
     <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total Value Locked)</string>
@@ -1586,8 +1586,8 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Project Revenue Rank</string>
     <string name="CoinAnalytics_ProjectFeeRank">Project Fee Rank</string>
     <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens are ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens are ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
     <string name="CoinAnalytics_OtherData">Other Data</string>
     <string name="CoinAnalytics_Reports">Reports</string>
@@ -1614,7 +1614,7 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">The overall score is based on the average daily active addresses over the last 7 days.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding respective token.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding the respective tokens.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
     <string name="Coin_Analytics_Details">Details</string>
     <string name="Coin_Analytics_SelectPeriod">Select Period</string>
