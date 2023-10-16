@@ -188,7 +188,6 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total del mercado de todas las criptomonedas.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">El cambio histórico en la relación entre el límite de mercado de Bitcoin y el resto de los mercados de criptomonedas. \n\nPor lo general, cuando el dominio de Bitcoin tiende a ser más alto, el resto de las tendencias del mercado de criptomonedas disminuye y viceversa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">El volumen de operaciones 24h del mercado de criptomonedas.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">El cambio histórico en el volumen de operaciones diarias acumuladas por %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Valor total del mercado de proyectos DeFi.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Valor total bloqueado (TVL) en DeFi.</string>
@@ -622,7 +621,6 @@
     <string name="SettingsCurrency_Understand">Entiendo</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
-    <string name="Settings_SecurityCenter">Seguridad</string>
     <string name="Settings_Notifications">Notificaciones</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
@@ -1111,16 +1109,12 @@
     <string name="CoinAnalytics_CexVolumeRank">Rango de Volumen CEX</string>
     <string name="CoinAnalytics_DexVolume">Volumen DEX</string>
     <string name="CoinAnalytics_DexVolumeRank">Rango de Volumen DEX</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens clasificados por volumen de negociación para el token en los intercambios descentralizados.</string>
     <string name="CoinAnalytics_DexLiquidity">Liquidez DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Rango de liquidez DEX</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens clasificados por liquidez disponible en los intercambios descentralizados.</string>
     <string name="CoinAnalytics_ActiveAddresses">Direcciones activas diarias</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Rango de direcciones activas</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens clasificados por el número de direcciones únicas que transaccionan con el token.</string>
     <string name="CoinAnalytics_TransactionCount">Número de transacciones</string>
     <string name="CoinAnalytics_TransactionCountRank">Rango de conteo Tx</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens clasificados por el número de transacciones en una cadena de bloques.</string>
     <string name="CoinAnalytics_Holders">Titulares</string>
     <string name="CoinAnalytics_ProjectTvl">Proyecto TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Proyecto TVL (Valor Total bloqueado)</string>
@@ -1128,8 +1122,6 @@
     <string name="CoinAnalytics_ProjectFee">Tarifa del proyecto</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Rango de Ingresos del Proyecto</string>
     <string name="CoinAnalytics_ProjectFeeRank">Rango de tarifa del proyecto</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Las fichas clasificadas por los ingresos generados para los titulares a través de mecanismos como estocar o quemar fichas.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Las fichas se clasifican de acuerdo a las tarifas generadas por los proyectos respectivos. La forma en que se cobran los honorarios varía de un proyecto a otro.</string>
     <string name="CoinAnalytics_OtherData">Otros Datos</string>
     <string name="CoinAnalytics_Reports">Reportar</string>
     <string name="CoinAnalytics_Funding">Fondos</string>
@@ -1151,7 +1143,6 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">La puntuación general se basa en la media diaria de las direcciones activas en los últimos 7 días.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">La puntuación general se basa en el valor total bloqueado (activos bajo administración) en el proyecto representado por el token dado.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">La puntuación general se basa en el promedio diario de las transacciones durante los últimos 7 días.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">La puntuación general se basa en el número total de direcciones que mantienen sus respectivos token.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Indicadores técnicos</string>
     <string name="Coin_Analytics_Details">Detalles</string>
     <string name="Coin_Analytics_SelectPeriod">Seleccionar Periodo</string>
