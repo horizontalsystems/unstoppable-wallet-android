@@ -199,6 +199,7 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Историческое изменение соотношения рыночной капитализации биткойнов к остальным криптовалютным рынкам. \n\nОбычно, в этом случае биткойны доминируют над остальными тенденциями криптовалютного рынка наоборот.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">24-часовой объем крипторынка.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">Историческое изменение усредненного ежедневного объема торговли для %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Общая рыночная стоимость проектов DeFi.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Всего заблокировано (TVL) в DeFi.</string>
@@ -678,6 +679,7 @@
     <string name="SettingsCurrency_Understand">Я понимаю</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
+    <string name="Settings_SecurityCenter">Безопасность</string>
     <string name="Settings_Notifications">Уведомления </string>
     <string name="Settings_ExperimentalFeatures">Функции</string>
     <string name="Settings_BaseCurrency">Базовая валюта</string>
@@ -790,6 +792,7 @@
     <string name="SettingsSecurity_EnablePin">Код доступа</string>
     <string name="SettingsSecurity_DisablePin">Отключить код доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить код</string>
+    <string name="SettingsSecurity_SetDuressPin">Установить режим Duress</string>
     <string name="SettingsSecurity_EditDuressPin">Изменить Duress код</string>
     <string name="SettingsSecurity_DisableDuressPin">Отключить Duress код</string>
     <string name="SettingsSecurity_DuressPinDescription">Специализированный режим, разработанный для обеспечения безопасности выбранных кошельков в условиях принуждения.</string>
@@ -809,12 +812,16 @@
     <string name="SetDuressPin_Description">Установите код для режима Duress</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>
     <string name="EditDuressPin_Description">Введите новый код для режима Duress</string>
+    <string name="DuressPin_Title">Режим Duress</string>
+    <string name="DuressPin_Description">Этот режим позволяет пользователю установить несколько паролей для разблокировки приложения, при этом заданный пароль отображает только определенные кошельки. Создан для обеспечения безопасности выбранных кошельков в случае принуждения или угроз.</string>
+    <string name="DuressPin_Notes">ПРИМЕЧАНИЯ</string>
     <string name="DuressPin_Notes_Biometrics_Title">Биометрическая аутентификация</string>
     <string name="DuressPin_Notes_Biometrics_Description">Функция биометрической аутентификации будет работать для разблокировки режима Duress Mode. Для удобства можно отключить биометрическую аутентификацию.</string>
     <string name="DuressPin_Notes_PasscodeDisabling_Title">Отключение кода доступа</string>
     <string name="DuressPin_Notes_PasscodeDisabling_Description">Отключение пароля в основном режиме автоматически сбросит режим Duress.</string>
     <string name="DuressPin_Notes_PasscodeChange_Title">Изменить код доступа</string>
     <string name="DuressPin_Notes_PasscodeChange_Description">Изменение кода в режиме Duress также изменит текущий код для этого режима.</string>
+    <string name="DuressPinSelectAccounts_Title">Выберите кошельки</string>
     <string name="DuressPinSelectAccounts_Description">Выберите кошельки, которые будут отображаться в режиме Duress.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">КОШЕЛЬКИ</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ПРОСМОТР КОШЕЛЬКА</string>
@@ -1220,10 +1227,14 @@
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Индикаторы доступны только для премиум-пользователей Unstoppable кошелька.</string>
+    <string name="CoinPage_AiGeneratedText">Это описание, сгенерированное искусственным интеллектом на основе предоставленного справочного материала для данной криптовалюты. Оно может содержать ошибки.</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_CexVolume_Info2">График, показывающий колебания дневного объема торговли токеном на ведущих централизованных биржах за 1 год.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих централизованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_CexVolume_Info4">Список всех токенов, ранжированных по объему торговли на децентрализованных биржах за 24ч/7дн/1мес.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Общий объем торгов по токену на ведущих децентрализованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_DexVolume_Info2">График, показывающий колебания дневного объема торговли токеном на ведущих децентрализованных биржах за 1 год.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих децентрализованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_DexVolume_Info4">Список всех токенов, ранжированных по объему торговли на децентрализованных биржах за 24ч/7дн/1мес.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">Отслеживаемые DEX биржи:</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Общая ликвидность, доступная в настоящий момент для токена на ведущих децентрализованных биржах.</string>
@@ -1235,6 +1246,7 @@
     <string name="CoinAnalytics_ActiveAddresses_Info3">Общее количество уникальных адресов блокчейна, с которых проводились транзакции с токеном за 30 дней.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">Рейтинг токена основан на количестве активных кошельков, используемых для транзакций с токеном за 30-дневный период.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info5">Список всех токенов, ранжированных по ежедневному количеству активных адресов транзакций с токеном с интервалом 24ч. / 7 дн. / 1 мес.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">Общее количество уникальных транзакций блокчейна с токеном более 30 дней.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">График, отражающий колебания количества транзакций за 1 год.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Рейтинг токена основан на количестве транзакций с токеном за 30-дневный период.</string>
     <string name="CoinAnalytics_TransactionCount_Info4">Список всех токенов, ранжированных на основе количества транзакций с интервалом 24ч / 7D / 1М.</string>
@@ -1244,9 +1256,11 @@
     <string name="CoinAnalytics_Holders_TrackedBlockchains">Отслеживаемые блокчейны: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">TVL (или активы под управлением) в проектных смарт-контрактах.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">График, отражающий колебания TVL в проектных смарт-контрактах за период, превышающий 1 год.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Рейтинг токена по текущему TVL.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">Список всех токенов, ранжированных по текущему TVL.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Соотношение рыночной капитализации/TVL в рамках проекта.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">Общая прибыль, полученная владельцами токенов за 30-дневный период. Как правило, плата взимается стейкерами токенов или посредством сжигания токенов.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">Рейтинг токена основан на доходе, полученном стейкерами токенов за 30-дневный период.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Список всех токенов, ранжированных на основе пассивного дохода стейкеров токенов с интервалом 24ч. / 7 дн. / 1 мес.</string>
     <string name="CoinAnalytics_TechIndicators_Info1">Общая оценка: Это общий обзор технических средств актива с учетом различных технических показателей и временных рамок. Он обеспечивает консенсусную точку зрения (купить, продать или нейтраль) на основе этих показателей.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Скользящие средние (MA): Это обычно используемые технические индикаторы, позволяющие сгладить данные о ценах для создания индикатора следующего тренда. Они показывают среднюю цену за определенный период времени. Существует несколько типов MAs:\n\nSimple Moving среднее значение (SMA): Это вычисляет среднее значение выбранного диапазона цен, обычно закрывают цены, по количеству периодов в этом диапазоне.\n\nЭкспоненциальное скользящее среднее (EMA): Это даёт больше веса для последних цен, тем самым реагируя быстрее на последние изменения цен.</string>
@@ -1257,12 +1271,16 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">Торговый объем токена на централизованных биржах.</string>
     <string name="CoinAnalytics_DexVolume">Объем DEX</string>
     <string name="CoinAnalytics_DexVolumeRank">Рейтинг объема DEX</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Торговый объем токена на децентрализованных биржах.</string>
     <string name="CoinAnalytics_DexLiquidity">Ликвидность DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Рейтинг ликвидности DEX</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Рейтинг токенов основан по доступной ликвидности на децентрализованных биржах.</string>
     <string name="CoinAnalytics_ActiveAddresses">Ежедневные активные адреса</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Рейтинг активных адресов</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Список токенов, ранжированных по количеству уникальных адресов транзакций с токеном.</string>
     <string name="CoinAnalytics_TransactionCount">Количество транзакций</string>
     <string name="CoinAnalytics_TransactionCountRank">Рейтинг кол-ва транзакций</string>
+    <string name="CoinAnalytics_TransactionCountRank_Description">Токены ранжируются по количеству транзакций в блокчейне.</string>
     <string name="CoinAnalytics_Holders">Держатели</string>
     <string name="CoinAnalytics_ProjectTvl">Проект TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Проект TVL (совокупная сумма средств заблокирована)</string>
@@ -1272,6 +1290,8 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Рейтинг доходов</string>
     <string name="CoinAnalytics_ProjectFeeRank">Рейтинг оплаты за проект</string>
     <string name="CoinAnalytics_HoldersRank">Рейтинг держателей</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Токены ранжируются по пассивному доходу владельцев, получаемому через стекинг или сжигание токенов.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Токены ранжируются в соответствии с платами, полученными в рамках соответствующих проектов.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Рейтинг токенов по уникальным адресам, содержащим их в нескольких блокчейнах.</string>
     <string name="CoinAnalytics_OtherData">Другие данные</string>
     <string name="CoinAnalytics_Reports">Отчёты</string>
@@ -1294,6 +1314,7 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">Общий балл основан на среднедневных активных адресах за последние 7 дней.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">Общая балл основан на общей закрытой стоимости (активы, находящиеся в ведении управления) на проекте, представленном данным токеном.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">Общий счет основан на среднем подсчете ежедневных транзакций за последние 7 дней.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">Общий балл основан на общем количестве адресов, содержащих соответствующий токен.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Технические индикаторы</string>
     <string name="Coin_Analytics_Details">Детали</string>
     <string name="Coin_Analytics_SelectPeriod">Выберите период</string>
