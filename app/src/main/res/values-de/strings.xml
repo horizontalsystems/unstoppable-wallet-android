@@ -647,6 +647,7 @@
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Blockchain Einstellungen</string>
     <!-- Backup Manager -->
+    <string name="BackupManager_Wallets">WALLETS</string>
     <string name="BackupManager_Other">ANDERE</string>
     <string name="BackupManager_MergeTitle">Warnung</string>
     <string name="BackupManager_Watchlist">Merkliste</string>
@@ -699,6 +700,7 @@
     <string name="SettingsSecurity_SyncModeBlockchain">Von Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Mehr Privat</string>
     <string name="DuressPin_Notes_Biometrics_Title">Biometrie-Authentifizierung</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Das Unstoppable Wallet ist für diejenigen gedacht, die in Kryptowährungen auf private und unabhängige Weise investieren und diese sparen möchten.
 
