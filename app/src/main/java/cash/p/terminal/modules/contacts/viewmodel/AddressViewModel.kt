@@ -11,7 +11,18 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.order
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.address.*
+import cash.p.terminal.modules.address.AddressHandlerBase58
+import cash.p.terminal.modules.address.AddressHandlerBech32
+import cash.p.terminal.modules.address.AddressHandlerBinanceChain
+import cash.p.terminal.modules.address.AddressHandlerBitcoinCash
+import cash.p.terminal.modules.address.AddressHandlerEns
+import cash.p.terminal.modules.address.AddressHandlerEvm
+import cash.p.terminal.modules.address.AddressHandlerPure
+import cash.p.terminal.modules.address.AddressHandlerSolana
+import cash.p.terminal.modules.address.AddressHandlerTron
+import cash.p.terminal.modules.address.AddressHandlerUdn
+import cash.p.terminal.modules.address.EnsResolverHolder
+import cash.p.terminal.modules.address.IAddressHandler
 import cash.p.terminal.modules.contacts.ContactAddressParser
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.ContactAddress
@@ -32,6 +43,7 @@ import kotlinx.coroutines.launch
 class AddressViewModel(
     private val contactUid: String?,
     private val contactsRepository: ContactsRepository,
+    private val udnApiKey: String,
     evmBlockchainManager: EvmBlockchainManager,
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
@@ -121,7 +133,7 @@ class AddressViewModel(
     }
 
     private fun addressParser(blockchain: Blockchain): ContactAddressParser {
-        val udnHandler = AddressHandlerUdn(TokenQuery(blockchain.type, TokenType.Native), "")
+        val udnHandler = AddressHandlerUdn(TokenQuery(blockchain.type, TokenType.Native), "", udnApiKey)
         val domainAddressHandlers = mutableListOf<IAddressHandler>(udnHandler)
         val rawAddressHandlers = mutableListOf<IAddressHandler>()
 

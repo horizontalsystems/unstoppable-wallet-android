@@ -101,6 +101,10 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.trongridApiKey)
     }
 
+    val udnApiKey by lazy {
+        Translator.getString(R.string.udnApiKey)
+    }
+
     val fiatDecimal: Int = 2
     val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
