@@ -154,6 +154,9 @@
     <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Markets</string>
     <string name="Market_Search">검색</string>
+    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
+    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Description">Leading blockchain platforms by the cumulative market of projects built on top.</string>
@@ -184,6 +187,7 @@
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_AddCoin">코인 추가</string>
@@ -207,6 +211,7 @@
     <string name="Balance_ReceiveAddressHint">입금 주소: %s</string>
     <string name="Balance_ReceiveWatchAddressHint">%s의 시계 주소</string>
     <string name="Balance_ReceiveWarningText">이 주소로는 %s만 보내주세요. 다른 종류의 토큰을 이 주소로 보내면 최종적으로 손실이 발생합니다.</string>
+    <string name="Balance_Receive_AddressFormatDescription">주소를 입력받기 위한 형식을 선택하세요.</string>
     <string name="Balance_Receive_AddressFormat">주소 형식</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">향상된 사용자 경험과 호환성으로 인해 비트코인 캐시(BCH)를 수신하는 데 현금 주소 형식이 선호됩니다. 그러나 두 주소 형식은 보낸 사람의 주소 형식에 관계없이 BCH를 수신하는 데 상호 교환적으로 사용될 수 있습니다.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">향상된 처리량과 보안을 위해 Bitcoin에서는 기본 SegWit 형식이 선호됩니다. 모든 주소 형식(Taproot, SegWit, Legacy)을 사용하여 보낸 사람의 주소 형식에 관계없이 BTC를 수신할 수 있으므로 다양한 코인 유형에 걸쳐 원활한 거래가 가능합니다.</string>
@@ -220,7 +225,7 @@
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
     <string name="Send_Fee">수수료</string>
-    <string name="Send_Fee_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.</string>
+    <string name="Send_Fee_Info">블록체인은 사용자가 거래를 보낼 때 네트워크 수수료를 지불해야 합니다. 이 수수료는 네트워크에서 많은 거래가 발생할 때 더 높아집니다.</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
@@ -296,9 +301,11 @@
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">위험</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">트랜잭션이 잠시 동안 보류 상태로 유지되거나 완전히 실패할 수 있습니다.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">위험</string>
+    <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">수수료가 너무 높음</string>
     <string name="FeeSettings_Overpricing">설정된 거래 수수료가 지금 이 거래를 처리하는 데 필요한 것보다 높습니다.</string>
     <string name="FeeSettings_Info_IUnderstand">이해합니다</string>
+    <string name="FeeSettings_FeeRate">수수료율 (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">다음 2 블록 타격에 대한 권장 값은 다음과 같습니다.</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
         \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within a reasonable amount of time.
@@ -353,6 +360,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">인증을 위해 메시지에 서명하십시오</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
     <string name="WalletConnect_Error_NoWallet">WalletConnect를 사용하려면 먼저 지갑을 생성하거나 가져와야 합니다</string>
+    <string name="WalletConnect_Error_NeedBackup">복구 문구의 복사본을 생성하여 이 지갑을 백업하십시오. 휴대폰 분실, 도난, 파손 등의 경우 지갑에 액세스하기 위해 필요합니다.</string>
     <string name="WalletConnect_Error_WatchAccount">이 기능은 시계 전용 지갑에서는 작동하지 않으므로 복원 또는 생성된 지갑으로 전환해야 합니다 </string>
     <string name="WalletConnect_Error_UnsupportedChainId">지원되지 않는 블록체인입니다</string>
     <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
@@ -567,6 +575,7 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">이미 차단된 거래</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">발송자께서 이 자금을 %s에 만료되는 지출 잠금으로 보냈습니다. \n\n걱정하지 마십시오, 수신된 비트코인은 이미 귀하의 것 이지만 잠금 기간이 만료될 때까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
+    <string name="Info_LockTime_Description_Static">발송자는 이러한 자금들을 표시된 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다.\n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
     <string name="Info_DoubleSpend_Title">이중 지출</string>
     <string name="Info_DoubleSpend_Description">이중 지출 위험! 블록 체인에 있는 거래에 지출된 정보를 사용하려는 또 다른 거래가 있습니다. 네트워크는 하나의 거래만 수용합니다</string>
     <string name="Info_DoubleSpend_ThisTx">이 Tx</string>
@@ -598,9 +607,12 @@
     <string name="Settings_Appearance">모양</string>
     <string name="Settings_Contact_ViaTelegram">텔레그램을 통해</string>
     <string name="Settings_Contact_ViaEmail">이메일로</string>
+    <string name="Settings_AutoLock">자동 잠금</string>
+    <string name="Settings_PersonalSupport">개인 지원</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Telegram 계정 이름을 입력하여 저희 팀과 개인 지원 채팅을 시작하세요. 문제가 확인되는 즉시 연락을 드리고 문제 해결을 시작하겠습니다.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">이미 비공개 채팅을 요청하셨습니다. Telegram에서 찾아보세요.</string>
     <string name="Settings_PersonalSupport_Account">계정</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">신청 완료</string>
     <string name="Settings_PersonalSupport_Request">요청</string>
     <string name="Settings_PersonalSupport_NewRequest">요청</string>
@@ -608,7 +620,16 @@
     <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
     <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
     <string name="Settings_Donate">후원하기</string>
+    <string name="Settings_DonateToken">기부하기 %s</string>
+    <string name="Settings_DonateWith">기부하기</string>
+    <string name="Settings_Donate_GetAddress">주소 받기</string>
     <string name="Settings_Donate_Addresses">구애</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">즉시</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1분</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5분</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15분</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30분</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1시간</string>
     <string name="Appearance_Theme">주제</string>
     <string name="Appearance_Tab">탭 설정</string>
     <string name="Appearance_LaunchScreen">시작 화면</string>
@@ -618,6 +639,7 @@
     <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
     <string name="Appearance_MarketsTab">시장 탭</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
+    <string name="Appearance_BalanceAutoHide_Description">앱이 열릴 때마다 잔고를 자동으로 숨깁니다. 이전 설정에 관계없이 적용됩니다.</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
     <string name="BalanceViewType_FiatValue">법정 가치</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
@@ -625,6 +647,23 @@
     <string name="SettingsAboutApp_WhatsNew">새로운 기능</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">블록 체인 설정</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">백업 관리자</string>
+    <string name="BackupManager_RestoreBackup">백업 복원</string>
+    <string name="BackupManager_CreateBackup">새로운 백업 생성</string>
+    <string name="BackupManager_BаckupFile">백업 파일</string>
+    <string name="BackupManager_Other">기타</string>
+    <string name="BackupManager_Restore">복구</string>
+    <string name="BackupManager_BackupFileContents">백업 파일의 내용 목록</string>
+    <string name="BackupManager_MergeTitle">경고</string>
+    <string name="BackupManager_MergeButton">위젯 변경</string>
+    <string name="BackupManager_MergeDescription">이 작업을 수행하면 현지 결제 연락처가 덮어쓰여집니다.</string>
+    <string name="BackupManager_BackupRequired">백업이 필요합니다</string>
+    <string name="BackupManager_WatchWallets">관찰 주소</string>
+    <string name="BackupManager_Watchlist">관심목록</string>
+    <string name="BackupManager_CustomRpc">사용자 지정 RPC</string>
+    <string name="BackupManager_AppSettingsTitle">앱 설정</string>
+    <string name="BackupManager_AppSettingsDescription">언어, 통화, 외관...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable은 사용자에 대한 데이터를 노출할 수 있는 데이터를 수집하거나 분석 도구를 사용하지 않습니다. 지갑은 사용자에게 높은 수준의 개인 정보를 보장하도록 설계되었습니다.</string>
     <string name="Privacy_BulletedText1">사용자 데이터는 항상 사용자의 장치에 남아 있습니다.</string>
@@ -639,6 +678,7 @@
     <string name="EvmNetwork_SyncMode">동기화 모드</string>
     <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC 소스 추가</string>
     <string name="AddEvmSyncSource_Name">이름</string>
     <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
@@ -649,10 +689,19 @@
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">복원 소스를 변경한 후 지갑은 Bitcoin 블록체인과 자체적으로 다시 동기화해야 합니다.</string>
     <string name="BtcBlockchainSettings_RestoreSource">매개 변수 복원</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">지갑 복원을 위한 데이터 소스를 선택하십시오. 블록체인에서 복원하는 데 훨씬 더 많은 시간이 걸립니다.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.
+\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
+\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
+\n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionSettings">거래 설정</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">트랜잭션 입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">거래 구조를 변경하여 BTC, LTC, BCH 거래를 추적하기 어렵게 만드십시오.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
+\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.
+\n\nThere are two options available to Unstoppable users:
+\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.
+\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
     <!--Info screen-->
     <string name="Info_Title">인포</string>
     <!--Setting_Security-->
@@ -660,18 +709,41 @@
     <string name="SettingsSecurity_Biometric_Authentication">생체정보 인증</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">생체정보 인증은 PIN 잠금 코드에 비해 장치의 보안을 약화시킬 가능성이 더 큽니다.</string>
     <string name="SettingsSecurity_EnablePin">비밀번호</string>
+    <string name="SettingsSecurity_DisablePin">비밀번호 비활성화</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
+    <string name="SettingsSecurity_SetDuressPin">긴급 상황 모드 설정</string>
+    <string name="SettingsSecurity_EditDuressPin">긴급 상황 비밀번호 편집</string>
+    <string name="SettingsSecurity_DisableDuressPin">협박 비밀번호를 비활성화합니다.</string>
+    <string name="SettingsSecurity_DuressPinDescription">강요 상황에서 선택한 지갑을 안전하게 보관하기 위해 디자인된 특별한 모드입니다.</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷을 완전히 익명화하십시오. 경우에 따라 DeFi 앱용 WalletConnect 기능이 매우 느리거나 전혀 작동하지 않을 수 있습니다.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">권장</string>
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 부터</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">더 개인</string>
+    <string name="SetDuressPin_Title">긴급 상황 비밀번호</string>
+    <string name="SetDuressPin_Description">긴급 상황 모드용 비밀번호를 설정하세요</string>
+    <string name="EditDuressPin_Title">긴급 상황 비밀번호 편집</string>
+    <string name="EditDuressPin_Description">긴급 상황 모드용 새 비밀번호를 입력하세요</string>
+    <string name="DuressPin_Title">긴급 상황 모드</string>
+    <string name="DuressPin_Description">이 모드는 사용자가 여러 언락 앱 비밀번호를 설정하도록 허용하며, 원하는 비밀번호는 지정된 지갑만 표시합니다. 강요나 위협에도 선택한 지갑을 안전하게 보관하기 위해 디자인되었습니다.</string>
+    <string name="DuressPin_Notes">노트</string>
+    <string name="DuressPin_Notes_Biometrics_Title">생체정보 인증</string>
+    <string name="DuressPin_Notes_Biometrics_Description">생체 인증 기능은 위급 상황 모드를 해제하는 데 사용됩니다. 편의를 위해 생체 인증을 비활성화할 수 있습니다.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">비밀번호 비활성화</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">기본 모드에서 비밀번호를 비활성화하면 긴급 상황 모드가 자동으로 재설정됩니다.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">비밀번호 변경</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">긴급 상황 모드에서 비밀번호를 변경하면 해당 모드의 현재 비밀번호도 변경됩니다.</string>
+    <string name="DuressPinSelectAccounts_Title">지갑 선택</string>
+    <string name="DuressPinSelectAccounts_Description">긴급 상황 모드에서 표시할 지갑을 선택하세요.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">지갑</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">관찰 주소</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Unstoppable 지갑은 개인적이고 독립적인 방식으로 암호화폐를 투자하고 보관하려는 사람들을 위해 만들어졌습니다.\n\n이는 오직 사용자만이 자금을 통제할 수 있는 비관세적인 P2P 지갑입니다. 데이터를 수집하지 않고 특정 지갑 앱에 지갑을 잠그지 않아 사용자의 독립성을 유지합니다.
 \n\nUnstoppable 지갑은 완전한 오픈소스여서 누구나 앱이 요구하는 대로 정확히 작동하는지 확인할 수 있습니다.
@@ -728,9 +800,11 @@
     <string name="Hud_Text_EmailAddressCopied">이메일 주소 복사됨</string>
     <string name="Hud_Added_To_Watchlist">관심목록에 추가되었습니다</string>
     <string name="Hud_Added_To_Wallet">지갑에 추가됨</string>
+    <string name="Hud_Removed_From_Wallet">Removed from Wallet</string>
     <string name="Hud_Already_In_Wallet">이미 지갑에 추가됨</string>
     <string name="Hud_Removed_from_Watchlist">관심목록에서 제거</string>
     <string name="Hud_Removed">제거됨</string>
+    <string name="Hud_WaitForSynchronization">동기화 대기 중</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 매니저</string>
     <string name="ManageCoins_Search">이름, 코드 또는 계약 주소</string>
@@ -786,6 +860,7 @@
     <string name="Watch_TypeEvmAddress">EVM 주소</string>
     <string name="Watch_TypeSolanaAddress">Solana 주소</string>
     <string name="Watch_TypeTronAddress">TRON 주소</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">잘못된 xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
@@ -808,6 +883,7 @@
     <string name="ManageAccount_WatchAddresses">관찰 주소</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">빠른 전환을 위한 지갑 선택</string>
     <string name="ManageAccount_DeleteWarning">이 지갑 주소 보기를 중지하시겠습니까?</string>
+    <string name="Balance_Receive_BackupRequired_Description">백업해야 합니다: %1$s을(를)</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">네트워크 설정</string>
     <string name="NetworkSettings_SwithesAutomatically">자동으로 전환</string>
@@ -954,7 +1030,6 @@
     <string name="Coin_Tab_Market">Markets</string>
     <string name="CoinPage_TimeDuration_All">모든</string>
     <string name="CoinPage_Markets">Markets</string>
-    <string name="CoinPage_MajorHolders_InfoDescription">The number of tokens held by the top 10 wallets. Quality projects typically have a widely distributed token.</string>
     <string name="CoinPage_SecurityParams_Privacy">개인정보</string>
     <string name="CoinPage_SecurityParams_Low">낮음</string>
     <string name="CoinPage_SecurityParams_High">높음</string>
@@ -967,11 +1042,14 @@
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
     <string name="CoinPage_TvlDescription">Capital is deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 유통 중인 모든 토큰의 \%%를 보여줍니다. \%%가 낮을수록 코인이 더 많이 분산됩니다.</string>
+    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="Coin_Analytics_Details">상세 정보</string>
+    <string name="Coin_Analytics_Period_30m">30분</string>
     <string name="Coin_Analytics_Period_1h">1시간</string>
     <string name="ActivateSubscription_Title">활성화</string>
     <string name="ActivateSubscription_Address">주소</string>
-    <string name="SubscriptionInfo_PersonalSupport_Title">Personal Support</string>
+    <string name="SubscriptionInfo_PersonalSupport_Title">개인 지원</string>
     <string name="Nfts_PriceType_Days_7">평균 7일</string>
     <string name="Nfts_PriceType_Days_30">평균 30일</string>
     <string name="Nfts_PriceType_LastSale">마지막 판매</string>
@@ -1031,6 +1109,8 @@
     <string name="NftCollection_EventType_Mint">민트</string>
     <string name="NftCollection_EventType_Unknown">알 수 없음</string>
     <!--Rate list-->
+    <string name="RateList_TopGainers">Top Gainers</string>
+    <string name="RateList_TopLosers">Top Losers</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">동기화 오류</string>
     <string name="BalanceSyncError_ButtonRetry">재시도</string>
@@ -1059,19 +1139,26 @@
     <string name="OSPin_Confirm_Desciption">이 앱을 사용하시려면 휴대 전화에 비밀번호 (잠금 화면) 이 활성화 되어야 합니다. \n\n안드로이드 설정에서 활성화 하도록 설정 할 수 있습니다.\n\nOS 수준에서 PIN 번호를 비활성화 하시게 되면 안전한 저장에 대한 보안 조치로 인해 이전에 저장된 데이터가 유효하지 않게 되는 것을 명심하세요. 귀하께서는 지갑으로 돌아가시려면 지갑 암호를 복원해야 합니다.</string>
     <string name="OSPin_Prompt_Desciption">이 앱은 앱 자체가 아닌 안드로이드의 안전한 저장소에 지갑의 중요한 데이터를 유지하려면 휴대 전화의 PIN 번호가 필요합니다.</string>
     <!--Unlock-->
+    <string name="Unlock_Title">잠금 해제</string>
     <string name="Unlock_Passcode">비밀번호</string>
+    <string name="Unlock_EnterPasscode">비밀번호 입력</string>
     <string name="Unlock_Incorrect">틀림</string>
     <string name="Unlock_BiometricScanner">생체정보 스캐너</string>
     <string name="Unlock_BiometricScannerDisabled_Description">비밀번호를 입력하거나 나중에 다시 시도하십시오</string>
     <string name="Unlock_BiometricScannerDisabled_Info">생체정보 인증 비활성화</string>
     <string name="Unlock_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
     <string name="Unlock_AttemptsLeft">남은 시도 횟수: %s</string>
+    <string name="Unlock_Regular">보통</string>
+    <string name="Unlock_Random">랜덤</string>
     <!--Set Pin-->
     <string name="PinSet_Title">암호 설정</string>
     <string name="PinSet_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>
     <string name="PinSet_ConfirmInfo">확인</string>
     <string name="PinSet_ErrorPinsDontMatch">비밀번호가 일치하지 않습니다. 다시 시도하세요.</string>
     <string name="PinSet_ErrorFailedToSavePin">당신의 비밀번호를 저장하는 동안 오류가 발생했습니다. 다시 시도하세요.</string>
+    <string name="PinSet_ForBiometrics">생체인식을 활성화하려면 비밀번호를 설정해주세요.</string>
+    <string name="PinSet_ForDuress">긴급 상황 모드를 활성화하려면 비밀번호를 설정하세요.</string>
+    <string name="PinSet_ErrorPinInUse">이 비밀번호는 이미 사용 중입니다.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">비밀번호 변경</string>
     <string name="EditPin_UnlockInfo">현재 비밀번호</string>

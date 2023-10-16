@@ -45,6 +45,7 @@
     <string name="Button_Search">Buscar</string>
     <string name="Button_Back">Atrás</string>
     <string name="Button_Copy">Copiar</string>
+    <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Eliminar</string>
     <string name="Button_LearnMore">Aprender más</string>
     <string name="Button_Activate">Activar</string>
@@ -55,16 +56,20 @@
     <string name="Button_SignUp">Regístrate</string>
     <string name="Button_Submit">Enviar</string>
     <string name="Button_TryAgain">Inténtalo de nuevo</string>
+    <string name="Button_Share">Compartir</string>
     <string name="Error_OutOfRange">No puede ser menor que %1$s o mayor que %2$s</string>
     <string name="Error_NotInteger">Número entero incorrecto</string>
     <string name="Error">Erreur</string>
+    <string name="NotAvailable">N/A</string>
     <string name="Any">Cualquier</string>
     <string name="SyncError">Error de sincronización. Inténtalo de nuevo</string>
+    <string name="PercentTitle">Percent</string>
     <string name="Keyboard">Teclado</string>
     <string name="AccountRecovery_Note">Nota</string>
     <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
     <string name="Intro_Wallet_Screen2Description">No te encierres y no dejes que otros te hagan eso.</string>
     <string name="Intro_Wallet_Screen3Title">Actúa sin Fronteras</string>
@@ -188,7 +193,6 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total del mercado de todas las criptomonedas.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">El cambio histórico en la relación entre el límite de mercado de Bitcoin y el resto de los mercados de criptomonedas. \n\nPor lo general, cuando el dominio de Bitcoin tiende a ser más alto, el resto de las tendencias del mercado de criptomonedas disminuye y viceversa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">El volumen de operaciones 24h del mercado de criptomonedas.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">El cambio histórico en el volumen de operaciones diarias acumuladas por %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Valor total del mercado de proyectos DeFi.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Valor total bloqueado (TVL) en DeFi.</string>
@@ -341,7 +345,9 @@
     <string name="FeeSettings_BaseFee">Tarifa Base</string>
     <string name="FeeSettings_BaseFee_Info">El protocolo de red determina el precio base por gas para cada bloque, llamada tarifa base. Varía en función del nivel de utilización de la red de bloque a bloque. Puede aumentar o disminuir no más del 12,5% en el próximo bloque, haciendo que las comisiones sean más predecibles. El valor que se muestra aquí es la tarifa base del bloque actual.</string>
     <string name="FeeSettings_MaxFee">Tarifa Máxima de Tarifa (Gwei)</string>
+    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
     <string name="FeeSettings_MaxMinerTips">Tarifa Máxima de prioridad (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Arriesgado</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transacción puede permanecer pendiente por un tiempo o fallar por completo.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Arriesgado</string>
@@ -351,6 +357,11 @@
     <string name="FeeSettings_Info_IUnderstand">Entiendo</string>
     <string name="FeeSettings_FeeRate">Tarifa de tarifa (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Este es el valor recomendado para golpear los siguientes 2 bloques</string>
+    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
+        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
+        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
+        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
+        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Velocidad de transacción</string>
     <string name="FeeInfo_Description">Las blockchain de Bitcoin como las de Ethereum requieren que los usuarios paguen comisiones de red al enviar transacciones. Las comisiones son más altas cuando muchas transacciones están teniendo lugar en la red y más bajas cuando el blockchain está menos ocupado.</string>
@@ -399,6 +410,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Por favor, firma un mensaje para autentificarte</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Firma</string>
     <string name="WalletConnect_Error_NoWallet">Necesita crear o importar una cartera antes de poder usar WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">Copia de seguridad de esta cartera creando una copia de su frase de recuperación. Será necesario para acceder al monedero si su teléfono está perdido, robado, roto, etc.</string>
     <string name="WalletConnect_Error_WatchAccount">Esta característica no funciona con los monederos \"watch-only\", necesita cambiar a un monedero restaurado o creado </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Blockchain no soportado</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No hay cuenta adecuada</string>
@@ -419,6 +431,8 @@
     <string name="WalletConnect_NotSupportedDescription">El tipo de cartera actual %s no es compatible con WalletConnect</string>
     <string name="WalletConnect_Unnamed">Sin nombre</string>
     <string name="WalletConnect_DAppUnknown">dApp desconocida</string>
+    <string name="WalletConnect_Pairings">Pairings</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Borrar todo</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">¿Desea eliminar todos los dAps emparejados?</string>
     <string name="WalletConnect_Pairings_Delete">Eliminar</string>
@@ -473,6 +487,8 @@
     <string name="Swap_MinimumGot">Cantidad Garantizada</string>
     <string name="Swap_PoweredBy">Desarrollado por</string>
     <string name="Swap_SelectSwapProvider_Title">Proveedor de intercambio</string>
+    <string name="Swap_AmountEstimated">(est)</string>
+    <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moneda</string>
     <!-- Swap Settings -->
@@ -485,6 +501,7 @@
     <string name="SwapSettings_RecipientAddressTitle">Dirección del destinatario</string>
     <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
     <string name="SwapSettings_Apply">Aplicar</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Dominio o dirección</string>
     <string name="SwapSettings_FeeSettingsAlert">Una tarifa de servicio para la acción de intercambio en la plataforma típicamente de 0,3% o 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
@@ -534,6 +551,8 @@
     <string name="Transactions_Completed">Finalizado</string>
     <string name="Transactions_Processing">Procesando</string>
     <string name="Transactions_Send">Enviar</string>
+    <string name="Transactions_Burn">Burn</string>
+    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Aprobar</string>
     <string name="Transactions_Swap">Permutar</string>
     <string name="Transactions_Failed">Falla</string>
@@ -562,6 +581,7 @@
     <string name="TransactionInfo_Status">Estado</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Date">Fecha</string>
+    <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Servicio</string>
     <string name="TransactionInfo_RawTransaction">Transacción sin procesar</string>
     <string name="TransactionInfo_ContactName">Nombre de contacto</string>
@@ -624,6 +644,7 @@
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Seguridad</string>
     <string name="Settings_Notifications">Notificaciones</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_Theme">Tema</string>
@@ -636,10 +657,12 @@
     <string name="Settings_Appearance">Apariencia</string>
     <string name="Settings_Contact_ViaTelegram">vía Telegram</string>
     <string name="Settings_Contact_ViaEmail">vía E-mail</string>
+    <string name="Settings_AutoLock">Bloqueo automático</string>
     <string name="Settings_PersonalSupport">Soporte personal</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Introduzca su nombre de cuenta de Telegram para iniciar un chat de asistencia personal con nuestro equipo. Nos pondremos en contacto contigo y comenzaremos a trabajar en tu problema tan pronto como lo veamos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Ya has solicitado un chat privado, encuentra en Telegram</string>
     <string name="Settings_PersonalSupport_Account">Cuenta</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Solicitado</string>
     <string name="Settings_PersonalSupport_Request">Pedido</string>
     <string name="Settings_PersonalSupport_NewRequest">Nueva requisición</string>
@@ -651,6 +674,12 @@
     <string name="Settings_DonateWith">Donar con</string>
     <string name="Settings_Donate_GetAddress">Obtener dirección</string>
     <string name="Settings_Donate_Addresses">Dirección</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Inmediato</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minuto</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 minutos</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 minutos</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 minutos</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">ESPECIALES DE OBJETO</string>
     <string name="Appearance_LaunchScreen">ACTUALIZAR SCREEN</string>
@@ -660,6 +689,7 @@
     <string name="Appearance_Warning_CloseApplication">Cambiar icono cerrará la aplicación</string>
     <string name="Appearance_MarketsTab">Pestaña de Mercados</string>
     <string name="Appearance_BalanceAutoHide">Saldo Auto Ocultar</string>
+    <string name="Appearance_BalanceAutoHide_Description">Oculta automáticamente el balance cada vez que se abre la aplicación, independientemente de las preferencias anteriores.</string>
     <string name="BalanceViewType_CoinValue">Valor de la moneda</string>
     <string name="BalanceViewType_FiatValue">Valor Fiat</string>
     <string name="SettingsAboutApp_Title">Sobre la aplicacion</string>
@@ -667,6 +697,16 @@
     <string name="SettingsAboutApp_WhatsNew">Qué novedades hay</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Configuración de Blockchain</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Gestor de copias de seguridad</string>
+    <string name="BackupManager_RestoreBackup">Restaurar copia de seguridad</string>
+    <string name="BackupManager_CreateBackup">Crear nueva copia de seguridad</string>
+    <string name="BackupManager_BаckupFile">Copia de seguridad</string>
+    <string name="BackupManager_Wallets">MONEDEROS</string>
+    <string name="BackupManager_Other">OTROS</string>
+    <string name="BackupManager_MergeTitle">Aviso</string>
+    <string name="BackupManager_WatchWallets">Ver Monedero</string>
+    <string name="BackupManager_Watchlist">Lista de Seguimiento</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable no recopila ningún dato o utiliza herramientas de análisis que puedan exponer cualquier dato sobre sus usuarios. La cartera está diseñada para asegurar un alto nivel de privacidad para sus usuarios.</string>
     <string name="Privacy_BulletedText1">Los datos del usuario siempre permanecen en el dispositivo del usuario.</string>
@@ -678,7 +718,6 @@
     <string name="EvmNetwork_AddNew">Añadir Nuevo</string>
     <string name="EvmNetwork_Added">Añadido</string>
     <string name="EvmNetwork_SyncMode">Modo de sincronización</string>
-    <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">Url RPC</string>
     <string name="AddEvmSyncSource_AddRPCSource">Añadir fuente RPC</string>
@@ -708,17 +747,39 @@
     <string name="SettingsSecurity_Info_Biometric_Authentication">Habilitar la Autenticación Biométrica puede debilitar potencialmente la seguridad de su dispositivo, en comparación al PIN de bloqueo clásico.</string>
     <string name="SettingsSecurity_EnablePin">Código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
+    <string name="SettingsSecurity_SetDuressPin">Establecer modo de Duración</string>
+    <string name="SettingsSecurity_EditDuressPin">Editar contraseña de Duración</string>
+    <string name="SettingsSecurity_DisableDuressPin">Desactivar Duress Passcode</string>
+    <string name="SettingsSecurity_DuressPinDescription">Un modo especializado diseñado para mantener las billeteras seleccionadas a salvo bajo coacción.</string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimiza completamente tu internet mientras usas esta aplicación. Tenga en cuenta que en algunos casos la función WalletConnect para aplicaciones DeFi puede ser muy lenta o no funcionar.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Las notificaciones para la aplicación del Monedero Unstoppable están desactivadas. Necesita activarlas para poder recibir alertas de cambio de precios.</string>
     <string name="SettingsSecurity_SortingShuffle">Aleatoriamente</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexación aleatoria</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Bip69 determinista</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexación Lexicográfica</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Recomendado</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Desde Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Más Privado</string>
+    <string name="SetDuressPin_Title">Durar contraseña</string>
+    <string name="SetDuressPin_Description">Establecer un código de acceso para el modo Duress</string>
+    <string name="EditDuressPin_Title">Editar contraseña de Duración</string>
+    <string name="EditDuressPin_Description">Introduzca una nueva contraseña para el modo Duress</string>
+    <string name="DuressPin_Title">Modo Duración</string>
+    <string name="DuressPin_Description">Este modo permite a los usuarios configurar múltiples códigos de acceso de la aplicación de desbloqueo donde un código de acceso deseado sólo muestra las carteras especificadas. Diseñado para mantener seguros las carteras seleccionadas bajo coerción o amenazas.</string>
+    <string name="DuressPin_Notes">NOTAS</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Autenticación biométrica</string>
+    <string name="DuressPin_Notes_Biometrics_Description">La función de Autenticación Biométrica funcionará para desbloquear el Modo Duración. Puede desactivar la Autenticación Biométrica para mayor comodidad.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Desactivando contraseña</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Deshabilitar el código de acceso en el modo principal restablecerá automáticamente el modo Duración.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Cambiar contraseña</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Cambiar el código de acceso en el modo Duress también cambiará el código de acceso actual para ese modo.</string>
+    <string name="DuressPinSelectAccounts_Title">Seleccionar carteras</string>
+    <string name="DuressPinSelectAccounts_Description">Seleccione las carteras que se mostrarán en Modo Duración.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">MONEDEROS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">VER MONEDEROS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">El monedero Unstoppable fue creado para aquellos que buscan invertir y almacenar criptomonedas de forma privada e independiente.
 
@@ -734,6 +795,7 @@
     <string name="SettingsTerms_Bugs">Puede haber problemas de software no descubiertos en el código que permite que esta aplicación funcione mal.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contacto</string>
     <!--Setting_Notifications-->
@@ -755,6 +817,7 @@
     <string name="NotificationBottomMenu_LongTerm">Largo Plazo 6M</string>
     <string name="NotificationBottomMenu_Long">Largo plazo</string>
     <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
     <string name="SettingsLaunchScreen_Balance">Saldo</string>
     <string name="SettingsLaunchScreen_MarketOverview">Visión General del Mercado</string>
     <string name="SettingsLaunchScreen_Watchlist">Lista de Seguimiento</string>
@@ -798,6 +861,7 @@
     <string name="ManageCoins_BchTypeDescription">Hay 2 formatos de dirección de las carteras Bitcoin Cash pueden usar para recibir pagos entrantes:\n\n- TYPE 0 (más antiguo)\n- TYPE 145 (más reciente)\n\nMientras que el monedero imparable soporta ambos se recomienda usar un monedero Bitcoin Cash que funcione en formato TYPE 145.</string>
     <string name="ManageCoins_ContractAddress">AÑADIR CONTRACTO</string>
     <!-- Experimental Feature -->
+    <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Las siguientes características son experimentales y deben utilizarse con precaución. Aunque hemos probado a fondo estas características usando nuestros propios fondos criptográficos, no podemos garantizar que funcionen como se espera en todos los casos posibles.</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Permite enviar Bitcoins que no se pueden gastar hasta la fecha establecida.\n\nEl receptor de dicha transacción debe utilizar el monedero Unstoppable.\n\nSólo el monedero Unstoppable puede identificar correctamente tales transacciones en la red Bitcoin, así como permitir que el receptor gaste esos Bitcoins después de que expire el período de bloqueo.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote dicha transacción a ti mismo.\n\nPor ser característica experimental, la cantidad máxima por transacción está limitada a 0.5 BTC.</string>
@@ -807,7 +871,7 @@
     <string name="ManageAccounts_Title">Monederos</string>
     <string name="ManageAccounts_CreateNewWallet">Crear</string>
     <string name="ManageAccounts_ImportWallet">Restaurar desde</string>
-    <string name="ManageAccounts_WatchAddress">Ver Dirección</string>
+    <string name="ManageAccounts_WatchAddress">Ver Monedero</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">Desde archivo</string>
     <string name="ImportWallet_BackupFile_Description">Importar desde un archivo de copia de seguridad.</string>
@@ -836,6 +900,7 @@
     <string name="Watch_TypeEvmAddress">Dirección EVM</string>
     <string name="Watch_TypeSolanaAddress">Dirección Solana</string>
     <string name="Watch_TypeTronAddress">Dirección de Tron</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">Clave xPubKey inválida</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>
@@ -858,6 +923,7 @@
     <string name="ManageAccount_WatchAddresses">Ver Dirección</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Seleccionar Monedero para cambiar rápidamente</string>
     <string name="ManageAccount_DeleteWarning">¿Quieres dejar de ver esta dirección de billetera?</string>
+    <string name="Balance_Receive_BackupRequired_Description">Necesitas hacer una copia de seguridad %1$s</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Configuración de Red</string>
     <string name="NetworkSettings_SwithesAutomatically">cambiar automáticamente</string>
@@ -908,6 +974,7 @@
     <string name="EvmPrivateKey_Warning">Esta clave es para todas las blockchains compatibles con EVM. No la comparta con nadie.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Toca para mostrar la clave privada</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Toca para mostrar la clave privada</string>
     <!-- Private Keys -->
@@ -915,6 +982,7 @@
     <string name="PrivateKeys_EvmPrivateKey">Clave Privada EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Otorga un control total sobre criptomonedas basadas en Ethereum, Binance Smart Chain, etc dentro de cada monedero correspondiente.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Otorga total control sobre los activos de la respectiva cartera.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Otorga control total sobre Bitcoin y otras criptomonedas basadas en UTXO, es decir, Litecoin, Bitcoin Cash, Dash, etc. dentro de su respectiva cartera.</string>
     <string name="PrivateKeys_NeverShareWarning">Nunca comparta su frase de recuperación con nadie. El equipo imparable nunca pedirá su frase de recuperación.</string>
     <!-- Public Keys -->
@@ -963,6 +1031,7 @@
     <string name="AddToken_Symbol">Símbolo</string>
     <string name="AddToken_CoinCode">Código de moneda</string>
     <string name="AddToken_Decimals">Decimales</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TIPOS DE COIN</string>
     <string name="AddToken_AlreadyAdded">YA AGREGADO</string>
     <string name="AddToken_AddressOrSymbol">Dirección del contrato</string>
@@ -1032,6 +1101,7 @@
     <string name="CoinPage_SecurityParams_Audits">Auditorias</string>
     <string name="CoinPage_Range24">Rango de 24h</string>
     <string name="CoinPage_About">Acerca de</string>
+    <string name="CoinPage_Overview">Resumen</string>
     <string name="CoinPage_Category">Categoría</string>
     <string name="CoinPage_Categories">Categorías</string>
     <string name="CoinPage_Contracts">Contratos</string>
@@ -1105,16 +1175,12 @@
     <string name="CoinAnalytics_CexVolumeRank">Rango de Volumen CEX</string>
     <string name="CoinAnalytics_DexVolume">Volumen DEX</string>
     <string name="CoinAnalytics_DexVolumeRank">Rango de Volumen DEX</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens clasificados por volumen de negociación para el token en los intercambios descentralizados.</string>
     <string name="CoinAnalytics_DexLiquidity">Liquidez DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Rango de liquidez DEX</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens clasificados por liquidez disponible en los intercambios descentralizados.</string>
     <string name="CoinAnalytics_ActiveAddresses">Direcciones activas diarias</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Rango de direcciones activas</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens clasificados por el número de direcciones únicas que transaccionan con el token.</string>
     <string name="CoinAnalytics_TransactionCount">Número de transacciones</string>
     <string name="CoinAnalytics_TransactionCountRank">Rango de conteo Tx</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens clasificados por el número de transacciones en una cadena de bloques.</string>
     <string name="CoinAnalytics_Holders">Titulares</string>
     <string name="CoinAnalytics_ProjectTvl">Proyecto TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Proyecto TVL (Valor Total bloqueado)</string>
@@ -1122,8 +1188,6 @@
     <string name="CoinAnalytics_ProjectFee">Tarifa del proyecto</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Rango de Ingresos del Proyecto</string>
     <string name="CoinAnalytics_ProjectFeeRank">Rango de tarifa del proyecto</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Las fichas clasificadas por los ingresos generados para los titulares a través de mecanismos como estocar o quemar fichas.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Las fichas se clasifican de acuerdo a las tarifas generadas por los proyectos respectivos. La forma en que se cobran los honorarios varía de un proyecto a otro.</string>
     <string name="CoinAnalytics_OtherData">Otros Datos</string>
     <string name="CoinAnalytics_Reports">Reportar</string>
     <string name="CoinAnalytics_Funding">Fondos</string>
@@ -1145,10 +1209,10 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">La puntuación general se basa en la media diaria de las direcciones activas en los últimos 7 días.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">La puntuación general se basa en el valor total bloqueado (activos bajo administración) en el proyecto representado por el token dado.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">La puntuación general se basa en el promedio diario de las transacciones durante los últimos 7 días.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">La puntuación general se basa en el número total de direcciones que mantienen sus respectivos token.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Indicadores técnicos</string>
     <string name="Coin_Analytics_Details">Detalles</string>
     <string name="Coin_Analytics_SelectPeriod">Seleccionar Periodo</string>
+    <string name="Coin_Analytics_Period_30m">30 minutos</string>
     <string name="Coin_Analytics_Period_1h">1 hora</string>
     <string name="Coin_Analytics_Period_4h">4 horas</string>
     <string name="Coin_Analytics_Period_8h">8 horas</string>
@@ -1230,6 +1294,7 @@
     <string name="NftCollection_EventType_Custom">Personalizado</string>
     <string name="NftCollection_EventType_Payout">Pagos</string>
     <string name="NftCollection_EventType_BulkCancel">Cancelar en masa</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Desconocido</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Máximos Ganadores</string>
@@ -1275,19 +1340,26 @@
     <string name="OSPin_Confirm_Desciption">Esta aplicación require que el teléfono tenga el código de acceso (bloqueo de pantalla) habilitado.\n\nLo puedes habilitar en los ajustes de Android.\n\nTome en cuenta que cuando desahabilita el PIN en el nivel OS, las medidas de seguridad en el alacenamiento seguro de su teléfono hace que la información previamente almacenada no sea válida. Usted necesita restaurar las claves de sus monederos para poder volver a su monedero.</string>
     <string name="OSPin_Prompt_Desciption">Esta aplicación requiere el PIN de tu teléfono para mantener datos sensibles de tu monedero en el almacenamiento seguro de Android y no en la propia aplicación.</string>
     <!--Unlock-->
+    <string name="Unlock_Title">Desbloquear</string>
     <string name="Unlock_Passcode">Código de acceso</string>
+    <string name="Unlock_EnterPasscode">Introducir código</string>
     <string name="Unlock_Incorrect">Incorrecto</string>
     <string name="Unlock_BiometricScanner">Escáner biométrico</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Introduzca el código de acceso o vuelva a intentarlo más tarde</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Autenticación biométrica desactivada</string>
     <string name="Unlock_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <string name="Unlock_AttemptsLeft">Intentos restantes: %s</string>
+    <string name="Unlock_Regular">Normal</string>
+    <string name="Unlock_Random">Aleatorio</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Establezca una contraseña</string>
     <string name="PinSet_Info">Su código servirá para abrir su monedero y enviar dinero</string>
     <string name="PinSet_ConfirmInfo">Confirmar</string>
     <string name="PinSet_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo.</string>
     <string name="PinSet_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
+    <string name="PinSet_ForBiometrics">Establecer un código de acceso para habilitar Biometrics</string>
+    <string name="PinSet_ForDuress">Establecer un código de acceso para activar el modo Duración</string>
+    <string name="PinSet_ErrorPinInUse">Este código de acceso ya está siendo usado.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Editar el código </string>
     <string name="EditPin_UnlockInfo">Código Actual</string>

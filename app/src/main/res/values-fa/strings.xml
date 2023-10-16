@@ -442,6 +442,7 @@
     <string name="Settings_LaunchScreen">صفحه شروع</string>
     <string name="Settings_Appearance">ظاهر</string>
     <string name="Settings_PersonalSupport_Request">درخواست</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">۱ ساعت</string>
     <string name="Appearance_Theme">موضوع</string>
     <string name="Appearance_LaunchScreen">صفحه راه اندازی</string>
     <string name="Appearance_AppIcon">نماد برنامه</string>
@@ -452,6 +453,9 @@
     <string name="SettingsAboutApp_Site">وب سایت پروژه</string>
     <string name="SettingsAboutApp_WhatsNew">تغییرات جدید</string>
     <!-- Blockchain Settings  -->
+    <!-- Backup Manager -->
+    <string name="BackupManager_Other">غیره</string>
+    <string name="BackupManager_MergeTitle">هشدار</string>
     <!-- Privacy  -->
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">اینترنت</string>
@@ -484,6 +488,7 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">توصیه شده</string>
     <string name="SettingsSecurity_SyncModeBlockchain">از زنجیره بلوکی</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">خصوصی تر</string>
+    <string name="DuressPin_Notes_Biometrics_Title">احراز هویت بیومتریک</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
 \n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds. It doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
@@ -676,6 +681,7 @@
     <string name="CoinPage_SecurityParams_Privacy">حریم خصوصی</string>
     <string name="CoinPage_SecurityParams_Low">پایین</string>
     <string name="CoinPage_SecurityParams_High">بالا</string>
+    <string name="CoinPage_Overview">نمای کلی</string>
     <string name="CoinPage_Website">وب سایت پروژه</string>
     <string name="CoinPage_Twitter_NoTweets">هنوز توییتی وجود ندارد</string>
     <string name="CoinPage_MarketCap_TvlRation">M.cap / TVL ratio</string>
