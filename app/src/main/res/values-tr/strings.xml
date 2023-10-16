@@ -677,7 +677,9 @@
     <string name="SettingsSecurity_Biometric_Authentication">Biyometrik doğrulama</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Biyometrik Kimlik Doğrulamanın etkinleştirilmesi, düz PIN kilit koduna kıyasla cihazınızın güvenliğini zayıflatabilir.</string>
     <string name="SettingsSecurity_EnablePin">Kod</string>
+    <string name="SettingsSecurity_DisablePin">Şifre Kodunu Devre Dışı Bırak</string>
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
+    <string name="SettingsSecurity_DisableDuressPin">Zorlama Şifresini Devre Dışı Bırak</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>
@@ -690,6 +692,7 @@
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain çıkışlı</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Daha Gizli</string>
     <string name="DuressPin_Notes_Biometrics_Title">Biyometrik doğrulama</string>
+    <string name="DuressPin_Notes_Biometrics_Description">Biyometrik Kimlik Doğrulama özelliği Zorlama Modunun kilidini açmak için çalışacaktır. Kolaylık olması açısından Biyometrik Kimlik Doğrulamayı devre dışı bırakabilirsiniz.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CÜZDANLAR</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
