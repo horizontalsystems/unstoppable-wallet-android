@@ -562,7 +562,6 @@
     <string name="SettingsCurrency_Understand">Anlıyorum</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
-    <string name="Settings_SecurityCenter">Güvenlik</string>
     <string name="Settings_Notifications">Bildirimler</string>
     <string name="Settings_ExperimentalFeatures">Deneysel</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
@@ -956,7 +955,6 @@
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">İzlenen DEX\'ler:</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">İzlenen blok zincirleri: Ethereum, Binance Smart Chain, İyimserlik, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">30 günlük süre boyunca token sahipleri için üretilen toplam gelir. Tipik olarak, ücretler token bahisçileri tarafından veya bir token yakma mekanizması aracılığıyla toplanır.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'ın sıralaması, token bahisçileri için 30 günlük süre boyunca elde edilen gelire dayanmaktadır.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Tüm belirteçlerin listesi, (24 saat / 7D / 1M aralıklarında) bahisçileri için üretilen gelire göre sıralanmıştır.</string>
     <string name="CoinAnalytics_CexVolumeRank">CEX Hacim Sıralaması</string>
     <string name="CoinAnalytics_DexVolumeRank">DEX Hacim Sıralaması</string>
