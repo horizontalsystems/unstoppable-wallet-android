@@ -197,7 +197,7 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valeur de marché totale de toutes les cryptomonnaies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Le changement historique du ratio entre la capitalisation boursière du Bitcoin et le reste des marchés de cryptomonnaies. \n\nGénéralement, lorsque la domination du Bitcoin tend à la hausse, le reste du marché des cryptomonnaies a une tendance à la baisse et vice versa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Le volume de trading de 24h du marché des cryptomonnaies.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">La variation historique du volume d\'échange quotidien agrégé pour %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Valeur de marché totale des projets DeFi.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Valeur totale verrouillée (TVL) dans DeFi.</string>
@@ -445,7 +445,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Veuillez signer un message pour vous authentifier</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signer</string>
     <string name="WalletConnect_Error_NoWallet">Vous devez créer ou importer un portefeuille avant de pouvoir utiliser WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">Vous devez sauvegarder %s avant de pouvoir utiliser WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
     <string name="WalletConnect_Error_WatchAccount">Cette fonctionnalité ne peut être utilisée avec les portefeuilles de type watching only. Vous devez basculer vers un portefeuille restauré ou en créer un </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Blockchain non pris en charge</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Aucun compte approprié</string>
@@ -692,6 +692,7 @@
     <string name="Settings_Appearance">Apparence</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
+    <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
@@ -708,6 +709,12 @@
     <string name="Settings_DonateWith">Donate with</string>
     <string name="Settings_Donate_GetAddress">Get Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
     <string name="Appearance_Theme">Thème</string>
     <string name="Appearance_Tab">PARAMÈTRES DES TAB</string>
     <string name="Appearance_LaunchScreen">ÉCRAN DE LÉCHARGEMENT</string>
@@ -717,6 +724,7 @@
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
     <string name="Appearance_MarketsTab">Onglet Marchés</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
+    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
     <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
     <string name="BalanceViewType_FiatValue">Valeur Fiat</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
@@ -724,6 +732,24 @@
     <string name="SettingsAboutApp_WhatsNew">Nouveautés</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Paramètres de la Blockchain</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Backup Manager</string>
+    <string name="BackupManager_RestoreBackup">Restore Backup</string>
+    <string name="BackupManager_CreateBackup">Create New Backup</string>
+    <string name="BackupManager_BаckupFile">Backup File</string>
+    <string name="BackupManager_Wallets">WALLETS</string>
+    <string name="BackupManager_Other">OTHER</string>
+    <string name="BackupManager_Restore">Restore</string>
+    <string name="BackupManager_BackupFileContents">List of contents in the backup file.</string>
+    <string name="BackupManager_MergeTitle">Warning</string>
+    <string name="BackupManager_MergeButton">Replace</string>
+    <string name="BackupManager_MergeDescription">This action will overwrite your local payment contacts.</string>
+    <string name="BackupManager_BackupRequired">Backup required</string>
+    <string name="BackupManager_WatchWallets">Watch Wallets</string>
+    <string name="BackupManager_Watchlist">Watchlist</string>
+    <string name="BackupManager_CustomRpc">Custom RPC</string>
+    <string name="BackupManager_AppSettingsTitle">App Settings</string>
+    <string name="BackupManager_AppSettingsDescription">Language, Currency, Appearance …</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable ne collecte aucune donnée et n\'utilise aucun outil d\'analyse susceptible d\'exposer des données sur ses utilisateurs. Le portefeuille est conçu pour assurer un haut niveau de confidentialité à ses utilisateurs.</string>
     <string name="Privacy_BulletedText1">Les données de l\'utilisateur restent toujours sur l\'appareil de l\'utilisateur.</string>
@@ -762,10 +788,15 @@
     <string name="Info_Title">Infos</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Confidentialité</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Authentification biométrique</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">L\'activation de l\'authentification biométrique peut potentiellement affaiblir la sécurité de votre appareil par rapport à un simple code de verrouillage PIN.</string>
-    <string name="SettingsSecurity_EnablePin">Code</string>
+    <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
+    <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Modifier le code</string>
+    <string name="SettingsSecurity_SetDuressPin">Set Duress Mode</string>
+    <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
+    <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
+    <string name="SettingsSecurity_DuressPinDescription">A specialized mode designed to keep selected wallets safe under coercion.</string>
     <string name="SettingsSecurity_ManageKeys">Gérer les portefeuilles</string>
     <string name="SettingsSecurity_AppRestartWarning">Cette opération va redémarrer Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonymisez complètement votre connexion Internet lorsque vous utilisez cette application. Remarque : dans certains cas, la fonction WalletConnect pour les applications DeFi peut être très lente ou ne pas fonctionner du tout.</string>
@@ -778,6 +809,23 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Recommandé</string>
     <string name="SettingsSecurity_SyncModeBlockchain">De la Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Plus Privé</string>
+    <string name="SetDuressPin_Title">Duress Passcode</string>
+    <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
+    <string name="EditDuressPin_Title">Edit Duress Passcode</string>
+    <string name="EditDuressPin_Description">Enter new passcode for Duress Mode</string>
+    <string name="DuressPin_Title">Duress Mode</string>
+    <string name="DuressPin_Description">This mode allows user to setup multiple unlock app passcodes where a desired passcode shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
+    <string name="DuressPin_Notes">NOTES</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Biometrics</string>
+    <string name="DuressPin_Notes_Biometrics_Description">The Biometric Authentication feature will work to unlock the Duress Mode. You can disable Biometric Authentication for convenience.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Passcode Disabling</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Disabling the passcode in the main mode will automatically reset the duress mode.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Passcode Change</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Changing the passcode in the Duress Mode will also change the current PIN code for that mode.</string>
+    <string name="DuressPinSelectAccounts_Title">Select Wallets</string>
+    <string name="DuressPinSelectAccounts_Description">Select the wallets that will be displayed in duress mode.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Unstoppable Wallet est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.
 
@@ -1108,6 +1156,7 @@
     <string name="CoinPage_SecurityParams_Audits">Audits</string>
     <string name="CoinPage_Range24">Plage de 24h</string>
     <string name="CoinPage_About">À propos de</string>
+    <string name="CoinPage_Overview">Overview</string>
     <string name="CoinPage_Category">Catégorie</string>
     <string name="CoinPage_Categories">Catégories</string>
     <string name="CoinPage_Contracts">Contrats</string>
@@ -1179,13 +1228,14 @@
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Indicators available only for Unstoppable Wallet premium users.</string>
+    <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank is based on trading volume on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank is based on trading volume on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes that are being tracked:</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
@@ -1197,7 +1247,7 @@
     <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over a 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
@@ -1207,11 +1257,11 @@
     <string name="CoinAnalytics_Holders_TrackedBlockchains">Tracked blockchains: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Graphique montrant la variation valeur totale verrouillée dans les contrats intelligents du projet sur une période de 1 an.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Rang du token en fonction de la valeur totale verrouillée actuelle.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank is based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">Liste de tous les tokens classés en fonction de la valeur totale verrouillée.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Rapport entre la capitalisation du marché et la TVL du projet.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total des revenus générés pour les détenteurs de tokens sur une période de 30 jours. Généralement, les frais sont perçus par les détenteurs de tokens ou bien par le biais d\'un mécanisme de brûlage de tokens.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Classement du token basé sur les revenus générés sur une période de 30 jours pour les stakers de token.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank is based on the revenue generated over a 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Liste de tous les tokens classés en fonction des revenus générés pour les stakers de tokens sur des intervalles de 24h / 7J / 1M.</string>
     <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Moving Averages (MA): These are commonly used technical indicators that smooth out price data to create a trend-following indicator. They show the average price over a specific time period. There are several types of MAs:\n\nSimple Moving Average (SMA): This calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.\n\nExponential Moving Average (EMA): This gives more weight to recent prices, thereby responding more quickly to recent price changes.</string>
@@ -1222,16 +1272,16 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">Les tokens classés en fonction du volume de trading du token sur les exchanges centralisés.</string>
     <string name="CoinAnalytics_DexVolume">Volume DEX</string>
     <string name="CoinAnalytics_DexVolumeRank">Rang de volume DEX</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Les tokens classés en fonction du volume de trading du token sur les exchanges décentralisés.</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens are ranked by trading volume for the token on decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity">Liquidité DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Classement de liquidité DEX</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Les tokens classés par liquidité disponible sur les exchanges décentralisés.</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens are ranked by available liquidity on decentralized exchanges.</string>
     <string name="CoinAnalytics_ActiveAddresses">Adresses actives quotidiennes</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Classement des adresses actives</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens classés par nombre d\'adresses uniques effectuant des transactions avec le token.</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens are ranked by a number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">Nombre de transactions</string>
     <string name="CoinAnalytics_TransactionCountRank">Classement par nombre de tr.</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens classés en fonction du nombre de transactions sur une blockchain.</string>
+    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens are ranked by number of transactions on a blockchain.</string>
     <string name="CoinAnalytics_Holders">Titres</string>
     <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projet TVL (valeur totale verrouillée)</string>
@@ -1241,8 +1291,8 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Classement en fonction des revenus du projet</string>
     <string name="CoinAnalytics_ProjectFeeRank">Project Fee Rank</string>
     <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens classés en fonction des revenus générés pour les détenteurs via des mécanismes i.e. staking ou token burns.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens are ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens are ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
     <string name="CoinAnalytics_OtherData">Autres données</string>
     <string name="CoinAnalytics_Reports">Rapports</string>
@@ -1265,7 +1315,7 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">The overall score is based on the average daily active addresses over the last 7 days.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding respective token.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding the respective tokens.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
     <string name="Coin_Analytics_Details">Details</string>
     <string name="Coin_Analytics_SelectPeriod">Select Period</string>
@@ -1402,19 +1452,26 @@
     <string name="OSPin_Confirm_Desciption">Cette application nécessite qu\'un code secret soit activé sur le téléphone (verrouillage de l\'écran). \n\nVous pouvez activer cette fonction dans les paramètres Android. \n\nVeuillez noter que lorsque vous avez désactivé le code PIN au niveau du système d\'exploitation, les mesures de sécurité stockées sur votre téléphone ont rendu invalide les données précédemment stockées. Vous devrez Restaurer vos clés de porte-monnaie pour revenir à votre porte-monnaie.</string>
     <string name="OSPin_Prompt_Desciption">Cette application nécessite le code PIN de votre téléphone afin de conserver les données confidentielles de votre porte-monnaie dans le stockage sécurisé d\'Android et non dans l\'application elle-même.</string>
     <!--Unlock-->
+    <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">Code</string>
+    <string name="Unlock_EnterPasscode">Enter Passcode</string>
     <string name="Unlock_Incorrect">Incorrecte</string>
     <string name="Unlock_BiometricScanner">Scanner biométrique</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Entrez le code d\'accès ou réessayez plus tard</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Autorisation biométrique désactivée</string>
     <string name="Unlock_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <string name="Unlock_AttemptsLeft">Attempts left: %s</string>
+    <string name="Unlock_Regular">Regular</string>
+    <string name="Unlock_Random">Random</string>
     <!--Set Pin-->
-    <string name="PinSet_Title">Définir le code d\'accès</string>
+    <string name="PinSet_Title">Create Passcode</string>
     <string name="PinSet_Info">Votre code secret sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
     <string name="PinSet_ConfirmInfo">Confirmer</string>
     <string name="PinSet_ErrorPinsDontMatch">Le code ne correspond pas. Réessayez.</string>
     <string name="PinSet_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code. Veuillez réessayer.</string>
+    <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>
+    <string name="PinSet_ForDuress">Set a passcode to enable Duress Mode</string>
+    <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Modifier le code </string>
     <string name="EditPin_UnlockInfo">Le code actuel</string>
