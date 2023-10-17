@@ -199,7 +199,7 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Историческое изменение соотношения рыночной капитализации биткойнов к остальным криптовалютным рынкам. \n\nОбычно, в этом случае биткойны доминируют над остальными тенденциями криптовалютного рынка наоборот.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">24-часовой объем крипторынка.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">Историческое изменение усредненного ежедневного объема торговли для %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Общая рыночная стоимость проектов DeFi.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Всего заблокировано (TVL) в DeFi.</string>
@@ -447,7 +447,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Пожалуйста, подпишите сообщение для аутентификации</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
     <string name="WalletConnect_Error_NoWallet">Вам нужно создать или импортировать кошелек перед использованием WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">Вам нужно сделать резервную копию %s перед использованием WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
@@ -694,6 +694,7 @@
     <string name="Settings_Appearance">Оформление</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
+    <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
@@ -710,6 +711,12 @@
     <string name="Settings_DonateWith">Donate with</string>
     <string name="Settings_Donate_GetAddress">Get Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
@@ -719,6 +726,7 @@
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_MarketsTab">Вкладка рынки</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
+    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
@@ -726,6 +734,24 @@
     <string name="SettingsAboutApp_WhatsNew">Что нового</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Настройки блокчейна</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Backup Manager</string>
+    <string name="BackupManager_RestoreBackup">Restore Backup</string>
+    <string name="BackupManager_CreateBackup">Create New Backup</string>
+    <string name="BackupManager_BаckupFile">Backup File</string>
+    <string name="BackupManager_Wallets">WALLETS</string>
+    <string name="BackupManager_Other">OTHER</string>
+    <string name="BackupManager_Restore">Restore</string>
+    <string name="BackupManager_BackupFileContents">List of contents in the backup file.</string>
+    <string name="BackupManager_MergeTitle">Warning</string>
+    <string name="BackupManager_MergeButton">Replace</string>
+    <string name="BackupManager_MergeDescription">This action will overwrite your local payment contacts.</string>
+    <string name="BackupManager_BackupRequired">Backup required</string>
+    <string name="BackupManager_WatchWallets">Watch Wallets</string>
+    <string name="BackupManager_Watchlist">Watchlist</string>
+    <string name="BackupManager_CustomRpc">Custom RPC</string>
+    <string name="BackupManager_AppSettingsTitle">App Settings</string>
+    <string name="BackupManager_AppSettingsDescription">Language, Currency, Appearance …</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable не собирает данные и не использует инструменты аналитики, которые могут раскрывать любые данные о своих пользователях. Кошелек разработан для обеспечения высокого уровня конфиденциальности для своих пользователей.</string>
     <string name="Privacy_BulletedText1">Данные пользователя всегда остаются на устройстве пользователя.</string>
@@ -761,10 +787,15 @@
     <string name="Info_Title">Информация</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Приватность</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Биометрическая аутентификация</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Активация биометрической аутентификации может потенциально ослабить безопасность вашего устройства по сравнению с простым PIN-кодом.</string>
-    <string name="SettingsSecurity_EnablePin">Код доступа</string>
+    <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
+    <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Изменить код</string>
+    <string name="SettingsSecurity_SetDuressPin">Set Duress Mode</string>
+    <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
+    <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
+    <string name="SettingsSecurity_DuressPinDescription">A specialized mode designed to keep selected wallets safe under coercion.</string>
     <string name="SettingsSecurity_ManageKeys">Управление кошельками</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
@@ -777,6 +808,23 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Рекомендовано</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Из блокчейна</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Более приватно</string>
+    <string name="SetDuressPin_Title">Duress Passcode</string>
+    <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
+    <string name="EditDuressPin_Title">Edit Duress Passcode</string>
+    <string name="EditDuressPin_Description">Enter new passcode for Duress Mode</string>
+    <string name="DuressPin_Title">Duress Mode</string>
+    <string name="DuressPin_Description">This mode allows user to setup multiple unlock app passcodes where a desired passcode shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
+    <string name="DuressPin_Notes">NOTES</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Biometrics</string>
+    <string name="DuressPin_Notes_Biometrics_Description">The Biometric Authentication feature will work to unlock the Duress Mode. You can disable Biometric Authentication for convenience.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Passcode Disabling</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Disabling the passcode in the main mode will automatically reset the duress mode.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Passcode Change</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Changing the passcode in the Duress Mode will also change the current PIN code for that mode.</string>
+    <string name="DuressPinSelectAccounts_Title">Select Wallets</string>
+    <string name="DuressPinSelectAccounts_Description">Select the wallets that will be displayed in duress mode.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Кошелек Unstoppable предназначен для тех, кто хочет инвестировать и хранить криптовалюты частным и независимым образом.
 
@@ -1107,6 +1155,7 @@
     <string name="CoinPage_SecurityParams_Audits">Аудиты</string>
     <string name="CoinPage_Range24">Диапазон за 24 ч</string>
     <string name="CoinPage_About">О проекте</string>
+    <string name="CoinPage_Overview">Overview</string>
     <string name="CoinPage_Category">Категория</string>
     <string name="CoinPage_Categories">Категории</string>
     <string name="CoinPage_Contracts">Контракты</string>
@@ -1178,13 +1227,14 @@
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Indicators available only for Unstoppable Wallet premium users.</string>
-    <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
+    <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">График, показывающий колебания дневного объема торговли токеном на ведущих централизованных биржах за 1 год.</string>
-    <string name="CoinAnalytics_CexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих централизованных биржах за 30-дневный период.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank is based on trading volume on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info4">Список всех токенов, ранжированных по объему торговли на децентрализованных биржах за 24ч/7дн/1мес.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Общий объем торгов по токену на ведущих децентрализованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_DexVolume_Info2">График, показывающий колебания дневного объема торговли токеном на ведущих децентрализованных биржах за 1 год.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих децентрализованных биржах за 30-дневный период.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank is based on trading volume on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">Список всех токенов, ранжированных по объему торговли на децентрализованных биржах за 24ч/7дн/1мес.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">Отслеживаемые DEX биржи:</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Общая ликвидность, доступная в настоящий момент для токена на ведущих децентрализованных биржах.</string>
@@ -1196,7 +1246,7 @@
     <string name="CoinAnalytics_ActiveAddresses_Info3">Общее количество уникальных адресов блокчейна, с которых проводились транзакции с токеном за 30 дней.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">Рейтинг токена основан на количестве активных кошельков, используемых для транзакций с токеном за 30-дневный период.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info5">Список всех токенов, ранжированных по ежедневному количеству активных адресов транзакций с токеном с интервалом 24ч. / 7 дн. / 1 мес.</string>
-    <string name="CoinAnalytics_TransactionCount_Info1">Общее количество уникальных транзакций блокчейна с токеном более 30 дней.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over a 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">График, отражающий колебания количества транзакций за 1 год.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Рейтинг токена основан на количестве транзакций с токеном за 30-дневный период.</string>
     <string name="CoinAnalytics_TransactionCount_Info4">Список всех токенов, ранжированных на основе количества транзакций с интервалом 24ч / 7D / 1М.</string>
@@ -1206,11 +1256,11 @@
     <string name="CoinAnalytics_Holders_TrackedBlockchains">Отслеживаемые блокчейны: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">TVL (или активы под управлением) в проектных смарт-контрактах.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">График, отражающий колебания TVL в проектных смарт-контрактах за период, превышающий 1 год.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Рейтинг токена по текущему TVL.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank is based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">Список всех токенов, ранжированных по текущему TVL.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Соотношение рыночной капитализации/TVL в рамках проекта.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">Общая прибыль, полученная владельцами токенов за 30-дневный период. Как правило, плата взимается стейкерами токенов или посредством сжигания токенов.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Рейтинг токена основан на доходе, полученном стейкерами токенов за 30-дневный период.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank is based on the revenue generated over a 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Список всех токенов, ранжированных на основе пассивного дохода стейкеров токенов с интервалом 24ч. / 7 дн. / 1 мес.</string>
     <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Moving Averages (MA): These are commonly used technical indicators that smooth out price data to create a trend-following indicator. They show the average price over a specific time period. There are several types of MAs:\n\nSimple Moving Average (SMA): This calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.\n\nExponential Moving Average (EMA): This gives more weight to recent prices, thereby responding more quickly to recent price changes.</string>
@@ -1221,16 +1271,16 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">Торговый объем токена на централизованных биржах.</string>
     <string name="CoinAnalytics_DexVolume">Объем DEX</string>
     <string name="CoinAnalytics_DexVolumeRank">Рейтинг объема DEX</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Торговый объем токена на децентрализованных биржах.</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens are ranked by trading volume for the token on decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity">Ликвидность DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank">Рейтинг ликвидности DEX</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Рейтинг токенов основан по доступной ликвидности на децентрализованных биржах.</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens are ranked by available liquidity on decentralized exchanges.</string>
     <string name="CoinAnalytics_ActiveAddresses">Ежедневные активные адреса</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Рейтинг активных адресов</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Список токенов, ранжированных по количеству уникальных адресов транзакций с токеном.</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens are ranked by a number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">Количество транзакций</string>
     <string name="CoinAnalytics_TransactionCountRank">Рейтинг кол-ва транзакций</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Токены ранжируются по количеству транзакций в блокчейне.</string>
+    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens are ranked by number of transactions on a blockchain.</string>
     <string name="CoinAnalytics_Holders">Держатели</string>
     <string name="CoinAnalytics_ProjectTvl">Проект TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Проект TVL (совокупная сумма средств заблокирована)</string>
@@ -1240,8 +1290,8 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Рейтинг доходов</string>
     <string name="CoinAnalytics_ProjectFeeRank">Project Fee Rank</string>
     <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Токены ранжируются по пассивному доходу владельцев, получаемому через стекинг или сжигание токенов.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens are ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens are ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
     <string name="CoinAnalytics_OtherData">Другие данные</string>
     <string name="CoinAnalytics_Reports">Отчёты</string>
@@ -1264,7 +1314,7 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">The overall score is based on the average daily active addresses over the last 7 days.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding respective token.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding the respective tokens.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
     <string name="Coin_Analytics_Details">Details</string>
     <string name="Coin_Analytics_SelectPeriod">Select Period</string>
@@ -1401,19 +1451,26 @@
     <string name="OSPin_Confirm_Desciption">Это приложение требует, чтобы на телефоне был включен пароль (экран блокировки).\n\nВы можете включить его в настройках Android.\n\nПожалуйста, обратите внимание, что после того, как вы отключили PIN-код на уровне ОС,  в безопасном хранилище вашего телефона ранее сохраненные данные стали недействительными. Поэтому Вам нужно восстановить ключи, чтобы вернуться к вашему кошельку.</string>
     <string name="OSPin_Prompt_Desciption">Это приложение требует PIN-код вашего телефона, чтобы сохранить конфиденциальные данные  вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
     <!--Unlock-->
+    <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">Код доступа</string>
+    <string name="Unlock_EnterPasscode">Enter Passcode</string>
     <string name="Unlock_Incorrect">Неправильно</string>
     <string name="Unlock_BiometricScanner">Биометрический сканер</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Введите код доступа или повторите попытку позже</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Биометрическая аутентификация отключена</string>
     <string name="Unlock_WalletDisabledUntil">Отключено до: %s</string>
     <string name="Unlock_AttemptsLeft">Attempts left: %s</string>
+    <string name="Unlock_Regular">Regular</string>
+    <string name="Unlock_Random">Random</string>
     <!--Set Pin-->
-    <string name="PinSet_Title">Установить код доступа</string>
+    <string name="PinSet_Title">Create Passcode</string>
     <string name="PinSet_Info">Код доступа будет использоваться для разблокировки вашего кошелька</string>
     <string name="PinSet_ConfirmInfo">Подтвердить</string>
     <string name="PinSet_ErrorPinsDontMatch">Код не совпадает. Попробуйте еще раз.</string>
     <string name="PinSet_ErrorFailedToSavePin">При сохранении вашего кода произошла ошибка. Повторите попытку.</string>
+    <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>
+    <string name="PinSet_ForDuress">Set a passcode to enable Duress Mode</string>
+    <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Изменить код</string>
     <string name="EditPin_UnlockInfo">Текущий код</string>
