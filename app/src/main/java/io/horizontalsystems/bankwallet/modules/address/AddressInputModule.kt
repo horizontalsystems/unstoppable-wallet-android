@@ -43,6 +43,9 @@ object AddressInputModule {
                 BlockchainType.Tron -> {
                     addressViewModel.addAddressHandler(AddressHandlerTron())
                 }
+                BlockchainType.Ton -> {
+                    addressViewModel.addAddressHandler(AddressHandlerTon())
+                }
                 is BlockchainType.Unsupported -> Unit
             }
 
@@ -79,6 +82,7 @@ object AddressInputModule {
                 }
                 BlockchainType.Solana,
                 BlockchainType.Tron,
+                BlockchainType.Ton,
                 is BlockchainType.Unsupported -> Unit
             }
 
