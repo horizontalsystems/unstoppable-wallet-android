@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -424,8 +425,46 @@ class TransactionViewItemFactory(
                 )
             }
 
+            is TonTransactionRecord -> {
+                createViewItemFromTonTransactionRecord(
+                    uid = record.uid,
+                    timestamp = record.timestamp,
+                    icon = icon,
+                    record = record
+                )
+            }
+
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
+    }
+
+    private fun createViewItemFromTonTransactionRecord(
+        uid: String,
+        timestamp: Long,
+        icon: TransactionViewItem.Icon.Failed?,
+        record: TonTransactionRecord,
+    ): TransactionViewItem {
+        val primaryValue = record.mainValue?.let { mainValue ->
+            mainValue.decimalValue?.let {
+                val color = when {
+                    it > BigDecimal.ZERO -> ColorName.Remus
+                    else -> ColorName.Lucian
+                }
+                getColoredValue(record.mainValue, color)
+            }
+        }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = null,
+            title = Translator.getString(R.string.Transactions_Unknown),
+            subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
+            primaryValue = primaryValue,
+            secondaryValue = null,
+            showAmount = showAmount,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?:TransactionViewItem.Icon.Platform(BlockchainType.Solana)
+        )
     }
 
     private fun createViewItemFromSolanaUnknownTransactionRecord(

@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SplAdapter
+import io.horizontalsystems.bankwallet.core.adapters.TonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.TronAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TronTransactionConverter
@@ -137,6 +138,9 @@ class AdapterFactory(
             }
             BlockchainType.Tron -> {
                 TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
+            }
+            BlockchainType.Ton -> {
+                TonAdapter(wallet)
             }
 
             else -> null
