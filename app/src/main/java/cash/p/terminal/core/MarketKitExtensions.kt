@@ -262,6 +262,7 @@ val BlockchainType.title: String
     BlockchainType.Gnosis -> "Gnosis"
     BlockchainType.Fantom -> "Fantom"
     BlockchainType.Tron -> "Tron"
+    BlockchainType.Ton -> "Ton"
     is BlockchainType.Unsupported -> this.uid
 }
 
@@ -516,4 +517,5 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Solana,
         BlockchainType.ECash,
         BlockchainType.Tron,
+        BlockchainType.Ton,
     )

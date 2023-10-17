@@ -122,6 +122,7 @@ class AddressHandlerUdn(
             BlockchainType.Zcash -> "ZEC"
             BlockchainType.Solana -> "SOL"
             BlockchainType.Tron -> "TRX"
+            BlockchainType.Ton -> "TON"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 
@@ -287,6 +288,16 @@ class AddressHandlerTron : IAddressHandler {
     override fun parseAddress(value: String): Address {
         val tronAddress = io.horizontalsystems.tronkit.models.Address.fromBase58(value)
         return Address(tronAddress.base58)
+    }
+}
+
+class AddressHandlerTon : IAddressHandler {
+    override fun isSupported(value: String): Boolean {
+        TODO()
+    }
+
+    override fun parseAddress(value: String): Address {
+        TODO()
     }
 }
 
