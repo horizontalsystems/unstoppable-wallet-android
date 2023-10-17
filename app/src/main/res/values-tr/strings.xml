@@ -197,7 +197,7 @@
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of crypto market.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Total market value of DeFi projects.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
@@ -449,7 +449,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Lütfen doğrulamak için bir mesajı imzalayın</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
     <string name="WalletConnect_Error_NoWallet">WalletConnect\'i kullanmadan önce bir cüzdan oluşturmanız veya içe aktarmanız gerekir</string>
-    <string name="WalletConnect_Error_NeedBackup">WalletConnect\'i kullanmadan önce %s yedeklemeniz gerekir</string>
+    <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
     <string name="WalletConnect_Error_WatchAccount">Bu özellik salt izlenir cüzdanlarda çalışmaz, geri yüklediğiniz veya oluşturduğunuz bir cüzdana geçmeniz gerekiyor </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Desteklenmeyen Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
@@ -696,6 +696,7 @@
     <string name="Settings_Appearance">Görünüm</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
+    <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
@@ -712,6 +713,12 @@
     <string name="Settings_DonateWith">Donate with</string>
     <string name="Settings_Donate_GetAddress">Get Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">TAB AYARLARI</string>
     <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
@@ -721,6 +728,7 @@
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
     <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
+    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
     <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
@@ -728,6 +736,24 @@
     <string name="SettingsAboutApp_WhatsNew">Neler yeni</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Blockchain Ayarları</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Backup Manager</string>
+    <string name="BackupManager_RestoreBackup">Restore Backup</string>
+    <string name="BackupManager_CreateBackup">Create New Backup</string>
+    <string name="BackupManager_BаckupFile">Backup File</string>
+    <string name="BackupManager_Wallets">WALLETS</string>
+    <string name="BackupManager_Other">OTHER</string>
+    <string name="BackupManager_Restore">Restore</string>
+    <string name="BackupManager_BackupFileContents">List of contents in the backup file.</string>
+    <string name="BackupManager_MergeTitle">Warning</string>
+    <string name="BackupManager_MergeButton">Replace</string>
+    <string name="BackupManager_MergeDescription">This action will overwrite your local payment contacts.</string>
+    <string name="BackupManager_BackupRequired">Backup required</string>
+    <string name="BackupManager_WatchWallets">Watch Wallets</string>
+    <string name="BackupManager_Watchlist">Watchlist</string>
+    <string name="BackupManager_CustomRpc">Custom RPC</string>
+    <string name="BackupManager_AppSettingsTitle">App Settings</string>
+    <string name="BackupManager_AppSettingsDescription">Language, Currency, Appearance …</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable herhangi bir veri toplamaz veya kullanıcıları hakkında herhangi bir veriyi ifşa edebilecek analiz araçları kullanmaz. Unstoppable cüzdanı kullanıcıları için yüksek düzeyde gizlilik sağlamak üzere tasarlanmıştır.</string>
     <string name="Privacy_BulletedText1">Kullanıcı verileri her zaman kullanıcının cihazında kalır.</string>
@@ -763,10 +789,15 @@
     <string name="Info_Title">Bilgi</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Gizlilik</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biyometrik doğrulama</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Biyometrik Kimlik Doğrulamanın etkinleştirilmesi, düz PIN kilit koduna kıyasla cihazınızın güvenliğini zayıflatabilir.</string>
-    <string name="SettingsSecurity_EnablePin">Kod</string>
+    <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
+    <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
+    <string name="SettingsSecurity_SetDuressPin">Set Duress Mode</string>
+    <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
+    <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
+    <string name="SettingsSecurity_DuressPinDescription">A specialized mode designed to keep selected wallets safe under coercion.</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>
@@ -779,6 +810,23 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">Tavsiye Edilen</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain çıkışlı</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Daha Gizli</string>
+    <string name="SetDuressPin_Title">Duress Passcode</string>
+    <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
+    <string name="EditDuressPin_Title">Edit Duress Passcode</string>
+    <string name="EditDuressPin_Description">Enter new passcode for Duress Mode</string>
+    <string name="DuressPin_Title">Duress Mode</string>
+    <string name="DuressPin_Description">This mode allows user to setup multiple unlock app passcodes where a desired passcode shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
+    <string name="DuressPin_Notes">NOTES</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Biometrics</string>
+    <string name="DuressPin_Notes_Biometrics_Description">The Biometric Authentication feature will work to unlock the Duress Mode. You can disable Biometric Authentication for convenience.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Passcode Disabling</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Disabling the passcode in the main mode will automatically reset the duress mode.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Passcode Change</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Changing the passcode in the Duress Mode will also change the current PIN code for that mode.</string>
+    <string name="DuressPinSelectAccounts_Title">Select Wallets</string>
+    <string name="DuressPinSelectAccounts_Description">Select the wallets that will be displayed in duress mode.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
 
@@ -1114,6 +1162,7 @@
     <string name="CoinPage_SecurityParams_Audits">Audits</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
+    <string name="CoinPage_Overview">Overview</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Categories">Categories</string>
     <string name="CoinPage_Contracts">Contracts</string>
@@ -1185,13 +1234,14 @@
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Indicators available only for Unstoppable Wallet premium users.</string>
-    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank is based on trading volume on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank is based on trading volume on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">İzlenen DEX\'ler:</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
@@ -1203,7 +1253,7 @@
     <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over a 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
@@ -1213,11 +1263,11 @@
     <string name="CoinAnalytics_Holders_TrackedBlockchains">İzlenen blok zincirleri: Ethereum, Binance Smart Chain, İyimserlik, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank is based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">List of all tokens ranked based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Market Cap / TVL ratio for the project.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">30 günlük süre boyunca token sahipleri için üretilen toplam gelir. Tipik olarak, ücretler token bahisçileri tarafından veya bir token yakma mekanizması aracılığıyla toplanır.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'ın sıralaması, token bahisçileri için 30 günlük süre boyunca elde edilen gelire dayanmaktadır.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank is based on the revenue generated over a 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Tüm belirteçlerin listesi, (24 saat / 7D / 1M aralıklarında) bahisçileri için üretilen gelire göre sıralanmıştır.</string>
     <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Moving Averages (MA): These are commonly used technical indicators that smooth out price data to create a trend-following indicator. They show the average price over a specific time period. There are several types of MAs:\n\nSimple Moving Average (SMA): This calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.\n\nExponential Moving Average (EMA): This gives more weight to recent prices, thereby responding more quickly to recent price changes.</string>
@@ -1228,16 +1278,16 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">Tokens ranked by trading volume for the token on centralized exchanges.</string>
     <string name="CoinAnalytics_DexVolume">DEX Volume</string>
     <string name="CoinAnalytics_DexVolumeRank">DEX Hacim Sıralaması</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens ranked by trading volume for the token on decentralized exchanges.</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens are ranked by trading volume for the token on decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity">DEX Liquidity</string>
     <string name="CoinAnalytics_DexLiquidityRank">DEX Likidite Sıralaması</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens ranked by available liquidity on decentralized exchanges.</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens are ranked by available liquidity on decentralized exchanges.</string>
     <string name="CoinAnalytics_ActiveAddresses">Daily Active Addresses</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Aktif Adresler Sıralaması</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens ranked by number of unique addresses transacting with the token.</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens are ranked by a number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">Transaction Count</string>
     <string name="CoinAnalytics_TransactionCountRank">İşlem Sayısı Sıralaması</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens ranked by number of transactions on a blockchain.</string>
+    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens are ranked by number of transactions on a blockchain.</string>
     <string name="CoinAnalytics_Holders">Holders</string>
     <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Proje TVL (Toplam Değer)</string>
@@ -1247,8 +1297,8 @@
     <string name="CoinAnalytics_ProjectRevenueRank">Proje Gelir Sıralaması</string>
     <string name="CoinAnalytics_ProjectFeeRank">Project Fee Rank</string>
     <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens are ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens are ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
     <string name="CoinAnalytics_OtherData">Other Data</string>
     <string name="CoinAnalytics_Reports">Reports</string>
@@ -1271,7 +1321,7 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">The overall score is based on the average daily active addresses over the last 7 days.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding respective token.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding the respective tokens.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
     <string name="Coin_Analytics_Details">Details</string>
     <string name="Coin_Analytics_SelectPeriod">Select Period</string>
@@ -1408,19 +1458,26 @@
     <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
     <string name="OSPin_Prompt_Desciption">Bu uygulama, hassas bilgileri kendi deposunda tutmaktansa Android\'in güvenli deposunda tutmak için telefonun PİN\'ine ihtiyaç duyar.</string>
     <!--Unlock-->
+    <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">Şifre</string>
+    <string name="Unlock_EnterPasscode">Enter Passcode</string>
     <string name="Unlock_Incorrect">Yanlış</string>
     <string name="Unlock_BiometricScanner">Biyometri Tarayıcı</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Parolayı girin veya daha sonra tekrar deneyin</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Biyometrik kimlik. etkisizleştirildi</string>
     <string name="Unlock_WalletDisabledUntil">Engellendi: %s</string>
     <string name="Unlock_AttemptsLeft">Attempts left: %s</string>
+    <string name="Unlock_Regular">Regular</string>
+    <string name="Unlock_Random">Random</string>
     <!--Set Pin-->
-    <string name="PinSet_Title">Şifre belirle</string>
+    <string name="PinSet_Title">Create Passcode</string>
     <string name="PinSet_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>
     <string name="PinSet_ConfirmInfo">Onayla</string>
     <string name="PinSet_ErrorPinsDontMatch">Kod uyuşmadı. Tekrar deneyin.</string>
     <string name="PinSet_ErrorFailedToSavePin">Şifre kaydedilirken hata oluştu. Tekrar deneyin.</string>
+    <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>
+    <string name="PinSet_ForDuress">Set a passcode to enable Duress Mode</string>
+    <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Kod Değiştir</string>
     <string name="EditPin_UnlockInfo">Şimdiki Kod</string>
