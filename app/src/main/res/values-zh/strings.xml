@@ -197,7 +197,7 @@
     <string name="MarketGlobalMetrics_TvlInDefi">DeFi锁定</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">所有加密货币的总市场价值.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">比特币市值与其他加密货币市值之间比率的历史变化。\n\n通常，当比特币主导地位上升时，其他加密市场会下降，反之亦然。</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">加密货币市场24小时交易量.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">%s 每日交易量的历史变化</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">去中心化金融（DeFi）项目的总市场价值.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">去中心金融（DeFi）中的锁定总价值（TVL)</string>
@@ -445,7 +445,7 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">请对消息签名以便进行验证</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
     <string name="WalletConnect_Error_NoWallet">您需要先创建或导入钱包才能使用 WaletConnect。</string>
-    <string name="WalletConnect_Error_NeedBackup">您需要先备份 %s 才能使用钱包连接</string>
+    <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
     <string name="WalletConnect_Error_WatchAccount">此功能不适用于观察中的钱包，您需要切换到恢复或创建的钱包 </string>
     <string name="WalletConnect_Error_UnsupportedChainId">不支持的Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">没有合适的帐户</string>
@@ -692,6 +692,7 @@
     <string name="Settings_Appearance">外观</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
+    <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
@@ -708,6 +709,12 @@
     <string name="Settings_DonateWith">Donate with</string>
     <string name="Settings_Donate_GetAddress">Get Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
     <string name="Appearance_Theme">主题</string>
     <string name="Appearance_Tab">TAB设置</string>
     <string name="Appearance_LaunchScreen">局域网SCREEN</string>
@@ -717,6 +724,7 @@
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
     <string name="Appearance_MarketsTab">市场选项卡</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
+    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
     <string name="BalanceViewType_CoinValue">币值</string>
     <string name="BalanceViewType_FiatValue">纤维值</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
@@ -724,6 +732,24 @@
     <string name="SettingsAboutApp_WhatsNew">更新说明</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">区块链设置</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Backup Manager</string>
+    <string name="BackupManager_RestoreBackup">Restore Backup</string>
+    <string name="BackupManager_CreateBackup">Create New Backup</string>
+    <string name="BackupManager_BаckupFile">Backup File</string>
+    <string name="BackupManager_Wallets">WALLETS</string>
+    <string name="BackupManager_Other">OTHER</string>
+    <string name="BackupManager_Restore">Restore</string>
+    <string name="BackupManager_BackupFileContents">List of contents in the backup file.</string>
+    <string name="BackupManager_MergeTitle">Warning</string>
+    <string name="BackupManager_MergeButton">Replace</string>
+    <string name="BackupManager_MergeDescription">This action will overwrite your local payment contacts.</string>
+    <string name="BackupManager_BackupRequired">Backup required</string>
+    <string name="BackupManager_WatchWallets">Watch Wallets</string>
+    <string name="BackupManager_Watchlist">Watchlist</string>
+    <string name="BackupManager_CustomRpc">Custom RPC</string>
+    <string name="BackupManager_AppSettingsTitle">App Settings</string>
+    <string name="BackupManager_AppSettingsDescription">Language, Currency, Appearance …</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">不可阻挡不会收集任何数据，也不会使用可能会暴露任何用户数据的分析工具。 钱包的设计是为了确保用户高度的隐私。</string>
     <string name="Privacy_BulletedText1">用户数据总是保留在用户的设备上。</string>
@@ -763,10 +789,15 @@
     <string name="Info_Title">信息</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">隐私保护</string>
-    <string name="SettingsSecurity_Biometric_Authentication">生物认证</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">启用生物认证会削弱设备的整体安全性（PIN码更安全）</string>
-    <string name="SettingsSecurity_EnablePin">启用密码</string>
+    <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
+    <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">编辑密码</string>
+    <string name="SettingsSecurity_SetDuressPin">Set Duress Mode</string>
+    <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
+    <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
+    <string name="SettingsSecurity_DuressPinDescription">A specialized mode designed to keep selected wallets safe under coercion.</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动本钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">使用此功能让您的网络完全匿名化。请注意，在某些情况下，DeFi的钱包链接功能可能非常慢或根本不起作用。</string>
@@ -779,6 +810,23 @@
     <string name="SettingsSecurity_SyncModeAPIDescription">推荐</string>
     <string name="SettingsSecurity_SyncModeBlockchain">来自区块链</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">更私密</string>
+    <string name="SetDuressPin_Title">Duress Passcode</string>
+    <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
+    <string name="EditDuressPin_Title">Edit Duress Passcode</string>
+    <string name="EditDuressPin_Description">Enter new passcode for Duress Mode</string>
+    <string name="DuressPin_Title">Duress Mode</string>
+    <string name="DuressPin_Description">This mode allows user to setup multiple unlock app passcodes where a desired passcode shows only specified wallets. Designed to keep selected wallets safe under coercion or threats.</string>
+    <string name="DuressPin_Notes">NOTES</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Biometrics</string>
+    <string name="DuressPin_Notes_Biometrics_Description">The Biometric Authentication feature will work to unlock the Duress Mode. You can disable Biometric Authentication for convenience.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Passcode Disabling</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Disabling the passcode in the main mode will automatically reset the duress mode.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Passcode Change</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Changing the passcode in the Duress Mode will also change the current PIN code for that mode.</string>
+    <string name="DuressPinSelectAccounts_Title">Select Wallets</string>
+    <string name="DuressPinSelectAccounts_Description">Select the wallets that will be displayed in duress mode.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Unstoppable钱包是为寻求以私密和独立的方式投资和储存加密货币的人士而创立。
 
@@ -1109,6 +1157,7 @@
     <string name="CoinPage_SecurityParams_Audits">审计</string>
     <string name="CoinPage_Range24">24h范围</string>
     <string name="CoinPage_About">关于</string>
+    <string name="CoinPage_Overview">Overview</string>
     <string name="CoinPage_Category">分类</string>
     <string name="CoinPage_Categories">分类</string>
     <string name="CoinPage_Contracts">合约</string>
@@ -1180,13 +1229,14 @@
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Indicators available only for Unstoppable Wallet premium users.</string>
-    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank based on trading volume on leading centralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank is based on trading volume on leading centralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank based on trading volume on leading decentralized exchanges over 30-day period.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank is based on trading volume on leading decentralized exchanges over a 30-day period.</string>
     <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">正在追踪的DEX：</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
@@ -1198,7 +1248,7 @@
     <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over 30-day period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with token over a 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
     <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
@@ -1208,11 +1258,11 @@
     <string name="CoinAnalytics_Holders_TrackedBlockchains">已追踪区块链：以太坊、币安智能链、Optimism、Arbitrum、Celo、Cronos、Avalanche、Fantom、Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank based on current Total-Value-Locked.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank is based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">List of all tokens ranked based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Market Cap / TVL ratio for the project.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total revenue generated for the token holders over 30-day period. Typically, fees are collected by token stakers or though a token burn mechanism.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank based on the revenue generated over 30-day period for token stakers.</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank is based on the revenue generated over a 30-day period for token stakers.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
     <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Moving Averages (MA): These are commonly used technical indicators that smooth out price data to create a trend-following indicator. They show the average price over a specific time period. There are several types of MAs:\n\nSimple Moving Average (SMA): This calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.\n\nExponential Moving Average (EMA): This gives more weight to recent prices, thereby responding more quickly to recent price changes.</string>
@@ -1223,16 +1273,16 @@
     <string name="CoinAnalytics_CexVolumeRank_Description">对中心化交易所的代币按交易量排名的代币。</string>
     <string name="CoinAnalytics_DexVolume">DEX交易量</string>
     <string name="CoinAnalytics_DexVolumeRank">DEX交易量排名</string>
-    <string name="CoinAnalytics_DexVolumeRank_Description">对去中心化交易所的代币按交易量排名的代币。</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens are ranked by trading volume for the token on decentralized exchanges.</string>
     <string name="CoinAnalytics_DexLiquidity">DEX流动性</string>
     <string name="CoinAnalytics_DexLiquidityRank">DEX流通性排名</string>
-    <string name="CoinAnalytics_DexLiquidityRank_Description">对去中心化交易所上按可用流通性排名的代币。</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens are ranked by available liquidity on decentralized exchanges.</string>
     <string name="CoinAnalytics_ActiveAddresses">每日活动地址</string>
     <string name="CoinAnalytics_ActiveAddressesRank">活跃地址排名</string>
-    <string name="CoinAnalytics_ActiveAddressesRank_Description">按与代币交易的唯一地址的数量排名的代币。</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens are ranked by a number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">交易数</string>
     <string name="CoinAnalytics_TransactionCountRank">Tx计数排名</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">按区块链上交易的数量排名的代币。</string>
+    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens are ranked by number of transactions on a blockchain.</string>
     <string name="CoinAnalytics_Holders">持有者</string>
     <string name="CoinAnalytics_ProjectTvl">项目TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">项目TVL（锁定总价值)</string>
@@ -1242,8 +1292,8 @@
     <string name="CoinAnalytics_ProjectRevenueRank">项目收入排名</string>
     <string name="CoinAnalytics_ProjectFeeRank">Project Fee Rank</string>
     <string name="CoinAnalytics_HoldersRank">Holders Rank</string>
-    <string name="CoinAnalytics_ProjectRevenueRank_Description">按通过如质押或代币销毁等机制为持有者生成的收入排名的代币。</string>
-    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens are ranked by revenue generated for holders via mechanisms i.e. staking or token burns.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens are ranked according to fees generated by respective projects. The way fees are collected varies from project to project.</string>
     <string name="CoinAnalytics_HoldersRank_Description">Ranking tokens by unique addresses holding them on multiple blockchains.</string>
     <string name="CoinAnalytics_OtherData">其它数据</string>
     <string name="CoinAnalytics_Reports">报告</string>
@@ -1266,7 +1316,7 @@
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">The overall score is based on the average daily active addresses over the last 7 days.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
-    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding respective token.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding the respective tokens.</string>
     <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
     <string name="Coin_Analytics_Details">Details</string>
     <string name="Coin_Analytics_SelectPeriod">Select Period</string>
@@ -1403,19 +1453,26 @@
     <string name="OSPin_Confirm_Desciption">此应用要求电话已启用密码（屏幕锁定）。\n\n您可以在Android设置中启用密码。\n\n请注意，禁用操作系统级别的PIN码后，电话的安全存储保障措施将使以前保存的数据无效。您必须恢复您的钱包密钥才能回到您的钱包。</string>
     <string name="OSPin_Prompt_Desciption">这个应用程序需要你的手机的密码，以便将敏感数据从你的钱包中保存在安卓的安全存储中，而不是在应用程序本身中。</string>
     <!--Unlock-->
+    <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">密码</string>
+    <string name="Unlock_EnterPasscode">Enter Passcode</string>
     <string name="Unlock_Incorrect">错误</string>
     <string name="Unlock_BiometricScanner">生物扫描仪</string>
     <string name="Unlock_BiometricScannerDisabled_Description">输入密码或稍后再试</string>
     <string name="Unlock_BiometricScannerDisabled_Info">生物认证被禁用</string>
     <string name="Unlock_WalletDisabledUntil">禁用至：%s</string>
     <string name="Unlock_AttemptsLeft">Attempts left: %s</string>
+    <string name="Unlock_Regular">Regular</string>
+    <string name="Unlock_Random">Random</string>
     <!--Set Pin-->
-    <string name="PinSet_Title">设置密码</string>
+    <string name="PinSet_Title">Create Passcode</string>
     <string name="PinSet_Info">您的密码将用于解锁钱包和发送资金</string>
     <string name="PinSet_ConfirmInfo">确认</string>
     <string name="PinSet_ErrorPinsDontMatch">密码不匹配。请重试。</string>
     <string name="PinSet_ErrorFailedToSavePin">保存密码时出错。请重试。</string>
+    <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>
+    <string name="PinSet_ForDuress">Set a passcode to enable Duress Mode</string>
+    <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">编辑密码</string>
     <string name="EditPin_UnlockInfo">当前密码</string>
