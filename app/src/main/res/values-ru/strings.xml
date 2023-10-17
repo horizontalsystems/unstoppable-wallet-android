@@ -689,7 +689,7 @@
     <string name="Settings_Privacy">Конфиденциальность</string>
     <string name="Settings_ShareThisWallet">Рассказать друзьям</string>
     <string name="Settings_AppStatus">Статус приложения</string>
-    <string name="Settings_RateUs">Оцените наше приложение</string>
+    <string name="Settings_RateUs">Оцените нас</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="Settings_Appearance">Оформление</string>
     <string name="Settings_Contact_ViaTelegram">через Telegram</string>
@@ -706,9 +706,9 @@
     <string name="Settings_PersonalSupport_Requestfailed">Ошибка запроса</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
-    <string name="Settings_Donate">Поддержать</string>
+    <string name="Settings_Donate">Поддержи нас</string>
     <string name="Settings_DonateToken">Пожертвовать %s</string>
-    <string name="Settings_DonateWith">Поддержи нас</string>
+    <string name="Settings_DonateWith">Пожертвовать с помощью</string>
     <string name="Settings_Donate_GetAddress">Получить адрес</string>
     <string name="Settings_Donate_Addresses">Адреса</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Немедленно</string>
