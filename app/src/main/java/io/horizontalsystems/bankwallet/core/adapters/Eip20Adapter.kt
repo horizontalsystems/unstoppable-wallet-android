@@ -31,7 +31,7 @@ class Eip20Adapter(
     evmLabelManager: EvmLabelManager
 ) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
 
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, wallet.transactionSource, baseToken, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, wallet.transactionSource, App.spamManager, baseToken, evmLabelManager)
 
     private val contractAddress: Address = Address(contractAddress)
     val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
