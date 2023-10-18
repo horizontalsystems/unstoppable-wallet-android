@@ -20,6 +20,7 @@ import com.walletconnect.sign.client.SignClient
 import cash.p.terminal.BuildConfig
 import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.factories.AdapterFactory
+import cash.p.terminal.core.factories.AddressParserFactory
 import cash.p.terminal.core.factories.EvmAccountManagerFactory
 import cash.p.terminal.core.managers.AccountCleaner
 import cash.p.terminal.core.managers.AccountManager
@@ -190,6 +191,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var cexAssetManager: CexAssetManager
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
+        lateinit var spamManager: SpamManager
     }
 
     override fun onCreate() {
@@ -434,6 +436,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaRpcSourceManager = solanaRpcSourceManager,
             contactsRepository = contactsRepository
         )
+
+        spamManager = SpamManager(marketKit)
 
         startTasks()
     }

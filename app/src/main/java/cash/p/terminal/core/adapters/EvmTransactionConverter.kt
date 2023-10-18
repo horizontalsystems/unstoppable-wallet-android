@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.managers.EvmLabelManager
+import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.tokenIconPlaceholder
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
@@ -49,6 +50,7 @@ class EvmTransactionConverter(
     private val coinManager: ICoinManager,
     private val evmKitWrapper: EvmKitWrapper,
     private val source: TransactionSource,
+    private val spamManager: SpamManager,
     private val baseToken: Token,
     private val evmLabelManager: EvmLabelManager
 ) {
@@ -184,7 +186,7 @@ class EvmTransactionConverter(
                     }
                     transaction.from != address && transaction.to != address -> {
                         ExternalContractCallTransactionRecord(
-                            transaction, baseToken, source,
+                            transaction, baseToken, source, spamManager,
                             getInternalEvents(internalTransactions) +
                                     getIncomingEip20Events(incomingEip20Transfers) +
                                     getIncomingEip721Events(incomingEip721Transfers) +

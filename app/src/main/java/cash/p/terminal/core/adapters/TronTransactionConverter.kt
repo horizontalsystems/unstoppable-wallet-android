@@ -1,5 +1,6 @@
 package cash.p.terminal.core.adapters
 
+import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.TronKitWrapper
@@ -121,7 +122,7 @@ class TronTransactionConverter(
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
                         TronExternalContractCallTransactionRecord(
-                            transaction, baseToken, source,
+                            transaction, baseToken, source, App.spamManager,
                             getInternalEvents(internalTransactions) +
                                     getIncomingEip20Events(incomingEip20Transfers),
                             getOutgoingEip20Events(outgoingEip20Transfers)

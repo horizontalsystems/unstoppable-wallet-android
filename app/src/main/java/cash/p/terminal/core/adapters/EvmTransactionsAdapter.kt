@@ -1,6 +1,7 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.AdapterState
+import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.EvmKitWrapper
@@ -27,7 +28,7 @@ class EvmTransactionsAdapter(
 ) : ITransactionsAdapter {
 
     private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseToken, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, App.spamManager, baseToken, evmLabelManager)
 
     override val explorerTitle: String
         get() = evmTransactionSource.name
