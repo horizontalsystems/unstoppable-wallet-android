@@ -27,20 +27,19 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class PublicKeysFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val account: Account? = arguments?.parcelable(ACCOUNT_KEY)
         if (account == null) {
             Toast.makeText(App.instance, "Account parameter is missing", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
+            navController.popBackStack()
             return
         }
-        ManageAccountScreen(findNavController(), account)
+        ManageAccountScreen(navController, account)
     }
 
 }

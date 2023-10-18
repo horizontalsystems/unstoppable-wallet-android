@@ -13,13 +13,12 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.info.ErrorDisplayDialogFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class ImportCexAccountFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val popUpToInclusiveId =
             arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
@@ -27,7 +26,7 @@ class ImportCexAccountFragment : BaseComposeFragment() {
             arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
 
         ComposeAppTheme {
-            ImportCexAccountNavHost(findNavController(), popUpToInclusiveId, inclusive)
+            ImportCexAccountNavHost(navController, popUpToInclusiveId, inclusive)
         }
     }
 

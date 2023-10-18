@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.launch
@@ -30,9 +29,9 @@ import kotlinx.coroutines.launch
 class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         RecoveryPhraseScreen(
-            navController = findNavController(),
+            navController = navController,
             account = arguments?.parcelable(RecoveryPhraseModule.ACCOUNT)!!
         )
     }

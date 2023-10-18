@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.LocalizedException
@@ -31,20 +32,19 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAc
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
-import io.horizontalsystems.core.findNavController
 import java.net.UnknownHostException
 
 class FaqListFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             FaqScreen(
-                onCloseClick = { findNavController().popBackStack() },
+                onCloseClick = { navController.popBackStack() },
                 onItemClick = { faqItem ->
                     val arguments =
                         bundleOf(MarkdownFragment.markdownUrlKey to faqItem.markdown)
-                    findNavController().slideFromRight(R.id.markdownFragment, arguments)
+                    navController.slideFromRight(R.id.markdownFragment, arguments)
                 }
             )
         }

@@ -18,12 +18,11 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.Re
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
 import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigureScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.findNavController
 
 class RestoreAccountFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val popUpToInclusiveId =
             arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
@@ -32,7 +31,7 @@ class RestoreAccountFragment : BaseComposeFragment() {
 
         ComposeAppTheme {
             RestoreAccountNavHost(
-                findNavController(),
+                navController,
                 popUpToInclusiveId,
                 inclusive
             )

@@ -35,23 +35,22 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalIte
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
 class ReceiveTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val viewModel = viewModel<ReceiveTokenSelectInitViewModel>()
 
         val activeAccount = viewModel.getActiveAccount()
 
         if (activeAccount == null) {
             HudHelper.showErrorMessage(LocalView.current, "No active account")
-            findNavController().popBackStack()
+            navController.popBackStack()
         } else {
-            ReceiveTokenSelectScreen(findNavController(), activeAccount)
+            ReceiveTokenSelectScreen(navController, activeAccount)
         }
     }
 }

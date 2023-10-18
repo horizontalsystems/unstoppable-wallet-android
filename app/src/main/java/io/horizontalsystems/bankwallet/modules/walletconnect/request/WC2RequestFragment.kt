@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
@@ -19,16 +20,14 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2UnsupportedRequest
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class WC2RequestFragment : BaseComposeFragment() {
     private val logger = AppLogger("wallet-connect v2")
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val requestId = requireArguments().getLong(REQUEST_ID_KEY)
-        val navController = findNavController()
         val wc2RequestViewModel = viewModel<WC2RequestViewModel>(factory = WC2RequestViewModel.Factory(requestId))
 
         val requestData = wc2RequestViewModel.requestData

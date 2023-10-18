@@ -22,6 +22,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.shorten
@@ -34,20 +35,19 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawre
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             InfoScreen(
                 txHash = requireArguments().getString(TRANSACTION_HASH)!!,
                 conflictingTxHash = requireArguments().getString(
                     CONFLICTING_TRANSACTION_HASH
                 )!!,
-                onBackClick = { findNavController().popBackStack() }
+                onBackClick = { navController.popBackStack() }
             )
         }
     }

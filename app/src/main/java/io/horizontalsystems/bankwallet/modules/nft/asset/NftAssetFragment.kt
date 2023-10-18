@@ -73,7 +73,7 @@ import java.net.URL
 class NftAssetFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val collectionUid = requireArguments().getString(NftAssetModule.collectionUidKey)
         val nftUid = requireArguments().getString(NftAssetModule.nftUidKey)?.let { NftUid.fromUid(it) }
         NftAssetScreen(findNavController(), collectionUid, nftUid)

@@ -14,17 +14,16 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBack
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupPasswordScreen
 import io.horizontalsystems.bankwallet.modules.backuplocal.terms.LocalBackupTermsScreen
-import io.horizontalsystems.core.findNavController
 
 class BackupLocalFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val accountId = arguments?.getString(ACCOUNT_ID_KEY)
         if (accountId != null) {
-            SingleWalletBackupNavHost(findNavController(), accountId)
+            SingleWalletBackupNavHost(navController, accountId)
         } else {
-            FullBackupNavHost(fragmentNavController = findNavController())
+            FullBackupNavHost(fragmentNavController = navController)
         }
     }
 

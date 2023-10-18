@@ -53,14 +53,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SnackbarError
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class NftHoldingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        NftHoldingsScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        NftHoldingsScreen(navController)
     }
 
 }

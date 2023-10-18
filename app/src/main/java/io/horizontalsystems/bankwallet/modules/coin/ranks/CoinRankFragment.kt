@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class CoinRankFragment : BaseComposeFragment() {
@@ -43,12 +42,12 @@ class CoinRankFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             type?.let { rankType ->
                 CoinRankScreen(
                     rankType,
-                    findNavController(),
+                    navController,
                 )
             } ?: run {
                 ScreenMessageWithAction(
@@ -60,7 +59,7 @@ class CoinRankFragment : BaseComposeFragment() {
                             .padding(horizontal = 48.dp)
                             .fillMaxWidth(),
                         title = stringResource(R.string.Button_Close),
-                        onClick = { findNavController().popBackStack() }
+                        onClick = { navController.popBackStack() }
                     )
                 }
             }
