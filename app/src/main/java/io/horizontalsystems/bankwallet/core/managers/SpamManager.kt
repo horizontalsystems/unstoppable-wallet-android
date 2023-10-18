@@ -29,7 +29,7 @@ class SpamManager(
             }
 
             is TransactionValue.NftValue -> {
-                spamValue(eventValue.coinUid, eventValue.value)
+                eventValue.value <= BigDecimal.ZERO
             }
 
             else -> true
