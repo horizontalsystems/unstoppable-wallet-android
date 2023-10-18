@@ -55,6 +55,7 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
+import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
@@ -191,6 +192,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var cexAssetManager: CexAssetManager
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
+        lateinit var spamManager: SpamManager
     }
 
     override fun onCreate() {
@@ -437,6 +439,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaRpcSourceManager = solanaRpcSourceManager,
             contactsRepository = contactsRepository
         )
+
+        spamManager = SpamManager(marketKit)
 
         startTasks()
     }
