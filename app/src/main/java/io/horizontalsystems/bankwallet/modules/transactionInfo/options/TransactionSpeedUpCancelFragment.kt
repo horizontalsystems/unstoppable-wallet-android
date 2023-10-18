@@ -69,14 +69,14 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
     private var snackbarInProcess: CustomSnackbar? = null
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         TransactionSpeedUpCancelScreen(
             sendEvmTransactionViewModel = sendEvmTransactionViewModel,
             feeViewModel = feeViewModel,
             nonceViewModel = nonceViewModel,
             parentNavGraphId = R.id.transactionSpeedUpCancelFragment,
             speedUpCancelViewModel = speedUpCancelViewModel,
-            navController = findNavController(),
+            navController = navController,
             onSendClick = {
                 logger.info("click send button")
                 sendEvmTransactionViewModel.send(logger)

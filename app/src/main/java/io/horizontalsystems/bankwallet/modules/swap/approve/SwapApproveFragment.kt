@@ -34,15 +34,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class SwapApproveFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val approveData = requireArguments().parcelable<SwapMainModule.ApproveData>(dataKey)!!
-        SwapApproveScreen(findNavController(), approveData)
+        SwapApproveScreen(navController, approveData)
     }
 
 }

@@ -31,15 +31,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val account = requireArguments().parcelable<Account>(BackupKeyModule.ACCOUNT)!!
-        RecoveryPhraseScreen(findNavController(), account)
+        RecoveryPhraseScreen(navController, account)
     }
 
 }

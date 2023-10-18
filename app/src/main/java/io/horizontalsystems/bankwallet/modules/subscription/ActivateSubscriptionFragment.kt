@@ -35,15 +35,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAc
 import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class ActivateSubscriptionFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ActivateSubscriptionScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        ActivateSubscriptionScreen(navController)
     }
 
 }

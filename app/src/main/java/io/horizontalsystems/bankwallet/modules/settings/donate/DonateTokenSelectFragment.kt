@@ -30,13 +30,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.core.findNavController
 
 class DonateTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        val navController = findNavController()
+    override fun GetContent(navController: NavController) {
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Settings_DonateWith),

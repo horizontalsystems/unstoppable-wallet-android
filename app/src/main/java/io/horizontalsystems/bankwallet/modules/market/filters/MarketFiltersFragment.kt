@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import io.horizontalsystems.bankwallet.modules.market.filters.PriceChange as FilterPriceChange
@@ -40,10 +39,10 @@ class MarketFiltersFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         AdvancedSearchScreen(
             viewModel,
-            findNavController(),
+            navController,
         )
     }
 

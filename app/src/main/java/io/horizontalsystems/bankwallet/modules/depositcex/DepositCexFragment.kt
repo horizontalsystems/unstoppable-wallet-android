@@ -5,13 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexDepositNetwork
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 
@@ -27,11 +27,10 @@ class DepositCexFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val cexAsset = arguments?.parcelable<CexAsset>("cexAsset")
         val network = arguments?.parcelable<CexDepositNetwork>("cexDepositNetwork")
         ComposeAppTheme {
-            val navController = findNavController()
             val navigatedFromMain = navController.previousBackStackEntry?.destination?.id == R.id.mainFragment
             val navigateBack: () -> Unit = { navController.popBackStack() }
 

@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
@@ -96,17 +95,17 @@ class UniswapSettingsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val dexValue = dex
         ComposeAppTheme {
             if (dexValue != null) {
                 UniswapSettingsScreen(
                     onCloseClick = {
-                        findNavController().popBackStack()
+                        navController.popBackStack()
                     },
                     dex = dexValue,
                     factory = UniswapSettingsModule.Factory(address, slippage, ttl),
-                    navController = findNavController(),
+                    navController = navController,
                     ttlEnabled = ttlEnabled
                 )
             } else {
@@ -119,7 +118,7 @@ class UniswapSettingsFragment : BaseComposeFragment() {
                             .padding(horizontal = 48.dp)
                             .fillMaxWidth(),
                         title = stringResource(R.string.Button_Close),
-                        onClick = { findNavController().popBackStack() }
+                        onClick = { navController.popBackStack() }
                     )
                 }
             }

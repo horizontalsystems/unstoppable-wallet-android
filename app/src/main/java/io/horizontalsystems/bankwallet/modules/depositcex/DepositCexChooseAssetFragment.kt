@@ -6,13 +6,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.findNavController
 
 class DepositCexChooseAssetFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        DepositCexChooseAssetScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        DepositCexChooseAssetScreen(navController)
     }
 
 }

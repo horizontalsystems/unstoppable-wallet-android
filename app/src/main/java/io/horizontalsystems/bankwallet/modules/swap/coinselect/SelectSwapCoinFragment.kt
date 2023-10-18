@@ -21,30 +21,29 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 
 class SelectSwapCoinFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val dex = arguments?.parcelable<SwapMainModule.Dex>(dexKey)
         val requestId = arguments?.getLong(requestIdKey)
         if (dex == null || requestId == null) {
-            findNavController().popBackStack()
+            navController.popBackStack()
         } else {
             SelectSwapCoinDialogScreen(
-                navController = findNavController(),
+                navController = navController,
                 dex = dex,
                 onClickItem = {
-                    closeWithResult(it, requestId)
+                    closeWithResult(it, requestId, navController)
                 }
             )
         }
     }
 
-    private fun closeWithResult(coinBalanceItem: CoinBalanceItem, requestId: Long) {
+    private fun closeWithResult(coinBalanceItem: CoinBalanceItem, requestId: Long, navController: NavController) {
         setNavigationResult(
             resultBundleKey, bundleOf(
                 requestIdKey to requestId,
@@ -52,7 +51,7 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
             )
         )
         Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().popBackStack()
+            navController.popBackStack()
         }, 100)
     }
 

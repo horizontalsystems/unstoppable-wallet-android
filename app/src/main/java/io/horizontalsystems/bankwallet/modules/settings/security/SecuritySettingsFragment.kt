@@ -39,7 +39,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
-import io.horizontalsystems.core.findNavController
 import kotlin.system.exitProcess
 
 class SecuritySettingsFragment : BaseComposeFragment() {
@@ -53,12 +52,12 @@ class SecuritySettingsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             SecurityCenterScreen(
                 securitySettingsViewModel = securitySettingsViewModel,
                 torViewModel = torViewModel,
-                navController = findNavController(),
+                navController = navController,
                 showAppRestartAlert = { showAppRestartAlert() },
                 restartApp = { restartApp() },
             )

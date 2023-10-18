@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScre
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +30,7 @@ import kotlinx.coroutines.launch
 class CoinFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val uid = try {
             activity?.intent?.data?.getQueryParameter("uid")
         } catch (e: UnsupportedOperationException) {
@@ -46,7 +45,7 @@ class CoinFragment : BaseComposeFragment() {
         CoinScreen(
             coinUid,
             coinViewModel(coinUid),
-            findNavController(),
+            navController,
             childFragmentManager
         )
     }

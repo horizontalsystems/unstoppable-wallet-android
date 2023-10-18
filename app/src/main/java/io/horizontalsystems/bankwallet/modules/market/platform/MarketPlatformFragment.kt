@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -35,13 +36,12 @@ import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class MarketPlatformFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val platformUid = activity?.intent?.data?.getQueryParameter("uid")
         val platformTitle = activity?.intent?.data?.getQueryParameter("title")
 
@@ -52,7 +52,7 @@ class MarketPlatformFragment : BaseComposeFragment() {
         }
 
         if (platform == null) {
-            findNavController().popBackStack()
+            navController.popBackStack()
             return
         }
 
@@ -61,10 +61,10 @@ class MarketPlatformFragment : BaseComposeFragment() {
         ComposeAppTheme {
             PlatformScreen(
                 factory = factory,
-                onCloseButtonClick = { findNavController().popBackStack() },
+                onCloseButtonClick = { navController.popBackStack() },
                 onCoinClick = { coinUid ->
                     val arguments = CoinFragment.prepareParams(coinUid)
-                    findNavController().slideFromRight(R.id.coinFragment, arguments)
+                    navController.slideFromRight(R.id.coinFragment, arguments)
                 }
             )
         }

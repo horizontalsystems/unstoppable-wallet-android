@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
@@ -33,9 +32,9 @@ class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         EvmPrivateKeyScreen(
-            navController = findNavController(),
+            navController = navController,
             evmPrivateKey = arguments?.getString(EVM_PRIVATE_KEY) ?: ""
         )
     }

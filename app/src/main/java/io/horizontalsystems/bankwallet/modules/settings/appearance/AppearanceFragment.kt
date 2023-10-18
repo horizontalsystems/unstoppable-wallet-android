@@ -24,14 +24,13 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.launch
 
 class AppearanceFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        AppearanceScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        AppearanceScreen(navController)
     }
 
 }

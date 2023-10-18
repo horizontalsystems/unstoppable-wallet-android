@@ -18,7 +18,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -41,7 +40,7 @@ import java.math.BigDecimal
 class SendEvmSettingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
         val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
         val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
@@ -61,7 +60,7 @@ class SendEvmSettingsFragment : BaseComposeFragment() {
                 viewModel = sendSettingsViewModel,
                 feeSettingsViewModel = feeSettingsViewModel,
                 nonceViewModel = nonceViewModel,
-                navController = findNavController()
+                navController = navController
             )
         }
     }

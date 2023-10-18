@@ -44,7 +44,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.core.SnackbarDuration
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
@@ -52,8 +51,8 @@ import kotlinx.coroutines.delay
 class AddTokenFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        AddTokenNavHost(findNavController())
+    override fun GetContent(navController: NavController) {
+        AddTokenNavHost(navController)
     }
 
 }
