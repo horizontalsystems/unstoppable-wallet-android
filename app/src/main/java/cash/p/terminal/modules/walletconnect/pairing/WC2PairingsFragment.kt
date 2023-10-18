@@ -37,13 +37,12 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.body_lucian
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 
 class WC2PairingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        WCPairingsScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        WCPairingsScreen(navController)
     }
 
 }

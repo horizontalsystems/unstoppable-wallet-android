@@ -36,17 +36,16 @@ import cash.p.terminal.ui.compose.components.TransactionInfoSpeedUpCell
 import cash.p.terminal.ui.compose.components.TransactionInfoStatusCell
 import cash.p.terminal.ui.compose.components.TransactionInfoTransactionHashCell
 import cash.p.terminal.ui.compose.components.TransactionNftAmountCell
-import io.horizontalsystems.core.findNavController
 
 class TransactionInfoFragment : BaseComposeFragment() {
 
     private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val viewItem = viewModelTxs.tmpItemToShow
         if (viewItem == null) {
-            findNavController().popBackStack()
+            navController.popBackStack()
             return 
         }
 
@@ -54,7 +53,7 @@ class TransactionInfoFragment : BaseComposeFragment() {
             TransactionInfoModule.Factory(viewItem)
         }
         
-        TransactionInfoScreen(viewModel, findNavController())
+        TransactionInfoScreen(viewModel, navController)
     }
 
 }

@@ -24,14 +24,13 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.launch
 
 class AppearanceFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        AppearanceScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        AppearanceScreen(navController)
     }
 
 }

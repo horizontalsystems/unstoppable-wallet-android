@@ -63,7 +63,6 @@ import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClea
 import cash.p.terminal.ui.compose.components.SnackbarError
 import cash.p.terminal.ui.compose.components.body_grey50
 import cash.p.terminal.ui.compose.components.headline2_jacob
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
 
 class MarketSearchFragment : BaseComposeFragment() {
@@ -71,10 +70,10 @@ class MarketSearchFragment : BaseComposeFragment() {
     private val viewModel by viewModels<MarketSearchViewModel> { MarketSearchModule.Factory() }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         MarketSearchScreen(
             viewModel,
-            findNavController(),
+            navController,
         )
     }
 

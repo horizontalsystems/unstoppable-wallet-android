@@ -42,7 +42,6 @@ import cash.p.terminal.ui.compose.components.body_grey50
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.title3_leah
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -50,10 +49,10 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 class ChooseContactFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ChooseContactScreen(
             arguments?.parcelable(blockchainTypeKey),
-            findNavController()
+            navController
         )
     }
 

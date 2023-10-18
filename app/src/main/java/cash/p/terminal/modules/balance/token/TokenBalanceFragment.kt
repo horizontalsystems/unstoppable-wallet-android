@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.App
@@ -12,17 +13,16 @@ import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class TokenBalanceFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val wallet = requireArguments().parcelable<Wallet>(WALLET_KEY)
         if (wallet == null) {
             Toast.makeText(App.instance, "Wallet is Null", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
+            navController.popBackStack()
             return
         }
         val viewModel by viewModels<TokenBalanceViewModel> { TokenBalanceModule.Factory(wallet) }
@@ -32,7 +32,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
             TokenBalanceScreen(
                 viewModel,
                 transactionsViewModel,
-                findNavController()
+                navController
             )
         }
     }

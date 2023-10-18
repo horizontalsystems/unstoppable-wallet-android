@@ -20,14 +20,13 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.launch
 
 class BaseCurrencySettingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        BaseCurrencyScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        BaseCurrencyScreen(navController)
     }
 
 }

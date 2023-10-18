@@ -20,7 +20,6 @@ import cash.p.terminal.modules.contacts.screen.ContactsScreen
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
@@ -29,9 +28,9 @@ import io.horizontalsystems.core.setNavigationResult
 class ContactsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ContactsNavHost(
-            navController = findNavController(),
+            navController = navController,
             mode = arguments?.parcelable(modeKey) ?: Mode.Full
         )
     }

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
@@ -26,7 +27,6 @@ import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class MarketCategoryFragment : BaseComposeFragment() {
@@ -40,21 +40,21 @@ class MarketCategoryFragment : BaseComposeFragment() {
     private val viewModel by viewModels<MarketCategoryViewModel> { factory }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             CategoryScreen(
                 viewModel,
                 chartViewModel,
-                { findNavController().popBackStack() },
-                { coinUid -> onCoinClick(coinUid) }
+                { navController.popBackStack() },
+                { coinUid -> onCoinClick(coinUid, navController) }
             )
         }
     }
 
-    private fun onCoinClick(coinUid: String) {
+    private fun onCoinClick(coinUid: String, navController: NavController) {
         val arguments = CoinFragment.prepareParams(coinUid)
 
-        findNavController().slideFromRight(R.id.coinFragment, arguments)
+        navController.slideFromRight(R.id.coinFragment, arguments)
     }
 
     companion object {

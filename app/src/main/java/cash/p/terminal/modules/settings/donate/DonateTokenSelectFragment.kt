@@ -30,13 +30,11 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.headline2_leah
-import io.horizontalsystems.core.findNavController
 
 class DonateTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        val navController = findNavController()
+    override fun GetContent(navController: NavController) {
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Settings_DonateWith),

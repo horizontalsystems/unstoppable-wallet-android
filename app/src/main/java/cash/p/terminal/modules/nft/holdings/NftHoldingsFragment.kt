@@ -53,14 +53,13 @@ import cash.p.terminal.ui.compose.components.SnackbarError
 import cash.p.terminal.ui.compose.components.headline2_leah
 import cash.p.terminal.ui.compose.components.subhead1_grey
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class NftHoldingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        NftHoldingsScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        NftHoldingsScreen(navController)
     }
 
 }

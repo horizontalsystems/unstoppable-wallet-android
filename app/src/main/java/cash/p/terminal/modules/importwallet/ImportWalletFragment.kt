@@ -34,7 +34,6 @@ import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -43,14 +42,14 @@ import java.io.File
 class ImportWalletFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val popUpToInclusiveId =
             arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.importWalletFragment) ?: R.id.importWalletFragment
 
         val inclusive =
             arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
 
-        ImportWalletScreen(findNavController(), popUpToInclusiveId, inclusive)
+        ImportWalletScreen(navController, popUpToInclusiveId, inclusive)
     }
 
 }

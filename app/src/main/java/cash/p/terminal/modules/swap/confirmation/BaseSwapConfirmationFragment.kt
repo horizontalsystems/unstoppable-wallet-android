@@ -59,13 +59,13 @@ abstract class BaseSwapConfirmationFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         BaseSwapConfirmationScreen(
             sendEvmTransactionViewModel = sendEvmTransactionViewModel,
             feeViewModel = feeViewModel,
             nonceViewModel = nonceViewModel,
             parentNavGraphId = navGraphId,
-            navController = findNavController(),
+            navController = navController,
             onSendClick = {
                 logger.info("click swap button")
                 sendEvmTransactionViewModel.send(logger)

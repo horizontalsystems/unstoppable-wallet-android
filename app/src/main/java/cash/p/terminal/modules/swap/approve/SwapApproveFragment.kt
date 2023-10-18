@@ -34,15 +34,14 @@ import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.TextPreprocessor
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class SwapApproveFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val approveData = requireArguments().parcelable<SwapMainModule.ApproveData>(dataKey)!!
-        SwapApproveScreen(findNavController(), approveData)
+        SwapApproveScreen(navController, approveData)
     }
 
 }

@@ -88,13 +88,13 @@ class SwapApproveConfirmationFragment : BaseComposeFragment() {
     private var snackbarInProcess: CustomSnackbar? = null
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         SwapApproveConfirmationScreen(
             sendEvmTransactionViewModel = sendEvmTransactionViewModel,
             feeViewModel = feeViewModel,
             nonceViewModel = nonceViewModel,
             parentNavGraphId = R.id.swapApproveConfirmationFragment,
-            navController = findNavController(),
+            navController = navController,
             onSendClick = {
                 logger.info("click approve button")
                 sendEvmTransactionViewModel.send(logger)

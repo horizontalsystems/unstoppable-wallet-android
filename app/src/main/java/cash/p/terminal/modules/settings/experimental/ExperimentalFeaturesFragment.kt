@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
@@ -25,15 +26,14 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.core.findNavController
 
 class ExperimentalFeaturesFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ExperimentalScreen(
-            onCloseClick = { findNavController().popBackStack() },
-            openTimeLock = { findNavController().slideFromRight(R.id.timeLockFragment) },
+            onCloseClick = { navController.popBackStack() },
+            openTimeLock = { navController.slideFromRight(R.id.timeLockFragment) },
         )
     }
 

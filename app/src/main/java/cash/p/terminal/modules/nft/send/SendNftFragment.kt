@@ -26,7 +26,6 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.nftkit.models.NftType
 
 class SendNftFragment : BaseComposeFragment() {
@@ -34,7 +33,7 @@ class SendNftFragment : BaseComposeFragment() {
     private val vmFactory by lazy { getFactory(requireArguments()) }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val factory = vmFactory
 
         when (factory?.evmNftRecord?.nftType) {
@@ -50,7 +49,7 @@ class SendNftFragment : BaseComposeFragment() {
                 }
                 val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
                 SendEip721Screen(
-                    findNavController(),
+                    navController,
                     eip721ViewModel,
                     addressViewModel,
                     addressParserViewModel,
@@ -70,7 +69,7 @@ class SendNftFragment : BaseComposeFragment() {
                 }
                 val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
                 SendEip1155Screen(
-                    findNavController(),
+                    navController,
                     eip1155ViewModel,
                     addressViewModel,
                     addressParserViewModel,
@@ -79,7 +78,7 @@ class SendNftFragment : BaseComposeFragment() {
             }
 
             else -> {
-                ShowErrorMessage(findNavController())
+                ShowErrorMessage(navController)
             }
         }
     }

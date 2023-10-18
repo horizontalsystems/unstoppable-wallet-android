@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.entities.ViewState
@@ -33,7 +34,6 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 
 class TechnicalIndicatorsDetailsFragment : BaseComposeFragment() {
@@ -48,7 +48,7 @@ class TechnicalIndicatorsDetailsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             if (coinUid == null || period == null) {
                 ScreenMessageWithAction(
@@ -61,7 +61,7 @@ class TechnicalIndicatorsDetailsFragment : BaseComposeFragment() {
                             .fillMaxWidth(),
                         title = stringResource(R.string.Button_Close),
                         onClick = {
-                            findNavController().popBackStack()
+                            navController.popBackStack()
                         }
                     )
                 }
@@ -70,7 +70,7 @@ class TechnicalIndicatorsDetailsFragment : BaseComposeFragment() {
                     coinUid = coinUid!!,
                     period = period!!,
                     onBackPress = {
-                        findNavController().popBackStack()
+                        navController.popBackStack()
                     }
                 )
             }

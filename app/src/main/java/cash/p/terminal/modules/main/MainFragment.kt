@@ -62,7 +62,6 @@ import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.HsBottomNavigation
 import cash.p.terminal.ui.compose.components.HsBottomNavigationItem
 import cash.p.terminal.ui.extensions.WalletSwitchBottomSheet
-import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.launch
 
 class MainFragment : BaseComposeFragment() {
@@ -70,12 +69,12 @@ class MainFragment : BaseComposeFragment() {
     private val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             MainScreenWithRootedDeviceCheck(
                 transactionsViewModel = transactionsViewModel,
                 deepLink = activity?.intent?.data?.toString(),
-                navController = findNavController(),
+                navController = navController,
                 clearActivityData = { activity?.intent?.data = null }
             )
         }

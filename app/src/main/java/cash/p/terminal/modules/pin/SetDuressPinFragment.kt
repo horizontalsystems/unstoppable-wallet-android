@@ -7,11 +7,11 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.pin.ui.PinSet
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import kotlinx.parcelize.Parcelize
@@ -19,7 +19,7 @@ import kotlinx.parcelize.Parcelize
 class SetDuressPinFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val viewModel = viewModel<SetDuressPinViewModel>(factory = SetDuressPinViewModel.Factory(arguments?.parcelable("input")))
         val view = LocalView.current
         ComposeAppTheme {
@@ -29,9 +29,9 @@ class SetDuressPinFragment : BaseComposeFragment() {
                 dismissWithSuccess = {
                     viewModel.onDuressPinSet()
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Created)
-                    findNavController().popBackStack(R.id.setDuressPinIntroFragment, true)
+                    navController.popBackStack(R.id.setDuressPinIntroFragment, true)
                 },
-                onBackPress = { findNavController().popBackStack() },
+                onBackPress = { navController.popBackStack() },
                 forDuress = true
             )
         }

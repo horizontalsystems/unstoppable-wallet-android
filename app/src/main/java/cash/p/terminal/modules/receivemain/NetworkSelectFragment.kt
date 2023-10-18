@@ -37,7 +37,6 @@ import cash.p.terminal.ui.compose.components.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
@@ -45,8 +44,7 @@ import kotlinx.coroutines.launch
 class NetworkSelectFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        val navController = findNavController()
+    override fun GetContent(navController: NavController) {
         val coinUid = arguments?.getString("coinUid")
         val popupDestinationId = arguments?.getInt(
             ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY

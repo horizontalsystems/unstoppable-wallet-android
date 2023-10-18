@@ -33,7 +33,6 @@ import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.body_leah
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.delay
@@ -41,9 +40,9 @@ import kotlinx.coroutines.delay
 class BackupConfirmKeyFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         RecoveryPhraseVerifyScreen(
-            findNavController(),
+            navController,
             arguments?.parcelable(BackupConfirmKeyModule.ACCOUNT)!!,
         )
     }

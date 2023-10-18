@@ -48,6 +48,7 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.EvmSyncSource
 import cash.p.terminal.modules.btcblockchainsettings.BlockchainSettingCell
 import cash.p.terminal.modules.evmnetwork.addrpc.AddRpcScreen
+import cash.p.terminal.modules.info.EvmNetworkInfoScreen
 import cash.p.terminal.modules.walletconnect.list.ui.ActionsRow
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.modules.walletconnect.list.ui.getShape
@@ -60,7 +61,6 @@ import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_jacob
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
@@ -69,11 +69,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 class EvmNetworkFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             EvmNetworkNavHost(
                 requireArguments(),
-                findNavController()
+                navController
             )
         }
     }

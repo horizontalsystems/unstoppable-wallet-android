@@ -85,13 +85,13 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
         get() = arguments?.parcelable(SendEvmModule.additionalInfoKey)
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         SendEvmConfirmationScreen(
             sendEvmTransactionViewModel = sendEvmTransactionViewModel,
             feeViewModel = feeViewModel,
             nonceViewModel = nonceViewModel,
             parentNavGraphId = R.id.sendEvmConfirmationFragment,
-            navController = findNavController(),
+            navController = navController,
             onSendClick = {
                 logger.info("click send button")
                 sendEvmTransactionViewModel.send(logger)

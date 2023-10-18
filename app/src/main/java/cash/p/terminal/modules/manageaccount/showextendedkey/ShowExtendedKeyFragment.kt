@@ -26,7 +26,6 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -35,7 +34,7 @@ import kotlinx.coroutines.launch
 class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val hdExtendedKey = arguments?.getString(ShowExtendedKeyModule.EXTENDED_ROOT_KEY)?.let {
             try {
                 HDExtendedKey(it)
@@ -49,7 +48,7 @@ class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
             NoExtendKeyScreen()
         } else {
             ShowExtendedKeyScreen(
-                findNavController(),
+                navController,
                 hdExtendedKey,
                 displayKeyType
             )

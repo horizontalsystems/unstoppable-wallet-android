@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.authorizedAction
@@ -38,16 +39,14 @@ import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_jacob
-import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class BackupManagerFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
-            val navController = findNavController()
             BackupManagerScreen(
                 onBackClick = {
                     navController.popBackStack()

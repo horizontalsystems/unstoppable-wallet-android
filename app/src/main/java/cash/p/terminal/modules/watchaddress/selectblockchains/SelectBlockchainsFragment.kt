@@ -40,7 +40,6 @@ import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.delay
@@ -48,7 +47,7 @@ import kotlinx.coroutines.delay
 class SelectBlockchainsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             val popUpToInclusiveId =
                 arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
@@ -60,12 +59,12 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
                 SelectBlockchainsScreen(
                     accountType,
                     accountName,
-                    findNavController(),
+                    navController,
                     popUpToInclusiveId,
                     inclusive
                 )
             } else {
-                findNavController().popBackStack()
+                navController.popBackStack()
             }
         }
     }

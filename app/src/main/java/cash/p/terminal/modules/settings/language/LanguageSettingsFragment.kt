@@ -32,14 +32,13 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 
 class LanguageSettingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         LanguageScreen(
-            findNavController(),
+            navController,
             { activity?.let { MainModule.startAsNewTask(it) } }
         )
     }

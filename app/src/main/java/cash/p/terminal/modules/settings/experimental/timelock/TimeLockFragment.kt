@@ -19,14 +19,13 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
-import io.horizontalsystems.core.findNavController
 
 class TimeLockFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ExperimentalScreen(
-            findNavController()
+            navController
         )
     }
 

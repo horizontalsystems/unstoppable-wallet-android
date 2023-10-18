@@ -34,7 +34,6 @@ import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.SelectorItem
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -44,13 +43,13 @@ import kotlinx.coroutines.delay
 class WatchAddressFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             val popUpToInclusiveId =
                 arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.watchAddressFragment) ?: R.id.watchAddressFragment
             val inclusive =
                 arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
-            WatchAddressScreen(findNavController(), popUpToInclusiveId, inclusive)
+            WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
         }
     }
 

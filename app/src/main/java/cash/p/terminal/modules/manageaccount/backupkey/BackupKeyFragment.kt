@@ -31,15 +31,14 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.MenuItem
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val account = requireArguments().parcelable<Account>(BackupKeyModule.ACCOUNT)!!
-        RecoveryPhraseScreen(findNavController(), account)
+        RecoveryPhraseScreen(navController, account)
     }
 
 }

@@ -56,6 +56,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
@@ -89,35 +90,35 @@ class ZcashConfigure : BaseComposeFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.onBackPressedDispatcher?.addCallback(this) {
-            close()
+            close(findNavController())
         }
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ZcashConfigureScreen(
-            onCloseWithResult = { closeWithConfigt(it) },
-            onCloseClick = { close() }
+            onCloseWithResult = { closeWithConfigt(it, navController) },
+            onCloseClick = { close(navController) }
         )
     }
 
-    private fun closeWithConfigt(config: ZCashConfig) {
-        findNavController().setNavigationResult(
+    private fun closeWithConfigt(config: ZCashConfig, navController: NavController) {
+        navController.setNavigationResult(
             resultBundleKey,
             bundleOf(
                 requestResultKey to RESULT_OK,
                 zcashConfigKey to config,
             )
         )
-        findNavController().popBackStack()
+        navController.popBackStack()
     }
 
-    private fun close() {
-        findNavController().setNavigationResult(
+    private fun close(navController: NavController) {
+        navController.setNavigationResult(
             resultBundleKey,
             bundleOf(requestResultKey to RESULT_CANCELLED)
         )
-        findNavController().popBackStack()
+        navController.popBackStack()
     }
 
     companion object {

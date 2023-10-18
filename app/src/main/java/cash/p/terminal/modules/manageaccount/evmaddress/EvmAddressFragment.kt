@@ -24,7 +24,6 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
@@ -34,9 +33,9 @@ class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val evmAddress = arguments?.getString(EVM_ADDRESS_KEY) ?: ""
-        EvmAddressScreen(evmAddress, findNavController())
+        EvmAddressScreen(evmAddress, navController)
     }
 
 }

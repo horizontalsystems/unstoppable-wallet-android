@@ -3,7 +3,7 @@ package cash.p.terminal.modules.coin.indicators
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
@@ -14,9 +14,8 @@ import io.horizontalsystems.core.helpers.HudHelper
 class IndicatorSettingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
-            val navController = findNavController()
             val indicatorSetting = arguments?.getString("indicatorId")?.let {
                 App.chartIndicatorManager.getChartIndicatorSetting(it)
             }

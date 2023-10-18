@@ -69,15 +69,13 @@ import cash.p.terminal.ui.compose.components.body_jacob
 import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 
 class ReceiveAddressFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        val navController = findNavController()
+    override fun GetContent(navController: NavController) {
         val wallet = arguments?.parcelable<Wallet>(WALLET_KEY)
         if (wallet == null) {
             Toast.makeText(App.instance, "Wallet parameter is missing", Toast.LENGTH_SHORT).show()

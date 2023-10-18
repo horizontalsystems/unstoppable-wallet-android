@@ -3,6 +3,7 @@ package cash.p.terminal.modules.send
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
@@ -17,7 +18,6 @@ import cash.p.terminal.modules.send.tron.SendTronConfirmationScreen
 import cash.p.terminal.modules.send.tron.SendTronViewModel
 import cash.p.terminal.modules.send.zcash.SendZCashConfirmationScreen
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -25,7 +25,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
     val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val arguments = requireArguments()
         val sendEntryPointDestId = arguments.getInt(sendEntryPointDestIdKey)
 
@@ -34,7 +34,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                 val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
 
                 SendBitcoinConfirmationScreen(
-                    findNavController(),
+                    navController,
                     sendBitcoinViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId
@@ -44,7 +44,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                 val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment)
 
                 SendBinanceConfirmationScreen(
-                    findNavController(),
+                    navController,
                     sendBinanceViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId
@@ -54,7 +54,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                 val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment)
 
                 SendZCashConfirmationScreen(
-                    findNavController(),
+                    navController,
                     sendZCashViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId
@@ -63,7 +63,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
             Type.Tron -> {
                 val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment)
                 SendTronConfirmationScreen(
-                    findNavController(),
+                    navController,
                     sendTronViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId
@@ -73,7 +73,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                 val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment)
 
                 SendSolanaConfirmationScreen(
-                    findNavController(),
+                    navController,
                     sendSolanaViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId

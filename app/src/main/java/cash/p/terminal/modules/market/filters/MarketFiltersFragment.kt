@@ -28,7 +28,6 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import cash.p.terminal.modules.market.filters.PriceChange as FilterPriceChange
@@ -40,10 +39,10 @@ class MarketFiltersFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         AdvancedSearchScreen(
             viewModel,
-            findNavController(),
+            navController,
         )
     }
 

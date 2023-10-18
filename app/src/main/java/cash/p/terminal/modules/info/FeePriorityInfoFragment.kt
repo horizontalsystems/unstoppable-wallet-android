@@ -20,15 +20,14 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.MenuItem
-import io.horizontalsystems.core.findNavController
 
 class FeePriorityInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ComposeAppTheme {
             InfoScreen(
-                findNavController()
+                navController
             )
         }
     }

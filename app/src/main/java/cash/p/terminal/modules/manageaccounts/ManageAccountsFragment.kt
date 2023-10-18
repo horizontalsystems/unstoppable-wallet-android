@@ -34,15 +34,14 @@ import cash.p.terminal.ui.compose.components.body_jacob
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class ManageAccountsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ManageAccountsScreen(
-            findNavController(),
+            navController,
             arguments?.parcelable(ManageAccountsModule.MODE)!!
         )
     }

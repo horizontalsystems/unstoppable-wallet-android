@@ -34,14 +34,13 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.headline2_jacob
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import java.math.BigDecimal
 
 class OverallScoreInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val scoreCategory = requireArguments().parcelable<ScoreCategory>(SCORE_CATEGORY_KEY)
         val categoryScores = getScores(scoreCategory)
         ComposeAppTheme {
@@ -55,7 +54,7 @@ class OverallScoreInfoFragment : BaseComposeFragment() {
                             .padding(horizontal = 48.dp)
                             .fillMaxWidth(),
                         title = stringResource(R.string.Button_Close),
-                        onClick = { findNavController().popBackStack() }
+                        onClick = { navController.popBackStack() }
                     )
                 }
             } else {
@@ -63,7 +62,7 @@ class OverallScoreInfoFragment : BaseComposeFragment() {
                     scoreCategory.title,
                     scoreCategory.description,
                     categoryScores,
-                    findNavController()
+                    navController
                 )
             }
         }

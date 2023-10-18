@@ -6,13 +6,12 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.findNavController
 
 class DepositCexChooseAssetFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        DepositCexChooseAssetScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        DepositCexChooseAssetScreen(navController)
     }
 
 }
