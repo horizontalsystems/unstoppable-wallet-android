@@ -359,16 +359,14 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                         maxLines = 1,
                     )
                     Spacer(Modifier.weight(1f))
-                    if (item.showAmount) {
-                        item.primaryValue?.let { coloredValue ->
-                            Text(
-                                text = coloredValue.value,
-                                style = ComposeAppTheme.typography.body,
-                                color = coloredValue.color.compose(),
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                            )
-                        }
+                    item.primaryValue?.let { coloredValue ->
+                        Text(
+                            text = if (item.showAmount) coloredValue.value else "*****",
+                            style = ComposeAppTheme.typography.body,
+                            color = coloredValue.color.compose(),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                        )
                     }
 
                     if (item.doubleSpend) {
@@ -402,15 +400,13 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                             .padding(end = 8.dp),
                         maxLines = 2,
                     )
-                    if (item.showAmount) {
-                        item.secondaryValue?.let { coloredValue ->
-                            Text(
-                                text = coloredValue.value,
-                                style = ComposeAppTheme.typography.subhead2,
-                                color = coloredValue.color.compose(),
-                                maxLines = 1,
-                            )
-                        }
+                    item.secondaryValue?.let { coloredValue ->
+                        Text(
+                            text = if (item.showAmount) coloredValue.value else "*****",
+                            style = ComposeAppTheme.typography.subhead2,
+                            color = coloredValue.color.compose(),
+                            maxLines = 1,
+                        )
                     }
                 }
             }

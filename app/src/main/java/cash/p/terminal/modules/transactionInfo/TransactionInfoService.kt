@@ -47,7 +47,8 @@ class TransactionInfoService(
     private val adapter: ITransactionsAdapter,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
-    private val nftMetadataService: NftMetadataService
+    private val nftMetadataService: NftMetadataService,
+    balanceHidden: Boolean,
 ) {
 
     val transactionHash: String get() = transactionRecord.transactionHash
@@ -61,7 +62,8 @@ class TransactionInfoService(
         adapter.lastBlockInfo,
         TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
         mapOf(),
-        mapOf()
+        mapOf(),
+        balanceHidden
     )
         private set(value) {
             field = value

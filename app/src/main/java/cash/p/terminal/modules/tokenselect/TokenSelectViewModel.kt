@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
+import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.swappable
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceService
@@ -24,7 +25,8 @@ class TokenSelectViewModel(
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?,
-    private val balanceSorter: BalanceSorter
+    private val balanceSorter: BalanceSorter,
+    private val balanceHiddenManager: BalanceHiddenManager
 ) : ViewModel() {
 
     private var noItems = false
@@ -70,7 +72,7 @@ class TokenSelectViewModel(
                     balanceViewItemFactory.viewItem2(
                         item = balanceItem,
                         currency = service.baseCurrency,
-                        hideBalance = false,
+                        hideBalance = balanceHiddenManager.balanceHidden,
                         watchAccount = service.isWatchAccount,
                         balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
                         networkAvailable = service.networkAvailable
@@ -112,7 +114,8 @@ class TokenSelectViewModel(
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
                 itemsFilter = null,
-                balanceSorter = BalanceSorter()
+                balanceSorter = BalanceSorter(),
+                balanceHiddenManager = App.balanceHiddenManager,
             ) as T
         }
     }
@@ -127,7 +130,8 @@ class TokenSelectViewModel(
                 itemsFilter = {
                     it.wallet.token.swappable
                 },
-                balanceSorter = BalanceSorter()
+                balanceSorter = BalanceSorter(),
+                balanceHiddenManager = App.balanceHiddenManager,
             ) as T
         }
     }
