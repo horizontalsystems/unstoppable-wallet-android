@@ -29,7 +29,8 @@ object TransactionInfoModule {
                 adapter,
                 App.marketKit,
                 App.currencyManager,
-                NftMetadataService(App.nftMetadataManager)
+                NftMetadataService(App.nftMetadataManager),
+                App.balanceHiddenManager.balanceHidden,
             )
             val factory = TransactionInfoViewItemFactory(
                 App.numberFormatter,
@@ -63,7 +64,8 @@ data class TransactionInfoItem(
     val lastBlockInfo: LastBlockInfo?,
     val explorerData: TransactionInfoModule.ExplorerData,
     val rates: Map<String, CurrencyValue>,
-    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>
+    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
+    val hideAmount: Boolean,
 )
 
 val BlockchainType.resendable: Boolean
