@@ -45,7 +45,6 @@
     <string name="Button_Search">Buscar</string>
     <string name="Button_Back">Atrás</string>
     <string name="Button_Copy">Copiar</string>
-    <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Eliminar</string>
     <string name="Button_LearnMore">Aprender más</string>
     <string name="Button_Activate">Activar</string>
@@ -60,16 +59,13 @@
     <string name="Error_OutOfRange">No puede ser menor que %1$s o mayor que %2$s</string>
     <string name="Error_NotInteger">Número entero incorrecto</string>
     <string name="Error">Erreur</string>
-    <string name="NotAvailable">N/A</string>
     <string name="Any">Cualquier</string>
     <string name="SyncError">Error de sincronización. Inténtalo de nuevo</string>
-    <string name="PercentTitle">Percent</string>
     <string name="Keyboard">Teclado</string>
     <string name="AccountRecovery_Note">Nota</string>
     <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
     <string name="Intro_Wallet_Screen2Description">No te encierres y no dejes que otros te hagan eso.</string>
     <string name="Intro_Wallet_Screen3Title">Actúa sin Fronteras</string>
@@ -345,9 +341,7 @@
     <string name="FeeSettings_BaseFee">Tarifa Base</string>
     <string name="FeeSettings_BaseFee_Info">El protocolo de red determina el precio base por gas para cada bloque, llamada tarifa base. Varía en función del nivel de utilización de la red de bloque a bloque. Puede aumentar o disminuir no más del 12,5% en el próximo bloque, haciendo que las comisiones sean más predecibles. El valor que se muestra aquí es la tarifa base del bloque actual.</string>
     <string name="FeeSettings_MaxFee">Tarifa Máxima de Tarifa (Gwei)</string>
-    <string name="FeeSettings_MaxFee_Info">This is the maximum total price per gas the user is willing to pay. It must cover the network\'s base fee rate and max priority fee rate. The value shown here is suggested based on an estimate of the next block\'s base fee rate plus the max priority fee rate chosen by the user. The actual fee rate paid will normally be lower. Setting this lower than the current base fee rate will limit the fee paid, but will result in longer waiting times for the transaction to be confirmed, or even in a stuck transaction.</string>
     <string name="FeeSettings_MaxMinerTips">Tarifa Máxima de prioridad (Gwei)</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Users pay priority fees to incentivize a transaction to be confirmed more quickly. They are sometimes called tips. The max priority fee rate is the maximum additional price per gas the user is willing to pay on top of the base fee rate. The value shown here is suggested based on predicted network conditions. The actual priority fee will normally be lower. Setting this to zero may result in a long waiting time for transaction to be confirmed, as it is placed at the end of the pending transactions queue from all users.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Arriesgado</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transacción puede permanecer pendiente por un tiempo o fallar por completo.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Arriesgado</string>
@@ -357,11 +351,6 @@
     <string name="FeeSettings_Info_IUnderstand">Entiendo</string>
     <string name="FeeSettings_FeeRate">Tarifa de tarifa (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Este es el valor recomendado para golpear los siguientes 2 bloques</string>
-    <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
-        \n\nThe Unstoppable wallet estimates fee based on the current blockchain activity and recommends the optimal value in order for the transaction to be processed within reasonable amount of time.
-        \n\nThe recommended fee rate shown as the amount of satoshi user needs to pay for a single byte of the transaction. Thus, the total fee depends on the total size of the transaction which is measured in bytes.
-        \n\nUsers may use provided controls to increase or decrease the fee rate value. The change in fee rate changes the total fee for the transaction the user will pay.
-        \n\nSetting fee rate below recommended value may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm. For transactions where priority is important, we recommend setting higher fee rate.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Velocidad de transacción</string>
     <string name="FeeInfo_Description">Las blockchain de Bitcoin como las de Ethereum requieren que los usuarios paguen comisiones de red al enviar transacciones. Las comisiones son más altas cuando muchas transacciones están teniendo lugar en la red y más bajas cuando el blockchain está menos ocupado.</string>
@@ -431,8 +420,6 @@
     <string name="WalletConnect_NotSupportedDescription">El tipo de cartera actual %s no es compatible con WalletConnect</string>
     <string name="WalletConnect_Unnamed">Sin nombre</string>
     <string name="WalletConnect_DAppUnknown">dApp desconocida</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
-    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Borrar todo</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">¿Desea eliminar todos los dAps emparejados?</string>
     <string name="WalletConnect_Pairings_Delete">Eliminar</string>
@@ -487,8 +474,6 @@
     <string name="Swap_MinimumGot">Cantidad Garantizada</string>
     <string name="Swap_PoweredBy">Desarrollado por</string>
     <string name="Swap_SelectSwapProvider_Title">Proveedor de intercambio</string>
-    <string name="Swap_AmountEstimated">(est)</string>
-    <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moneda</string>
     <!-- Swap Settings -->
@@ -501,7 +486,6 @@
     <string name="SwapSettings_RecipientAddressTitle">Dirección del destinatario</string>
     <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
     <string name="SwapSettings_Apply">Aplicar</string>
-    <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Dominio o dirección</string>
     <string name="SwapSettings_FeeSettingsAlert">Una tarifa de servicio para la acción de intercambio en la plataforma típicamente de 0,3% o 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
@@ -551,8 +535,6 @@
     <string name="Transactions_Completed">Finalizado</string>
     <string name="Transactions_Processing">Procesando</string>
     <string name="Transactions_Send">Enviar</string>
-    <string name="Transactions_Burn">Burn</string>
-    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Aprobar</string>
     <string name="Transactions_Swap">Permutar</string>
     <string name="Transactions_Failed">Falla</string>
@@ -581,7 +563,6 @@
     <string name="TransactionInfo_Status">Estado</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Date">Fecha</string>
-    <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Servicio</string>
     <string name="TransactionInfo_RawTransaction">Transacción sin procesar</string>
     <string name="TransactionInfo_ContactName">Nombre de contacto</string>
@@ -644,7 +625,6 @@
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Seguridad</string>
     <string name="Settings_Notifications">Notificaciones</string>
-    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_Theme">Tema</string>
@@ -662,7 +642,6 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Introduzca su nombre de cuenta de Telegram para iniciar un chat de asistencia personal con nuestro equipo. Nos pondremos en contacto contigo y comenzaremos a trabajar en tu problema tan pronto como lo veamos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Ya has solicitado un chat privado, encuentra en Telegram</string>
     <string name="Settings_PersonalSupport_Account">Cuenta</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Solicitado</string>
     <string name="Settings_PersonalSupport_Request">Pedido</string>
     <string name="Settings_PersonalSupport_NewRequest">Nueva requisición</string>
@@ -757,7 +736,6 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Las notificaciones para la aplicación del Monedero Unstoppable están desactivadas. Necesita activarlas para poder recibir alertas de cambio de precios.</string>
     <string name="SettingsSecurity_SortingShuffle">Aleatoriamente</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexación aleatoria</string>
-    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Bip69 determinista</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexación Lexicográfica</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Recomendado</string>
@@ -795,7 +773,6 @@
     <string name="SettingsTerms_Bugs">Puede haber problemas de software no descubiertos en el código que permite que esta aplicación funcione mal.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contacto</string>
     <!--Setting_Notifications-->
@@ -817,7 +794,6 @@
     <string name="NotificationBottomMenu_LongTerm">Largo Plazo 6M</string>
     <string name="NotificationBottomMenu_Long">Largo plazo</string>
     <!-- Settings Launch Screen -->
-    <string name="SettingsLaunchScreen_Auto">Auto</string>
     <string name="SettingsLaunchScreen_Balance">Saldo</string>
     <string name="SettingsLaunchScreen_MarketOverview">Visión General del Mercado</string>
     <string name="SettingsLaunchScreen_Watchlist">Lista de Seguimiento</string>
@@ -861,7 +837,6 @@
     <string name="ManageCoins_BchTypeDescription">Hay 2 formatos de dirección de las carteras Bitcoin Cash pueden usar para recibir pagos entrantes:\n\n- TYPE 0 (más antiguo)\n- TYPE 145 (más reciente)\n\nMientras que el monedero imparable soporta ambos se recomienda usar un monedero Bitcoin Cash que funcione en formato TYPE 145.</string>
     <string name="ManageCoins_ContractAddress">AÑADIR CONTRACTO</string>
     <!-- Experimental Feature -->
-    <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Las siguientes características son experimentales y deben utilizarse con precaución. Aunque hemos probado a fondo estas características usando nuestros propios fondos criptográficos, no podemos garantizar que funcionen como se espera en todos los casos posibles.</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Permite enviar Bitcoins que no se pueden gastar hasta la fecha establecida.\n\nEl receptor de dicha transacción debe utilizar el monedero Unstoppable.\n\nSólo el monedero Unstoppable puede identificar correctamente tales transacciones en la red Bitcoin, así como permitir que el receptor gaste esos Bitcoins después de que expire el período de bloqueo.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote dicha transacción a ti mismo.\n\nPor ser característica experimental, la cantidad máxima por transacción está limitada a 0.5 BTC.</string>
@@ -900,7 +875,6 @@
     <string name="Watch_TypeEvmAddress">Dirección EVM</string>
     <string name="Watch_TypeSolanaAddress">Dirección Solana</string>
     <string name="Watch_TypeTronAddress">Dirección de Tron</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">Clave xPubKey inválida</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>
@@ -974,7 +948,6 @@
     <string name="EvmPrivateKey_Warning">Esta clave es para todas las blockchains compatibles con EVM. No la comparta con nadie.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Toca para mostrar la clave privada</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Toca para mostrar la clave privada</string>
     <!-- Private Keys -->
@@ -982,7 +955,6 @@
     <string name="PrivateKeys_EvmPrivateKey">Clave Privada EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Otorga un control total sobre criptomonedas basadas en Ethereum, Binance Smart Chain, etc dentro de cada monedero correspondiente.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Otorga total control sobre los activos de la respectiva cartera.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Otorga control total sobre Bitcoin y otras criptomonedas basadas en UTXO, es decir, Litecoin, Bitcoin Cash, Dash, etc. dentro de su respectiva cartera.</string>
     <string name="PrivateKeys_NeverShareWarning">Nunca comparta su frase de recuperación con nadie. El equipo imparable nunca pedirá su frase de recuperación.</string>
     <!-- Public Keys -->
@@ -1031,7 +1003,6 @@
     <string name="AddToken_Symbol">Símbolo</string>
     <string name="AddToken_CoinCode">Código de moneda</string>
     <string name="AddToken_Decimals">Decimales</string>
-    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TIPOS DE COIN</string>
     <string name="AddToken_AlreadyAdded">YA AGREGADO</string>
     <string name="AddToken_AddressOrSymbol">Dirección del contrato</string>
@@ -1294,7 +1265,6 @@
     <string name="NftCollection_EventType_Custom">Personalizado</string>
     <string name="NftCollection_EventType_Payout">Pagos</string>
     <string name="NftCollection_EventType_BulkCancel">Cancelar en masa</string>
-    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Desconocido</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Máximos Ganadores</string>
