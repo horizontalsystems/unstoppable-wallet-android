@@ -8,7 +8,6 @@
     <string name="Alert_Close">Kapat</string>
     <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Alert_Restart">Yeniden başlat</string>
-    <string name="Suspended">SUSPENDED</string>
     <string name="Action_Undo">GERİ ALMA</string>
     <string name="Button_Show">Göster</string>
     <string name="Button_Cancel">İptal</string>
@@ -62,7 +61,6 @@
     <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
     <string name="Intro_Wallet_Screen2Description">Kendinizi kilitlemeyin ve başkalarının bunu sizin için yapmasına izin vermeyin.</string>
     <string name="Intro_Wallet_Screen3Title">Sınırları Kaldırın</string>
@@ -211,7 +209,6 @@
     <string name="Send_Advanced">İleri düzey</string>
     <string name="Send_Hodler_Description">TimeLock yalnızca BIP44 adreslerine (1 ile başlar) göndermek için çalışır</string>
     <string name="Send_Confirmation_Title">Onayla</string>
-    <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
     <string name="Send_Confirmation_Amount">Tutar</string>
     <string name="Send_Confirmation_To">Alan</string>
@@ -335,7 +332,6 @@
     <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
     <string name="WalletConnect_Disconnecting">Bağlantı kesiliyor</string>
     <string name="WalletConnect_SignMessageRequest_Title">İmza Talebi</string>
-    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Lütfen doğrulamak için bir mesajı imzalayın</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
@@ -361,8 +357,6 @@
     <string name="WalletConnect_NotSupportedDescription">Mevcut cüzdan türünüz %s WalletConnect\'i desteklemiyor</string>
     <string name="WalletConnect_Unnamed">İsimsiz</string>
     <string name="WalletConnect_DAppUnknown">Bilinmeyen dApp</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
-    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Hepsini Sil</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Eşleştirilmiş tüm dAps\'leri silmek istiyor musunuz?</string>
     <string name="WalletConnect_Pairings_Delete">Sil</string>
@@ -420,7 +414,6 @@
     <string name="Swap_AmountEstimated">(tah)</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
-    <string name="Swap_AmountTypeCoin">Coin</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Ayarları</string>
     <string name="SwapSettings_Service">Hizmet</string>
@@ -481,8 +474,6 @@
     <string name="Transactions_Completed">Tamamlandı</string>
     <string name="Transactions_Processing">İşleniyor</string>
     <string name="Transactions_Send">Gönder</string>
-    <string name="Transactions_Burn">Burn</string>
-    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Onayla</string>
     <string name="Transactions_Swap">Takas</string>
     <string name="Transactions_Failed">Başarısız</string>
@@ -589,10 +580,7 @@
     <string name="Settings_Contact_ViaEmail">E-posta yoluyla</string>
     <string name="Settings_AutoLock">Otomatik kilit</string>
     <string name="Settings_PersonalSupport">Kişisel Destek</string>
-    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
-    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
     <string name="Settings_PersonalSupport_Account">Hesap</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Request">İstek</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
@@ -614,7 +602,6 @@
     <string name="Appearance_BalanceConversion">BAKIYE ÇEVRIMI</string>
     <string name="Appearance_BalanceValue">BAKIYE DEĞERI</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
-    <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
     <string name="Appearance_BalanceAutoHide_Description">Uygulama her açıldığında, önceki tercihlere bakılmaksızın bakiyeyi otomatik olarak gizler.</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
@@ -709,7 +696,6 @@
     <string name="SettingsTerms_Bugs">Bu uygulamaya güç veren kodda, uygulamanın arızalanmasına neden olabilecek keşfedilmemiş yazılım sorunları olabilir.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Iletişim</string>
     <!--Setting_Notifications-->
@@ -1070,13 +1056,8 @@
     <string name="NftCollection_EventType_Custom">Özel</string>
     <string name="NftCollection_EventType_Payout">Ödeme</string>
     <string name="NftCollection_EventType_BulkCancel">Toplu İptal</string>
-    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Top Losers</string>
-    <string name="RateList_Posts">News</string>
-    <string name="Market_DaysAgo">%dd. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Senk. hatası</string>
     <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
@@ -1092,7 +1073,6 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">Türü Seç</string>
     <string name="NftAssetActivity_Empty">Henüz öğe etkinliği yok</string>
-    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
