@@ -13,8 +13,8 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
-import cash.p.terminal.modules.swap.SwapViewItemHelper
 import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
+import cash.p.terminal.modules.swap.SwapViewItemHelper
 import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
@@ -25,7 +25,7 @@ object OneInchConfirmationModule {
     class Factory(val blockchainType: BlockchainType, private val oneInchSwapParameters: OneInchSwapParameters) : ViewModelProvider.Factory {
 
         private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
-        private val oneInchKitHelper by lazy { OneInchKitHelper(evmKitWrapper.evmKit) }
+        private val oneInchKitHelper by lazy { OneInchKitHelper(evmKitWrapper.evmKit, App.appConfigProvider.oneInchApiKey) }
         private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit

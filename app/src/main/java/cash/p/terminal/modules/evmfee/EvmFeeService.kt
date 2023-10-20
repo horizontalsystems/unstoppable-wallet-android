@@ -48,7 +48,7 @@ class EvmFeeService(
         gasPriceService.setRecommended()
     }
 
-    fun onCleared() {
+    override fun clear() {
         disposable.clear()
         gasPriceInfoDisposable?.dispose()
     }
