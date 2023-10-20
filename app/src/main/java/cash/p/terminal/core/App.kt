@@ -437,7 +437,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             contactsRepository = contactsRepository
         )
 
-        spamManager = SpamManager(marketKit)
+        spamManager = SpamManager()
 
         startTasks()
     }
