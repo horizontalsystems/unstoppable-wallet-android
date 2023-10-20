@@ -66,7 +66,11 @@ class BackupFileValidator {
         val fullBackup = gson.fromJson(json, FullBackup::class.java)
         val walletBackup = gson.fromJson(json, BackupLocalModule.WalletBackup::class.java)
 
-        if (fullBackup.settings == null && walletBackup.version != 2 && walletBackup.version !in 1..2) {
+        val isSingleWalletBackup =
+            fullBackup.settings == null && walletBackup.crypto != null && walletBackup.type != null && walletBackup.version in 1..2
+        val isFullBackup = fullBackup.settings != null && fullBackup.version == 2 && walletBackup.crypto == null && walletBackup.type == null
+
+        if (!isSingleWalletBackup && !isFullBackup) {
             throw Exception("Invalid json format")
         }
     }
