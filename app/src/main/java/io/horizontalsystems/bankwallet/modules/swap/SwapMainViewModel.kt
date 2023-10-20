@@ -96,7 +96,7 @@ class SwapMainViewModel(
     private var tokenToState = toTokenService.state
 
     private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchainType).evmKitWrapper?.evmKit!! }
-    private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit) }
+    private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit, App.appConfigProvider.oneInchApiKey) }
     private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit, DexType.Uniswap) }
     private val pancakeSwapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit, DexType.PancakeSwap) }

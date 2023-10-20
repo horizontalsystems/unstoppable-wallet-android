@@ -51,16 +51,25 @@ class OneInchFeeService(
     override val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
 
     init {
-        sync(gasPriceService.state)
-        gasPriceService.stateObservable
-            .subscribeIO {
-                sync(it)
-            }
-            .let { disposable.add(it) }
+        val gasPriceServiceState = gasPriceService.state
+        sync(gasPriceServiceState)
+        if (gasPriceServiceState.dataOrNull == null) {
+            gasPriceService.stateObservable
+                .subscribeIO {
+                    sync(it)
+                }
+                .let { disposable.add(it) }
+        }
     }
 
     override fun reset() {
         gasPriceService.setRecommended()
+    }
+
+    override fun clear() {
+        disposable.clear()
+        gasPriceInfoDisposable?.dispose()
+        retryDisposable?.dispose()
     }
 
     private fun sync(gasPriceServiceState: DataState<GasPriceInfo>) {
