@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Не задан параметр</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
     <string name="Alert_Close">Закрыть</string>
@@ -278,7 +277,6 @@
     <string name="Balance_SyncedUntil">до %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_AddCoins">Добавить токен</string>
     <string name="Balance_AddCoin">Добавить токен</string>
@@ -699,7 +697,6 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
     <string name="Settings_PersonalSupport_Account">Аккаунт</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Запрошено</string>
     <string name="Settings_PersonalSupport_Request">Запрос</string>
     <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
@@ -766,7 +763,6 @@
     <string name="EvmNetwork_SyncMode">Режим синхронизации</string>
     <string name="EvmNetwork_SyncModeDescription">Этот параметр определяет способ взаимодействия приложения с блокчейнами при отправке или получении транзакций.\n\nКогда речь идет о Bitcoin, Bitcoin Cash, Litecoin, и Dash, связь с сетевыми узлами блокчейна полностью равноправна. Unstoppable пингует многие узлы и связывается с одним из них. Каждый раз приложение подключается к другому узлу.\n\nЧто касается Ethereum и Binance Smart Chain, то пока нет подходящих альтернативных вариантов мобильных кошельков для взаимодействия с соответствующими блокчейнами кроме сторонних поставщиков услуг RPC (т.е. Infura.io) или личными узлами Ethereum. Это значит, что ваше взаимодействие с блокчейном не децентрализовано. Это влияет не на ваши средства, а на возможность подключения к сети блокчейн.</string>
     <!--Add RPC Source-->
-    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
@@ -1019,7 +1015,6 @@
     <string name="EvmPrivateKey_Warning">Этот ключ предназначен для всех EVM-совместимых блокчейнов. Не передавайте его никому.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Private Keys -->
@@ -1076,12 +1071,10 @@
     <string name="AddToken_Symbol">Символ</string>
     <string name="AddToken_CoinCode">Код токена</string>
     <string name="AddToken_Decimals">Десятичные знаки</string>
-    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
     <string name="AddToken_AlreadyAdded">УЖЕ ДОБАВЛЕНО</string>
     <string name="AddToken_AddressOrSymbol">Адрес контракта</string>
     <string name="AddToken_ChooseToken">Выберите токен</string>
-    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке</string>
     <string name="AddToken_InvalidContractAddress">Неверный адрес контракта</string>
     <string name="AddToken_InvalidBep2Symbol">Неверный символ BEP2</string>
@@ -1223,9 +1216,6 @@
     <string name="CoinPage_Type">Тип</string>
     <string name="CoinPage_Period">Период</string>
     <string name="CoinPage_RsiLength">Длина RSI</string>
-    <string name="CoinPage_FastLength">Fast Length</string>
-    <string name="CoinPage_SlowLength">Slow Length</string>
-    <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Индикаторы доступны только для премиум-пользователей Unstoppable кошелька.</string>
     <string name="CoinPage_AiGeneratedText">Это описание, сгенерированное искусственным интеллектом на основе предоставленного справочного материала для данной криптовалюты. Оно может содержать ошибки.</string>
     <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
@@ -1386,7 +1376,6 @@
     <string name="NftCollection_AveragePrice">Средняя оценка за все время</string>
     <string name="NftCollection_ItemsCount">%d Элементов</string>
     <string name="NftCollection_TodaysSales">Продажи за сегодня</string>
-    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s за NFT</string>
     <string name="NftCollection_Royalty">Вознаграждение</string>
     <string name="NftCollection_InceptionDate">Дата старта</string>
@@ -1423,7 +1412,6 @@
     <string name="ReleaseNotes_FollowUs">Мы в соцсетях</string>
     <string name="CoinPage_Chart_Locked">Заблокировано</string>
     <string name="ProUsersInfo_Title">Pro-пользователь</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Дополнительная информация о токене</string>
     <string name="ProUsersInfo_Description">Чтобы включить эти данные, вы должны получить бронзовый уровень UW NFTs “Coin Info+”\n\nТакже вы получите доступ к данным ниже:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX объем и рейтинг</string>
