@@ -59,6 +59,7 @@ interface IEvmFeeService {
     val transactionStatus: DataState<Transaction>
     val transactionStatusObservable: Observable<DataState<Transaction>>
 
+    fun clear()
     fun reset()
 }
 
