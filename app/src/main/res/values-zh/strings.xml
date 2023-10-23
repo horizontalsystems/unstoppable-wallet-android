@@ -57,6 +57,7 @@
     <string name="Button_Submit">提交</string>
     <string name="Button_TryAgain">再试一次</string>
     <string name="Button_Share">分享</string>
+    <string name="Button_Apply">应用</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
@@ -595,6 +596,7 @@
     <string name="Transactions_Filter_AllBlockchains">所有Blockchains</string>
     <string name="Transactions_Filter_AllCoins">所有硬币</string>
     <string name="Transactions_Filter_ChooseCoin">选择代币</string>
+    <string name="Transactions_Filter_ChooseBlockchain">选择区块链</string>
     <string name="Transactions_Incoming">已收到</string>
     <string name="Transactions_Outgoing">已发送</string>
     <string name="Transactions_Swaps">掉期交易</string>
@@ -827,7 +829,6 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">联系信息</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">为您要监视的代币设定价格变动警报\n\n当过去24小时内价格变动超过选定的临界值时，您将会收到警报。\n\n价格趋势警报将对短期的1星期、长期的6个月发出趋势变动警告。</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用本钱包通知，您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
