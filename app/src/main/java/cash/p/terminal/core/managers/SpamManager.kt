@@ -1,12 +1,20 @@
 package cash.p.terminal.core.managers
 
+import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import java.math.BigDecimal
 
-class SpamManager {
+class SpamManager(
+    private val localStorage: ILocalStorage
+) {
     private val stableCoinCodes = listOf("USDT", "USDC", "DAI", "BUSD", "EURS")
     private val negligibleValue = BigDecimal("0.01")
+
+    var hideUnknownTokens = localStorage.hideUnknownTokens
+        private set
+    var hideStablecoinsDust = localStorage.hideStablecoinsNegligibleAmount
+        private set
 
     fun isSpam(
         incomingEvents: List<TransferEvent>,
@@ -26,16 +34,26 @@ class SpamManager {
                 spamValue(eventValue.coinUid, eventValue.value)
             }
 
-            else -> true
+            else -> hideUnknownTokens
         }
     }
 
     private fun spamValue(coinCode: String, value: BigDecimal): Boolean {
-        return if (stableCoinCodes.contains(coinCode)) {
+        return if (hideStablecoinsDust && stableCoinCodes.contains(coinCode)) {
             value < negligibleValue
         } else {
             value <= BigDecimal.ZERO
         }
+    }
+
+    fun updateFilterHideUnknownTokens(hide: Boolean) {
+        localStorage.hideUnknownTokens = hide
+        hideUnknownTokens = hide
+    }
+
+    fun updateFilterHideStablecoinsDust(hide: Boolean) {
+        localStorage.hideStablecoinsNegligibleAmount = hide
+        hideStablecoinsDust = hide
     }
 
 }

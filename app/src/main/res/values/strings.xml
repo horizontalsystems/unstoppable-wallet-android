@@ -64,6 +64,7 @@
     <string name="Button_Submit">Submit</string>
     <string name="Button_TryAgain">Try Again</string>
     <string name="Button_Share">Share</string>
+    <string name="Button_Apply">Apply</string>
 
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
@@ -710,6 +711,7 @@
     <string name="Transactions_Filter_AllBlockchains">All Blockchains</string>
     <string name="Transactions_Filter_AllCoins">All Coins</string>
     <string name="Transactions_Filter_ChooseCoin">Choose Coin</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Choose Blockchain</string>
     <string name="Transactions_Incoming">Received</string>
     <string name="Transactions_Outgoing">Sent</string>
     <string name="Transactions_Swaps">Swaps</string>
@@ -717,6 +719,11 @@
     <string name="Transactions_Unknown">Unknown Transaction</string>
     <string name="Transactions_Unknown_Description">Transaction can not be parsed</string>
     <string name="Transactions_Multiple">Multiple</string>
+    <string name="Transactions_Filter">Filter</string>
+    <string name="Transactions_Coins">Coins</string>
+    <string name="Transactions_Filter_HideUnknownTokens">Hide Unknown Tokens</string>
+    <string name="Transactions_Filter_StablecoinDustAmount">Stablecoin Dust Amount</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Hiding incoming transactions with the dust amount in stablecoins, this partially solves the  address poisoning attack problems.</string>
 
     <!--Transaction Info-->
 

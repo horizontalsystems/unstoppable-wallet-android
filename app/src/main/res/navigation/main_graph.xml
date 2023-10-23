@@ -30,6 +30,12 @@
     <fragment
         android:id="@+id/filterCoinFragment"
         android:name="cash.p.terminal.modules.transactions.FilterCoinFragment" />
+   <fragment
+        android:id="@+id/filterBlockchainFragment"
+        android:name="cash.p.terminal.modules.transactions.FilterBlockchainFragment" />
+   <fragment
+        android:id="@+id/transactionFilterFragment"
+        android:name="cash.p.terminal.modules.transactions.TransactionsFilterFragment" />
     <fragment
         android:id="@+id/transactionInfoFragment"
         android:name="cash.p.terminal.modules.transactionInfo.TransactionInfoFragment" />
