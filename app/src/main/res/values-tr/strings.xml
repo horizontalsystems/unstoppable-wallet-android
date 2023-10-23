@@ -52,6 +52,7 @@
     <string name="Button_SignUp">Üye olmak</string>
     <string name="Button_Submit">Onayla</string>
     <string name="Button_TryAgain">Tekrar deneyin</string>
+    <string name="Button_Apply">Uygula</string>
     <string name="Error">Hata</string>
     <string name="Any">Herhangi</string>
     <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
@@ -488,6 +489,7 @@
     <string name="Transactions_Filter_AllBlockchains">Tüm Blok Zincirleri</string>
     <string name="Transactions_Filter_AllCoins">Tüm paralar</string>
     <string name="Transactions_Filter_ChooseCoin">Kripto Parayı Seç</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Blockchain Seç</string>
     <string name="Transactions_Incoming">Alındı</string>
     <string name="Transactions_Outgoing">Gönderildi</string>
     <string name="Transactions_Swaps">Swap</string>
@@ -697,7 +699,6 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Iletişim</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarı alırsınız. \n\nFiyat Trendi Uyarısı, 6 ay boyunca, 1 haftalık kısa bir süre için bir trend değişikliği durumunu uyarır.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
