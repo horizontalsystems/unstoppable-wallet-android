@@ -39,6 +39,7 @@
     <string name="Button_Send">ارسال</string>
     <string name="Button_Copy">رونوشت</string>
     <string name="Button_Sign">نشانه</string>
+    <string name="Button_Apply">درخواست دادن</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
@@ -357,6 +358,7 @@
     <string name="Transaction_Unlimited">نامحدود %s</string>
     <string name="Transactions_All">همه</string>
     <string name="Transactions_Filter_ChooseCoin">سکه را انتخاب کنید</string>
+    <string name="Transactions_Filter_ChooseBlockchain">انتخاب زنجیره بلوکی</string>
     <string name="Transactions_Incoming">دريافت شد</string>
     <string name="Transactions_Outgoing">ارسال شد</string>
     <string name="Transactions_Swaps">جابجایی</string>
@@ -497,7 +499,6 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">تماس</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت برای سکه هایی که می خواهید ببینید را تنظیم کنید. \n\n وقتی تغییر قیمت در ۲۴ ساعت گذشته از آستانه انتخاب شده بیشتر شود به شما هشدار داده می شود.\n\nهشدار روند قیمت برای مدت کوتاه ۱ هفته و برای مدت طولانی ۶ ماه تغییر روند هشدار می دهد.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. برای اینکه بتوانید هشدارهای تغییر قیمت را دریافت کنید ، باید آنها را فعال کنید.</string>
