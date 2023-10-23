@@ -169,6 +169,16 @@ class TransactionRecordRepository(
         }
     }
 
+    override fun reload() {
+        adaptersMap.forEach { (_, transactionAdapterWrapper) ->
+            transactionAdapterWrapper.reload()
+        }
+        unsubscribeFromUpdates()
+        allLoaded.set(false)
+        loadItems(1)
+        subscribeForUpdates()
+    }
+
     private fun unsubscribeFromUpdates() {
         disposableUpdates?.dispose()
     }

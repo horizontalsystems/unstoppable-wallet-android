@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,6 +41,8 @@ class TransactionsViewModel(
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
     val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
     val viewState = MutableLiveData<ViewState>(ViewState.Loading)
+    var filterHideUnknownTokens by mutableStateOf(service.filterHideUnknownTokens)
+    var filterHideStablecoinsDust by mutableStateOf(service.filterHideStablecoinsDust)
 
     private val disposables = CompositeDisposable()
 
@@ -120,7 +125,6 @@ class TransactionsViewModel(
         service.resetFilters()
     }
 
-
     fun onBottomReached() {
         service.loadNext()
     }
@@ -135,6 +139,16 @@ class TransactionsViewModel(
     }
 
     fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)
+
+    fun updateFilterHideUnknownTokens(checked: Boolean) {
+        service.updateFilterHideUnknownTokens(checked)
+        filterHideUnknownTokens = checked
+    }
+
+    fun updateFilterHideStablecoinsDust(checked: Boolean) {
+        service.updateFilterHideStablecoinsDust(checked)
+        filterHideStablecoinsDust = checked
+    }
 }
 
 data class TransactionItem(
