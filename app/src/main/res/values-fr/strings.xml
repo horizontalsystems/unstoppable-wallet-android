@@ -56,6 +56,7 @@
     <string name="Button_Submit">Je me connecte</string>
     <string name="Button_TryAgain">Veuillez Réessayer</string>
     <string name="Button_Share">Partager</string>
+    <string name="Button_Apply">Appliquer</string>
     <string name="Error_OutOfRange">Il doit contenir au moins %1$s et faire un maximum de %2$s caractères</string>
     <string name="Error_NotInteger">Les chiffres que vous avez fournis sont incorrects</string>
     <string name="Error">Erreur</string>
@@ -581,6 +582,7 @@
     <string name="Transactions_Filter_AllBlockchains">Toutes les blockchains</string>
     <string name="Transactions_Filter_AllCoins">Toutes les pièces</string>
     <string name="Transactions_Filter_ChooseCoin">Choisir la pièce</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Choisir la blockchain</string>
     <string name="Transactions_Incoming">Reçue</string>
     <string name="Transactions_Outgoing">Envoyée</string>
     <string name="Transactions_Swaps">Echanger</string>
@@ -813,7 +815,6 @@
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Soyez Unstoppable</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Contacter</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Définissez des alertes de changement de prix pour les pièces que vous souhaitez surveiller.\n\nVous serez alerté lorsque le changement de prix des dernières 24 heures dépassera le seuil sélectionné.\n\nL\'alerte de tendance de prix vous avertit d\'un changement de tendance pour le court terme à 1 semaine, pour le long terme à 6 mois.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Les notifications pour l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour pouvoir recevoir des alertes de changement de prix.</string>
