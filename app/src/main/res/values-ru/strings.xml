@@ -56,6 +56,7 @@
     <string name="Button_Submit">Подтвердить</string>
     <string name="Button_TryAgain">Попробовать ещё раз</string>
     <string name="Button_Share">Поделиться</string>
+    <string name="Button_Apply">Применить</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
@@ -602,6 +603,7 @@
     <string name="Transactions_Filter_AllBlockchains">Все блокчейны</string>
     <string name="Transactions_Filter_AllCoins">Все токены</string>
     <string name="Transactions_Filter_ChooseCoin">Выберите токен</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Выбрать блокчейн</string>
     <string name="Transactions_Incoming">Получено</string>
     <string name="Transactions_Outgoing">Отправлено</string>
     <string name="Transactions_Swaps">Обмены</string>
@@ -838,7 +840,6 @@
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Продолжить</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Обратная связь</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Установите уведомления об изменении курса отслеживаемых вами монет.\n\nВы получите уведомление, когда изменение курса за последние 24 часа превысит выбранный порог.\n\n Уведомление о тенденции цен предупреждает об изменениях в движении цен в краткосрочной перспективе (1 неделя), и долгосрочной перспективе (6 месяцев).</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Кошелек отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
