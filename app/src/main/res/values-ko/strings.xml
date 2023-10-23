@@ -55,6 +55,7 @@
     <string name="Button_Submit">제출하기</string>
     <string name="Button_TryAgain">다시 시도하십시오.</string>
     <string name="Button_Share">공유</string>
+    <string name="Button_Apply">적용</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
@@ -494,6 +495,7 @@
     <string name="Transactions_Filter_AllBlockchains">모든 블록체인</string>
     <string name="Transactions_Filter_AllCoins">모든코인</string>
     <string name="Transactions_Filter_ChooseCoin">코인 선택</string>
+    <string name="Transactions_Filter_ChooseBlockchain">블록체인 선택</string>
     <string name="Transactions_Incoming">수령됨</string>
     <string name="Transactions_Outgoing">전송됨</string>
     <string name="Transactions_Swaps">스왑</string>
@@ -720,7 +722,6 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">연락처</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">보고 싶은 코인에 대한 가격 변경 알림 설정\n\n최근 24시간 동안의 가격 변동이 선택된 임계값을 초과할 경우 알림 메시지가 표시됨\n\n가격 동향 알림은 짧은 1주일, 긴 6개월 동안의 동향 변화에 대해 알려줍니다.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
