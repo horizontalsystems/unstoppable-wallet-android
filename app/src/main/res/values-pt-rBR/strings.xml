@@ -55,6 +55,7 @@
     <string name="Button_Submit">Submeter</string>
     <string name="Button_TryAgain">Tentar novamente</string>
     <string name="Button_Share">Partilhar</string>
+    <string name="Button_Apply">Aplicar</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
     <string name="Error">Erro</string>
@@ -573,6 +574,7 @@
     <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
     <string name="Transactions_Filter_AllCoins">Todas as moedas</string>
     <string name="Transactions_Filter_ChooseCoin">Escolher Moedas</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Escolha Blockchain</string>
     <string name="Transactions_Incoming">Recebido</string>
     <string name="Transactions_Outgoing">Enviado</string>
     <string name="Transactions_Swaps">Trocas</string>
@@ -758,7 +760,6 @@
     <string name="SettingsShare_Title">Compartilhar</string>
     <string name="SettingsShare_Text">Seja Unstoppable</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Contato</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Defina alertas de mudança de preço para as moedas que você gostaria de observar.\n\nVocê será alertado quando a mudança de preço nas últimas 24 horas exceder o limite selecionado.\n\nAlerta de Tendência de Preço avisa sobre uma mudança de tendência para o período de 1 semana, durante 6 meses.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">As notificações do aplicativo da carteira Unstoppable estão desativadas. Você precisa ativá-las para poder receber alertas de alteração de preço.</string>
