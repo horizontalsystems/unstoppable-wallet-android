@@ -440,7 +440,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             contactsRepository = contactsRepository
         )
 
-        spamManager = SpamManager()
+        spamManager = SpamManager(localStorage)
 
         startTasks()
     }

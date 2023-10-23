@@ -34,6 +34,8 @@ class TransactionsService(
     private val nftMetadataService: NftMetadataService,
 ) : Clearable {
     val filterResetEnabled by transactionFilterService::resetEnabled
+    val filterHideUnknownTokens by transactionFilterService::filterHideUnknownTokens
+    val filterHideStablecoinsDust by transactionFilterService::filterHideStablecoinsDust
 
     private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
@@ -307,6 +309,20 @@ class TransactionsService(
             blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), selectedBlockchain))
 
             transactionRecordRepository.setWalletAndBlockchain(w, selectedBlockchain)
+        }
+    }
+
+    fun updateFilterHideUnknownTokens(hide: Boolean) {
+        executorService.submit {
+            transactionFilterService.setFilterHideUnknownTokens(hide)
+            transactionRecordRepository.reload()
+        }
+    }
+
+    fun updateFilterHideStablecoinsDust(hide: Boolean) {
+        executorService.submit {
+            transactionFilterService.setFilterHideStablecoinsDust(hide)
+            transactionRecordRepository.reload()
         }
     }
 

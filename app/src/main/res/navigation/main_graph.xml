@@ -38,6 +38,12 @@
     <fragment
         android:id="@+id/filterCoinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactions.FilterCoinFragment" />
+   <fragment
+        android:id="@+id/filterBlockchainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.FilterBlockchainFragment" />
+   <fragment
+        android:id="@+id/transactionFilterFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.TransactionsFilterFragment" />
     <fragment
         android:id="@+id/transactionInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment" />

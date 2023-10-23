@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class TransactionFilterService {
+class TransactionFilterService(
+    private val spamManager: SpamManager,
+) {
     private var transactionWallets: List<TransactionWallet?> = listOf(null)
     var selectedWallet: TransactionWallet? = null
         private set
@@ -17,6 +20,8 @@ class TransactionFilterService {
 
     private val _resetEnabled = MutableStateFlow(false)
     val resetEnabled = _resetEnabled.asStateFlow()
+    val filterHideUnknownTokens = spamManager.hideUnknownTokens
+    val filterHideStablecoinsDust = spamManager.hideStablecoinsDust
 
     private var blockchains: List<Blockchain?> = listOf(null)
 
@@ -90,5 +95,13 @@ class TransactionFilterService {
                 || selectedBlockchain != null
                 || selectedTransactionType != FilterTransactionType.All
         }
+    }
+
+    fun setFilterHideUnknownTokens(hide: Boolean) {
+        spamManager.updateFilterHideUnknownTokens(hide)
+    }
+
+    fun setFilterHideStablecoinsDust(hide: Boolean) {
+        spamManager.updateFilterHideStablecoinsDust(hide)
     }
 }
