@@ -51,6 +51,7 @@
     <string name="Button_Submit">Jetzt anmelden</string>
     <string name="Button_TryAgain">Bitte versuche es noch einmal</string>
     <string name="Button_Share">Teilen</string>
+    <string name="Button_Apply">Übernehmen</string>
     <string name="Error_OutOfRange">Es muss mindestens %1$s enthalten und darf maximal %2$s Zeichen lang sein</string>
     <string name="Error_NotInteger">Die von Dir angegebenen Zahlen sind nicht richtig</string>
     <string name="Error">Fehler</string>
@@ -503,6 +504,7 @@
     <string name="Transactions_Filter_AllBlockchains">Alle Blockchains</string>
     <string name="Transactions_Filter_AllCoins">Alle Coins</string>
     <string name="Transactions_Filter_ChooseCoin">Coins auswählen</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Blockchain auswählen</string>
     <string name="Transactions_Incoming">Erhalten</string>
     <string name="Transactions_Outgoing">Gesendet</string>
     <string name="Transactions_Approvals">Genehmigungen</string>
@@ -727,7 +729,6 @@
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Sei unaufhaltsam</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Kontakt</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Legen Sie Warnungen für Preisänderungen von Coins fest, die Sie sehen möchten\n\nSie werden benachrichtigt, wenn die Preisänderung der letzten 24 Stunden den ausgewählten Grenzwert überschreitet.\n\nPreistrend-Warnung warnt vor einer Trendänderung für 1 Woche (kurzfristig), für 6 Monate (langfristig).</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Die Benachrichtigungen für das Unstoppable Wallet sind ausgeschaltet. Sie müssen die Benachrichtigungen einschalten und eine Aktualisierung im Hintergrund erlauben, um Benachrichtigungen bei Preisänderungn zu erhalten.</string>
