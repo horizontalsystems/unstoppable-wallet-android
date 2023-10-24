@@ -84,6 +84,10 @@ class SendEvmTransactionViewModel(
         service.clear()
     }
 
+    fun pauseSync() {
+        service.pauseSync()
+    }
+
     @Synchronized
     private fun sync(state: SendEvmTransactionService.State) {
         when (state) {
