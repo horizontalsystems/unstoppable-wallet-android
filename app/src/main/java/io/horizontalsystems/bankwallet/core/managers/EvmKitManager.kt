@@ -9,14 +9,18 @@ import io.horizontalsystems.bankwallet.core.supportedNftTypes
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.TransactionBuilder
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.RpcSource
+import io.horizontalsystems.ethereumkit.models.Signature
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.nftkit.core.NftKit
@@ -107,6 +111,7 @@ class EvmKitManager(
 
         val address: Address
         var signer: Signer? = null
+        var isHardwareSigner = false
 
         when (accountType) {
             is AccountType.Mnemonic -> {
@@ -120,6 +125,10 @@ class EvmKitManager(
             }
             is AccountType.EvmAddress -> {
                 address = Address(accountType.address)
+            }
+            is AccountType.EvmAddressHardware -> {
+                address = Address(accountType.address)
+                isHardwareSigner = true
             }
             else -> throw UnsupportedAccountException()
         }
@@ -165,7 +174,7 @@ class EvmKitManager(
 
         evmKit.start()
 
-        return EvmKitWrapper(evmKit, nftKit, blockchainType, signer)
+        return EvmKitWrapper(evmKit, nftKit, blockchainType, signer, isHardwareSigner)
     }
 
     @Synchronized
@@ -210,24 +219,62 @@ class EvmKitWrapper(
     val evmKit: EthereumKit,
     val nftKit: NftKit?,
     val blockchainType: BlockchainType,
-    val signer: Signer?
+    val signer: Signer?,
+    val isHardwareSigner: Boolean
 ) {
 
     fun sendSingle(
         transactionData: TransactionData,
         gasPrice: GasPrice,
         gasLimit: Long,
-        nonce: Long?
+        nonce: Long?,
+        signatureHex: String? = null
     ): Single<FullTransaction> {
-        return if (signer != null) {
+        return if (signer != null || signatureHex != null) {
             evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
                 .flatMap { rawTransaction ->
-                    val signature = signer.signature(rawTransaction)
-                    evmKit.send(rawTransaction, signature)
+                    val signature = signer?.signature(rawTransaction) ?: signatureHex?.toSignature()
+                    if (signature == null) {
+                        Single.error(Exception())
+                    } else {
+                        val transactionBuilder = TransactionBuilder(evmKit.receiveAddress, evmKit.chain.id)
+                        val rawTransactionHex = transactionBuilder.encode(rawTransaction, signature = signature).toHexString()
+                        evmKit.send(rawTransaction, signature!!)
+                    }
                 }
         } else {
             Single.error(Exception())
         }
     }
 
+    fun getUnsignedTransactionHex(
+        transactionData: TransactionData,
+        gasPrice: GasPrice,
+        gasLimit: Long,
+        nonce: Long?
+    ): Single<String> {
+        val transactionBuilder = TransactionBuilder(evmKit.receiveAddress, evmKit.chain.id)
+        val signature = Signature(evmKit.chain.id, ByteArray(0), ByteArray(0))
+        return evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
+            .map { rawTransaction ->
+                val hex = "0x" + transactionBuilder.encode(rawTransaction, signature).toHexString()
+                hex
+            }
+    }
 }
+
+fun String.toSignature(): Signature? {
+    if (this.length < 130) return null // Minimum length check (64 for r, 64 for s, and at least 2 for v)
+
+    val cleaned = this.removePrefix("0x")
+    val rHex = cleaned.substring(0, 64)
+    val sHex = cleaned.substring(64, 128)
+    val vHex = cleaned.substring(128)
+
+    return Signature(
+        v = vHex.toIntOrNull(16) ?: return null,
+        r = rHex.hexStringToByteArray(),
+        s = sHex.hexStringToByteArray()
+    )
+}
+
