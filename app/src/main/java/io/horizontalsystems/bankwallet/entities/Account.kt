@@ -39,6 +39,16 @@ data class Account(
         get() = type.isWatchAccountType
 
     @IgnoredOnParcel
+    val isHardwareAccount: Boolean
+        get() = when (this.type) {
+            is AccountType.EvmAddressHardware -> true
+            is AccountType.SolanaAddressHardware -> true
+            is AccountType.TronAddressHardware -> true
+            is AccountType.HdExtendedKeyHardware -> this.type.hdExtendedKey.isPublic
+            else -> false
+        }
+
+    @IgnoredOnParcel
     val nonStandard: Boolean by lazy {
         if (type is AccountType.Mnemonic) {
             val words = type.words.joinToString(separator = " ")
@@ -136,6 +146,15 @@ sealed class AccountType : Parcelable {
     data class TronAddress(val address: String): AccountType()
 
     @Parcelize
+    data class EvmAddressHardware(val address: String) : AccountType()
+
+    @Parcelize
+    data class SolanaAddressHardware(val address: String) : AccountType()
+
+    @Parcelize
+    data class TronAddressHardware(val address: String): AccountType()
+
+    @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
         @IgnoredOnParcel
         val seed by lazy { Mnemonic().toSeed(words, passphrase) }
@@ -169,6 +188,20 @@ sealed class AccountType : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             return other is HdExtendedKey && keySerialized.contentEquals(other.keySerialized)
+        }
+
+        override fun hashCode(): Int {
+            return keySerialized.hashCode()
+        }
+    }
+
+    @Parcelize
+    data class HdExtendedKeyHardware(val keySerialized: String) : AccountType() {
+        val hdExtendedKey: HDExtendedKey
+            get() = HDExtendedKey(keySerialized)
+
+        override fun equals(other: Any?): Boolean {
+            return other is HdExtendedKeyHardware && keySerialized.contentEquals(other.keySerialized)
         }
 
         override fun hashCode(): Int {
@@ -243,6 +276,22 @@ sealed class AccountType : Parcelable {
                     else -> ""
                 }
             }
+            is EvmAddressHardware -> "EVM Address Hardware"
+            is SolanaAddressHardware -> "Solana Address Hardware"
+            is TronAddressHardware -> "Tron Address Hardware"
+            is HdExtendedKeyHardware -> {
+                when (this.hdExtendedKey.derivedType) {
+                    HDExtendedKey.DerivedType.Master -> "BIP32 Root Key Hardware"
+                    HDExtendedKey.DerivedType.Account -> {
+                        if (hdExtendedKey.isPublic) {
+                            "Account xPubKey Hardware"
+                        } else {
+                            "Account xPrivKey Hardware"
+                        }
+                    }
+                    else -> ""
+                }
+            }
             is Cex -> "Cex"
         }
 
@@ -265,18 +314,21 @@ sealed class AccountType : Parcelable {
             is EvmAddress -> this.address.shorten()
             is SolanaAddress -> this.address.shorten()
             is TronAddress -> this.address.shorten()
+            is EvmAddressHardware -> this.address.shorten()
+            is SolanaAddressHardware -> this.address.shorten()
+            is TronAddressHardware -> this.address.shorten()
             else -> this.description
         }
 
     val canAddTokens: Boolean
         get() = when (this) {
-            is Mnemonic, is EvmPrivateKey -> true
+            is Mnemonic, is EvmPrivateKey, is EvmAddressHardware, is HdExtendedKeyHardware -> true
             else -> false
         }
 
     val supportsWalletConnect: Boolean
         get() = when (this) {
-            is Mnemonic, is EvmPrivateKey -> true
+            is Mnemonic, is EvmPrivateKey, is EvmAddressHardware, is HdExtendedKeyHardware  -> true
             else -> false
         }
 

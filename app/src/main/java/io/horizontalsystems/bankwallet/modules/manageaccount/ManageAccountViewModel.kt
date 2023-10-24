@@ -115,6 +115,17 @@ class ManageAccountViewModel(
                 }
             }
 
+            is AccountType.EvmAddressHardware -> listOf()
+            is AccountType.SolanaAddressHardware -> listOf()
+            is AccountType.TronAddressHardware -> listOf()
+            is AccountType.HdExtendedKeyHardware -> {
+                if (account.type.hdExtendedKey.isPublic) {
+                    listOf(KeyAction.PublicKeys)
+                } else {
+                    listOf(KeyAction.PrivateKeys, KeyAction.PublicKeys)
+                }
+            }
+
             is AccountType.Cex -> listOf()
         }
     }

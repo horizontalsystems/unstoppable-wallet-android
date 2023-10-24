@@ -30,19 +30,19 @@ class WatchAddressService(
                 is AccountType.Cex,
                 is AccountType.Mnemonic,
                 is AccountType.EvmPrivateKey -> Unit // N/A
-                is AccountType.SolanaAddress -> {
+                is AccountType.SolanaAddress, is AccountType.SolanaAddressHardware -> {
                     if (BlockchainType.Solana.supports(accountType)) {
                         add(TokenQuery(BlockchainType.Solana, TokenType.Native))
                     }
                 }
 
-                is AccountType.TronAddress -> {
+                is AccountType.TronAddress, is AccountType.TronAddressHardware -> {
                     if (BlockchainType.Tron.supports(accountType)) {
                         add(TokenQuery(BlockchainType.Tron, TokenType.Native))
                     }
                 }
 
-                is AccountType.EvmAddress -> {
+                is AccountType.EvmAddress, is AccountType.EvmAddressHardware -> {
                     evmBlockchainManager.allMainNetBlockchains.forEach { blockchain ->
                         if (blockchain.type.supports(accountType)) {
                             add(TokenQuery(blockchain.type, TokenType.Native))
@@ -51,6 +51,34 @@ class WatchAddressService(
                 }
 
                 is AccountType.HdExtendedKey -> {
+                    if (BlockchainType.Bitcoin.supports(accountType)) {
+                        accountType.hdExtendedKey.purposes.forEach { purpose ->
+                            add(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(purpose.tokenTypeDerivation)))
+                        }
+                    }
+
+                    if (BlockchainType.Dash.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Dash, TokenType.Native))
+                    }
+
+                    if (BlockchainType.BitcoinCash.supports(accountType)) {
+                        TokenType.AddressType.values().map {
+                            add(TokenQuery(BlockchainType.BitcoinCash, TokenType.AddressTyped(it)))
+                        }
+                    }
+
+                    if (BlockchainType.Litecoin.supports(accountType)) {
+                        accountType.hdExtendedKey.purposes.map { purpose ->
+                            add(TokenQuery(BlockchainType.Litecoin, TokenType.Derived(purpose.tokenTypeDerivation)))
+                        }
+                    }
+
+                    if (BlockchainType.ECash.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.ECash, TokenType.Native))
+                    }
+                }
+
+                is AccountType.HdExtendedKeyHardware -> {
                     if (BlockchainType.Bitcoin.supports(accountType)) {
                         accountType.hdExtendedKey.purposes.forEach { purpose ->
                             add(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(purpose.tokenTypeDerivation)))
