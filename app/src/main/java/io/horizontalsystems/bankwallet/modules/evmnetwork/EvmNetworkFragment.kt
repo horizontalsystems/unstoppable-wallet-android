@@ -70,12 +70,10 @@ class EvmNetworkFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            EvmNetworkNavHost(
-                requireArguments(),
-                navController
-            )
-        }
+        EvmNetworkNavHost(
+            requireArguments(),
+            navController
+        )
     }
 
 }

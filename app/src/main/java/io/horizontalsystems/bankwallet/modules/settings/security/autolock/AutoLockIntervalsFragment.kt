@@ -46,32 +46,30 @@ private fun AutoLockIntervalsScreen(
         factory = AutoLockModule.Factory()
     )
 ) {
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Settings_AutoLock),
-                    navigationIcon = {
-                        HsBackButton(onClick = close)
-                    },
-                )
-            }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(
-                            rememberScrollState()
-                        )
-                ) {
-                    VSpacer(12.dp)
-                    CellUniversalLawrenceSection(viewModel.intervals) { item ->
-                        IntervalCell(item.interval, item.selected) { interval ->
-                            viewModel.onSelectAutoLockInterval(interval)
-                            close.invoke()
-                        }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Settings_AutoLock),
+                navigationIcon = {
+                    HsBackButton(onClick = close)
+                },
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(
+                        rememberScrollState()
+                    )
+            ) {
+                VSpacer(12.dp)
+                CellUniversalLawrenceSection(viewModel.intervals) { item ->
+                    IntervalCell(item.interval, item.selected) { interval ->
+                        viewModel.onSelectAutoLockInterval(interval)
+                        close.invoke()
                     }
                 }
             }

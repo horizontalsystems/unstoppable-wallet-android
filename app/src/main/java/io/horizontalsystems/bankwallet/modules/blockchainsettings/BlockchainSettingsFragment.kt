@@ -37,11 +37,9 @@ class BlockchainSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            BlockchainSettingsScreen(
-                navController = navController,
-            )
-        }
+        BlockchainSettingsScreen(
+            navController = navController,
+        )
     }
 
 }
@@ -107,10 +105,12 @@ private fun onClick(
             val params = BtcBlockchainSettingsModule.args(item.blockchainItem.blockchain)
             navController.slideFromBottom(R.id.btcBlockchainSettingsFragment, params)
         }
+
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
             val params = EvmNetworkModule.args(item.blockchainItem.blockchain)
             navController.slideFromBottom(R.id.evmNetworkFragment, params)
         }
+
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
             navController.slideFromBottom(R.id.solanaNetworkFragment, bundleOf())
         }

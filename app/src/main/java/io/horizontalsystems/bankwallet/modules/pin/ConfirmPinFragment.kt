@@ -6,24 +6,21 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinConfirm
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class ConfirmPinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            PinConfirm(
-                onSuccess = {
-                    navController.setNavigationResultX(Result(true))
-                    navController.popBackStack()
-                },
-                onCancel = {
-                    navController.popBackStack()
-                }
-            )
-        }
+        PinConfirm(
+            onSuccess = {
+                navController.setNavigationResultX(Result(true))
+                navController.popBackStack()
+            },
+            onCancel = {
+                navController.popBackStack()
+            }
+        )
     }
 
     @Parcelize

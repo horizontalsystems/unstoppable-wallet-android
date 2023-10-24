@@ -29,52 +29,50 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
 @Composable
 fun LocalBackupTermsScreen(
-    onTermsAccepted: ()-> Unit,
+    onTermsAccepted: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     var termChecked by rememberSaveable { mutableStateOf(false) }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.LocalBackup_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackClick)
-                    },
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.LocalBackup_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = onBackClick)
+                },
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            Column(modifier = Modifier.weight(1f)) {
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    text = stringResource(R.string.LocalBackup_TermsWarningText)
+                )
+                VSpacer(24.dp)
+                CellUniversalLawrenceSection(
+                    listOf {
+                        LocalBackupTerm(
+                            text = stringResource(R.string.LocalBackup_Term1),
+                            checked = termChecked,
+                            onCheckedChange = { checked ->
+                                termChecked = checked
+                            }
+                        )
+                    }
                 )
             }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Column(modifier = Modifier.weight(1f)) {
-                    TextImportantWarning(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                        text = stringResource(R.string.LocalBackup_TermsWarningText)
-                    )
-                    VSpacer(24.dp)
-                    CellUniversalLawrenceSection(
-                        listOf {
-                            LocalBackupTerm(
-                                text = stringResource(R.string.LocalBackup_Term1),
-                                checked = termChecked,
-                                onCheckedChange = { checked ->
-                                    termChecked = checked
-                                }
-                            )
-                        }
-                    )
-                }
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.Button_Continue),
-                        enabled = termChecked,
-                        onClick = onTermsAccepted,
-                    )
-                }
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.Button_Continue),
+                    enabled = termChecked,
+                    onClick = onTermsAccepted,
+                )
             }
         }
     }

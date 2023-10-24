@@ -49,9 +49,7 @@ class AboutFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            AboutNavHost(navController)
-        }
+        AboutNavHost(navController)
     }
 
 }

@@ -60,64 +60,62 @@ private fun BaseCurrencyScreen(
         }
     }
 
-    ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = sheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                WarningBottomSheet(
-                    text = stringResource(
-                        R.string.SettingsCurrency_DisclaimerText,
-                        viewModel.disclaimerCurrencies
-                    ),
-                    onCloseClick = {
-                        viewModel.closeDisclaimer()
-                        scope.launch { sheetState.hide() }
-                    },
-                    onOkClick = {
-                        viewModel.onAcceptDisclaimer()
-                        scope.launch { sheetState.hide() }
-                    }
-                )
-            }
-        ) {
-            Column(
-                modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-            ) {
-                AppBar(
-                    title = stringResource(R.string.SettingsCurrency_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    }
-                )
-                Column(
-                    Modifier.verticalScroll(rememberScrollState())
-                ) {
-                    Spacer(Modifier.height(12.dp))
-                    CellUniversalLawrenceSection(viewModel.popularItems) { item ->
-                        CurrencyCell(
-                            item.currency.code,
-                            item.currency.symbol,
-                            item.currency.flag,
-                            item.selected,
-                            { viewModel.onSelectBaseCurrency(item.currency) }
-                        )
-                    }
-                    Spacer(Modifier.height(24.dp))
-                    HeaderText(
-                        stringResource(R.string.SettingsCurrency_Other)
-                    )
-                    CellUniversalLawrenceSection(viewModel.otherItems) { item ->
-                        CurrencyCell(
-                            item.currency.code,
-                            item.currency.symbol,
-                            item.currency.flag,
-                            item.selected,
-                            { viewModel.onSelectBaseCurrency(item.currency) }
-                        )
-                    }
-                    Spacer(Modifier.height(24.dp))
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            WarningBottomSheet(
+                text = stringResource(
+                    R.string.SettingsCurrency_DisclaimerText,
+                    viewModel.disclaimerCurrencies
+                ),
+                onCloseClick = {
+                    viewModel.closeDisclaimer()
+                    scope.launch { sheetState.hide() }
+                },
+                onOkClick = {
+                    viewModel.onAcceptDisclaimer()
+                    scope.launch { sheetState.hide() }
                 }
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+        ) {
+            AppBar(
+                title = stringResource(R.string.SettingsCurrency_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                }
+            )
+            Column(
+                Modifier.verticalScroll(rememberScrollState())
+            ) {
+                Spacer(Modifier.height(12.dp))
+                CellUniversalLawrenceSection(viewModel.popularItems) { item ->
+                    CurrencyCell(
+                        item.currency.code,
+                        item.currency.symbol,
+                        item.currency.flag,
+                        item.selected,
+                        { viewModel.onSelectBaseCurrency(item.currency) }
+                    )
+                }
+                Spacer(Modifier.height(24.dp))
+                HeaderText(
+                    stringResource(R.string.SettingsCurrency_Other)
+                )
+                CellUniversalLawrenceSection(viewModel.otherItems) { item ->
+                    CurrencyCell(
+                        item.currency.code,
+                        item.currency.symbol,
+                        item.currency.flag,
+                        item.selected,
+                        { viewModel.onSelectBaseCurrency(item.currency) }
+                    )
+                }
+                Spacer(Modifier.height(24.dp))
             }
         }
     }

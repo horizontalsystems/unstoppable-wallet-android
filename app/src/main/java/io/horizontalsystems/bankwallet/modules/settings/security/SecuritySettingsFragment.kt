@@ -53,15 +53,13 @@ class SecuritySettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            SecurityCenterScreen(
-                securitySettingsViewModel = securitySettingsViewModel,
-                torViewModel = torViewModel,
-                navController = navController,
-                showAppRestartAlert = { showAppRestartAlert() },
-                restartApp = { restartApp() },
-            )
-        }
+        SecurityCenterScreen(
+            securitySettingsViewModel = securitySettingsViewModel,
+            torViewModel = torViewModel,
+            navController = navController,
+            showAppRestartAlert = { showAppRestartAlert() },
+            restartApp = { restartApp() },
+        )
     }
 
     private fun showAppRestartAlert() {

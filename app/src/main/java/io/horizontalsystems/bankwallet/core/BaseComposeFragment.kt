@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 
 abstract class BaseComposeFragment(
@@ -29,7 +30,9 @@ abstract class BaseComposeFragment(
             )
 
             setContent {
-                GetContent(findNavController())
+                ComposeAppTheme {
+                    GetContent(findNavController())
+                }
             }
         }
     }

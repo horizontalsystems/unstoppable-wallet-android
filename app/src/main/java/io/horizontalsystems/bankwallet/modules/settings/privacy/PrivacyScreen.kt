@@ -30,54 +30,52 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 
 @Composable
 fun PrivacyScreen(navController: NavController) {
-    ComposeAppTheme {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.Settings_Privacy),
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
+            }
+        )
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(ComposeAppTheme.colors.tyler)
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
         ) {
-            AppBar(
-                title = stringResource(R.string.Settings_Privacy),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
-            )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
 
-                InfoTextBody(
-                    text = stringResource(R.string.Privacy_Information),
-                )
-
-                BulletedText(R.string.Privacy_BulletedText1)
-                BulletedText(R.string.Privacy_BulletedText2)
-                BulletedText(R.string.Privacy_BulletedText3)
-                BulletedText(R.string.Privacy_BulletedText4)
-                Spacer(modifier = Modifier.height(32.dp))
-            }
-
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
+            InfoTextBody(
+                text = stringResource(R.string.Privacy_Information),
             )
 
-            Spacer(Modifier.height(12.dp))
-
-            Text(
-                text = stringResource(R.string.FooterText),
-                style = ComposeAppTheme.typography.caption,
-                color = ComposeAppTheme.colors.grey,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
-
-            Spacer(Modifier.height(28.dp))
+            BulletedText(R.string.Privacy_BulletedText1)
+            BulletedText(R.string.Privacy_BulletedText2)
+            BulletedText(R.string.Privacy_BulletedText3)
+            BulletedText(R.string.Privacy_BulletedText4)
+            Spacer(modifier = Modifier.height(32.dp))
         }
+
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        Text(
+            text = stringResource(R.string.FooterText),
+            style = ComposeAppTheme.typography.caption,
+            color = ComposeAppTheme.colors.grey,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        Spacer(Modifier.height(28.dp))
     }
 }
 

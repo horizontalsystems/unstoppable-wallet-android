@@ -155,55 +155,53 @@ private fun TransactionSpeedUpCancelScreen(
 ) {
     val enabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Send_Confirmation_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                            icon = R.drawable.ic_manage_2,
-                            tint = ComposeAppTheme.colors.jacob,
-                            onClick = {
-                                navController.slideFromBottom(
-                                    resId = R.id.sendEvmSettingsFragment,
-                                    args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
-                                )
-                            }
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Send_Confirmation_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                        icon = R.drawable.ic_manage_2,
+                        tint = ComposeAppTheme.colors.jacob,
+                        onClick = {
+                            navController.slideFromBottom(
+                                resId = R.id.sendEvmSettingsFragment,
+                                args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                            )
+                        }
                     )
                 )
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                SendEvmTransactionView(
+                    sendEvmTransactionViewModel,
+                    feeViewModel,
+                    nonceViewModel,
+                    navController,
+                    speedUpCancelViewModel.description
+                )
             }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Column(
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    SendEvmTransactionView(
-                        sendEvmTransactionViewModel,
-                        feeViewModel,
-                        nonceViewModel,
-                        navController,
-                        speedUpCancelViewModel.description
-                    )
-                }
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = speedUpCancelViewModel.buttonTitle,
-                        onClick = onSendClick,
-                        enabled =  if(speedUpCancelViewModel.isTransactionPending) enabled else false
-                    )
-                }
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = speedUpCancelViewModel.buttonTitle,
+                    onClick = onSendClick,
+                    enabled = if (speedUpCancelViewModel.isTransactionPending) enabled else false
+                )
             }
         }
     }

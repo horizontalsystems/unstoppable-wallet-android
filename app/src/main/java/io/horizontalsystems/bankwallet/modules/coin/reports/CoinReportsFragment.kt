@@ -37,17 +37,15 @@ class CoinReportsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            CoinReportsScreen(
-                viewModel = viewModel,
-                onClickNavigation = {
-                    navController.popBackStack()
-                },
-                onClickReportUrl = {
-                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                }
-            )
-        }
+        CoinReportsScreen(
+            viewModel = viewModel,
+            onClickNavigation = {
+                navController.popBackStack()
+            },
+            onClickReportUrl = {
+                LinkHelper.openLinkInAppBrowser(requireContext(), it)
+            }
+        )
     }
 
     companion object {
@@ -83,9 +81,11 @@ private fun CoinReportsScreen(
                     ViewState.Loading -> {
                         Loading()
                     }
+
                     is ViewState.Error -> {
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                     }
+
                     ViewState.Success -> {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             reportViewItems?.let {
@@ -106,6 +106,7 @@ private fun CoinReportsScreen(
                             }
                         }
                     }
+
                     null -> {}
                 }
             }

@@ -119,28 +119,26 @@ private fun getFactory(requireArguments: Bundle): SendNftModule.Factory? {
 
 @Composable
 private fun ShowErrorMessage(navController: NavController) {
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.SendNft_Title),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = { navController.popBackStack() }
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.SendNft_Title),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = { navController.popBackStack() }
                     )
                 )
-            }
-        ) {
-            Column(Modifier.padding(it)) {
-                ScreenMessageWithAction(
-                    text = stringResource(R.string.Error),
-                    icon = R.drawable.ic_error_48
-                )
-            }
+            )
+        }
+    ) {
+        Column(Modifier.padding(it)) {
+            ScreenMessageWithAction(
+                text = stringResource(R.string.Error),
+                icon = R.drawable.ic_error_48
+            )
         }
     }
 }

@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class SetPinFragment : BaseComposeFragment() {
@@ -18,17 +17,15 @@ class SetPinFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
 
-        ComposeAppTheme {
-            PinSet(
-                title = stringResource(R.string.PinSet_Title),
-                description = stringResource(input?.descriptionResId ?: R.string.PinSet_Info),
-                dismissWithSuccess = {
-                    navController.setNavigationResultX(Result(true))
-                    navController.popBackStack()
-                },
-                onBackPress = { navController.popBackStack() }
-            )
-        }
+        PinSet(
+            title = stringResource(R.string.PinSet_Title),
+            description = stringResource(input?.descriptionResId ?: R.string.PinSet_Info),
+            dismissWithSuccess = {
+                navController.setNavigationResultX(Result(true))
+                navController.popBackStack()
+            },
+            onBackPress = { navController.popBackStack() }
+        )
     }
 
     @Parcelize

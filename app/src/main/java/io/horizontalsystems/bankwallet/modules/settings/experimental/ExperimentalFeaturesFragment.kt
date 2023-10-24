@@ -44,31 +44,29 @@ private fun ExperimentalScreen(
     onCloseClick: () -> Unit,
     openTimeLock: () -> Unit,
 ) {
-    ComposeAppTheme {
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.ExperimentalFeatures_Title),
+            navigationIcon = {
+                HsBackButton(onClick = onCloseClick)
+            }
+        )
         Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+            Modifier.verticalScroll(rememberScrollState())
         ) {
-            AppBar(
-                title = stringResource(R.string.ExperimentalFeatures_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = onCloseClick)
+            TextImportantWarning(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                text = stringResource(R.string.ExperimentalFeatures_Description)
+            )
+            Spacer(Modifier.height(24.dp))
+            CellUniversalLawrenceSection(
+                listOf {
+                    ItemCell(R.string.BitcoinHodling_Title, openTimeLock)
                 }
             )
-            Column(
-                Modifier.verticalScroll(rememberScrollState())
-            ) {
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    text = stringResource(R.string.ExperimentalFeatures_Description)
-                )
-                Spacer(Modifier.height(24.dp))
-                CellUniversalLawrenceSection(
-                    listOf {
-                        ItemCell(R.string.BitcoinHodling_Title, openTimeLock)
-                    }
-                )
-                Spacer(Modifier.height(24.dp))
-            }
+            Spacer(Modifier.height(24.dp))
         }
     }
 }

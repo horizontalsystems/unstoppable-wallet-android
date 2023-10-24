@@ -44,9 +44,7 @@ class FilterCoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            FilterCoinScreen(navController, viewModel)
-        }
+        FilterCoinScreen(navController, viewModel)
     }
 
 }
@@ -56,72 +54,70 @@ class FilterCoinFragment : BaseComposeFragment() {
 fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewModel) {
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
 
-    ComposeAppTheme {
-        Surface(color = ComposeAppTheme.colors.tyler) {
-            Column {
-                AppBar(
-                    title = stringResource(R.string.Transactions_Filter_ChooseCoin),
-                    navigationIcon = {
-                        HsBackButton(onClick = navController::popBackStack)
-                    }
-                )
-                filterCoins?.let { filterCoins ->
-                    LazyColumn(
-                        contentPadding = PaddingValues(bottom = 32.dp)
-                    ) {
-                        items(filterCoins) {
-                            CellMultilineClear(borderTop = true) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .clickable {
-                                            viewModel.setFilterCoin(it.item)
-                                            navController.popBackStack()
-                                        }
-                                        .padding(horizontal = 16.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    val token = it.item?.token
-                                    if (token != null) {
-                                        Image(
-                                            painter = rememberAsyncImagePainter(
-                                                model = token.coin.imageUrl,
-                                                error = painterResource(token.iconPlaceholder)
-                                            ),
-                                            modifier = Modifier
-                                                .padding(end = 16.dp)
-                                                .size(24.dp),
-                                            contentDescription = null
-                                        )
-                                        Column {
-                                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                                B2(text = token.coin.name)
-                                                it.item.badge?.let { badge ->
-                                                    Spacer(modifier = Modifier.width(6.dp))
-                                                    Badge(text = badge)
-                                                }
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column {
+            AppBar(
+                title = stringResource(R.string.Transactions_Filter_ChooseCoin),
+                navigationIcon = {
+                    HsBackButton(onClick = navController::popBackStack)
+                }
+            )
+            filterCoins?.let { filterCoins ->
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 32.dp)
+                ) {
+                    items(filterCoins) {
+                        CellMultilineClear(borderTop = true) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clickable {
+                                        viewModel.setFilterCoin(it.item)
+                                        navController.popBackStack()
+                                    }
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val token = it.item?.token
+                                if (token != null) {
+                                    Image(
+                                        painter = rememberAsyncImagePainter(
+                                            model = token.coin.imageUrl,
+                                            error = painterResource(token.iconPlaceholder)
+                                        ),
+                                        modifier = Modifier
+                                            .padding(end = 16.dp)
+                                            .size(24.dp),
+                                        contentDescription = null
+                                    )
+                                    Column {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            B2(text = token.coin.name)
+                                            it.item.badge?.let { badge ->
+                                                Spacer(modifier = Modifier.width(6.dp))
+                                                Badge(text = badge)
                                             }
-                                            Spacer(modifier = Modifier.height(1.dp))
-                                            D1(text = token.coin.code)
                                         }
-                                    } else {
-                                        Image(
-                                            painter = painterResource(R.drawable.icon_24_circle_coin),
-                                            modifier = Modifier
-                                                .padding(end = 16.dp)
-                                                .size(24.dp),
-                                            contentDescription = null
-                                        )
-                                        B2(text = stringResource(R.string.Transactions_Filter_AllCoins))
+                                        Spacer(modifier = Modifier.height(1.dp))
+                                        D1(text = token.coin.code)
                                     }
-                                    if (it.selected) {
-                                        Spacer(modifier = Modifier.weight(1f))
-                                        Icon(
-                                            painter = painterResource(R.drawable.icon_20_check_1),
-                                            contentDescription = null,
-                                            tint = ComposeAppTheme.colors.jacob
-                                        )
-                                    }
+                                } else {
+                                    Image(
+                                        painter = painterResource(R.drawable.icon_24_circle_coin),
+                                        modifier = Modifier
+                                            .padding(end = 16.dp)
+                                            .size(24.dp),
+                                        contentDescription = null
+                                    )
+                                    B2(text = stringResource(R.string.Transactions_Filter_AllCoins))
+                                }
+                                if (it.selected) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    Icon(
+                                        painter = painterResource(R.drawable.icon_20_check_1),
+                                        contentDescription = null,
+                                        tint = ComposeAppTheme.colors.jacob
+                                    )
                                 }
                             }
                         }
