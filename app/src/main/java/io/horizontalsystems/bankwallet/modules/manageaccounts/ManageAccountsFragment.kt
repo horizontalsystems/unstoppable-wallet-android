@@ -71,9 +71,14 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
             item {
                 Spacer(modifier = Modifier.height(12.dp))
 
-                viewItems?.let { (regularAccounts, watchAccounts) ->
+                viewItems?.let { (regularAccounts, hardwareAccounts, watchAccounts) ->
                     if (regularAccounts.isNotEmpty()) {
                         AccountsSection(regularAccounts, viewModel, navController)
+                        Spacer(modifier = Modifier.height(32.dp))
+                    }
+
+                    if (hardwareAccounts.isNotEmpty()) {
+                        AccountsSection(hardwareAccounts, viewModel, navController)
                         Spacer(modifier = Modifier.height(32.dp))
                     }
 
@@ -96,6 +101,9 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                     },
                     ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
                         navController.slideFromRight(R.id.importWalletFragment, args)
+                    },
+                    ActionViewItem(R.drawable.icon_hardware_wallet_20, R.string.ManageAccounts_LinkHardwareWallet) {
+                        navController.slideFromRight(R.id.hardwareWalletFragment, args)
                     },
                     ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
                         navController.slideFromRight(R.id.watchAddressFragment, args)
@@ -159,6 +167,12 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             if (accountViewItem.isWatchAccount) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_binocule_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
+            } else if (accountViewItem.isHardwareAccount) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_hardware_wallet_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )

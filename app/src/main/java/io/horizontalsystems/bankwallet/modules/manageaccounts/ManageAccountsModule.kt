@@ -35,6 +35,7 @@ object ManageAccountsModule {
         val backupRequired: Boolean,
         val showAlertIcon: Boolean,
         val isWatchAccount: Boolean,
+        val isHardwareAccount: Boolean,
         val migrationRequired: Boolean,
     )
 

@@ -17,7 +17,7 @@ class ManageAccountsViewModel(
     private val mode: ManageAccountsModule.Mode
 ) : ViewModel() {
 
-    var viewItems by mutableStateOf<Pair<List<AccountViewItem>, List<AccountViewItem>>?>(null)
+    var viewItems by mutableStateOf<Triple<List<AccountViewItem>, List<AccountViewItem>, List<AccountViewItem>>?>(null)
     var finish by mutableStateOf(false)
 
     init {
@@ -41,10 +41,14 @@ class ManageAccountsViewModel(
     }
 
     private fun updateViewItems(activeAccount: Account?, accounts: List<Account>) {
-        viewItems = accounts
+        var viewItemsAll = accounts
             .sortedBy { it.name.lowercase() }
             .map { getViewItem(it, activeAccount) }
-            .partition { !it.isWatchAccount }
+        viewItems = Triple(
+            first =  viewItemsAll.filter { !it.isWatchAccount && !it.isHardwareAccount },
+            second = viewItemsAll.filter { it.isHardwareAccount},
+            third =  viewItemsAll.filter { it.isWatchAccount}
+        )
     }
 
     private fun getViewItem(account: Account, activeAccount: Account?) =
@@ -56,6 +60,7 @@ class ManageAccountsViewModel(
             backupRequired = !account.isBackedUp && !account.isFileBackedUp,
             showAlertIcon = !account.isBackedUp || account.nonStandard || account.nonRecommended,
             isWatchAccount = account.isWatchAccount,
+            isHardwareAccount = account.isHardwareAccount,
             migrationRequired = account.nonStandard,
         )
 

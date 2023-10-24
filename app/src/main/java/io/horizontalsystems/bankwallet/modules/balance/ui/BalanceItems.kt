@@ -261,6 +261,13 @@ fun BalanceItems(
                         )
                         HSpacer(16.dp)
                     }
+                    if (accountViewItem.isHardwareAccount) {
+                        Image(
+                            painter = painterResource(R.drawable.icon_hardware_wallet_24),
+                            contentDescription = "hardware wallet icon"
+                        )
+                        HSpacer(12.dp)
+                    }
 
                     ButtonSecondaryCircle(
                         icon = R.drawable.ic_manage_2,

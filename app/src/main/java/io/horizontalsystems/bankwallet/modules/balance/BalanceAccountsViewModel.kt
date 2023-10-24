@@ -29,6 +29,7 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
                     BalanceScreenState.HasAccount(
                         AccountViewItem(
                             activeAccountState.account.isWatchAccount,
+                            activeAccountState.account.isHardwareAccount,
                             activeAccountState.account.name,
                             activeAccountState.account.id,
                             activeAccountState.account.type
@@ -44,6 +45,7 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
 data class AccountViewItem(
     val isWatchAccount: Boolean,
+    val isHardwareAccount: Boolean,
     val name: String = "",
     val id: String,
     val type: AccountType

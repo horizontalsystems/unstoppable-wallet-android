@@ -78,6 +78,16 @@ fun BalanceNoAccount(navController: NavController) {
                 }
             }
         )
+        Spacer(Modifier.height(16.dp))
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 48.dp),
+            title = stringResource(R.string.ManageAccounts_LinkHardwareWallet),
+            onClick = {
+                navController.slideFromRight(R.id.hardwareWalletFragment)
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
         ButtonPrimaryTransparent(
             modifier = Modifier
