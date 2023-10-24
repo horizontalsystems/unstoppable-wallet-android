@@ -1073,6 +1073,7 @@
     <string name="Hud_Text_Created">Created</string>
     <string name="Hud_Text_Restored">Imported</string>
     <string name="Hud_Text_AddressAdded">Address Added</string>
+    <string name="Hud_Text_HardwareWalletLinked">Hardware Wallet Linked</string>
     <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_Verified">Verified</string>
     <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
@@ -1127,6 +1128,7 @@
     <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
     <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
+    <string name="ManageAccounts_LinkHardwareWallet">Link Hardware Wallet</string>
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
@@ -1140,6 +1142,9 @@
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
     <string name="ImportWallet_SelectAnotherFile">Select Another File</string>
+
+    <!-- Link Hardware Wallet -->
+    <string name="Hardware_LinkBy">Link By</string>
 
     <!-- Import Backup File -->
     <string name="ImportBackupFile_EnterPassword">Enter Password</string>
