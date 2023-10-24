@@ -193,15 +193,17 @@ private fun TransactionSpeedUpCancelScreen(
                     speedUpCancelViewModel.description
                 )
             }
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-                    title = speedUpCancelViewModel.buttonTitle,
-                    onClick = onSendClick,
-                    enabled = if (speedUpCancelViewModel.isTransactionPending) enabled else false
-                )
+            if (!sendEvmTransactionViewModel.isHardwareAccount()) {
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
+                        title = speedUpCancelViewModel.buttonTitle,
+                        onClick = onSendClick,
+                        enabled = if (speedUpCancelViewModel.isTransactionPending) enabled else false
+                    )
+                }
             }
         }
     }
