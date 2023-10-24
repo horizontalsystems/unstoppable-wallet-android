@@ -75,8 +75,8 @@ class SendEvmTransactionViewModel(
         }
     }
 
-    fun send(logger: AppLogger) {
-        service.send(logger)
+    fun send(logger: AppLogger, signatureHex: String? = null) {
+        service.send(logger, signatureHex)
     }
 
     override fun onCleared() {
