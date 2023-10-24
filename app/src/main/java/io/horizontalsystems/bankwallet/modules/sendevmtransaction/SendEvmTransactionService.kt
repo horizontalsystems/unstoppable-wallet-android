@@ -14,6 +14,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +41,8 @@ interface ISendEvmTransactionService {
     suspend fun start()
     fun send(logger: AppLogger, signatureHex: String? = null)
     fun methodName(input: ByteArray): String?
+
+    fun getUnsignedTransactionHex(): Single<String>
     fun clear()
 }
 
@@ -153,6 +156,16 @@ class SendEvmTransactionService(
 
     override fun methodName(input: ByteArray): String? =
         evmLabelManager.methodLabel(input)
+
+    override fun getUnsignedTransactionHex(): Single<String> {
+        val txConfig = settingsService.state.dataOrNull ?: return Single.error(Exception())
+        return evmKitWrapper.getUnsignedTransactionHex(
+            txConfig.transactionData,
+            txConfig.gasData.gasPrice,
+            txConfig.gasData.gasLimit,
+            txConfig.nonce
+        )
+    }
 
     override fun clear() {
         disposable.clear()

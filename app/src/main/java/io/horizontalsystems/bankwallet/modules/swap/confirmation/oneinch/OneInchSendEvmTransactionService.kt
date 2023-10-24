@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
@@ -168,6 +169,21 @@ class OneInchSendEvmTransactionService(
     }
 
     override fun methodName(input: ByteArray): String? = null
+
+    override fun getUnsignedTransactionHex(): Single<String> {
+        if (state !is SendEvmTransactionService.State.Ready) {
+            return Single.error(Exception())
+        }
+
+        val txConfig = settingsService.state.dataOrNull ?: return Single.error(Exception())
+
+        return evmKitWrapper.getUnsignedTransactionHex(
+            txConfig.transactionData,
+            txConfig.gasData.gasPrice,
+            txConfig.gasData.gasLimit,
+            txConfig.nonce
+        )
+    }
 
     override fun clear() {
         disposable.clear()
