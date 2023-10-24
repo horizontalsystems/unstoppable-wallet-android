@@ -170,6 +170,8 @@ interface IAccountFactory {
     ): Account
     fun watchAccount(name: String, type: AccountType): Account
     fun getNextWatchAccountName(): String
+    fun hardwareAccount(name: String, type: AccountType): Account
+    fun getNextHardwareAccountName(): String
     fun getNextAccountName(): String
     fun getNextCexAccountName(cexType: CexType): String
 }

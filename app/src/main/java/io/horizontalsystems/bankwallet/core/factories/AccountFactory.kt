@@ -52,8 +52,27 @@ class AccountFactory(
         return "Watch Wallet ${watchAccountsCount + 1}"
     }
 
+
+    override fun hardwareAccount(name: String, type: AccountType): Account {
+        val id = UUID.randomUUID().toString()
+        return Account(
+            id = id,
+            name = name,
+            type = type,
+            origin = AccountOrigin.Restored,
+            level = userManager.getUserLevel(),
+            isBackedUp = true
+        )
+    }
+
+    override fun getNextHardwareAccountName(): String {
+        val hardwareAccountsCount = accountManager.accounts.count { it.isHardwareAccount }
+
+        return "Hardware Wallet ${hardwareAccountsCount + 1}"
+    }
+
     override fun getNextAccountName(): String {
-        val nonWatchAccountsCount = accountManager.accounts.count { !it.isWatchAccount }
+        val nonWatchAccountsCount = accountManager.accounts.count { !it.isWatchAccount && !it.isHardwareAccount }
 
         return "Wallet ${nonWatchAccountsCount + 1}"
     }
