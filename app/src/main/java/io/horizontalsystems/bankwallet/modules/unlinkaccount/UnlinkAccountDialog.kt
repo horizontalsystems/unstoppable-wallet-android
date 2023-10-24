@@ -70,6 +70,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
     val confirmations = viewModel.confirmations
     val unlinkEnabled = viewModel.unlinkEnabled
     val showDeleteWarning = viewModel.showDeleteWarning
+    val isHardwareAccount = viewModel.isHardwareAccount
 
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_red_24),
@@ -99,9 +100,13 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
         }
 
         if (showDeleteWarning) {
+            var warningTextId = if (isHardwareAccount)
+                R.string.ManageAccount_UnlinkWarning
+            else R.string.ManageAccount_DeleteWarning
+
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(id = R.string.ManageAccount_DeleteWarning)
+                text = stringResource(id = warningTextId)
             )
         }
 

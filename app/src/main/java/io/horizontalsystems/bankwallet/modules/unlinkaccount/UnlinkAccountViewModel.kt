@@ -27,8 +27,10 @@ class UnlinkAccountViewModel(
             else -> R.string.ManageKeys_Delete_FromPhone
         }
 
+    var isHardwareAccount = account.isHardwareAccount
+
     init {
-        if (account.isWatchAccount) {
+        if (account.isWatchAccount || account.isHardwareAccount) {
             showDeleteWarning = true
         } else {
             confirmations = listOf(

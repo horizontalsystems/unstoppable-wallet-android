@@ -1186,6 +1186,7 @@
     <string name="ManageAccount_WatchAddresses">Watch Wallets</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <string name="ManageAccount_DeleteWarning">Do you want to stop watching this wallet address?</string>
+    <string name="ManageAccount_UnlinkWarning">Do you want to unlink this hardware wallet?</string>
 
     <string name="Balance_Receive_BackupRequired_Description">You need to backup %1$s</string>
 
@@ -1301,6 +1302,7 @@
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s Wallet from the device.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
     <string name="ManageKeys_StopWatching">Stop Watching</string>
+    <string name="ManageKeys_UnlinkHardwareWallet">Unlink Hardware Wallet</string>
 
     <!-- Manage Keys Alert -->
 
