@@ -38,7 +38,7 @@ interface ISendEvmTransactionService {
     val settingsService: SendEvmSettingsService
 
     suspend fun start()
-    fun send(logger: AppLogger)
+    fun send(logger: AppLogger, signatureHex: String? = null)
     fun methodName(input: ByteArray): String?
     fun clear()
 }
@@ -124,7 +124,7 @@ class SendEvmTransactionService(
         }
     }
 
-    override fun send(logger: AppLogger) {
+    override fun send(logger: AppLogger, signatureHex: String?) {
         if (state !is State.Ready) {
             logger.info("state is not Ready: ${state.javaClass.simpleName}")
             return
@@ -138,7 +138,8 @@ class SendEvmTransactionService(
             txConfig.transactionData,
             txConfig.gasData.gasPrice,
             txConfig.gasData.gasLimit,
-            txConfig.nonce
+            txConfig.nonce,
+            signatureHex
         )
             .subscribeIO({ fullTransaction ->
                 sendState = SendState.Sent(fullTransaction.transaction.hash)

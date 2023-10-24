@@ -140,7 +140,7 @@ class OneInchSendEvmTransactionService(
         }
     }
 
-    override fun send(logger: AppLogger) {
+    override fun send(logger: AppLogger, signatureHex: String?) {
         if (state !is SendEvmTransactionService.State.Ready) {
             logger.info("state is not Ready: ${state.javaClass.simpleName}")
             return
@@ -154,7 +154,8 @@ class OneInchSendEvmTransactionService(
             txConfig.transactionData,
             txConfig.gasData.gasPrice,
             txConfig.gasData.gasLimit,
-            txConfig.nonce
+            txConfig.nonce,
+            signatureHex
         )
             .subscribeIO({ fullTransaction ->
                 sendState = SendEvmTransactionService.SendState.Sent(fullTransaction.transaction.hash)
