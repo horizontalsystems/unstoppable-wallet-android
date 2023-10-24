@@ -311,6 +311,7 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     // Animations
     implementation "androidx.compose.animation:animation:$compose_version"
+    implementation "androidx.compose.animation:animation-graphics-android:$compose_version"
     // Tooling support (Previews, etc.)
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     // Integration with ViewModels
