@@ -23,6 +23,10 @@ class WC2SignMessageRequestService(
         requestData.evmKitWrapper
     }
 
+    override val isHardwareAccount = evmKitWrapper.isHardwareSigner
+
+    override val ownAddress = evmKitWrapper.evmKit.receiveAddress.eip55
+
     override val chain: WCRequestChain by lazy {
         val evmKit = evmKitWrapper.evmKit
         val chain = evmKit.chain
@@ -57,6 +61,14 @@ class WC2SignMessageRequestService(
                 it.toHexString()
             )
         }
+    }
+
+    override fun acceptWithSignature(signatureHex: String) {
+        sessionManager.service.respondPendingRequest(
+            pendingRequest.id,
+            pendingRequest.topic,
+            signatureHex
+        )
     }
 
     override fun reject() {

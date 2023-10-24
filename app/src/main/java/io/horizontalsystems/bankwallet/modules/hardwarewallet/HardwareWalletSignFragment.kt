@@ -194,7 +194,7 @@ fun HardwareWalletSignFragment(ownAddress: String,
                                 } else {
                                     val signature = signatureHex.toSignature()
                                     val shex = signature?.toByteArray().toHexString()
-                                    //signMessageViewModel?.acceptWithSignature(shex!!)
+                                    signMessageViewModel?.acceptWithSignature(shex!!)
                                 }
                             } else {
                                 sendViewModel?.service?.setFailed(IOException("Signature Scan Error"))

@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.fee.FeeCell
+import io.horizontalsystems.bankwallet.modules.hardwarewallet.HardwareWalletSignFragment
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
@@ -163,6 +164,13 @@ fun SendEthRequestScreen(
             }
 
             Spacer(Modifier.height(24.dp))
+
+            if ((cautions == null || cautions?.size == 0) && sendEvmTransactionViewModel.isHardwareAccount())
+            {
+                HardwareWalletSignFragment(ownAddress = sendEvmTransactionViewModel.service.ownAddress.eip55,
+                    sendEvmTransactionViewModel, feeViewModel,
+                )
+            }
         }
         Column(Modifier.padding(horizontal = 24.dp)) {
             ButtonPrimaryYellow(

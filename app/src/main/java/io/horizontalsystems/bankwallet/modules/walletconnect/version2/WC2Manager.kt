@@ -39,6 +39,10 @@ class WC2Manager(
                 Address(accountType.address)
             }
 
+            is AccountType.EvmAddressHardware -> {
+                Address(accountType.address)
+            }
+
             else -> throw UnsupportedAccountException()
         }
 

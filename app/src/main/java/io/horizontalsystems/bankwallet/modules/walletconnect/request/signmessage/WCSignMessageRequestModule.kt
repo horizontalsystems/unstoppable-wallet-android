@@ -30,8 +30,11 @@ object WCSignMessageRequestModule {
         val message: SignMessage
         val chain: WCRequestChain
         val isLegacySignRequest: Boolean
+        val isHardwareAccount: Boolean
+        val ownAddress: String
         fun sign()
         fun reject()
+        fun acceptWithSignature(signatureHex: String)
     }
 
 }

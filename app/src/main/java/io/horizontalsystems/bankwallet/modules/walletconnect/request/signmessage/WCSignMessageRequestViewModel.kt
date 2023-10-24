@@ -16,6 +16,10 @@ class WCSignMessageRequestViewModel(
 
     val chain by service::chain
 
+    val isHardwareAccount = service.isHardwareAccount
+
+    val ownAddress = service.ownAddress
+
     var trustCheckmarkChecked: Boolean by mutableStateOf(false)
         private set
 
@@ -30,6 +34,15 @@ class WCSignMessageRequestViewModel(
             service.sign()
             closeLiveEvent.postValue(Unit)
         } catch (e: NumberFormatException) {
+            showSignError = true
+        }
+    }
+
+    fun acceptWithSignature(signatureHex: String) {
+        try {
+            service.acceptWithSignature(signatureHex)
+            closeLiveEvent.postValue(Unit)
+        } catch(e: Exception) {
             showSignError = true
         }
     }

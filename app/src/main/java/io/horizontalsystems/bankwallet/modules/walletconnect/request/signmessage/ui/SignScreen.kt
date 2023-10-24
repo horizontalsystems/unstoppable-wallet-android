@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.hardwarewallet.HardwareWalletSignFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestChain
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestViewModel
@@ -83,16 +84,24 @@ fun SignMessageRequestScreen(
             }
 
             Spacer(Modifier.height(24.dp))
+
+            if (viewModel.isHardwareAccount) {
+                HardwareWalletSignFragment(
+                    ownAddress = viewModel.ownAddress,
+                    signMessageViewModel = viewModel)
+            }
         }
         ButtonsGroupWithShade {
             Column(Modifier.padding(horizontal = 24.dp)) {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
-                    enabled = viewModel.signEnabled,
-                    onClick = { viewModel.sign() },
-                )
-                Spacer(Modifier.height(16.dp))
+                if (!viewModel.isHardwareAccount) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
+                        enabled = viewModel.signEnabled,
+                        onClick = { viewModel.sign() },
+                    )
+                    Spacer(Modifier.height(16.dp))
+                }
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Reject),
