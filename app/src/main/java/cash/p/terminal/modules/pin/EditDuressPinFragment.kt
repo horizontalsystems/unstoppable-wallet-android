@@ -6,20 +6,17 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.pin.ui.PinSet
-import cash.p.terminal.ui.compose.ComposeAppTheme
 
 class EditDuressPinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            PinSet(
-                title = stringResource(id = R.string.EditDuressPin_Title),
-                description = stringResource(id = R.string.EditDuressPin_Description),
-                dismissWithSuccess = { navController.popBackStack() },
-                onBackPress = { navController.popBackStack() },
-                forDuress = true
-            )
-        }
+        PinSet(
+            title = stringResource(id = R.string.EditDuressPin_Title),
+            description = stringResource(id = R.string.EditDuressPin_Description),
+            dismissWithSuccess = { navController.popBackStack() },
+            onBackPress = { navController.popBackStack() },
+            forDuress = true
+        )
     }
 }

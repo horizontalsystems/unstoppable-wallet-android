@@ -48,61 +48,59 @@ fun AppStatusScreen(
     val localView = LocalView.current
     val context = LocalContext.current
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Settings_AppStatus),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                )
-            }
-        ) {
-            Column(Modifier.padding(it)) {
-                Column(
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Settings_AppStatus),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+            )
+        }
+    ) {
+        Column(Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 12.dp)
-                    ) {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(R.string.Button_Copy),
-                            onClick = {
-                                uiState.appStatusAsText?.let {
-                                    clipboardManager.setText(AnnotatedString(it))
-                                    HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                                }
+                    ButtonPrimaryYellow(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(R.string.Button_Copy),
+                        onClick = {
+                            uiState.appStatusAsText?.let {
+                                clipboardManager.setText(AnnotatedString(it))
+                                HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
                             }
-                        )
-                        HSpacer(8.dp)
-                        ButtonPrimaryDefault(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(R.string.Button_Share),
-                            onClick = {
-                                uiState.appStatusAsText?.let {
-                                    ShareCompat.IntentBuilder(context)
-                                        .setType("text/plain")
-                                        .setText(it)
-                                        .startChooser()
-                                }
+                        }
+                    )
+                    HSpacer(8.dp)
+                    ButtonPrimaryDefault(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(R.string.Button_Share),
+                        onClick = {
+                            uiState.appStatusAsText?.let {
+                                ShareCompat.IntentBuilder(context)
+                                    .setType("text/plain")
+                                    .setText(it)
+                                    .startChooser()
                             }
-                        )
-                    }
-                    uiState.blockViewItems.forEach { blockData ->
-                        StatusBlock(
-                            sectionTitle = blockData.title,
-                            contentItems = blockData.content,
-                        )
-                    }
-                    VSpacer(32.dp)
+                        }
+                    )
                 }
+                uiState.blockViewItems.forEach { blockData ->
+                    StatusBlock(
+                        sectionTitle = blockData.title,
+                        contentItems = blockData.content,
+                    )
+                }
+                VSpacer(32.dp)
             }
         }
     }

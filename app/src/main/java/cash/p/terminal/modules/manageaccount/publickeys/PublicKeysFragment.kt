@@ -48,48 +48,46 @@ class PublicKeysFragment : BaseComposeFragment() {
 fun ManageAccountScreen(navController: NavController, account: Account) {
     val viewModel = viewModel<PublicKeysViewModel>(factory = PublicKeysModule.Factory(account))
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.PublicKeys_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    }
-                )
-            }
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                viewModel.viewState.evmAddress?.let { evmAddress ->
-                    KeyActionItem(
-                        title = stringResource(id = R.string.PublicKeys_EvmAddress),
-                        description = stringResource(R.string.PublicKeys_EvmAddress_Description)
-                    ) {
-                        navController.slideFromRight(
-                            R.id.evmAddressFragment,
-                            bundleOf(EvmAddressFragment.EVM_ADDRESS_KEY to evmAddress)
-                        )
-                    }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.PublicKeys_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
                 }
-                viewModel.viewState.extendedPublicKey?.let { publicKey ->
-                    KeyActionItem(
-                        title = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKey),
-                        description = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKeyDescription),
-                    ) {
-                        navController.slideFromRight(
-                            R.id.showExtendedKeyFragment,
-                            ShowExtendedKeyModule.prepareParams(
-                                publicKey.hdKey,
-                                publicKey.accountPublicKey
-                            )
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(Modifier.height(12.dp))
+            viewModel.viewState.evmAddress?.let { evmAddress ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.PublicKeys_EvmAddress),
+                    description = stringResource(R.string.PublicKeys_EvmAddress_Description)
+                ) {
+                    navController.slideFromRight(
+                        R.id.evmAddressFragment,
+                        bundleOf(EvmAddressFragment.EVM_ADDRESS_KEY to evmAddress)
+                    )
+                }
+            }
+            viewModel.viewState.extendedPublicKey?.let { publicKey ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKey),
+                    description = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKeyDescription),
+                ) {
+                    navController.slideFromRight(
+                        R.id.showExtendedKeyFragment,
+                        ShowExtendedKeyModule.prepareParams(
+                            publicKey.hdKey,
+                            publicKey.accountPublicKey
                         )
-                    }
+                    )
                 }
             }
         }

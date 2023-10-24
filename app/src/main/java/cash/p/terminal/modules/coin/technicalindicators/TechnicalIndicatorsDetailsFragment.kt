@@ -49,31 +49,29 @@ class TechnicalIndicatorsDetailsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            if (coinUid == null || period == null) {
-                ScreenMessageWithAction(
-                    text = stringResource(R.string.Error),
-                    icon = R.drawable.ic_error_48
-                ) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 48.dp)
-                            .fillMaxWidth(),
-                        title = stringResource(R.string.Button_Close),
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                }
-            } else {
-                TechnicalIndicatorsDetailsScreen(
-                    coinUid = coinUid!!,
-                    period = period!!,
-                    onBackPress = {
+        if (coinUid == null || period == null) {
+            ScreenMessageWithAction(
+                text = stringResource(R.string.Error),
+                icon = R.drawable.ic_error_48
+            ) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 48.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.Button_Close),
+                    onClick = {
                         navController.popBackStack()
                     }
                 )
             }
+        } else {
+            TechnicalIndicatorsDetailsScreen(
+                coinUid = coinUid!!,
+                period = period!!,
+                onBackPress = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 

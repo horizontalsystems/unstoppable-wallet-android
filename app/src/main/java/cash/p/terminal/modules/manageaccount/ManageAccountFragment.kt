@@ -77,90 +77,88 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
         viewModel.onClose()
     }
 
-    ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = viewModel.viewState.title,
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.ManageAccount_Save),
-                        onClick = { viewModel.onSave() },
-                        enabled = viewModel.viewState.canSave
-                    )
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = viewModel.viewState.title,
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.ManageAccount_Save),
+                    onClick = { viewModel.onSave() },
+                    enabled = viewModel.viewState.canSave
                 )
             )
+        )
 
-            Column {
-                HeaderText(stringResource(id = R.string.ManageAccount_Name))
+        Column {
+            HeaderText(stringResource(id = R.string.ManageAccount_Name))
 
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.viewState.title,
-                    hint = "",
-                    onValueChange = {
-                        viewModel.onChange(it)
-                    }
-                )
-
-                when (viewModel.viewState.headerNote) {
-                    HeaderNote.NonStandardAccount -> {
-                        NoteError(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp),
-                            text = stringResource(R.string.AccountRecovery_MigrationRequired),
-                            onClick = {
-                                FaqManager.showFaqPage(
-                                    navController,
-                                    FaqManager.faqPathMigrationRequired
-                                )
-                            }
-                        )
-                    }
-
-                    HeaderNote.NonRecommendedAccount -> {
-                        NoteWarning(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp),
-                            text = stringResource(R.string.AccountRecovery_MigrationRecommended),
-                            onClick = {
-                                FaqManager.showFaqPage(
-                                    navController,
-                                    FaqManager.faqPathMigrationRecommended
-                                )
-                            },
-                            onClose = null
-                        )
-                    }
-
-                    HeaderNote.None -> Unit
+            FormsInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                initial = viewModel.viewState.title,
+                hint = "",
+                onValueChange = {
+                    viewModel.onChange(it)
                 }
+            )
 
-                KeyActions(viewModel, navController)
-
-                if (viewModel.viewState.backupActions.isNotEmpty()) {
-                    BackupActions(
-                        viewModel.viewState.backupActions,
-                        viewModel.account,
-                        navController
+            when (viewModel.viewState.headerNote) {
+                HeaderNote.NonStandardAccount -> {
+                    NoteError(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp),
+                        text = stringResource(R.string.AccountRecovery_MigrationRequired),
+                        onClick = {
+                            FaqManager.showFaqPage(
+                                navController,
+                                FaqManager.faqPathMigrationRequired
+                            )
+                        }
                     )
                 }
 
-                VSpacer(32.dp)
-                CellUniversalLawrenceSection(
-                    listOf {
-                        RedActionItem(
-                            title = stringResource(id = R.string.ManageAccount_Unlink),
-                            icon = painterResource(id = R.drawable.ic_delete_20)
-                        ) {
-                            navController.slideFromBottom(
-                                R.id.unlinkConfirmationDialog,
-                                UnlinkAccountDialog.prepareParams(viewModel.account)
+                HeaderNote.NonRecommendedAccount -> {
+                    NoteWarning(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp),
+                        text = stringResource(R.string.AccountRecovery_MigrationRecommended),
+                        onClick = {
+                            FaqManager.showFaqPage(
+                                navController,
+                                FaqManager.faqPathMigrationRecommended
                             )
-                        }
-                    })
-                VSpacer(32.dp)
+                        },
+                        onClose = null
+                    )
+                }
+
+                HeaderNote.None -> Unit
             }
+
+            KeyActions(viewModel, navController)
+
+            if (viewModel.viewState.backupActions.isNotEmpty()) {
+                BackupActions(
+                    viewModel.viewState.backupActions,
+                    viewModel.account,
+                    navController
+                )
+            }
+
+            VSpacer(32.dp)
+            CellUniversalLawrenceSection(
+                listOf {
+                    RedActionItem(
+                        title = stringResource(id = R.string.ManageAccount_Unlink),
+                        icon = painterResource(id = R.drawable.ic_delete_20)
+                    ) {
+                        navController.slideFromBottom(
+                            R.id.unlinkConfirmationDialog,
+                            UnlinkAccountDialog.prepareParams(viewModel.account)
+                        )
+                    }
+                })
+            VSpacer(32.dp)
         }
     }
 }
@@ -397,7 +395,7 @@ private fun YellowActionItem(
                 tint = ComposeAppTheme.colors.lucian
             )
             HSpacer(6.dp)
-        } else if(completed) {
+        } else if (completed) {
             Icon(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 painter = painterResource(id = R.drawable.ic_checkmark_20),

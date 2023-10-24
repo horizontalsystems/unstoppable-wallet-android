@@ -38,16 +38,14 @@ class FaqListFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            FaqScreen(
-                onCloseClick = { navController.popBackStack() },
-                onItemClick = { faqItem ->
-                    val arguments =
-                        bundleOf(MarkdownFragment.markdownUrlKey to faqItem.markdown)
-                    navController.slideFromRight(R.id.markdownFragment, arguments)
-                }
-            )
-        }
+        FaqScreen(
+            onCloseClick = { navController.popBackStack() },
+            onItemClick = { faqItem ->
+                val arguments =
+                    bundleOf(MarkdownFragment.markdownUrlKey to faqItem.markdown)
+                navController.slideFromRight(R.id.markdownFragment, arguments)
+            }
+        )
     }
 
 }
@@ -71,6 +69,7 @@ private fun FaqScreen(
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 is ViewState.Error -> {
                     val s = when (val error = viewState.t) {
                         is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
@@ -80,6 +79,7 @@ private fun FaqScreen(
 
                     ScreenMessageWithAction(s, R.drawable.ic_error_48)
                 }
+
                 ViewState.Success -> {
                     Column {
                         val tabItems =
@@ -99,7 +99,7 @@ private fun FaqScreen(
                             CellUniversalLawrenceSection(viewModel.faqItems) { faq ->
                                 RowUniversal(
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    onClick =  { onItemClick(faq) }
+                                    onClick = { onItemClick(faq) }
                                 ) {
                                     subhead1_leah(text = faq.title)
                                 }

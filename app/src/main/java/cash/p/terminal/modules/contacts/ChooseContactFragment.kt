@@ -77,99 +77,97 @@ fun ChooseContactScreen(
 
     val items = viewModel.items
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                var searchMode by remember { mutableStateOf(false) }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            var searchMode by remember { mutableStateOf(false) }
 
-                AppBar(
-                    title = {
-                        if (searchMode) {
-                            var searchText by rememberSaveable { mutableStateOf("") }
-                            val focusRequester = remember { FocusRequester() }
+            AppBar(
+                title = {
+                    if (searchMode) {
+                        var searchText by rememberSaveable { mutableStateOf("") }
+                        val focusRequester = remember { FocusRequester() }
 
-                            BasicTextField(
-                                modifier = Modifier
-                                    .focusRequester(focusRequester),
-                                value = searchText,
-                                onValueChange = { value ->
-                                    searchText = value
-                                    viewModel.onEnterQuery(value)
-                                },
-                                singleLine = true,
-                                textStyle = ColoredTextStyle(
-                                    color = ComposeAppTheme.colors.leah,
-                                    textStyle = ComposeAppTheme.typography.body
-                                ),
-                                decorationBox = { innerTextField ->
-                                    if (searchText.isEmpty()) {
-                                        body_grey50(stringResource(R.string.Market_Search_Hint))
-                                    }
-                                    innerTextField()
-                                },
-                                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
-                            )
-                            SideEffect {
-                                focusRequester.requestFocus()
-                            }
-                        } else {
-                            title3_leah(text = stringResource(id = R.string.Contacts))
+                        BasicTextField(
+                            modifier = Modifier
+                                .focusRequester(focusRequester),
+                            value = searchText,
+                            onValueChange = { value ->
+                                searchText = value
+                                viewModel.onEnterQuery(value)
+                            },
+                            singleLine = true,
+                            textStyle = ColoredTextStyle(
+                                color = ComposeAppTheme.colors.leah,
+                                textStyle = ComposeAppTheme.typography.body
+                            ),
+                            decorationBox = { innerTextField ->
+                                if (searchText.isEmpty()) {
+                                    body_grey50(stringResource(R.string.Market_Search_Hint))
+                                }
+                                innerTextField()
+                            },
+                            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                        )
+                        SideEffect {
+                            focusRequester.requestFocus()
                         }
-                    },
-                    navigationIcon = {
-                        HsBackButton(onClick = {
-                            if (searchMode) {
-                                viewModel.onEnterQuery(null)
-                                searchMode = false
-                            } else {
-                                navController.popBackStack()
-                            }
-                        })
-                    },
-                    menuItems = if (searchMode) {
-                        listOf()
                     } else {
-                        listOf(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Search),
-                                icon = R.drawable.icon_search,
-                                onClick = {
-                                    searchMode = true
-                                }
-                            )
-                        )
+                        title3_leah(text = stringResource(id = R.string.Contacts))
                     }
-                )
-            }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Crossfade(items.isEmpty(), label = "") { empty ->
-                    if (empty) {
-                        ListEmptyView(
-                            text = stringResource(R.string.EmptyResults),
-                            icon = R.drawable.ic_not_found
+                },
+                navigationIcon = {
+                    HsBackButton(onClick = {
+                        if (searchMode) {
+                            viewModel.onEnterQuery(null)
+                            searchMode = false
+                        } else {
+                            navController.popBackStack()
+                        }
+                    })
+                },
+                menuItems = if (searchMode) {
+                    listOf()
+                } else {
+                    listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Search),
+                            icon = R.drawable.icon_search,
+                            onClick = {
+                                searchMode = true
+                            }
                         )
-                    } else {
-                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                            VSpacer(height = 12.dp)
-                            CellUniversalLawrenceSection(items, showFrame = true) { contact ->
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            navController.setNavigationResult(
-                                                ChooseContactFragment.resultKey,
-                                                bundleOf("contact" to contact.address)
-                                            )
-                                            navController.popBackStack()
-                                        }
-                                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                                ) {
-                                    body_leah(text = contact.name)
-                                    VSpacer(height = 1.dp)
-                                    subhead2_grey(text = contact.address.shorten())
-                                }
+                    )
+                }
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            Crossfade(items.isEmpty(), label = "") { empty ->
+                if (empty) {
+                    ListEmptyView(
+                        text = stringResource(R.string.EmptyResults),
+                        icon = R.drawable.ic_not_found
+                    )
+                } else {
+                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                        VSpacer(height = 12.dp)
+                        CellUniversalLawrenceSection(items, showFrame = true) { contact ->
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        navController.setNavigationResult(
+                                            ChooseContactFragment.resultKey,
+                                            bundleOf("contact" to contact.address)
+                                        )
+                                        navController.popBackStack()
+                                    }
+                                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                            ) {
+                                body_leah(text = contact.name)
+                                VSpacer(height = 1.dp)
+                                subhead2_grey(text = contact.address.shorten())
                             }
                         }
                     }

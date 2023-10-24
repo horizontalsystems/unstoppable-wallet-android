@@ -49,12 +49,10 @@ class BtcBlockchainSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            BtcBlockchainSettingsScreen(
-                viewModel,
-                navController
-            )
-        }
+        BtcBlockchainSettingsScreen(
+            viewModel,
+            navController
+        )
     }
 
 }

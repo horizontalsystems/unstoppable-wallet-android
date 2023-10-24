@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.walletconnect.list.ui.WCSessionsScreen
-import cash.p.terminal.ui.compose.ComposeAppTheme
 
 class WCListFragment : BaseComposeFragment() {
 
@@ -12,12 +11,10 @@ class WCListFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val deepLinkUri = activity?.intent?.data?.toString()
         activity?.intent?.data = null
-        ComposeAppTheme {
-            WCSessionsScreen(
-                navController,
-                deepLinkUri
-            )
-        }
+        WCSessionsScreen(
+            navController,
+            deepLinkUri
+        )
     }
 
 }

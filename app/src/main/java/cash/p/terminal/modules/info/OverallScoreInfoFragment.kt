@@ -43,28 +43,26 @@ class OverallScoreInfoFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val scoreCategory = requireArguments().parcelable<ScoreCategory>(SCORE_CATEGORY_KEY)
         val categoryScores = getScores(scoreCategory)
-        ComposeAppTheme {
-            if (scoreCategory == null) {
-                ScreenMessageWithAction(
-                    text = stringResource(R.string.Error),
-                    icon = R.drawable.ic_error_48
-                ) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 48.dp)
-                            .fillMaxWidth(),
-                        title = stringResource(R.string.Button_Close),
-                        onClick = { navController.popBackStack() }
-                    )
-                }
-            } else {
-                InfoScreen(
-                    scoreCategory.title,
-                    scoreCategory.description,
-                    categoryScores,
-                    navController
+        if (scoreCategory == null) {
+            ScreenMessageWithAction(
+                text = stringResource(R.string.Error),
+                icon = R.drawable.ic_error_48
+            ) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 48.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.Button_Close),
+                    onClick = { navController.popBackStack() }
                 )
             }
+        } else {
+            InfoScreen(
+                scoreCategory.title,
+                scoreCategory.description,
+                categoryScores,
+                navController
+            )
         }
     }
 

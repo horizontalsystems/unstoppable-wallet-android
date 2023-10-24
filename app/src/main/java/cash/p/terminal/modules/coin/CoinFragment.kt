@@ -73,12 +73,10 @@ fun CoinScreen(
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
-    ComposeAppTheme {
-        if (coinViewModel != null) {
-            CoinTabs(coinViewModel, navController, fragmentManager)
-        } else {
-            CoinNotFound(coinUid, navController)
-        }
+    if (coinViewModel != null) {
+        CoinTabs(coinViewModel, navController, fragmentManager)
+    } else {
+        CoinNotFound(coinUid, navController)
     }
 }
 
@@ -152,9 +150,11 @@ fun CoinTabs(
                         navController = navController
                     )
                 }
+
                 CoinModule.Tab.Market -> {
                     CoinMarketsScreen(fullCoin = viewModel.fullCoin)
                 }
+
                 CoinModule.Tab.Details -> {
                     CoinAnalyticsScreen(
                         fullCoin = viewModel.fullCoin,

@@ -45,24 +45,22 @@ class SendEvmSettingsFragment : BaseComposeFragment() {
         val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
         val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
 
-        ComposeAppTheme {
-            val feeSettingsViewModel = viewModel<ViewModel>(
-                factory = EvmFeeModule.Factory(
-                    feeViewModel.feeService,
-                    feeViewModel.gasPriceService,
-                    feeViewModel.coinService
-                )
+        val feeSettingsViewModel = viewModel<ViewModel>(
+            factory = EvmFeeModule.Factory(
+                feeViewModel.feeService,
+                feeViewModel.gasPriceService,
+                feeViewModel.coinService
             )
-            val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
-                factory = SendEvmSettingsModule.Factory(sendViewModel.service.settingsService, feeViewModel.coinService)
-            )
-            SendEvmFeeSettingsScreen(
-                viewModel = sendSettingsViewModel,
-                feeSettingsViewModel = feeSettingsViewModel,
-                nonceViewModel = nonceViewModel,
-                navController = navController
-            )
-        }
+        )
+        val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
+            factory = SendEvmSettingsModule.Factory(sendViewModel.service.settingsService, feeViewModel.coinService)
+        )
+        SendEvmFeeSettingsScreen(
+            viewModel = sendSettingsViewModel,
+            feeSettingsViewModel = feeSettingsViewModel,
+            nonceViewModel = nonceViewModel,
+            navController = navController
+        )
     }
 
     companion object {

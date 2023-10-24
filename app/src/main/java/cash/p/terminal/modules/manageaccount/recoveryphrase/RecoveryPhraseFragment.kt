@@ -52,67 +52,65 @@ private fun RecoveryPhraseScreen(
         initialValue = ModalBottomSheetValue.Hidden,
     )
 
-    ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = sheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                ConfirmCopyBottomSheet(
-                    onConfirm = {
-                        coroutineScope.launch {
-                            TextHelper.copyText(viewModel.words.joinToString(" "))
-                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                            sheetState.hide()
-                        }
-                    },
-                    onCancel = {
-                        coroutineScope.launch {
-                            sheetState.hide()
-                        }
-                    }
-                )
-            }
-        ) {
-            Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-                AppBar(
-                    title = stringResource(R.string.RecoveryPhrase_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = navController::popBackStack)
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Info_Title),
-                            icon = R.drawable.ic_info_24,
-                            onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                            }
-                        )
-                    )
-                )
-
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.Top
-                ) {
-                    Spacer(Modifier.height(12.dp))
-                    TextImportantWarning(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(R.string.PrivateKeys_NeverShareWarning)
-                    )
-                    Spacer(Modifier.height(24.dp))
-                    var hidden by remember { mutableStateOf(true) }
-                    SeedPhraseList(viewModel.wordsNumbered, hidden) {
-                        hidden = !hidden
-                    }
-                    Spacer(Modifier.height(24.dp))
-                    PassphraseCell(viewModel.passphrase, hidden)
-                }
-                ActionButton(R.string.Alert_Copy) {
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            ConfirmCopyBottomSheet(
+                onConfirm = {
                     coroutineScope.launch {
-                        sheetState.show()
+                        TextHelper.copyText(viewModel.words.joinToString(" "))
+                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                        sheetState.hide()
                     }
+                },
+                onCancel = {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                    }
+                }
+            )
+        }
+    ) {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            AppBar(
+                title = stringResource(R.string.RecoveryPhrase_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = navController::popBackStack)
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Info_Title),
+                        icon = R.drawable.ic_info_24,
+                        onClick = {
+                            FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                        }
+                    )
+                )
+            )
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Top
+            ) {
+                Spacer(Modifier.height(12.dp))
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = stringResource(R.string.PrivateKeys_NeverShareWarning)
+                )
+                Spacer(Modifier.height(24.dp))
+                var hidden by remember { mutableStateOf(true) }
+                SeedPhraseList(viewModel.wordsNumbered, hidden) {
+                    hidden = !hidden
+                }
+                Spacer(Modifier.height(24.dp))
+                PassphraseCell(viewModel.passphrase, hidden)
+            }
+            ActionButton(R.string.Alert_Copy) {
+                coroutineScope.launch {
+                    sheetState.show()
                 }
             }
         }

@@ -70,14 +70,12 @@ class MainFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            MainScreenWithRootedDeviceCheck(
-                transactionsViewModel = transactionsViewModel,
-                deepLink = activity?.intent?.data?.toString(),
-                navController = navController,
-                clearActivityData = { activity?.intent?.data = null }
-            )
-        }
+        MainScreenWithRootedDeviceCheck(
+            transactionsViewModel = transactionsViewModel,
+            deepLink = activity?.intent?.data?.toString(),
+            navController = navController,
+            clearActivityData = { activity?.intent?.data = null }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -211,6 +209,7 @@ private fun MainScreen(
                                 fragmentNavController,
                                 transactionsViewModel
                             )
+
                             MainNavigation.Settings -> SettingsScreen(fragmentNavController)
                         }
                     }
@@ -246,10 +245,12 @@ private fun MainScreen(
             SupportState.Supported -> {
                 fragmentNavController.slideFromRight(R.id.wallet_connect_graph)
             }
+
             SupportState.NotSupportedDueToNoActiveAccount -> {
                 clearActivityData.invoke()
                 fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment)
             }
+
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {
                 clearActivityData.invoke()
                 val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
@@ -258,6 +259,7 @@ private fun MainScreen(
                     BackupRequiredDialog.prepareParams(wcSupportState.account, text)
                 )
             }
+
             is SupportState.NotSupported -> {
                 clearActivityData.invoke()
                 fragmentNavController.slideFromBottom(
@@ -265,6 +267,7 @@ private fun MainScreen(
                     WCAccountTypeNotSupportedDialog.prepareParams(wcSupportState.accountTypeDescription)
                 )
             }
+
             null -> {}
         }
         viewModel.wcSupportStateHandled()
@@ -306,6 +309,7 @@ private fun BadgedIcon(
                 },
                 content = icon
             )
+
         MainModule.BadgeType.BadgeDot ->
             BadgedBox(
                 badge = {
@@ -320,6 +324,7 @@ private fun BadgedIcon(
                 },
                 content = icon
             )
+
         else -> {
             Box {
                 icon()

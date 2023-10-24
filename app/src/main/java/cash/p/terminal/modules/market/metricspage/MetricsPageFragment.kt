@@ -44,10 +44,8 @@ class MetricsPageFragment : BaseComposeFragment() {
         val factory = MetricsPageModule.Factory(metricsType!!)
         val chartViewModel by viewModels<ChartViewModel> { factory }
         val viewModel by viewModels<MetricsPageViewModel> { factory }
-        ComposeAppTheme {
-            MetricsPage(viewModel, chartViewModel, navController) {
-                onCoinClick(it, navController)
-            }
+        MetricsPage(viewModel, chartViewModel, navController) {
+            onCoinClick(it, navController)
         }
     }
 
@@ -94,9 +92,11 @@ class MetricsPageFragment : BaseComposeFragment() {
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
+
                         ViewState.Success -> {
                             val listState = rememberSaveable(
                                 marketData?.menu?.sortDescending,
@@ -140,6 +140,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                                 }
                             }
                         }
+
                         null -> {}
                     }
                 }

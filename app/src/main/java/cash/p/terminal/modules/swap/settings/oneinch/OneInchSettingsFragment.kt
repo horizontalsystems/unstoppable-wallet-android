@@ -70,29 +70,27 @@ class OneInchSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         val dexValue = dex
-        ComposeAppTheme {
-            if (dexValue != null) {
-                OneInchSettingsScreen(
-                    onCloseClick = {
-                        navController.popBackStack()
-                    },
-                    dex = dexValue,
-                    factory = OneInchSwapSettingsModule.Factory(address, slippage),
-                    navController = navController
+        if (dexValue != null) {
+            OneInchSettingsScreen(
+                onCloseClick = {
+                    navController.popBackStack()
+                },
+                dex = dexValue,
+                factory = OneInchSwapSettingsModule.Factory(address, slippage),
+                navController = navController
+            )
+        } else {
+            ScreenMessageWithAction(
+                text = stringResource(R.string.Error),
+                icon = R.drawable.ic_error_48
+            ) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 48.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.Button_Close),
+                    onClick = { navController.popBackStack() }
                 )
-            } else {
-                ScreenMessageWithAction(
-                    text = stringResource(R.string.Error),
-                    icon = R.drawable.ic_error_48
-                ) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 48.dp)
-                            .fillMaxWidth(),
-                        title = stringResource(R.string.Button_Close),
-                        onClick = { navController.popBackStack() }
-                    )
-                }
             }
         }
     }

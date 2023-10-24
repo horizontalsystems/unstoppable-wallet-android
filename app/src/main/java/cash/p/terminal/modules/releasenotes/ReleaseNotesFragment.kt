@@ -35,12 +35,10 @@ class ReleaseNotesFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            ReleaseNotesScreen(
-                closeablePopup = arguments?.getBoolean(showAsClosablePopupKey) ?: false,
-                onCloseClick = { navController.popBackStack() },
-            )
-        }
+        ReleaseNotesScreen(
+            closeablePopup = arguments?.getBoolean(showAsClosablePopupKey) ?: false,
+            onCloseClick = { navController.popBackStack() },
+        )
     }
 
     companion object {

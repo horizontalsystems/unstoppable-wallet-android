@@ -75,62 +75,60 @@ fun SelectSwapCoinDialogScreen(
     val viewModel = viewModel<SelectSwapCoinViewModel>(factory = SelectSwapCoinModule.Factory(dex))
     val coinItems = viewModel.coinItems
 
-    ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            SearchBar(
-                title = stringResource(R.string.Select_Coins),
-                searchHintText = stringResource(R.string.ManageCoins_Search),
-                onClose = { navController.popBackStack() },
-                onSearchTextChanged = {
-                    viewModel.onEnterQuery(it)
-                }
-            )
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        SearchBar(
+            title = stringResource(R.string.Select_Coins),
+            searchHintText = stringResource(R.string.ManageCoins_Search),
+            onClose = { navController.popBackStack() },
+            onSearchTextChanged = {
+                viewModel.onEnterQuery(it)
+            }
+        )
 
-            LazyColumn {
-                items(coinItems) { coinItem ->
-                    SectionUniversalItem(borderTop = true) {
-                        RowUniversal(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            onClick = {
-                                onClickItem.invoke(coinItem)
-                            }
-                        ) {
-                            CoinImage(
-                                iconUrl = coinItem.token.coin.imageUrl,
-                                placeholder = coinItem.token.iconPlaceholder,
-                                modifier = Modifier.size(32.dp)
-                            )
-                            Spacer(modifier = Modifier.size(16.dp))
-                            MultitextM1(
-                                title = { B2(text = coinItem.token.coin.name) },
-                                subtitle = { D1(text = coinItem.token.coin.code) }
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            MultitextM1(
-                                title = {
-                                    coinItem.balance?.let {
-                                        App.numberFormatter.formatCoinFull(it, coinItem.token.coin.code, 8)
-                                    }?.let {
-                                        B2(text = it)
-                                    }
-                                },
-                                subtitle = {
-                                    coinItem.fiatBalanceValue?.let { fiatBalanceValue ->
-                                        App.numberFormatter.formatFiatFull(
-                                            fiatBalanceValue.value,
-                                            fiatBalanceValue.currency.symbol
-                                        )
-                                    }?.let {
-                                        D1(
-                                            modifier = Modifier.align(Alignment.End),
-                                            text = it
-                                        )
-                                    }
-                                }
-                            )
+        LazyColumn {
+            items(coinItems) { coinItem ->
+                SectionUniversalItem(borderTop = true) {
+                    RowUniversal(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        onClick = {
+                            onClickItem.invoke(coinItem)
                         }
+                    ) {
+                        CoinImage(
+                            iconUrl = coinItem.token.coin.imageUrl,
+                            placeholder = coinItem.token.iconPlaceholder,
+                            modifier = Modifier.size(32.dp)
+                        )
+                        Spacer(modifier = Modifier.size(16.dp))
+                        MultitextM1(
+                            title = { B2(text = coinItem.token.coin.name) },
+                            subtitle = { D1(text = coinItem.token.coin.code) }
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        MultitextM1(
+                            title = {
+                                coinItem.balance?.let {
+                                    App.numberFormatter.formatCoinFull(it, coinItem.token.coin.code, 8)
+                                }?.let {
+                                    B2(text = it)
+                                }
+                            },
+                            subtitle = {
+                                coinItem.fiatBalanceValue?.let { fiatBalanceValue ->
+                                    App.numberFormatter.formatFiatFull(
+                                        fiatBalanceValue.value,
+                                        fiatBalanceValue.currency.symbol
+                                    )
+                                }?.let {
+                                    D1(
+                                        modifier = Modifier.align(Alignment.End),
+                                        text = it
+                                    )
+                                }
+                            }
+                        )
                     }
                 }
             }

@@ -40,9 +40,7 @@ import cash.p.terminal.ui.compose.components.subhead2_lucian
 class SetDuressPinSelectAccountsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            SetDuressPinSelectAccountsScreen(navController)
-        }
+        SetDuressPinSelectAccountsScreen(navController)
     }
 }
 

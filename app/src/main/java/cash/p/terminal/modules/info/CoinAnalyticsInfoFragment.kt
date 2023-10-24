@@ -37,11 +37,9 @@ class CoinAnalyticsInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            CoinAnalyticsInfoScreen(
-                analyticsInfo
-            ) { navController.popBackStack() }
-        }
+        CoinAnalyticsInfoScreen(
+            analyticsInfo
+        ) { navController.popBackStack() }
     }
 
     companion object {
@@ -73,7 +71,7 @@ private fun CoinAnalyticsInfoScreen(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                analyticsInfo?.let{ info ->
+                analyticsInfo?.let { info ->
                     InfoHeader(info.title)
                     AnalyticsInfoBody(info)
                     Spacer(Modifier.height(20.dp))
@@ -98,13 +96,14 @@ private fun CoinAnalyticsInfoScreen(
 
 @Composable
 private fun AnalyticsInfoBody(info: AnalyticInfo) {
-    when(info) {
+    when (info) {
         AnalyticInfo.CexVolumeInfo -> {
             BulletedText(R.string.CoinAnalytics_CexVolume_Info1)
             BulletedText(R.string.CoinAnalytics_CexVolume_Info2)
             BulletedText(R.string.CoinAnalytics_CexVolume_Info3)
             BulletedText(R.string.CoinAnalytics_CexVolume_Info4)
         }
+
         AnalyticInfo.DexVolumeInfo -> {
             BulletedText(R.string.CoinAnalytics_DexVolume_Info1)
             BulletedText(R.string.CoinAnalytics_DexVolume_Info2)
@@ -114,6 +113,7 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
             BulletedText(R.string.CoinAnalytics_DexVolume_TrackedDexes_Info1)
             BulletedText(R.string.CoinAnalytics_DexVolume_TrackedDexes_Info2)
         }
+
         AnalyticInfo.DexLiquidityInfo -> {
             BulletedText(R.string.CoinAnalytics_DexLiquidity_Info1)
             BulletedText(R.string.CoinAnalytics_DexLiquidity_Info2)
@@ -122,6 +122,7 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
             BulletedText(R.string.CoinAnalytics_DexLiquidity_TrackedDexes_Info1)
             BulletedText(R.string.CoinAnalytics_DexLiquidity_TrackedDexes_Info2)
         }
+
         AnalyticInfo.AddressesInfo -> {
             BulletedText(R.string.CoinAnalytics_ActiveAddresses_Info1)
             BulletedText(R.string.CoinAnalytics_ActiveAddresses_Info2)
@@ -129,6 +130,7 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
             BulletedText(R.string.CoinAnalytics_ActiveAddresses_Info4)
             BulletedText(R.string.CoinAnalytics_ActiveAddresses_Info5)
         }
+
         AnalyticInfo.TransactionCountInfo -> {
             BulletedText(R.string.CoinAnalytics_TransactionCount_Info1)
             BulletedText(R.string.CoinAnalytics_TransactionCount_Info2)
@@ -136,11 +138,13 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
             BulletedText(R.string.CoinAnalytics_TransactionCount_Info4)
             BulletedText(R.string.CoinAnalytics_TransactionCount_Info5)
         }
+
         AnalyticInfo.HoldersInfo -> {
             BulletedText(R.string.CoinAnalytics_Holders_Info1)
             BulletedText(R.string.CoinAnalytics_Holders_Info2)
             InfoBody(R.string.CoinAnalytics_Holders_TrackedBlockchains)
         }
+
         AnalyticInfo.TvlInfo -> {
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info1)
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info2)
@@ -148,7 +152,8 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info4)
             BulletedText(R.string.CoinAnalytics_ProjectTVL_Info5)
         }
-        AnalyticInfo.TechnicalIndicatorsInfo-> {
+
+        AnalyticInfo.TechnicalIndicatorsInfo -> {
             BulletedText(R.string.CoinAnalytics_TechIndicators_Info1)
             BulletedText(R.string.CoinAnalytics_TechIndicators_Info2)
             BulletedText(R.string.CoinAnalytics_TechIndicators_Info3)

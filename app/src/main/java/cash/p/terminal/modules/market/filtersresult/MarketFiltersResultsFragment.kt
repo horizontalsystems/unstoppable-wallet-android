@@ -38,9 +38,7 @@ class MarketFiltersResultsFragment : BaseComposeFragment() {
             return
         }
 
-        ComposeAppTheme {
-            SearchResultsScreen(viewModel, navController)
-        }
+        SearchResultsScreen(viewModel, navController)
     }
 
     private fun getViewModel(): MarketFiltersResultViewModel? {
@@ -80,9 +78,11 @@ private fun SearchResultsScreen(
                     ViewState.Loading -> {
                         Loading()
                     }
+
                     is ViewState.Error -> {
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                     }
+
                     ViewState.Success -> {
                         CoinList(
                             items = viewModel.viewItemsState,

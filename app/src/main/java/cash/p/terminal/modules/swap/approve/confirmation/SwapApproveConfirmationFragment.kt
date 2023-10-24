@@ -150,66 +150,64 @@ private fun SwapApproveConfirmationScreen(
 ) {
     val enabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                val navigationIcon: @Composable (() -> Unit)? = if (backButton) {
-                    {
-                        HsIconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "back button",
-                                tint = ComposeAppTheme.colors.jacob
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            val navigationIcon: @Composable (() -> Unit)? = if (backButton) {
+                {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "back button",
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    }
+                }
+            } else {
+                null
+            }
+
+            AppBar(
+                title = stringResource(R.string.Send_Confirmation_Title),
+                navigationIcon = navigationIcon,
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                        icon = R.drawable.ic_manage_2,
+                        tint = ComposeAppTheme.colors.jacob,
+                        onClick = {
+                            navController.slideFromBottom(
+                                resId = R.id.sendEvmSettingsFragment,
+                                args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
                             )
                         }
-                    }
-                } else {
-                    null
-                }
-
-                AppBar(
-                    title = stringResource(R.string.Send_Confirmation_Title),
-                    navigationIcon = navigationIcon,
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                            icon = R.drawable.ic_manage_2,
-                            tint = ComposeAppTheme.colors.jacob,
-                            onClick = {
-                                navController.slideFromBottom(
-                                    resId = R.id.sendEvmSettingsFragment,
-                                    args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
-                                )
-                            }
-                        )
                     )
                 )
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                SendEvmTransactionView(
+                    sendEvmTransactionViewModel,
+                    feeViewModel,
+                    nonceViewModel,
+                    navController
+                )
             }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Column(
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    SendEvmTransactionView(
-                        sendEvmTransactionViewModel,
-                        feeViewModel,
-                        nonceViewModel,
-                        navController
-                    )
-                }
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.Swap_Approve),
-                        onClick = onSendClick,
-                        enabled = enabled
-                    )
-                }
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.Swap_Approve),
+                    onClick = onSendClick,
+                    enabled = enabled
+                )
             }
         }
     }

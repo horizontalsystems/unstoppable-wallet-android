@@ -52,17 +52,15 @@ class CoinInvestmentsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            CoinInvestmentsScreen(
-                viewModel = viewModel,
-                onClickNavigation = {
-                    navController.popBackStack()
-                },
-                onClickFundUrl = {
-                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                }
-            )
-        }
+        CoinInvestmentsScreen(
+            viewModel = viewModel,
+            onClickNavigation = {
+                navController.popBackStack()
+            },
+            onClickFundUrl = {
+                LinkHelper.openLinkInAppBrowser(requireContext(), it)
+            }
+        )
     }
 
     companion object {

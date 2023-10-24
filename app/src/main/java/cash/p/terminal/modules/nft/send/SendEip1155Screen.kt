@@ -61,86 +61,84 @@ fun SendEip1155Screen(
     nftSendFragment: Int,
 ) {
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.SendNft_Title),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = { navController.popBackStack() }
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.SendNft_Title),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = { navController.popBackStack() }
                     )
                 )
-            }
-        ) {
-            Column(Modifier.padding(it)) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    viewModel.uiState.imageUrl?.let { imageUrl ->
-                        Spacer(Modifier.height(12.dp))
-                        Image(
-                            painter = rememberAsyncImagePainter(
-                                model = imageUrl,
-                            ),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .heightIn(0.dp, 100.dp)
-                                .clip(RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                    Spacer(Modifier.height(24.dp))
-                    headline1_leah(
-                        text = viewModel.uiState.name
-                    )
+            )
+        }
+    ) {
+        Column(Modifier.padding(it)) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                viewModel.uiState.imageUrl?.let { imageUrl ->
                     Spacer(Modifier.height(12.dp))
-                    AvailableNftBalance(viewModel.availableNftBalance)
-                    Spacer(Modifier.height(12.dp))
-                    ItemCountInput(
-                        state = viewModel.uiState.amountState,
-                        onValueChange = { amount ->
-                            viewModel.onAmountChange(amount)
-                        }
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    HSAddressInput(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        viewModel = addressViewModel,
-                        error = viewModel.uiState.addressError,
-                        textPreprocessor = addressParserViewModel,
-                        navController = navController,
-                    ) { address ->
-                        viewModel.onEnterAddress(address)
-                    }
-                    Spacer(Modifier.height(24.dp))
-                    ButtonPrimaryYellow(
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = imageUrl,
+                        ),
+                        contentDescription = null,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                        title = stringResource(R.string.Button_Next),
-                        onClick = {
-                            viewModel.getSendData()?.let { sendData ->
-                                navController.slideFromRight(
-                                    R.id.sendEvmConfirmationFragment,
-                                    SendEvmConfirmationModule.prepareParams(
-                                        sendData,
-                                        nftSendFragment
-                                    )
-                                )
-                            }
-                        },
-                        enabled = viewModel.uiState.canBeSend
+                            .padding(horizontal = 16.dp)
+                            .heightIn(0.dp, 100.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
                     )
                 }
-
+                Spacer(Modifier.height(24.dp))
+                headline1_leah(
+                    text = viewModel.uiState.name
+                )
+                Spacer(Modifier.height(12.dp))
+                AvailableNftBalance(viewModel.availableNftBalance)
+                Spacer(Modifier.height(12.dp))
+                ItemCountInput(
+                    state = viewModel.uiState.amountState,
+                    onValueChange = { amount ->
+                        viewModel.onAmountChange(amount)
+                    }
+                )
+                Spacer(Modifier.height(12.dp))
+                HSAddressInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    viewModel = addressViewModel,
+                    error = viewModel.uiState.addressError,
+                    textPreprocessor = addressParserViewModel,
+                    navController = navController,
+                ) { address ->
+                    viewModel.onEnterAddress(address)
+                }
+                Spacer(Modifier.height(24.dp))
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                    title = stringResource(R.string.Button_Next),
+                    onClick = {
+                        viewModel.getSendData()?.let { sendData ->
+                            navController.slideFromRight(
+                                R.id.sendEvmConfirmationFragment,
+                                SendEvmConfirmationModule.prepareParams(
+                                    sendData,
+                                    nftSendFragment
+                                )
+                            )
+                        }
+                    },
+                    enabled = viewModel.uiState.canBeSend
+                )
             }
+
         }
     }
 }

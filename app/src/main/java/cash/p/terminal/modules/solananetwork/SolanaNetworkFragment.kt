@@ -45,12 +45,10 @@ class SolanaNetworkFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            SolanaNetworkScreen(
-                viewModel,
-                navController
-            )
-        }
+        SolanaNetworkScreen(
+            viewModel,
+            navController
+        )
     }
 
 }

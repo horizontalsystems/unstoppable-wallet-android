@@ -12,7 +12,6 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.parcelable
 
 class TokenBalanceFragment : BaseComposeFragment() {
@@ -28,13 +27,11 @@ class TokenBalanceFragment : BaseComposeFragment() {
         val viewModel by viewModels<TokenBalanceViewModel> { TokenBalanceModule.Factory(wallet) }
         val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
-        ComposeAppTheme {
-            TokenBalanceScreen(
-                viewModel,
-                transactionsViewModel,
-                navController
-            )
-        }
+        TokenBalanceScreen(
+            viewModel,
+            transactionsViewModel,
+            navController
+        )
     }
 
     companion object {

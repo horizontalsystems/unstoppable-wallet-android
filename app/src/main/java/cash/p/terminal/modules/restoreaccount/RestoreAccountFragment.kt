@@ -17,7 +17,6 @@ import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import cash.p.terminal.modules.restoreaccount.restoremnemonic.RestorePhrase
 import cash.p.terminal.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
-import cash.p.terminal.ui.compose.ComposeAppTheme
 
 class RestoreAccountFragment : BaseComposeFragment() {
 
@@ -29,13 +28,11 @@ class RestoreAccountFragment : BaseComposeFragment() {
         val inclusive =
             arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
 
-        ComposeAppTheme {
-            RestoreAccountNavHost(
-                navController,
-                popUpToInclusiveId,
-                inclusive
-            )
-        }
+        RestoreAccountNavHost(
+            navController,
+            popUpToInclusiveId,
+            inclusive
+        )
     }
 
 }

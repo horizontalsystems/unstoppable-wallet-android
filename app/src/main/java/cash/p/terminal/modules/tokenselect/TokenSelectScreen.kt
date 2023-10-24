@@ -30,58 +30,56 @@ fun TokenSelectScreen(
     emptyItemsText: String,
     header: @Composable (() -> Unit)? = null
 ) {
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                SearchBar(
-                    title = title,
-                    searchHintText = "",
-                    menuItems = listOf(),
-                    onClose = { navController.popBackStack() },
-                    onSearchTextChanged = { text ->
-                        viewModel.updateFilter(text)
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            SearchBar(
+                title = title,
+                searchHintText = "",
+                menuItems = listOf(),
+                onClose = { navController.popBackStack() },
+                onSearchTextChanged = { text ->
+                    viewModel.updateFilter(text)
+                }
+            )
+        }
+    ) { paddingValues ->
+        val uiState = viewModel.uiState
+        if (uiState.noItems) {
+            ListEmptyView(
+                text = emptyItemsText,
+                icon = R.drawable.ic_empty_wallet
+            )
+        } else {
+            LazyColumn(contentPadding = paddingValues) {
+                item {
+                    if (header == null) {
+                        VSpacer(12.dp)
                     }
-                )
-            }
-        ) { paddingValues ->
-            val uiState = viewModel.uiState
-            if (uiState.noItems) {
-                ListEmptyView(
-                    text = emptyItemsText,
-                    icon = R.drawable.ic_empty_wallet
-                )
-            } else {
-                LazyColumn(contentPadding = paddingValues) {
-                    item {
-                        if (header == null) {
-                            VSpacer(12.dp)
-                        }
-                        header?.invoke()
-                    }
-                    val balanceViewItems = uiState.items
-                    itemsIndexed(balanceViewItems) { index, item ->
-                        val lastItem = index == balanceViewItems.size - 1
+                    header?.invoke()
+                }
+                val balanceViewItems = uiState.items
+                itemsIndexed(balanceViewItems) { index, item ->
+                    val lastItem = index == balanceViewItems.size - 1
 
-                        Box(
-                            modifier = Modifier.clickable {
-                                onClickItem.invoke(item)
-                            }
+                    Box(
+                        modifier = Modifier.clickable {
+                            onClickItem.invoke(item)
+                        }
+                    ) {
+                        SectionUniversalItem(
+                            borderTop = true,
+                            borderBottom = lastItem
                         ) {
-                            SectionUniversalItem(
-                                borderTop = true,
-                                borderBottom = lastItem
-                            ) {
-                                BalanceCardInner(
-                                    viewItem = item,
-                                    type = BalanceCardSubtitleType.CoinName
-                                )
-                            }
+                            BalanceCardInner(
+                                viewItem = item,
+                                type = BalanceCardSubtitleType.CoinName
+                            )
                         }
                     }
-                    item {
-                        VSpacer(32.dp)
-                    }
+                }
+                item {
+                    VSpacer(32.dp)
                 }
             }
         }

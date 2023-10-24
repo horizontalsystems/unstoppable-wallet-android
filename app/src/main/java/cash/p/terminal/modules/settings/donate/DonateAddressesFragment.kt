@@ -38,11 +38,9 @@ class DonateAddressesFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            DonateScreen(
-                onBackPress = { navController.popBackStack() }
-            )
-        }
+        DonateScreen(
+            onBackPress = { navController.popBackStack() }
+        )
     }
 
 }

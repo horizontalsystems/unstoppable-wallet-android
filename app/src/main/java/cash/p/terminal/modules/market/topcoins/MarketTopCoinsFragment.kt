@@ -48,13 +48,11 @@ class MarketTopCoinsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            TopCoinsScreen(
-                viewModel,
-                { navController.popBackStack() },
-                { coinUid -> onCoinClick(coinUid, navController) }
-            )
-        }
+        TopCoinsScreen(
+            viewModel,
+            { navController.popBackStack() },
+            { coinUid -> onCoinClick(coinUid, navController) }
+        )
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
@@ -115,9 +113,11 @@ fun TopCoinsScreen(
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
+
                         ViewState.Success -> {
                             viewItems?.let {
                                 CoinList(
@@ -185,6 +185,7 @@ fun TopCoinsScreen(
                                 }
                             }
                         }
+
                         null -> {}
                     }
                 }
@@ -203,8 +204,10 @@ fun TopCoinsScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+
             SelectorDialogState.Closed,
-            null -> {}
+            null -> {
+            }
         }
     }
 }

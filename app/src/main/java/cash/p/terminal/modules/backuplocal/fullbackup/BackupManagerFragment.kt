@@ -46,31 +46,29 @@ class BackupManagerFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            BackupManagerScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                },
-                onRestoreBackup = { jsonString, fileName ->
-                    navController.navigateWithTermsAccepted {
-                        navController.slideFromBottom(
-                            R.id.restoreLocalFragment,
-                            bundleOf(
-                                ManageAccountsModule.popOffOnSuccessKey to R.id.backupManagerFragment,
-                                ManageAccountsModule.popOffInclusiveKey to false,
-                                RestoreLocalFragment.jsonFileKey to jsonString,
-                                RestoreLocalFragment.fileNameKey to fileName
-                            )
+        BackupManagerScreen(
+            onBackClick = {
+                navController.popBackStack()
+            },
+            onRestoreBackup = { jsonString, fileName ->
+                navController.navigateWithTermsAccepted {
+                    navController.slideFromBottom(
+                        R.id.restoreLocalFragment,
+                        bundleOf(
+                            ManageAccountsModule.popOffOnSuccessKey to R.id.backupManagerFragment,
+                            ManageAccountsModule.popOffInclusiveKey to false,
+                            RestoreLocalFragment.jsonFileKey to jsonString,
+                            RestoreLocalFragment.fileNameKey to fileName
                         )
-                    }
-                },
-                onCreateBackup = {
-                    navController.authorizedAction {
-                        navController.slideFromRight(R.id.backupLocalFragment)
-                    }
+                    )
                 }
-            )
-        }
+            },
+            onCreateBackup = {
+                navController.authorizedAction {
+                    navController.slideFromRight(R.id.backupLocalFragment)
+                }
+            }
+        )
     }
 }
 

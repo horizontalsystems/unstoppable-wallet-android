@@ -116,94 +116,92 @@ private fun AddTokenScreen(
         }
     }
 
-    ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = stringResource(R.string.AddToken_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = closeScreen)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Add),
-                        onClick = viewModel::onAddClick,
-                        enabled = uiState.addButtonEnabled
-                    )
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = stringResource(R.string.AddToken_Title),
+            navigationIcon = {
+                HsBackButton(onClick = closeScreen)
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Add),
+                    onClick = viewModel::onAddClick,
+                    enabled = uiState.addButtonEnabled
                 )
             )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(modifier = Modifier.height(12.dp))
+        )
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.height(12.dp))
 
+            CellUniversalLawrenceSection(
+                listOf {
+                    RowUniversal(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        onClick = { navController.navigate(BlockchainSelectorPage) }
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_blocks_24),
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        body_leah(
+                            text = stringResource(R.string.AddToken_Blockchain),
+                            modifier = Modifier.weight(1f)
+                        )
+                        subhead1_grey(
+                            text = viewModel.selectedBlockchain.name,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_down_arrow_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
+                }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            FormsInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                enabled = false,
+                hint = stringResource(R.string.AddToken_AddressOrSymbol),
+                state = getState(uiState.caution, uiState.loading),
+                qrScannerEnabled = true,
+            ) {
+                viewModel.onEnterText(it)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            uiState.tokenInfo?.let { tokenInfo ->
                 CellUniversalLawrenceSection(
-                    listOf {
-                        RowUniversal(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            onClick = { navController.navigate(BlockchainSelectorPage) }
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_blocks_24),
-                                contentDescription = null
+                    listOf(
+                        {
+                            TitleValueCell(
+                                stringResource(R.string.AddToken_CoinName),
+                                tokenInfo.token.coin.name
                             )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            body_leah(
-                                text = stringResource(R.string.AddToken_Blockchain),
-                                modifier = Modifier.weight(1f)
+                        }, {
+                            TitleValueCell(
+                                stringResource(R.string.AddToken_CoinCode),
+                                tokenInfo.token.coin.code
                             )
-                            subhead1_grey(
-                                text = viewModel.selectedBlockchain.name,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.grey
+                        }, {
+                            TitleValueCell(
+                                stringResource(R.string.AddToken_Decimals),
+                                tokenInfo.token.decimals.toString()
                             )
                         }
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    enabled = false,
-                    hint = stringResource(R.string.AddToken_AddressOrSymbol),
-                    state = getState(uiState.caution, uiState.loading),
-                    qrScannerEnabled = true,
-                ) {
-                    viewModel.onEnterText(it)
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                uiState.tokenInfo?.let { tokenInfo ->
-                    CellUniversalLawrenceSection(
-                        listOf(
-                            {
-                                TitleValueCell(
-                                    stringResource(R.string.AddToken_CoinName),
-                                    tokenInfo.token.coin.name
-                                )
-                            }, {
-                                TitleValueCell(
-                                    stringResource(R.string.AddToken_CoinCode),
-                                    tokenInfo.token.coin.code
-                                )
-                            }, {
-                                TitleValueCell(
-                                    stringResource(R.string.AddToken_Decimals),
-                                    tokenInfo.token.decimals.toString()
-                                )
-                            }
-                        )
                     )
-                }
+                )
             }
         }
     }

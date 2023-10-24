@@ -169,102 +169,100 @@ fun ZcashConfigureScreen(
         mutableStateOf(TextFieldValue(""))
     }
 
-    ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = sheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                SlowSyncWarningBottomSheet(
-                    text = stringResource(R.string.Restore_ZCash_SlowSyncWarningText),
-                    onContinueClick = {
-                        showSlowSyncWarning = false
-                        scope.launch { sheetState.hide() }
-                        viewModel.restoreAsOld()
-                    },
-                    onCloseClick = {
-                        showSlowSyncWarning = false
-                        scope.launch { sheetState.hide() }
-                    },
-                )
-            }
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            SlowSyncWarningBottomSheet(
+                text = stringResource(R.string.Restore_ZCash_SlowSyncWarningText),
+                onContinueClick = {
+                    showSlowSyncWarning = false
+                    scope.launch { sheetState.hide() }
+                    viewModel.restoreAsOld()
+                },
+                onCloseClick = {
+                    showSlowSyncWarning = false
+                    scope.launch { sheetState.hide() }
+                },
+            )
+        }
+    ) {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = { ZcashAppBar(onCloseClick = onCloseClick) }
         ) {
-            Scaffold(
-                backgroundColor = ComposeAppTheme.colors.tyler,
-                topBar = { ZcashAppBar(onCloseClick = onCloseClick) }
-            ) {
-                Column(modifier = Modifier.padding(it)) {
-                    Column(
+            Column(modifier = Modifier.padding(it)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                ) {
+                    Spacer(Modifier.height(12.dp))
+                    CellMultilineLawrenceSection(
+                        listOf(
+                            {
+                                OptionCell(
+                                    title = stringResource(R.string.Restore_ZCash_NewWallet),
+                                    subtitle = stringResource(R.string.Restore_ZCash_NewWallet_Description),
+                                    checked = viewModel.uiState.restoreAsNew,
+                                    onClick = {
+                                        viewModel.restoreAsNew()
+                                        textState =
+                                            textState.copy(text = "", selection = TextRange(0))
+                                        focusManager.clearFocus()
+                                    }
+                                )
+                            },
+                            {
+                                OptionCell(
+                                    title = stringResource(R.string.Restore_ZCash_OldWallet),
+                                    subtitle = stringResource(R.string.Restore_ZCash_OldWallet_Description),
+                                    checked = viewModel.uiState.restoreAsOld,
+                                    onClick = {
+                                        showSlowSyncWarning = true
+                                        textState =
+                                            textState.copy(text = "", selection = TextRange(0))
+                                        focusManager.clearFocus()
+                                    }
+                                )
+                            },
+                        )
+                    )
+
+                    Spacer(Modifier.height(24.dp))
+                    HeaderText(text = stringResource(R.string.Restore_BirthdayHeight))
+
+                    BirthdayHeightInput(
+                        textState = textState,
+                        focusRequester = focusRequester,
+                        textPreprocessor = object : TextPreprocessor {
+                            override fun process(text: String): String {
+                                return text.replace("[^0-9]".toRegex(), "")
+                            }
+                        },
+                        onValueChange = { textFieldValue ->
+                            textState = textFieldValue
+                            viewModel.setBirthdayHeight(textFieldValue.text)
+                        }
+                    )
+
+                    InfoText(
+                        text = stringResource(R.string.Restore_ZCash_BirthdayHeight_Hint),
+                    )
+
+                    Spacer(Modifier.height(24.dp))
+                }
+
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f)
-                            .verticalScroll(rememberScrollState()),
-                    ) {
-                        Spacer(Modifier.height(12.dp))
-                        CellMultilineLawrenceSection(
-                            listOf(
-                                {
-                                    OptionCell(
-                                        title = stringResource(R.string.Restore_ZCash_NewWallet),
-                                        subtitle = stringResource(R.string.Restore_ZCash_NewWallet_Description),
-                                        checked = viewModel.uiState.restoreAsNew,
-                                        onClick = {
-                                            viewModel.restoreAsNew()
-                                            textState =
-                                                textState.copy(text = "", selection = TextRange(0))
-                                            focusManager.clearFocus()
-                                        }
-                                    )
-                                },
-                                {
-                                    OptionCell(
-                                        title = stringResource(R.string.Restore_ZCash_OldWallet),
-                                        subtitle = stringResource(R.string.Restore_ZCash_OldWallet_Description),
-                                        checked = viewModel.uiState.restoreAsOld,
-                                        onClick = {
-                                            showSlowSyncWarning = true
-                                            textState =
-                                                textState.copy(text = "", selection = TextRange(0))
-                                            focusManager.clearFocus()
-                                        }
-                                    )
-                                },
-                            )
-                        )
-
-                        Spacer(Modifier.height(24.dp))
-                        HeaderText(text = stringResource(R.string.Restore_BirthdayHeight))
-
-                        BirthdayHeightInput(
-                            textState = textState,
-                            focusRequester = focusRequester,
-                            textPreprocessor = object : TextPreprocessor {
-                                override fun process(text: String): String {
-                                    return text.replace("[^0-9]".toRegex(), "")
-                                }
-                            },
-                            onValueChange = { textFieldValue ->
-                                textState = textFieldValue
-                                viewModel.setBirthdayHeight(textFieldValue.text)
-                            }
-                        )
-
-                        InfoText(
-                            text = stringResource(R.string.Restore_ZCash_BirthdayHeight_Hint),
-                        )
-
-                        Spacer(Modifier.height(24.dp))
-                    }
-
-                    ButtonsGroupWithShade {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Button_Done),
-                            onClick = { viewModel.onDoneClick() },
-                            enabled = viewModel.uiState.doneButtonEnabled
-                        )
-                    }
+                            .padding(start = 16.dp, end = 16.dp),
+                        title = stringResource(R.string.Button_Done),
+                        onClick = { viewModel.onDoneClick() },
+                        enabled = viewModel.uiState.doneButtonEnabled
+                    )
                 }
             }
         }
@@ -284,9 +282,11 @@ private fun OptionCell(
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier
-            .padding(start = 16.dp)
-            .weight(1f)) {
+        Column(
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .weight(1f)
+        ) {
             body_leah(
                 text = title,
                 maxLines = 1,

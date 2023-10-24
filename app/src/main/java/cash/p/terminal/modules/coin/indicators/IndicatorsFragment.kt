@@ -36,11 +36,9 @@ class IndicatorsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            IndicatorsScreen(
-                navController = navController,
-            )
-        }
+        IndicatorsScreen(
+            navController = navController,
+        )
     }
 
 }

@@ -50,9 +50,7 @@ class GuidesFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            GuidesScreen(navController)
-        }
+        GuidesScreen(navController)
     }
 
 }
@@ -79,6 +77,7 @@ fun GuidesScreen(navController: NavController) {
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 is ViewState.Error -> {
                     val s = when (val error = viewState.t) {
                         is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
@@ -88,6 +87,7 @@ fun GuidesScreen(navController: NavController) {
 
                     ScreenMessageWithAction(s, R.drawable.ic_error_48)
                 }
+
                 ViewState.Success -> {
                     if (selectedCategory != null) {
                         Column {

@@ -26,12 +26,10 @@ class TransactionLockTimeInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            InfoScreen(
-                requireArguments().getString(LOCK_TIME)!!,
-                navController
-            )
-        }
+        InfoScreen(
+            requireArguments().getString(LOCK_TIME)!!,
+            navController
+        )
     }
 
     companion object {

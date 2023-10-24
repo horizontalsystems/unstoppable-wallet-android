@@ -50,11 +50,9 @@ class PersonalSupportFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            PersonalSupportScreen(
-                navController
-            )
-        }
+        PersonalSupportScreen(
+            navController
+        )
     }
 
 }
@@ -78,23 +76,21 @@ private fun PersonalSupportScreen(navController: NavController) {
         }
     }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Settings_PersonalSupport),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                )
-            }
-        ) { paddingValues ->
-            if (uiState.showRequestForm) {
-                RequestForm(paddingValues, viewModel, uiState)
-            } else {
-                SupportEnabled(paddingValues, viewModel)
-            }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Settings_PersonalSupport),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+            )
+        }
+    ) { paddingValues ->
+        if (uiState.showRequestForm) {
+            RequestForm(paddingValues, viewModel, uiState)
+        } else {
+            SupportEnabled(paddingValues, viewModel)
         }
     }
 }

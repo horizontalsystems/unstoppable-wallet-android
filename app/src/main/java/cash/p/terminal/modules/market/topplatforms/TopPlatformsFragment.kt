@@ -46,12 +46,10 @@ class TopPlatformsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            TopPlatformsScreen(
-                viewModel,
-                navController,
-            )
-        }
+        TopPlatformsScreen(
+            viewModel,
+            navController,
+        )
     }
 
     companion object {
@@ -88,12 +86,14 @@ fun TopPlatformsScreen(
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
                                 viewModel::onErrorClick
                             )
                         }
+
                         ViewState.Success -> {
                             viewModel.viewItems.let { viewItems ->
                                 TopPlatformsList(
@@ -160,6 +160,7 @@ fun TopPlatformsScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+
             SelectorDialogState.Closed -> {}
         }
     }

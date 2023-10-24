@@ -64,12 +64,10 @@ class CexAssetFragment : BaseComposeFragment() {
 
         val viewModel by viewModels<CexAssetViewModel> { CexAssetViewModel.Factory(asset) }
 
-        ComposeAppTheme {
-            CexAssetScreen(
-                viewModel,
-                navController
-            )
-        }
+        CexAssetScreen(
+            viewModel,
+            navController
+        )
     }
 
     companion object {

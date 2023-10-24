@@ -12,7 +12,6 @@ import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.info.ErrorDisplayDialogFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 class ImportCexAccountFragment : BaseComposeFragment() {
@@ -25,9 +24,7 @@ class ImportCexAccountFragment : BaseComposeFragment() {
         val inclusive =
             arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
 
-        ComposeAppTheme {
-            ImportCexAccountNavHost(navController, popUpToInclusiveId, inclusive)
-        }
+        ImportCexAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
 
 }
