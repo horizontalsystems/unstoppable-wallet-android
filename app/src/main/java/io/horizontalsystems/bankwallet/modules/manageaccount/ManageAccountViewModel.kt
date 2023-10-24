@@ -64,7 +64,7 @@ class ManageAccountViewModel(
     }
 
     private fun getBackupItems(account: Account): List<BackupItem> {
-        if (account.isWatchAccount) {
+        if (account.isWatchAccount || account.isHardwareAccount) {
             return emptyList()
         }
         if (account.type is AccountType.HdExtendedKey
