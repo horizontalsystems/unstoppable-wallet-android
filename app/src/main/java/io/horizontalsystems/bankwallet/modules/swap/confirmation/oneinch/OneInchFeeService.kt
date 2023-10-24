@@ -66,6 +66,11 @@ class OneInchFeeService(
         gasPriceService.setRecommended()
     }
 
+    var syncPaused = false
+    fun pauseSync() {
+        syncPaused = true
+    }
+
     override fun clear() {
         disposable.clear()
         gasPriceInfoDisposable?.dispose()
@@ -73,6 +78,9 @@ class OneInchFeeService(
     }
 
     private fun sync(gasPriceServiceState: DataState<GasPriceInfo>) {
+        if (syncPaused) {
+            return
+        }
         when (gasPriceServiceState) {
             is DataState.Error -> {
                 transactionStatus = gasPriceServiceState
@@ -87,6 +95,9 @@ class OneInchFeeService(
     }
 
     private fun sync(gasPriceInfo: GasPriceInfo) {
+        if (syncPaused) {
+            return
+        }
         gasPriceInfoDisposable?.dispose()
         retryDisposable?.dispose()
 
@@ -107,6 +118,9 @@ class OneInchFeeService(
     }
 
     private fun sync(swap: Swap, gasPriceInfo: GasPriceInfo) {
+        if (syncPaused) {
+            return
+        }
         val swapTx = swap.transaction
         val gasData = GasData(
             gasLimit = swapTx.gasLimit,

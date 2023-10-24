@@ -26,11 +26,19 @@ class EvmFeeCellViewModel(
             .let { disposable.add(it) }
     }
 
+    var syncPaused = false
+    fun pauseSync() {
+        syncPaused = true
+    }
+
     override fun onCleared() {
         disposable.clear()
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
+        if (syncPaused) {
+            return
+        }
         when (transactionStatus) {
             DataState.Loading -> {}
             is DataState.Error -> {

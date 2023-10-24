@@ -32,6 +32,9 @@ interface ISendEvmTransactionService {
 
     val ownAddress: Address
 
+    fun isHardwareAccount(): Boolean
+    fun pauseSync()
+
     val settingsService: SendEvmSettingsService
 
     suspend fun start()
@@ -50,6 +53,10 @@ class SendEvmTransactionService(
 
     private val evmKit = evmKitWrapper.evmKit
     private val stateSubject = PublishSubject.create<State>()
+
+    override fun isHardwareAccount() : Boolean {
+        return evmKitWrapper.isHardwareSigner
+    }
 
     override var state: State = State.NotReady()
         private set(value) {
@@ -86,7 +93,16 @@ class SendEvmTransactionService(
         settingsService.start()
     }
 
+    var syncPaused = false
+    override fun pauseSync() {
+        syncPaused = true
+        settingsService.pauseSync()
+    }
+
     private fun sync(settingsState: DataState<SendEvmSettingsService.Transaction>) {
+        if (syncPaused) {
+            return
+        }
         when (settingsState) {
             is DataState.Error -> {
                 state = State.NotReady(errors = listOf(settingsState.error))
@@ -143,6 +159,9 @@ class SendEvmTransactionService(
     }
 
     private fun syncTxDataState(transaction: SendEvmSettingsService.Transaction? = null) {
+        if (syncPaused) {
+            return
+        }
         val transactionData = transaction?.transactionData ?: sendEvmData.transactionData
         txDataState = TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
     }

@@ -30,6 +30,10 @@ class OneInchSendEvmTransactionService(
 
     private val evmKit = evmKitWrapper.evmKit
 
+    override fun isHardwareAccount(): Boolean {
+        return evmKitWrapper.isHardwareSigner
+    }
+
     private val disposable = CompositeDisposable()
 
     private val stateSubject = PublishSubject.create<SendEvmTransactionService.State>()
@@ -72,7 +76,17 @@ class OneInchSendEvmTransactionService(
         settingsService.start()
     }
 
+    var syncPaused = false
+    override fun pauseSync() {
+        syncPaused = true
+        settingsService.pauseSync()
+        feeService.pauseSync()
+    }
+
     private fun sync(settingsState: DataState<SendEvmSettingsService.Transaction>) {
+        if (syncPaused) {
+            return
+        }
         when (settingsState) {
             is DataState.Error -> {
                 state = SendEvmTransactionService.State.NotReady(errors = listOf(settingsState.error))
@@ -94,6 +108,9 @@ class OneInchSendEvmTransactionService(
     }
 
     private fun syncTxDataState(transaction: SendEvmSettingsService.Transaction) {
+        if (syncPaused) {
+            return
+        }
         val transactionData = transaction.transactionData
         val decoration = evmKit.decorate(transactionData)
         val additionalInfo = getAdditionalInfo(feeService.parameters)
