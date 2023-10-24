@@ -24,6 +24,7 @@ class UnlinkAccountViewModel(
 
     val deleteButtonText = when {
             account.isWatchAccount -> R.string.ManageKeys_StopWatching
+            account.isHardwareAccount -> R.string.ManageKeys_UnlinkHardwareWallet
             else -> R.string.ManageKeys_Delete_FromPhone
         }
 

@@ -74,7 +74,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
 
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_red_24),
-        title = stringResource(R.string.ManageKeys_Delete_Title),
+        title = stringResource(if (isHardwareAccount) R.string.ManageKeys_UnlinkHardwareWallet else R.string.ManageKeys_Delete_Title),
         onCloseClick = {
             navController.popBackStack()
         }
