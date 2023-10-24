@@ -89,14 +89,12 @@ class SwapMainFragment : BaseFragment() {
                 val mainViewModel: SwapMainViewModel by viewModels { factory }
                 val allowanceViewModel: SwapAllowanceViewModel by viewModels { factory }
                 setContent {
-                    ComposeAppTheme {
-                        SwapNavHost(
-                            findNavController(),
-                            mainViewModel,
-                            allowanceViewModel,
-                            swapEntryPointDestId
-                        )
-                    }
+                    SwapNavHost(
+                        findNavController(),
+                        mainViewModel,
+                        allowanceViewModel,
+                        swapEntryPointDestId
+                    )
                 }
             } catch (t: Throwable) {
                 Toast.makeText(

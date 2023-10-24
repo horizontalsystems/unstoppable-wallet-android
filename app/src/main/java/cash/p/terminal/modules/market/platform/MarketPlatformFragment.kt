@@ -71,7 +71,7 @@ class MarketPlatformFragment : BaseComposeFragment() {
             factory = factory,
             onCloseButtonClick = { navController.popBackStack() },
             onCoinClick = { coinUid ->
-                val arguments = CoinFragment.prepareParams(coinUid, "market_platform")
+                val arguments = CoinFragment.prepareParams(coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
             }
         )

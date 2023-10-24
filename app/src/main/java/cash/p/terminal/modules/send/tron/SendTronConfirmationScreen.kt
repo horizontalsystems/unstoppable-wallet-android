@@ -128,15 +128,6 @@ fun SendTronConfirmationScreen(
         }
     }
 
-    DisposableLifecycleCallbacks(
-        //additional close for cases when user closes app immediately after sending
-        onResume = {
-            if (sendResult == SendResult.Sent) {
-                navController.popBackStack(closeUntilDestId, true)
-            }
-        }
-    )
-
     Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
             title = stringResource(R.string.Send_Confirmation_Title),
