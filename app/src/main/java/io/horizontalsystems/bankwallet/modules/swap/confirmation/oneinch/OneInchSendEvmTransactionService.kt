@@ -185,6 +185,10 @@ class OneInchSendEvmTransactionService(
         )
     }
 
+    override fun setFailed(error: Throwable) {
+        sendState = SendEvmTransactionService.SendState.Failed(error)
+    }
+
     override fun clear() {
         disposable.clear()
         settingsService.clear()

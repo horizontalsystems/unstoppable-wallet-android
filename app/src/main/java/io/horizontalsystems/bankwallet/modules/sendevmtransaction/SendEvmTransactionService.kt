@@ -43,6 +43,7 @@ interface ISendEvmTransactionService {
     fun methodName(input: ByteArray): String?
 
     fun getUnsignedTransactionHex(): Single<String>
+    fun setFailed(error: Throwable)
     fun clear()
 }
 
@@ -156,6 +157,10 @@ class SendEvmTransactionService(
 
     override fun methodName(input: ByteArray): String? =
         evmLabelManager.methodLabel(input)
+
+    override fun setFailed(error: Throwable) {
+        sendState = SendState.Failed(error)
+    }
 
     override fun getUnsignedTransactionHex(): Single<String> {
         val txConfig = settingsService.state.dataOrNull ?: return Single.error(Exception())

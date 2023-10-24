@@ -23,7 +23,7 @@ class WCSignMessageRequestViewModel(
         private set
 
     var showSignError: Boolean by mutableStateOf(false)
-        private set
+        internal set
 
     fun sign() {
         try {

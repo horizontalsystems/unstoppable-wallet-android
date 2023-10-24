@@ -304,6 +304,12 @@
         android:id="@+id/selectBlockchainsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment" />
     <fragment
+        android:id="@+id/hardwareWalletFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.hardwarewallet.HardwareWalletFragment" />
+    <fragment
+        android:id="@+id/selectHardwareBlockchainsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.hardwarewallet.selectblockchains.SelectHardwareBlockchainsFragment" />
+    <fragment
         android:id="@+id/zcashConfigure"
         android:name="io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure"/>
     <fragment
