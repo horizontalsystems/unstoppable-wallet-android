@@ -91,7 +91,7 @@ class EvmAccountManager(
     private fun handle(fullTransactions: List<FullTransaction>, account: Account, evmKitWrapper: EvmKitWrapper, initial: Boolean) {
         val shouldAutoEnableTokens = tokenAutoEnableManager.isAutoEnabled(account, blockchainType)
 
-        if (initial && account.origin == AccountOrigin.Restored && !account.isWatchAccount && !shouldAutoEnableTokens) {
+        if (initial && account.origin == AccountOrigin.Restored && !account.isWatchAccount && !account.isHardwareAccount && !shouldAutoEnableTokens) {
             return
         }
 
