@@ -90,54 +90,52 @@ fun NetworkSelectScreen(
     val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(activeAccount, fullCoin))
     val coroutineScope = rememberCoroutineScope()
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Balance_Network),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                    menuItems = listOf()
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Balance_Network),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+                menuItems = listOf()
+            )
+        }
+    ) {
+        Column(Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                InfoText(
+                    text = stringResource(R.string.Balance_NetworkSelectDescription)
                 )
-            }
-        ) {
-            Column(Modifier.padding(it)) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    InfoText(
-                        text = stringResource(R.string.Balance_NetworkSelectDescription)
-                    )
-                    VSpacer(20.dp)
-                    CellUniversalLawrenceSection(viewModel.eligibleTokens) { token ->
-                        val blockchain = token.blockchain
-                        SectionUniversalItem {
-                            NetworkCell(
-                                title = blockchain.name,
-                                subtitle = blockchain.description,
-                                imageUrl = blockchain.type.imageUrl,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        val wallet = viewModel.getOrCreateWallet(token)
+                VSpacer(20.dp)
+                CellUniversalLawrenceSection(viewModel.eligibleTokens) { token ->
+                    val blockchain = token.blockchain
+                    SectionUniversalItem {
+                        NetworkCell(
+                            title = blockchain.name,
+                            subtitle = blockchain.description,
+                            imageUrl = blockchain.type.imageUrl,
+                            onClick = {
+                                coroutineScope.launch {
+                                    val wallet = viewModel.getOrCreateWallet(token)
 
-                                        navController.slideFromRight(
-                                            R.id.receiveFragment,
-                                            bundleOf(
-                                                ReceiveAddressFragment.WALLET_KEY to wallet,
-                                                ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
-                                            )
+                                    navController.slideFromRight(
+                                        R.id.receiveFragment,
+                                        bundleOf(
+                                            ReceiveAddressFragment.WALLET_KEY to wallet,
+                                            ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
                                         )
-                                    }
+                                    )
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
-                    VSpacer(32.dp)
                 }
+                VSpacer(32.dp)
             }
         }
     }

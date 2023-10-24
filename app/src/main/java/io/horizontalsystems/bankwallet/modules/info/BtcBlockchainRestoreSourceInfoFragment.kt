@@ -24,11 +24,9 @@ class BtcBlockchainRestoreSourceInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            InfoScreen(
-                navController
-            )
-        }
+        InfoScreen(
+            navController
+        )
     }
 
 }

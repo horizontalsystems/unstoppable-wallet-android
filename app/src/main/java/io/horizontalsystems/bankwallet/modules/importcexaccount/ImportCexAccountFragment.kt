@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.info.ErrorDisplayDialogFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 class ImportCexAccountFragment : BaseComposeFragment() {
@@ -25,9 +24,7 @@ class ImportCexAccountFragment : BaseComposeFragment() {
         val inclusive =
             arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
 
-        ComposeAppTheme {
-            ImportCexAccountNavHost(navController, popUpToInclusiveId, inclusive)
-        }
+        ImportCexAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
 
 }

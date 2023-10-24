@@ -66,13 +66,11 @@ class CoinMajorHoldersFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            CoinMajorHoldersScreen(
-                coinUid,
-                blockchain,
-                navController,
-            )
-        }
+        CoinMajorHoldersScreen(
+            coinUid,
+            blockchain,
+            navController,
+        )
     }
 
     companion object {

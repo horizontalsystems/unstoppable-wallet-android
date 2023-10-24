@@ -31,49 +31,47 @@ fun SelectCoinScreen(
 
     val uiState = viewModel.uiState
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                SearchBar(
-                    title = stringResource(R.string.Cex_ChooseCoin),
-                    searchHintText = stringResource(R.string.Cex_SelectCoin_Search),
-                    onClose = onClose,
-                    onSearchTextChanged = {
-                        viewModel.onEnterQuery(it)
-                    }
-                )
-            }
-        ) {
-            Crossfade(targetState = uiState.loading) { loading ->
-                Column(modifier = Modifier.padding(it)) {
-                    if (loading) {
-                        Loading()
-                    } else {
-                        uiState.items?.let { viewItems ->
-                            if (viewItems.isEmpty()) {
-                                ListEmptyView(
-                                    text = stringResource(R.string.EmptyResults),
-                                    icon = R.drawable.ic_not_found
-                                )
-                            } else {
-                                LazyColumn {
-                                    item {
-                                        Spacer(modifier = Modifier.height(12.dp))
-                                        Divider(
-                                            thickness = 1.dp,
-                                            color = ComposeAppTheme.colors.steel10,
-                                        )
-                                    }
-                                    items(viewItems) { viewItem: DepositCexModule.CexCoinViewItem ->
-                                        CoinCell(
-                                            viewItem = viewItem,
-                                            suspended = itemIsSuspended.invoke(viewItem),
-                                            onItemClick = {
-                                                onSelectAsset.invoke(viewItem.cexAsset)
-                                            },
-                                        )
-                                    }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            SearchBar(
+                title = stringResource(R.string.Cex_ChooseCoin),
+                searchHintText = stringResource(R.string.Cex_SelectCoin_Search),
+                onClose = onClose,
+                onSearchTextChanged = {
+                    viewModel.onEnterQuery(it)
+                }
+            )
+        }
+    ) {
+        Crossfade(targetState = uiState.loading) { loading ->
+            Column(modifier = Modifier.padding(it)) {
+                if (loading) {
+                    Loading()
+                } else {
+                    uiState.items?.let { viewItems ->
+                        if (viewItems.isEmpty()) {
+                            ListEmptyView(
+                                text = stringResource(R.string.EmptyResults),
+                                icon = R.drawable.ic_not_found
+                            )
+                        } else {
+                            LazyColumn {
+                                item {
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Divider(
+                                        thickness = 1.dp,
+                                        color = ComposeAppTheme.colors.steel10,
+                                    )
+                                }
+                                items(viewItems) { viewItem: DepositCexModule.CexCoinViewItem ->
+                                    CoinCell(
+                                        viewItem = viewItem,
+                                        suspended = itemIsSuspended.invoke(viewItem),
+                                        onItemClick = {
+                                            onSelectAsset.invoke(viewItem.cexAsset)
+                                        },
+                                    )
                                 }
                             }
                         }

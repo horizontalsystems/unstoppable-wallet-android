@@ -74,67 +74,65 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
         viewModel.onErrorShown()
     }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.RecoveryPhraseVerify_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    }
-                )
-            }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                InfoText(text = stringResource(R.string.RecoveryPhraseVerify_Description))
-                Spacer(Modifier.height(12.dp))
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.RecoveryPhraseVerify_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                }
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            InfoText(text = stringResource(R.string.RecoveryPhraseVerify_Description))
+            Spacer(Modifier.height(12.dp))
 
-                uiState.hiddenWordItems.forEachIndexed { index, it ->
-                    if (index != 0) {
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-
-                    val borderColor = if (uiState.currentHiddenWordItemIndex == index) {
-                        ComposeAppTheme.colors.yellow50
-                    } else {
-                        ComposeAppTheme.colors.steel20
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(44.dp)
-                            .padding(horizontal = 16.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        body_leah(text = it.toString())
-                    }
+            uiState.hiddenWordItems.forEachIndexed { index, it ->
+                if (index != 0) {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                Spacer(Modifier.height(24.dp))
+                val borderColor = if (uiState.currentHiddenWordItemIndex == index) {
+                    ComposeAppTheme.colors.yellow50
+                } else {
+                    ComposeAppTheme.colors.steel20
+                }
 
-                FlowRow(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                        .height(44.dp)
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    uiState.wordOptions.forEach { wordOption ->
-                        Box(modifier = Modifier.height(28.dp)) {
-                            ButtonSecondaryDefault(
-                                title = wordOption.word,
-                                enabled = wordOption.enabled,
-                                onClick = {
-                                    viewModel.onSelectWord(wordOption)
-                                }
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
+                    body_leah(text = it.toString())
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+            ) {
+                uiState.wordOptions.forEach { wordOption ->
+                    Box(modifier = Modifier.height(28.dp)) {
+                        ButtonSecondaryDefault(
+                            title = wordOption.word,
+                            enabled = wordOption.enabled,
+                            onClick = {
+                                viewModel.onSelectWord(wordOption)
+                            }
+                        )
                     }
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
             }
         }

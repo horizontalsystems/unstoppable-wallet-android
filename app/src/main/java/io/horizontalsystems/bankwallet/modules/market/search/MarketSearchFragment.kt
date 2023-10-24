@@ -88,83 +88,86 @@ fun MarketSearchScreen(
     val viewState = viewModel.viewState
     val errorMessage = viewModel.errorMessage
 
-    ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            SearchView(
-                onSearchTextChange = { query -> viewModel.searchByQuery(query) },
-                onRightTextButtonClick = {
-                    navController.slideFromRight(R.id.marketAdvancedSearchFragment)
-                },
-                leftIcon = R.drawable.ic_back,
-                onBackButtonClick = { navController.popBackStack() }
-            )
-            Crossfade(viewState) { viewState ->
-                when (viewState) {
-                    ViewState.Loading -> {
-                        Loading()
-                    }
-                    is ViewState.Error -> {
-                        ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
-                    }
-                    ViewState.Success -> {
-                        when (val itemsData = viewModel.itemsData) {
-                            is MarketSearchModule.Data.DiscoveryItems -> {
-                                CardsGrid(
-                                    viewItems = itemsData.discoveryItems,
-                                    timePeriodSelect = viewModel.timePeriodMenu,
-                                    sortDescending = viewModel.sortDescending,
-                                    onToggleSortType = {
-                                        viewModel.toggleSortType()
-                                    },
-                                    onCategoryClick = { viewItemType ->
-                                        when (viewItemType) {
-                                            MarketSearchModule.DiscoveryItem.TopCoins -> {
-                                                navController.slideFromBottom(
-                                                    R.id.marketTopCoinsFragment
-                                                )
-                                            }
-                                            is MarketSearchModule.DiscoveryItem.Category -> {
-                                                navController.slideFromBottom(
-                                                    R.id.marketCategoryFragment,
-                                                    bundleOf(MarketCategoryFragment.categoryKey to viewItemType.coinCategory)
-                                                )
-                                            }
-                                        }
-                                    }
-                                ) { viewModel.toggleTimePeriod(it) }
-                            }
-                            is MarketSearchModule.Data.SearchResult -> {
-                                if (itemsData.coinItems.isEmpty()) {
-                                    ListEmptyView(
-                                        text = stringResource(R.string.EmptyResults),
-                                        icon = R.drawable.ic_not_found
-                                    )
-                                } else {
-                                    MarketSearchResults(
-                                        coinResult = itemsData.coinItems,
-                                        onCoinClick = { coin ->
-                                            val arguments = CoinFragment.prepareParams(coin.uid)
-                                            navController.slideFromRight(
-                                                R.id.coinFragment,
-                                                arguments
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        SearchView(
+            onSearchTextChange = { query -> viewModel.searchByQuery(query) },
+            onRightTextButtonClick = {
+                navController.slideFromRight(R.id.marketAdvancedSearchFragment)
+            },
+            leftIcon = R.drawable.ic_back,
+            onBackButtonClick = { navController.popBackStack() }
+        )
+        Crossfade(viewState) { viewState ->
+            when (viewState) {
+                ViewState.Loading -> {
+                    Loading()
+                }
+
+                is ViewState.Error -> {
+                    ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
+                }
+
+                ViewState.Success -> {
+                    when (val itemsData = viewModel.itemsData) {
+                        is MarketSearchModule.Data.DiscoveryItems -> {
+                            CardsGrid(
+                                viewItems = itemsData.discoveryItems,
+                                timePeriodSelect = viewModel.timePeriodMenu,
+                                sortDescending = viewModel.sortDescending,
+                                onToggleSortType = {
+                                    viewModel.toggleSortType()
+                                },
+                                onCategoryClick = { viewItemType ->
+                                    when (viewItemType) {
+                                        MarketSearchModule.DiscoveryItem.TopCoins -> {
+                                            navController.slideFromBottom(
+                                                R.id.marketTopCoinsFragment
                                             )
                                         }
-                                    ) { favorited, coinUid ->
-                                        viewModel.onFavoriteClick(favorited, coinUid)
+
+                                        is MarketSearchModule.DiscoveryItem.Category -> {
+                                            navController.slideFromBottom(
+                                                R.id.marketCategoryFragment,
+                                                bundleOf(MarketCategoryFragment.categoryKey to viewItemType.coinCategory)
+                                            )
+                                        }
                                     }
                                 }
-                            }
-                            null -> {}
+                            ) { viewModel.toggleTimePeriod(it) }
                         }
+
+                        is MarketSearchModule.Data.SearchResult -> {
+                            if (itemsData.coinItems.isEmpty()) {
+                                ListEmptyView(
+                                    text = stringResource(R.string.EmptyResults),
+                                    icon = R.drawable.ic_not_found
+                                )
+                            } else {
+                                MarketSearchResults(
+                                    coinResult = itemsData.coinItems,
+                                    onCoinClick = { coin ->
+                                        val arguments = CoinFragment.prepareParams(coin.uid)
+                                        navController.slideFromRight(
+                                            R.id.coinFragment,
+                                            arguments
+                                        )
+                                    }
+                                ) { favorited, coinUid ->
+                                    viewModel.onFavoriteClick(favorited, coinUid)
+                                }
+                            }
+                        }
+
+                        null -> {}
                     }
                 }
             }
         }
+    }
 
-        errorMessage?.let {
-            SnackbarError(it.getString())
-            viewModel.errorShown()
-        }
+    errorMessage?.let {
+        SnackbarError(it.getString())
+        viewModel.errorShown()
     }
 }
 

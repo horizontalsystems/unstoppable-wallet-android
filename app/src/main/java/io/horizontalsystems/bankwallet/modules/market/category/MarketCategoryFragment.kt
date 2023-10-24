@@ -41,14 +41,12 @@ class MarketCategoryFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            CategoryScreen(
-                viewModel,
-                chartViewModel,
-                { navController.popBackStack() },
-                { coinUid -> onCoinClick(coinUid, navController) }
-            )
-        }
+        CategoryScreen(
+            viewModel,
+            chartViewModel,
+            { navController.popBackStack() },
+            { coinUid -> onCoinClick(coinUid, navController) }
+        )
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {

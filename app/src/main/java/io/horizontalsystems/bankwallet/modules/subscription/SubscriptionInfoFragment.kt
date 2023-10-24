@@ -33,22 +33,20 @@ class SubscriptionInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            val uriHandler = LocalUriHandler.current
+        val uriHandler = LocalUriHandler.current
 
-            SubscriptionInfoScreen(
-                onClickGetPremium = {
-                    uriHandler.openUri(App.appConfigProvider.analyticsLink)
-                },
-                onClickHavePremium = {
-                    navController.popBackStack()
-                    navController.slideFromBottom(R.id.activateSubscription)
-                },
-                onClose = {
-                    navController.popBackStack()
-                }
-            )
-        }
+        SubscriptionInfoScreen(
+            onClickGetPremium = {
+                uriHandler.openUri(App.appConfigProvider.analyticsLink)
+            },
+            onClickHavePremium = {
+                navController.popBackStack()
+                navController.slideFromBottom(R.id.activateSubscription)
+            },
+            onClose = {
+                navController.popBackStack()
+            }
+        )
     }
 
 }

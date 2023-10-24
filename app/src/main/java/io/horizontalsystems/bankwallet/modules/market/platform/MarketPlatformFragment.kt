@@ -58,16 +58,14 @@ class MarketPlatformFragment : BaseComposeFragment() {
 
         val factory = MarketPlatformModule.Factory(platform)
 
-        ComposeAppTheme {
-            PlatformScreen(
-                factory = factory,
-                onCloseButtonClick = { navController.popBackStack() },
-                onCoinClick = { coinUid ->
-                    val arguments = CoinFragment.prepareParams(coinUid)
-                    navController.slideFromRight(R.id.coinFragment, arguments)
-                }
-            )
-        }
+        PlatformScreen(
+            factory = factory,
+            onCloseButtonClick = { navController.popBackStack() },
+            onCoinClick = { coinUid ->
+                val arguments = CoinFragment.prepareParams(coinUid)
+                navController.slideFromRight(R.id.coinFragment, arguments)
+            }
+        )
     }
 
     companion object {
@@ -108,12 +106,14 @@ private fun PlatformScreen(
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
                                 viewModel::onErrorClick
                             )
                         }
+
                         ViewState.Success -> {
                             viewModel.viewItems.let { viewItems ->
                                 CoinList(
@@ -180,6 +180,7 @@ private fun PlatformScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+
             else -> {}
         }
     }

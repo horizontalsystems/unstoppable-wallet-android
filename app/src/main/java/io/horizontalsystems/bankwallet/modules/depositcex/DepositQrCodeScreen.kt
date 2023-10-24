@@ -86,184 +86,182 @@ fun DepositQrCodeScreen(
         }
     }
 
-    ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = modalBottomSheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                WarningBottomSheet(
-                    text = stringResource(R.string.CexDeposit_MemoAlertText),
-                    onButtonClick = {
-                        coroutineScope.launch { modalBottomSheetState.hide() }
+    ModalBottomSheetLayout(
+        sheetState = modalBottomSheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            WarningBottomSheet(
+                text = stringResource(R.string.CexDeposit_MemoAlertText),
+                onButtonClick = {
+                    coroutineScope.launch { modalBottomSheetState.hide() }
+                }
+            )
+        },
+    ) {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                val navigationIcon: @Composable (() -> Unit)? = onNavigateBack?.let {
+                    {
+                        HsBackButton(onClick = onNavigateBack)
                     }
-                )
-            },
-        ) {
-            Scaffold(
-                backgroundColor = ComposeAppTheme.colors.tyler,
-                topBar = {
-                    val navigationIcon: @Composable (() -> Unit)? = onNavigateBack?.let {
-                        {
-                            HsBackButton(onClick = onNavigateBack)
-                        }
-                    }
-                    AppBar(
-                        title = stringResource(R.string.CexDeposit_Title, cexAsset.id),
-                        navigationIcon = navigationIcon,
-                        menuItems = listOf(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Done),
-                                onClick = onClose
-                            )
+                }
+                AppBar(
+                    title = stringResource(R.string.CexDeposit_Title, cexAsset.id),
+                    navigationIcon = navigationIcon,
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Done),
+                            onClick = onClose
                         )
                     )
-                }
-            ) {
-                Crossfade(targetState = uiState.loading, label = "") { loading ->
-                    Column(modifier = Modifier.padding(it)) {
-                        if (loading) {
-                            Loading()
-                        } else if (address != null) {
-                            val qrBitmap = TextHelper.getQrCodeBitmap(address.address)
-                            val view = LocalView.current
-                            val context = LocalContext.current
+                )
+            }
+        ) {
+            Crossfade(targetState = uiState.loading, label = "") { loading ->
+                Column(modifier = Modifier.padding(it)) {
+                    if (loading) {
+                        Loading()
+                    } else if (address != null) {
+                        val qrBitmap = TextHelper.getQrCodeBitmap(address.address)
+                        val view = LocalView.current
+                        val context = LocalContext.current
 
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState()),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            VSpacer(12.dp)
                             Column(
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .verticalScroll(rememberScrollState()),
+                                    .padding(horizontal = 16.dp)
+                                    .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+                                    .padding(top = 32.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
+                                    .fillMaxWidth(),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
-                                VSpacer(12.dp)
-                                Column(
+                                Box(
                                     modifier = Modifier
-                                        .padding(horizontal = 16.dp)
-                                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
-                                        .padding(top = 32.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
-                                        .fillMaxWidth(),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(ComposeAppTheme.colors.white)
+                                        .size(150.dp),
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .clip(RoundedCornerShape(8.dp))
-                                            .background(ComposeAppTheme.colors.white)
-                                            .size(150.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        qrBitmap?.let {
+                                    qrBitmap?.let {
+                                        Image(
+                                            modifier = Modifier
+                                                .clickable {
+                                                    TextHelper.copyText(address.address)
+                                                    HudHelper.showSuccessMessage(
+                                                        view,
+                                                        R.string.Hud_Text_Copied
+                                                    )
+                                                }
+                                                .padding(8.dp)
+                                                .fillMaxSize(),
+                                            bitmap = it.asImageBitmap(),
+                                            contentScale = ContentScale.FillWidth,
+                                            contentDescription = null
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(8.dp))
+                                                .background(ComposeAppTheme.colors.white)
+                                                .size(40.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
                                             Image(
-                                                modifier = Modifier
-                                                    .clickable {
-                                                        TextHelper.copyText(address.address)
-                                                        HudHelper.showSuccessMessage(
-                                                            view,
-                                                            R.string.Hud_Text_Copied
-                                                        )
-                                                    }
-                                                    .padding(8.dp)
-                                                    .fillMaxSize(),
-                                                bitmap = it.asImageBitmap(),
-                                                contentScale = ContentScale.FillWidth,
+                                                modifier = Modifier.size(32.dp),
+                                                painter = adaptiveIconPainterResource(
+                                                    id = R.mipmap.launcher_main,
+                                                    fallbackDrawable = R.drawable.launcher_main_preview
+                                                ),
                                                 contentDescription = null
                                             )
-                                            Box(
-                                                modifier = Modifier
-                                                    .clip(RoundedCornerShape(8.dp))
-                                                    .background(ComposeAppTheme.colors.white)
-                                                    .size(40.dp),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Image(
-                                                    modifier = Modifier.size(32.dp),
-                                                    painter = adaptiveIconPainterResource(
-                                                        id = R.mipmap.launcher_main,
-                                                        fallbackDrawable = R.drawable.launcher_main_preview
-                                                    ),
-                                                    contentDescription = null
-                                                )
-                                            }
                                         }
                                     }
-                                    VSpacer(12.dp)
-                                    subhead2_grey(
-                                        text = stringResource(R.string.CexDeposit_AddressDescription, cexAsset.id),
-                                        textAlign = TextAlign.Center
-                                    )
                                 }
                                 VSpacer(12.dp)
-                                val composableItems: MutableList<@Composable () -> Unit> = mutableListOf()
+                                subhead2_grey(
+                                    text = stringResource(R.string.CexDeposit_AddressDescription, cexAsset.id),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            VSpacer(12.dp)
+                            val composableItems: MutableList<@Composable () -> Unit> = mutableListOf()
+                            composableItems.add {
+                                DetailCell(
+                                    title = stringResource(R.string.Deposit_Address),
+                                    value = address.address,
+                                )
+                            }
+                            network?.let { network ->
                                 composableItems.add {
                                     DetailCell(
-                                        title = stringResource(R.string.Deposit_Address),
-                                        value = address.address,
+                                        title = stringResource(R.string.CexDeposit_Network),
+                                        value = network.networkName,
                                     )
                                 }
-                                network?.let { network ->
-                                    composableItems.add {
-                                        DetailCell(
-                                            title = stringResource(R.string.CexDeposit_Network),
-                                            value = network.networkName,
-                                        )
-                                    }
-                                }
-                                if (address.tag.isNotEmpty()) {
-                                    composableItems.add {
-                                        DetailCell(
-                                            title = stringResource(R.string.CexDeposit_Memo),
-                                            value = address.tag,
-                                            onCopy = {
-                                                TextHelper.copyText(address.tag)
-                                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                                            }
-                                        )
-                                    }
-                                }
-
-                                CellUniversalLawrenceSection(composableItems = composableItems)
-
-                                if (address.tag.isNotEmpty()) {
-                                    TextImportantError(
-                                        modifier = Modifier.padding(16.dp),
-                                        text = stringResource(R.string.CexDeposit_MemoWarning, cexAsset.id)
-                                    )
-                                } else {
-                                    TextImportantWarning(
-                                        modifier = Modifier.padding(16.dp),
-                                        text = stringResource(R.string.CexDeposit_DepositWarning, cexAsset.id)
-                                    )
-                                }
-
-                                VSpacer(24.dp)
                             }
-                            ButtonsGroupWithShade {
-                                Column(Modifier.padding(horizontal = 24.dp)) {
-                                    ButtonPrimaryYellow(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        title = stringResource(R.string.Button_Copy),
-                                        onClick = {
-                                            TextHelper.copyText(address.address)
+                            if (address.tag.isNotEmpty()) {
+                                composableItems.add {
+                                    DetailCell(
+                                        title = stringResource(R.string.CexDeposit_Memo),
+                                        value = address.tag,
+                                        onCopy = {
+                                            TextHelper.copyText(address.tag)
                                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                                        },
-                                    )
-                                    VSpacer(16.dp)
-                                    ButtonPrimaryDefault(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        title = stringResource(R.string.Button_Share),
-                                        onClick = {
-                                            ShareCompat.IntentBuilder(context)
-                                                .setType("text/plain")
-                                                .setText(address.address)
-                                                .startChooser()
                                         }
                                     )
                                 }
                             }
-                        } else if (uiState.error != null) {
-                            ListEmptyView(
-                                text = uiState.error.localizedMessage ?: stringResource(R.string.Error),
-                                icon = R.drawable.ic_sync_error
-                            )
+
+                            CellUniversalLawrenceSection(composableItems = composableItems)
+
+                            if (address.tag.isNotEmpty()) {
+                                TextImportantError(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = stringResource(R.string.CexDeposit_MemoWarning, cexAsset.id)
+                                )
+                            } else {
+                                TextImportantWarning(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = stringResource(R.string.CexDeposit_DepositWarning, cexAsset.id)
+                                )
+                            }
+
+                            VSpacer(24.dp)
                         }
+                        ButtonsGroupWithShade {
+                            Column(Modifier.padding(horizontal = 24.dp)) {
+                                ButtonPrimaryYellow(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = stringResource(R.string.Button_Copy),
+                                    onClick = {
+                                        TextHelper.copyText(address.address)
+                                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                                    },
+                                )
+                                VSpacer(16.dp)
+                                ButtonPrimaryDefault(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = stringResource(R.string.Button_Share),
+                                    onClick = {
+                                        ShareCompat.IntentBuilder(context)
+                                            .setType("text/plain")
+                                            .setText(address.address)
+                                            .startChooser()
+                                    }
+                                )
+                            }
+                        }
+                    } else if (uiState.error != null) {
+                        ListEmptyView(
+                            text = uiState.error.localizedMessage ?: stringResource(R.string.Error),
+                            icon = R.drawable.ic_sync_error
+                        )
                     }
                 }
             }

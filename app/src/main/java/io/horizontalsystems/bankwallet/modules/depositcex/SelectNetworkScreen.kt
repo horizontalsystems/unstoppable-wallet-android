@@ -34,42 +34,40 @@ fun SelectNetworkScreen(
     onNavigateBack: (() -> Unit)?,
     onClose: () -> Unit,
 ) {
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                val navigationIcon: @Composable (() -> Unit)? = onNavigateBack?.let {
-                    {
-                        HsBackButton(onClick = onNavigateBack)
-                    }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            val navigationIcon: @Composable (() -> Unit)? = onNavigateBack?.let {
+                {
+                    HsBackButton(onClick = onNavigateBack)
                 }
+            }
 
-                AppBar(
-                    title = stringResource(R.string.Cex_ChooseNetwork),
-                    navigationIcon = navigationIcon,
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = onClose
-                        )
+            AppBar(
+                title = stringResource(R.string.Cex_ChooseNetwork),
+                navigationIcon = navigationIcon,
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = onClose
                     )
                 )
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            InfoText(text = stringResource(R.string.Cex_ChooseNetwork_Description))
+            VSpacer(20.dp)
+            CellUniversalLawrenceSection(networks) { cexNetwork ->
+                NetworkCell(
+                    item = cexNetwork,
+                    onItemClick = {
+                        onSelectNetwork.invoke(cexNetwork)
+                    },
+                )
             }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                InfoText(text = stringResource(R.string.Cex_ChooseNetwork_Description))
-                VSpacer(20.dp)
-                CellUniversalLawrenceSection(networks) { cexNetwork ->
-                    NetworkCell(
-                        item = cexNetwork,
-                        onItemClick = {
-                            onSelectNetwork.invoke(cexNetwork)
-                        },
-                    )
-                }
-                VSpacer(32.dp)
-            }
+            VSpacer(32.dp)
         }
     }
 }

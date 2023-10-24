@@ -24,11 +24,9 @@ class EvmBlockchainSyncModeInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            EvmNetworkInfoScreen(
-                navController
-            )
-        }
+        EvmNetworkInfoScreen(
+            navController
+        )
     }
 
 }

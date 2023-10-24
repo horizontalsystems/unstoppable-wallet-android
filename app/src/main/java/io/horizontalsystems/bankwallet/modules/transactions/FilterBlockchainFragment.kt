@@ -41,9 +41,7 @@ class FilterBlockchainFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            FilterBlockchainScreen(navController, viewModel)
-        }
+        FilterBlockchainScreen(navController, viewModel)
     }
 }
 
@@ -52,22 +50,20 @@ class FilterBlockchainFragment : BaseComposeFragment() {
 fun FilterBlockchainScreen(navController: NavController, viewModel: TransactionsViewModel) {
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
 
-    ComposeAppTheme {
-        Surface(color = ComposeAppTheme.colors.tyler) {
-            Column {
-                AppBar(
-                    title = stringResource(R.string.Transactions_Filter_ChooseBlockchain),
-                    navigationIcon = {
-                        HsBackButton(onClick = navController::popBackStack)
-                    }
-                )
-                filterBlockchains?.let { blockchains ->
-                    LazyColumn(
-                        contentPadding = PaddingValues(bottom = 32.dp)
-                    ) {
-                        items(blockchains) { filterItem ->
-                            BlockchainCell(viewModel, filterItem, navController)
-                        }
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column {
+            AppBar(
+                title = stringResource(R.string.Transactions_Filter_ChooseBlockchain),
+                navigationIcon = {
+                    HsBackButton(onClick = navController::popBackStack)
+                }
+            )
+            filterBlockchains?.let { blockchains ->
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 32.dp)
+                ) {
+                    items(blockchains) { filterItem ->
+                        BlockchainCell(viewModel, filterItem, navController)
                     }
                 }
             }

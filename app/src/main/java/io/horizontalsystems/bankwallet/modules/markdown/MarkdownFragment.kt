@@ -20,19 +20,17 @@ class MarkdownFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            MarkdownScreen(
-                handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false,
-                showAsPopup = arguments?.getBoolean(showAsPopupKey) ?: false,
-                markdownUrl = arguments?.getString(markdownUrlKey) ?: "",
-                onCloseClick = { navController.popBackStack() },
-                onUrlClick = { url ->
-                    navController.slideFromRight(
-                        R.id.markdownFragment, bundleOf(markdownUrlKey to url)
-                    )
-                }
-            )
-        }
+        MarkdownScreen(
+            handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false,
+            showAsPopup = arguments?.getBoolean(showAsPopupKey) ?: false,
+            markdownUrl = arguments?.getString(markdownUrlKey) ?: "",
+            onCloseClick = { navController.popBackStack() },
+            onUrlClick = { url ->
+                navController.slideFromRight(
+                    R.id.markdownFragment, bundleOf(markdownUrlKey to url)
+                )
+            }
+        )
     }
 
     companion object {

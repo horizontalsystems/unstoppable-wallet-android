@@ -46,12 +46,10 @@ class TransactionsFilterFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            FilterScreen(
-                navController,
-                viewModel
-            )
-        }
+        FilterScreen(
+            navController,
+            viewModel
+        )
     }
 
 }
@@ -78,98 +76,96 @@ fun FilterScreen(
 
     val filterBlockchain = filterBlockchains?.firstOrNull { it.selected }?.item
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Transactions_Filter),
-                    navigationIcon = {
-                        HsBackButton(onClick = navController::popBackStack)
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Reset),
-                            enabled = filterResetEnabled,
-                            onClick = {
-                                viewModel.resetFilters()
-                            }
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Transactions_Filter),
+                navigationIcon = {
+                    HsBackButton(onClick = navController::popBackStack)
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Reset),
+                        enabled = filterResetEnabled,
+                        onClick = {
+                            viewModel.resetFilters()
+                        }
                     )
                 )
+            )
+        }
+    ) {
+        Column(Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                VSpacer(12.dp)
+                CellSingleLineLawrenceSection(
+                    listOf {
+                        FilterDropdownCell(
+                            title = stringResource(R.string.Market_Filter_Blockchains),
+                            value = filterBlockchain?.name,
+                            onClick = {
+                                navController.slideFromRight(R.id.filterBlockchainFragment)
+                            }
+                        )
+                    }
+                )
+                VSpacer(32.dp)
+                CellSingleLineLawrenceSection(
+                    listOf {
+                        FilterDropdownCell(
+                            title = stringResource(R.string.Transactions_Coins),
+                            value = selectedCoinFilterTitle,
+                            onClick = {
+                                navController.slideFromRight(R.id.filterCoinFragment)
+                            }
+                        )
+                    }
+                )
+                VSpacer(32.dp)
+                CellSingleLineLawrenceSection(
+                    listOf {
+                        FilterSwitch(
+                            title = stringResource(R.string.Transactions_Filter_HideUnknownTokens),
+                            enabled = filterHideUnknownTokens,
+                            onChecked = { checked ->
+                                viewModel.updateFilterHideUnknownTokens(checked)
+                            }
+                        )
+                    }
+                )
+                VSpacer(32.dp)
+                CellSingleLineLawrenceSection(
+                    listOf {
+                        FilterSwitch(
+                            title = stringResource(R.string.Transactions_Filter_StablecoinDustAmount),
+                            enabled = filterStablecoinsDust,
+                            onChecked = { checked ->
+                                viewModel.updateFilterHideStablecoinsDust(checked)
+                            }
+                        )
+                    }
+                )
+                InfoText(
+                    text = stringResource(R.string.Transactions_Filter_StablecoinDustAmount_Description),
+                )
+                VSpacer(24.dp)
             }
-        ) {
-            Column(Modifier.padding(it)) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    VSpacer(12.dp)
-                    CellSingleLineLawrenceSection(
-                        listOf {
-                            FilterDropdownCell(
-                                title = stringResource(R.string.Market_Filter_Blockchains),
-                                value = filterBlockchain?.name,
-                                onClick = {
-                                    navController.slideFromRight(R.id.filterBlockchainFragment)
-                                }
-                            )
-                        }
-                    )
-                    VSpacer(32.dp)
-                    CellSingleLineLawrenceSection(
-                        listOf {
-                            FilterDropdownCell(
-                                title = stringResource(R.string.Transactions_Coins),
-                                value = selectedCoinFilterTitle,
-                                onClick = {
-                                    navController.slideFromRight(R.id.filterCoinFragment)
-                                }
-                            )
-                        }
-                    )
-                    VSpacer(32.dp)
-                    CellSingleLineLawrenceSection(
-                        listOf {
-                            FilterSwitch(
-                                title = stringResource(R.string.Transactions_Filter_HideUnknownTokens),
-                                enabled = filterHideUnknownTokens,
-                                onChecked = { checked ->
-                                    viewModel.updateFilterHideUnknownTokens(checked)
-                                }
-                            )
-                        }
-                    )
-                    VSpacer(32.dp)
-                    CellSingleLineLawrenceSection(
-                        listOf {
-                            FilterSwitch(
-                                title = stringResource(R.string.Transactions_Filter_StablecoinDustAmount),
-                                enabled = filterStablecoinsDust,
-                                onChecked = { checked ->
-                                    viewModel.updateFilterHideStablecoinsDust(checked)
-                                }
-                            )
-                        }
-                    )
-                    InfoText(
-                        text = stringResource(R.string.Transactions_Filter_StablecoinDustAmount_Description),
-                    )
-                    VSpacer(24.dp)
-                }
 
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        title = stringResource(R.string.Button_Apply),
-                        onClick = {
-                            navController.popBackStack()
-                        },
-                    )
-                }
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    title = stringResource(R.string.Button_Apply),
+                    onClick = {
+                        navController.popBackStack()
+                    },
+                )
             }
         }
     }

@@ -48,24 +48,22 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            val popUpToInclusiveId =
-                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
-            val inclusive =
-                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
-            val accountType = arguments?.parcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
-            val accountName = arguments?.getString(SelectBlockchainsModule.accountNameKey)
-            if (accountType != null) {
-                SelectBlockchainsScreen(
-                    accountType,
-                    accountName,
-                    navController,
-                    popUpToInclusiveId,
-                    inclusive
-                )
-            } else {
-                navController.popBackStack()
-            }
+        val popUpToInclusiveId =
+            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
+        val inclusive =
+            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+        val accountType = arguments?.parcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
+        val accountName = arguments?.getString(SelectBlockchainsModule.accountNameKey)
+        if (accountType != null) {
+            SelectBlockchainsScreen(
+                accountType,
+                accountName,
+                navController,
+                popUpToInclusiveId,
+                inclusive
+            )
+        } else {
+            navController.popBackStack()
         }
     }
 

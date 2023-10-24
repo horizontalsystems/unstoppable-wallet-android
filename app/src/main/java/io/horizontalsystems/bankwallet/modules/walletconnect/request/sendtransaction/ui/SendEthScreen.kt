@@ -60,126 +60,131 @@ fun SendEthRequestScreen(
     val fee by feeViewModel.feeLiveData.observeAsState(null)
     val viewState by feeViewModel.viewStateLiveData.observeAsState()
 
-    ComposeAppTheme {
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            AppBar(
-                title = stringResource(R.string.Button_Confirm),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                        icon = R.drawable.ic_manage_2,
-                        tint = ComposeAppTheme.colors.jacob,
-                        onClick = {
-                            navController.slideFromBottom(
-                                resId = R.id.sendEvmSettingsFragment,
-                                args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
-                            )
-                        }
-                    )
-                )
-            )
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .weight(1f)
-                    .fillMaxWidth()
-            ) {
-                Spacer(Modifier.height(12.dp))
-                transactionInfoItems?.let { sections ->
-                    sections.forEach { section ->
-                        CellUniversalLawrenceSection(section.viewItems) { item ->
-                            when (item) {
-                                is ViewItem.Subhead -> SubheadCell(
-                                    item.title,
-                                    item.value,
-                                    item.iconRes
-                                )
-                                is ViewItem.Value -> TitleTypedValueCell(
-                                    item.title,
-                                    item.value,
-                                    item.type
-                                )
-                                is ViewItem.Address -> TransactionInfoAddressCell(
-                                    item.title,
-                                    item.value,
-                                    item.showAdd,
-                                    item.blockchainType,
-                                    navController
-                                )
-                                is ViewItem.ContactItem -> TransactionInfoContactCell(
-                                    item.contact.name
-                                )
-                                is ViewItem.Input -> TitleHexValueCell(
-                                    Translator.getString(R.string.WalletConnect_Input),
-                                    item.value.shorten(),
-                                    item.value
-                                )
-                                is ViewItem.Amount -> AmountCell(
-                                    item.fiatAmount,
-                                    item.coinAmount,
-                                    item.type,
-                                    item.token
-                                )
-                                is ViewItem.TokenItem -> TokenCell(item.token)
-                                is ViewItem.AmountMulti -> AmountMultiCell(
-                                    item.amounts,
-                                    item.type,
-                                    item.token
-                                )
-                                is ViewItem.NftAmount,
-                                is ViewItem.ValueMulti -> {
-                                }
-                            }
-                        }
-                        Spacer(Modifier.height(12.dp))
-                    }
-                }
-
-                CellUniversalLawrenceSection(
-                    listOf {
-                        FeeCell(
-                            title = stringResource(R.string.FeeSettings_NetworkFee),
-                            info = stringResource(R.string.FeeSettings_NetworkFee_Info),
-                            value = fee,
-                            viewState = viewState,
-                            navController = navController
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.Button_Confirm),
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                    icon = R.drawable.ic_manage_2,
+                    tint = ComposeAppTheme.colors.jacob,
+                    onClick = {
+                        navController.slideFromBottom(
+                            resId = R.id.sendEvmSettingsFragment,
+                            args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
                         )
                     }
                 )
+            )
+        )
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            Spacer(Modifier.height(12.dp))
+            transactionInfoItems?.let { sections ->
+                sections.forEach { section ->
+                    CellUniversalLawrenceSection(section.viewItems) { item ->
+                        when (item) {
+                            is ViewItem.Subhead -> SubheadCell(
+                                item.title,
+                                item.value,
+                                item.iconRes
+                            )
 
-                cautions?.let {
-                    Cautions(it)
+                            is ViewItem.Value -> TitleTypedValueCell(
+                                item.title,
+                                item.value,
+                                item.type
+                            )
+
+                            is ViewItem.Address -> TransactionInfoAddressCell(
+                                item.title,
+                                item.value,
+                                item.showAdd,
+                                item.blockchainType,
+                                navController
+                            )
+
+                            is ViewItem.ContactItem -> TransactionInfoContactCell(
+                                item.contact.name
+                            )
+
+                            is ViewItem.Input -> TitleHexValueCell(
+                                Translator.getString(R.string.WalletConnect_Input),
+                                item.value.shorten(),
+                                item.value
+                            )
+
+                            is ViewItem.Amount -> AmountCell(
+                                item.fiatAmount,
+                                item.coinAmount,
+                                item.type,
+                                item.token
+                            )
+
+                            is ViewItem.TokenItem -> TokenCell(item.token)
+                            is ViewItem.AmountMulti -> AmountMultiCell(
+                                item.amounts,
+                                item.type,
+                                item.token
+                            )
+
+                            is ViewItem.NftAmount,
+                            is ViewItem.ValueMulti -> {
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(12.dp))
                 }
-
-                Spacer(Modifier.height(24.dp))
-            }
-            Column(Modifier.padding(horizontal = 24.dp)) {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.Button_Confirm),
-                    enabled = approveEnabled,
-                    onClick = {
-                        logger.info("click confirm button")
-                        sendEvmTransactionViewModel.send(logger)
-                    }
-                )
-                Spacer(Modifier.height(16.dp))
-                ButtonPrimaryDefault(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.Button_Reject),
-                    onClick = {
-                        viewModel.reject()
-                        close()
-                    }
-                )
-                Spacer(Modifier.height(32.dp))
             }
 
+            CellUniversalLawrenceSection(
+                listOf {
+                    FeeCell(
+                        title = stringResource(R.string.FeeSettings_NetworkFee),
+                        info = stringResource(R.string.FeeSettings_NetworkFee_Info),
+                        value = fee,
+                        viewState = viewState,
+                        navController = navController
+                    )
+                }
+            )
+
+            cautions?.let {
+                Cautions(it)
+            }
+
+            Spacer(Modifier.height(24.dp))
         }
+        Column(Modifier.padding(horizontal = 24.dp)) {
+            ButtonPrimaryYellow(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.Button_Confirm),
+                enabled = approveEnabled,
+                onClick = {
+                    logger.info("click confirm button")
+                    sendEvmTransactionViewModel.send(logger)
+                }
+            )
+            Spacer(Modifier.height(16.dp))
+            ButtonPrimaryDefault(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.Button_Reject),
+                onClick = {
+                    viewModel.reject()
+                    close()
+                }
+            )
+            Spacer(Modifier.height(32.dp))
+        }
+
     }
 }
