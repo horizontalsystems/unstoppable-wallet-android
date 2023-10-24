@@ -84,6 +84,10 @@ class SendEvmTransactionViewModel(
         service.clear()
     }
 
+    fun isHardwareAccount() : Boolean {
+        return service.isHardwareAccount()
+    }
+
     fun pauseSync() {
         service.pauseSync()
     }

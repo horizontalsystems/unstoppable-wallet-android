@@ -176,15 +176,17 @@ private fun SendEvmConfirmationScreen(
                     navController
                 )
             }
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-                    title = stringResource(R.string.Send_Confirmation_Send_Button),
-                    onClick = onSendClick,
-                    enabled = enabled
-                )
+            if (!sendEvmTransactionViewModel.isHardwareAccount()) {
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
+                        title = stringResource(R.string.Send_Confirmation_Send_Button),
+                        onClick = onSendClick,
+                        enabled = enabled
+                    )
+                }
             }
         }
     }
