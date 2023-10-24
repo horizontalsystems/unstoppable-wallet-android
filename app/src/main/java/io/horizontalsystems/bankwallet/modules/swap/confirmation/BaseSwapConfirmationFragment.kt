@@ -155,15 +155,17 @@ private fun BaseSwapConfirmationScreen(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-                    title = stringResource(R.string.Swap),
-                    onClick = onSendClick,
-                    enabled = enabled
-                )
+            if (!sendEvmTransactionViewModel.isHardwareAccount()) {
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
+                        title = stringResource(R.string.Swap),
+                        onClick = onSendClick,
+                        enabled = enabled
+                    )
+                }
             }
         }
     }
