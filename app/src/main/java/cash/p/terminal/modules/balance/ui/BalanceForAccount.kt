@@ -186,7 +186,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 viewModel.totalUiState
                             )
                         } else {
-                            BalanceItemsEmpty(navController, accountViewItem)
+                            BalanceItemsEmpty(navController)
                         }
                     }
 
