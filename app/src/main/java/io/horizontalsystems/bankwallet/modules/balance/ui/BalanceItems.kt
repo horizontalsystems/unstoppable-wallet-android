@@ -314,24 +314,20 @@ fun BalanceItems(
                     it.wallet.hashCode()
                 }
             ) { item ->
-                if (item.isWatchAccount) {
-                    BalanceCard(item, viewModel, navController)
-                } else {
-                    BalanceCardSwipable(
-                        viewItem = item,
-                        viewModel = viewModel,
-                        navController = navController,
-                        revealed = revealedCardId == item.wallet.hashCode(),
-                        onReveal = { walletHashCode ->
-                            if (revealedCardId != walletHashCode) {
-                                revealedCardId = walletHashCode
-                            }
-                        },
-                        onConceal = {
-                            revealedCardId = null
+                BalanceCardSwipable(
+                    viewItem = item,
+                    viewModel = viewModel,
+                    navController = navController,
+                    revealed = revealedCardId == item.wallet.hashCode(),
+                    onReveal = { walletHashCode ->
+                        if (revealedCardId != walletHashCode) {
+                            revealedCardId = walletHashCode
                         }
-                    )
-                }
+                    },
+                    onConceal = {
+                        revealedCardId = null
+                    }
+                )
             }
         }
     }
