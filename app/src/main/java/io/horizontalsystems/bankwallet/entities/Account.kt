@@ -258,7 +258,7 @@ sealed class AccountType : Parcelable {
         }
 
     val hideZeroBalances: Boolean
-        get() = this is EvmAddress || this is SolanaAddress
+        get() = this is SolanaAddress
 
     val detailedDescription: String
         get() = when (this) {
