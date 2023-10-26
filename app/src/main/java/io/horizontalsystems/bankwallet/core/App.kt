@@ -101,6 +101,7 @@ import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenS
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionStorage
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.SessionRequestFilterManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
@@ -398,7 +399,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         initializeWalletConnectV2(appConfig)
 
-        wc2Service = WC2Service()
+        wc2Service = WC2Service(SessionRequestFilterManager())
         wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
