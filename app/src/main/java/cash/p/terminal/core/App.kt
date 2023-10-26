@@ -101,6 +101,7 @@ import cash.p.terminal.modules.settings.appearance.LaunchScreenService
 import cash.p.terminal.modules.theme.ThemeService
 import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionStorage
+import cash.p.terminal.modules.walletconnect.version2.SessionRequestFilterManager
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.modules.walletconnect.version2.WC2Service
 import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
@@ -398,7 +399,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         initializeWalletConnectV2(appConfig)
 
-        wc2Service = WC2Service()
+        wc2Service = WC2Service(SessionRequestFilterManager())
         wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
