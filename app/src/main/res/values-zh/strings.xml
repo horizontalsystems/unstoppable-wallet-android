@@ -701,7 +701,6 @@
     <string name="Settings_Donate">捐助</string>
     <string name="Settings_DonateToken">捐赠%s</string>
     <string name="Settings_DonateWith">捐赠方式</string>
-    <string name="Settings_Donate_GetAddress">获取地址</string>
     <string name="Settings_Donate_Addresses">地址</string>
     <string name="SettingsSecurity_AutoLock_Immediate">即时的</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 分钟</string>
