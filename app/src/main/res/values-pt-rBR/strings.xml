@@ -672,7 +672,6 @@
     <string name="Settings_Donate">Doar</string>
     <string name="Settings_DonateToken">Doe %s</string>
     <string name="Settings_DonateWith">Doar com</string>
-    <string name="Settings_Donate_GetAddress">Obter endereço</string>
     <string name="Settings_Donate_Addresses">Endereços</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <string name="Appearance_Theme">TEMA</string>
