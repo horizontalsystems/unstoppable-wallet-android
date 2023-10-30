@@ -25,7 +25,8 @@ object PinUnlockModule {
                 App.pinComponent,
                 lockoutManager,
                 App.systemInfoManager,
-                OneTimeTimer()
+                OneTimeTimer(),
+                App.localStorage,
             ) as T
         }
     }

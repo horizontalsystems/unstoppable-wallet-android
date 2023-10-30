@@ -81,6 +81,7 @@ class LocalStorageManager(
     private val APP_AUTO_LOCK_INTERVAL = "app_auto_lock_interval"
     private val HIDE_UNKNOWN_TOKENS = "hide_unknown_tokens"
     private val HIDE_STABLECOINS_NEGLIGIBLE_AMOUNT = "hide_stablecoins_negligible_amount"
+    private val PIN_RANDOMIZED = "pin_randomized"
 
     private val gson by lazy { Gson() }
 
@@ -466,6 +467,12 @@ class LocalStorageManager(
         get() = preferences.getBoolean(HIDE_STABLECOINS_NEGLIGIBLE_AMOUNT, true)
         set(value) {
             preferences.edit().putBoolean(HIDE_STABLECOINS_NEGLIGIBLE_AMOUNT, value).apply()
+        }
+
+    override var pinRandomized: Boolean
+        get() = preferences.getBoolean(PIN_RANDOMIZED, false)
+        set(value) {
+            preferences.edit().putBoolean(PIN_RANDOMIZED, value).apply()
         }
 
     private val _marketsTabEnabledFlow = MutableStateFlow(marketsTabEnabled)
