@@ -653,7 +653,6 @@
     <string name="Settings_Donate">Donar</string>
     <string name="Settings_DonateToken">Donar %s</string>
     <string name="Settings_DonateWith">Donar con</string>
-    <string name="Settings_Donate_GetAddress">Obtener dirección</string>
     <string name="Settings_Donate_Addresses">Dirección</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Inmediato</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minuto</string>
