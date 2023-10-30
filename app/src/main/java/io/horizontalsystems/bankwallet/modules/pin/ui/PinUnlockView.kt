@@ -101,11 +101,14 @@ fun PinUnlock(
                 onNumberClick = { number -> viewModel.onKeyClick(number) },
                 onDeleteClick = { viewModel.onDelete() },
                 showFingerScanner = uiState.fingerScannerEnabled,
-                showRandomizer = true,
+                pinRandomized = viewModel.pinRandomized,
                 showBiometricPrompt = {
                     showBiometricPrompt = true
                 },
-                inputState = uiState.inputState
+                inputState = uiState.inputState,
+                updatePinRandomized = { randomized ->
+                    viewModel.updatePinRandomized(randomized)
+                }
             )
         }
     }

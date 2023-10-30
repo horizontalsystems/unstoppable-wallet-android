@@ -113,6 +113,7 @@ interface ILocalStorage {
     var personalSupportEnabled: Boolean
     var hideUnknownTokens: Boolean
     var hideStablecoinsNegligibleAmount: Boolean
+    var pinRandomized: Boolean
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)

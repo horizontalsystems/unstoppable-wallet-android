@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockoutState
@@ -21,10 +22,14 @@ class PinUnlockViewModel(
     private val pinComponent: IPinComponent,
     private val lockoutManager: ILockoutManager,
     systemInfoManager: ISystemInfoManager,
-    private val timer: OneTimeTimer
+    private val timer: OneTimeTimer,
+    private val localStorage: ILocalStorage,
 ) : ViewModel(), OneTimerDelegate {
 
     private var attemptsLeft: Int? = null
+
+    var pinRandomized by mutableStateOf(localStorage.pinRandomized)
+        private set
 
     var uiState by mutableStateOf(
         PinUnlockViewState(
@@ -46,6 +51,11 @@ class PinUnlockViewModel(
 
     override fun onFire() {
         updateLockoutState()
+    }
+
+    fun updatePinRandomized(random: Boolean) {
+        localStorage.pinRandomized = random
+        pinRandomized = random
     }
 
     fun onBiometricsUnlock() {
