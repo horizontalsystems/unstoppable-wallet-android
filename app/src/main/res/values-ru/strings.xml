@@ -708,7 +708,6 @@
     <string name="Settings_Donate">Поддержи нас</string>
     <string name="Settings_DonateToken">Пожертвовать %s</string>
     <string name="Settings_DonateWith">Пожертвовать с помощью</string>
-    <string name="Settings_Donate_GetAddress">Получить адрес</string>
     <string name="Settings_Donate_Addresses">Адреса</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Немедленно</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 минута</string>
