@@ -52,10 +52,11 @@ fun PinConfirm(
             )
 
             PinNumpad(
+                pinRandomized = viewModel.pinRandomized,
                 onNumberClick = { number -> viewModel.onKeyClick(number) },
                 onDeleteClick = { viewModel.onDelete() },
-                showRandomizer = true,
-                inputState = viewModel.uiState.inputState
+                inputState = viewModel.uiState.inputState,
+                updatePinRandomized = { random -> viewModel.updatePinRandomized(random) }
             )
         }
     }

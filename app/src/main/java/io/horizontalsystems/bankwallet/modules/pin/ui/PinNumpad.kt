@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,14 +37,14 @@ import io.horizontalsystems.core.helpers.HudHelper
 @Composable
 fun PinNumpad(
     showFingerScanner: Boolean = false,
-    showRandomizer: Boolean = false,
+    pinRandomized: Boolean? = null,
     onNumberClick: (Int) -> Unit,
     onDeleteClick: () -> Unit,
     showBiometricPrompt: (() -> Unit)? = null,
-    inputState: InputState = InputState.Enabled()
+    inputState: InputState = InputState.Enabled(),
+    updatePinRandomized: ((Boolean) -> Unit)? = null,
 ) {
-    var numpadNumbers by remember { mutableStateOf(generateOriginalNumpadNumbers()) }
-    var isRandomized by remember { mutableStateOf(false) }
+    val numpadNumbers by remember(pinRandomized) { mutableStateOf(getNumpadNumbers(pinRandomized)) }
     val enabled = inputState is InputState.Enabled
 
     Column(
@@ -87,28 +86,23 @@ fun PinNumpad(
         }
         Column(
             modifier = Modifier.height(100.dp)
-        ){
-            if (showRandomizer) {
+        ) {
+            pinRandomized?.let { isRandomized ->
                 VSpacer(24.dp)
-                val onClick = {
-                    isRandomized = !isRandomized
-                    numpadNumbers = if (isRandomized) {
-                        generateRandomNumpadNumbers()
-                    } else {
-                        generateOriginalNumpadNumbers()
-                    }
-                }
-
                 if (isRandomized) {
                     ButtonSecondaryYellow(
                         title = stringResource(R.string.Unlock_Random),
-                        onClick = onClick,
+                        onClick = {
+                            updatePinRandomized?.invoke(false)
+                        },
                         enabled = enabled,
                     )
                 } else {
                     ButtonSecondaryDefault(
                         title = stringResource(R.string.Unlock_Random),
-                        onClick = onClick,
+                        onClick = {
+                            updatePinRandomized?.invoke(true)
+                        },
                         enabled = enabled,
                     )
                 }
@@ -116,6 +110,11 @@ fun PinNumpad(
         }
     }
 
+}
+
+private fun getNumpadNumbers(pinRandomized: Boolean?): List<Int> = when(pinRandomized) {
+    true -> generateRandomNumpadNumbers()
+    false, null -> generateOriginalNumpadNumbers()
 }
 
 private fun generateOriginalNumpadNumbers(): List<Int> {
@@ -201,7 +200,7 @@ fun Preview_Pin() {
                 onNumberClick = { },
                 onDeleteClick = { },
                 showFingerScanner = true,
-                showRandomizer = true,
+                pinRandomized = true,
                 showBiometricPrompt = {
 
                 }
@@ -222,7 +221,7 @@ fun Preview_PinLocked() {
                 onNumberClick = { },
                 onDeleteClick = { },
                 showFingerScanner = true,
-                showRandomizer = true,
+                pinRandomized = true,
                 showBiometricPrompt = {},
                 inputState = InputState.Locked("12:33")
             )
