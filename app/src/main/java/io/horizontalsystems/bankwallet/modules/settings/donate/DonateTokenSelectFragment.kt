@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -63,20 +64,19 @@ private fun DonateHeader(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 24.dp),
+            .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        VSpacer(24.dp)
         headline2_leah(
             text = stringResource(R.string.Settings_Donate_Info),
             textAlign = TextAlign.Center
         )
         VSpacer(24.dp)
-        Image(
-            painter = painterResource(id = R.drawable.hands_32),
+        Icon(
+            painter = painterResource(id = R.drawable.ic_heart_filled_24),
+            tint = ComposeAppTheme.colors.jacob,
             contentDescription = null,
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-                .padding(horizontal = 24.dp)
         )
     }
 
@@ -89,27 +89,29 @@ private fun DonateHeader(navController: NavController) {
 private fun GetAddressCell(
     onClick: () -> Unit
 ) {
-    Divider(
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10,
+    VSpacer(24.dp)
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = onClick
+            ) {
+                body_leah(
+                    text = stringResource(R.string.Settings_Donate_GetAddress),
+                    maxLines = 1,
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .weight(1f)
+                )
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                )
+            }
+        }
     )
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
-    ) {
-        body_leah(
-            text = stringResource(R.string.Settings_Donate_GetAddress),
-            maxLines = 1,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .weight(1f)
-        )
-        Image(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-        )
-    }
+    VSpacer(32.dp)
 }
 
 @Preview
