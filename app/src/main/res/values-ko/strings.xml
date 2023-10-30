@@ -600,7 +600,6 @@
     <string name="Settings_Donate">후원하기</string>
     <string name="Settings_DonateToken">기부하기 %s</string>
     <string name="Settings_DonateWith">기부하기</string>
-    <string name="Settings_Donate_GetAddress">주소 받기</string>
     <string name="Settings_Donate_Addresses">구애</string>
     <string name="SettingsSecurity_AutoLock_Immediate">즉시</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1분</string>
