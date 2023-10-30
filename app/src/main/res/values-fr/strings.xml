@@ -683,7 +683,6 @@
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
     <string name="Settings_DonateWith">Donnez avec</string>
-    <string name="Settings_Donate_GetAddress">Obtenir une adresse</string>
     <string name="Settings_Donate_Addresses">Adresses</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Immédiat</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
