@@ -606,7 +606,6 @@
     <string name="Settings_Donate">Spenden</string>
     <string name="Settings_DonateToken">%s Spenden</string>
     <string name="Settings_DonateWith">Spenden mit</string>
-    <string name="Settings_Donate_GetAddress">Adresse erhalten</string>
     <string name="Settings_Donate_Addresses">Adressen</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Sofort</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 Minute</string>
