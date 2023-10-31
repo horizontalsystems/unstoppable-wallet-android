@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.tokenselect
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
@@ -46,10 +48,15 @@ fun TokenSelectScreen(
     ) { paddingValues ->
         val uiState = viewModel.uiState
         if (uiState.noItems) {
-            ListEmptyView(
-                text = emptyItemsText,
-                icon = R.drawable.ic_empty_wallet
-            )
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                header?.invoke()
+                ListEmptyView(
+                    text = emptyItemsText,
+                    icon = R.drawable.ic_empty_wallet
+                )
+            }
         } else {
             LazyColumn(contentPadding = paddingValues) {
                 item {
