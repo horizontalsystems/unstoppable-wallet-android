@@ -15,7 +15,11 @@ import java.math.RoundingMode
 
 object SendTronModule {
 
-    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val prefilledAddress: String?,
+        private val showAddressInput: Boolean
+    ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTronAdapter) ?: throw IllegalStateException("SendTronAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
@@ -30,7 +34,7 @@ object SendTronModule {
                         wallet.token,
                         amountValidator,
                     )
-                    val addressService = SendTronAddressService(adapter, wallet.token, predefinedAddress)
+                    val addressService = SendTronAddressService(adapter, wallet.token, prefilledAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -43,7 +47,8 @@ object SendTronModule {
                         amountService,
                         addressService,
                         coinMaxAllowedDecimals,
-                        App.contactsRepository
+                        App.contactsRepository,
+                        showAddressInput,
                     ) as T
                 }
 

@@ -38,14 +38,15 @@ class SendSolanaViewModel(
     private val addressService: SendSolanaAddressService,
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
+    private val showAddressInput: Boolean,
 ) : ViewModel() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
-    private val showAddressInput = addressService.predefinedAddress == null
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
+    private val prefilledAddress = addressService.solanaAddress?.let { Address(it.toString()) }
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -53,7 +54,8 @@ class SendSolanaViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput
+            showAddressInput = showAddressInput,
+            prefilledAddress = prefilledAddress
         )
     )
         private set
@@ -148,7 +150,8 @@ class SendSolanaViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput
+            showAddressInput = showAddressInput,
+            prefilledAddress = prefilledAddress,
         )
     }
 
