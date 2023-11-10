@@ -364,6 +364,7 @@
     <string name="Balance_Receive_Account">Account</string>
     <string name="Balance_Receive_NotActive">Not active</string>
     <string name="Balance_LockedAmount_Title">Locked</string>
+    <string name="Balance_Error_InvalidQrCode">Can\'t recognize</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
