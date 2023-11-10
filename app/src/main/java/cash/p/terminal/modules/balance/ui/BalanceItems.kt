@@ -37,6 +37,7 @@ import cash.p.terminal.modules.balance.*
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.rateapp.RateAppModule
 import cash.p.terminal.modules.rateapp.RateAppViewModel
+import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
@@ -333,6 +334,13 @@ fun BalanceItems(
                 }
             }
         }
+    }
+    uiState.openSend?.let { openSend ->
+        navController.slideFromRight(
+            R.id.sendTokenSelectFragment,
+            SendTokenSelectFragment.prepareParams(openSend.blockchainTypes, openSend.address)
+        )
+        viewModel.onSendOpened()
     }
 }
 

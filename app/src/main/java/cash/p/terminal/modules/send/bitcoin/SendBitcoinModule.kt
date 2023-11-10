@@ -11,8 +11,13 @@ import cash.p.terminal.modules.xrate.XRateService
 
 object SendBitcoinModule {
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendBitcoinAdapter is null")
+    class Factory(
+        private val wallet: Wallet,
+        private val predefinedAddress: String?,
+        private val showAddressInput: Boolean
+    ) : ViewModelProvider.Factory {
+        val adapter =
+            (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendBitcoinAdapter is null")
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType)!!
@@ -31,8 +36,9 @@ object SendBitcoinModule {
                 pluginService,
                 XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 App.btcBlockchainManager,
-                App.contactsRepository
-            )  as T
+                App.contactsRepository,
+                showAddressInput,
+            ) as T
         }
     }
 

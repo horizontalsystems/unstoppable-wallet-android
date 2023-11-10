@@ -14,7 +14,7 @@ object AddressInputModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val addressViewModel = AddressViewModel(tokenQuery.blockchainType, App.contactsRepository, initial)
 
-            addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
+            addressViewModel.addAddressHandler(AddressHandlerEns(tokenQuery.blockchainType, EnsResolverHolder.resolver))
             addressViewModel.addAddressHandler(AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey))
 
             when (tokenQuery.blockchainType) {
@@ -25,7 +25,7 @@ object AddressInputModule {
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
                 BlockchainType.BinanceChain -> {
-                    addressViewModel.addAddressHandler(AddressHandlerPure())
+                    addressViewModel.addAddressHandler(AddressHandlerPure(tokenQuery.blockchainType))
                 }
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
@@ -35,7 +35,7 @@ object AddressInputModule {
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
                 BlockchainType.ArbitrumOne -> {
-                    addressViewModel.addAddressHandler(AddressHandlerEvm())
+                    addressViewModel.addAddressHandler(AddressHandlerEvm(tokenQuery.blockchainType))
                 }
                 BlockchainType.Solana -> {
                     addressViewModel.addAddressHandler(AddressHandlerSolana())
@@ -55,7 +55,7 @@ object AddressInputModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val addressViewModel = AddressViewModel(blockchainType, App.contactsRepository, null)
 
-            addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
+            addressViewModel.addAddressHandler(AddressHandlerEns(blockchainType, EnsResolverHolder.resolver))
 
             when (blockchainType) {
                 BlockchainType.Bitcoin,
@@ -65,7 +65,7 @@ object AddressInputModule {
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
                 BlockchainType.BinanceChain -> {
-                    addressViewModel.addAddressHandler(AddressHandlerPure())
+                    addressViewModel.addAddressHandler(AddressHandlerPure(blockchainType))
                 }
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
@@ -75,7 +75,7 @@ object AddressInputModule {
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
                 BlockchainType.ArbitrumOne -> {
-                    addressViewModel.addAddressHandler(AddressHandlerEvm())
+                    addressViewModel.addAddressHandler(AddressHandlerEvm(blockchainType))
                 }
                 BlockchainType.Solana,
                 BlockchainType.Tron,

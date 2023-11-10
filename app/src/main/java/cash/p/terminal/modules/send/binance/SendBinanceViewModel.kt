@@ -34,6 +34,7 @@ class SendBinanceViewModel(
     private val feeService: SendBinanceFeeService,
     private val xRateService: XRateService,
     private val contactsRepo: ContactsRepository,
+    private val showAddressInput: Boolean,
 ) : ViewModel() {
     val blockchainType = wallet.token.blockchainType
     val feeToken by feeService::feeToken
@@ -47,7 +48,7 @@ class SendBinanceViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
     private var memo: String? = null
-    private val showAddressInput = addressService.predefinedAddress == null
+    private val prefilledAddress = addressService.address
 
     var uiState by mutableStateOf(
         SendBinanceUiState(
@@ -58,6 +59,7 @@ class SendBinanceViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
             showAddressInput = showAddressInput,
+            prefilledAddress = prefilledAddress,
         )
     )
         private set
@@ -130,6 +132,7 @@ class SendBinanceViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
             showAddressInput = showAddressInput,
+            prefilledAddress = prefilledAddress,
         )
     }
 
@@ -193,5 +196,6 @@ data class SendBinanceUiState(
     val addressError: Throwable?,
     val amountCaution: HSCaution?,
     val canBeSend: Boolean,
-    val showAddressInput: Boolean
+    val showAddressInput: Boolean,
+    val prefilledAddress: Address?,
 )

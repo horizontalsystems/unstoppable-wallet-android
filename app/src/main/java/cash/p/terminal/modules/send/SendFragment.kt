@@ -54,7 +54,10 @@ class SendFragment : BaseFragment() {
                 val wallet = arguments.parcelable<Wallet>(walletKey) ?: throw IllegalStateException("Wallet is Null!")
                 val title = arguments.getString(titleKey) ?: ""
                 val sendEntryPointDestId = arguments.getInt(sendEntryPointDestIdKey)
-                val predefinedAddress = arguments.getString(predefinedAddressKey)
+                var predefinedAddress = arguments.getString(predefinedAddressKey)
+                val prefilledAddress = arguments.getString(prefilledAddressKey)
+                val showAddressInput = predefinedAddress == null
+                val address = prefilledAddress ?: predefinedAddress
 
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
                     AmountInputModeModule.Factory(wallet.coin.uid)
@@ -66,7 +69,7 @@ class SendFragment : BaseFragment() {
                     BlockchainType.ECash,
                     BlockchainType.Litecoin,
                     BlockchainType.Dash -> {
-                        val factory = SendBitcoinModule.Factory(wallet, predefinedAddress)
+                        val factory = SendBitcoinModule.Factory(wallet, address, showAddressInput)
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) {
                             factory
                         }
@@ -82,7 +85,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     is BlockchainType.BinanceChain -> {
-                        val factory = SendBinanceModule.Factory(wallet, predefinedAddress)
+                        val factory = SendBinanceModule.Factory(wallet, address, showAddressInput)
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) {
                             factory
                         }
@@ -98,7 +101,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Zcash -> {
-                        val factory = SendZCashModule.Factory(wallet, predefinedAddress)
+                        val factory = SendZCashModule.Factory(wallet, address, showAddressInput)
                         val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) {
                             factory
                         }
@@ -121,7 +124,7 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Gnosis,
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
-                        val factory = SendEvmModule.Factory(wallet, predefinedAddress)
+                        val factory = SendEvmModule.Factory(wallet, address, showAddressInput)
                         val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
                             R.id.sendXFragment
                         ) { factory }
@@ -139,7 +142,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Solana -> {
-                        val factory = SendSolanaModule.Factory(wallet, predefinedAddress)
+                        val factory = SendSolanaModule.Factory(wallet, address, showAddressInput)
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendSolanaScreen(
@@ -153,7 +156,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Tron -> {
-                        val factory = SendTronModule.Factory(wallet, predefinedAddress)
+                        val factory = SendTronModule.Factory(wallet, address, showAddressInput)
                         val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendTronScreen(
@@ -182,6 +185,7 @@ class SendFragment : BaseFragment() {
         private const val sendEntryPointDestIdKey = "sendEntryPointDestIdKey"
         private const val titleKey = "titleKey"
         private const val predefinedAddressKey = "predefinedAddressKey"
+        private const val prefilledAddressKey = "predefilledAddressKey"
 
         fun prepareParams(wallet: Wallet, title: String) = bundleOf(
             walletKey to wallet,
@@ -192,12 +196,14 @@ class SendFragment : BaseFragment() {
             wallet: Wallet,
             sendEntryPointDestId: Int,
             title: String,
-            predefinedAddress: String? = null
+            predefinedAddress: String? = null,
+            prefilledAddress: String? = null,
         ) = bundleOf(
             walletKey to wallet,
             sendEntryPointDestIdKey to sendEntryPointDestId,
             titleKey to title,
-            predefinedAddressKey to predefinedAddress
+            predefinedAddressKey to predefinedAddress,
+            prefilledAddressKey to prefilledAddress
         )
     }
 }

@@ -5,15 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.R
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.address.AddressParserFactory
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.modules.walletconnect.version2.WC2Service
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,20 +30,25 @@ class BalanceViewModel(
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
     private val wc2Service: WC2Service,
-    private val wC2Manager: WC2Manager
+    private val wC2Manager: WC2Manager,
+    private val addressParserFactory: AddressParserFactory,
 ) : ViewModel(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
     private var isRefreshing = false
+    private var openSendTokenSelect: OpenSendTokenSelect? = null
+    private var errorMessage: String? = null
 
     var uiState by mutableStateOf(
         BalanceUiState(
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
-            headerNote = HeaderNote.None
+            headerNote = HeaderNote.None,
+            errorMessage = errorMessage,
+            openSend = openSendTokenSelect
         )
     )
         private set
@@ -96,7 +105,9 @@ class BalanceViewModel(
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
-            headerNote = headerNote()
+            headerNote = headerNote(),
+            errorMessage = errorMessage,
+            openSend = openSendTokenSelect
         )
 
         viewModelScope.launch {
@@ -131,17 +142,6 @@ class BalanceViewModel(
             }
 
             emitState()
-        }
-    }
-
-    fun setConnectionUri(uri: String) {
-        connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
-            2 -> {
-                wc2Service.pair(uri)
-                null
-            }
-
-            else -> WalletConnectListViewModel.ConnectionResult.Error
         }
     }
 
@@ -180,6 +180,7 @@ class BalanceViewModel(
                     emitState()
                 }
             }
+
             else -> Unit
         }
     }
@@ -205,6 +206,43 @@ class BalanceViewModel(
         return wC2Manager.getWalletConnectSupportState()
     }
 
+    fun handleScannedData(scannedText: String) {
+        val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
+        if (wcUriVersion == 2) {
+            wc2Service.pair(
+                uri = scannedText,
+                onSuccess = {
+                    connectionResult = null
+                },
+                onError = {
+                    connectionResult = WalletConnectListViewModel.ConnectionResult.Error
+                })
+        } else {
+            val addressParserChain = addressParserFactory.parserChain(null, false)
+            val supportedHandlers = addressParserChain.handlers.filter { handler ->
+                handler.isSupported(scannedText)
+            }
+            if (supportedHandlers.isNotEmpty()) {
+                val address = supportedHandlers.first().parseAddress(scannedText)
+                openSendTokenSelect = OpenSendTokenSelect(supportedHandlers.map { it.blockchainType }, address.hex)
+                emitState()
+            } else {
+                errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                emitState()
+            }
+        }
+    }
+
+    fun onSendOpened() {
+        openSendTokenSelect = null
+        emitState()
+    }
+
+    fun errorShown() {
+        errorMessage = null
+        emitState()
+    }
+
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
         class Dialog(val wallet: Wallet, val errorMessage: String?) : SyncError()
@@ -222,7 +260,14 @@ data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem2>,
     val viewState: ViewState?,
     val isRefreshing: Boolean,
-    val headerNote: HeaderNote
+    val headerNote: HeaderNote,
+    val errorMessage: String?,
+    val openSend: OpenSendTokenSelect? = null,
+)
+
+data class OpenSendTokenSelect(
+    val blockchainTypes: List<BlockchainType>,
+    val address: String
 )
 
 sealed class TotalUIState {

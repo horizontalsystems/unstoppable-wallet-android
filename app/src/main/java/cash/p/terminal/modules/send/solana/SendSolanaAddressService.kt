@@ -8,18 +8,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 
-class SendSolanaAddressService(val predefinedAddress: String?) {
-    private var address: Address? = predefinedAddress?.let { Address(it) }
+class SendSolanaAddressService(prefilledAddress: String?) {
+    private var address: Address? = prefilledAddress?.let { Address(it) }
     private var addressError: Throwable? = null
-    private var solanaAddress: SolanaAddress? = predefinedAddress?.let { SolanaAddress(it) }
+    var solanaAddress: SolanaAddress? = prefilledAddress?.let { SolanaAddress(it) }
+        private set
 
     private val _stateFlow = MutableStateFlow(
-            State(
-                    address = address,
-                    evmAddress = solanaAddress,
-                    addressError = addressError,
-                    canBeSend = solanaAddress != null,
-            )
+        State(
+            address = address,
+            evmAddress = solanaAddress,
+            addressError = addressError,
+            canBeSend = solanaAddress != null,
+        )
     )
     val stateFlow = _stateFlow.asStateFlow()
 
@@ -46,18 +47,18 @@ class SendSolanaAddressService(val predefinedAddress: String?) {
     private fun emitState() {
         _stateFlow.update {
             State(
-                    address = address,
-                    evmAddress = solanaAddress,
-                    addressError = addressError,
-                    canBeSend = solanaAddress != null
+                address = address,
+                evmAddress = solanaAddress,
+                addressError = addressError,
+                canBeSend = solanaAddress != null
             )
         }
     }
 
     data class State(
-            val address: Address?,
-            val evmAddress: SolanaAddress?,
-            val addressError: Throwable?,
-            val canBeSend: Boolean
+        val address: Address?,
+        val evmAddress: SolanaAddress?,
+        val addressError: Throwable?,
+        val canBeSend: Boolean
     )
 }
