@@ -136,38 +136,37 @@ class AddressViewModel(
         val udnHandler = AddressHandlerUdn(TokenQuery(blockchain.type, TokenType.Native), "", udnApiKey)
         val domainAddressHandlers = mutableListOf<IAddressHandler>(udnHandler)
         val rawAddressHandlers = mutableListOf<IAddressHandler>()
-
         when (blockchain.type) {
             BlockchainType.Bitcoin -> {
                 val network = MainNet()
-                rawAddressHandlers.add(AddressHandlerBase58(network))
-                rawAddressHandlers.add(AddressHandlerBech32(network))
+                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
+                rawAddressHandlers.add(AddressHandlerBech32(network, blockchain.type))
             }
             BlockchainType.BitcoinCash -> {
                 val network = MainNetBitcoinCash()
-                rawAddressHandlers.add(AddressHandlerBase58(network))
+                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
                 rawAddressHandlers.add(AddressHandlerBitcoinCash(network))
             }
             BlockchainType.ECash -> {
                 val network = MainNetECash()
-                rawAddressHandlers.add(AddressHandlerBase58(network))
+                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
                 rawAddressHandlers.add(AddressHandlerBitcoinCash(network))
             }
             BlockchainType.Litecoin -> {
                 val network = MainNetLitecoin()
-                rawAddressHandlers.add(AddressHandlerBase58(network))
-                rawAddressHandlers.add(AddressHandlerBech32(network))
+                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
+                rawAddressHandlers.add(AddressHandlerBech32(network, blockchain.type))
             }
             BlockchainType.Dash -> {
                 val network = MainNetDash()
-                rawAddressHandlers.add(AddressHandlerBase58(network))
+                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
             }
             BlockchainType.BinanceChain -> {
                 rawAddressHandlers.add(AddressHandlerBinanceChain())
             }
             BlockchainType.Zcash -> {
                 //No validation
-                rawAddressHandlers.add(AddressHandlerPure())
+                rawAddressHandlers.add(AddressHandlerPure(blockchain.type))
             }
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
@@ -177,8 +176,8 @@ class AddressViewModel(
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {
-                domainAddressHandlers.add(AddressHandlerEns(EnsResolverHolder.resolver))
-                rawAddressHandlers.add(AddressHandlerEvm())
+                domainAddressHandlers.add(AddressHandlerEns(blockchain.type, EnsResolverHolder.resolver))
+                rawAddressHandlers.add(AddressHandlerEvm(blockchain.type))
             }
             BlockchainType.Solana -> {
                 rawAddressHandlers.add(AddressHandlerSolana())

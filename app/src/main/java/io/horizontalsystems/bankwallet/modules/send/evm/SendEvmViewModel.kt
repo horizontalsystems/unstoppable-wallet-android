@@ -17,19 +17,20 @@ import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class SendEvmViewModel(
-        val wallet: Wallet,
-        val sendToken: Token,
-        val adapter: ISendEthereumAdapter,
-        private val xRateService: XRateService,
-        private val amountService: SendAmountAdvancedService,
-        private val addressService: SendEvmAddressService,
-        val coinMaxAllowedDecimals: Int
+    val wallet: Wallet,
+    val sendToken: Token,
+    val adapter: ISendEthereumAdapter,
+    private val xRateService: XRateService,
+    private val amountService: SendAmountAdvancedService,
+    private val addressService: SendEvmAddressService,
+    val coinMaxAllowedDecimals: Int,
+    private val showAddressInput: Boolean
 ) : ViewModel() {
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-    private val showAddressInput = addressService.predefinedAddress == null
+    private val prefilledAddress = addressService.evmAddress?.let { Address(it.eip55) }
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -37,7 +38,8 @@ class SendEvmViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput
+            showAddressInput = showAddressInput,
+            prefilledAddress = prefilledAddress
         )
     )
         private set
@@ -84,6 +86,7 @@ class SendEvmViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
+            prefilledAddress = prefilledAddress,
         )
     }
 

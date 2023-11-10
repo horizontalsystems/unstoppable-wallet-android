@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.modules.balance.*
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
+import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -330,6 +331,13 @@ fun BalanceItems(
                 )
             }
         }
+    }
+    uiState.openSend?.let { openSend ->
+        navController.slideFromRight(
+            R.id.sendTokenSelectFragment,
+            SendTokenSelectFragment.prepareParams(openSend.blockchainTypes, openSend.address)
+        )
+        viewModel.onSendOpened()
     }
 }
 
