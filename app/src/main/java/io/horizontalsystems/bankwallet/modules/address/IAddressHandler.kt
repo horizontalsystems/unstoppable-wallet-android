@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.address
 
 import com.unstoppabledomains.resolution.Resolution
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAddressValidator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.binancechainkit.helpers.Crypto
 import io.horizontalsystems.bitcoincore.network.Network
@@ -252,6 +253,19 @@ class AddressHandlerSolana : IAddressHandler {
             throw AddressValidator.AddressValidationException(e.message ?: "")
         }
 
+        return Address(value)
+    }
+
+}
+
+class AddressHandlerZcash : IAddressHandler {
+    override val blockchainType = BlockchainType.Zcash
+
+    override fun isSupported(value: String): Boolean {
+        return ZcashAddressValidator.validate(value)
+    }
+
+    override fun parseAddress(value: String): Address {
         return Address(value)
     }
 

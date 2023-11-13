@@ -50,6 +50,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
+import java.util.regex.Pattern
 import kotlin.math.max
 
 class ZcashAdapter(
@@ -376,5 +377,25 @@ class ZcashAdapter(
                 Synchronizer.erase(App.instance, ZcashNetwork.Mainnet, getValidAliasFromAccountId(accountId))
             }
         }
+    }
+}
+
+object ZcashAddressValidator {
+    fun validate(address: String): Boolean {
+        return isValidZcashAddress(address)
+    }
+
+    private fun isValidTransparentAddress(address: String): Boolean {
+        val transparentPattern = Pattern.compile("^t[0-9a-zA-Z]{34}$")
+        return transparentPattern.matcher(address).matches()
+    }
+
+    private fun isValidShieldedAddress(address: String): Boolean {
+        val shieldedPattern = Pattern.compile("^z[0-9a-zA-Z]{77}$")
+        return shieldedPattern.matcher(address).matches()
+    }
+
+    private fun isValidZcashAddress(address: String): Boolean {
+        return isValidTransparentAddress(address) || isValidShieldedAddress(address)
     }
 }
