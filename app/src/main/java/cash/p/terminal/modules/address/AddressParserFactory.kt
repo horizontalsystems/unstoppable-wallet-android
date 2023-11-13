@@ -53,9 +53,7 @@ class AddressParserFactory(
             }
 
             BlockchainType.Zcash -> {
-                //No validation
-                //todo: add zcash address handler
-//                addressHandlers.add(AddressHandlerPure(blockchainType))
+                addressHandlers.add(AddressHandlerZcash())
             }
 
             BlockchainType.Ethereum,
