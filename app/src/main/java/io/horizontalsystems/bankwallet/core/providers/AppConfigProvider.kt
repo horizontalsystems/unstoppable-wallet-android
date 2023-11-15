@@ -109,6 +109,10 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.oneInchApiKey)
     }
 
+    val blockchairApiKey by lazy {
+        Translator.getString(R.string.blockchairApiKey)
+    }
+
     val fiatDecimal: Int = 2
     val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
