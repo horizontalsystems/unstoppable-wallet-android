@@ -246,7 +246,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         evmSyncSourceStorage = EvmSyncSourceStorage(appDatabase)
         evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
 
-        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
+        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, appConfigProvider, marketKit)
 
         binanceKitManager = BinanceKitManager()
 
