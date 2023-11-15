@@ -218,10 +218,8 @@ class BalanceViewModel(
                     connectionResult = WalletConnectListViewModel.ConnectionResult.Error
                 })
         } else {
-            val addressParserChain = addressParserFactory.parserChain(null, false)
-            val supportedHandlers = addressParserChain.handlers.filter { handler ->
-                handler.isSupported(scannedText)
-            }
+            val addressParserChain = addressParserFactory.parserChain(null)
+            val supportedHandlers = addressParserChain.supportedAddressHandlers(scannedText)
             if (supportedHandlers.isNotEmpty()) {
                 val address = supportedHandlers.first().parseAddress(scannedText)
                 openSendTokenSelect = OpenSendTokenSelect(supportedHandlers.map { it.blockchainType }, address.hex)

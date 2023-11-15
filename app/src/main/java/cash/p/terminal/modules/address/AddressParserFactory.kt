@@ -14,9 +14,7 @@ class AddressParserFactory(
     private val udnApiKey: String,
 ) {
 
-    private fun parserChainHandlers(blockchainType: BlockchainType, withEns: Boolean = true): List<IAddressHandler> {
-        val udnHandler = AddressHandlerUdn(TokenQuery(blockchainType, TokenType.Native), "", udnApiKey)
-        val domainAddressHandlers = mutableListOf<IAddressHandler>(udnHandler)
+    private fun parserChainHandlers(blockchainType: BlockchainType): List<IAddressHandler> {
         val addressHandlers = mutableListOf<IAddressHandler>()
         when (blockchainType) {
             BlockchainType.Bitcoin -> {
@@ -64,7 +62,6 @@ class AddressParserFactory(
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {
-                domainAddressHandlers.add(AddressHandlerEns(blockchainType, EnsResolverHolder.resolver))
                 addressHandlers.add(AddressHandlerEvm(blockchainType))
             }
 
@@ -79,25 +76,47 @@ class AddressParserFactory(
             is BlockchainType.Unsupported -> {
             }
         }
-        if (withEns) {
-            addressHandlers.addAll(domainAddressHandlers)
-        }
         return addressHandlers
     }
 
-    fun parserChain(blockchainType: BlockchainType?, withEns: Boolean = true): AddressParserChain {
+    private fun domainHandlers(blockchainType: BlockchainType): List<IAddressHandler> {
+        val udnHandler = AddressHandlerUdn(TokenQuery(blockchainType, TokenType.Native), "", udnApiKey)
+        val domainAddressHandlers = mutableListOf<IAddressHandler>(udnHandler)
+        when (blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Optimism,
+            BlockchainType.Gnosis,
+            BlockchainType.Fantom,
+            BlockchainType.ArbitrumOne -> {
+                domainAddressHandlers.add(AddressHandlerEns(blockchainType, EnsResolverHolder.resolver))
+            }
+
+            else -> {}
+        }
+        return domainAddressHandlers
+    }
+
+    fun parserChain(blockchainType: BlockchainType?, withEns: Boolean = false): AddressParserChain {
+        val addressHandlers = mutableListOf<IAddressHandler>()
+        val domainHandlers = mutableListOf<IAddressHandler>()
+
         blockchainType?.let {
-            return AddressParserChain().apply {
-                addHandlers(parserChainHandlers(it, withEns))
+            addressHandlers.addAll(parserChainHandlers(it))
+            if (withEns) {
+                domainHandlers.addAll(domainHandlers(it))
+            }
+        } ?: run {
+            BlockchainType.supported.forEach {
+                addressHandlers.addAll(parserChainHandlers(it))
+                if (withEns) {
+                    domainHandlers.addAll(domainHandlers(it))
+                }
             }
         }
 
-        val handlers = BlockchainType.supported.map {
-            parserChainHandlers(it, withEns)
-        }.flatten()
-
-        return AddressParserChain().apply {
-            addHandlers(handlers)
-        }
+        return AddressParserChain(addressHandlers, domainHandlers)
     }
 }

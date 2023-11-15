@@ -11,39 +11,25 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.order
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.address.AddressHandlerBase58
-import cash.p.terminal.modules.address.AddressHandlerBech32
-import cash.p.terminal.modules.address.AddressHandlerBinanceChain
-import cash.p.terminal.modules.address.AddressHandlerBitcoinCash
-import cash.p.terminal.modules.address.AddressHandlerEns
-import cash.p.terminal.modules.address.AddressHandlerEvm
-import cash.p.terminal.modules.address.AddressHandlerPure
-import cash.p.terminal.modules.address.AddressHandlerSolana
-import cash.p.terminal.modules.address.AddressHandlerTron
-import cash.p.terminal.modules.address.AddressHandlerUdn
-import cash.p.terminal.modules.address.EnsResolverHolder
+import cash.p.terminal.modules.address.AddressParserChain
+import cash.p.terminal.modules.address.AddressParserFactory
+import cash.p.terminal.modules.address.AddressValidationException
 import cash.p.terminal.modules.address.IAddressHandler
-import cash.p.terminal.modules.contacts.ContactAddressParser
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
-import io.horizontalsystems.bitcoinkit.MainNet
-import io.horizontalsystems.dashkit.MainNetDash
-import io.horizontalsystems.ecash.MainNetECash
-import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddressViewModel(
     private val contactUid: String?,
     private val contactsRepository: ContactsRepository,
-    private val udnApiKey: String,
+    private val addressParserFactory: AddressParserFactory,
     evmBlockchainManager: EvmBlockchainManager,
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
@@ -82,7 +68,7 @@ class AddressViewModel(
     }
 
     private var blockchain = contactAddress?.blockchain ?: availableBlockchains.first()
-    private var addressParser: ContactAddressParser = addressParser(blockchain)
+    private var addressParser: AddressParserChain = addressParserFactory.parserChain(blockchain.type, true)
 
     var uiState by mutableStateOf(uiState())
         private set
@@ -97,7 +83,7 @@ class AddressViewModel(
 
     fun onEnterBlockchain(blockchain: Blockchain) {
         this.blockchain = blockchain
-        this.addressParser = addressParser(blockchain)
+        this.addressParser = addressParserFactory.parserChain(blockchain.type, true)
 
         emitUiState()
 
@@ -120,7 +106,7 @@ class AddressViewModel(
             emitUiState()
 
             addressState = try {
-                val parsedAddress = addressParser.parseAddress(address)
+                val parsedAddress = parseAddress(addressParser, address.trim())
                 ensureActive()
                 contactsRepository.validateAddress(contactUid, ContactAddress(blockchain, parsedAddress.hex))
                 DataState.Success(parsedAddress)
@@ -130,66 +116,6 @@ class AddressViewModel(
             }
             emitUiState()
         }
-    }
-
-    private fun addressParser(blockchain: Blockchain): ContactAddressParser {
-        val udnHandler = AddressHandlerUdn(TokenQuery(blockchain.type, TokenType.Native), "", udnApiKey)
-        val domainAddressHandlers = mutableListOf<IAddressHandler>(udnHandler)
-        val rawAddressHandlers = mutableListOf<IAddressHandler>()
-        when (blockchain.type) {
-            BlockchainType.Bitcoin -> {
-                val network = MainNet()
-                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
-                rawAddressHandlers.add(AddressHandlerBech32(network, blockchain.type))
-            }
-            BlockchainType.BitcoinCash -> {
-                val network = MainNetBitcoinCash()
-                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
-                rawAddressHandlers.add(AddressHandlerBitcoinCash(network))
-            }
-            BlockchainType.ECash -> {
-                val network = MainNetECash()
-                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
-                rawAddressHandlers.add(AddressHandlerBitcoinCash(network))
-            }
-            BlockchainType.Litecoin -> {
-                val network = MainNetLitecoin()
-                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
-                rawAddressHandlers.add(AddressHandlerBech32(network, blockchain.type))
-            }
-            BlockchainType.Dash -> {
-                val network = MainNetDash()
-                rawAddressHandlers.add(AddressHandlerBase58(network, blockchain.type))
-            }
-            BlockchainType.BinanceChain -> {
-                rawAddressHandlers.add(AddressHandlerBinanceChain())
-            }
-            BlockchainType.Zcash -> {
-                //No validation
-                rawAddressHandlers.add(AddressHandlerPure(blockchain.type))
-            }
-            BlockchainType.Ethereum,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Polygon,
-            BlockchainType.Avalanche,
-            BlockchainType.Optimism,
-            BlockchainType.Gnosis,
-            BlockchainType.Fantom,
-            BlockchainType.ArbitrumOne -> {
-                domainAddressHandlers.add(AddressHandlerEns(blockchain.type, EnsResolverHolder.resolver))
-                rawAddressHandlers.add(AddressHandlerEvm(blockchain.type))
-            }
-            BlockchainType.Solana -> {
-                rawAddressHandlers.add(AddressHandlerSolana())
-            }
-            BlockchainType.Tron -> {
-                rawAddressHandlers.add(AddressHandlerTron())
-            }
-            is BlockchainType.Unsupported -> {
-            }
-        }
-
-        return ContactAddressParser(domainAddressHandlers, rawAddressHandlers, blockchain)
     }
 
     private fun uiState() = UiState(
@@ -206,6 +132,27 @@ class AddressViewModel(
 
     private fun emitUiState() {
         uiState = uiState()
+    }
+
+    private suspend fun parseAddress(addressParser: AddressParserChain, value: String): Address = withContext(Dispatchers.IO) {
+        try {
+            val resolvedAddress = addressParser.getAddressFromDomain(value)?.hex ?: value
+            parse(resolvedAddress, addressParser.supportedAddressHandlers(resolvedAddress))
+        } catch (error: Throwable) {
+            throw AddressValidationException.Invalid(error, blockchain.name)
+        }
+    }
+
+    private fun parse(value: String, supportedHandlers: List<IAddressHandler>): Address {
+        if (supportedHandlers.isEmpty()) {
+            throw AddressValidationException.Unsupported(blockchain.name)
+        }
+
+        try {
+            return supportedHandlers.first().parseAddress(value)
+        } catch (t: Throwable) {
+            throw AddressValidationException.Invalid(t, blockchain.name)
+        }
     }
 
     data class UiState(
