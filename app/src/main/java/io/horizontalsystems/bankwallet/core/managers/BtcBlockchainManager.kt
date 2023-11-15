@@ -1,17 +1,19 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
-import io.horizontalsystems.bitcoincore.BitcoinCore
+import io.horizontalsystems.bitcoincore.BitcoinCore.SyncMode
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class BtcBlockchainManager(
     private val storage: BlockchainSettingsStorage,
-    marketKit: MarketKitWrapper
+    private val appConfigProvider: AppConfigProvider,
+    marketKit: MarketKitWrapper,
 ) {
 
     private val restoreModeUpdatedSubject = PublishSubject.create<BlockchainType>()
@@ -38,14 +40,21 @@ class BtcBlockchainManager(
         return storage.btcRestoreMode(blockchainType) ?: BtcRestoreMode.Api
     }
 
-    fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): BitcoinCore.SyncMode {
+    private fun apiSyncMode(blockchainType: BlockchainType) = when (blockchainType) {
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash -> SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
+
+        else -> SyncMode.Api()
+    }
+
+    fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): SyncMode {
         if (accountOrigin == AccountOrigin.Created) {
-            return BitcoinCore.SyncMode.NewWallet()
+            return apiSyncMode(blockchainType)
         }
 
         return when (restoreMode(blockchainType)) {
-            BtcRestoreMode.Api -> BitcoinCore.SyncMode.Api()
-            BtcRestoreMode.Blockchain -> BitcoinCore.SyncMode.Full()
+            BtcRestoreMode.Api -> apiSyncMode(blockchainType)
+            BtcRestoreMode.Blockchain -> SyncMode.Full()
         }
     }
 
