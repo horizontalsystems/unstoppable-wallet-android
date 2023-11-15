@@ -102,8 +102,18 @@ class WC2Service(
     }
 
     fun approve(proposal: Sign.Model.SessionProposal, blockchains: List<WCBlockchain>) {
+        val supportedMethods = listOf(
+            "personal_sign",
+            "eth_signTypedData",
+            "eth_sendTransaction",
+            "eth_sign",
+        )
+
         val namespaces = proposal.requiredNamespaces + proposal.optionalNamespaces
-        val methods = namespaces.values.flatMap { it.methods }.distinct()
+        val methods = namespaces.values
+            .flatMap { it.methods }
+            .distinct()
+            .filter { supportedMethods.contains(it) }
         val events = namespaces.values.flatMap { it.events }.distinct()
 
         val sessionNamespaces = blockchains
