@@ -19,9 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 
-class WC2Service(
-    private val sessionRequestFilterManager: SessionRequestFilterManager
-) : SignClient.WalletDelegate {
+class WC2Service : SignClient.WalletDelegate {
 
     private val TAG = "WC2Service"
 
@@ -227,9 +225,6 @@ class WC2Service(
     }
 
     override fun onSessionRequest(sessionRequest: Sign.Model.SessionRequest, verifyContext: Sign.Model.VerifyContext) {
-        if (sessionRequestFilterManager.canHandle(sessionRequest)) {
-            return
-        }
         sessionsRequestReceivedSubject.onNext(sessionRequest)
         pendingRequestUpdatedSubject.onNext(Unit)
     }
