@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -85,6 +86,8 @@ fun HardwareWalletSignFragment(ownAddress: String,
     var isSending by remember { mutableStateOf<Boolean>(false) }
 
     var scanToTransmit by remember { mutableStateOf<Boolean>(false) }
+    var showScanInstructions by remember { mutableStateOf<Boolean>(false) }
+
     var txData by remember { mutableStateOf<String?>(null) }
     var messageHex by remember { mutableStateOf<String?>(null) }
 
@@ -122,7 +125,7 @@ fun HardwareWalletSignFragment(ownAddress: String,
         val intentListener = Consumer<Intent> {
             if (ownAddress != null) {
                 if (handleNfcIntent(it, ownAddress!!, txData, messageHex)) {
-                    scanToTransmit = true
+                    showScanInstructions = true
                 } else {
                     sendViewModel?.service?.setFailed(IOException("NFC Connection Error"))
                     signMessageViewModel?.showSignError = true
@@ -171,7 +174,35 @@ fun HardwareWalletSignFragment(ownAddress: String,
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                if (scanToTransmit) {
+                if (showScanInstructions) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Hit 'Scan to transmit' to scan the displayed QR Code and complete the process",
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth()
+                                .padding(top = 16.dp, bottom = 8.dp),
+                            color = Color.Black,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center
+                        )
+                        ButtonPrimaryYellow(
+                            title = "Scan to transmit",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            onClick = {
+                                showScanInstructions = false
+                                scanToTransmit = true
+                            }
+                        )
+                    }
+                } else if (scanToTransmit) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(0.75f)
