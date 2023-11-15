@@ -94,6 +94,7 @@ android {
             resValue "string", "trongridApiKey", "33374494-8060-447e-8367-90c5efd4ed95"
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "ElyK7s22HR0JD78CEXVPnpZA8UyuUwIl"
+            resValue "string", "blockchairApiKey", "M___unstoppn7jfFpe40X___________"
         }
 
         appcenterdebug {
@@ -135,6 +136,7 @@ android {
             resValue "string", "trongridApiKey", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29"
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "ElyK7s22HR0JD78CEXVPnpZA8UyuUwIl"
+            resValue "string", "blockchairApiKey", "M___unstoppn7jfFpe40X___________"
         }
 
         appcenterrelease {
@@ -270,7 +272,7 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:bc62893'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:2bd239f'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:94bb971'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:7e4d7c0'
