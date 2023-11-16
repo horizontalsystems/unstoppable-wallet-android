@@ -23,6 +23,8 @@ class BtcBlockchainManager(
     val transactionSortModeUpdatedObservable: Observable<BlockchainType> =
         transactionSortModeUpdatedSubject
 
+    private val blockchairSyncEnabledBlockchains = listOf(BlockchainType.Bitcoin, BlockchainType.BitcoinCash)
+
     private val blockchainTypes = listOf(
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
@@ -36,24 +38,31 @@ class BtcBlockchainManager(
     fun blockchain(blockchainType: BlockchainType) =
         allBlockchains.firstOrNull { blockchainType == it.type }
 
+    private fun defaultRestoreMode(blockchainType: BlockchainType) =
+        if (blockchainType in blockchairSyncEnabledBlockchains) BtcRestoreMode.Blockchair else BtcRestoreMode.Hybrid
+
     fun restoreMode(blockchainType: BlockchainType): BtcRestoreMode {
-        return storage.btcRestoreMode(blockchainType) ?: BtcRestoreMode.Api
+        return storage.btcRestoreMode(blockchainType) ?: defaultRestoreMode(blockchainType)
     }
 
-    private fun apiSyncMode(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.Bitcoin,
-        BlockchainType.BitcoinCash -> SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
-
-        else -> SyncMode.Api()
-    }
+    fun availableRestoreModes(blockchainType: BlockchainType) =
+        BtcRestoreMode.values().let {
+            val values = it.toList()
+            if (blockchainType !in blockchairSyncEnabledBlockchains) {
+                values - BtcRestoreMode.Blockchair
+            } else {
+                values
+            }
+        }
 
     fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): SyncMode {
         if (accountOrigin == AccountOrigin.Created) {
-            return apiSyncMode(blockchainType)
+            return SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
         }
 
         return when (restoreMode(blockchainType)) {
-            BtcRestoreMode.Api -> apiSyncMode(blockchainType)
+            BtcRestoreMode.Blockchair -> SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
+            BtcRestoreMode.Hybrid -> SyncMode.Api()
             BtcRestoreMode.Blockchain -> SyncMode.Full()
         }
     }

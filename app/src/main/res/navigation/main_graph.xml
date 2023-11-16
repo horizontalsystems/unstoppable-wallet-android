@@ -81,9 +81,6 @@
         android:id="@+id/backupLocalFragment"
         android:name="cash.p.terminal.modules.backuplocal.BackupLocalFragment"/>
     <fragment
-        android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
-        android:name="cash.p.terminal.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
-    <fragment
         android:id="@+id/evmBlockchainSyncModeInfoFragment"
         android:name="cash.p.terminal.modules.info.EvmBlockchainSyncModeInfoFragment"/>
      <fragment

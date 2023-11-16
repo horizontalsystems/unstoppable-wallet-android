@@ -26,21 +26,20 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 
 class BtcBlockchainSettingsFragment : BaseComposeFragment() {
 
@@ -104,14 +103,12 @@ private fun BtcBlockchainSettingsScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 Spacer(Modifier.height(12.dp))
-
+                RestoreSourceSettings(viewModel)
+                Spacer(Modifier.height(32.dp))
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceChangeWarning)
                 )
-
-                Spacer(Modifier.height(24.dp))
-                RestoreSourceSettings(viewModel, navController)
                 Spacer(Modifier.height(32.dp))
             }
 
@@ -132,41 +129,29 @@ private fun BtcBlockchainSettingsScreen(
 
 @Composable
 private fun RestoreSourceSettings(
-    viewModel: BtcBlockchainSettingsViewModel,
-    navController: NavController
+    viewModel: BtcBlockchainSettingsViewModel
 ) {
-    BlockchainSettingSection(
-        viewModel.restoreSources,
-        R.id.btcBlockchainRestoreSourceInfoFragment,
-        R.string.BtcBlockchainSettings_RestoreSource,
-        R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription,
-        { viewItem -> viewModel.onSelectRestoreMode(viewItem) },
-        navController
-    )
+    BlockchainSettingSection(viewModel.restoreSources) { viewItem ->
+        viewModel.onSelectRestoreMode(viewItem)
+    }
 }
 
 @Composable
 private fun BlockchainSettingSection(
     restoreSources: List<BtcBlockchainSettingsModule.ViewItem>,
-    infoScreenId: Int,
-    settingTitleTextRes: Int,
-    settingDescriptionTextRes: Int,
-    onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit,
-    navController: NavController
+    onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit
 ) {
-    HeaderText(
-        text = stringResource(settingTitleTextRes),
-        onInfoClick = {
-            navController.slideFromBottom(infoScreenId)
-        })
+    subhead2_grey(
+        modifier = Modifier.padding(horizontal = 32.dp),
+        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+    )
+    VSpacer(32.dp)
     CellUniversalLawrenceSection(restoreSources) { item ->
-        BlockchainSettingCell(item.title, item.subtitle, item.selected) {
+        BlockchainSettingCell(item.title, item.subtitle, item.selected, item.icon) {
             onItemClick(item)
         }
     }
-    InfoText(
-        text = stringResource(settingDescriptionTextRes),
-    )
+
 }
 
 @Composable
@@ -174,12 +159,31 @@ fun BlockchainSettingCell(
     title: String,
     subtitle: String,
     checked: Boolean,
+    icon: BlockchainSettingsIcon?,
     onClick: () -> Unit
 ) {
     RowUniversal(
         onClick = onClick
     ) {
-        Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
+        icon?.let {
+            HSpacer(width = 16.dp)
+            Image(
+                modifier = Modifier
+                    .size(32.dp),
+                painter = when (icon) {
+                    is BlockchainSettingsIcon.ApiIcon -> painterResource(icon.resId)
+                    is BlockchainSettingsIcon.BlockchainIcon -> rememberAsyncImagePainter(
+                        model = icon.url,
+                        error = painterResource(R.drawable.ic_platform_placeholder_32)
+                    )
+                },
+                contentDescription = null,
+            )
+        }
+
+        Column(modifier = Modifier
+            .padding(start = 16.dp)
+            .weight(1f)) {
             body_leah(
                 text = title,
                 maxLines = 1,
