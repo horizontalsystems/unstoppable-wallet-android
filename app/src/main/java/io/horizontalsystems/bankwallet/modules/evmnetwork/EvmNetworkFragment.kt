@@ -154,7 +154,7 @@ private fun EvmNetworkScreen(
 
                 item {
                     CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
-                        BlockchainSettingCell(item.name, item.url, item.selected) {
+                        BlockchainSettingCell(item.name, item.url, item.selected, null) {
                             viewModel.onSelectSyncSource(item.syncSource)
                         }
                     }

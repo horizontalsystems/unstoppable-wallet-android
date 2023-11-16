@@ -4,9 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.ViewItem
 import io.reactivex.disposables.CompositeDisposable
 
@@ -54,15 +56,23 @@ class BtcBlockchainSettingsViewModel(
     }
 
     private fun syncRestoreModeState() {
-        val viewItems = BtcRestoreMode.values().map { mode ->
+        val viewItems = service.restoreModes.map { mode ->
             ViewItem(
                 id = mode.raw,
                 title = Translator.getString(mode.title),
                 subtitle = Translator.getString(mode.description),
-                selected = mode == service.restoreMode
+                selected = mode == service.restoreMode,
+                icon = mode.icon
             )
         }
         restoreSources = viewItems
     }
+
+    private val BtcRestoreMode.icon: BlockchainSettingsIcon
+        get() = when (this) {
+            BtcRestoreMode.Blockchair -> BlockchainSettingsIcon.ApiIcon(R.drawable.ic_blockchair)
+            BtcRestoreMode.Hybrid -> BlockchainSettingsIcon.ApiIcon(R.drawable.ic_api_hybrid)
+            BtcRestoreMode.Blockchain -> BlockchainSettingsIcon.BlockchainIcon(service.blockchain.type.imageUrl)
+        }
 
 }
