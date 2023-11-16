@@ -703,17 +703,9 @@
     <string name="AddEvmSyncSource_AddRPCSource">Añadir fuente RPC</string>
     <string name="AddEvmSyncSource_Name">Nombre</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Auth Básica (opcional)</string>
-    <string name="AddEvmSyncSource_RpcSource">Fuente RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">La fuente RPC con esta url ya existe</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">La url introducida no es válida. La url válida debe tener uno de los siguientes esquemas: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
-    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Después de cambiar Restaurar Fuente, el monedero tendrá que resinc sí mismo con el blockchain de Bitcoin.</string>
-    <string name="BtcBlockchainSettings_RestoreSource">Restaurar Fuente</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Seleccione una fuente de datos para la restauración de la cartera. La restauración de la cadena de bloques lleva mucho más tiempo.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.
-\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
-\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
-\n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entradas/Salidas</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Ajustes de la transacción</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entradas / salidas de transacciones</string>
@@ -739,9 +731,6 @@
     <string name="SettingsSecurity_SortingShuffleDescription">Indexación aleatoria</string>
     <string name="SettingsSecurity_SortingBip69">Bip69 determinista</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexación Lexicográfica</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">Recomendado</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">Desde Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Más Privado</string>
     <string name="SetDuressPin_Title">Durar contraseña</string>
     <string name="SetDuressPin_Description">Establecer un código de acceso para el modo Duress</string>
     <string name="EditDuressPin_Title">Editar contraseña de Duración</string>
