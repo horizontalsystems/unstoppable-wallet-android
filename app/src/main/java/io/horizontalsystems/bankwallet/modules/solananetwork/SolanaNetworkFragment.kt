@@ -26,14 +26,13 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
@@ -95,9 +94,12 @@ private fun SolanaNetworkScreen(
             ) {
 
                 item {
-                    HeaderText(stringResource(R.string.AddEvmSyncSource_RpcSource)) {
-                        navController.slideFromBottom(R.id.evmBlockchainSyncModeInfoFragment)
-                    }
+                    VSpacer(12.dp)
+                    subhead2_grey(
+                        modifier = Modifier.padding(horizontal = 32.dp),
+                        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+                    )
+                    VSpacer(32.dp)
                 }
 
                 item {
@@ -125,7 +127,9 @@ private fun NetworkSettingCell(
     RowUniversal(
         onClick = onClick
     ) {
-        Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
+        Column(modifier = Modifier
+            .padding(start = 16.dp)
+            .weight(1f)) {
             body_leah(
                 text = title,
                 maxLines = 1,
