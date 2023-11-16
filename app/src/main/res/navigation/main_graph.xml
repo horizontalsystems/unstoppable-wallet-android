@@ -86,9 +86,6 @@
     <fragment
         android:id="@+id/backupLocalFragment"
         android:name="io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalFragment"/>
-    <fragment
-        android:id="@+id/evmBlockchainSyncModeInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.EvmBlockchainSyncModeInfoFragment"/>
      <fragment
         android:id="@+id/transactionLockTimeInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment"/>
