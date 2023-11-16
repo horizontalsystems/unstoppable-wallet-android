@@ -705,20 +705,14 @@
     <string name="EvmNetwork_AddNew">Adicionar novo</string>
     <string name="EvmNetwork_Added">Adicionado</string>
     <string name="EvmNetwork_SyncMode">Sincronizar Nó</string>
-    <string name="EvmNetwork_SyncModeDescription">Esta configuração controla como este aplicativo interage com blockchains ao enviar ou receber transações.\n\nNo caso do Bitcoin, Bitcoin Cash, Litecoin e Dash, a comunicação com os nós da rede blockchain é totalmente peer-to-peer. Os pings Unstoppable são feitos em muitos nós e se comunicam com um deles. Cada vez que o aplicativo se conecta a um nó diferente.\n\nNo caso da Ethereum, da Binance Smart Chain e outras blockchains de EVM, não existem alternativas para as carteiras móveis para interagir com as respectivas blockchains que não sejam por provedores de serviços RPC de terceiros (ex. Infura.io) ou nós pessoais. Isso essencialmente significa que sua comunicação com essa blockchain não é descentralizada. Isso não afeta seus fundos de forma alguma, apenas a capacidade de se conectar à rede blockchain.\n\nFique tranquilo, vamos mantê-lo no radar e em breve tentaremos fornecer uma forma descentralizada para sincronizar. Paciência.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">Url RPC</string>
     <string name="AddEvmSyncSource_AddRPCSource">Adicionar fonte RPC</string>
     <string name="AddEvmSyncSource_Name">Nome</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Autenticação básica (opcional)</string>
-    <string name="AddEvmSyncSource_RpcSource">Fonte RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">Fonte RPC com esta url já existe</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Url inserida é inválida. URL válida deve ter um dos seguintes esquemas: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
-    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte de restauração, a carteira terá que ressincronizar-se com a blockchain do Bitcoin.</string>
-    <string name="BtcBlockchainSettings_RestoreSource">Restaurar Fonte</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restauração de carteira. Restaurar da blockchain leva consideravelmente mais tempo.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceDescription">Esta configuração só é relevante ao restaurar uma carteira existente. É um processo de obtenção de histórico de transações para uma determinada criptomoeda, então o aplicativo de carteira é capaz de exibir transações anteriores e calcular o saldo do usuário. Isto precisa acontecer apenas uma vez quando o usuário restaura as carteiras previamente criadas.\n\nNeste ponto, existem duas possíveis maneiras de uma carteira móvel como o Unstoppable de fazer isso:\n\n1. do Servidor API: Há um servidor predefinido por terceiros que hospeda toda a blockchain e tem todos os dados processados e otimizados para fornecer esses dados de forma rápida. Este método é rápido, mas potencialmente (não necessariamente) menos privado. É também um método centralizado para restaurar uma carteira, pois depende da disponibilidade de um servidor de terceiros. Esta opção é recomendada devido à velocidade de obtenção de dados (5-10 minutos).\n\n2. da Blockchain: O aplicativo tenta restaurar diretamente de uma rede de nós da blockchain. Essa é uma maneira descentralizada de restaurar o saldo das carteiras e transações anteriores. O aplicativo pança muitos dos nós da rede e solicita dados deles sem abordar alguns nós especificamente. Esta opção é lenta e pode levar facilmente 2-3 horas, o aplicativo precisa estar aberto enquanto a restauração está acontecendo. Este método de restauração não depende de nenhuma entidade e deve funcionar em todas as condições.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrada/Saída</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Configurações de transação</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entradas / Saídas de Transação</string>
@@ -741,9 +735,6 @@
     <string name="SettingsSecurity_SortingBip69Short">Determinístico</string>
     <string name="SettingsSecurity_SortingBip69">Bip69 Determinístico</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexação Lexicográfica</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">Recomendado</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">Da Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Mais Privado</string>
     <string name="DuressPin_Notes_Biometrics_Title">Autenticação Biométrica</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">A carteira Unstoppable foi criada para quem deseja investir e armazenar criptomoedas de maneira privada e independente.
