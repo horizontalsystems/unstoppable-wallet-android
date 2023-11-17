@@ -11,8 +11,8 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.modules.address.AddressParserChain
-import io.horizontalsystems.bankwallet.modules.address.AddressParserFactory
 import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
 import io.horizontalsystems.bankwallet.modules.address.IAddressHandler
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 class AddressViewModel(
     private val contactUid: String?,
     private val contactsRepository: ContactsRepository,
-    private val addressParserFactory: AddressParserFactory,
+    private val addressHandlerFactory: AddressHandlerFactory,
     evmBlockchainManager: EvmBlockchainManager,
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
@@ -68,7 +68,7 @@ class AddressViewModel(
     }
 
     private var blockchain = contactAddress?.blockchain ?: availableBlockchains.first()
-    private var addressParser: AddressParserChain = addressParserFactory.parserChain(blockchain.type, true)
+    private var addressParser: AddressParserChain = addressHandlerFactory.parserChain(blockchain.type, true)
 
     var uiState by mutableStateOf(uiState())
         private set
@@ -83,7 +83,7 @@ class AddressViewModel(
 
     fun onEnterBlockchain(blockchain: Blockchain) {
         this.blockchain = blockchain
-        this.addressParser = addressParserFactory.parserChain(blockchain.type, true)
+        this.addressParser = addressHandlerFactory.parserChain(blockchain.type, true)
 
         emitUiState()
 

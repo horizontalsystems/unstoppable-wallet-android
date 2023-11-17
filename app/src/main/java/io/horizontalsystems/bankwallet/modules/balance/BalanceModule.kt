@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.address.AddressParserFactory
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexRepositoryWrapper
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexSorter
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewModel
@@ -37,7 +37,7 @@ object BalanceModule {
                 App.localStorage,
                 App.wc2Service,
                 App.wc2Manager,
-                AddressParserFactory(App.appConfigProvider.udnApiKey)
+                AddressHandlerFactory(App.appConfigProvider.udnApiKey)
             ) as T
         }
     }

@@ -55,7 +55,8 @@ fun SendBitcoinNavHost(
     fragmentNavController: NavController,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    prefilledAmount: BigDecimal?
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -69,7 +70,8 @@ fun SendBitcoinNavHost(
                 navController,
                 viewModel,
                 amountInputModeViewModel,
-                sendEntryPointDestId
+                sendEntryPointDestId,
+                prefilledAmount,
             )
         }
         composablePage(SendBtcAdvancedSettingsPage) {
@@ -91,7 +93,8 @@ fun SendBitcoinScreen(
     composeNavController: NavController,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    prefilledAmount: BigDecimal?,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -106,7 +109,9 @@ fun SendBitcoinScreen(
 
     val rate = viewModel.coinRate
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.token.blockchainType))
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
+        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+    )
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {

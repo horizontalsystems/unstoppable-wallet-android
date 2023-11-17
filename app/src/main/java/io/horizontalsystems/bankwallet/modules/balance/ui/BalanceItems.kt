@@ -335,7 +335,7 @@ fun BalanceItems(
     uiState.openSend?.let { openSend ->
         navController.slideFromRight(
             R.id.sendTokenSelectFragment,
-            SendTokenSelectFragment.prepareParams(openSend.blockchainTypes, openSend.address)
+            SendTokenSelectFragment.prepareParams(openSend.blockchainTypes, openSend.address, openSend.amount)
         )
         viewModel.onSendOpened()
     }
