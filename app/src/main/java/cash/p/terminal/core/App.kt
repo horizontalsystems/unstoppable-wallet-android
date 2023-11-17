@@ -20,7 +20,6 @@ import com.walletconnect.sign.client.SignClient
 import cash.p.terminal.BuildConfig
 import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.factories.AdapterFactory
-import cash.p.terminal.core.factories.AddressParserFactory
 import cash.p.terminal.core.factories.EvmAccountManagerFactory
 import cash.p.terminal.core.managers.AccountCleaner
 import cash.p.terminal.core.managers.AccountManager
@@ -55,6 +54,7 @@ import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.managers.SolanaWalletManager
+import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TermsManager
@@ -160,7 +160,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
         lateinit var numberFormatter: IAppNumberFormatter
-        lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
@@ -350,8 +349,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         feeCoinProvider = FeeTokenProvider(marketKit)
-
-        addressParserFactory = AddressParserFactory()
 
         pinComponent = PinComponent(
             pinSettingsStorage = pinSettingsStorage,

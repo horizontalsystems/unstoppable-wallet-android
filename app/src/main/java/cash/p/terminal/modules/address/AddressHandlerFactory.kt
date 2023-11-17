@@ -10,7 +10,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 
-class AddressParserFactory(
+class AddressHandlerFactory(
     private val udnApiKey: String,
 ) {
 

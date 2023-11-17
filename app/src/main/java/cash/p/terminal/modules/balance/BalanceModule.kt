@@ -6,7 +6,7 @@ import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BalanceData
 import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.address.AddressParserFactory
+import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.balance.cex.BalanceCexRepositoryWrapper
 import cash.p.terminal.modules.balance.cex.BalanceCexSorter
 import cash.p.terminal.modules.balance.cex.BalanceCexViewModel
@@ -37,7 +37,7 @@ object BalanceModule {
                 App.localStorage,
                 App.wc2Service,
                 App.wc2Manager,
-                AddressParserFactory(App.appConfigProvider.udnApiKey)
+                AddressHandlerFactory(App.appConfigProvider.udnApiKey)
             ) as T
         }
     }

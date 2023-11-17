@@ -25,6 +25,7 @@ import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import java.math.BigDecimal
 
 @Composable
 fun SendEvmScreen(
@@ -32,7 +33,8 @@ fun SendEvmScreen(
     navController: NavController,
     viewModel: SendEvmViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    prefilledAmount: BigDecimal? = null,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -43,7 +45,9 @@ fun SendEvmScreen(
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.token.blockchainType))
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
+        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+    )
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {

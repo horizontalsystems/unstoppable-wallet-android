@@ -9,7 +9,7 @@ import cash.p.terminal.core.providers.FeeRates
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.AddressData
+import cash.p.terminal.entities.AddressUriParserResult
 import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.CexType
 import cash.p.terminal.entities.EnabledWallet
@@ -443,7 +443,7 @@ interface IFeeRateProvider {
 }
 
 interface IAddressParser {
-    fun parse(paymentAddress: String): AddressData
+    fun parse(paymentAddress: String): AddressUriParserResult
 }
 
 interface IAccountCleaner {

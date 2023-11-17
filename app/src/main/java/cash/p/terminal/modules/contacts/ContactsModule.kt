@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.modules.address.AddressParserFactory
+import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
@@ -42,7 +42,7 @@ object ContactsModule {
             return AddressViewModel(
                 contactUid,
                 App.contactsRepository,
-                AddressParserFactory(App.appConfigProvider.udnApiKey),
+                AddressHandlerFactory(App.appConfigProvider.udnApiKey),
                 App.evmBlockchainManager,
                 App.marketKit,
                 contactAddress,

@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.sendtokenselect
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -15,13 +16,15 @@ import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 
 class SendTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
         val blockchainTypes = arguments?.getParcelableArrayList<BlockchainType>(blockchainTypesKey)
-        val address = arguments?.getString(addressKey)
+        val prefilledData = arguments?.getParcelable<PrefilledData>(addressDataKey)
         val view = LocalView.current
         TokenSelectScreen(
             navController = navController,
@@ -36,7 +39,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                                 wallet = it.wallet,
                                 sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                 title = sendTitle,
-                                prefilledAddress = address,
+                                prefilledAddressData = prefilledData,
                             )
                         )
                     }
@@ -57,11 +60,18 @@ class SendTokenSelectFragment : BaseComposeFragment() {
 
     companion object {
         private const val blockchainTypesKey = "blockchainTypesKey"
-        private const val addressKey = "addressKey"
-        fun prepareParams(blockchainTypes: List<BlockchainType>? = null, address: String) = bundleOf(
+        private const val addressDataKey = "addressDataKey"
+
+        fun prepareParams(blockchainTypes: List<BlockchainType>? = null, address: String, amount: BigDecimal?) = bundleOf(
             blockchainTypesKey to blockchainTypes,
-            addressKey to address
+            addressDataKey to PrefilledData(address, amount)
         )
 
     }
 }
+
+@Parcelize
+data class PrefilledData(
+    val address: String,
+    val amount: BigDecimal? = null,
+) : Parcelable

@@ -2,16 +2,18 @@ package cash.p.terminal.core.utils
 
 import cash.p.terminal.core.IAddressParser
 import cash.p.terminal.entities.AddressData
+import cash.p.terminal.entities.AddressUriParserResult
 import java.math.BigDecimal
 
 
 class AddressParser(private val validScheme: String, private val removeScheme: Boolean) : IAddressParser {
     private val parameterVersion = "version"
-    private val parameterAmount = "amount"
+    private val parameterAmount = "amount"  // BIP21 uses amount field
+    private val parameterValue = "value" // EIP67 uses value field
     private val parameterLabel = "label"
     private val parameterMessage = "message"
 
-    override fun parse(paymentAddress: String): AddressData {
+    override fun parse(paymentAddress: String): AddressUriParserResult {
         var parsedString = paymentAddress
         val address: String
 
@@ -25,11 +27,13 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
         val schemeSeparatedParts = paymentAddress.split(":")
         // check exist scheme. If scheme equal network scheme (Bitcoin or bitcoincash), remove scheme for bitcoin or leave for cash. Otherwise, leave wrong scheme to make throw in validator
         if (schemeSeparatedParts.size >= 2) {
-            if (schemeSeparatedParts[0] == validScheme) {
+            if (validScheme.isEmpty() || schemeSeparatedParts[0] == validScheme) {
                 parsedString = if (removeScheme) schemeSeparatedParts[1] else paymentAddress
             } else {
-                parsedString = paymentAddress
+                return AddressUriParserResult.WrongUri
             }
+        } else {
+            return AddressUriParserResult.NoUri
         }
 
         // check exist params
@@ -38,7 +42,7 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
         if (versionSeparatedParts.size < 2) {
             address = parsedString
 
-            return AddressData(address = address)
+            return AddressUriParserResult.Data(AddressData(address = address))
         }
 
         address = versionSeparatedParts[0]
@@ -48,13 +52,14 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
             if (parts.size == 2) {
                 when (parts[0]) {
                     parameterVersion -> version = parts[1]
-                    parameterAmount -> {
+                    parameterAmount, parameterValue -> {
                         try {
                             amount = parts[1].toBigDecimal()
                         } catch (e: NumberFormatException) {
                             //invalid data
                         }
                     }
+
                     parameterLabel -> label = parts[1]
                     parameterMessage -> message = parts[1]
                     else -> parameters[parts[0]] = parts[1]
@@ -62,6 +67,21 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
             }
         }
 
-        return AddressData(address = address, version = version, amount = amount, label = label, message = message, parameters = if (parameters.isEmpty()) null else parameters)
+        return AddressUriParserResult.Data(
+            AddressData(
+                address = address,
+                version = version,
+                amount = amount,
+                label = label,
+                message = message,
+                parameters = if (parameters.isEmpty()) null else parameters
+            )
+        )
+    }
+
+    companion object {
+        fun hasUriPrefix(text: String): Boolean {
+            return text.split(":").size > 1
+        }
     }
 }

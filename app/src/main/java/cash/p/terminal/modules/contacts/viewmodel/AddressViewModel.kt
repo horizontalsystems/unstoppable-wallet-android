@@ -11,8 +11,8 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.order
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
+import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.address.AddressParserChain
-import cash.p.terminal.modules.address.AddressParserFactory
 import cash.p.terminal.modules.address.AddressValidationException
 import cash.p.terminal.modules.address.IAddressHandler
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 class AddressViewModel(
     private val contactUid: String?,
     private val contactsRepository: ContactsRepository,
-    private val addressParserFactory: AddressParserFactory,
+    private val addressHandlerFactory: AddressHandlerFactory,
     evmBlockchainManager: EvmBlockchainManager,
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
@@ -68,7 +68,7 @@ class AddressViewModel(
     }
 
     private var blockchain = contactAddress?.blockchain ?: availableBlockchains.first()
-    private var addressParser: AddressParserChain = addressParserFactory.parserChain(blockchain.type, true)
+    private var addressParser: AddressParserChain = addressHandlerFactory.parserChain(blockchain.type, true)
 
     var uiState by mutableStateOf(uiState())
         private set
@@ -83,7 +83,7 @@ class AddressViewModel(
 
     fun onEnterBlockchain(blockchain: Blockchain) {
         this.blockchain = blockchain
-        this.addressParser = addressParserFactory.parserChain(blockchain.type, true)
+        this.addressParser = addressHandlerFactory.parserChain(blockchain.type, true)
 
         emitUiState()
 

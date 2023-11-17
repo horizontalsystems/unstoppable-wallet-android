@@ -28,6 +28,7 @@ import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.send.bitcoin.advanced.FeeRateCaution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import java.math.BigDecimal
 
 @Composable
 fun SendBinanceScreen(
@@ -35,7 +36,8 @@ fun SendBinanceScreen(
     navController: NavController,
     viewModel: SendBinanceViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    prefilledAmount: BigDecimal?
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -47,7 +49,9 @@ fun SendBinanceScreen(
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.token.blockchainType))
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
+        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+    )
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {

@@ -50,8 +50,7 @@ object SendNftModule {
                     EvmKitWrapperHoldingViewModel(evmKitWrapper) as T
                 }
                 AddressParserViewModel::class.java -> {
-                    val factory = AddressParserFactory()
-                    AddressParserViewModel(factory.parser(nftUid.blockchainType)) as T
+                    AddressParserViewModel(AddressParserFactory.parser(nftUid.blockchainType), null) as T
                 }
                 else -> throw IllegalArgumentException()
             }

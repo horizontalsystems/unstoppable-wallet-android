@@ -25,6 +25,7 @@ import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import java.math.BigDecimal
 
 @Composable
 fun SendSolanaScreen(
@@ -32,7 +33,8 @@ fun SendSolanaScreen(
     navController: NavController,
     viewModel: SendSolanaViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    prefilledAmount: BigDecimal?,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -43,7 +45,9 @@ fun SendSolanaScreen(
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.token.blockchainType))
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
+        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+    )
     val amountUnique = paymentAddressViewModel.amountUnique
 
 
