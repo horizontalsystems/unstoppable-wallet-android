@@ -20,7 +20,6 @@ import com.walletconnect.sign.client.SignClient
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
@@ -161,7 +160,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
         lateinit var numberFormatter: IAppNumberFormatter
-        lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
@@ -352,8 +350,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         feeCoinProvider = FeeTokenProvider(marketKit)
-
-        addressParserFactory = AddressParserFactory()
 
         pinComponent = PinComponent(
             pinSettingsStorage = pinSettingsStorage,

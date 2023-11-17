@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.address.AddressParserFactory
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
@@ -42,7 +42,7 @@ object ContactsModule {
             return AddressViewModel(
                 contactUid,
                 App.contactsRepository,
-                AddressParserFactory(App.appConfigProvider.udnApiKey),
+                AddressHandlerFactory(App.appConfigProvider.udnApiKey),
                 App.evmBlockchainManager,
                 App.marketKit,
                 contactAddress,

@@ -2,6 +2,12 @@ package io.horizontalsystems.bankwallet.entities
 
 import java.math.BigDecimal
 
+sealed class AddressUriParserResult{
+    data class Data(val addressData: AddressData): AddressUriParserResult()
+    object NoUri: AddressUriParserResult()
+    object WrongUri: AddressUriParserResult()
+}
+
 data class AddressData(
         val address: String,
         val version: String? = null,
