@@ -1,5 +1,7 @@
 package io.horizontalsystems.marketkit.providers
 
+import android.util.Log
+import java.time.Instant
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Single
@@ -17,6 +19,10 @@ import java.util.*
 
 class HsProvider(baseUrl: String, apiKey: String, appVersion: String, appId: String?) {
 
+    // TODO: Temporary workaround for Cosanta
+    private var cosantaLastPrice: BigDecimal? = null
+    private var cosantaLastChange: BigDecimal? = null
+
     // TODO Remove old base URL https://api-dev.blocksdecoded.com/v1 and switch it to new servers
     private val pirateService by lazy {
         val headerMap = mutableMapOf<String, String>()
@@ -28,6 +34,11 @@ class HsProvider(baseUrl: String, apiKey: String, appVersion: String, appId: Str
         headerMap["apikey"] = apiKey
 
         RetrofitUtils.build("https://p.cash/s1/", headerMap)
+                .create(MarketService::class.java)
+    }
+
+    private val piratePlaceService by lazy {
+        RetrofitUtils.build("https://pirate.place/api/")
                 .create(MarketService::class.java)
     }
 
@@ -94,10 +105,64 @@ class HsProvider(baseUrl: String, apiKey: String, appVersion: String, appId: Str
             additionalParams = additionalParams
         )
             .map { coinPrices ->
-                coinPrices.mapNotNull { coinPriceResponse ->
+                //  TODO: replace to pirate place API
+                val mutableCoinPrices = coinPrices.toMutableList()
+                if ("cosanta" in coinUids) {
+                    val cosantaResponse = coinPrices.find { it.uid == "cosanta" }
+                    if (cosantaResponse == null){
+                        val disposable = fetchPiratePlaceCoinInfo("cosanta")
+                                .subscribe({
+                                    val currency = currencyCode.lowercase()
+                                    cosantaLastPrice = when (currency){
+                                        "usd" -> it.price.usd
+                                        "btc" -> it.price.btc
+                                        "eur" -> it.price.eur
+                                        "gbp" -> it.price.gbp
+                                        "jpy" -> it.price.jpy
+                                        "aud" -> it.price.aud
+                                        // ARS is missing on PiratePlace
+                                        "brl" -> it.price.brl
+                                        "cad" -> it.price.cad
+                                        "chf" -> it.price.chf
+                                        "cny" -> it.price.cny
+                                        "hkd" -> it.price.hkd
+                                        // HUF is missing on PiratePlace
+                                        "ils" -> it.price.ils
+                                        "inr" -> it.price.inr
+                                        // NOK is missing on PiratePlace
+                                        // PHP is missing on PiratePlace
+                                        "rub" -> it.price.rub
+                                        "sgd" -> it.price.sgd
+                                        "zar" -> it.price.zar
+                                        else -> null
+                                    }
+                                    if (cosantaLastPrice != null) {
+                                        cosantaLastChange = it.changes.price.percentage24h[currency]
+                                    }
+                                },{
+                                    Log.e("PiratePlace", "sync() error", it)
+                                })
+                        if (cosantaLastPrice != null){
+                            val addCosanta = CoinPriceResponse(
+                                    uid = "cosanta",
+                                    price = cosantaLastPrice,
+                                    priceChange = cosantaLastChange,
+                                    lastUpdated = Instant.now().epochSecond
+                            )
+                            mutableCoinPrices.add(addCosanta)
+                        }
+                    }
+                }
+                mutableCoinPrices.mapNotNull { coinPriceResponse ->
                     coinPriceResponse.coinPrice(currencyCode)
                 }
             }
+    }
+
+    private fun fetchPiratePlaceCoinInfo(
+            uid: String
+    ):Single<PiratePlaceCoinRaw>{
+        return piratePlaceService.getPlaceCoinInfo(coin = uid)
     }
 
     fun historicalCoinPriceSingle(
@@ -331,6 +396,8 @@ class HsProvider(baseUrl: String, apiKey: String, appVersion: String, appId: Str
     }
 
     private interface MarketService {
+        @GET("coins/{coin}")
+        fun getPlaceCoinInfo(@Path("coin") coin: String): Single<PiratePlaceCoinRaw>
 
         @GET("coins")
         fun getMarketInfos(
