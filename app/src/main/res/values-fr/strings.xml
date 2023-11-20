@@ -18,6 +18,7 @@
     <string name="Button_Disable">Désactiver</string>
     <string name="Button_ScanQr">QR Code à scanner</string>
     <string name="Button_Close">Fermer</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Done">Fait</string>
     <string name="Button_Retry">Réessayer</string>
     <string name="Button_Change">Changer</string>
@@ -131,6 +132,7 @@
     <string name="Restore_PrivateKey_InvalidKey">Clé invalide</string>
     <string name="Select_Coins">Crypto Monnaie</string>
     <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire de Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Saisissez la hauteur de l\'anniversaire du portefeuille pour une synchronisation plus rapide.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (facultatif)</string>
@@ -143,6 +145,7 @@
     <string name="ImportCexAccount_SelectCex">Essayez CEX</string>
     <string name="ImportCexAccount_SelectCexDescription">Sélectionnez l\'exchange centralisé auquel vous voulez vous connecter.</string>
     <string name="ImportCexAccountBinance_Description">Veuillez renseigner vos clés API (API Keys and Secrets) pour pouvoir vous connecter à votre exchange de cryptomonnaies.</string>
+    <string name="ImportCexAccountBinance_ApiKey">API Key</string>
     <string name="ImportCexAccountBinance_SecretKey">Code Secret</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
@@ -215,11 +218,17 @@
     <string name="Market_Filter_Volume24h">Volume de négociation (24h)</string>
     <string name="Market_Filter_PricePeriod">Période de prix</string>
     <string name="Market_Filter_PriceChange">Variation de prix</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">A surpassé BTC</string>
     <string name="Market_Filter_OutperformedEth">A surpassé ETH</string>
     <string name="Market_Filter_OutperformedBnb">A surpassé BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Prix proche d\'ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Prix proche d\'ATL</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_ShowResults">Afficher les résultats</string>
     <string name="Market_Filter_ShowResults_Counter">Afficher les résultats : %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5mn</string>
@@ -448,6 +457,8 @@
     <string name="WalletConnect_Address">Adresse</string>
     <string name="WalletConnect_Network">Réseau</string>
     <string name="WalletConnect_Input">Entrées</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <string name="WalletConnect_I_Trust">Je fais confiance à</string>
     <string name="WalletConnect_Note">Remarque</string>
     <string name="WalletConnect_LegacySignWarning">Signer ce message peut être dangereux. Cette signature peut potentiellement effectuer toute opération au nom de votre compte, y compris en donnant le contrôle total de votre compte et de tous ses actifs au site requérant. Ne signez ce message que si vous savez ce que vous faites ou si vous faites entièrement confiance au site requérant.</string>
@@ -455,6 +466,7 @@
     <string name="WalletConnect_Unnamed">Inconnu</string>
     <string name="WalletConnect_DAppUnknown">DApp inconnu</string>
     <string name="WalletConnect_Pairings">Paires de Devises</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Tout Supprimer</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Voulez-vous supprimer tous les dApss appariés ?</string>
     <string name="WalletConnect_Pairings_Delete">Supprimer</string>
@@ -509,7 +521,9 @@
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
     <string name="Swap_SelectSwapProvider_Title">Fournisseur swap</string>
+    <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(montant minimal)</string>
+    <string name="Swap_AmountMax">(max)</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
@@ -675,6 +689,7 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Entrez le nom de votre compte Telegram pour commencer une conversation de soutien personnelle avec notre équipe. Nous reviendrons vers vous et commencerons à travailler sur votre problème dès que nous le verrons.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Vous avez déjà demandé une conversation privée, la trouver sur Telegram</string>
     <string name="Settings_PersonalSupport_Account">Compte</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Demandé</string>
     <string name="Settings_PersonalSupport_Request">Requête</string>
     <string name="Settings_PersonalSupport_NewRequest">Nouvelle demande</string>
@@ -769,6 +784,8 @@
     <string name="SettingsSecurity_SortingBip69Short">Déterministe</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SetDuressPin_Title">Code Duress</string>
     <string name="SetDuressPin_Description">Définir un code d\'accès pour le mode Duress</string>
     <string name="EditDuressPin_Title">Modifier le code de détresse</string>
@@ -820,6 +837,7 @@
     <string name="NotificationBottomMenu_LongTerm">Long terme 6M</string>
     <string name="NotificationBottomMenu_Long">Longue</string>
     <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
     <string name="SettingsLaunchScreen_Balance">Solde</string>
     <string name="SettingsLaunchScreen_MarketOverview">Vue d\'ensemble du marché</string>
     <string name="SettingsLaunchScreen_Watchlist">Liste de suivi</string>
@@ -904,6 +922,7 @@
     <string name="Watch_TypeEvmAddress">Adresse EVM</string>
     <string name="Watch_TypeSolanaAddress">Adresse Solana</string>
     <string name="Watch_TypeTronAddress">Adresse du Tron</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">xPubKey invalide</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
@@ -977,6 +996,7 @@
     <string name="EvmPrivateKey_Warning">Cette clé est pour toutes les blockchains compatibles EVM. Ne la partagez avec personne.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Appuyez pour afficher la clé privée</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Appuyez pour afficher la clé privée</string>
     <!-- Private Keys -->
@@ -984,6 +1004,7 @@
     <string name="PrivateKeys_EvmPrivateKey">Clé privée EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Permet un contrôle total des crypto-monnaies basées sur l\'EVM, c\'est-à-dire Ethereum, Binance Smart Chain, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Permet d\'exercer un contrôle total sur les actifs du portefeuille correspondant.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Permet un contrôle total du Bitcoin et des autres crypto-monnaies basées sur l\'UTXO, c\'est-à-dire Litecoin, Bitcoin Cash, Dash, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_NeverShareWarning">Ne partagez jamais votre phrase de récupération avec quiconque. Une équipe imparable ne demandera jamais votre phrase de récupération.</string>
     <!-- Public Keys -->
@@ -1032,6 +1053,7 @@
     <string name="AddToken_Symbol">Symbole</string>
     <string name="AddToken_CoinCode">Code de la pièce</string>
     <string name="AddToken_Decimals">Decimales</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TYPES DE COINS</string>
     <string name="AddToken_AlreadyAdded">DÉJÀ AJOUTÉ</string>
     <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
@@ -1102,6 +1124,7 @@
     <string name="CoinPage_Category">Catégorie</string>
     <string name="CoinPage_Categories">Catégories</string>
     <string name="CoinPage_Contracts">Contrats</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_CoinTypes">Types de pièces</string>
     <string name="CoinPage_Links">Liens</string>
     <string name="CoinPage_Guide">Tutoriel</string>
@@ -1316,6 +1339,7 @@
     <string name="NftCollection_AveragePrice">Moyenne du temps</string>
     <string name="NftCollection_ItemsCount">%d éléments</string>
     <string name="NftCollection_TodaysSales">Vendeurs d\'aujourd\'hui</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s par NFT</string>
     <string name="NftCollection_Royalty">Redevance</string>
     <string name="NftCollection_InceptionDate">Date de création</string>
