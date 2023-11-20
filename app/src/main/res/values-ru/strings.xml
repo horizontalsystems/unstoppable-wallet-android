@@ -2,6 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Не задан параметр</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
     <string name="Alert_Close">Закрыть</string>
@@ -278,6 +279,7 @@
     <string name="Balance_SyncedUntil">до %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_AddCoins">Добавить токен</string>
     <string name="Balance_AddCoin">Добавить токен</string>
@@ -763,6 +765,7 @@
     <string name="EvmNetwork_Added">Добавлено</string>
     <string name="EvmNetwork_SyncMode">Режим синхронизации</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
@@ -796,6 +799,7 @@
     <string name="SettingsSecurity_SortingBip69Short">Детерминированный</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
     <string name="SetDuressPin_Title">Duress код</string>
     <string name="SetDuressPin_Description">Установите код для режима Duress</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>
@@ -1006,6 +1010,7 @@
     <string name="EvmPrivateKey_Warning">Этот ключ предназначен для всех EVM-совместимых блокчейнов. Не передавайте его никому.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Private Keys -->
@@ -1062,10 +1067,12 @@
     <string name="AddToken_Symbol">Символ</string>
     <string name="AddToken_CoinCode">Код токена</string>
     <string name="AddToken_Decimals">Десятичные знаки</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
     <string name="AddToken_AlreadyAdded">УЖЕ ДОБАВЛЕНО</string>
     <string name="AddToken_AddressOrSymbol">Адрес контракта</string>
     <string name="AddToken_ChooseToken">Выберите токен</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке</string>
     <string name="AddToken_InvalidContractAddress">Неверный адрес контракта</string>
     <string name="AddToken_InvalidBep2Symbol">Неверный символ BEP2</string>
@@ -1367,6 +1374,7 @@
     <string name="NftCollection_AveragePrice">Средняя оценка за все время</string>
     <string name="NftCollection_ItemsCount">%d Элементов</string>
     <string name="NftCollection_TodaysSales">Продажи за сегодня</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s за NFT</string>
     <string name="NftCollection_Royalty">Вознаграждение</string>
     <string name="NftCollection_InceptionDate">Дата старта</string>
@@ -1403,6 +1411,7 @@
     <string name="ReleaseNotes_FollowUs">Мы в соцсетях</string>
     <string name="CoinPage_Chart_Locked">Заблокировано</string>
     <string name="ProUsersInfo_Title">Pro-пользователь</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Дополнительная информация о токене</string>
     <string name="ProUsersInfo_Description">Чтобы включить эти данные, вы должны получить бронзовый уровень UW NFTs “Coin Info+”\n\nТакже вы получите доступ к данным ниже:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX объем и рейтинг</string>
