@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Incoming
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Outgoing
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -430,7 +432,7 @@ class TransactionViewItemFactory(
                     uid = record.uid,
                     timestamp = record.timestamp,
                     icon = icon,
-                    record = record
+                    record = record,
                 )
             }
 
@@ -441,29 +443,40 @@ class TransactionViewItemFactory(
     private fun createViewItemFromTonTransactionRecord(
         uid: String,
         timestamp: Long,
-        icon: TransactionViewItem.Icon.Failed?,
+        icon: TransactionViewItem.Icon?,
         record: TonTransactionRecord,
     ): TransactionViewItem {
-        val primaryValue = record.mainValue?.let { mainValue ->
-            mainValue.decimalValue?.let {
-                val color = when {
-                    it > BigDecimal.ZERO -> ColorName.Remus
-                    else -> ColorName.Lucian
+        val title: String
+        val subtitle: String?
+        val primaryValue: ColoredValue?
+
+        when (record.type) {
+            Incoming -> {
+                title = Translator.getString(R.string.Transactions_Receive)
+                subtitle = record.from?.let {
+                    Translator.getString(R.string.Transactions_From, mapped(it, record.blockchainType))
                 }
-                getColoredValue(record.mainValue, color)
+                primaryValue = getColoredValue(record.mainValue, ColorName.Remus)
+            }
+            Outgoing -> {
+                title = Translator.getString(R.string.Transactions_Send)
+                subtitle = record.to?.let {
+                    Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
+                }
+                primaryValue = getColoredValue(record.mainValue, ColorName.Lucian)
             }
         }
 
         return TransactionViewItem(
             uid = record.uid,
             progress = null,
-            title = Translator.getString(R.string.Transactions_Unknown),
-            subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
+            title = title,
+            subtitle = subtitle ?: "",
             primaryValue = primaryValue,
             secondaryValue = null,
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
-            icon = icon ?:TransactionViewItem.Icon.Platform(BlockchainType.Solana)
+            icon = icon ?: singleValueIconType(record.mainValue)
         )
     }
 
