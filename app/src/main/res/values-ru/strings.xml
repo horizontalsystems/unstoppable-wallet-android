@@ -310,6 +310,7 @@
     <string name="Balance_Receive_Account">Аккаунт</string>
     <string name="Balance_Receive_NotActive">Не активен</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
+    <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <string name="SendNft_Error_NotEnoughtBalance">Недостаточно средств</string>
@@ -613,6 +614,7 @@
     <string name="Transactions_Unknown">Неизвестная транзакция</string>
     <string name="Transactions_Unknown_Description">Транзакция не может быть обработана</string>
     <string name="Transactions_Multiple">Множество</string>
+    <string name="Transactions_Filter">Фильтр</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Транзакция</string>
     <string name="TransactionInfo_Title">Детали транзакции</string>
