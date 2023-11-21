@@ -1085,6 +1085,7 @@
     <string name="CoinPage_Period">Zeitraum</string>
     <string name="CoinPage_SlowLength">Langsame Länge</string>
     <string name="CoinPage_SignalSmoothing">Signal glättet</string>
+    <string name="CoinPage_AiGeneratedText">Dies ist eine von KI generierte Beschreibung, basierend auf dem bereitgestellten Referenzmaterial für die angegebene Kryptowährung. Sie kann Fehler enthalten.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Diagramm, das die Schwankungen im täglichen Handelsvolumen des Tokens an führenden zentralisierten Börsen über einen Zeitraum von 1 Jahr zeigt.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Die Rangfolge des Tokens basiert auf dem Handelsvolumen an führenden zentralisierten Börsen über einen Zeitraum von 30 Tagen.</string>
     <string name="CoinAnalytics_CexVolume_Info4">Liste aller Token, sortiert nach Handelsvolumen auf zentralisierten Börsen über Intervalle von 24 Stunden / 7 Tagen / 1 Monat.</string>
