@@ -171,7 +171,9 @@
     <string name="Market_TvlDeFi">DeFi锁定</string>
     <string name="Market_DeFiCap">DeFi市值</string>
     <string name="Market_SeeAll">更多</string>
+    <string name="Market_PoweredByApi">Powered By CoinGeko API</string>
     <string name="Market_PoweredByHorizontalApi">水平API支持</string>
+    <string name="Market_PoweredByDefiLlamaApi">Powered By DefiLlama API</string>
     <string name="Market_Tab_Overview">行情</string>
     <string name="Market_Tab_Posts">发现</string>
     <string name="Market_Tab_Watchlist">关注</string>
@@ -306,6 +308,7 @@
     <string name="Balance_Receive_Account">账户</string>
     <string name="Balance_Receive_NotActive">不活动</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
+    <string name="Balance_Error_InvalidQrCode">无法识别</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <string name="SendNft_Error_NotEnoughtBalance">余额不足</string>
@@ -465,6 +468,8 @@
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_Unnamed">未命名</string>
     <string name="WalletConnect_DAppUnknown">未知的 dApp</string>
+    <string name="WalletConnect_Pairings">货币对</string>
+    <string name="WalletConnect_PairedDApps">已配对dApp</string>
     <string name="WalletConnect_Pairings_DeleteAll">全部刪除</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">您想要删除所有配对的 dApps？</string>
     <string name="WalletConnect_Pairings_Delete">删除</string>
@@ -607,6 +612,7 @@
     <string name="Transactions_Unknown">未知交易</string>
     <string name="Transactions_Unknown_Description">无法解析交易</string>
     <string name="Transactions_Multiple">多种</string>
+    <string name="Transactions_Filter">筛选器</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">交易</string>
     <string name="TransactionInfo_Title">交易信息</string>
