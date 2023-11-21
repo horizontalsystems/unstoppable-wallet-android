@@ -36,13 +36,8 @@ class NftCollectionFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val uid = activity?.intent?.data?.getQueryParameter("uid")
-        val blockchainTypeUidFromIntent = activity?.intent?.data?.getQueryParameter("blockchainTypeUid")
-        if (uid != null) {
-            activity?.intent?.data = null
-        }
-        val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
-        val blockchainTypeString = requireArguments().getString(blockchainTypeKey, blockchainTypeUidFromIntent ?: "")
+        val nftCollectionUid = requireArguments().getString(collectionUidKey, "")
+        val blockchainTypeString = requireArguments().getString(blockchainTypeUidKey, "")
         val blockchainType = BlockchainType.fromUid(blockchainTypeString)
 
         val viewModel by navGraphViewModels<NftCollectionOverviewViewModel>(R.id.nftCollectionFragment) {
@@ -57,10 +52,10 @@ class NftCollectionFragment : BaseComposeFragment() {
 
     companion object {
         private const val collectionUidKey = "collectionUid"
-        private const val blockchainTypeKey = "blockchainType"
+        private const val blockchainTypeUidKey = "blockchainTypeUid"
 
-        fun prepareParams(collectionUid: String, blockchainType: BlockchainType) =
-            bundleOf(collectionUidKey to collectionUid, blockchainTypeKey to blockchainType.uid)
+        fun prepareParams(collectionUid: String, blockchainTypeUid: String) =
+            bundleOf(collectionUidKey to collectionUid, blockchainTypeUidKey to blockchainTypeUid)
     }
 }
 

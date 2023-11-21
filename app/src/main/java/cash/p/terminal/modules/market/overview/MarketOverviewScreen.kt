@@ -22,7 +22,11 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.category.MarketCategoryFragment
-import cash.p.terminal.modules.market.overview.ui.*
+import cash.p.terminal.modules.market.overview.ui.BoardsView
+import cash.p.terminal.modules.market.overview.ui.MetricChartsView
+import cash.p.terminal.modules.market.overview.ui.TopNftCollectionsBoardView
+import cash.p.terminal.modules.market.overview.ui.TopPlatformsBoardView
+import cash.p.terminal.modules.market.overview.ui.TopSectorsBoardView
 import cash.p.terminal.modules.market.platform.MarketPlatformFragment
 import cash.p.terminal.modules.market.topcoins.MarketTopCoinsFragment
 import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsFragment
@@ -107,7 +111,7 @@ fun MarketOverviewScreen(
                                     viewModel.onSelectTopNftsTimeDuration(timeDuration)
                                 },
                                 onClickCollection = { blockchainType, collectionUid ->
-                                    val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
+                                    val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType.uid)
                                     navController.slideFromBottom(R.id.nftCollectionFragment, args)
                                 },
                                 onClickSeeAll = {

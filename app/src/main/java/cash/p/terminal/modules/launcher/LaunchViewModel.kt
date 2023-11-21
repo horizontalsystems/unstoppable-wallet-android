@@ -13,9 +13,8 @@ class LaunchViewModel(
     private val pinComponent: IPinComponent,
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,
-    private val localStorage: ILocalStorage
+    localStorage: ILocalStorage
 ) : ViewModel() {
-    val torEnabled by localStorage::torEnabled
 
     private val mainShowedOnce = localStorage.mainShowedOnce
 
