@@ -111,8 +111,7 @@ interface ILocalStorage {
     val marketsTabEnabledFlow: StateFlow<Boolean>
     var nonRecommendedAccountAlertDismissedAccounts: Set<String>
     var personalSupportEnabled: Boolean
-    var hideUnknownTokens: Boolean
-    var hideStablecoinsNegligibleAmount: Boolean
+    var hideSuspiciousTransactions: Boolean
     var pinRandomized: Boolean
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?

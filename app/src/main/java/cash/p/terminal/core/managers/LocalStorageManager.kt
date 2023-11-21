@@ -79,8 +79,7 @@ class LocalStorageManager(
     private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
     private val APP_ID = "app_id"
     private val APP_AUTO_LOCK_INTERVAL = "app_auto_lock_interval"
-    private val HIDE_UNKNOWN_TOKENS = "hide_unknown_tokens"
-    private val HIDE_STABLECOINS_NEGLIGIBLE_AMOUNT = "hide_stablecoins_negligible_amount"
+    private val HIDE_SUSPICIOUS_TX = "hide_suspicious_tx"
     private val PIN_RANDOMIZED = "pin_randomized"
 
     private val gson by lazy { Gson() }
@@ -457,16 +456,10 @@ class LocalStorageManager(
             preferences.edit().putBoolean(PERSONAL_SUPPORT_ENABLED, enabled).apply()
         }
 
-    override var hideUnknownTokens: Boolean
-        get() = preferences.getBoolean(HIDE_UNKNOWN_TOKENS, true)
+    override var hideSuspiciousTransactions: Boolean
+        get() = preferences.getBoolean(HIDE_SUSPICIOUS_TX, true)
         set(value) {
-            preferences.edit().putBoolean(HIDE_UNKNOWN_TOKENS, value).apply()
-        }
-
-    override var hideStablecoinsNegligibleAmount: Boolean
-        get() = preferences.getBoolean(HIDE_STABLECOINS_NEGLIGIBLE_AMOUNT, true)
-        set(value) {
-            preferences.edit().putBoolean(HIDE_STABLECOINS_NEGLIGIBLE_AMOUNT, value).apply()
+            preferences.edit().putBoolean(HIDE_SUSPICIOUS_TX, value).apply()
         }
 
     override var pinRandomized: Boolean

@@ -11,9 +11,7 @@ class SpamManager(
     private val stableCoinCodes = listOf("USDT", "USDC", "DAI", "BUSD", "EURS")
     private val negligibleValue = BigDecimal("0.01")
 
-    var hideUnknownTokens = localStorage.hideUnknownTokens
-        private set
-    var hideStablecoinsDust = localStorage.hideStablecoinsNegligibleAmount
+    var hideSuspiciousTx = localStorage.hideSuspiciousTransactions
         private set
 
     fun isSpam(
@@ -34,26 +32,21 @@ class SpamManager(
                 spamValue(eventValue.coinUid, eventValue.value)
             }
 
-            else -> hideUnknownTokens
+            else -> hideSuspiciousTx
         }
     }
 
     private fun spamValue(coinCode: String, value: BigDecimal): Boolean {
-        return if (hideStablecoinsDust && stableCoinCodes.contains(coinCode)) {
+        return if (hideSuspiciousTx && stableCoinCodes.contains(coinCode)) {
             value < negligibleValue
         } else {
             value <= BigDecimal.ZERO
         }
     }
 
-    fun updateFilterHideUnknownTokens(hide: Boolean) {
-        localStorage.hideUnknownTokens = hide
-        hideUnknownTokens = hide
-    }
-
-    fun updateFilterHideStablecoinsDust(hide: Boolean) {
-        localStorage.hideStablecoinsNegligibleAmount = hide
-        hideStablecoinsDust = hide
+    fun updateFilterHideSuspiciousTx(hide: Boolean) {
+        localStorage.hideSuspiciousTransactions = hide
+        hideSuspiciousTx = hide
     }
 
 }
