@@ -41,8 +41,7 @@ class TransactionsViewModel(
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
     val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
     val viewState = MutableLiveData<ViewState>(ViewState.Loading)
-    var filterHideUnknownTokens by mutableStateOf(service.filterHideUnknownTokens)
-    var filterHideStablecoinsDust by mutableStateOf(service.filterHideStablecoinsDust)
+    var filterHideSuspiciousTx by mutableStateOf(service.filterHideSuspiciousTx)
 
     private val disposables = CompositeDisposable()
 
@@ -140,15 +139,11 @@ class TransactionsViewModel(
 
     fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)
 
-    fun updateFilterHideUnknownTokens(checked: Boolean) {
-        service.updateFilterHideUnknownTokens(checked)
-        filterHideUnknownTokens = checked
+    fun updateFilterHideSuspiciousTx(checked: Boolean) {
+        service.updateFilterHideSuspiciousTx(checked)
+        filterHideSuspiciousTx = checked
     }
 
-    fun updateFilterHideStablecoinsDust(checked: Boolean) {
-        service.updateFilterHideStablecoinsDust(checked)
-        filterHideStablecoinsDust = checked
-    }
 }
 
 data class TransactionItem(

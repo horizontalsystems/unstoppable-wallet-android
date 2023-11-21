@@ -63,8 +63,7 @@ fun FilterScreen(
     val filterResetEnabled by viewModel.filterResetEnabled.collectAsState()
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
-    val filterHideUnknownTokens = viewModel.filterHideUnknownTokens
-    val filterStablecoinsDust = viewModel.filterHideStablecoinsDust
+    val filterHideUnknownTokens = viewModel.filterHideSuspiciousTx
 
     val filterCoin = filterCoins?.find { it.selected }?.item
     val coinCode = filterCoin?.token?.coin?.code
@@ -130,22 +129,10 @@ fun FilterScreen(
                 CellSingleLineLawrenceSection(
                     listOf {
                         FilterSwitch(
-                            title = stringResource(R.string.Transactions_Filter_HideUnknownTokens),
+                            title = stringResource(R.string.Transactions_Filter_HideSuspiciousTx),
                             enabled = filterHideUnknownTokens,
                             onChecked = { checked ->
-                                viewModel.updateFilterHideUnknownTokens(checked)
-                            }
-                        )
-                    }
-                )
-                VSpacer(32.dp)
-                CellSingleLineLawrenceSection(
-                    listOf {
-                        FilterSwitch(
-                            title = stringResource(R.string.Transactions_Filter_StablecoinDustAmount),
-                            enabled = filterStablecoinsDust,
-                            onChecked = { checked ->
-                                viewModel.updateFilterHideStablecoinsDust(checked)
+                                viewModel.updateFilterHideSuspiciousTx(checked)
                             }
                         )
                     }

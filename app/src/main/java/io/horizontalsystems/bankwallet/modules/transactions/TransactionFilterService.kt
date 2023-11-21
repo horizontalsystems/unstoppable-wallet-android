@@ -20,8 +20,7 @@ class TransactionFilterService(
 
     private val _resetEnabled = MutableStateFlow(false)
     val resetEnabled = _resetEnabled.asStateFlow()
-    val filterHideUnknownTokens = spamManager.hideUnknownTokens
-    val filterHideStablecoinsDust = spamManager.hideStablecoinsDust
+    val filterHideSuspiciousTx = spamManager.hideSuspiciousTx
 
     private var blockchains: List<Blockchain?> = listOf(null)
 
@@ -97,11 +96,8 @@ class TransactionFilterService(
         }
     }
 
-    fun setFilterHideUnknownTokens(hide: Boolean) {
-        spamManager.updateFilterHideUnknownTokens(hide)
+    fun setFilterHideSuspiciousTx(hide: Boolean) {
+        spamManager.updateFilterHideSuspiciousTx(hide)
     }
 
-    fun setFilterHideStablecoinsDust(hide: Boolean) {
-        spamManager.updateFilterHideStablecoinsDust(hide)
-    }
 }

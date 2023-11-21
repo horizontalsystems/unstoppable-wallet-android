@@ -721,8 +721,7 @@
     <string name="Transactions_Multiple">Multiple</string>
     <string name="Transactions_Filter">Filter</string>
     <string name="Transactions_Coins">Coins</string>
-    <string name="Transactions_Filter_HideUnknownTokens">Hide Unknown Tokens</string>
-    <string name="Transactions_Filter_StablecoinDustAmount">Stablecoin Dust Amount</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Hide suspicious tx</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Hiding incoming transactions with the dust amount in stablecoins, this partially solves the  address poisoning attack problems.</string>
 
     <!--Transaction Info-->
