@@ -42,14 +42,8 @@ class MarketPlatformFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val platformUid = activity?.intent?.data?.getQueryParameter("uid")
-        val platformTitle = activity?.intent?.data?.getQueryParameter("title")
 
-        val platform = if (platformUid != null && platformTitle != null) {
-            Platform(platformUid, platformTitle)
-        } else {
-            arguments?.parcelable(platformKey)
-        }
+        val platform = arguments?.parcelable<Platform>(platformKey)
 
         if (platform == null) {
             navController.popBackStack()
