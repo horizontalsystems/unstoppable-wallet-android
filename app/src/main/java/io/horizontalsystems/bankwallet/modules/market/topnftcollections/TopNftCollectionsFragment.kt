@@ -52,7 +52,7 @@ class TopNftCollectionsFragment : BaseComposeFragment() {
             viewModel,
             { navController.popBackStack() },
             { blockchainType, collectionUid ->
-                val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
+                val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType.uid)
                 navController.slideFromBottom(R.id.nftCollectionFragment, args)
             }
         )
