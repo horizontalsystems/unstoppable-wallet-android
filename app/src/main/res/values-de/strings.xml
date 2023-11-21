@@ -1117,6 +1117,8 @@
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total value Locked)</string>
     <string name="CoinAnalytics_Reports">Berichte</string>
     <string name="Coin_Analytics_Audits">Prüfungen</string>
+    <string name="Coin_Analytics_OverallScore">Gesamtpunktzahl</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Ausgezeichnet</string>
     <string name="Coin_Analytics_OverallScore_Good">Gut</string>
     <string name="Coin_Analytics_OverallScore_Fair">Faire</string>
     <string name="Coin_Analytics_OverallScore_Poor">Arm</string>
