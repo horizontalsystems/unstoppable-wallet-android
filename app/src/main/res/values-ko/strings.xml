@@ -11,6 +11,7 @@
     <string name="Suspended">일시 정지</string>
     <string name="Action_Undo">실행 취소</string>
     <string name="Button_Show">표시</string>
+    <string name="Button_Hide">숨기기</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Next">다음</string>
     <string name="Button_Enable">활성화</string>
@@ -49,6 +50,7 @@
     <string name="Button_LearnMore">자세히 보기</string>
     <string name="Button_Activate">활성화</string>
     <string name="Button_Sign">가입</string>
+    <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">API 키 가져오기</string>
     <string name="Button_Login">로그인</string>
     <string name="Button_SignUp">회원가입</string>
@@ -56,6 +58,8 @@
     <string name="Button_TryAgain">다시 시도하십시오.</string>
     <string name="Button_Share">공유</string>
     <string name="Button_Apply">적용</string>
+    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
+    <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
@@ -66,6 +70,7 @@
     <string name="AccountRecovery_MigrationRecommended">이 지갑은 비밀 단어 목록 및/또는 암호 문구에 비표준 문자를 사용하는 것 같습니다. 잔액이나 거래 내역이 보이지 않으면 아래에서 자세한 내용을 읽어보세요.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <string name="AccountRecovery_MigrationRequired">비표준 호환 지갑입니다. 자세한 내용은 아래를 참조하십시오.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
     <string name="Intro_Wallet_Screen2Description">자신을 잠금하지 말고 다른 사람들이 귀하에게 그렇게 하도록 두지 마십시오.</string>
     <string name="Intro_Wallet_Screen3Title">무경계로</string>
@@ -145,12 +150,23 @@
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <!--Market-->
+    <string name="Market_Field_MarketCap">시가총액</string>
+    <string name="Market_Field_Volume">거래량</string>
+    <string name="Market_Field_PriceDiff">가격</string>
+    <string name="Market_Title">시장</string>
     <string name="Market_Search">검색</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Description">Leading blockchain platforms by the cumulative market of projects built on top.</string>
     <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_TotalMarketCap">시가 총액</string>
+    <string name="MarketGlobalMetrics_Volume">24시간 거래량</string>
+    <string name="MarketGlobalMetrics_DefiCap">디파이(DeFi) 시가총액</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">디파이(DeFi)에서의 총 예치 가치</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">모든 암호화폐의 총 시장 가치\" or \"모든 가상 화폐의 총 시장 가치.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">암호화폐 시장의 24시간 거래량\" or \"가상 화폐 시장의 24시간 거래량.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">디파이 프로젝트의 총 시장 가치.</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!--Market Search-->
@@ -159,16 +175,41 @@
     <string name="Market_Filter_MarketCap">시가총액</string>
     <string name="Market_Filter_Top_100">상위 100</string>
     <string name="Market_Filter_Top_250">상위 250</string>
+    <string name="Market_Filter_Top_500">상위 500</string>
     <string name="Market_Filter_Top_1000">상위 1000</string>
     <string name="Market_Filter_Top_1500">상위 1500</string>
+    <string name="Market_Filter_ShowResults">결과 보기</string>
+    <string name="Market_Filter_Range_5M_20M">5백만 - 20백만</string>
+    <string name="Market_Filter_Range_20M_100M">2000만 - 1억</string>
+    <string name="Market_Filter_Range_100M_1B">1억 - 10억</string>
+    <string name="Market_Filter_Range_1B_5B">10억 - 50억</string>
     <string name="Market_Filter_Range_0_10M">&lt; 10</string>
+    <string name="Market_Filter_Range_10M_40M">천만 - 4천만</string>
+    <string name="Market_Filter_Range_40M_200M">4000만 - 2억</string>
+    <string name="Market_Filter_Range_200M_2B">2억 - 20억</string>
+    <string name="Market_Filter_Range_2B_10B">20억 - 100억</string>
+    <string name="Market_Filter_Range_50M_200M">5000만 - 2억</string>
+    <string name="Market_Filter_Range_200M_1B">2억 - 10억</string>
+    <string name="Market_Filter_Range_1B_10B">10억 - 100억</string>
+    <string name="Market_Filter_Range_10B_50B">100억 - 500억</string>
+    <string name="Market_Filter_Range_500M_2B">5억 - 20억</string>
+    <string name="Market_Filter_Range_10B_100B">100억 - 1,000억</string>
+    <string name="Market_Filter_Range_100B_500B">1,000억 - 5,000억</string>
+    <string name="Market_Filter_TimePeriod_1D">1 일</string>
+    <string name="Market_Filter_TimePeriod_1W">1 일주</string>
+    <string name="Market_Filter_TimePeriod_2W">이주</string>
+    <string name="Market_Filter_TimePeriod_1M">1개월</string>
+    <string name="Market_Filter_TimePeriod_6M">6 개월</string>
+    <string name="Market_Filter_TimePeriod_1Y">일년</string>
     <string name="TimePeriod_24h">24 시간</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
+    <string name="TvlRank_MultiChain">다중 체인</string>
     <!--Balance-->
     <string name="Balance_Withdraw">빼다</string>
     <string name="Balance_Title">잔액</string>
     <string name="Balance_Send">전송</string>
+    <string name="Balance_Swap">스왑</string>
     <string name="Balance_Deposit">수신</string>
     <string name="Balance_Receive">수신</string>
     <string name="Balance_Address">주소</string>
@@ -176,6 +217,7 @@
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_AddCoin">코인 추가</string>
@@ -266,6 +308,7 @@
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">고급의</string>
     <string name="SendEvmSettings_Nonce">트랜잭션 Nonce</string>
+    <string name="SendEvmSettings_Nonce_Info">Nonce(논스)는 사용자 지갑 내에서 거래마다 고유한 정수값입니다. 보통 각 제출된 거래마다 증가하며 변경할 필요가 없습니다. 고급 사용자는 새 거래가 충분히 높은 수수료로 설정되어 이전 거래가 대신 확인되지 않도록 하기 위해 보류 중인 거래의 논스 값을 설정할 수 있습니다. (예를 들어, 거래 확인을 가속화하거나 거래 매개변수를 완전히 변경하려는 경우). 여러 보류 중인 거래가 동일한 논스를 가지면 일반적으로 가장 높은 수수료를 가진 거래만 확인됩니다.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">중고 Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">이 nonce를 사용하여 실행된 트랜잭션이 이미 존재합니다.</string>
     <!-- Fee Settings -->
@@ -275,8 +318,11 @@
     <string name="FeeSettings_FeeLegacy_Info">주어진 거래에 대한 최대 예상 총 수수료입니다. 일반적으로 실제 거래 수수료는 더 낮습니다.</string>
     <string name="FeeSettings_Fee">최대 수수료</string>
     <string name="FeeSettings_NetworkFee">네트워크 수수료</string>
+    <string name="FeeSettings_NetworkFee_Info">네트워크에서 주어진 거래를 보내는 데 예상되는 비용.</string>
+    <string name="FeeSettings_GasLimit_Info">거래 복잡성은 \'가스\'라고 불리는 단위로 측정됩니다. 이는 실행되는 스마트 계약에 따라 다릅니다. 가스 한도는 해당 거래를 실행하는 데 필요한 최대 가스를 예상한 값입니다. 실제로 사용된 가스는 일반적으로 더 낮을 것입니다.</string>
     <string name="FeeSettings_GasPrice_Info">네트워크 거래 수수료는 가스 단위로 측정됩니다. 가스 가격은 사용자가 가스 단위당 지출할 의향이 있는 금액입니다. 네트워크가 사용 중일 때는 가스 가격이 높고 유휴 상태일 때는 가스 가격이 낮습니다. 가스 가격이 충분하지 않아 거래가 장기간 보류 상태로 남아 있는 경우가 많습니다.</string>
     <string name="FeeSettings_BaseFee">기본 수수료</string>
+    <string name="FeeSettings_MaxFee_Info">이것은 사용자가 지불하려는 가스당 최대 총 가격입니다. 이것은 네트워크의 기본 수수료율과 최대 우선순위 수수료율을 포함해야 합니다. 여기에 표시된 값은 사용자가 선택한 다음 블록의 기본 수수료율과 최대 우선순위 수수료율을 기반으로 추천된 것입니다. 실제로 지불되는 수수료율은 일반적으로 더 낮을 것입니다. 현재 기본 수수료율보다 낮게 설정하면 수수료 지불이 제한될 수 있지만, 거래가 확인되기까지 더 긴 대기 시간이나 막힌 거래가 발생할 수 있습니다.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">위험</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">트랜잭션이 잠시 동안 보류 상태로 유지되거나 완전히 실패할 수 있습니다.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">위험</string>
@@ -503,6 +549,7 @@
     <string name="Transactions_Unknown">알 수 없는 트랜잭션</string>
     <string name="Transactions_Unknown_Description">트랜잭션을 구문 분석할 수 없습니다</string>
     <string name="Transactions_Multiple">다수</string>
+    <string name="Transactions_Filter">필터</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">거래기록</string>
     <string name="TransactionInfo_Title">거래 정보</string>
@@ -713,6 +760,7 @@
     <string name="SettingsTerms_Bugs">이 앱을 구동하는 코드에 발견되지 않은 소프트웨어 문제가 있을 수 있으며 이로 인해 앱이 오작동할 수 있습니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">보고 싶은 코인에 대한 가격 변경 알림 설정\n\n최근 24시간 동안의 가격 변동이 선택된 임계값을 초과할 경우 알림 메시지가 표시됨\n\n가격 동향 알림은 짧은 1주일, 긴 6개월 동안의 동향 변화에 대해 알려줍니다.</string>
@@ -981,21 +1029,101 @@
     <!--Coin Page-->
     <string name="Coin_Info">코인 정보</string>
     <string name="Coin_Tab_Overview">금액</string>
+    <string name="Coin_Tab_Market">시장</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6개월</string>
+    <string name="CoinPage_TimeDuration_Year">1년</string>
+    <string name="CoinPage_TimeDuration_Year2">2년</string>
     <string name="CoinPage_TimeDuration_All">모든</string>
+    <string name="CoinPage_Markets">시장</string>
+    <string name="CoinPage_TradingVolume">거래량</string>
+    <string name="CoinPage_MajorHolders">주요 보유자</string>
+    <string name="CoinPage_Audits">감사</string>
+    <string name="CoinPage_Audits_Empty">감사 보고서 없음</string>
+    <string name="CoinPage_Treasuries_FilterTitle">필터</string>
+    <string name="CoinPage_Reports">보고서</string>
     <string name="CoinPage_SecurityParams_Privacy">개인정보</string>
     <string name="CoinPage_SecurityParams_Low">낮음</string>
     <string name="CoinPage_SecurityParams_High">높음</string>
+    <string name="CoinPage_SecurityParams_Centralized">중앙화</string>
+    <string name="CoinPage_SecurityParams_Audits">감사</string>
+    <string name="CoinPage_Range24">24시간 범위</string>
+    <string name="CoinPage_About">에 대해</string>
+    <string name="CoinPage_Overview">개요</string>
+    <string name="CoinPage_Contracts">계약</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_Links">링크</string>
+    <string name="CoinPage_Guide">가이드</string>
     <string name="CoinPage_Website">웹사이트</string>
+    <string name="CoinPage_Whitepaper">백서</string>
+    <string name="CoinPage_Twitter_NotAvailable">트위터 사용 불가</string>
     <string name="CoinPage_Twitter_NoTweets">아직 트윗이 없습니다</string>
+    <string name="CoinPage_Twitter_Quoted">인용됨 %s</string>
+    <string name="CoinPage_Twitter_Retweeted">리트윗됨 %s</string>
+    <string name="CoinPage_Twitter_SeeOnTwitter">트위터에서 확인하세요</string>
     <string name="CoinPage_MarketCap">시가총액</string>
+    <string name="CoinPage_DilutedMarketCap">희석화 시가 총액</string>
+    <string name="CoinPage_inCirculation">유통 중</string>
+    <string name="CoinPage_TotalSupply">총 공급량</string>
+    <string name="CoinPage_Volume">거래량</string>
+    <string name="CoinPage_NoData">데이터 없음</string>
     <string name="CoinPage_AddToWallet">지갑에 추가됨</string>
     <string name="CoinPage_InWallet">지갑에서</string>
+    <string name="CoinPage_Performance_Week">1 일주</string>
+    <string name="CoinPage_Performance_Month">1개월</string>
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
     <string name="CoinPage_TvlDescription">Capital is deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 유통 중인 모든 토큰의 \%%를 보여줍니다. \%%가 낮을수록 코인이 더 많이 분산됩니다.</string>
+    <string name="CoinPage_Type">유형</string>
+    <string name="CoinPage_Period">기간</string>
+    <string name="CoinPage_RsiLength">RSI 기간</string>
+    <string name="CoinPage_FastLength">빠른 길이</string>
+    <string name="CoinPage_SlowLength">느린 길이</string>
+    <string name="CoinPage_SignalSmoothing">신호 평활화</string>
+    <string name="CoinPage_AiGeneratedText">이것은 주어진 암호화폐에 대한 참고 자료를 기반으로 한 AI 생성된 설명입니다. 오류가 포함될 수 있습니다.</string>
+    <string name="CoinAnalytics_CexVolume_Info1">주요 중앙화 거래소에서의 토큰의 30일 동안의 총 거래량.</string>
+    <string name="CoinAnalytics_CexVolume_Info2">주요 중앙화 거래소에서의 토큰의 1년 동안 일일 거래량 변동을 보여주는 차트.</string>
+    <string name="CoinAnalytics_CexVolume_Info4">24시간 / 7일 / 1개월 간격으로 중앙화 거래소에서의 거래량을 기반으로 순위가 매겨진 모든 토큰의 목록.</string>
+    <string name="CoinAnalytics_DexVolume_Info1">주요 탈중앙화 거래소에서의 토큰의 30일 동안의 총 거래량.</string>
+    <string name="CoinAnalytics_DexVolume_Info2">1년 동안 주요 탈중앙화 거래소에서의 토큰의 일일 거래량 변동을 보여주는 차트.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">주요 탈중앙화 거래소에서 30일 동안의 거래량을 기반으로 한 토큰의 순위.</string>
+    <string name="CoinAnalytics_DexVolume_Info4">24시간 / 7일 / 1개월 간격으로 탈중앙화 거래소에서 거래량을 기반으로 한 모든 토큰의 순위 목록.</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes">추적 중인 DEX:</string>
+    <string name="CoinAnalytics_DexLiquidity_Info1">주요 탈중앙화 거래소에서 해당 토큰의 현재 사용 가능한 유동성 총액.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info2">주요 탈중앙화 거래소에서의 해당 토큰의 1년 동안 사용 가능한 유동성 변동을 보여주는 차트.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info3">주요 탈중앙화 거래소에서의 해당 토큰의 사용 가능한 유동성을 기준으로 순위 매겨진 모든 토큰의 목록.</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes">추적 중인 DEX:</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">24시간 동안의 고유 일일 활성 주소 총 수.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">1년 동안 일일 활성 주소 수의 변동을 보여주는 차트.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">24시간 / 7일 / 1개월 간격으로 토큰과 거래하는 일일 활성 주소 수를 기반으로 순위가 매겨진 모든 토큰의 목록.</string>
+    <string name="CoinAnalytics_TransactionCount_Info2">1년 동안의 거래 수 변동을 보여주는 차트.</string>
+    <string name="CoinAnalytics_TransactionCount_Info3">토큰의 순위는 30일 동안의 토큰 거래 수를 기준으로 합니다.</string>
+    <string name="CoinAnalytics_TransactionCount_Info4">24시간 / 7일 / 1개월 간격으로 토큰과의 거래 수를 기반으로 순위가 매겨진 모든 토큰의 목록.</string>
+    <string name="CoinAnalytics_Holders_Info1">다양한 블록체인에서 토큰을 보유한 고유 주소의 총 수.</string>
+    <string name="CoinAnalytics_Holders_Info2">각 블록체인에서 토큰을 보유한 상위 10개 지갑.</string>
+    <string name="CoinAnalytics_Holders_TrackedBlockchains">추적되는 블록체인: 이더리움, 바이낸스 스마트 체인, 옵티미즘, 아비트럼, 셀로, 크로노스, 아발란체, 팬텀, 폴리곤</string>
+    <string name="CoinAnalytics_ProjectTVL_Info2">1년 동안 프로젝트의 스마트 계약에서의 총 예치 가치(Total-Value-Locked) 변동을 보여주는 차트.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info4">현재 총 예치 가치(Total-Value-Locked)를 기반으로 순위가 매겨진 모든 토큰의 목록.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info5">프로젝트의 시가총액 / TVL 비율.</string>
+    <string name="CoinAnalytics_TechIndicators_Info1">요약: 이것은 다양한 기술적 지표와 시간대를 고려하여 자산의 기술적 특성을 일반적으로 개요합니다. 이러한 지표를 기반으로 한 공통된 견해 (매수, 매도 또는 중립)를 제공합니다.</string>
+    <string name="CoinAnalytics_TechIndicators_Info2">이동평균 (MA): 이것들은 추세를 따르는 지표를 만들기 위해 가격 데이터를 평활하게 하는 데 사용되는 일반적인 기술 지표입니다. 이것들은 특정 시간 기간 동안의 평균 가격을 보여줍니다. 다양한 종류의 이동평균이 있습니다:\n\n단순 이동평균 (SMA): 이것은 선택한 가격 범위, 보통 종가, 내의 기간 수로 평균을 계산합니다.\n\n지수 이동평균 (EMA): 이것은 최근 가격에 더 많은 가중치를 부여하여 최근 가격 변동에 더 빨리 반응합니다.</string>
+    <string name="CoinAnalytics_TechIndicators_Info3">오실레이터(Oscillators): 이것들은 일정한 범위 내에서 시간에 따라 변동하는 기술 지표로 (중심선 위 및 아래 또는 설정된 수준 사이에서), 시장에서 과매수 및 과매도 상태를 식별하는 데 도움을 주도록 설계되었습니다. 여기 일반적인 오실레이터 중 일부가 있습니다:\n\n상대강도지수 (RSI): 이것은 가격 움직임의 속도와 변화를 측정합니다. 주로 과매수 또는 과매도 상태를 식별하는 데 사용됩니다.\n\n이동평균수렴확산 (MACD): 이것은 잠재적인 매수 및 매도 신호를 식별하는 데 사용됩니다. MACD는 신호선을 크로스할 때 (매수) 또는 (매도) 아래로 크로스할 때 기술적 신호를 생성합니다.</string>
+    <string name="CoinAnalytics_ProjectNoAnalyticData">이 프로젝트에는 분석 데이터가 없습니다.</string>
+    <string name="CoinAnalytics_CexVolume">CEX 거래량</string>
+    <string name="CoinAnalytics_CexVolumeRank">CEX 거래량 순위</string>
+    <string name="CoinAnalytics_CexVolumeRank_Description">중앙화 거래소에서의 토큰 거래량을 기준으로 순위가 매겨진 토큰들.</string>
+    <string name="CoinAnalytics_Reports">보고서</string>
+    <string name="Coin_Analytics_Audits">감사</string>
+    <string name="Coin_Analytics_OverallScore_DexVolume">종합 점수는 지난 7일 동안 탈중앙화 거래소에서의 평균 일일 거래량을 기반으로 합니다.</string>
+    <string name="Coin_Analytics_OverallScore_ActiveAddresses">종합 점수는 지난 7일 동안의 평균 일일 활성 주소를 기반으로 합니다.</string>
+    <string name="Coin_Analytics_OverallScore_ProjectTvl">종합 점수는 주어진 토큰을 통해 표현된 프로젝트의 총 예치 가치 (자산 관리 대상)를 기반으로 합니다.</string>
+    <string name="Coin_Analytics_OverallScore_TransactionCount">종합 점수는 지난 7일 동안의 평균 일일 거래 횟수를 기반으로 합니다.</string>
+    <string name="Coin_Analytics_TechnicalIndicators">기술적 지표</string>
     <string name="Coin_Analytics_Details">상세 정보</string>
+    <string name="Coin_Analytics_SelectPeriod">기간 선택</string>
     <string name="Coin_Analytics_Period_30m">30분</string>
     <string name="Coin_Analytics_Period_1h">1시간</string>
+    <string name="Coin_Analytics_Period_4h">4 시간</string>
+    <string name="Coin_Analytics_Indicators_NoData">데이터 없음</string>
     <string name="ActivateSubscription_Title">활성화</string>
     <string name="ActivateSubscription_Address">주소</string>
     <string name="SubscriptionInfo_PersonalSupport_Title">개인 지원</string>
