@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSpee
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoStatusCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoTransactionHashCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmountCell
+import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 
 class TransactionInfoFragment : BaseComposeFragment() {
 
@@ -99,6 +100,13 @@ fun TransactionInfoSection(
     navController: NavController,
     getRawTransaction: () -> String?
 ) {
+    if (section.size == 1 && section[0] is TransactionInfoViewItem.WarningMessage) {
+        (section[0] as? TransactionInfoViewItem.WarningMessage)?.let {
+            WarningMessageCell(it.message)
+        }
+        return
+    }
+
     CellUniversalLawrenceSection(
         buildList {
             for (viewItem in section) {
@@ -214,6 +222,10 @@ fun TransactionInfoSection(
                         add {
                             TransactionInfoSentToSelfCell()
                         }
+                    }
+
+                    is TransactionInfoViewItem.WarningMessage -> {
+                        //already handled
                     }
                 }
             }

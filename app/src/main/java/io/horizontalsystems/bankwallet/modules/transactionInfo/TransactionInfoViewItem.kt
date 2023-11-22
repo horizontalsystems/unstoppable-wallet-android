@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.marketkit.models.BlockchainType
-import java.util.*
+import java.util.Date
 
 sealed class TransactionInfoViewItem {
     class Transaction(val leftValue: String, val rightValue: String, val icon: Int?) : TransactionInfoViewItem()
@@ -36,6 +36,8 @@ sealed class TransactionInfoViewItem {
     object SentToSelf : TransactionInfoViewItem()
 
     class SpeedUpCancel(val transactionHash: String) : TransactionInfoViewItem()
+
+    class WarningMessage(val message: String) : TransactionInfoViewItem()
 }
 
 data class ColoredValue(val value: String, val color: ColorName)

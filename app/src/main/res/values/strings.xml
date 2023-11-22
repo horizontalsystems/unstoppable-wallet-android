@@ -759,6 +759,7 @@
     <string name="TransactionInfo_Options">Options</string>
     <string name="TransactionInfo_SpeedUp">Speed Up</string>
     <string name="TransactionInfo_Cancel">Cancel</string>
+    <string name="TransactionInfo_SpamWarning">This transaction is suspicious and can be a scam.\nPlease do not copy any addresses from this transaction.</string>
 
     <string name="StatusInfo_Pending">Pending</string>
     <string name="StatusInfo_Processing">Processing</string>
