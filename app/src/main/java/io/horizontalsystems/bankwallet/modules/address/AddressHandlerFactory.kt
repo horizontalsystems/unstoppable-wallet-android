@@ -73,6 +73,10 @@ class AddressHandlerFactory(
                 addressHandlers.add(AddressHandlerTron())
             }
 
+            BlockchainType.Ton -> {
+                addressHandlers.add(AddressHandlerTon())
+            }
+
             is BlockchainType.Unsupported -> {
             }
         }
