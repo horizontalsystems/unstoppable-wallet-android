@@ -82,6 +82,10 @@ class TransactionInfoViewItemFactory(
 
         var sentToSelf = false
 
+        if (transactionItem.record.spam) {
+            itemSections.add(listOf(TransactionInfoViewItem.WarningMessage(translator.getString(R.string.TransactionInfo_SpamWarning))))
+        }
+
         when (transaction) {
             is ContractCreationTransactionRecord -> {
                 itemSections.add(getContractCreationItems(transaction))

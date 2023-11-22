@@ -86,6 +86,16 @@ fun SectionTitleCell(
 }
 
 @Composable
+fun WarningMessageCell(message: String) {
+    TextImportantWarning(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        text = message
+    )
+}
+
+@Composable
 fun TransactionNftAmountCell(
     amount: ColoredValue,
     iconUrl: String?,
