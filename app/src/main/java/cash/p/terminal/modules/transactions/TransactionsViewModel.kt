@@ -166,6 +166,7 @@ data class TransactionViewItem(
     val showAmount: Boolean = true,
     val sentToSelf: Boolean = false,
     val doubleSpend: Boolean = false,
+    val spam: Boolean = false,
     val locked: Boolean? = null,
     val icon: Icon
 ) {

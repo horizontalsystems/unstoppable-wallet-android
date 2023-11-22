@@ -32,12 +32,12 @@ class SpamManager(
                 spamValue(eventValue.coinUid, eventValue.value)
             }
 
-            else -> hideSuspiciousTx
+            else -> true
         }
     }
 
     private fun spamValue(coinCode: String, value: BigDecimal): Boolean {
-        return if (hideSuspiciousTx && stableCoinCodes.contains(coinCode)) {
+        return if (stableCoinCodes.contains(coinCode)) {
             value < negligibleValue
         } else {
             value <= BigDecimal.ZERO

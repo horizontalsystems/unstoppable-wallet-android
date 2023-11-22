@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.balance.token
 
 import cash.p.terminal.core.Clearable
+import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
@@ -36,7 +37,8 @@ class TokenTransactionsService(
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val contactsRepository: ContactsRepository,
-    private val nftMetadataService: NftMetadataService
+    private val nftMetadataService: NftMetadataService,
+    private val spamManager: SpamManager,
 ) : Clearable {
     private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
@@ -204,7 +206,7 @@ class TokenTransactionsService(
                 newRecords.add(record)
             }
 
-            if (record.spam) return@forEach
+            if (record.spam && spamManager.hideSuspiciousTx) return@forEach
 
             transactionItem = if (transactionItem == null) {
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)

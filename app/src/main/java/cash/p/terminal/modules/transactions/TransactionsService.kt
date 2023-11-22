@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.CurrencyValue
@@ -32,6 +33,7 @@ class TransactionsService(
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
     private val nftMetadataService: NftMetadataService,
+    private val spamManager: SpamManager,
 ) : Clearable {
     val filterResetEnabled by transactionFilterService::resetEnabled
     val filterHideSuspiciousTx by transactionFilterService::filterHideSuspiciousTx
@@ -214,7 +216,7 @@ class TransactionsService(
                 newRecords.add(record)
             }
 
-            if (record.spam) return@forEach
+            if (record.spam && spamManager.hideSuspiciousTx) return@forEach
 
             transactionItem = if (transactionItem == null) {
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
