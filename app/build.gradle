@@ -359,7 +359,10 @@ dependencies {
 }
 
 configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy {
+        cacheChangingModulesFor 0, 'seconds'
+        force 'com.github.horizontalsystems:hd-wallet-kit-android:4493a4b'
+    }
 }
 
 // fixes reproducible builds (fixes difference in assets/dexopt/baseline.profm)
