@@ -15,6 +15,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -232,7 +233,8 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
             Box(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .size(42.dp),
+                    .size(42.dp)
+                    .alpha(if (item.spam) 0.5f else 1f),
                 contentAlignment = Alignment.Center
             ) {
                 item.progress?.let { progress ->
@@ -300,7 +302,11 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                     is TransactionViewItem.Icon.ImageResource -> {}
                 }
             }
-            Column(modifier = Modifier.padding(end = 16.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .alpha(if (item.spam) 0.5f else 1f)
+            ) {
                 Row {
                     body_leah(
                         modifier = Modifier.padding(end = 32.dp),

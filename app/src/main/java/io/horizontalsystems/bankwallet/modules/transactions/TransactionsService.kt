@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -32,6 +33,7 @@ class TransactionsService(
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
     private val nftMetadataService: NftMetadataService,
+    private val spamManager: SpamManager,
 ) : Clearable {
     val filterResetEnabled by transactionFilterService::resetEnabled
     val filterHideSuspiciousTx by transactionFilterService::filterHideSuspiciousTx
@@ -214,7 +216,7 @@ class TransactionsService(
                 newRecords.add(record)
             }
 
-            if (record.spam) return@forEach
+            if (record.spam && spamManager.hideSuspiciousTx) return@forEach
 
             transactionItem = if (transactionItem == null) {
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
