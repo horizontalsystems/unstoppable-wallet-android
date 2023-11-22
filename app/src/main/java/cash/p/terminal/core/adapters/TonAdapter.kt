@@ -15,6 +15,8 @@ import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.TransactionSource
+import io.horizontalsystems.hdwalletkit.Curve
+import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tonkit.DriverFactory
 import io.horizontalsystems.tonkit.SyncState
@@ -53,7 +55,9 @@ class TonAdapter(
             throw UnsupportedAccountException()
         }
 
-        tonKit = TonKitFactory(DriverFactory(App.instance)).createWatch("UQBpAeJL-VSLCigCsrgGQHCLeiEBdAuZBlbrrUGI4BVQJoPM")
+        val hdWallet = HDWallet(accountType.seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
+        val privateKey = hdWallet.privateKey(0)
+        tonKit = TonKitFactory(DriverFactory(App.instance)).create(privateKey.privKeyBytes)
     }
 
     override fun start() {
