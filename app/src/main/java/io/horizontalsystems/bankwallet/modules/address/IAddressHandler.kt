@@ -292,6 +292,8 @@ class AddressHandlerTron : IAddressHandler {
 }
 
 class AddressHandlerTon : IAddressHandler {
+    override val blockchainType = BlockchainType.Ton
+
     override fun isSupported(value: String): Boolean {
         TODO()
     }
