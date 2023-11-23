@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendAmountAdvancedService
@@ -24,7 +25,8 @@ class SendEvmViewModel(
     private val amountService: SendAmountAdvancedService,
     private val addressService: SendEvmAddressService,
     val coinMaxAllowedDecimals: Int,
-    private val showAddressInput: Boolean
+    private val showAddressInput: Boolean,
+    private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -97,5 +99,9 @@ class SendEvmViewModel(
         val transactionData = adapter.getTransactionData(tmpEvmAmount, evmAddress)
 
         return SendEvmData(transactionData)
+    }
+
+    fun hasConnection(): Boolean {
+        return connectivityManager.isConnected
     }
 }

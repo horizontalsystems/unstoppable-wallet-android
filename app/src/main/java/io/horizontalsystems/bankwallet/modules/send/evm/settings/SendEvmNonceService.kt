@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.settings
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsError
+import io.horizontalsystems.ethereumkit.api.core.NodeWebSocket
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import kotlinx.coroutines.Dispatchers
@@ -74,10 +76,14 @@ class SendEvmNonceService(
     }
 
     private suspend fun setRecommended() = withContext(Dispatchers.IO) {
-        val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
-        sync(nonce, default = true)
+        try {
+            val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
+            sync(nonce, default = true)
 
-        latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
+            latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
+        } catch (e: NodeWebSocket.SocketError.NotConnected) {
+            Log.e("SendEvmNonceService", "setRecommended error", e)
+        }
     }
 
     data class State(

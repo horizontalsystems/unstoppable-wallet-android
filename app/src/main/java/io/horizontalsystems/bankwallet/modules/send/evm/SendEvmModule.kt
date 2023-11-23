@@ -147,6 +147,7 @@ object SendEvmModule {
                         addressService,
                         coinMaxAllowedDecimals,
                         showAddressInput,
+                        App.connectivityManager,
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
