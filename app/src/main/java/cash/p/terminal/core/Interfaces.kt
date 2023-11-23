@@ -353,6 +353,11 @@ interface ISendSolanaAdapter {
     suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
 }
 
+interface ISendTonAdapter {
+    val availableBalance: BigDecimal
+    suspend fun send(amount: BigDecimal, address: String)
+}
+
 interface ISendTronAdapter {
     val balanceData: BalanceData
     val trxBalanceData: BalanceData

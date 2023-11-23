@@ -6,6 +6,7 @@ import cash.p.terminal.core.BalanceData
 import cash.p.terminal.core.IAdapter
 import cash.p.terminal.core.IBalanceAdapter
 import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.entities.AccountType
@@ -36,7 +37,7 @@ import java.math.BigDecimal
 
 class TonAdapter(
     private val wallet: Wallet,
-) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendTonAdapter {
 
     private val decimals = 9
 
@@ -179,6 +180,12 @@ class TonAdapter(
         is SyncState.Syncing -> AdapterState.Syncing()
     }
 
+    override val availableBalance: BigDecimal
+        get() = balance
+
+    override suspend fun send(amount: BigDecimal, address: String) {
+        tonKit.send(address, amount.movePointRight(decimals).toBigInteger().toString())
+    }
 }
 
 class TonTransactionRecord(

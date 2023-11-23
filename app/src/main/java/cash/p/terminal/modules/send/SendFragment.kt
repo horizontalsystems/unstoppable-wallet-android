@@ -28,6 +28,9 @@ import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewMod
 import cash.p.terminal.modules.send.solana.SendSolanaModule
 import cash.p.terminal.modules.send.solana.SendSolanaScreen
 import cash.p.terminal.modules.send.solana.SendSolanaViewModel
+import cash.p.terminal.modules.send.ton.SendTonModule
+import cash.p.terminal.modules.send.ton.SendTonScreen
+import cash.p.terminal.modules.send.ton.SendTonViewModel
 import cash.p.terminal.modules.send.tron.SendTronModule
 import cash.p.terminal.modules.send.tron.SendTronScreen
 import cash.p.terminal.modules.send.tron.SendTronViewModel
@@ -154,6 +157,21 @@ class SendFragment : BaseFragment() {
                                 title,
                                 findNavController(),
                                 sendSolanaViewModel,
+                                amountInputModeViewModel,
+                                sendEntryPointDestId,
+                                prefilledAddressData?.amount,
+                            )
+                        }
+                    }
+
+                    BlockchainType.Ton -> {
+                        val factory = SendTonModule.Factory(wallet, address, showAddressInput)
+                        val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment) { factory }
+                        setContent {
+                            SendTonScreen(
+                                title,
+                                findNavController(),
+                                sendTonViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledAddressData?.amount,
