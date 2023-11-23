@@ -777,10 +777,17 @@
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다.</string>
     <!--Btc Blockchain Settings -->
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">소스를 변경한 후에는 지갑이 자체적으로 다시 동기화해야 합니다.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionSettings">거래 설정</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">트랜잭션 입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">거래 구조를 변경하여 BTC, LTC, BCH 거래를 추적하기 어렵게 만드십시오.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">대부분의 비트코인 ​​거래는 물론 비트코인 ​​캐시, 대시 및 라이트코인을 포함한 유사한 암호화폐의 거래는 두 가지 출력을 생성합니다. 하나의 출력은 수신자에게 가는 금액이고 다른 하나는 발신자에게 반환되는 변경 출력입니다. 대부분의 지갑이 트랜잭션을 구성하는 방식을 통해 제3자는 출력 중 어느 것이 수신 당사자에게 갔고 어느 것이 발신자에게 반환된 변경 금액인지 쉽게 이해할 수 있습니다. 발신자에게 반환된 출력은 나중에 미래의 거래에 사용되기 때문에 이 두 거래 사이의 연결이 분명해집니다.
+\n\nUnstoppable 지갑은 누군가가 어떤 출력이 어디로 가는지 알아내기 어렵게 하는 조치를 구현합니다.
+\n\n 멈출 수 없는 사용자가 사용할 수 있는 두 가지 옵션:
+\n\n1. 셔플: 트랜잭션 출력 순서는 모든 트랜잭션에서 무작위로 지정됩니다. 때로는 변화가 첫 번째 출력이 될 수도 있고 때로는 두 번째 출력이 될 수도 있습니다. 사용자가 앱 개발자를 신뢰한다면 이것을 권장 옵션으로 고려하십시오.
+\n\n2. 결정적: 트랜잭션 출력 주문에 대해 일반적으로 합의된 표준이 있습니다(BIP69로 알려짐). 오픈 소스 지갑에서 이 표준은 지갑 사용자가 앱 개발자가 출력 순서를 구현하는 방법을 신뢰할 필요가 없도록 합니다. 이 표준은 새롭기 때문에 아직 많은 지갑에서 구현하지 않았습니다. 결과적으로 해당 표준을 사용하는 지갑에서 트랜잭션이 전송되었는지 여부를 블록체인에서 확인할 수 있습니다.</string>
     <!--Info screen-->
     <string name="Info_Title">인포</string>
     <!--Setting_Security-->
@@ -800,6 +807,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">빠르고 비공개, 중앙집중화</string>
@@ -835,6 +843,7 @@
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
+    <string name="SettingsContact_Title">문의하기</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">보고 싶은 코인에 대한 가격 변경 알림 설정\n\n최근 24시간 동안의 가격 변동이 선택된 임계값을 초과할 경우 알림 메시지가 표시됨\n\n가격 동향 알림은 짧은 1주일, 긴 6개월 동안의 동향 변화에 대해 알려줍니다.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
@@ -877,6 +886,7 @@
     <string name="Hud_Text_EmailAddressCopied">이메일 주소 복사됨</string>
     <string name="Hud_Added_To_Watchlist">관심목록에 추가되었습니다</string>
     <string name="Hud_Added_To_Wallet">지갑에 추가됨</string>
+    <string name="Hud_Removed_From_Wallet">지갑에서 제거됨</string>
     <string name="Hud_Already_In_Wallet">이미 지갑에 추가됨</string>
     <string name="Hud_Removed_from_Watchlist">관심목록에서 제거</string>
     <string name="Hud_Removed">제거됨</string>
