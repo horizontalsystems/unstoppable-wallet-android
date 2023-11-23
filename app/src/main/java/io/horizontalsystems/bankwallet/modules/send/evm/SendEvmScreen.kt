@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.helpers.HudHelper
 import java.math.BigDecimal
 
 @Composable
@@ -49,6 +51,7 @@ fun SendEvmScreen(
         factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
+    val view = LocalView.current
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
@@ -110,11 +113,15 @@ fun SendEvmScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-                    viewModel.getSendData()?.let {
-                        navController.slideFromRight(
-                            R.id.sendEvmConfirmationFragment,
-                            SendEvmConfirmationModule.prepareParams(it, R.id.sendXFragment, sendEntryPointDestId)
-                        )
+                    if (viewModel.hasConnection()) {
+                        viewModel.getSendData()?.let {
+                            navController.slideFromRight(
+                                R.id.sendEvmConfirmationFragment,
+                                SendEvmConfirmationModule.prepareParams(it, R.id.sendXFragment, sendEntryPointDestId)
+                            )
+                        }
+                    } else {
+                        HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
                     }
                 },
                 enabled = proceedEnabled
