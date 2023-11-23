@@ -57,7 +57,7 @@ class TonAdapter(
 
         val hdWallet = HDWallet(accountType.seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
         val privateKey = hdWallet.privateKey(0)
-        tonKit = TonKitFactory(DriverFactory(App.instance)).create(privateKey.privKeyBytes)
+        tonKit = TonKitFactory(DriverFactory(App.instance)).create(privateKey.privKeyBytes, wallet.account.id)
     }
 
     override fun start() {
