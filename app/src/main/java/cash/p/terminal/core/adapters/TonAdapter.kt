@@ -31,7 +31,10 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.rx2.rxSingle
 import java.math.BigDecimal
 
@@ -168,7 +171,31 @@ class TonAdapter(
     override fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
-    ) = Flowable.empty<List<TransactionRecord>>()
+    ): Flowable<List<TransactionRecord>> {
+        val tonTransactionType = when (transactionType) {
+            FilterTransactionType.All -> null
+            FilterTransactionType.Incoming -> TransactionType.Incoming
+            FilterTransactionType.Outgoing -> TransactionType.Outgoing
+            FilterTransactionType.Swap -> return Flowable.empty()
+            FilterTransactionType.Approve -> return Flowable.empty()
+        }
+
+        return tonKit.newTransactionsFlow
+            .map {
+                if (tonTransactionType != null) {
+                    it.filter { it.type == tonTransactionType.name }
+                } else {
+                    it
+                }
+            }
+            .filter { it.isNotEmpty() }
+            .map {
+                it.map {
+                    createTransactionRecord(it)
+                }
+            }
+            .asFlowable()
+    }
 
     override fun getTransactionUrl(transactionHash: String): String {
         return "https://tonscan.org/tx/$transactionHash"
