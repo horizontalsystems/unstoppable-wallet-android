@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendEthereumAdapter
+import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.send.SendAmountAdvancedService
@@ -24,7 +25,8 @@ class SendEvmViewModel(
     private val amountService: SendAmountAdvancedService,
     private val addressService: SendEvmAddressService,
     val coinMaxAllowedDecimals: Int,
-    private val showAddressInput: Boolean
+    private val showAddressInput: Boolean,
+    private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -97,5 +99,9 @@ class SendEvmViewModel(
         val transactionData = adapter.getTransactionData(tmpEvmAmount, evmAddress)
 
         return SendEvmData(transactionData)
+    }
+
+    fun hasConnection(): Boolean {
+        return connectivityManager.isConnected
     }
 }
