@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ISendTonAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -36,7 +37,7 @@ import java.math.BigDecimal
 
 class TonAdapter(
     private val wallet: Wallet,
-) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendTonAdapter {
 
     private val decimals = 9
 
@@ -179,6 +180,12 @@ class TonAdapter(
         is SyncState.Syncing -> AdapterState.Syncing()
     }
 
+    override val availableBalance: BigDecimal
+        get() = balance
+
+    override suspend fun send(amount: BigDecimal, address: String) {
+        tonKit.send(address, amount.movePointRight(decimals).toBigInteger().toString())
+    }
 }
 
 class TonTransactionRecord(
