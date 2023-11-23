@@ -28,6 +28,9 @@ import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.EvmKitWrapp
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
+import io.horizontalsystems.bankwallet.modules.send.ton.SendTonModule
+import io.horizontalsystems.bankwallet.modules.send.ton.SendTonScreen
+import io.horizontalsystems.bankwallet.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronModule
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronScreen
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
@@ -154,6 +157,21 @@ class SendFragment : BaseFragment() {
                                 title,
                                 findNavController(),
                                 sendSolanaViewModel,
+                                amountInputModeViewModel,
+                                sendEntryPointDestId,
+                                prefilledAddressData?.amount,
+                            )
+                        }
+                    }
+
+                    BlockchainType.Ton -> {
+                        val factory = SendTonModule.Factory(wallet, address, showAddressInput)
+                        val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment) { factory }
+                        setContent {
+                            SendTonScreen(
+                                title,
+                                findNavController(),
+                                sendTonViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledAddressData?.amount,
