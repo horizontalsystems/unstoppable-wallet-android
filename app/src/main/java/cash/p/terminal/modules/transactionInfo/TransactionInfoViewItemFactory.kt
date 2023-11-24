@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.R
 import cash.p.terminal.core.IAppNumberFormatter
+import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.providers.Translator
@@ -91,6 +92,31 @@ class TransactionInfoViewItemFactory(
                 itemSections.add(getContractCreationItems(transaction))
             }
 
+            is TonTransactionRecord -> {
+                when (transaction.type) {
+                    TonTransactionRecord.Type.Incoming -> {
+                        itemSections.add(
+                            getReceiveSectionItems(
+                                value = transaction.mainValue,
+                                fromAddress = transaction.from,
+                                coinPrice = rates[transaction.mainValue.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                            )
+                        )
+                    }
+                    TonTransactionRecord.Type.Outgoing -> {
+                        itemSections.add(
+                            getSendSectionItems(
+                                value = transaction.mainValue,
+                                toAddress = transaction.to,
+                                coinPrice = rates[transaction.mainValue.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                nftMetadata = nftMetadata
+                            )
+                        )
+                    }
+                }
+            }
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
                     getReceiveSectionItems(
