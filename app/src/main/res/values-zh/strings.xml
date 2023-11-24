@@ -613,6 +613,8 @@
     <string name="Transactions_Unknown_Description">无法解析交易</string>
     <string name="Transactions_Multiple">多种</string>
     <string name="Transactions_Filter">筛选器</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">隐藏可疑Txs</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">隐藏到达的沙尘群交易，这部分解决了地址中毒攻击问题。</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">交易</string>
     <string name="TransactionInfo_Title">交易信息</string>
@@ -646,6 +648,7 @@
     <string name="TransactionInfo_Options">选项</string>
     <string name="TransactionInfo_SpeedUp">加速</string>
     <string name="TransactionInfo_Cancel">取消</string>
+    <string name="TransactionInfo_SpamWarning">这笔交易存在可疑，可能是诈骗。\n请不要从这笔交易中复制任何地址。</string>
     <string name="StatusInfo_Pending">待处理</string>
     <string name="StatusInfo_Processing">正在处理</string>
     <string name="StatusInfo_Confirmed">已完成</string>
@@ -796,6 +799,7 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
@@ -1237,11 +1241,19 @@
     <string name="CoinAnalytics_ActiveAddresses_Info3">过去30天内与代币进行交易的独特区块链地址的总数。</string>
     <string name="CoinAnalytics_ActiveAddresses_Info5">根据24小时/7天/1个月时间段内与代币进行交易的每日活跃地址数量排名的所有代币列表。</string>
     <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with tokens over a 30-day period.</string>
+    <string name="CoinAnalytics_TransactionCount_Info2">显示1年周期的交易计数变化的图表。</string>
+    <string name="CoinAnalytics_TransactionCount_Info3">基于30天周期与代币交易的数量的代币排名。</string>
+    <string name="CoinAnalytics_TransactionCount_Info4">基于24时 / 7天 / 1月间隔的交易数量排名的所有代币的列表。</string>
     <string name="CoinAnalytics_TransactionCount_Info5">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_Holders_Info1">在各种区块链上持有代币的唯一地址的总数。</string>
+    <string name="CoinAnalytics_Holders_Info2">在每一个区块链上持有代币的前10大钱包。</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">已追踪区块链：以太坊、币安智能链、Optimism、Arbitrum、Celo、Cronos、Avalanche、Fantom、Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">图表显示了过去一年内项目智能合约中锁定总价值的变化。</string>
     <string name="CoinAnalytics_ProjectTVL_Info3">代币的排名基于当前的锁定总价值。</string>
+    <string name="CoinAnalytics_ProjectTVL_Info4">基于当前锁定总价值排名的所有代币的列表。</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">项目的市值/锁定总价值（TVL）比率。</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info1">在30天周期内为代币持有者生成的总收入。通常，费用由代币质押者或通过代币销毁机制收集。</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">基于在30天周期内为代币质押者生成的收入的代币排名。</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">基于在24时 / 7天 / 1月间隔内为代币质押者生成的收入排名的所有代币的列表。</string>
     <string name="CoinAnalytics_TechIndicators_Info1">概述：这是对资产技术手段的一般概述，考虑到各种技术指标和时间框架。 它根据这些指标提供了一个协商一致的观点(购买、出售或中立)。</string>
     <string name="CoinAnalytics_TechIndicators_Info2">移动平均值：这些是通用的技术指标，可使价格数据平滑使用，从而产生一个趋势跟踪指标。 它们显示了特定时期内的平均价格。 多个类型的MA：\n\n简单移动平均值(SMA)：这个计算了选定的价格范围的平均值。 通常按该范围内的周期数结算价格。\n\n指数移动平均值(EMA)：这使得对最近的价格更加权重，从而对最近的价格变化作出更快的反应。</string>
