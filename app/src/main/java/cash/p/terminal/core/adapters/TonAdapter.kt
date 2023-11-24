@@ -19,6 +19,7 @@ import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.hdwalletkit.Curve
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.tonkit.ConnectionManager
 import io.horizontalsystems.tonkit.DriverFactory
 import io.horizontalsystems.tonkit.SyncState
 import io.horizontalsystems.tonkit.TonKit
@@ -61,13 +62,13 @@ class TonAdapter(
 
         val hdWallet = HDWallet(accountType.seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
         val privateKey = hdWallet.privateKey(0)
-        tonKit = TonKitFactory(DriverFactory(App.instance)).create(privateKey.privKeyBytes, wallet.account.id)
+        tonKit = TonKitFactory(DriverFactory(App.instance), ConnectionManager(App.instance)).create(privateKey.privKeyBytes, wallet.account.id)
     }
 
     override fun start() {
         coroutineScope.launch {
             tonKit.balanceFlow.collect {
-                balance = it?.toBigDecimal()?.movePointLeft(decimals) ?: BigDecimal.ZERO
+                balance = it.toBigDecimal().movePointLeft(decimals)
                 balanceUpdatedSubject.onNext(Unit)
             }
         }
