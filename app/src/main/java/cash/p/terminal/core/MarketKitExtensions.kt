@@ -161,7 +161,10 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Tron -> {
             tokenType is TokenType.Native || tokenType is TokenType.Eip20
         }
-        else -> false
+        BlockchainType.Ton -> {
+            tokenType is TokenType.Native
+        }
+        is BlockchainType.Unsupported -> false
     }
 
 val Blockchain.description: String
