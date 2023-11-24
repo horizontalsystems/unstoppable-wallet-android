@@ -361,7 +361,7 @@ dependencies {
 configurations.all {
     resolutionStrategy {
         cacheChangingModulesFor 0, 'seconds'
-        force 'com.github.horizontalsystems:hd-wallet-kit-android:4493a4b'
+        force 'com.github.horizontalsystems:hd-wallet-kit-android:a74b51f'
     }
 }
 
