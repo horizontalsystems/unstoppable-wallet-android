@@ -11,6 +11,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendSolanaAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -39,6 +40,7 @@ class SendSolanaViewModel(
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
+    private val connectivityManager: ConnectivityManager,
 ) : ViewModel() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
@@ -114,7 +116,16 @@ class SendSolanaViewModel(
         }
     }
 
+    fun hasConnection(): Boolean {
+        return connectivityManager.isConnected
+    }
+
     private suspend fun send() = withContext(Dispatchers.IO) {
+        if (!hasConnection()){
+            sendResult = SendResult.Failed(createCaution(UnknownHostException()))
+            return@withContext
+        }
+
         try {
             sendResult = SendResult.Sending
 
