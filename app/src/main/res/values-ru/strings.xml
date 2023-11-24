@@ -615,6 +615,8 @@
     <string name="Transactions_Unknown_Description">Транзакция не может быть обработана</string>
     <string name="Transactions_Multiple">Множество</string>
     <string name="Transactions_Filter">Фильтр</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Скрыть подозрительные транзакции</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Скрытие входящих транзакций с незначительной суммой в стабильных монетах частично решает проблемы атаки на загрязнение адреса.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Транзакция</string>
     <string name="TransactionInfo_Title">Детали транзакции</string>
@@ -648,6 +650,7 @@
     <string name="TransactionInfo_Options">Параметры</string>
     <string name="TransactionInfo_SpeedUp">Ускорение</string>
     <string name="TransactionInfo_Cancel">Отменить</string>
+    <string name="TransactionInfo_SpamWarning">Эта транзакция подозрительна и может быть мошенничеством. \nПожалуйста, не копируйте никакие адреса из этой транзакции.</string>
     <string name="StatusInfo_Pending">В ожидании</string>
     <string name="StatusInfo_Processing">В процессе</string>
     <string name="StatusInfo_Confirmed">Выполнено</string>
@@ -703,6 +706,7 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
     <string name="Settings_PersonalSupport_Account">Аккаунт</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Запрошено</string>
     <string name="Settings_PersonalSupport_Request">Запрос</string>
     <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
@@ -801,7 +805,11 @@
     <string name="SettingsSecurity_SortingBip69Short">Детерминированный</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Быстрый, Конфиденциальный, Централизованный</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Блокчейн</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Децентрализованное восстановление</string>
     <string name="SetDuressPin_Title">Duress код</string>
     <string name="SetDuressPin_Description">Установите код для режима Duress</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>
@@ -836,6 +844,7 @@
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Продолжить</string>
     <!--Setting_Contact-->
+    <string name="SettingsContact_Title">Свяжитесь с нами</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Установите уведомления об изменении курса отслеживаемых вами монет.\n\nВы получите уведомление, когда изменение курса за последние 24 часа превысит выбранный порог.\n\n Уведомление о тенденции цен предупреждает об изменениях в движении цен в краткосрочной перспективе (1 неделя), и долгосрочной перспективе (6 месяцев).</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Кошелек отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
@@ -1216,6 +1225,9 @@
     <string name="CoinPage_Type">Тип</string>
     <string name="CoinPage_Period">Период</string>
     <string name="CoinPage_RsiLength">Длина RSI</string>
+    <string name="CoinPage_FastLength">Fast Length</string>
+    <string name="CoinPage_SlowLength">Slow Length</string>
+    <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Индикаторы доступны только для премиум-пользователей Unstoppable кошелька.</string>
     <string name="CoinPage_AiGeneratedText">Это описание, сгенерированное искусственным интеллектом на основе предоставленного справочного материала для данной криптовалюты. Оно может содержать ошибки.</string>
     <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
