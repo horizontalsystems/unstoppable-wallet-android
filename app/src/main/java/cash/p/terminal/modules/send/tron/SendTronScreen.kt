@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,6 +26,7 @@ import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.helpers.HudHelper
 import java.math.BigDecimal
 
 @Composable
@@ -36,6 +38,7 @@ fun SendTronScreen(
     sendEntryPointDestId: Int,
     prefilledAmount: BigDecimal?
 ) {
+    val view = LocalView.current
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
 
@@ -112,16 +115,19 @@ fun SendTronScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
+                    if (viewModel.hasConnection()) {
+                        viewModel.onNavigateToConfirmation()
 
-                    viewModel.onNavigateToConfirmation()
-
-                    navController.slideFromRight(
-                        R.id.sendConfirmation,
-                        SendConfirmationFragment.prepareParams(
-                            SendConfirmationFragment.Type.Tron,
-                            sendEntryPointDestId
+                        navController.slideFromRight(
+                            R.id.sendConfirmation,
+                            SendConfirmationFragment.prepareParams(
+                                SendConfirmationFragment.Type.Tron,
+                                sendEntryPointDestId
+                            )
                         )
-                    )
+                    } else {
+                        HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
+                    }
                 },
                 enabled = proceedEnabled
             )

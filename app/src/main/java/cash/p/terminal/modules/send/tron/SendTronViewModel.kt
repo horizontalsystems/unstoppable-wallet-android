@@ -11,6 +11,7 @@ import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.ViewState
@@ -39,7 +40,8 @@ class SendTronViewModel(
     private val addressService: SendTronAddressService,
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
-    private val showAddressInput: Boolean
+    private val showAddressInput: Boolean,
+    private val connectivityManager: ConnectivityManager,
 ) : ViewModel() {
     val logger: AppLogger = AppLogger("send-tron")
 
@@ -238,6 +240,10 @@ class SendTronViewModel(
         viewModelScope.launch {
             send()
         }
+    }
+
+    fun hasConnection(): Boolean {
+        return connectivityManager.isConnected
     }
 
     private suspend fun send() = withContext(Dispatchers.IO) {

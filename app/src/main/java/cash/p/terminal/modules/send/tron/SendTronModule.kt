@@ -49,6 +49,7 @@ object SendTronModule {
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
                         showAddressInput,
+                        App.connectivityManager,
                     ) as T
                 }
 
