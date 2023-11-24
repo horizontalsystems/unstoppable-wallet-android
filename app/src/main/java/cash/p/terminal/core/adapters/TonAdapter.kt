@@ -148,6 +148,8 @@ class TonAdapter(
             else -> null
         } ?: BigDecimal.ZERO
 
+        val fee = transaction.fee?.toBigDecimal()?.movePointLeft(decimals)
+
         val type = when (transaction.type) {
             TransactionType.Incoming.name -> TonTransactionRecord.Type.Incoming
             TransactionType.Outgoing.name -> TonTransactionRecord.Type.Outgoing
@@ -163,6 +165,7 @@ class TonAdapter(
             timestamp = transaction.timestamp,
             source = wallet.transactionSource,
             mainValue = TransactionValue.CoinValue(wallet.token, value),
+            fee = fee?.let { TransactionValue.CoinValue(wallet.token, it) },
             type = type,
             from = transaction.src,
             to = transaction.dest,
@@ -227,6 +230,7 @@ class TonTransactionRecord(
     spam: Boolean = false,
     source: TransactionSource,
     override val mainValue: TransactionValue,
+    val fee: TransactionValue?,
     val type: Type,
     val from: String?,
     val to: String?

@@ -842,6 +842,12 @@ class TransactionInfoViewItemFactory(
                 }
             }
 
+            is TonTransactionRecord -> {
+                if (transaction.fee != null) {
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                }
+            }
+
             is BitcoinOutgoingTransactionRecord ->
                 transaction.fee?.let { items.add(getFee(it, rates[it.coinUid])) }
 

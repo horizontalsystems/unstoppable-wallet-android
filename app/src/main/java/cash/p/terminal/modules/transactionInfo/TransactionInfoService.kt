@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.CurrencyValue
@@ -75,6 +76,7 @@ class TransactionInfoService(
             val coinUids = mutableListOf<String?>()
 
             val txCoinTypes = when (val tx = transactionRecord) {
+                is TonTransactionRecord -> listOf(tx.mainValue.coinUid, tx.fee?.coinUid)
                 is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is SwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
