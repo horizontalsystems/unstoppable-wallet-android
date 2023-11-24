@@ -296,6 +296,7 @@
     <string name="Balance_NoAssetsToSend">Vous n\'avez pas d\'actifs à envoyer.</string>
     <string name="Balance_NoAssetsToSwap">Vous n\'avez pas d\'actifs à échanger.</string>
     <string name="Balance_Network">Réseau</string>
+    <string name="Balance_Format">Formater</string>
     <string name="Balance_NetworkSelectDescription">Choisissez le réseau pour recevoir une adresse.</string>
     <string name="Balance_ReceiveAddressHint">Votre adresse pour le dépôt %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Adresse de la montre de %s</string>
@@ -307,6 +308,7 @@
     <string name="Balance_Receive_Account">Compte</string>
     <string name="Balance_Receive_NotActive">Non actif</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
+    <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <string name="SendNft_Error_NotEnoughtBalance">Solde insuffisant</string>
@@ -316,6 +318,7 @@
     <string name="Send_Fee">Frais</string>
     <string name="Send_Fee_Info">Les blockchains requièrent que les usagers paient des frais de réseau lorsqu\'ils envoient des transactions. Ces frais sont plus élevés lorsque de nombreuses transactions empruntent le réseau.</string>
     <string name="Send_Button_Paste">Coller</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_Advanced">Avancé</string>
     <string name="Send_Hodler_Description">Le TimeLock ne fonctionne que pour les envois vers les adresses du BIP44 (commençant par 1)</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
@@ -524,8 +527,10 @@
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(montant minimal)</string>
     <string name="Swap_AmountMax">(max)</string>
+    <string name="Swap_AmountTypeCoin">Pièce</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
+    <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
     <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix évolue défavorablement au-delà de ce pourcentage</string>
     <string name="SwapSettings_DeadlineTitle">Date limite de transaction</string>
@@ -533,6 +538,7 @@
     <string name="SwapSettings_RecipientAddressTitle">Adresse du destinataire</string>
     <string name="SwapSettings_RecipientAddressDescription">Le montant sera transféré à l\'adresse indiquée après l\'opération de change</string>
     <string name="SwapSettings_Apply">Appliquer</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse ou domaine</string>
     <string name="SwapSettings_FeeSettingsAlert">Des frais de service pour l\'action de swap sur la plateforme sont typiques de 0,3% ou 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Délai Zéro</string>
@@ -547,6 +553,7 @@
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Valider</string>
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
+    <string name="Swap_Confirmation_Maximum">Maximum</string>
     <string name="Swap_Confirmation_Estimated">Estimé</string>
     <!--Approve-->
     <string name="Approve_Title">Swap approuvé</string>
@@ -582,6 +589,7 @@
     <string name="Transactions_Processing">Traitement en cours</string>
     <string name="Transactions_Send">Envoyer</string>
     <string name="Transactions_Burn">Brûlure</string>
+    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Approuver</string>
     <string name="Transactions_Swap">Echanger</string>
     <string name="Transactions_Failed">Échec</string>
@@ -604,13 +612,19 @@
     <string name="Transactions_Unknown">Transaction inconnue</string>
     <string name="Transactions_Unknown_Description">La transaction ne peut pas être analysée</string>
     <string name="Transactions_Multiple">Multiples</string>
+    <string name="Transactions_Filter">Filtre</string>
+    <string name="Transactions_Coins">Pièces</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Masquer les transactions suspectes</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Masquer les transactions entrantes avec des montants infimes en stablecoins, cela résout partiellement les problèmes d\'attaques de poisoning d\'adresse.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Opération</string>
     <string name="TransactionInfo_Title">Informations sur la transaction</string>
     <string name="TransactionInfo_Approval">Validation du remplacement</string>
     <string name="TransactionInfo_Status">Statut</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
+    <string name="TransactionInfo_Date">Date du Virement</string>
     <string name="TransactionInfo_Id">Identifiant</string>
+    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_ContactName">Nom du contact</string>
     <string name="TransactionInfo_To">À</string>
@@ -635,6 +649,7 @@
     <string name="TransactionInfo_Options">Paramètres</string>
     <string name="TransactionInfo_SpeedUp">Accélérer</string>
     <string name="TransactionInfo_Cancel">Annuler</string>
+    <string name="TransactionInfo_SpamWarning">Cette transaction est suspecte et peut être une arnaque. \nVeuillez ne copier aucune adresse de cette transaction.</string>
     <string name="StatusInfo_Pending">En attente</string>
     <string name="StatusInfo_Processing">Traitement en cours</string>
     <string name="StatusInfo_Confirmed">Terminé</string>
@@ -671,6 +686,7 @@
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
+    <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ExperimentalFeatures">Expérimental</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
@@ -697,9 +713,12 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
+    <string name="Settings_DonateToken">Donate %s</string>
     <string name="Settings_DonateWith">Donnez avec</string>
+    <string name="Settings_Donate_GetAddress">Adresse du don</string>
     <string name="Settings_Donate_Addresses">Adresses</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Immédiat</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
@@ -745,6 +764,7 @@
     <string name="Privacy_BulletedText3">Le portefeuille ne partage aucune donnée sur les utilisateurs.</string>
     <string name="Privacy_BulletedText4">Aucun compte utilisateur ni aucune base de données ne conserve les données des utilisateurs à un autre endroit.</string>
     <!-- Security Center -->
+    <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Ajouter un Nouveau</string>
     <string name="EvmNetwork_Added">Ajouté</string>
@@ -757,6 +777,8 @@
     <string name="AddEvmSyncSource_Warning_UrlExists">La source RPC avec cette url existe déjà</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Après avoir changé de source, le portefeuille devra se resynchroniser lui-même.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrées/Sorties</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Paramètres de transaction</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entrées / Sorties de transaction</string>
@@ -784,8 +806,11 @@
     <string name="SettingsSecurity_SortingBip69Short">Déterministe</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rapide, Privé, Centralisé</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Restauration décentralisée</string>
     <string name="SetDuressPin_Title">Code Duress</string>
     <string name="SetDuressPin_Description">Définir un code d\'accès pour le mode Duress</string>
     <string name="EditDuressPin_Title">Modifier le code de détresse</string>
@@ -801,6 +826,7 @@
     <string name="DuressPin_Notes_PasscodeChange_Description">La modification du code d\'accès en mode Duress modifiera également le code d\'accès actuel pour ce mode.</string>
     <string name="DuressPinSelectAccounts_Title">Sélectionnez les portefeuilles</string>
     <string name="DuressPinSelectAccounts_Description">Sélectionnez les portefeuilles qui seront affichés en mode Duresse.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">REGARDER LES WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Unstoppable Wallet est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.
@@ -819,6 +845,7 @@
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Soyez Unstoppable</string>
     <!--Setting_Contact-->
+    <string name="SettingsContact_Title">Contactez-nous</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Définissez des alertes de changement de prix pour les pièces que vous souhaitez surveiller.\n\nVous serez alerté lorsque le changement de prix des dernières 24 heures dépassera le seuil sélectionné.\n\nL\'alerte de tendance de prix vous avertit d\'un changement de tendance pour le court terme à 1 semaine, pour le long terme à 6 mois.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Les notifications pour l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour pouvoir recevoir des alertes de changement de prix.</string>
@@ -826,6 +853,7 @@
     <string name="SettingsNotifications_Off">Désactivé</string>
     <string name="SettingsNotifications_DeactivateAll">Tout réinitialiser</string>
     <string name="SettingsNotifications_PushNotification">Notification push</string>
+    <string name="Notification_Title">Notifications</string>
     <string name="Notification_PriceUp">%1$s prix : Hausse %2$s%% ⬆️</string>
     <string name="Notification_PriceDown">%1$s prix : Baisse %2$s%% ⬇️</string>
     <string name="Notification_TrendUp">%s tendance : Hausse 📈</string>
@@ -1058,8 +1086,10 @@
     <string name="AddToken_AlreadyAdded">DÉJÀ AJOUTÉ</string>
     <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
     <string name="AddToken_ChooseToken">Choisir les jetons</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidContractAddress">Adresse du contrat invalide</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
     <string name="AddEvmToken_Bep2NotFound">Symbole BEP2 introuvable</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Adresse du contrat introuvable dans la blockchain %s</string>
     <!-- Address Format Settings List -->
@@ -1072,6 +1102,7 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommendé)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
@@ -1079,6 +1110,7 @@
     <string name="Tor_Connection_Title">Connexion</string>
     <string name="Tor_Connection_Enable">Activer Tor</string>
     <string name="Tor_Connection_Disable">Désactiver Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Démarrage de Tor...</string>
     <string name="Tor_Status_Error">Erreur lors du démarrage de Tor !</string>
     <string name="TorPage_Connecting">Connexion à Tor…</string>
@@ -1092,9 +1124,14 @@
     <string name="Coin_Tab_Overview">Prix</string>
     <string name="Coin_Tab_Market">Marchés</string>
     <string name="Coin_Tab_Details">Analyses</string>
+    <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Aujourd\'hui</string>
+    <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7J</string>
+    <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2S</string>
+    <string name="CoinPage_TimeDuration_Month3">3M</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1J</string>
     <string name="CoinPage_TimeDuration_Year2">2A</string>
     <string name="CoinPage_TimeDuration_All">Tout</string>
@@ -1102,8 +1139,10 @@
     <string name="CoinPage_TradingVolume">Volume de trading</string>
     <string name="CoinPage_MajorHolders">Porteurs majeurs</string>
     <string name="CoinPage_MajorHolders_InfoDescription">Le nombre de tokens détenus par les 10 meilleurs portefeuilles. Les tokens des projets de qualité sont généralement largement distribués.</string>
+    <string name="CoinPage_Audits">Audits</string>
     <string name="CoinPage_Audits_Empty">Aucun rapport d\'audit</string>
     <string name="CoinPage_Audits_PoweredBy">Propulsé par Defiyield.app</string>
+    <string name="CoinPage_Audits_Issues">Problèmes : %d</string>
     <string name="CoinPage_InvestorData">Données de l\'investisseur</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filtres</string>
     <string name="CoinPage_Treasuries_PoweredBy">Propulsé par Bitcointreasuries.net</string>
@@ -1118,6 +1157,7 @@
     <string name="CoinPage_SecurityParams_Decentralized">Décentralisé</string>
     <string name="CoinPage_SecurityParams_ConfiscationResistance">Résistance à la saisie</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance">Résistance à la censure</string>
+    <string name="CoinPage_SecurityParams_Audits">Audits</string>
     <string name="CoinPage_Range24">Plage de 24h</string>
     <string name="CoinPage_About">À propos de</string>
     <string name="CoinPage_Overview">Synthèse</string>
@@ -1125,6 +1165,7 @@
     <string name="CoinPage_Categories">Catégories</string>
     <string name="CoinPage_Contracts">Contrats</string>
     <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Types de pièces</string>
     <string name="CoinPage_Links">Liens</string>
     <string name="CoinPage_Guide">Tutoriel</string>
@@ -1140,6 +1181,8 @@
     <string name="CoinPage_DilutedMarketCap">Cap. marché diluée</string>
     <string name="CoinPage_inCirculation">Offre en Circulation</string>
     <string name="CoinPage_TotalSupply">Offre totale</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
+    <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">G</string>
     <string name="CoinPage_MarketCap_Trillion">MM</string>
     <string name="CoinPage_MarketCap_Quadrillion">P</string>
@@ -1182,6 +1225,8 @@
     <string name="CoinPage_MacdSettingsDescription">Le MACD (Moving Average Average Convergence Divergence MACD) est un indicateur d\'élan qui suit la relation entre deux EMA du prix d\'un titre. Il signale l\'achat ou la vente d\'opportunités lorsque la ligne MACD (EMA moins 12 périodes de l\'EMA) traverse l\'EMA de 9 périodes, connue sous le nom de ligne de signal.</string>
     <string name="CoinPage_InsufficientData">Données insuffisantes</string>
     <string name="CoinPage_InsufficientDataError">Il n\'y a pas assez de points de données pour afficher l\'indicateur EMA 1. Veuillez ajuster la période de temps pour générer une vue de la ligne moyenne mobile. Pas assez de point pour afficher EMA 1.</string>
+    <string name="CoinPage_Type">Type</string>
+    <string name="CoinPage_Period">Period</string>
     <string name="CoinPage_RsiLength">Longueur RSI</string>
     <string name="CoinPage_FastLength">Longueur rapide</string>
     <string name="CoinPage_SlowLength">Longueur lente</string>
@@ -1201,6 +1246,7 @@
     <string name="CoinAnalytics_DexLiquidity_Info2">Graphique montrant une variation de la liquidité disponible pour le jeton sur les principales bourses décentralisées sur une période de 1 an.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">Liste de tous les jetons classés en fonction de la liquidité disponible pour le jeton sur les principaux échanges décentralisés.</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes qui sont suivis :</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Nombre total d\'adresses actives quotidiennes uniques sur une période de 24 heures.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">Graphique montrant des variations dans le nombre quotidien d\'adresses actives sur une période de 1 an.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">Nombre total d\'adresses blockchain uniques transitant avec un jeton sur une période de 30 jours.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">Le rang du jeton est basé sur le nombre de portefeuilles actifs opérant avec le jeton de période de 30 jours.</string>
@@ -1220,6 +1266,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total des revenus générés pour les détenteurs de tokens sur une période de 30 jours. Généralement, les frais sont perçus par les détenteurs de tokens ou bien par le biais d\'un mécanisme de brûlage de tokens.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info2">Classement du token basé sur les revenus générés sur une période de 30 jours pour les stakers de token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Liste de tous les tokens classés en fonction des revenus générés pour les stakers de tokens sur des intervalles de 24h / 7J / 1M.</string>
+    <string name="CoinAnalytics_TechIndicators_Info1">Résumé: This is a general overview of an asset technicals, considering a variety of technical indicators and timeframes. Il fournit un point de vue consensuel (Acheter, Vendre ou Neutre) basé sur ces indicateurs.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Moyennes mobiles (MA) : Ce sont des indicateurs techniques couramment utilisés pour lisser les données de prix afin de créer un indicateur de suivi de tendance. Ils montrent le prix moyen sur une période de temps spécifique. Il existe plusieurs types de MA :\n\nMoyenne mobile simple (SMA) : Cela calcule la moyenne d\'une plage de prix sélectionnée, généralement les prix de clôture, par le nombre de périodes dans cette plage.\n\nMoyenne mobile exponentielle (EMA) : Cela donne plus de poids aux prix récents, répondant ainsi plus rapidement aux changements de prix récents.</string>
     <string name="CoinAnalytics_TechIndicators_Info3">Oscillateurs: Ce sont des indicateurs techniques qui fluctuent dans le temps à l\'intérieur d\'une bande (au-dessus et en dessous d\'une ligne centrale, ou entre des niveaux définis). Ils sont conçus pour aider à identifier les conditions de surachat et de survente sur un marché. Voici quelques oscillateurs courants:\n\nIndice de force relative (RSI): Cela mesure la vitesse et le changement des mouvements de prix. Il est généralement utilisé pour identifier les conditions de surachat ou de survente.\n\nConvergence divergence de moyennes mobiles (MACD): Cela est utilisé pour identifier les signaux d\'achat et de vente potentiels. Il déclenche des signaux techniques lorsqu\'il croise au-dessus (pour acheter) ou en dessous (pour vendre) de sa ligne de signal.</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Ce projet n\'a pas de données d\'analyse</string>
@@ -1241,6 +1288,7 @@
     <string name="CoinAnalytics_Holders">Titres</string>
     <string name="CoinAnalytics_ProjectTvl">Projet TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projet TVL (valeur totale verrouillée)</string>
+    <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Revenus du projet</string>
     <string name="CoinAnalytics_ProjectFee">Frais de projet</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Classement en fonction des revenus du projet</string>
@@ -1252,6 +1300,7 @@
     <string name="CoinAnalytics_OtherData">Autres données</string>
     <string name="CoinAnalytics_Reports">Rapports</string>
     <string name="CoinAnalytics_Funding">Financement</string>
+    <string name="Coin_Analytics_Audits">Audits</string>
     <string name="Coin_Analytics_Last30d">30 derniers j.</string>
     <string name="Coin_Analytics_Current">actuel</string>
     <string name="Coin_Analytics_Rank">Rang</string>
@@ -1259,6 +1308,7 @@
     <string name="Coin_Analytics_30DayUniqueAddress">Adresses uniques de 30 jours</string>
     <string name="Coin_Analytics_30DayVolume">Volume sur 30 jours</string>
     <string name="Coin_Analytics_OverallScore">Sous total</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Excellent</string>
     <string name="Coin_Analytics_OverallScore_Good">Bon</string>
     <string name="Coin_Analytics_OverallScore_Fair">Équitable</string>
     <string name="Coin_Analytics_OverallScore_Poor">Mauvais</string>
@@ -1327,6 +1377,7 @@
     <string name="NftAsset_ContractAddress">Adresse du contrat</string>
     <string name="NftAsset_TokenId">Identifiant du token</string>
     <string name="NftAsset_TokenStandard">Standard du token</string>
+    <string name="NftAsset_Blockchain">Blockchain</string>
     <string name="NftAsset_Links_Website">Site Web</string>
     <string name="PoweredBy_OpenSeaAPI">Propulsé par OpenSea API</string>
     <string name="Nft_TopCollections">Top des collections NFT</string>
@@ -1357,6 +1408,7 @@
     <string name="NftCollection_EventType_Custom">Personnalisé</string>
     <string name="NftCollection_EventType_Payout">Versement</string>
     <string name="NftCollection_EventType_BulkCancel">Annuler en bloc</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Inconnu</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Les grands gagnants</string>
@@ -1430,6 +1482,7 @@
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
     <!--Contacts-->
+    <string name="Contacts">Contacts</string>
     <string name="Contacts_Backup">Sauvegarder les contacts</string>
     <string name="Contacts_Restore">Restaurer les contacts</string>
     <string name="Contacts_Restore_Warning">Cette action écrasera complètement vos contacts et supprimera votre liste de contacts existante. Voulez-vous remplacer votre liste de contacts ? </string>
@@ -1479,6 +1532,7 @@
     <string name="CexWithdraw_EmailVerificationCode">Code de vérification</string>
     <string name="CexWithdraw_GoogleAuthenticationCode">Code Google Authenticator</string>
     <string name="CexWithdraw_GetCode">Réenvoyer</string>
+    <string name="CexWithdraw_GetCodeSeconds">%s sec</string>
     <string name="CexWithdraw_EmailVerificationInfo">Entrez le code de vérification envoyé à votre adresse e-mail.</string>
     <string name="CexWithdraw_GoogleAuthenticationInfo">Entrez le code de votre application Google Authenticator.</string>
     <string name="CexWithdraw_Withdraw">Retraits</string>
