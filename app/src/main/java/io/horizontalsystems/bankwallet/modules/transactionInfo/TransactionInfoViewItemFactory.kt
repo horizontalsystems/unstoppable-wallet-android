@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -91,6 +92,31 @@ class TransactionInfoViewItemFactory(
                 itemSections.add(getContractCreationItems(transaction))
             }
 
+            is TonTransactionRecord -> {
+                when (transaction.type) {
+                    TonTransactionRecord.Type.Incoming -> {
+                        itemSections.add(
+                            getReceiveSectionItems(
+                                value = transaction.mainValue,
+                                fromAddress = transaction.from,
+                                coinPrice = rates[transaction.mainValue.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                            )
+                        )
+                    }
+                    TonTransactionRecord.Type.Outgoing -> {
+                        itemSections.add(
+                            getSendSectionItems(
+                                value = transaction.mainValue,
+                                toAddress = transaction.to,
+                                coinPrice = rates[transaction.mainValue.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                nftMetadata = nftMetadata
+                            )
+                        )
+                    }
+                }
+            }
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
                     getReceiveSectionItems(
