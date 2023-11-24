@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -75,6 +76,7 @@ class TransactionInfoService(
             val coinUids = mutableListOf<String?>()
 
             val txCoinTypes = when (val tx = transactionRecord) {
+                is TonTransactionRecord -> listOf(tx.mainValue.coinUid, tx.fee?.coinUid)
                 is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is SwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
