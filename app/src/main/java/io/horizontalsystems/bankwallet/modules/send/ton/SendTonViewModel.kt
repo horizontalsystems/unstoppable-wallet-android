@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendTonAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
@@ -66,6 +67,8 @@ class SendTonViewModel(
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
+    private val logger: AppLogger = AppLogger("send-ton")
+
     init {
         amountService.stateFlow.collectWith(viewModelScope) {
             handleUpdatedAmountState(it)
@@ -106,6 +109,8 @@ class SendTonViewModel(
     }
 
     fun onClickSend() {
+        logger.info("click send button")
+
         viewModelScope.launch {
             send()
         }
@@ -114,12 +119,15 @@ class SendTonViewModel(
     private suspend fun send() = withContext(Dispatchers.IO) {
         try {
             sendResult = SendResult.Sending
+            logger.info("sending tx")
 
             adapter.send(amountState.amount!!, addressState.tonAddress!!)
 
             sendResult = SendResult.Sent
+            logger.info("success")
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
+            logger.warning("failed", e)
         }
     }
 
