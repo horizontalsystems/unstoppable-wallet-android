@@ -8,8 +8,10 @@
     <string name="Alert_Close">Kapat</string>
     <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Alert_Restart">Yeniden başlat</string>
+    <string name="Suspended">SUSPENDED</string>
     <string name="Action_Undo">GERİ ALMA</string>
     <string name="Button_Show">Göster</string>
+    <string name="Button_Hide">Gizle</string>
     <string name="Button_Cancel">İptal</string>
     <string name="Button_Next">İleri</string>
     <string name="Button_Enable">Etkinleştir</string>
@@ -46,14 +48,18 @@
     <string name="Button_Browser">Tarayıcı</string>
     <string name="Button_Delete">Sil</string>
     <string name="Button_LearnMore">Daha fazla bilgi edin</string>
+    <string name="Button_Activate">Activate</string>
     <string name="Button_Sign">kaydol</string>
+    <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">API Anahtarı alın</string>
     <string name="Button_Login">Giriş yapmak</string>
     <string name="Button_SignUp">Üye olmak</string>
     <string name="Button_Submit">Onayla</string>
     <string name="Button_TryAgain">Tekrar deneyin</string>
+    <string name="Button_Share">Paylaş</string>
     <string name="Button_Apply">Uygula</string>
     <string name="Error">Hata</string>
+    <string name="NotAvailable">N/A</string>
     <string name="Any">Herhangi</string>
     <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
     <string name="PercentTitle">Yüzde</string>
@@ -62,6 +68,7 @@
     <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
     <string name="Intro_Wallet_Screen2Description">Kendinizi kilitlemeyin ve başkalarının bunu sizin için yapmasına izin vermeyin.</string>
     <string name="Intro_Wallet_Screen3Title">Sınırları Kaldırın</string>
@@ -144,17 +151,80 @@
     <string name="Market_Field_MarketCap">P. Değeri</string>
     <string name="Market_Field_Volume">Birim</string>
     <string name="Market_Field_PriceDiff">Fiyat</string>
+    <string name="Market_Title">Markets</string>
     <string name="Market_Search">Ara</string>
+    <string name="Market_Field_HighestCap">En Yüksek</string>
+    <string name="Market_Field_LowestCap">En Düşük</string>
+    <string name="Market_Field_HighestVolume">En Yüksek HacIm</string>
+    <string name="Market_Field_LowestVolume">En Düşük HacIm</string>
+    <string name="Market_Sort_PopupTitle">Sıralama şekli</string>
+    <string name="Market_TotalMarketCap">Total Cap</string>
+    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_Volume24h">24 saat hacim</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
+    <string name="Market_SeeAll">See All</string>
+    <string name="Market_Tab_Overview">İzleme</string>
+    <string name="Market_Tab_Posts">Haberler</string>
+    <string name="Market_Tab_Watchlist">İzleme Listesi</string>
+    <string name="Market_Tab_Watchlist_EmptyList">İzleme listeniz boş.</string>
+    <string name="Market_Category_TopCoins">En iyi Coinler</string>
+    <string name="Market_Category_TopCoins_Description">P. Değerine Göre En Iyi Coinler</string>
     <!--Market Overview-->
+    <string name="Market_Overview_TopSectors">En İyi Sektörler</string>
     <!--Market Top Platforms-->
+    <string name="MarketTopPlatforms_Title">En İyi Platformlar</string>
+    <string name="MarketTopPlatforms_PlatofrmsRank">En İyi Blok Zinciri Platformları</string>
     <string name="MarketTopPlatforms_Description">Leading blockchain platforms by the cumulative market of projects built on top.</string>
+    <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s zincirindeki tüm protokollerin piyasa değeri</string>
     <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_Chart">Chart</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
+    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
+    <string name="MarketGlobalMetrics_Volume">24 saat hacim</string>
+    <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Tüm kripto paraların toplam piyasa değeri.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">Kripto piyasa 24 saatlik işlem hacmi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Hepsi</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!--Market Search-->
+    <string name="Market_AdvancedSearch_Results">Sonuçlar</string>
     <string name="Market_Search_Hint">Ara</string>
     <string name="Market_Search_BrowseCategories">Browse Categories</string>
+    <string name="Market_Filter_ChooseSet">Set Seç</string>
+    <string name="Market_Filter_MarketCap">Piyasa Değeri</string>
+    <string name="Market_Filter_Volume">İşlem Hacmi</string>
+    <string name="Market_Filter_PriceChange">Fiyat Değişimi</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
+    <string name="Market_Filter_OutperformedBtc">BTC\'yi Geride Bıraktı</string>
+    <string name="Market_Filter_OutperformedEth">ETH\'yi Geride Bıraktı</string>
+    <string name="Market_Filter_OutperformedBnb">BNB\'yi Geride Bıraktı</string>
+    <string name="Market_Filter_PriceCloseToAth">ATH\'ye Yakın Fiyat</string>
+    <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
+    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
+    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
+    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
+    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
+    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
+    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <!--Balance-->
@@ -497,6 +567,7 @@
     <string name="Transactions_Unknown">Bilinmeyen İşlem</string>
     <string name="Transactions_Unknown_Description">İşlem çözümlenemiyor</string>
     <string name="Transactions_Multiple">Çoklu</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Gelen işlemleri, stablecoin\'lerdeki toz miktarı ile gizlemek, adres zehirleme saldırısı sorunlarını kısmen çözer.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Hesap işlemi</string>
     <string name="TransactionInfo_Title">İşlem Bilgileri</string>
@@ -530,6 +601,7 @@
     <string name="TransactionInfo_Options">Seçenekler</string>
     <string name="TransactionInfo_SpeedUp">Hızlandır</string>
     <string name="TransactionInfo_Cancel">İptal</string>
+    <string name="TransactionInfo_SpamWarning">Bu işlem şüpheli ve dolandırıcılık olabilir. \nLütfen bu işlemden herhangi bir adres kopyalamayın.</string>
     <string name="StatusInfo_Pending">Devam ediyor</string>
     <string name="StatusInfo_Processing">İşleniyor</string>
     <string name="StatusInfo_Confirmed">Tamamlandı</string>
@@ -583,7 +655,11 @@
     <string name="Settings_AutoLock">Otomatik kilit</string>
     <string name="Settings_PersonalSupport">Kişisel Destek</string>
     <string name="Settings_PersonalSupport_Account">Hesap</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
+    <string name="Settings_PersonalSupport_Requested">Talep Edildi</string>
     <string name="Settings_PersonalSupport_Request">İstek</string>
+    <string name="Settings_PersonalSupport_NewRequest">Yeni istek</string>
+    <string name="Settings_PersonalSupport_Requestfailed">Talep Başarısız oldu</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
     <string name="Settings_Donate">Bağış yapmak</string>
@@ -642,12 +718,14 @@
     <string name="EvmNetwork_Added">Eklendi</string>
     <string name="EvmNetwork_SyncMode">Senkron Modu</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC Kaynağı Ekle</string>
     <string name="AddEvmSyncSource_Name">İsim</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth (optional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">Bu URL\'ye sahip RPC kaynak zaten var</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Girilen Url geçersiz. Geçerli url aşağıdaki şemalardan birine sahip olmalıdır: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">İşlemler yapılmış cüzdanı geri yüklemek için veri kaynağını seçin.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Giriş/Çıkış</string>
     <string name="BtcBlockchainSettings_TransactionSettings">İşlem Ayarları</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">İşlem Girdileri / Çıktıları</string>
@@ -662,17 +740,37 @@
     <string name="SettingsSecurity_EnablePin">Kod</string>
     <string name="SettingsSecurity_DisablePin">Şifre Kodunu Devre Dışı Bırak</string>
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
+    <string name="SettingsSecurity_SetDuressPin">Baskı Modunu Ayarla</string>
+    <string name="SettingsSecurity_EditDuressPin">Duress Şifresini Düzenle</string>
     <string name="SettingsSecurity_DisableDuressPin">Zorlama Şifresini Devre Dışı Bırak</string>
+    <string name="SettingsSecurity_DuressPinDescription">Seçilen cüzdanları zorlama altında güvende tutmak için tasarlanmış özel bir mod.</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
     <string name="SettingsSecurity_SortingShuffle">Karıştır</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Rastgele Dizinleme</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Dizinleme</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Hızlı, Özel, Merkezileştirilmiş</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SetDuressPin_Title">Duress Şifre Kodu</string>
+    <string name="SetDuressPin_Description">Duress Modu için bir şifre kodu ayarlayın</string>
+    <string name="EditDuressPin_Title">Duress Şifresini Düzenle</string>
+    <string name="EditDuressPin_Description">Duress Modu için yeni şifreyi girin</string>
+    <string name="DuressPin_Title">Duress Modu</string>
+    <string name="DuressPin_Description">Bu mod, kullanıcıların sadece belirtilen cüzdanları gösteren istenen şifre kodlarıyla birden fazla uygulama kilidini ayarlamalarına olanak tanır. Seçilen cüzdanları zorlama veya tehditler altında güvende tutmak için tasarlanmıştır.</string>
     <string name="DuressPin_Notes_Biometrics_Title">Biyometrik doğrulama</string>
     <string name="DuressPin_Notes_Biometrics_Description">Biyometrik Kimlik Doğrulama özelliği Zorlama Modunun kilidini açmak için çalışacaktır. Kolaylık olması açısından Biyometrik Kimlik Doğrulamayı devre dışı bırakabilirsiniz.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Şifre Kodu Devre Dışı Bırakma</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Ana modda şifre kodunu devre dışı bırakmak, Duress Modunu otomatik olarak sıfırlar.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Şifre Kodu Değiştirme</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Duress Modunda şifre kodunu değiştirmek, o mod için mevcut şifre kodunu da değiştirir.</string>
+    <string name="DuressPinSelectAccounts_Title">Cüzdanları Seçin</string>
+    <string name="DuressPinSelectAccounts_Description">Duress Modunda gösterilecek cüzdanları seçin.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CÜZDANLAR</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
@@ -689,6 +787,7 @@
     <string name="SettingsTerms_Bugs">Bu uygulamaya güç veren kodda, uygulamanın arızalanmasına neden olabilecek keşfedilmemiş yazılım sorunları olabilir.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarı alırsınız. \n\nFiyat Trendi Uyarısı, 6 ay boyunca, 1 haftalık kısa bir süre için bir trend değişikliği durumunu uyarır.</string>
@@ -793,6 +892,7 @@
     <string name="Watch_TypeEvmAddress">EVM Adresi</string>
     <string name="Watch_TypeSolanaAddress">Solana Adresi</string>
     <string name="Watch_TypeTronAddress">Tron Adresi</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <string name="Watch_Error_InvalidXPubKey">Geçersiz xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
@@ -865,6 +965,7 @@
     <string name="EvmPrivateKey_Warning">Bu anahtar, tüm EVM uyumlu blok zincirleri içindir. Onu kimseyle paylaşmayın.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
     <!-- Private Keys -->
@@ -872,6 +973,7 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Ilgili cüzdan içinde EVM tabanlı kripto, yani Ethereum, Binance Smart Chain vb. Üzerinde tam kontrol sağlar.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">İlgili cüzdandaki varlıklar üzerinde tam kontrol sağlar.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Ilgili cüzdan içinde Bitcoin ve diğer UTXO tabanlı kriptolar üzerinde tam kontrol sağlar, yani Litecoin, Bitcoin Cash, Dash vb.</string>
     <string name="PrivateKeys_NeverShareWarning">Kurtarma ifadenizi asla kimseyle paylaşmayın. Unstoppable ekip asla kurtarma ifadenizi istemez.</string>
     <!-- Public Keys -->
@@ -920,6 +1022,7 @@
     <string name="AddToken_Symbol">Sembol</string>
     <string name="AddToken_CoinCode">Coin Kodu</string>
     <string name="AddToken_Decimals">Ondalıklar</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">COIN ÇEŞİTLERİ</string>
     <string name="AddToken_AlreadyAdded">ÇOKTAN EKLENMİŞ GÖRÜNÜYOR</string>
     <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
@@ -959,12 +1062,18 @@
     <string name="Tor_PrerequisitesAlert_Content">TOR\'un etkinleştirilmesi Ethereum blockchain bağlantısını tekrar Infura\'ya sıfırlayacaktır.</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Fiyat</string>
+    <string name="Coin_Tab_Market">Markets</string>
     <string name="CoinPage_TimeDuration_All">Hepsi</string>
+    <string name="CoinPage_Markets">Markets</string>
+    <string name="CoinPage_TradingVolume">İşlem Hacmi</string>
     <string name="CoinPage_SecurityParams_Privacy">Gizlilik</string>
     <string name="CoinPage_SecurityParams_Low">Yavaş</string>
     <string name="CoinPage_SecurityParams_High">Hızlı</string>
+    <string name="CoinPage_Overview">İzleme</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Website">Web sitesi</string>
     <string name="CoinPage_Twitter_NoTweets">Henüz tweet yok</string>
+    <string name="CoinPage_MarketCap">Piyasa Değeri</string>
     <string name="CoinPage_Volume">Birim</string>
     <string name="CoinPage_AddToWallet">Cüzdana Ekle</string>
     <string name="CoinPage_InWallet">Cüzdanda</string>
@@ -989,6 +1098,7 @@
     <string name="Coin_Analytics_Details">Ayrıntılar</string>
     <string name="Coin_Analytics_Period_30m">30 dakika</string>
     <string name="Coin_Analytics_Period_1h">1 saat</string>
+    <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Address">Adres</string>
     <string name="SubscriptionInfo_Title">Premium Ayrıcalıkları</string>
     <string name="SubscriptionInfo_PersonalSupport_Title">Kişisel Destek</string>
@@ -1050,6 +1160,7 @@
     <string name="NftCollection_EventType_BulkCancel">Toplu İptal</string>
     <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
+    <string name="RateList_Posts">Haberler</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Senk. hatası</string>
     <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
@@ -1061,6 +1172,7 @@
     <string name="CoinPage_Chart_Locked">Kilitli</string>
     <string name="ProUsersInfo_Features_Authenticating">Doğrulanıyor...</string>
     <string name="Hud_Text_LearnMore">Çok Yakında</string>
+    <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, and useful charts based on on-chain data that will help give you a clear view of projects</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Türü Seç</string>
