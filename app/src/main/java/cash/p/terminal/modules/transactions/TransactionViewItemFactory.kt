@@ -5,6 +5,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.adapters.TonTransactionRecord.Type.Incoming
 import cash.p.terminal.core.adapters.TonTransactionRecord.Type.Outgoing
+import cash.p.terminal.core.adapters.TonTransactionRecord.Type.Unknown
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.providers.Translator
@@ -464,6 +465,11 @@ class TransactionViewItemFactory(
                     Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
                 }
                 primaryValue = getColoredValue(record.mainValue, ColorName.Lucian)
+            }
+            Unknown -> {
+                title = Translator.getString(R.string.Transactions_Unknown)
+                subtitle = Translator.getString(R.string.Transactions_Unknown_Description)
+                primaryValue = null
             }
         }
 

@@ -115,6 +115,8 @@ class TransactionInfoViewItemFactory(
                             )
                         )
                     }
+                    TonTransactionRecord.Type.Unknown -> {
+                    }
                 }
             }
             is EvmIncomingTransactionRecord ->
