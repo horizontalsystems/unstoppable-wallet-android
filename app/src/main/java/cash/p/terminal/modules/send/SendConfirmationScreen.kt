@@ -30,6 +30,7 @@ import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.fee.HSFeeInputRaw
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -109,6 +110,15 @@ fun SendConfirmationScreen(
             navController.popBackStack(closeUntilDestId, true)
         }
     }
+
+    DisposableLifecycleCallbacks(
+        //additional close for cases when user closes app immediately after sending
+        onResume = {
+            if (sendResult == SendResult.Sent) {
+                navController.popBackStack(closeUntilDestId, true)
+            }
+        }
+    )
 
     Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(

@@ -38,6 +38,7 @@ import cash.p.terminal.modules.send.ConfirmAmountCell
 import cash.p.terminal.modules.send.MemoCell
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -126,6 +127,15 @@ fun SendTronConfirmationScreen(
             navController.popBackStack(closeUntilDestId, true)
         }
     }
+
+    DisposableLifecycleCallbacks(
+        //additional close for cases when user closes app immediately after sending
+        onResume = {
+            if (sendResult == SendResult.Sent) {
+                navController.popBackStack(closeUntilDestId, true)
+            }
+        }
+    )
 
     Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
