@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -109,6 +110,15 @@ fun SendConfirmationScreen(
             navController.popBackStack(closeUntilDestId, true)
         }
     }
+
+    DisposableLifecycleCallbacks(
+        //additional close for cases when user closes app immediately after sending
+        onResume = {
+            if (sendResult == SendResult.Sent) {
+                navController.popBackStack(closeUntilDestId, true)
+            }
+        }
+    )
 
     Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
