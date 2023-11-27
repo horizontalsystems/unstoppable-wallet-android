@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Incoming
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Outgoing
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Unknown
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -464,6 +465,11 @@ class TransactionViewItemFactory(
                     Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
                 }
                 primaryValue = getColoredValue(record.mainValue, ColorName.Lucian)
+            }
+            Unknown -> {
+                title = Translator.getString(R.string.Transactions_Unknown)
+                subtitle = Translator.getString(R.string.Transactions_Unknown_Description)
+                primaryValue = null
             }
         }
 

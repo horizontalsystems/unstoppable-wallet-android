@@ -153,7 +153,8 @@ class TonAdapter(
         val type = when (transaction.type) {
             TransactionType.Incoming.name -> TonTransactionRecord.Type.Incoming
             TransactionType.Outgoing.name -> TonTransactionRecord.Type.Outgoing
-            else -> TonTransactionRecord.Type.Incoming
+            TransactionType.Unknown.name -> TonTransactionRecord.Type.Unknown
+            else -> TonTransactionRecord.Type.Unknown
         }
 
         return TonTransactionRecord(
@@ -246,6 +247,6 @@ class TonTransactionRecord(
     source,
 ) {
     enum class Type {
-        Incoming, Outgoing
+        Incoming, Outgoing, Unknown
     }
 }
