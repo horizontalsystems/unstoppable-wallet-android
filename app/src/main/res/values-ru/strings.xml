@@ -57,6 +57,7 @@
     <string name="Button_Submit">Подтвердить</string>
     <string name="Button_TryAgain">Попробовать ещё раз</string>
     <string name="Button_Share">Поделиться</string>
+    <string name="Button_Apply">Применить</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
@@ -309,6 +310,7 @@
     <string name="Balance_Receive_Account">Аккаунт</string>
     <string name="Balance_Receive_NotActive">Не активен</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
+    <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <string name="SendNft_Error_NotEnoughtBalance">Недостаточно средств</string>
@@ -604,6 +606,7 @@
     <string name="Transactions_Filter_AllBlockchains">Все блокчейны</string>
     <string name="Transactions_Filter_AllCoins">Все токены</string>
     <string name="Transactions_Filter_ChooseCoin">Выберите токен</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Выбрать блокчейн</string>
     <string name="Transactions_Incoming">Получено</string>
     <string name="Transactions_Outgoing">Отправлено</string>
     <string name="Transactions_Swaps">Обмены</string>
@@ -611,6 +614,9 @@
     <string name="Transactions_Unknown">Неизвестная транзакция</string>
     <string name="Transactions_Unknown_Description">Транзакция не может быть обработана</string>
     <string name="Transactions_Multiple">Множество</string>
+    <string name="Transactions_Filter">Фильтр</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Скрыть подозрительные транзакции</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Скрытие входящих транзакций с незначительной суммой в стабильных монетах частично решает проблемы атаки на загрязнение адреса.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Транзакция</string>
     <string name="TransactionInfo_Title">Детали транзакции</string>
@@ -644,6 +650,7 @@
     <string name="TransactionInfo_Options">Параметры</string>
     <string name="TransactionInfo_SpeedUp">Ускорение</string>
     <string name="TransactionInfo_Cancel">Отменить</string>
+    <string name="TransactionInfo_SpamWarning">Эта транзакция подозрительна и может быть мошенничеством. \nПожалуйста, не копируйте никакие адреса из этой транзакции.</string>
     <string name="StatusInfo_Pending">В ожидании</string>
     <string name="StatusInfo_Processing">В процессе</string>
     <string name="StatusInfo_Confirmed">Выполнено</string>
@@ -764,13 +771,11 @@
     <string name="EvmNetwork_AddNew">Добавить новый</string>
     <string name="EvmNetwork_Added">Добавлено</string>
     <string name="EvmNetwork_SyncMode">Режим синхронизации</string>
-    <string name="EvmNetwork_SyncModeDescription">Этот параметр определяет способ взаимодействия приложения с блокчейнами при отправке или получении транзакций.\n\nКогда речь идет о Bitcoin, Bitcoin Cash, Litecoin, и Dash, связь с сетевыми узлами блокчейна полностью равноправна. P.CASH пингует многие узлы и связывается с одним из них. Каждый раз приложение подключается к другому узлу.\n\nЧто касается Ethereum и Binance Smart Chain, то пока нет подходящих альтернативных вариантов мобильных кошельков для взаимодействия с соответствующими блокчейнами кроме сторонних поставщиков услуг RPC (т.е. Infura.io) или личными узлами Ethereum. Это значит, что ваше взаимодействие с блокчейном не децентрализовано. Это влияет не на ваши средства, а на возможность подключения к сети блокчейн.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
-    <string name="AddEvmSyncSource_RpcSource">Источник RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Источник с таким url уже существует</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
@@ -805,9 +810,11 @@
     <string name="SettingsSecurity_SortingBip69Short">Детерминированный</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">Рекомендовано</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">Из блокчейна</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Более приватно</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Быстрый, Конфиденциальный, Централизованный</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Блокчейн</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Децентрализованное восстановление</string>
     <string name="SetDuressPin_Title">Duress код</string>
     <string name="SetDuressPin_Description">Установите код для режима Duress</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>

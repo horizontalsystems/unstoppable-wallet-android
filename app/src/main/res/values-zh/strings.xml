@@ -57,6 +57,7 @@
     <string name="Button_Submit">提交</string>
     <string name="Button_TryAgain">再试一次</string>
     <string name="Button_Share">分享</string>
+    <string name="Button_Apply">应用</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
@@ -307,6 +308,7 @@
     <string name="Balance_Receive_Account">账户</string>
     <string name="Balance_Receive_NotActive">不活动</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
+    <string name="Balance_Error_InvalidQrCode">无法识别</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <string name="SendNft_Error_NotEnoughtBalance">余额不足</string>
@@ -466,8 +468,8 @@
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_Unnamed">未命名</string>
     <string name="WalletConnect_DAppUnknown">未知的 dApp</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
-    <string name="WalletConnect_PairedDApps">Paired dApps</string>
+    <string name="WalletConnect_Pairings">货币对</string>
+    <string name="WalletConnect_PairedDApps">已配对dApp</string>
     <string name="WalletConnect_Pairings_DeleteAll">全部刪除</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">您想要删除所有配对的 dApps？</string>
     <string name="WalletConnect_Pairings_Delete">删除</string>
@@ -602,6 +604,7 @@
     <string name="Transactions_Filter_AllBlockchains">所有Blockchains</string>
     <string name="Transactions_Filter_AllCoins">所有硬币</string>
     <string name="Transactions_Filter_ChooseCoin">选择代币</string>
+    <string name="Transactions_Filter_ChooseBlockchain">选择区块链</string>
     <string name="Transactions_Incoming">已收到</string>
     <string name="Transactions_Outgoing">已发送</string>
     <string name="Transactions_Swaps">掉期交易</string>
@@ -609,6 +612,9 @@
     <string name="Transactions_Unknown">未知交易</string>
     <string name="Transactions_Unknown_Description">无法解析交易</string>
     <string name="Transactions_Multiple">多种</string>
+    <string name="Transactions_Filter">筛选器</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">隐藏可疑Txs</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">隐藏到达的沙尘群交易，这部分解决了地址中毒攻击问题。</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">交易</string>
     <string name="TransactionInfo_Title">交易信息</string>
@@ -642,6 +648,7 @@
     <string name="TransactionInfo_Options">选项</string>
     <string name="TransactionInfo_SpeedUp">加速</string>
     <string name="TransactionInfo_Cancel">取消</string>
+    <string name="TransactionInfo_SpamWarning">这笔交易存在可疑，可能是诈骗。\n请不要从这笔交易中复制任何地址。</string>
     <string name="StatusInfo_Pending">待处理</string>
     <string name="StatusInfo_Processing">正在处理</string>
     <string name="StatusInfo_Confirmed">已完成</string>
@@ -707,7 +714,6 @@
     <string name="Settings_Donate">捐助</string>
     <string name="Settings_DonateToken">捐赠%s</string>
     <string name="Settings_DonateWith">捐赠方式</string>
-    <string name="Settings_Donate_GetAddress">获取地址</string>
     <string name="Settings_Donate_Addresses">地址</string>
     <string name="SettingsSecurity_AutoLock_Immediate">即时的</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 分钟</string>
@@ -762,29 +768,18 @@
     <string name="EvmNetwork_AddNew">添加新的</string>
     <string name="EvmNetwork_Added">已添加</string>
     <string name="EvmNetwork_SyncMode">同步模式</string>
-    <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. P.CASH pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">添加 RPC 源</string>
     <string name="AddEvmSyncSource_Name">名称</string>
     <string name="AddEvmSyncSource_BasicAuthentication">基本认证(可选)</string>
-    <string name="AddEvmSyncSource_RpcSource">RPC 源</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">此网址的 RPC 源已存在</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： http，https，ws，wss</string>
     <!--Btc Blockchain Settings -->
-    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">更改恢复源后，钱包必须将自身与 Bitcoin 区块链重新同步。</string>
-    <string name="BtcBlockchainSettings_RestoreSource">恢复参数</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">选择一个数据源来恢复钱包。从区块链恢复需要更多时间。</string>
-    <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.\n\nAt this point, there are two potential ways for a mobile wallet like P.CASH to do this:\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).\n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">输入/输出</string>
     <string name="BtcBlockchainSettings_TransactionSettings">交易设置</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">交易输入 / 输出</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">通过改变交易结构的方式使您的BTC、LTC、BCH交易更难被追踪。</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
-\n\nThe P.CASH wallet implements measures to make it harder for someone to figure out which output goes where.
-\n\nThere are two options available to P.CASH users:
-\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.
-\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
     <!--Info screen-->
     <string name="Info_Title">信息</string>
     <!--Setting_Security-->
@@ -807,9 +802,10 @@
     <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">推荐</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">来自区块链</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">更私密</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">快速、私密、中心化</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SetDuressPin_Title">密码错误</string>
     <string name="SetDuressPin_Description">设置口令模式密码</string>
     <string name="EditDuressPin_Title">编辑货币密码</string>
@@ -844,7 +840,7 @@
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Be Free</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">联系信息</string>
+    <string name="SettingsContact_Title">联系我们</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">为您要监视的代币设定价格变动警报\n\n当过去24小时内价格变动超过选定的临界值时，您将会收到警报。\n\n价格趋势警报将对短期的1星期、长期的6个月发出趋势变动警告。</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用本钱包通知，您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
@@ -1231,39 +1227,34 @@
     <string name="CoinPage_IndicatorsAlertText">指标仅适用于不可阻止的钱包高级用户。</string>
     <string name="CoinPage_AiGeneratedText">这是一个基于给定的加密货币所提供的参考材料生成的 AI 描述。它可能包含错误。</string>
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
-    <string name="CoinAnalytics_CexVolume_Info2">Chart showing variation in daily trading volume for the token on leading centralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_CexVolume_Info3">Token\'s rank is based on trading volume on leading centralized exchanges over a 30-day period.</string>
-    <string name="CoinAnalytics_CexVolume_Info4">List of all tokens ranked based on trading volume on centralized exchanges over 24H / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_DexVolume_Info1">Total trading volume for the token on leading decentralized exchanges over 30-day period.</string>
-    <string name="CoinAnalytics_DexVolume_Info2">Chart showing variation in daily trading volume for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Token\'s rank is based on trading volume on leading decentralized exchanges over a 30-day period.</string>
-    <string name="CoinAnalytics_DexVolume_Info4">List of all tokens ranked based on trading volume on decentralized exchanges over 24H / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_CexVolume_Info2">图表显示了过去一年内该代币在主要中心化交易所的日交易量变化。</string>
+    <string name="CoinAnalytics_CexVolume_Info3">代币的排名基于过去30天内在主要中心化交易所的交易量。</string>
+    <string name="CoinAnalytics_CexVolume_Info4">根据中心化交易所24小时/7天/1个月间隔的交易量排名的所有代币列表。</string>
+    <string name="CoinAnalytics_DexVolume_Info2">图表显示了过去一年内该代币在主要去中心化交易所的日交易量变化。</string>
+    <string name="CoinAnalytics_DexVolume_Info4">根据去中心化交易所24小时/7天/1个月间隔的交易量排名的所有代币列表。</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">正在追踪的DEX：</string>
-    <string name="CoinAnalytics_DexLiquidity_Info1">Total currently available liquidity for the token on leading decentralized exchanges.</string>
-    <string name="CoinAnalytics_DexLiquidity_Info2">Chart showing variation in available liquidity for the token on leading decentralized exchanges over 1 year period.</string>
-    <string name="CoinAnalytics_DexLiquidity_Info3">List of all tokens ranked based on available liquidity for the token on leading decentralized exchanges.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info1">该代币在主要去中心化交易所当前可用的总流动性。</string>
+    <string name="CoinAnalytics_DexLiquidity_Info2">图表显示了过去一年内该代币在主要去中心化交易所可用流动性的变化。</string>
+    <string name="CoinAnalytics_DexLiquidity_Info3">根据在主要去中心化交易所的代币可用流动性排名的所有代币列表。</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">正在追踪的DEX：</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info2">Chart showing variation in daily active address count over 1 year period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info3">Total number of unique blockchain addresses transacting with token over 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'s rank based on the number of active wallets transacting with the token 30-day period.</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info5">List of all tokens ranked based on the number of daily active addresses transacting with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">图表显示了过去一年内每日活跃地址数量的变化。</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info3">过去30天内与代币进行交易的独特区块链地址的总数。</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">根据24小时/7天/1个月时间段内与代币进行交易的每日活跃地址数量排名的所有代币列表。</string>
     <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with tokens over a 30-day period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info2">Chart showing variation in transaction count over 1 year period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info3">Token\'s rank based on the number of transactions with the token 30-day period.</string>
-    <string name="CoinAnalytics_TransactionCount_Info4">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_TransactionCount_Info2">显示1年周期的交易计数变化的图表。</string>
+    <string name="CoinAnalytics_TransactionCount_Info3">基于30天周期与代币交易的数量的代币排名。</string>
+    <string name="CoinAnalytics_TransactionCount_Info4">基于24时 / 7天 / 1月间隔的交易数量排名的所有代币的列表。</string>
     <string name="CoinAnalytics_TransactionCount_Info5">List of all tokens ranked based on the number of transactions with the token over 24h / 7D / 1M intervals.</string>
-    <string name="CoinAnalytics_Holders_Info1">Total number of unique addresses holding the token on various blockchains.</string>
-    <string name="CoinAnalytics_Holders_Info2">Top 10 wallets holding the token on each blockchain.</string>
+    <string name="CoinAnalytics_Holders_Info1">在各种区块链上持有代币的唯一地址的总数。</string>
+    <string name="CoinAnalytics_Holders_Info2">在每一个区块链上持有代币的前10大钱包。</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">已追踪区块链：以太坊、币安智能链、Optimism、Arbitrum、Celo、Cronos、Avalanche、Fantom、Polygon</string>
-    <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (or Assets Under Management) in the project\'s smart contracts.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info2">Chart showing variation Total-Value-Locked in project\'s smart contracts over 1 year period.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'s rank is based on current Total-Value-Locked.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info4">List of all tokens ranked based on current Total-Value-Locked.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info5">Market Cap / TVL ratio for the project.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info1">Total revenue generated for the token holders over 30-day period. Typically, fees are collected by token stakers or though a token burn mechanism.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank is based on the revenue generated over a 30-day period for token stakers.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info2">图表显示了过去一年内项目智能合约中锁定总价值的变化。</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">代币的排名基于当前的锁定总价值。</string>
+    <string name="CoinAnalytics_ProjectTVL_Info4">基于当前锁定总价值排名的所有代币的列表。</string>
+    <string name="CoinAnalytics_ProjectTVL_Info5">项目的市值/锁定总价值（TVL）比率。</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info1">在30天周期内为代币持有者生成的总收入。通常，费用由代币质押者或通过代币销毁机制收集。</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info2">基于在30天周期内为代币质押者生成的收入的代币排名。</string>
+    <string name="CoinAnalytics_ProjectRevenue_Info3">基于在24时 / 7天 / 1月间隔内为代币质押者生成的收入排名的所有代币的列表。</string>
     <string name="CoinAnalytics_TechIndicators_Info1">概述：这是对资产技术手段的一般概述，考虑到各种技术指标和时间框架。 它根据这些指标提供了一个协商一致的观点(购买、出售或中立)。</string>
     <string name="CoinAnalytics_TechIndicators_Info2">移动平均值：这些是通用的技术指标，可使价格数据平滑使用，从而产生一个趋势跟踪指标。 它们显示了特定时期内的平均价格。 多个类型的MA：\n\n简单移动平均值(SMA)：这个计算了选定的价格范围的平均值。 通常按该范围内的周期数结算价格。\n\n指数移动平均值(EMA)：这使得对最近的价格更加权重，从而对最近的价格变化作出更快的反应。</string>
     <string name="CoinAnalytics_TechIndicators_Info3">Oscillators：这些是技术指标，随着时间的推移在波段内(在中心线以下或在设定的层次之间)波动。 它们的目的是帮助查明市场上买卖过多和销售过剩的条件。 这里有一些常见的顾问：\n\n相对力量指数(RSI)：这将衡量价格变动的速度和变化。 它通常被用来查明买入或卖出过多的情况。\n\n移动平均汇合差(MACD)：用于识别潜在的买卖信号。 它在其信号线上方(购买)或下方(出售)时，会触发技术信号。</string>

@@ -57,6 +57,7 @@
     <string name="Button_Submit">Je me connecte</string>
     <string name="Button_TryAgain">Veuillez Réessayer</string>
     <string name="Button_Share">Partager</string>
+    <string name="Button_Apply">Appliquer</string>
     <string name="Error_OutOfRange">Il doit contenir au moins %1$s et faire un maximum de %2$s caractères</string>
     <string name="Error_NotInteger">Les chiffres que vous avez fournis sont incorrects</string>
     <string name="Error">Erreur</string>
@@ -295,7 +296,7 @@
     <string name="Balance_NoAssetsToSend">Vous n\'avez pas d\'actifs à envoyer.</string>
     <string name="Balance_NoAssetsToSwap">Vous n\'avez pas d\'actifs à échanger.</string>
     <string name="Balance_Network">Réseau</string>
-    <string name="Balance_Format">Format</string>
+    <string name="Balance_Format">Formater</string>
     <string name="Balance_NetworkSelectDescription">Choisissez le réseau pour recevoir une adresse.</string>
     <string name="Balance_ReceiveAddressHint">Votre adresse pour le dépôt %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Adresse de la montre de %s</string>
@@ -307,6 +308,7 @@
     <string name="Balance_Receive_Account">Compte</string>
     <string name="Balance_Receive_NotActive">Non actif</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
+    <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <string name="SendNft_Error_NotEnoughtBalance">Solde insuffisant</string>
@@ -525,7 +527,7 @@
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(montant minimal)</string>
     <string name="Swap_AmountMax">(max)</string>
-    <string name="Swap_AmountTypeCoin">Coin</string>
+    <string name="Swap_AmountTypeCoin">Pièce</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
     <string name="SwapSettings_Service">Service</string>
@@ -602,6 +604,7 @@
     <string name="Transactions_Filter_AllBlockchains">Toutes les blockchains</string>
     <string name="Transactions_Filter_AllCoins">Toutes les pièces</string>
     <string name="Transactions_Filter_ChooseCoin">Choisir la pièce</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Choisir la blockchain</string>
     <string name="Transactions_Incoming">Reçue</string>
     <string name="Transactions_Outgoing">Envoyée</string>
     <string name="Transactions_Swaps">Echanger</string>
@@ -609,13 +612,17 @@
     <string name="Transactions_Unknown">Transaction inconnue</string>
     <string name="Transactions_Unknown_Description">La transaction ne peut pas être analysée</string>
     <string name="Transactions_Multiple">Multiples</string>
+    <string name="Transactions_Filter">Filtre</string>
+    <string name="Transactions_Coins">Pièces</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Masquer les transactions suspectes</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Masquer les transactions entrantes avec des montants infimes en stablecoins, cela résout partiellement les problèmes d\'attaques de poisoning d\'adresse.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Opération</string>
     <string name="TransactionInfo_Title">Informations sur la transaction</string>
     <string name="TransactionInfo_Approval">Validation du remplacement</string>
     <string name="TransactionInfo_Status">Statut</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
-    <string name="TransactionInfo_Date">Date</string>
+    <string name="TransactionInfo_Date">Date du Virement</string>
     <string name="TransactionInfo_Id">Identifiant</string>
     <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
@@ -642,6 +649,7 @@
     <string name="TransactionInfo_Options">Paramètres</string>
     <string name="TransactionInfo_SpeedUp">Accélérer</string>
     <string name="TransactionInfo_Cancel">Annuler</string>
+    <string name="TransactionInfo_SpamWarning">Cette transaction est suspecte et peut être une arnaque. \nVeuillez ne copier aucune adresse de cette transaction.</string>
     <string name="StatusInfo_Pending">En attente</string>
     <string name="StatusInfo_Processing">Traitement en cours</string>
     <string name="StatusInfo_Confirmed">Terminé</string>
@@ -707,7 +715,7 @@
     <string name="Settings_Donate">Faire un don</string>
     <string name="Settings_DonateToken">Donate %s</string>
     <string name="Settings_DonateWith">Donnez avec</string>
-    <string name="Settings_Donate_GetAddress">Obtenir une adresse</string>
+    <string name="Settings_Donate_GetAddress">Adresse du don</string>
     <string name="Settings_Donate_Addresses">Adresses</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Immédiat</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
@@ -737,7 +745,6 @@
     <string name="BackupManager_RestoreBackup">Restaurer la sauvegarde</string>
     <string name="BackupManager_CreateBackup">Créer une nouvelle sauvegarde</string>
     <string name="BackupManager_BаckupFile">Fichier de sauvegarde</string>
-    <string name="BackupManager_Wallets">WALLETS</string>
     <string name="BackupManager_Other">AUTRE</string>
     <string name="BackupManager_Restore">Restaurer</string>
     <string name="BackupManager_BackupFileContents">Liste des contenus dans le fichier de sauvegarde.</string>
@@ -762,23 +769,16 @@
     <string name="EvmNetwork_AddNew">Ajouter un Nouveau</string>
     <string name="EvmNetwork_Added">Ajouté</string>
     <string name="EvmNetwork_SyncMode">Mode de synchronisation</string>
-    <string name="EvmNetwork_SyncModeDescription">Ce paramètre contrôle la façon dont cette application interagit avec les blockchains lors de l\'envoi ou de la réception de transactions.\n\nDans le cas du Bitcoin, du Bitcoin Cash, du Litecoin et du Dash, la communication avec les nœuds du réseau blockchain est entièrement de pair à pair. P.CASH ping plusieurs nœuds et communique avec l\'un d\'entre eux.\n\nDans le cas d\'Ethereum, de Binance Smart Chain et d\'autres blockchains EVM, les portefeuilles mobiles n\'ont pas d\'autre choix pour interagir avec les blockchains respectives que de passer par des fournisseurs de services RPC tiers (par exemple Infura.io) ou des nœuds personnels. Cela signifie essentiellement que votre communication avec cette blockchain n\'est pas décentralisée. Cela n\'a aucune incidence sur vos fonds, mais seulement sur votre capacité à vous connecter au réseau de la blockchain.\n\nRassurez-vous, nous réfléchissons à une solution et nous essaierons très bientôt de vous proposer un moyen décentralisé de synchronisation. Patience.</string>
     <!--Add RPC Source-->
     <string name="AddEvmSyncSource_RpcUrl">Url RPC</string>
     <string name="AddEvmSyncSource_AddRPCSource">Ajouter une source RPC</string>
     <string name="AddEvmSyncSource_Name">Nom</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Authentification basique (facultatif)</string>
-    <string name="AddEvmSyncSource_RpcSource">Source RPC</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">La source RPC avec cette url existe déjà</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
-    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Une fois la source de restauration modifiée, le portefeuille devra être resynchronisé avec la blockchain Bitcoin.</string>
-    <string name="BtcBlockchainSettings_RestoreSource">Restorer la source</string>
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Après avoir changé de source, le portefeuille devra se resynchroniser lui-même.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.
-\n\nAt this point, there are two potential ways for a mobile wallet like P.CASH to do this:
-\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
-\n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrées/Sorties</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Paramètres de transaction</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entrées / Sorties de transaction</string>
@@ -806,9 +806,11 @@
     <string name="SettingsSecurity_SortingBip69Short">Déterministe</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">Recommandé</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">De la Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Plus Privé</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rapide, Privé, Centralisé</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Restauration décentralisée</string>
     <string name="SetDuressPin_Title">Code Duress</string>
     <string name="SetDuressPin_Description">Définir un code d\'accès pour le mode Duress</string>
     <string name="EditDuressPin_Title">Modifier le code de détresse</string>
@@ -843,7 +845,7 @@
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Soyez Free</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Contacter</string>
+    <string name="SettingsContact_Title">Contactez-nous</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Définissez des alertes de changement de prix pour les pièces que vous souhaitez surveiller.\n\nVous serez alerté lorsque le changement de prix des dernières 24 heures dépassera le seuil sélectionné.\n\nL\'alerte de tendance de prix vous avertit d\'un changement de tendance pour le court terme à 1 semaine, pour le long terme à 6 mois.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Les notifications pour l\'application P.CASH Wallet sont désactivées. Vous devez les activer pour pouvoir recevoir des alertes de changement de prix.</string>
@@ -1129,7 +1131,7 @@
     <string name="CoinPage_Audits">Audits</string>
     <string name="CoinPage_Audits_Empty">Aucun rapport d\'audit</string>
     <string name="CoinPage_Audits_PoweredBy">Propulsé par Defiyield.app</string>
-    <string name="CoinPage_Audits_Issues">Issues: %d</string>
+    <string name="CoinPage_Audits_Issues">Problèmes : %d</string>
     <string name="CoinPage_InvestorData">Données de l\'investisseur</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filtres</string>
     <string name="CoinPage_Treasuries_PoweredBy">Propulsé par Bitcointreasuries.net</string>
@@ -1233,7 +1235,7 @@
     <string name="CoinAnalytics_DexLiquidity_Info2">Graphique montrant une variation de la liquidité disponible pour le jeton sur les principales bourses décentralisées sur une période de 1 an.</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">Liste de tous les jetons classés en fonction de la liquidité disponible pour le jeton sur les principaux échanges décentralisés.</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes qui sont suivis :</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">Total number of unique daily active addresses over 24-hour period.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Nombre total d\'adresses actives quotidiennes uniques sur une période de 24 heures.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">Graphique montrant des variations dans le nombre quotidien d\'adresses actives sur une période de 1 an.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">Nombre total d\'adresses blockchain uniques transitant avec un jeton sur une période de 30 jours.</string>
     <string name="CoinAnalytics_ActiveAddresses_Info4">Le rang du jeton est basé sur le nombre de portefeuilles actifs opérant avec le jeton de période de 30 jours.</string>
@@ -1245,7 +1247,6 @@
     <string name="CoinAnalytics_TransactionCount_Info5">Le nombre total de jetons transférés sur la blockchain sur la période de 30 jours.</string>
     <string name="CoinAnalytics_Holders_Info1">Nombre total d\'adresses uniques détenant le jeton sur différentes blockchains.</string>
     <string name="CoinAnalytics_Holders_Info2">Top 10 des portefeuilles détenant le jeton sur chaque blockchain.</string>
-    <string name="CoinAnalytics_Holders_TrackedBlockchains">Tracked blockchains: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (ou Acsets Under Management) dans les contrats intelligents du projet.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Graphique montrant la variation valeur totale verrouillée dans les contrats intelligents du projet sur une période de 1 an.</string>
     <string name="CoinAnalytics_ProjectTVL_Info3">Rang du token en fonction de la valeur totale verrouillée actuelle.</string>
@@ -1254,7 +1255,7 @@
     <string name="CoinAnalytics_ProjectRevenue_Info1">Total des revenus générés pour les détenteurs de tokens sur une période de 30 jours. Généralement, les frais sont perçus par les détenteurs de tokens ou bien par le biais d\'un mécanisme de brûlage de tokens.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info2">Classement du token basé sur les revenus générés sur une période de 30 jours pour les stakers de token.</string>
     <string name="CoinAnalytics_ProjectRevenue_Info3">Liste de tous les tokens classés en fonction des revenus générés pour les stakers de tokens sur des intervalles de 24h / 7J / 1M.</string>
-    <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
+    <string name="CoinAnalytics_TechIndicators_Info1">Résumé: This is a general overview of an asset technicals, considering a variety of technical indicators and timeframes. Il fournit un point de vue consensuel (Acheter, Vendre ou Neutre) basé sur ces indicateurs.</string>
     <string name="CoinAnalytics_TechIndicators_Info2">Moyennes mobiles (MA) : Ce sont des indicateurs techniques couramment utilisés pour lisser les données de prix afin de créer un indicateur de suivi de tendance. Ils montrent le prix moyen sur une période de temps spécifique. Il existe plusieurs types de MA :\n\nMoyenne mobile simple (SMA) : Cela calcule la moyenne d\'une plage de prix sélectionnée, généralement les prix de clôture, par le nombre de périodes dans cette plage.\n\nMoyenne mobile exponentielle (EMA) : Cela donne plus de poids aux prix récents, répondant ainsi plus rapidement aux changements de prix récents.</string>
     <string name="CoinAnalytics_TechIndicators_Info3">Oscillateurs: Ce sont des indicateurs techniques qui fluctuent dans le temps à l\'intérieur d\'une bande (au-dessus et en dessous d\'une ligne centrale, ou entre des niveaux définis). Ils sont conçus pour aider à identifier les conditions de surachat et de survente sur un marché. Voici quelques oscillateurs courants:\n\nIndice de force relative (RSI): Cela mesure la vitesse et le changement des mouvements de prix. Il est généralement utilisé pour identifier les conditions de surachat ou de survente.\n\nConvergence divergence de moyennes mobiles (MACD): Cela est utilisé pour identifier les signaux d\'achat et de vente potentiels. Il déclenche des signaux techniques lorsqu\'il croise au-dessus (pour acheter) ou en dessous (pour vendre) de sa ligne de signal.</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Ce projet n\'a pas de données d\'analyse</string>
@@ -1508,7 +1509,6 @@
     <string name="CexDeposit_AddressDescription">Votre adresse pour le dépôt %s</string>
     <string name="CexDeposit_DepositWarning">Envoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
     <string name="CexDeposit_MemoWarning">Mémo (tag) est requis ou vous perdrez vos pièces.\n\nEnvoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
-    <string name="CexDeposit_Important">Important</string>
     <string name="CexDeposit_MemoAlertText">A la fois un mémo (tag) et l\'adresse sont nécessaires pour s\'assurer que les actifs sont reçus. Sinon, vos fonds seront perdus.</string>
     <string name="Cex_Error_FailedToConnectApiKey">Impossible de connecter votre clé API</string>
     <!--Cex Withdraw Module-->
