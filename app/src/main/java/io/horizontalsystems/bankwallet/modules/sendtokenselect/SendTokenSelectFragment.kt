@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.sendtokenselect
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -13,11 +15,16 @@ import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 
 class SendTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
+        val blockchainTypes = arguments?.getParcelableArrayList<BlockchainType>(blockchainTypesKey)
+        val prefilledData = arguments?.getParcelable<PrefilledData>(addressDataKey)
         val view = LocalView.current
         TokenSelectScreen(
             navController = navController,
@@ -29,9 +36,10 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                         navController.slideFromRight(
                             R.id.sendXFragment,
                             SendFragment.prepareParams(
-                                it.wallet,
-                                R.id.sendTokenSelectFragment,
-                                sendTitle
+                                wallet = it.wallet,
+                                sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                                title = sendTitle,
+                                prefilledAddressData = prefilledData,
                             )
                         )
                     }
@@ -45,9 +53,25 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                     }
                 }
             },
-            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
+            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes)),
             emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
         )
     }
 
+    companion object {
+        private const val blockchainTypesKey = "blockchainTypesKey"
+        private const val addressDataKey = "addressDataKey"
+
+        fun prepareParams(blockchainTypes: List<BlockchainType>? = null, address: String, amount: BigDecimal?) = bundleOf(
+            blockchainTypesKey to blockchainTypes,
+            addressDataKey to PrefilledData(address, amount)
+        )
+
+    }
 }
+
+@Parcelize
+data class PrefilledData(
+    val address: String,
+    val amount: BigDecimal? = null,
+) : Parcelable

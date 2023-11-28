@@ -34,40 +34,38 @@ fun BlockchainSelectorScreen(
     val menuItems = emptyList<MenuItem>()
     var selectedItem by remember { mutableStateOf(selectedBlockchain) }
 
-    ComposeAppTheme {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.Market_Filter_Blockchains),
+            navigationIcon = {
+                HsBackButton(onNavigateToBack)
+            },
+            menuItems = menuItems
+        )
+
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = ComposeAppTheme.colors.tyler)
+            Modifier.verticalScroll(rememberScrollState())
         ) {
-            AppBar(
-                title = stringResource(R.string.Market_Filter_Blockchains),
-                navigationIcon = {
-                    HsBackButton(onNavigateToBack)
-                },
-                menuItems = menuItems
-            )
+            Spacer(Modifier.height(12.dp))
+            HSSectionRounded {
+                blockchains.forEachIndexed { index, item ->
+                    BlockchainCell(
+                        item = item,
+                        selected = selectedItem == item,
+                        onCheck = {
+                            selectedItem = item
 
-            Column(
-                Modifier.verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                HSSectionRounded {
-                    blockchains.forEachIndexed { index, item ->
-                        BlockchainCell(
-                            item = item,
-                            selected = selectedItem == item,
-                            onCheck = {
-                                selectedItem = item
-
-                                onSelectBlockchain(it)
-                            },
-                            borderTop = index != 0
-                        )
-                    }
+                            onSelectBlockchain(it)
+                        },
+                        borderTop = index != 0
+                    )
                 }
-                Spacer(Modifier.height(32.dp))
             }
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

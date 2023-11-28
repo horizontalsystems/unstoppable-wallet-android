@@ -31,16 +31,7 @@ class CoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val uid = try {
-            activity?.intent?.data?.getQueryParameter("uid")
-        } catch (e: UnsupportedOperationException) {
-            null
-        }
-
-        val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
-        if (uid != null) {
-            activity?.intent?.data = null
-        }
+        val coinUid = requireArguments().getString(COIN_UID_KEY, "")
 
         CoinScreen(
             coinUid,
@@ -73,12 +64,10 @@ fun CoinScreen(
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
-    ComposeAppTheme {
-        if (coinViewModel != null) {
-            CoinTabs(coinViewModel, navController, fragmentManager)
-        } else {
-            CoinNotFound(coinUid, navController)
-        }
+    if (coinViewModel != null) {
+        CoinTabs(coinViewModel, navController, fragmentManager)
+    } else {
+        CoinNotFound(coinUid, navController)
     }
 }
 
@@ -152,9 +141,11 @@ fun CoinTabs(
                         navController = navController
                     )
                 }
+
                 CoinModule.Tab.Market -> {
                     CoinMarketsScreen(fullCoin = viewModel.fullCoin)
                 }
+
                 CoinModule.Tab.Details -> {
                     CoinAnalyticsScreen(
                         fullCoin = viewModel.fullCoin,

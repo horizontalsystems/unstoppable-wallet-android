@@ -2,6 +2,10 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Incoming
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Outgoing
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Unknown
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -197,6 +201,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
+                    spam = record.spam,
                     icon = icon
                 )
             }
@@ -244,6 +249,7 @@ class TransactionViewItemFactory(
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
                     icon = icon,
+                    spam = record.spam,
                     nftMetadata = transactionItem.nftMetadata
                 )
             }
@@ -259,6 +265,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
+                    spam = record.spam,
                     icon = icon,
                     nftMetadata = transactionItem.nftMetadata
                 )
@@ -274,6 +281,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
+                    spam = record.spam,
                     icon = icon
                 )
             }
@@ -288,6 +296,7 @@ class TransactionViewItemFactory(
                     sentToSelf = record.sentToSelf,
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
+                    spam = record.spam,
                     icon = icon,
                     nftMetadata = transactionItem.nftMetadata
                 )
@@ -301,6 +310,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     blockchainType = record.blockchainType,
                     progress = progress,
+                    spam = record.spam,
                     icon = icon
                 )
             }
@@ -337,6 +347,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
+                    spam = record.spam,
                     icon = icon
                 )
             }
@@ -354,6 +365,7 @@ class TransactionViewItemFactory(
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
                     icon = icon,
+                    spam = record.spam,
                     nftMetadata = transactionItem.nftMetadata
                 )
             }
@@ -370,6 +382,7 @@ class TransactionViewItemFactory(
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
                     icon = icon,
+                    spam = record.spam,
                     nftMetadata = transactionItem.nftMetadata
                 )
             }
@@ -383,6 +396,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
+                    spam =  record.spam,
                     icon = icon
                 )
             }
@@ -398,6 +412,7 @@ class TransactionViewItemFactory(
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
                     icon = icon,
+                    spam = record.spam,
                     nftMetadata = transactionItem.nftMetadata
                 )
             }
@@ -408,12 +423,67 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     contract = record.transaction.contract,
                     progress = progress,
+                    spam = record.spam,
                     icon = icon
+                )
+            }
+
+            is TonTransactionRecord -> {
+                createViewItemFromTonTransactionRecord(
+                    uid = record.uid,
+                    timestamp = record.timestamp,
+                    icon = icon,
+                    record = record,
                 )
             }
 
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
+    }
+
+    private fun createViewItemFromTonTransactionRecord(
+        uid: String,
+        timestamp: Long,
+        icon: TransactionViewItem.Icon?,
+        record: TonTransactionRecord,
+    ): TransactionViewItem {
+        val title: String
+        val subtitle: String?
+        val primaryValue: ColoredValue?
+
+        when (record.type) {
+            Incoming -> {
+                title = Translator.getString(R.string.Transactions_Receive)
+                subtitle = record.from?.let {
+                    Translator.getString(R.string.Transactions_From, mapped(it, record.blockchainType))
+                }
+                primaryValue = getColoredValue(record.mainValue, ColorName.Remus)
+            }
+            Outgoing -> {
+                title = Translator.getString(R.string.Transactions_Send)
+                subtitle = record.to?.let {
+                    Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
+                }
+                primaryValue = getColoredValue(record.mainValue, ColorName.Lucian)
+            }
+            Unknown -> {
+                title = Translator.getString(R.string.Transactions_Unknown)
+                subtitle = Translator.getString(R.string.Transactions_Unknown_Description)
+                primaryValue = null
+            }
+        }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = null,
+            title = title,
+            subtitle = subtitle ?: "",
+            primaryValue = primaryValue,
+            secondaryValue = null,
+            showAmount = showAmount,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: singleValueIconType(record.mainValue)
+        )
     }
 
     private fun createViewItemFromSolanaUnknownTransactionRecord(
@@ -435,6 +505,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
+            spam = record.spam,
             icon = icon ?: iconType(record.blockchainType, incomingValues, outgoingValues, mutableMapOf())
         )
     }
@@ -463,6 +534,7 @@ class TransactionViewItemFactory(
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
+            spam = record.spam,
             icon = icon ?: singleValueIconType(record.value, nftMetadata)
         )
     }
@@ -486,6 +558,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
+            spam = record.spam,
             icon = icon ?: singleValueIconType(record.value)
         )
     }
@@ -517,6 +590,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
+            spam = record.spam,
             icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
         )
     }
@@ -538,6 +612,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
+            spam = record.spam,
             icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
         )
     }
@@ -547,6 +622,7 @@ class TransactionViewItemFactory(
         timestamp: Long,
         contract: Contract?,
         progress: Float?,
+        spam: Boolean,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         return TransactionViewItem(
@@ -557,6 +633,7 @@ class TransactionViewItemFactory(
             primaryValue = null,
             secondaryValue = null,
             date = Date(timestamp * 1000),
+            spam = spam,
             icon = icon ?: TransactionViewItem.Icon.Platform(BlockchainType.Tron)
         )
     }
@@ -566,6 +643,7 @@ class TransactionViewItemFactory(
         timestamp: Long,
         blockchainType: BlockchainType,
         progress: Float?,
+        spam: Boolean,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         return TransactionViewItem(
@@ -576,6 +654,7 @@ class TransactionViewItemFactory(
             primaryValue = null,
             secondaryValue = null,
             date = Date(timestamp * 1000),
+            spam = spam,
             icon = icon ?: TransactionViewItem.Icon.Platform(blockchainType)
         )
     }
@@ -589,6 +668,7 @@ class TransactionViewItemFactory(
         sentToSelf: Boolean,
         currencyValue: CurrencyValue?,
         progress: Float?,
+        spam: Boolean,
         icon: TransactionViewItem.Icon?,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
@@ -610,6 +690,7 @@ class TransactionViewItemFactory(
             showAmount = showAmount,
             date = Date(timestamp * 1000),
             sentToSelf = sentToSelf,
+            spam = spam,
             icon = icon ?: singleValueIconType(value, nftMetadata)
         )
     }
@@ -629,6 +710,7 @@ class TransactionViewItemFactory(
         timestamp: Long,
         currencyValue: CurrencyValue?,
         progress: Float?,
+        spam: Boolean,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = getColoredValue(value, ColorName.Remus)
@@ -648,6 +730,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(timestamp * 1000),
+            spam = spam,
             icon = icon ?: singleValueIconType(value)
         )
     }
@@ -665,6 +748,7 @@ class TransactionViewItemFactory(
             primaryValue = null,
             secondaryValue = null,
             date = Date(record.timestamp * 1000),
+            spam = record.spam,
             icon = icon ?: TransactionViewItem.Icon.Platform(record.blockchainType)
         )
     }
@@ -679,6 +763,7 @@ class TransactionViewItemFactory(
         timestamp: Long,
         currencyValue: CurrencyValue?,
         progress: Float?,
+        spam: Boolean,
         icon: TransactionViewItem.Icon?,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
@@ -694,6 +779,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(timestamp * 1000),
+            spam = spam,
             icon = icon ?: iconType(blockchainType, incomingValues, outgoingValues, nftMetadata)
         )
     }
@@ -707,6 +793,7 @@ class TransactionViewItemFactory(
         timestamp: Long,
         currencyValue: CurrencyValue?,
         progress: Float?,
+        spam: Boolean,
         icon: TransactionViewItem.Icon?,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
@@ -745,6 +832,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(timestamp * 1000),
+            spam = spam,
             icon = icon ?: iconType(blockchainType, incomingValues, outgoingValues, nftMetadata)
         )
     }
@@ -792,6 +880,7 @@ class TransactionViewItemFactory(
             sentToSelf = record.sentToSelf,
             doubleSpend = record.conflictingHash != null,
             locked = locked,
+            spam = record.spam,
             icon = icon ?: singleValueIconType(record.value)
         )
     }
@@ -834,6 +923,7 @@ class TransactionViewItemFactory(
             sentToSelf = false,
             doubleSpend = record.conflictingHash != null,
             locked = locked,
+            spam = record.spam,
             icon = icon ?: singleValueIconType(record.value)
         )
     }
@@ -864,6 +954,7 @@ class TransactionViewItemFactory(
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
+            spam = record.spam,
             icon = icon ?: singleValueIconType(record.value)
         )
     }
@@ -891,6 +982,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
+            spam = record.spam,
             icon = icon ?: singleValueIconType(record.value)
         )
     }
@@ -903,6 +995,7 @@ class TransactionViewItemFactory(
         timestamp: Long,
         currencyValue: CurrencyValue?,
         progress: Float?,
+        spam: Boolean,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValueText: String
@@ -928,6 +1021,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(timestamp * 1000),
+            spam = spam,
             icon = icon ?: singleValueIconType(value)
         )
     }

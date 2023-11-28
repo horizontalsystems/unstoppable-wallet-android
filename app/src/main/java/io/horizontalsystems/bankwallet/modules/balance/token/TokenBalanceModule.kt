@@ -33,7 +33,8 @@ class TokenBalanceModule {
                 TransactionsRateRepository(App.currencyManager, App.marketKit),
                 TransactionSyncStateRepository(App.transactionAdapterManager),
                 App.contactsRepository,
-                NftMetadataService(App.nftMetadataManager)
+                NftMetadataService(App.nftMetadataManager),
+                App.spamManager
             )
 
             return TokenBalanceViewModel(

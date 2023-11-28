@@ -15,7 +15,11 @@ import java.math.RoundingMode
 
 object SendSolanaModule {
 
-    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val prefilledAddress: String?,
+        private val showAddressInput: Boolean
+    ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter) ?: throw IllegalStateException("SendSolanaAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
@@ -26,11 +30,11 @@ object SendSolanaModule {
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
                     val amountService = SendAmountAdvancedService(
-                            adapter.availableBalance.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
-                            wallet.token,
-                            amountValidator,
+                        adapter.availableBalance.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
+                        wallet.token,
+                        amountValidator,
                     )
-                    val addressService = SendSolanaAddressService(predefinedAddress)
+                    val addressService = SendSolanaAddressService(prefilledAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -43,9 +47,12 @@ object SendSolanaModule {
                         amountService,
                         addressService,
                         coinMaxAllowedDecimals,
-                        App.contactsRepository
+                        App.contactsRepository,
+                        showAddressInput,
+                        App.connectivityManager,
                     ) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
         }

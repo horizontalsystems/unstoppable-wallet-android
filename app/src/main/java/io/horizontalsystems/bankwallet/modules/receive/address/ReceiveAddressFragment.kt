@@ -145,184 +145,182 @@ private fun ReceiveAddressScreen(
         }
     }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Deposit_Title, uiState.coinCode),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Done),
-                            onClick = onCloseClick
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Deposit_Title, uiState.coinCode),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Done),
+                        onClick = onCloseClick
                     )
                 )
-            }
-        ) {
-            Crossfade(uiState.viewState, label = "") { viewState ->
-                Column(Modifier.padding(it)) {
-                    when (viewState) {
-                        is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
-                        }
+            )
+        }
+    ) {
+        Crossfade(uiState.viewState, label = "") { viewState ->
+            Column(Modifier.padding(it)) {
+                when (viewState) {
+                    is ViewState.Error -> {
+                        ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                    }
 
-                        ViewState.Loading -> {
-                            Loading()
-                        }
+                    ViewState.Loading -> {
+                        Loading()
+                    }
 
-                        ViewState.Success -> {
-                            val qrCodeBitmap = TextHelper.getQrCodeBitmap(uiState.address)
+                    ViewState.Success -> {
+                        val qrCodeBitmap = TextHelper.getQrCodeBitmap(uiState.address)
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState()),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            VSpacer(12.dp)
                             Column(
                                 modifier = Modifier
-                                    .weight(1f)
                                     .fillMaxWidth()
-                                    .verticalScroll(rememberScrollState()),
+                                    .padding(horizontal = 16.dp)
+                                    .clip(RoundedCornerShape(24.dp))
+                                    .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+                                    .padding(horizontal = 24.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
-                                VSpacer(12.dp)
-                                Column(
+                                VSpacer(32.dp)
+                                Box(
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 16.dp)
-                                        .clip(RoundedCornerShape(24.dp))
-                                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
-                                        .padding(horizontal = 24.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(ComposeAppTheme.colors.white)
+                                        .size(150.dp),
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    VSpacer(32.dp)
-                                    Box(
-                                        modifier = Modifier
-                                            .clip(RoundedCornerShape(8.dp))
-                                            .background(ComposeAppTheme.colors.white)
-                                            .size(150.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        qrCodeBitmap?.let {
+                                    qrCodeBitmap?.let {
+                                        Image(
+                                            modifier = Modifier
+                                                .clickable {
+                                                    TextHelper.copyText(uiState.address)
+                                                    HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+                                                }
+                                                .padding(8.dp)
+                                                .fillMaxSize(),
+                                            bitmap = it.asImageBitmap(),
+                                            contentScale = ContentScale.FillWidth,
+                                            contentDescription = null
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(8.dp))
+                                                .background(ComposeAppTheme.colors.white)
+                                                .size(40.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
                                             Image(
-                                                modifier = Modifier
-                                                    .clickable {
-                                                        TextHelper.copyText(uiState.address)
-                                                        HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                                                    }
-                                                    .padding(8.dp)
-                                                    .fillMaxSize(),
-                                                bitmap = it.asImageBitmap(),
-                                                contentScale = ContentScale.FillWidth,
+                                                modifier = Modifier.size(32.dp),
+                                                painter = adaptiveIconPainterResource(
+                                                    id = R.mipmap.launcher_main,
+                                                    fallbackDrawable = R.drawable.launcher_main_preview
+                                                ),
                                                 contentDescription = null
                                             )
-                                            Box(
-                                                modifier = Modifier
-                                                    .clip(RoundedCornerShape(8.dp))
-                                                    .background(ComposeAppTheme.colors.white)
-                                                    .size(40.dp),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Image(
-                                                    modifier = Modifier.size(32.dp),
-                                                    painter = adaptiveIconPainterResource(
-                                                        id = R.mipmap.launcher_main,
-                                                        fallbackDrawable = R.drawable.launcher_main_preview
-                                                    ),
-                                                    contentDescription = null
-                                                )
-                                            }
                                         }
                                     }
-                                    VSpacer(12.dp)
-                                    subhead2_grey(
-                                        text = uiState.qrDescription,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                    VSpacer(24.dp)
                                 }
                                 VSpacer(12.dp)
-                                CellUniversalLawrenceSection(uiState.descriptionItems) { item ->
-                                    when (item) {
-                                        is ReceiveAddressModule.DescriptionItem.Value -> {
-                                            RowUniversal(
+                                subhead2_grey(
+                                    text = uiState.qrDescription,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                VSpacer(24.dp)
+                            }
+                            VSpacer(12.dp)
+                            CellUniversalLawrenceSection(uiState.descriptionItems) { item ->
+                                when (item) {
+                                    is ReceiveAddressModule.DescriptionItem.Value -> {
+                                        RowUniversal(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 16.dp),
+                                        ) {
+                                            subhead2_grey(
+                                                text = item.title,
+                                            )
+                                            subhead1_leah(
+                                                text = item.value,
                                                 modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(horizontal = 16.dp),
-                                            ) {
-                                                subhead2_grey(
-                                                    text = item.title,
-                                                )
-                                                subhead1_leah(
-                                                    text = item.value,
-                                                    modifier = Modifier
-                                                        .padding(start = 16.dp)
-                                                        .weight(1f),
-                                                    textAlign = TextAlign.End
-                                                )
-                                            }
+                                                    .padding(start = 16.dp)
+                                                    .weight(1f),
+                                                textAlign = TextAlign.End
+                                            )
                                         }
+                                    }
 
-                                        is ReceiveAddressModule.DescriptionItem.ValueInfo -> {
-                                            RowUniversal(
+                                    is ReceiveAddressModule.DescriptionItem.ValueInfo -> {
+                                        RowUniversal(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 16.dp),
+                                        ) {
+                                            body_grey(
+                                                text = item.title,
+                                            )
+                                            HSpacer(8.dp)
+                                            HsIconButton(
                                                 modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(horizontal = 16.dp),
-                                            ) {
-                                                body_grey(
-                                                    text = item.title,
-                                                )
-                                                HSpacer(8.dp)
-                                                HsIconButton(
-                                                    modifier = Modifier
-                                                        .padding(end = 8.dp)
-                                                        .size(20.dp),
-                                                    onClick = {
-                                                        val args = NotActiveWarningDialog.prepareParams(item.infoTitle, item.infoText, false)
-                                                        navController.slideFromBottom(R.id.notActiveAccountDialog, args)
-                                                    }
-                                                ) {
-                                                    Icon(
-                                                        painter = painterResource(id = R.drawable.ic_info_20),
-                                                        contentDescription = "info button",
-                                                        tint = ComposeAppTheme.colors.grey,
-                                                    )
+                                                    .padding(end = 8.dp)
+                                                    .size(20.dp),
+                                                onClick = {
+                                                    val args = NotActiveWarningDialog.prepareParams(item.infoTitle, item.infoText, false)
+                                                    navController.slideFromBottom(R.id.notActiveAccountDialog, args)
                                                 }
-                                                body_jacob(
-                                                    text = item.value,
-                                                    modifier = Modifier
-                                                        .padding(start = 16.dp)
-                                                        .weight(1f),
-                                                    textAlign = TextAlign.End
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(id = R.drawable.ic_info_20),
+                                                    contentDescription = "info button",
+                                                    tint = ComposeAppTheme.colors.grey,
                                                 )
                                             }
+                                            body_jacob(
+                                                text = item.value,
+                                                modifier = Modifier
+                                                    .padding(start = 16.dp)
+                                                    .weight(1f),
+                                                textAlign = TextAlign.End
+                                            )
                                         }
                                     }
                                 }
-                                VSpacer(16.dp)
-                                TextImportantWarning(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                    text = stringResource(R.string.Balance_ReceiveWarningText, uiState.coinCode)
-                                )
-                                VSpacer(32.dp)
                             }
+                            VSpacer(16.dp)
+                            TextImportantWarning(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                text = stringResource(R.string.Balance_ReceiveWarningText, uiState.coinCode)
+                            )
+                            VSpacer(32.dp)
+                        }
 
-                            ButtonsGroupWithShade {
-                                Column(Modifier.padding(horizontal = 24.dp)) {
-                                    ButtonPrimaryYellow(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        title = stringResource(R.string.Button_Copy),
-                                        onClick = {
-                                            TextHelper.copyText(uiState.address)
-                                            HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                                        },
-                                    )
-                                    VSpacer(16.dp)
-                                    ButtonPrimaryDefault(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        title = stringResource(R.string.Button_Share),
-                                        onClick = { onShareClick.invoke(uiState.address) },
-                                    )
-                                }
+                        ButtonsGroupWithShade {
+                            Column(Modifier.padding(horizontal = 24.dp)) {
+                                ButtonPrimaryYellow(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = stringResource(R.string.Button_Copy),
+                                    onClick = {
+                                        TextHelper.copyText(uiState.address)
+                                        HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+                                    },
+                                )
+                                VSpacer(16.dp)
+                                ButtonPrimaryDefault(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = stringResource(R.string.Button_Share),
+                                    onClick = { onShareClick.invoke(uiState.address) },
+                                )
                             }
                         }
                     }

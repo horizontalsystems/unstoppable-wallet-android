@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -38,7 +39,9 @@ class SendTronViewModel(
     private val amountService: SendAmountAdvancedService,
     private val addressService: SendTronAddressService,
     val coinMaxAllowedDecimals: Int,
-    private val contactsRepo: ContactsRepository
+    private val contactsRepo: ContactsRepository,
+    private val showAddressInput: Boolean,
+    private val connectivityManager: ConnectivityManager,
 ) : ViewModel() {
     val logger: AppLogger = AppLogger("send-tron")
 
@@ -50,7 +53,7 @@ class SendTronViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState: FeeState = FeeState.Loading
     private var cautions: List<HSCaution> = listOf()
-    private val showAddressInput = addressService.predefinedAddress == null
+    private var prefilledAddress = addressService.address
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -62,6 +65,7 @@ class SendTronViewModel(
             feeViewState = feeState.viewState,
             cautions = listOf(),
             showAddressInput = showAddressInput,
+            prefilledAddress = prefilledAddress,
         )
     )
         private set
@@ -238,6 +242,10 @@ class SendTronViewModel(
         }
     }
 
+    fun hasConnection(): Boolean {
+        return connectivityManager.isConnected
+    }
+
     private suspend fun send() = withContext(Dispatchers.IO) {
         try {
             val confirmationData = confirmationData ?: return@withContext
@@ -283,6 +291,7 @@ class SendTronViewModel(
             feeViewState = feeState.viewState,
             cautions = cautions,
             showAddressInput = showAddressInput,
+            prefilledAddress = prefilledAddress,
         )
     }
 }

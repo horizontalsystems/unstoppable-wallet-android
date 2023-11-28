@@ -42,9 +42,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 class SetDuressPinIntroFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            SetDuressPinIntroScreen(navController)
-        }
+        SetDuressPinIntroScreen(navController)
     }
 }
 

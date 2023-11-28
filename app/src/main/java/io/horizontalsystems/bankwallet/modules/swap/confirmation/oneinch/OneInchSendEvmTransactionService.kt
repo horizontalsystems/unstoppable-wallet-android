@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ISendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
-import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.OneInchSwapParameters
+import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -153,5 +153,6 @@ class OneInchSendEvmTransactionService(
 
     override fun clear() {
         disposable.clear()
+        settingsService.clear()
     }
 }

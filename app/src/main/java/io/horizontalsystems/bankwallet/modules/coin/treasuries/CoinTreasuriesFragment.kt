@@ -56,9 +56,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            CoinTreasuriesScreen(viewModel)
-        }
+        CoinTreasuriesScreen(viewModel)
     }
 
     @Composable
@@ -88,9 +86,11 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
+
                         ViewState.Success -> {
                             LazyColumn(modifier = Modifier.fillMaxSize()) {
                                 treasuriesData?.let { treasuriesData ->
@@ -130,6 +130,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                                 }
                             }
                         }
+
                         null -> {}
                     }
                 }

@@ -64,77 +64,78 @@ fun ReceiveTokenSelectScreen(navController: NavController, activeAccount: Accoun
     val fullCoins = viewModel.uiState.fullCoins
     val coroutineScope = rememberCoroutineScope()
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                SearchBar(
-                    title = stringResource(R.string.Balance_Receive),
-                    searchHintText = "",
-                    menuItems = listOf(),
-                    onClose = { navController.popBackStack() },
-                    onSearchTextChanged = { text ->
-                        viewModel.updateFilter(text)
-                    }
-                )
-            }
-        ) { paddingValues ->
-            LazyColumn(contentPadding = paddingValues) {
-                item {
-                    VSpacer(12.dp)
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            SearchBar(
+                title = stringResource(R.string.Balance_Receive),
+                searchHintText = "",
+                menuItems = listOf(),
+                onClose = { navController.popBackStack() },
+                onSearchTextChanged = { text ->
+                    viewModel.updateFilter(text)
                 }
-                itemsIndexed(fullCoins) { index, fullCoin ->
-                    val coin = fullCoin.coin
-                    val lastItem = index == fullCoins.size - 1
-                    SectionUniversalItem(borderTop = true, borderBottom = lastItem) {
-                        ReceiveCoin(
-                            coinName = coin.name,
-                            coinCode = coin.code,
-                            coinIconUrl = coin.imageUrl,
-                            coinIconPlaceholder = coin.imagePlaceholder,
-                            onClick = {
-                                coroutineScope.launch {
-                                    val popupDestinationId = navController.currentDestination?.id
+            )
+        }
+    ) { paddingValues ->
+        LazyColumn(contentPadding = paddingValues) {
+            item {
+                VSpacer(12.dp)
+            }
+            itemsIndexed(fullCoins) { index, fullCoin ->
+                val coin = fullCoin.coin
+                val lastItem = index == fullCoins.size - 1
+                SectionUniversalItem(borderTop = true, borderBottom = lastItem) {
+                    ReceiveCoin(
+                        coinName = coin.name,
+                        coinCode = coin.code,
+                        coinIconUrl = coin.imageUrl,
+                        coinIconPlaceholder = coin.imagePlaceholder,
+                        onClick = {
+                            coroutineScope.launch {
+                                val popupDestinationId = navController.currentDestination?.id
 
-                                    when (val coinActiveWalletsType = viewModel.getCoinForReceiveType(fullCoin)) {
-                                        CoinForReceiveType.MultipleAddressTypes -> {
-                                            navController.slideFromRight(
-                                                R.id.receiveBchAddressTypeSelectFragment,
-                                                BchAddressTypeSelectFragment.prepareParams(coin.uid, popupDestinationId)
-                                            )
-                                        }
-                                        CoinForReceiveType.MultipleDerivations -> {
-                                            navController.slideFromRight(
-                                                R.id.receiveDerivationSelectFragment,
-                                                DerivationSelectFragment.prepareParams(coin.uid, popupDestinationId)
-                                            )
-                                        }
-                                        CoinForReceiveType.MultipleBlockchains -> {
-                                            navController.slideFromRight(
-                                                R.id.receiveNetworkSelectFragment,
-                                                NetworkSelectFragment.prepareParams(coin.uid, popupDestinationId)
-                                            )
-                                        }
-                                        is CoinForReceiveType.Single -> {
-                                            navController.slideFromRight(
-                                                R.id.receiveFragment,
-                                                bundleOf(
-                                                    ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet,
-                                                    ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
-                                                )
-                                            )
-                                        }
-
-                                        null -> Unit
+                                when (val coinActiveWalletsType = viewModel.getCoinForReceiveType(fullCoin)) {
+                                    CoinForReceiveType.MultipleAddressTypes -> {
+                                        navController.slideFromRight(
+                                            R.id.receiveBchAddressTypeSelectFragment,
+                                            BchAddressTypeSelectFragment.prepareParams(coin.uid, popupDestinationId)
+                                        )
                                     }
+
+                                    CoinForReceiveType.MultipleDerivations -> {
+                                        navController.slideFromRight(
+                                            R.id.receiveDerivationSelectFragment,
+                                            DerivationSelectFragment.prepareParams(coin.uid, popupDestinationId)
+                                        )
+                                    }
+
+                                    CoinForReceiveType.MultipleBlockchains -> {
+                                        navController.slideFromRight(
+                                            R.id.receiveNetworkSelectFragment,
+                                            NetworkSelectFragment.prepareParams(coin.uid, popupDestinationId)
+                                        )
+                                    }
+
+                                    is CoinForReceiveType.Single -> {
+                                        navController.slideFromRight(
+                                            R.id.receiveFragment,
+                                            bundleOf(
+                                                ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet,
+                                                ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
+                                            )
+                                        )
+                                    }
+
+                                    null -> Unit
                                 }
                             }
-                        )
-                    }
+                        }
+                    )
                 }
-                item {
-                    VSpacer(32.dp)
-                }
+            }
+            item {
+                VSpacer(32.dp)
             }
         }
     }

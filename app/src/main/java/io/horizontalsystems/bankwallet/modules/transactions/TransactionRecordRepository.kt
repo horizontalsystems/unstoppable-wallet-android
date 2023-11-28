@@ -73,7 +73,8 @@ class TransactionRecordRepository(
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
                 BlockchainType.Solana,
-                BlockchainType.Tron -> {
+                BlockchainType.Tron,
+                BlockchainType.Ton -> {
                     if (mergedWallets.none { it.source == wallet.source }) {
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }
@@ -167,6 +168,16 @@ class TransactionRecordRepository(
         if (!allLoaded.get()) {
             loadItems(loadedPageNumber + 1)
         }
+    }
+
+    override fun reload() {
+        adaptersMap.forEach { (_, transactionAdapterWrapper) ->
+            transactionAdapterWrapper.reload()
+        }
+        unsubscribeFromUpdates()
+        allLoaded.set(false)
+        loadItems(1)
+        subscribeForUpdates()
     }
 
     private fun unsubscribeFromUpdates() {

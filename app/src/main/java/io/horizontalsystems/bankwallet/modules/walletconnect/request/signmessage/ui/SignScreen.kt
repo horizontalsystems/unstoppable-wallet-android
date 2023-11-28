@@ -47,57 +47,57 @@ fun SignMessageRequestScreen(
         viewModel.signErrorShown()
     }
 
-    ComposeAppTheme {
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            AppBar(
-                stringResource(R.string.WalletConnect_SignMessageRequest_Title),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
-                    )
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            stringResource(R.string.WalletConnect_SignMessageRequest_Title),
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Close),
+                    icon = R.drawable.ic_close,
+                    onClick = { navController.popBackStack() }
                 )
             )
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .weight(1f)
-                    .fillMaxWidth()
-            ) {
-                Spacer(Modifier.height(12.dp))
+        )
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            Spacer(Modifier.height(12.dp))
 
-                when (val message = viewModel.message) {
-                    is SignMessage.PersonalMessage -> {
-                        MessageContent(message.data, viewModel.dAppName, viewModel.chain, viewModel)
-                    }
-                    is SignMessage.Message -> {
-                        MessageContent(message.data, viewModel.dAppName, viewModel.chain, viewModel, message.showLegacySignWarning)
-                    }
-                    is SignMessage.TypedMessage -> {
-                        TypedMessageContent(message, viewModel.dAppName, viewModel.chain)
-                    }
+            when (val message = viewModel.message) {
+                is SignMessage.PersonalMessage -> {
+                    MessageContent(message.data, viewModel.dAppName, viewModel.chain, viewModel)
                 }
 
-                Spacer(Modifier.height(24.dp))
+                is SignMessage.Message -> {
+                    MessageContent(message.data, viewModel.dAppName, viewModel.chain, viewModel, message.showLegacySignWarning)
+                }
+
+                is SignMessage.TypedMessage -> {
+                    TypedMessageContent(message, viewModel.dAppName, viewModel.chain)
+                }
             }
-            ButtonsGroupWithShade {
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
-                        enabled = viewModel.signEnabled,
-                        onClick = { viewModel.sign() },
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    ButtonPrimaryDefault(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.Button_Reject),
-                        onClick = { viewModel.reject() }
-                    )
-                }
+
+            Spacer(Modifier.height(24.dp))
+        }
+        ButtonsGroupWithShade {
+            Column(Modifier.padding(horizontal = 24.dp)) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
+                    enabled = viewModel.signEnabled,
+                    onClick = { viewModel.sign() },
+                )
+                Spacer(Modifier.height(16.dp))
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Reject),
+                    onClick = { viewModel.reject() }
+                )
             }
         }
     }

@@ -42,14 +42,8 @@ class MarketPlatformFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val platformUid = activity?.intent?.data?.getQueryParameter("uid")
-        val platformTitle = activity?.intent?.data?.getQueryParameter("title")
 
-        val platform = if (platformUid != null && platformTitle != null) {
-            Platform(platformUid, platformTitle)
-        } else {
-            arguments?.parcelable(platformKey)
-        }
+        val platform = arguments?.parcelable<Platform>(platformKey)
 
         if (platform == null) {
             navController.popBackStack()
@@ -58,16 +52,14 @@ class MarketPlatformFragment : BaseComposeFragment() {
 
         val factory = MarketPlatformModule.Factory(platform)
 
-        ComposeAppTheme {
-            PlatformScreen(
-                factory = factory,
-                onCloseButtonClick = { navController.popBackStack() },
-                onCoinClick = { coinUid ->
-                    val arguments = CoinFragment.prepareParams(coinUid)
-                    navController.slideFromRight(R.id.coinFragment, arguments)
-                }
-            )
-        }
+        PlatformScreen(
+            factory = factory,
+            onCloseButtonClick = { navController.popBackStack() },
+            onCoinClick = { coinUid ->
+                val arguments = CoinFragment.prepareParams(coinUid)
+                navController.slideFromRight(R.id.coinFragment, arguments)
+            }
+        )
     }
 
     companion object {
@@ -108,12 +100,14 @@ private fun PlatformScreen(
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
                                 viewModel::onErrorClick
                             )
                         }
+
                         ViewState.Success -> {
                             viewModel.viewItems.let { viewItems ->
                                 CoinList(
@@ -180,6 +174,7 @@ private fun PlatformScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+
             else -> {}
         }
     }

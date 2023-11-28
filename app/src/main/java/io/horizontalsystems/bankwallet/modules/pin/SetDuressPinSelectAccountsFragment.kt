@@ -40,9 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 class SetDuressPinSelectAccountsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            SetDuressPinSelectAccountsScreen(navController)
-        }
+        SetDuressPinSelectAccountsScreen(navController)
     }
 }
 

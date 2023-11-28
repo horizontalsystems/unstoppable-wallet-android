@@ -65,87 +65,85 @@ fun ActivateSubscriptionScreen(navController: NavController) {
         }
     }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.ActivateSubscription_Title),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = { navController.popBackStack() }
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.ActivateSubscription_Title),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = { navController.popBackStack() }
                     )
                 )
-            }
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(it)
         ) {
-            Column(
-                modifier = Modifier.padding(it)
-            ) {
-                if (uiState.fetchingMessage) {
-                    Loading()
-                }
-                uiState.fetchingMessageError?.let { error ->
-                    if (error is NoSubscription) {
-                        ScreenMessageWithAction(
-                            text = stringResource(R.string.ActivateSubscription_NoSubscriptionError),
-                            icon = R.drawable.ic_sync_error,
-                        ) {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 48.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.SubscriptionInfo_GetPremium),
-                                onClick = {
-                                    uriHandler.openUri(App.appConfigProvider.analyticsLink)
-                                }
-                            )
-                        }
-                    } else {
-                        ListErrorView(
-                            errorText = error.message ?: error.javaClass.simpleName,
-                            icon = R.drawable.ic_error_48
-                        ) {
-                            viewModel.retry()
-                        }
-                    }
-                }
-                uiState.subscriptionInfo?.let { subscriptionInfo ->
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .verticalScroll(rememberScrollState())
+            if (uiState.fetchingMessage) {
+                Loading()
+            }
+            uiState.fetchingMessageError?.let { error ->
+                if (error is NoSubscription) {
+                    ScreenMessageWithAction(
+                        text = stringResource(R.string.ActivateSubscription_NoSubscriptionError),
+                        icon = R.drawable.ic_sync_error,
                     ) {
-                        MessageToSignSection(
-                            subscriptionInfo.walletName,
-                            subscriptionInfo.walletAddress,
-                            subscriptionInfo.messageToSign
-                        )
-                    }
-                }
-                ButtonsGroupWithShade {
-                    Column(Modifier.padding(horizontal = 24.dp)) {
-                        if (uiState.signButtonState.visible) {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier.fillMaxWidth(),
-                                title = stringResource(R.string.Button_Sign),
-                                enabled = uiState.signButtonState.enabled,
-                                onClick = {
-                                    viewModel.sign()
-                                },
-                            )
-                            Spacer(Modifier.height(16.dp))
-                        }
-                        ButtonPrimaryDefault(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = stringResource(R.string.Button_Cancel),
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 48.dp)
+                                .fillMaxWidth(),
+                            title = stringResource(R.string.SubscriptionInfo_GetPremium),
                             onClick = {
-                                navController.popBackStack()
+                                uriHandler.openUri(App.appConfigProvider.analyticsLink)
                             }
                         )
                     }
+                } else {
+                    ListErrorView(
+                        errorText = error.message ?: error.javaClass.simpleName,
+                        icon = R.drawable.ic_error_48
+                    ) {
+                        viewModel.retry()
+                    }
+                }
+            }
+            uiState.subscriptionInfo?.let { subscriptionInfo ->
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    MessageToSignSection(
+                        subscriptionInfo.walletName,
+                        subscriptionInfo.walletAddress,
+                        subscriptionInfo.messageToSign
+                    )
+                }
+            }
+            ButtonsGroupWithShade {
+                Column(Modifier.padding(horizontal = 24.dp)) {
+                    if (uiState.signButtonState.visible) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = stringResource(R.string.Button_Sign),
+                            enabled = uiState.signButtonState.enabled,
+                            onClick = {
+                                viewModel.sign()
+                            },
+                        )
+                        Spacer(Modifier.height(16.dp))
+                    }
+                    ButtonPrimaryDefault(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = stringResource(R.string.Button_Cancel),
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    )
                 }
             }
         }

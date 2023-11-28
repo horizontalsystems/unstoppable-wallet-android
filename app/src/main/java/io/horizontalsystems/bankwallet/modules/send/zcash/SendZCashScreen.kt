@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import java.math.BigDecimal
 
 @Composable
 fun SendZCashScreen(
@@ -34,7 +35,8 @@ fun SendZCashScreen(
     navController: NavController,
     viewModel: SendZCashViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    prefilledAmount: BigDecimal?,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -47,7 +49,9 @@ fun SendZCashScreen(
     val memoIsAllowed = uiState.memoIsAllowed
     val amountInputType = amountInputModeViewModel.inputType
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.token.blockchainType))
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
+        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+    )
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
@@ -94,6 +98,7 @@ fun SendZCashScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = uiState.prefilledAddress,
                     tokenQuery = wallet.token.tokenQuery,
                     coinCode = wallet.coin.code,
                     error = addressError,

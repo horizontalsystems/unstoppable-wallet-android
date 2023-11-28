@@ -104,57 +104,55 @@ private fun CreateAccountIntroScreen(
         }
     }
 
-    ComposeAppTheme {
-        Surface(color = ComposeAppTheme.colors.tyler) {
-            Column(Modifier.fillMaxSize()) {
-                AppBar(
-                    title = stringResource(R.string.ManageAccounts_CreateNewWallet),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Create),
-                            onClick = viewModel::createAccount
-                        )
-                    ),
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackClick)
-                    },
-                    backgroundColor = Color.Transparent
-                )
-                Spacer(Modifier.height(12.dp))
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column(Modifier.fillMaxSize()) {
+            AppBar(
+                title = stringResource(R.string.ManageAccounts_CreateNewWallet),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Create),
+                        onClick = viewModel::createAccount
+                    )
+                ),
+                navigationIcon = {
+                    HsBackButton(onClick = onBackClick)
+                },
+                backgroundColor = Color.Transparent
+            )
+            Spacer(Modifier.height(12.dp))
 
-                HeaderText(stringResource(id = R.string.ManageAccount_Name))
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.accountName,
-                    pasteEnabled = false,
-                    hint = viewModel.defaultAccountName,
-                    onValueChange = viewModel::onChangeAccountName
-                )
+            HeaderText(stringResource(id = R.string.ManageAccount_Name))
+            FormsInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                initial = viewModel.accountName,
+                pasteEnabled = false,
+                hint = viewModel.defaultAccountName,
+                onValueChange = viewModel::onChangeAccountName
+            )
 
-                Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(32.dp))
 
-                CellSingleLineLawrenceSection {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clickable {
-                                openCreateAdvancedScreen.invoke()
-                            }
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        body_leah(text = stringResource(R.string.Button_Advanced))
-                        Spacer(modifier = Modifier.weight(1f))
-                        Image(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = null,
-                        )
-                    }
+            CellSingleLineLawrenceSection {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            openCreateAdvancedScreen.invoke()
+                        }
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    body_leah(text = stringResource(R.string.Button_Advanced))
+                    Spacer(modifier = Modifier.weight(1f))
+                    Image(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(id = R.drawable.ic_arrow_right),
+                        contentDescription = null,
+                    )
                 }
-
-                Spacer(Modifier.height(32.dp))
             }
+
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

@@ -64,6 +64,7 @@
     <string name="Button_Submit">Submit</string>
     <string name="Button_TryAgain">Try Again</string>
     <string name="Button_Share">Share</string>
+    <string name="Button_Apply">Apply</string>
 
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
@@ -363,6 +364,7 @@
     <string name="Balance_Receive_Account">Account</string>
     <string name="Balance_Receive_NotActive">Not active</string>
     <string name="Balance_LockedAmount_Title">Locked</string>
+    <string name="Balance_Error_InvalidQrCode">Can\'t recognize</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
@@ -709,6 +711,7 @@
     <string name="Transactions_Filter_AllBlockchains">All Blockchains</string>
     <string name="Transactions_Filter_AllCoins">All Coins</string>
     <string name="Transactions_Filter_ChooseCoin">Choose Coin</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Choose Blockchain</string>
     <string name="Transactions_Incoming">Received</string>
     <string name="Transactions_Outgoing">Sent</string>
     <string name="Transactions_Swaps">Swaps</string>
@@ -716,6 +719,10 @@
     <string name="Transactions_Unknown">Unknown Transaction</string>
     <string name="Transactions_Unknown_Description">Transaction can not be parsed</string>
     <string name="Transactions_Multiple">Multiple</string>
+    <string name="Transactions_Filter">Filter</string>
+    <string name="Transactions_Coins">Coins</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Hide suspicious tx</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Hiding incoming transactions with the dust amount in stablecoins, this partially solves the  address poisoning attack problems.</string>
 
     <!--Transaction Info-->
 
@@ -752,6 +759,7 @@
     <string name="TransactionInfo_Options">Options</string>
     <string name="TransactionInfo_SpeedUp">Speed Up</string>
     <string name="TransactionInfo_Cancel">Cancel</string>
+    <string name="TransactionInfo_SpamWarning">This transaction is suspicious and can be a scam.\nPlease do not copy any addresses from this transaction.</string>
 
     <string name="StatusInfo_Pending">Pending</string>
     <string name="StatusInfo_Processing">Processing</string>
@@ -839,7 +847,7 @@
     <string name="Settings_Donate">Donate</string>
     <string name="Settings_DonateToken">Donate %s</string>
     <string name="Settings_DonateWith">Donate with</string>
-    <string name="Settings_Donate_GetAddress">Get Address</string>
+    <string name="Settings_Donate_GetAddress">Donation Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
 
     <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
@@ -913,7 +921,6 @@
     <string name="EvmNetwork_AddNew">Add New</string>
     <string name="EvmNetwork_Added">Added</string>
     <string name="EvmNetwork_SyncMode">Sync Mode</string>
-    <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
 
     <!--Add RPC Source-->
 
@@ -921,19 +928,13 @@
     <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
     <string name="AddEvmSyncSource_Name">Name</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
-    <string name="AddEvmSyncSource_RpcSource">RPC Source</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
 
 
     <!--Btc Blockchain Settings -->
-    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing Restore Source the wallet will have to resync itself with the Bitcoin blockchain.</string>
-    <string name="BtcBlockchainSettings_RestoreSource">Restore Source</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Select a data source for wallet restore. Restoring from blockchain takes considerably more time.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.
-\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
-\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
-\n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing source the wallet will have to resync itself.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Unstoppable app should use for synchronizing wallet(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>
@@ -969,10 +970,12 @@
     <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
-    <string name="SettingsSecurity_SyncModeAPI" translatable="false">API</string>
-    <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Fast, Private, Centralized</string>
+    <string name="SettingsSecurity_SyncModeHybrid" translatable="false">Hybrid</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Decentralized Restore</string>
 
     <string name="SetDuressPin_Title">Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
@@ -1013,7 +1016,7 @@
 
     <!--Setting_Contact-->
 
-    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Title">Contact Us</string>
 
     <!--Setting_Notifications-->
 

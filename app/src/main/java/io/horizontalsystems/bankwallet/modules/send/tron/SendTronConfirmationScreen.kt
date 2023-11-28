@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.MemoCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -127,139 +128,145 @@ fun SendTronConfirmationScreen(
         }
     }
 
-    ComposeAppTheme {
-        Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = stringResource(R.string.Send_Confirmation_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = listOf()
-            )
-            Box(
-                modifier = Modifier.fillMaxSize()
+    DisposableLifecycleCallbacks(
+        //additional close for cases when user closes app immediately after sending
+        onResume = {
+            if (sendResult == SendResult.Sent) {
+                navController.popBackStack(closeUntilDestId, true)
+            }
+        }
+    )
+
+    Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = stringResource(R.string.Send_Confirmation_Title),
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
+            },
+            menuItems = listOf()
+        )
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 106.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(bottom = 106.dp)
-                ) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    val topSectionItems = buildList<@Composable () -> Unit> {
-                        add {
-                            SectionTitleCell(
-                                stringResource(R.string.Send_Confirmation_YouSend),
-                                coin.name,
-                                R.drawable.ic_arrow_up_right_12
-                            )
-                        }
-                        add {
-                            val coinAmount = App.numberFormatter.formatCoinFull(
-                                amount,
-                                coin.code,
-                                coinMaxAllowedDecimals
-                            )
+                Spacer(modifier = Modifier.height(12.dp))
+                val topSectionItems = buildList<@Composable () -> Unit> {
+                    add {
+                        SectionTitleCell(
+                            stringResource(R.string.Send_Confirmation_YouSend),
+                            coin.name,
+                            R.drawable.ic_arrow_up_right_12
+                        )
+                    }
+                    add {
+                        val coinAmount = App.numberFormatter.formatCoinFull(
+                            amount,
+                            coin.code,
+                            coinMaxAllowedDecimals
+                        )
 
-                            val currencyAmount = rate?.let { rate ->
-                                rate.copy(value = amount.times(rate.value))
-                                    .getFormattedFull()
-                            }
+                        val currencyAmount = rate?.let { rate ->
+                            rate.copy(value = amount.times(rate.value))
+                                .getFormattedFull()
+                        }
 
-                            ConfirmAmountCell(currencyAmount, coinAmount, coin.imageUrl)
-                        }
+                        ConfirmAmountCell(currencyAmount, coinAmount, coin.imageUrl)
+                    }
+                    add {
+                        TransactionInfoAddressCell(
+                            title = stringResource(R.string.Send_Confirmation_To),
+                            value = address.hex,
+                            showAdd = contact == null,
+                            blockchainType = blockchainType,
+                            navController = navController
+                        )
+                    }
+                    if (isInactiveAddress) {
                         add {
-                            TransactionInfoAddressCell(
-                                title = stringResource(R.string.Send_Confirmation_To),
-                                value = address.hex,
-                                showAdd = contact == null,
-                                blockchainType = blockchainType,
-                                navController = navController
-                            )
-                        }
-                        if (isInactiveAddress) {
-                            add {
-                                InactiveAddressWarningItem(navController)
-                            }
-                        }
-                        contact?.let {
-                            add {
-                                TransactionInfoContactCell(name = contact.name)
-                            }
+                            InactiveAddressWarningItem(navController)
                         }
                     }
-
-                    CellUniversalLawrenceSection(topSectionItems)
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    val bottomSectionItems = buildList<@Composable () -> Unit> {
+                    contact?.let {
                         add {
-                            HSFeeInputRawWithViewState(
-                                title = stringResource(R.string.FeeInfo_TronFee_Title),
-                                info = stringResource(R.string.FeeInfo_TronFee_Description),
+                            TransactionInfoContactCell(name = contact.name)
+                        }
+                    }
+                }
+
+                CellUniversalLawrenceSection(topSectionItems)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                val bottomSectionItems = buildList<@Composable () -> Unit> {
+                    add {
+                        HSFeeInputRawWithViewState(
+                            title = stringResource(R.string.FeeInfo_TronFee_Title),
+                            info = stringResource(R.string.FeeInfo_TronFee_Description),
+                            coinCode = feeCoin.code,
+                            coinDecimal = feeCoinMaxAllowedDecimals,
+                            fee = fee,
+                            viewState = feeViewState,
+                            amountInputType = amountInputType,
+                            rate = feeCoinRate,
+                            navController = navController
+                        )
+                    }
+
+                    activationFee?.let {
+                        add {
+                            HSFeeInputRaw(
+                                title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
+                                info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
                                 coinCode = feeCoin.code,
                                 coinDecimal = feeCoinMaxAllowedDecimals,
-                                fee = fee,
-                                viewState = feeViewState,
+                                fee = it,
                                 amountInputType = amountInputType,
                                 rate = feeCoinRate,
                                 navController = navController
                             )
                         }
+                    }
 
-                        activationFee?.let {
-                            add {
-                                HSFeeInputRaw(
-                                    title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
-                                    info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
-                                    coinCode = feeCoin.code,
-                                    coinDecimal = feeCoinMaxAllowedDecimals,
-                                    fee = it,
-                                    amountInputType = amountInputType,
-                                    rate = feeCoinRate,
-                                    navController = navController
-                                )
-                            }
-                        }
-
-                        resourcesConsumed?.let {
-                            add {
-                                ResourcesConsumed(
-                                    title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
-                                    value = it,
-                                    info = stringResource(R.string.FeeInfo_TronResourcesConsumed_Description),
-                                    navController = navController
-                                )
-                            }
-                        }
-
-                        if (!memo.isNullOrBlank()) {
-                            add {
-                                MemoCell(memo)
-                            }
+                    resourcesConsumed?.let {
+                        add {
+                            ResourcesConsumed(
+                                title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
+                                value = it,
+                                info = stringResource(R.string.FeeInfo_TronResourcesConsumed_Description),
+                                navController = navController
+                            )
                         }
                     }
 
-                    CellUniversalLawrenceSection(bottomSectionItems)
-
-                    if (cautions.isNotEmpty()) {
-                        Cautions(cautions)
+                    if (!memo.isNullOrBlank()) {
+                        add {
+                            MemoCell(memo)
+                        }
                     }
                 }
 
-                SendButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                CellUniversalLawrenceSection(bottomSectionItems)
 
-                    sendResult = sendResult,
-                    onClickSend = onClickSend,
-                    enabled = sendEnabled
-                )
+                if (cautions.isNotEmpty()) {
+                    Cautions(cautions)
+                }
             }
-        }
 
+            SendButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+
+                sendResult = sendResult,
+                onClickSend = onClickSend,
+                enabled = sendEnabled
+            )
+        }
     }
 }
 

@@ -48,16 +48,14 @@ class TopNftCollectionsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            TopNftCollectionsScreen(
-                viewModel,
-                { navController.popBackStack() },
-                { blockchainType, collectionUid ->
-                    val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
-                    navController.slideFromBottom(R.id.nftCollectionFragment, args)
-                }
-            )
-        }
+        TopNftCollectionsScreen(
+            viewModel,
+            { navController.popBackStack() },
+            { blockchainType, collectionUid ->
+                val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType.uid)
+                navController.slideFromBottom(R.id.nftCollectionFragment, args)
+            }
+        )
     }
 
     companion object {

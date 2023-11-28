@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockoutManager
@@ -25,10 +26,14 @@ import kotlinx.coroutines.launch
 class PinConfirmViewModel(
     private val pinComponent: IPinComponent,
     private val lockoutManager: ILockoutManager,
-    private val timer: OneTimeTimer
+    private val timer: OneTimeTimer,
+    private val localStorage: ILocalStorage,
 ) : ViewModel(), OneTimerDelegate {
 
     private var attemptsLeft: Int? = null
+
+    var pinRandomized by mutableStateOf(localStorage.pinRandomized)
+        private set
 
     var uiState by mutableStateOf(
         PinConfirmViewState(
@@ -49,6 +54,11 @@ class PinConfirmViewModel(
 
     override fun onFire() {
         updateLockoutState()
+    }
+
+    fun updatePinRandomized(random: Boolean) {
+        localStorage.pinRandomized = random
+        pinRandomized = random
     }
 
     fun onKeyClick(number: Int) {
@@ -139,7 +149,8 @@ class PinConfirmViewModel(
             return PinConfirmViewModel(
                 App.pinComponent,
                 lockoutManager,
-                OneTimeTimer()
+                OneTimeTimer(),
+                App.localStorage
             ) as T
         }
     }

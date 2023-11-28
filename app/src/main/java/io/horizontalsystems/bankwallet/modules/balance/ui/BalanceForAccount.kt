@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,6 +53,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -65,8 +67,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
     val coroutineScope = rememberCoroutineScope()
     val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.setConnectionUri(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+            viewModel.handleScannedData(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
         }
+    }
+
+    viewModel.uiState.errorMessage?.let { message ->
+        val view = LocalView.current
+        HudHelper.showErrorMessage(view, text = message)
+        viewModel.errorShown()
     }
 
     when (viewModel.connectionResult) {
@@ -178,7 +186,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 viewModel.totalUiState
                             )
                         } else {
-                            BalanceItemsEmpty(navController, accountViewItem)
+                            BalanceItemsEmpty(navController)
                         }
                     }
 

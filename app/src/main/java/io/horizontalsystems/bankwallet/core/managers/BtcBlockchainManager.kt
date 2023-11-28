@@ -1,17 +1,19 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
-import io.horizontalsystems.bitcoincore.BitcoinCore
+import io.horizontalsystems.bitcoincore.BitcoinCore.SyncMode
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class BtcBlockchainManager(
     private val storage: BlockchainSettingsStorage,
-    marketKit: MarketKitWrapper
+    private val appConfigProvider: AppConfigProvider,
+    marketKit: MarketKitWrapper,
 ) {
 
     private val restoreModeUpdatedSubject = PublishSubject.create<BlockchainType>()
@@ -20,6 +22,8 @@ class BtcBlockchainManager(
     private val transactionSortModeUpdatedSubject = PublishSubject.create<BlockchainType>()
     val transactionSortModeUpdatedObservable: Observable<BlockchainType> =
         transactionSortModeUpdatedSubject
+
+    private val blockchairSyncEnabledBlockchains = listOf(BlockchainType.Bitcoin, BlockchainType.BitcoinCash)
 
     private val blockchainTypes = listOf(
         BlockchainType.Bitcoin,
@@ -34,18 +38,32 @@ class BtcBlockchainManager(
     fun blockchain(blockchainType: BlockchainType) =
         allBlockchains.firstOrNull { blockchainType == it.type }
 
+    private fun defaultRestoreMode(blockchainType: BlockchainType) =
+        if (blockchainType in blockchairSyncEnabledBlockchains) BtcRestoreMode.Blockchair else BtcRestoreMode.Hybrid
+
     fun restoreMode(blockchainType: BlockchainType): BtcRestoreMode {
-        return storage.btcRestoreMode(blockchainType) ?: BtcRestoreMode.Api
+        return storage.btcRestoreMode(blockchainType) ?: defaultRestoreMode(blockchainType)
     }
 
-    fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): BitcoinCore.SyncMode {
+    fun availableRestoreModes(blockchainType: BlockchainType) =
+        BtcRestoreMode.values().let {
+            val values = it.toList()
+            if (blockchainType !in blockchairSyncEnabledBlockchains) {
+                values - BtcRestoreMode.Blockchair
+            } else {
+                values
+            }
+        }
+
+    fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): SyncMode {
         if (accountOrigin == AccountOrigin.Created) {
-            return BitcoinCore.SyncMode.NewWallet()
+            return SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
         }
 
         return when (restoreMode(blockchainType)) {
-            BtcRestoreMode.Api -> BitcoinCore.SyncMode.Api()
-            BtcRestoreMode.Blockchain -> BitcoinCore.SyncMode.Full()
+            BtcRestoreMode.Blockchair -> SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
+            BtcRestoreMode.Hybrid -> SyncMode.Api()
+            BtcRestoreMode.Blockchain -> SyncMode.Full()
         }
     }
 

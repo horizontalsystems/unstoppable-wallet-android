@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +16,7 @@ import kotlinx.parcelize.Parcelize
 
 object MainModule {
 
-    class Factory(private val wcDeepLink: String?) : ViewModelProvider.Factory {
+    class Factory(private val wcDeepLink: Uri?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MainViewModel(
@@ -74,7 +75,8 @@ object MainModule {
     }
 
     data class UiState(
-        val selectedPageIndex: Int,
+        val selectedTabIndex: Int,
+        val deeplinkPage: DeeplinkPage?,
         val mainNavItems: List<NavigationViewItem>,
         val showRateAppDialog: Boolean,
         val contentHidden: Boolean,
@@ -84,3 +86,8 @@ object MainModule {
         val wcSupportState: WC2Manager.SupportState?
     )
 }
+
+data class DeeplinkPage(
+    val navigationId: Int,
+    val bundle: Bundle? = null
+)

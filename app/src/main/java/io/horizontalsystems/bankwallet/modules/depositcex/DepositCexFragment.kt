@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexDepositNetwork
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 
@@ -30,35 +29,33 @@ class DepositCexFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val cexAsset = arguments?.parcelable<CexAsset>("cexAsset")
         val network = arguments?.parcelable<CexDepositNetwork>("cexDepositNetwork")
-        ComposeAppTheme {
-            val navigatedFromMain = navController.previousBackStackEntry?.destination?.id == R.id.mainFragment
-            val navigateBack: () -> Unit = { navController.popBackStack() }
+        val navigatedFromMain = navController.previousBackStackEntry?.destination?.id == R.id.mainFragment
+        val navigateBack: () -> Unit = { navController.popBackStack() }
 
-            if (cexAsset != null) {
-                val networks = cexAsset.depositNetworks
-                if (networks.isEmpty() || network != null || networks.size == 1) {
-                    DepositQrCodeScreen(
-                        cexAsset = cexAsset,
-                        onNavigateBack = if (navigatedFromMain) null else navigateBack,
-                        onClose = { navController.popBackStack(R.id.mainFragment, false) },
-                        network = network ?: networks.firstOrNull()
-                    )
-                } else {
-                    SelectNetworkScreen(
-                        networks = networks,
-                        onNavigateBack = if (navigatedFromMain) null else navigateBack,
-                        onClose = { navController.popBackStack(R.id.mainFragment, false) },
-                        onSelectNetwork = {
-                            navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it))
-                        }
-                    )
-                }
-
+        if (cexAsset != null) {
+            val networks = cexAsset.depositNetworks
+            if (networks.isEmpty() || network != null || networks.size == 1) {
+                DepositQrCodeScreen(
+                    cexAsset = cexAsset,
+                    onNavigateBack = if (navigatedFromMain) null else navigateBack,
+                    onClose = { navController.popBackStack(R.id.mainFragment, false) },
+                    network = network ?: networks.firstOrNull()
+                )
             } else {
-                val view = LocalView.current
-                HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
-                navController.popBackStack()
+                SelectNetworkScreen(
+                    networks = networks,
+                    onNavigateBack = if (navigatedFromMain) null else navigateBack,
+                    onClose = { navController.popBackStack(R.id.mainFragment, false) },
+                    onSelectNetwork = {
+                        navController.slideFromRight(R.id.depositCexFragment, args(cexAsset, it))
+                    }
+                )
             }
+
+        } else {
+            val view = LocalView.current
+            HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
+            navController.popBackStack()
         }
     }
 

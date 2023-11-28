@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,6 +26,8 @@ import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.helpers.HudHelper
+import java.math.BigDecimal
 
 @Composable
 fun SendEvmScreen(
@@ -32,7 +35,8 @@ fun SendEvmScreen(
     navController: NavController,
     viewModel: SendEvmViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    prefilledAmount: BigDecimal? = null,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -43,8 +47,11 @@ fun SendEvmScreen(
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.token.blockchainType))
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
+        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+    )
     val amountUnique = paymentAddressViewModel.amountUnique
+    val view = LocalView.current
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
@@ -90,6 +97,7 @@ fun SendEvmScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = uiState.prefilledAddress,
                     tokenQuery = wallet.token.tokenQuery,
                     coinCode = wallet.coin.code,
                     error = addressError,
@@ -105,11 +113,15 @@ fun SendEvmScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-                    viewModel.getSendData()?.let {
-                        navController.slideFromRight(
-                            R.id.sendEvmConfirmationFragment,
-                            SendEvmConfirmationModule.prepareParams(it, R.id.sendXFragment, sendEntryPointDestId)
-                        )
+                    if (viewModel.hasConnection()) {
+                        viewModel.getSendData()?.let {
+                            navController.slideFromRight(
+                                R.id.sendEvmConfirmationFragment,
+                                SendEvmConfirmationModule.prepareParams(it, R.id.sendXFragment, sendEntryPointDestId)
+                            )
+                        }
+                    } else {
+                        HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
                     }
                 },
                 enabled = proceedEnabled

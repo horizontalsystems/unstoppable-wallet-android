@@ -45,13 +45,11 @@ class ManageWalletsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            ManageWalletsScreen(
-                navController,
-                viewModel,
-                restoreSettingsViewModel
-            )
-        }
+        ManageWalletsScreen(
+            navController,
+            viewModel,
+            restoreSettingsViewModel
+        )
     }
 
 }

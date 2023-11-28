@@ -48,9 +48,7 @@ class TvlFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ComposeAppTheme {
-            TvlScreen(viewModel, tvlChartViewModel, navController) { onCoinClick(it, navController) }
-        }
+        TvlScreen(viewModel, tvlChartViewModel, navController) { onCoinClick(it, navController) }
     }
 
     private fun onCoinClick(coinUid: String?, navController: NavController) {

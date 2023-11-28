@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -87,6 +88,7 @@ fun SendConfirmationScreen(
                 SnackbarDuration.INDEFINITE
             )
         }
+
         SendResult.Sent -> {
             HudHelper.showSuccessMessage(
                 view,
@@ -94,9 +96,11 @@ fun SendConfirmationScreen(
                 SnackbarDuration.LONG
             )
         }
+
         is SendResult.Failed -> {
             HudHelper.showErrorMessage(view, sendResult.caution.getString())
         }
+
         null -> Unit
     }
 
@@ -107,101 +111,108 @@ fun SendConfirmationScreen(
         }
     }
 
-    ComposeAppTheme {
-        Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = stringResource(R.string.Send_Confirmation_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = listOf()
-            )
-            Box(
-                modifier = Modifier.fillMaxSize()
+    DisposableLifecycleCallbacks(
+        //additional close for cases when user closes app immediately after sending
+        onResume = {
+            if (sendResult == SendResult.Sent) {
+                navController.popBackStack(closeUntilDestId, true)
+            }
+        }
+    )
+
+    Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = stringResource(R.string.Send_Confirmation_Title),
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
+            },
+            menuItems = listOf()
+        )
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 106.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(bottom = 106.dp)
-                ) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    val topSectionItems = buildList<@Composable () -> Unit> {
-                        add {
-                            SectionTitleCell(
-                                stringResource(R.string.Send_Confirmation_YouSend),
-                                coin.name,
-                                R.drawable.ic_arrow_up_right_12
-                            )
-                        }
-                        add {
-                            val coinAmount = App.numberFormatter.formatCoinFull(
-                                amount,
-                                coin.code,
-                                coinMaxAllowedDecimals
-                            )
+                Spacer(modifier = Modifier.height(12.dp))
+                val topSectionItems = buildList<@Composable () -> Unit> {
+                    add {
+                        SectionTitleCell(
+                            stringResource(R.string.Send_Confirmation_YouSend),
+                            coin.name,
+                            R.drawable.ic_arrow_up_right_12
+                        )
+                    }
+                    add {
+                        val coinAmount = App.numberFormatter.formatCoinFull(
+                            amount,
+                            coin.code,
+                            coinMaxAllowedDecimals
+                        )
 
-                            val currencyAmount = rate?.let { rate ->
-                                rate.copy(value = amount.times(rate.value))
-                                    .getFormattedFull()
-                            }
+                        val currencyAmount = rate?.let { rate ->
+                            rate.copy(value = amount.times(rate.value))
+                                .getFormattedFull()
+                        }
 
-                            ConfirmAmountCell(currencyAmount, coinAmount, coin.imageUrl)
-                        }
+                        ConfirmAmountCell(currencyAmount, coinAmount, coin.imageUrl)
+                    }
+                    add {
+                        TransactionInfoAddressCell(
+                            title = stringResource(R.string.Send_Confirmation_To),
+                            value = address.hex,
+                            showAdd = contact == null,
+                            blockchainType = blockchainType,
+                            navController = navController
+                        )
+                    }
+                    contact?.let {
                         add {
-                            TransactionInfoAddressCell(
-                                title = stringResource(R.string.Send_Confirmation_To),
-                                value = address.hex,
-                                showAdd = contact == null,
-                                blockchainType = blockchainType,
-                                navController = navController
-                            )
-                        }
-                        contact?.let {
-                            add {
-                                TransactionInfoContactCell(name = contact.name)
-                            }
-                        }
-                        if (lockTimeInterval != null) {
-                            add {
-                                HSHodler(lockTimeInterval = lockTimeInterval)
-                            }
+                            TransactionInfoContactCell(name = contact.name)
                         }
                     }
-
-                    CellUniversalLawrenceSection(topSectionItems)
-
-                    Spacer(modifier = Modifier.height(28.dp))
-
-                    val bottomSectionItems = buildList<@Composable () -> Unit> {
+                    if (lockTimeInterval != null) {
                         add {
-                            HSFeeInputRaw(
-                                coinCode = feeCoin.code,
-                                coinDecimal = feeCoinMaxAllowedDecimals,
-                                fee = fee,
-                                amountInputType = amountInputType,
-                                rate = feeCoinRate,
-                                navController = navController
-                            )
-                        }
-                        if (!memo.isNullOrBlank()) {
-                            add {
-                                MemoCell(memo)
-                            }
+                            HSHodler(lockTimeInterval = lockTimeInterval)
                         }
                     }
-
-                    CellUniversalLawrenceSection(bottomSectionItems)
                 }
 
-                SendButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                    sendResult = sendResult,
-                    onClickSend = onClickSend
-                )
+                CellUniversalLawrenceSection(topSectionItems)
+
+                Spacer(modifier = Modifier.height(28.dp))
+
+                val bottomSectionItems = buildList<@Composable () -> Unit> {
+                    add {
+                        HSFeeInputRaw(
+                            coinCode = feeCoin.code,
+                            coinDecimal = feeCoinMaxAllowedDecimals,
+                            fee = fee,
+                            amountInputType = amountInputType,
+                            rate = feeCoinRate,
+                            navController = navController
+                        )
+                    }
+                    if (!memo.isNullOrBlank()) {
+                        add {
+                            MemoCell(memo)
+                        }
+                    }
+                }
+
+                CellUniversalLawrenceSection(bottomSectionItems)
             }
+
+            SendButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                sendResult = sendResult,
+                onClickSend = onClickSend
+            )
         }
     }
 }
@@ -217,6 +228,7 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
                 enabled = false
             )
         }
+
         SendResult.Sent -> {
             ButtonPrimaryYellow(
                 modifier = modifier,
@@ -225,6 +237,7 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
                 enabled = false
             )
         }
+
         else -> {
             ButtonPrimaryYellow(
                 modifier = modifier,

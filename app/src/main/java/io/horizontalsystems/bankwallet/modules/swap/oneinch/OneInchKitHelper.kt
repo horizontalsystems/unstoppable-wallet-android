@@ -14,9 +14,10 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class OneInchKitHelper(
-    evmKit: EthereumKit
+    evmKit: EthereumKit,
+    apiKey: String
 ) {
-    private val oneInchKit = OneInchKit.getInstance(evmKit)
+    private val oneInchKit = OneInchKit.getInstance(evmKit, apiKey)
 
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")

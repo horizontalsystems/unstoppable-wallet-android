@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.providers.FeeRates
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.AddressData
+import io.horizontalsystems.bankwallet.entities.AddressUriParserResult
 import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.CexType
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -111,6 +111,8 @@ interface ILocalStorage {
     val marketsTabEnabledFlow: StateFlow<Boolean>
     var nonRecommendedAccountAlertDismissedAccounts: Set<String>
     var personalSupportEnabled: Boolean
+    var hideSuspiciousTransactions: Boolean
+    var pinRandomized: Boolean
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
@@ -351,6 +353,11 @@ interface ISendSolanaAdapter {
     suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
 }
 
+interface ISendTonAdapter {
+    val availableBalance: BigDecimal
+    suspend fun send(amount: BigDecimal, address: String)
+}
+
 interface ISendTronAdapter {
     val balanceData: BalanceData
     val trxBalanceData: BalanceData
@@ -443,7 +450,7 @@ interface IFeeRateProvider {
 }
 
 interface IAddressParser {
-    fun parse(paymentAddress: String): AddressData
+    fun parse(paymentAddress: String): AddressUriParserResult
 }
 
 interface IAccountCleaner {

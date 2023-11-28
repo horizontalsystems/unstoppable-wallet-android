@@ -87,222 +87,223 @@ fun ContactsScreen(
         }
     }
 
-    ComposeAppTheme {
-        var bottomSheetType: ContactsScreenBottomSheetType? by remember { mutableStateOf(null) }
-        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        val coroutineScope = rememberCoroutineScope()
-        var selectedContact by remember { mutableStateOf<Contact?>(null) }
-        var searchMode by remember { mutableStateOf(uiState.searchMode) }
+    var bottomSheetType: ContactsScreenBottomSheetType? by remember { mutableStateOf(null) }
+    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+    var selectedContact by remember { mutableStateOf<Contact?>(null) }
+    var searchMode by remember { mutableStateOf(uiState.searchMode) }
 
-        ModalBottomSheetLayout(
-            sheetState = bottomSheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                when (bottomSheetType) {
-                    null -> {
-                        Spacer(modifier = Modifier.height(1.dp))
-                    }
-                    ContactsScreenBottomSheetType.ReplaceAddressConfirmation -> {
-                        val warningMessage = selectedContact?.let { viewModel.replaceWarningMessage(it)?.getString() }
-                        ConfirmationBottomSheet(
-                            title = stringResource(R.string.Alert_TitleWarning),
-                            text = warningMessage ?: "",
-                            iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                            confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
-                            cautionType = Caution.Type.Warning,
-                            cancelText = stringResource(R.string.Button_Cancel),
-                            onConfirm = {
-                                selectedContact?.let {
-                                    coroutineScope.launch {
-                                        bottomSheetState.hide()
-                                        onNavigateToContact(it)
-                                    }
-                                }
-                            },
-                            onClose = {
-                                coroutineScope.launch { bottomSheetState.hide() }
-                            }
-                        )
-                    }
-                    ContactsScreenBottomSheetType.RestoreContactsConfirmation -> {
-                        ConfirmationBottomSheet(
-                            title = stringResource(R.string.Alert_TitleWarning),
-                            text = stringResource(R.string.Contacts_Restore_Warning),
-                            iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                            confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
-                            cautionType = Caution.Type.Error,
-                            cancelText = stringResource(R.string.Button_Cancel),
-                            onConfirm = {
+    ModalBottomSheetLayout(
+        sheetState = bottomSheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            when (bottomSheetType) {
+                null -> {
+                    Spacer(modifier = Modifier.height(1.dp))
+                }
+
+                ContactsScreenBottomSheetType.ReplaceAddressConfirmation -> {
+                    val warningMessage = selectedContact?.let { viewModel.replaceWarningMessage(it)?.getString() }
+                    ConfirmationBottomSheet(
+                        title = stringResource(R.string.Alert_TitleWarning),
+                        text = warningMessage ?: "",
+                        iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                        confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
+                        cautionType = Caution.Type.Warning,
+                        cancelText = stringResource(R.string.Button_Cancel),
+                        onConfirm = {
+                            selectedContact?.let {
                                 coroutineScope.launch {
                                     bottomSheetState.hide()
-                                    restoreLauncher.launch(arrayOf("application/json"))
+                                    onNavigateToContact(it)
                                 }
-                            },
-                            onClose = {
-                                coroutineScope.launch { bottomSheetState.hide() }
                             }
+                        },
+                        onClose = {
+                            coroutineScope.launch { bottomSheetState.hide() }
+                        }
+                    )
+                }
+
+                ContactsScreenBottomSheetType.RestoreContactsConfirmation -> {
+                    ConfirmationBottomSheet(
+                        title = stringResource(R.string.Alert_TitleWarning),
+                        text = stringResource(R.string.Contacts_Restore_Warning),
+                        iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                        confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
+                        cautionType = Caution.Type.Error,
+                        cancelText = stringResource(R.string.Button_Cancel),
+                        onConfirm = {
+                            coroutineScope.launch {
+                                bottomSheetState.hide()
+                                restoreLauncher.launch(arrayOf("application/json"))
+                            }
+                        },
+                        onClose = {
+                            coroutineScope.launch { bottomSheetState.hide() }
+                        }
+                    )
+                }
+            }
+
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = ComposeAppTheme.colors.tyler)
+        ) {
+            AppBar(
+                title = {
+                    if (searchMode) {
+                        var searchText by remember { mutableStateOf(uiState.nameQuery ?: "") }
+                        val focusRequester = remember { FocusRequester() }
+
+                        BasicTextField(
+                            modifier = Modifier
+                                .focusRequester(focusRequester),
+                            value = searchText,
+                            onValueChange = { value ->
+                                searchText = value
+                                viewModel.onEnterQuery(value)
+                            },
+                            singleLine = true,
+                            textStyle = ColoredTextStyle(
+                                color = ComposeAppTheme.colors.leah,
+                                textStyle = ComposeAppTheme.typography.body
+                            ),
+                            decorationBox = { innerTextField ->
+                                if (searchText.isEmpty()) {
+                                    body_grey50(stringResource(R.string.Market_Search_Hint))
+                                }
+                                innerTextField()
+                            },
+                            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                        )
+                        SideEffect {
+                            focusRequester.requestFocus()
+                        }
+                    } else {
+                        title3_leah(text = stringResource(id = R.string.Contacts))
+                    }
+                },
+                navigationIcon = {
+                    HsBackButton {
+                        if (searchMode) {
+                            viewModel.onEnterQuery(null)
+                            searchMode = false
+                        } else {
+                            onNavigateToBack()
+                        }
+                    }
+                },
+                menuItems = if (searchMode) {
+                    listOf()
+                } else buildList {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Search),
+                            icon = R.drawable.icon_search,
+                            enabled = true,
+                            onClick = {
+                                searchMode = true
+                            }
+                        )
+                    )
+                    if (uiState.showAddContact) {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Contacts_NewContact),
+                                icon = R.drawable.icon_user_plus,
+                                tint = ComposeAppTheme.colors.jacob,
+                                onClick = onNavigateToCreateContact
+                            )
+                        )
+                    }
+                    if (uiState.showMoreOptions) {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Contacts_ActionMore),
+                                icon = R.drawable.ic_more2_20,
+                                enabled = true,
+                                onClick = {
+                                    showMoreSelectorDialog = true
+                                }
+                            )
                         )
                     }
                 }
-
-            }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = ComposeAppTheme.colors.tyler)
-            ) {
-                AppBar(
-                    title = {
-                        if (searchMode) {
-                            var searchText by remember { mutableStateOf(uiState.nameQuery ?: "") }
-                            val focusRequester = remember { FocusRequester() }
-
-                            BasicTextField(
-                                modifier = Modifier
-                                    .focusRequester(focusRequester),
-                                value = searchText,
-                                onValueChange = { value ->
-                                    searchText = value
-                                    viewModel.onEnterQuery(value)
-                                },
-                                singleLine = true,
-                                textStyle = ColoredTextStyle(
-                                    color = ComposeAppTheme.colors.leah,
-                                    textStyle = ComposeAppTheme.typography.body
-                                ),
-                                decorationBox = { innerTextField ->
-                                    if (searchText.isEmpty()) {
-                                        body_grey50(stringResource(R.string.Market_Search_Hint))
-                                    }
-                                    innerTextField()
-                                },
-                                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
-                            )
-                            SideEffect {
-                                focusRequester.requestFocus()
-                            }
-                        } else {
-                            title3_leah(text = stringResource(id = R.string.Contacts))
-                        }
-                    },
-                    navigationIcon = {
-                        HsBackButton {
-                            if (searchMode) {
-                                viewModel.onEnterQuery(null)
-                                searchMode = false
-                            } else {
-                                onNavigateToBack()
-                            }
-                        }
-                    },
-                    menuItems = if (searchMode) {
-                        listOf()
-                    } else buildList {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Button_Search),
-                                icon = R.drawable.icon_search,
-                                enabled = true,
-                                onClick = {
-                                    searchMode = true
+            )
+            if (uiState.contacts.isNotEmpty()) {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Spacer(Modifier.height(12.dp))
+                    CellUniversalLawrenceSection(uiState.contacts) { contact ->
+                        Contact(contact) {
+                            if (viewModel.shouldShowReplaceWarning(contact)) {
+                                coroutineScope.launch {
+                                    bottomSheetType = ContactsScreenBottomSheetType.ReplaceAddressConfirmation
+                                    selectedContact = contact
+                                    bottomSheetState.show()
                                 }
-                            )
-                        )
-                        if (uiState.showAddContact) {
-                            add(
-                                MenuItem(
-                                    title = TranslatableString.ResString(R.string.Contacts_NewContact),
-                                    icon = R.drawable.icon_user_plus,
-                                    tint = ComposeAppTheme.colors.jacob,
-                                    onClick = onNavigateToCreateContact
-                                )
-                            )
-                        }
-                        if (uiState.showMoreOptions) {
-                            add(
-                                MenuItem(
-                                    title = TranslatableString.ResString(R.string.Contacts_ActionMore),
-                                    icon = R.drawable.ic_more2_20,
-                                    enabled = true,
-                                    onClick = {
-                                        showMoreSelectorDialog = true
-                                    }
-                                )
-                            )
+                            } else {
+                                onNavigateToContact(contact)
+                            }
                         }
                     }
-                )
-                if (uiState.contacts.isNotEmpty()) {
-                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        Spacer(Modifier.height(12.dp))
-                        CellUniversalLawrenceSection(uiState.contacts) { contact ->
-                            Contact(contact) {
-                                if (viewModel.shouldShowReplaceWarning(contact)) {
+                    Spacer(Modifier.height(32.dp))
+                }
+            } else {
+                if (searchMode) {
+                    ListEmptyView(
+                        text = stringResource(R.string.EmptyResults),
+                        icon = R.drawable.ic_not_found
+                    )
+                } else {
+                    ScreenMessageWithAction(
+                        text = stringResource(R.string.Contacts_NoContacts),
+                        icon = R.drawable.icon_user_plus
+                    ) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 48.dp)
+                                .fillMaxWidth(),
+                            title = stringResource(R.string.Contacts_AddNewContact),
+                            onClick = onNavigateToCreateContact
+                        )
+                    }
+                }
+            }
+
+            if (showMoreSelectorDialog) {
+                SelectorDialogCompose(
+                    title = stringResource(R.string.Contacts_ActionMore),
+                    items = ContactsModule.ContactsAction.values().map {
+                        (SelectorItem(stringResource(it.title), false, it))
+                    },
+                    onDismissRequest = {
+                        showMoreSelectorDialog = false
+                    },
+                    onSelectItem = { action ->
+                        when (action) {
+                            ContactsModule.ContactsAction.Restore -> {
+                                if (viewModel.shouldShowRestoreWarning()) {
                                     coroutineScope.launch {
-                                        bottomSheetType = ContactsScreenBottomSheetType.ReplaceAddressConfirmation
-                                        selectedContact = contact
+                                        bottomSheetType = ContactsScreenBottomSheetType.RestoreContactsConfirmation
                                         bottomSheetState.show()
                                     }
                                 } else {
-                                    onNavigateToContact(contact)
+                                    restoreLauncher.launch(arrayOf("application/json"))
                                 }
                             }
-                        }
-                        Spacer(Modifier.height(32.dp))
-                    }
-                } else {
-                    if (searchMode) {
-                        ListEmptyView(
-                            text = stringResource(R.string.EmptyResults),
-                            icon = R.drawable.ic_not_found
-                        )
-                    } else {
-                        ScreenMessageWithAction(
-                            text = stringResource(R.string.Contacts_NoContacts),
-                            icon = R.drawable.icon_user_plus
-                        ) {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 48.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.Contacts_AddNewContact),
-                                onClick = onNavigateToCreateContact
-                            )
-                        }
-                    }
-                }
 
-                if (showMoreSelectorDialog) {
-                    SelectorDialogCompose(
-                        title = stringResource(R.string.Contacts_ActionMore),
-                        items = ContactsModule.ContactsAction.values().map {
-                            (SelectorItem(stringResource(it.title), false, it))
-                        },
-                        onDismissRequest = {
-                            showMoreSelectorDialog = false
-                        },
-                        onSelectItem = { action ->
-                            when (action) {
-                                ContactsModule.ContactsAction.Restore -> {
-                                    if (viewModel.shouldShowRestoreWarning()) {
-                                        coroutineScope.launch {
-                                            bottomSheetType = ContactsScreenBottomSheetType.RestoreContactsConfirmation
-                                            bottomSheetState.show()
-                                        }
-                                    } else {
-                                        restoreLauncher.launch(arrayOf("application/json"))
-                                    }
-                                }
-                                ContactsModule.ContactsAction.Backup -> {
-                                    App.pinComponent.keepUnlocked()
-                                    backupLauncher.launch(viewModel.backupFileName)
-                                }
+                            ContactsModule.ContactsAction.Backup -> {
+                                App.pinComponent.keepUnlocked()
+                                backupLauncher.launch(viewModel.backupFileName)
                             }
-                        })
-                }
+                        }
+                    })
             }
         }
     }

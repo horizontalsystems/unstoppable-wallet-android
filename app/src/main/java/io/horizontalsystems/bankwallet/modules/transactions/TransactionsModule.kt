@@ -22,8 +22,9 @@ object TransactionsModule {
                     App.contactsRepository,
                     App.transactionAdapterManager,
                     App.walletManager,
-                    TransactionFilterService(),
-                    NftMetadataService(App.nftMetadataManager)
+                    TransactionFilterService(App.spamManager),
+                    NftMetadataService(App.nftMetadataManager),
+                    App.spamManager
                 ),
                 TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager),
                 App.balanceHiddenManager

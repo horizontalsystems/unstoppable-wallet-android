@@ -42,38 +42,36 @@ fun AddTokenBlockchainSelectorScreen(
     val menuItems = emptyList<MenuItem>()
     var selectedItem = selectedBlockchain
 
-    ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = stringResource(R.string.Market_Filter_Blockchains),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = menuItems
-            )
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = stringResource(R.string.Market_Filter_Blockchains),
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
+            },
+            menuItems = menuItems
+        )
 
-            Column(
-                Modifier.verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                HSSectionRounded {
-                    blockchains.forEachIndexed { index, item ->
-                        BlockchainCell(
-                            item = item,
-                            selected = selectedItem == item,
-                            onCheck = {
-                                selectedItem = item
-                                navController.previousBackStackEntry
-                                    ?.savedStateHandle
-                                    ?.set(BlockchainSelectorResult, listOf(item))
-                                navController.popBackStack()
-                            },
-                            borderTop = index != 0
-                        )
-                    }
+        Column(
+            Modifier.verticalScroll(rememberScrollState())
+        ) {
+            Spacer(Modifier.height(12.dp))
+            HSSectionRounded {
+                blockchains.forEachIndexed { index, item ->
+                    BlockchainCell(
+                        item = item,
+                        selected = selectedItem == item,
+                        onCheck = {
+                            selectedItem = item
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set(BlockchainSelectorResult, listOf(item))
+                            navController.popBackStack()
+                        },
+                        borderTop = index != 0
+                    )
                 }
-                Spacer(Modifier.height(32.dp))
             }
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

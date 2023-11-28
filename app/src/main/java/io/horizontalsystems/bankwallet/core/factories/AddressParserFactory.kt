@@ -3,7 +3,19 @@ package io.horizontalsystems.bankwallet.core.factories
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class AddressParserFactory {
+object AddressParserFactory {
+    val uriBlockchainTypes: List<BlockchainType> = listOf(
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Dash,
+        BlockchainType.Litecoin,
+        BlockchainType.Zcash,
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceChain,
+        BlockchainType.Tron,
+    )
+
     fun parser(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Bitcoin -> AddressParser("bitcoin", true)
         BlockchainType.BitcoinCash -> AddressParser("bitcoincash", false)
@@ -14,6 +26,7 @@ class AddressParserFactory {
         BlockchainType.Ethereum -> AddressParser("ethereum", true)
         BlockchainType.BinanceSmartChain -> AddressParser("", true)
         BlockchainType.BinanceChain -> AddressParser("binance", true)
+        BlockchainType.Tron -> AddressParser("tron", true)
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
@@ -22,6 +35,7 @@ class AddressParserFactory {
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
         BlockchainType.Tron,
+        BlockchainType.Ton,
         is BlockchainType.Unsupported -> AddressParser("", false)
     }
 }
