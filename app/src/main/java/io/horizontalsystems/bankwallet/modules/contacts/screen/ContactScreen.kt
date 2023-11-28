@@ -13,6 +13,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -150,7 +151,12 @@ fun ContactScreen(
                 FormsInput(
                     modifier = Modifier
                         .focusRequester(focusRequester)
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .onGloballyPositioned {
+                            if (uiState.focusOnContactName) {
+                                focusRequester.requestFocus()
+                            }
+                        },
                     initial = viewModel.contact.name,
                     pasteEnabled = false,
                     state = uiState.error?.let { DataState.Error(it) },
@@ -176,11 +182,6 @@ fun ContactScreen(
 
                 Spacer(Modifier.height(32.dp))
             }
-        }
-    }
-    LaunchedEffect(key1 = uiState.focusOnContactName) {
-        if (uiState.focusOnContactName) {
-            focusRequester.requestFocus()
         }
     }
 }
