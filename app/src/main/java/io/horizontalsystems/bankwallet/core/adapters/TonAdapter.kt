@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.hdwalletkit.Curve
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.marketkit.models.Token
@@ -259,6 +260,8 @@ class TonTransactionRecord(
     enum class Type {
         Incoming, Outgoing, Unknown
     }
+
+    override fun status(lastBlockHeight: Int?) = TransactionStatus.Completed
 }
 
 data class TonTransfer(val src: String, val dest: String, val amount: TransactionValue.CoinValue)
