@@ -186,6 +186,7 @@ val Blockchain.description: String
         BlockchainType.Gnosis -> "xDAI, ERC20 tokens"
         BlockchainType.Fantom -> "FTM, ERC20 tokens"
         BlockchainType.Tron -> "TRX, TRC20 tokens"
+        BlockchainType.Ton -> "TON"
         else -> ""
     }
 
@@ -209,6 +210,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Tron,
+        BlockchainType.Ton,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Zcash,
