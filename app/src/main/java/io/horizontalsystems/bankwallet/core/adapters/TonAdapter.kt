@@ -26,6 +26,8 @@ import io.horizontalsystems.tonkit.TonKit
 import io.horizontalsystems.tonkit.TonKitFactory
 import io.horizontalsystems.tonkit.TonTransaction
 import io.horizontalsystems.tonkit.TransactionType
+import io.horizontalsystems.tonkit.Transfer
+import io.horizontalsystems.tonkit.transfers
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -142,19 +144,20 @@ class TonAdapter(
     }
 
     private fun createTransactionRecord(transaction: TonTransaction): TransactionRecord {
-        val value = when (transaction.type) {
-            TransactionType.Incoming.name -> transaction.value_?.toBigDecimal()?.movePointLeft(decimals)
-            TransactionType.Outgoing.name -> transaction.value_?.toBigDecimal()?.movePointLeft(decimals)?.negate()
-            else -> null
+        val amount = transaction.amount?.toBigDecimal()?.movePointLeft(decimals)
+
+        val value = if (transaction.type == TransactionType.Outgoing) {
+            amount?.negate()
+        } else {
+            amount
         } ?: BigDecimal.ZERO
 
         val fee = transaction.fee?.toBigDecimal()?.movePointLeft(decimals)
 
         val type = when (transaction.type) {
-            TransactionType.Incoming.name -> TonTransactionRecord.Type.Incoming
-            TransactionType.Outgoing.name -> TonTransactionRecord.Type.Outgoing
-            TransactionType.Unknown.name -> TonTransactionRecord.Type.Unknown
-            else -> TonTransactionRecord.Type.Unknown
+            TransactionType.Incoming -> TonTransactionRecord.Type.Incoming
+            TransactionType.Outgoing -> TonTransactionRecord.Type.Outgoing
+            TransactionType.Unknown -> TonTransactionRecord.Type.Unknown
         }
 
         return TonTransactionRecord(
@@ -168,8 +171,16 @@ class TonAdapter(
             mainValue = TransactionValue.CoinValue(wallet.token, value),
             fee = fee?.let { TransactionValue.CoinValue(wallet.token, it) },
             type = type,
-            from = transaction.src,
-            to = transaction.dest,
+            transfers = transaction.transfers.map { createTransferRecprd(it) }
+        )
+    }
+
+    private fun createTransferRecprd(transfer: Transfer): TonTransfer {
+        val amount = transfer.amount.toBigDecimal().movePointLeft(decimals)
+        return TonTransfer(
+            src = transfer.src,
+            dest = transfer.dest,
+            amount = TransactionValue.CoinValue(wallet.token, amount),
         )
     }
 
@@ -188,7 +199,7 @@ class TonAdapter(
         return tonKit.newTransactionsFlow
             .map {
                 if (tonTransactionType != null) {
-                    it.filter { it.type == tonTransactionType.name }
+                    it.filter { it.type == tonTransactionType }
                 } else {
                     it
                 }
@@ -233,8 +244,7 @@ class TonTransactionRecord(
     override val mainValue: TransactionValue,
     val fee: TransactionValue?,
     val type: Type,
-    val from: String?,
-    val to: String?
+    val transfers: List<TonTransfer>
 ) : TransactionRecord(
     uid,
     transactionHash,
@@ -250,3 +260,5 @@ class TonTransactionRecord(
         Incoming, Outgoing, Unknown
     }
 }
+
+data class TonTransfer(val src: String, val dest: String, val amount: TransactionValue.CoinValue)
