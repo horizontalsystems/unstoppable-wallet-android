@@ -381,7 +381,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             enabled = !viewItem.wallet.token.isCustom,
             onClick = {
                 val coinUid = viewItem.wallet.coin.uid
-                val arguments = CoinFragment.prepareParams(coinUid)
+                val arguments = CoinFragment.prepareParams(coinUid, "wallet_token_balance")
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
             },

@@ -106,7 +106,7 @@ class MarketFiltersService(
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
-            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code)
+            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code, "market_advanced_search_results")
                 .doOnSuccess {
                     cache = it
                 }
