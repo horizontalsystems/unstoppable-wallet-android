@@ -450,20 +450,27 @@ class TransactionViewItemFactory(
         val title: String
         val subtitle: String?
         val primaryValue: ColoredValue?
+        val singleTransfer = record.transfers.singleOrNull()
 
         when (record.type) {
             Incoming -> {
                 title = Translator.getString(R.string.Transactions_Receive)
-                subtitle = record.from?.let {
-                    Translator.getString(R.string.Transactions_From, mapped(it, record.blockchainType))
+                subtitle = if (singleTransfer == null) {
+                    Translator.getString(R.string.Transactions_Multiple)
+                } else {
+                    Translator.getString(R.string.Transactions_From, mapped(singleTransfer.src, record.blockchainType))
                 }
+
                 primaryValue = getColoredValue(record.mainValue, ColorName.Remus)
             }
             Outgoing -> {
                 title = Translator.getString(R.string.Transactions_Send)
-                subtitle = record.to?.let {
-                    Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
+                subtitle = if (singleTransfer == null) {
+                    Translator.getString(R.string.Transactions_Multiple)
+                } else {
+                    Translator.getString(R.string.Transactions_To, mapped(singleTransfer.dest, record.blockchainType))
                 }
+
                 primaryValue = getColoredValue(record.mainValue, ColorName.Lucian)
             }
             Unknown -> {
@@ -477,7 +484,7 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = null,
             title = title,
-            subtitle = subtitle ?: "",
+            subtitle = subtitle,
             primaryValue = primaryValue,
             secondaryValue = null,
             showAmount = showAmount,
