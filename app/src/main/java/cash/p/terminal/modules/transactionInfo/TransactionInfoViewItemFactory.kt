@@ -95,25 +95,28 @@ class TransactionInfoViewItemFactory(
             is TonTransactionRecord -> {
                 when (transaction.type) {
                     TonTransactionRecord.Type.Incoming -> {
-                        itemSections.add(
-                            getReceiveSectionItems(
-                                value = transaction.mainValue,
-                                fromAddress = transaction.from,
-                                coinPrice = rates[transaction.mainValue.coinUid],
-                                hideAmount = transactionItem.hideAmount,
+                        transaction.transfers.forEach { transfer ->
+                            itemSections.add(
+                                getReceiveSectionItems(
+                                    value = transfer.amount,
+                                    fromAddress = transfer.src,
+                                    coinPrice = rates[transfer.amount.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                )
                             )
-                        )
+                        }
                     }
                     TonTransactionRecord.Type.Outgoing -> {
-                        itemSections.add(
-                            getSendSectionItems(
-                                value = transaction.mainValue,
-                                toAddress = transaction.to,
-                                coinPrice = rates[transaction.mainValue.coinUid],
-                                hideAmount = transactionItem.hideAmount,
-                                nftMetadata = nftMetadata
+                        transaction.transfers.forEach { transfer ->
+                            itemSections.add(
+                                getSendSectionItems(
+                                    value = transfer.amount,
+                                    toAddress = transfer.dest,
+                                    coinPrice = rates[transfer.amount.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                )
                             )
-                        )
+                        }
                     }
                     TonTransactionRecord.Type.Unknown -> {
                     }
