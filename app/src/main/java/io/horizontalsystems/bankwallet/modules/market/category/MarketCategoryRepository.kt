@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.category
 
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.reactivex.Single
 import kotlin.math.min
 
@@ -21,7 +21,7 @@ class MarketCategoryRepository(
     @Synchronized
     private fun getMarketItems(coinCategoryUid: String, forceRefresh: Boolean, baseCurrency: Currency): List<MarketItem> =
         if (forceRefresh && (cacheTimestamp + cacheValidPeriodInMillis < System.currentTimeMillis()) || cache.isEmpty()) {
-            val marketInfoList = marketKit.marketInfosSingle(coinCategoryUid, baseCurrency.code).blockingGet()
+            val marketInfoList = marketKit.marketInfosSingle(coinCategoryUid, baseCurrency.code, "market_category").blockingGet()
 
             val marketItems = marketInfoList.map { marketInfo ->
                 MarketItem.createFromCoinMarket(marketInfo, baseCurrency)

@@ -42,7 +42,7 @@ class CoinTweetsService(
             Single.just(tmpUser)
         } else {
             marketKit
-                .marketInfoOverviewSingle(coinUid, "USD", "en")
+                .marketInfoOverviewSingle(coinUid, "USD", "en", "market_tweets")
                 .flatMap {
                     val username = it.links[LinkType.Twitter]
 

@@ -151,7 +151,7 @@ fun TransactionAmountCell(
 ) {
     val clickable = coinUid?.let {
         Modifier.clickable {
-            navController.slideFromRight(R.id.coinFragment, CoinFragment.prepareParams(it))
+            navController.slideFromRight(R.id.coinFragment, CoinFragment.prepareParams(it, "transaction_info"))
         }
     } ?: Modifier
 

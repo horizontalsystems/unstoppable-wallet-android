@@ -19,7 +19,7 @@ object TopPlatformsModule {
     class Factory(private val timeDuration: TimeDuration?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val repository = TopPlatformsRepository(App.marketKit, App.currencyManager)
+            val repository = TopPlatformsRepository(App.marketKit, App.currencyManager, "market_top_platforms")
             val service = TopPlatformsService(repository, App.currencyManager)
             return TopPlatformsViewModel(service, timeDuration) as T
         }

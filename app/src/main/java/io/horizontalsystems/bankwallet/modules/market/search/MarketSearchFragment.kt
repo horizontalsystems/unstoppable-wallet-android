@@ -146,7 +146,7 @@ fun MarketSearchScreen(
                                 MarketSearchResults(
                                     coinResult = itemsData.coinItems,
                                     onCoinClick = { coin ->
-                                        val arguments = CoinFragment.prepareParams(coin.uid)
+                                        val arguments = CoinFragment.prepareParams(coin.uid, "market_search")
                                         navController.slideFromRight(
                                             R.id.coinFragment,
                                             arguments

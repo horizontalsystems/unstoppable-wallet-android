@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
@@ -17,6 +18,7 @@ class MarketTopCoinsService(
     private val favoritesManager: MarketFavoritesManager,
     topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
+    private val marketField: MarketField,
 ) {
     private var disposables = CompositeDisposable()
 
@@ -51,7 +53,8 @@ class MarketTopCoinsService(
                 topMarket.value,
                 sortingField,
                 topMarket.value,
-                currencyManager.baseCurrency
+                currencyManager.baseCurrency,
+                marketField
             )
             .subscribeIO({
                 marketItems = it

@@ -228,7 +228,7 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
                 viewItem.coinUid?.let { coinUid ->
                     navController.slideFromRight(
                         R.id.coinFragment,
-                        CoinFragment.prepareParams(coinUid)
+                        CoinFragment.prepareParams(coinUid, "cex_asset")
                     )
                 }
             },

@@ -23,12 +23,13 @@ import kotlinx.parcelize.Parcelize
 
 object CoinAnalyticsModule {
 
-    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
+    class Factory(private val fullCoin: FullCoin, private val apiTag: String) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = CoinAnalyticsService(
                 fullCoin,
+                apiTag,
                 App.marketKit,
                 App.currencyManager,
                 App.subscriptionManager,
