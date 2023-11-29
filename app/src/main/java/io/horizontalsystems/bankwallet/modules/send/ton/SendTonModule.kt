@@ -30,7 +30,7 @@ object SendTonModule {
                     val amountService = SendAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
                     val addressService = SendTonAddressService(prefilledAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-                    val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
+                    val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: throw IllegalArgumentException()
 
                     SendTonViewModel(
                         wallet,
