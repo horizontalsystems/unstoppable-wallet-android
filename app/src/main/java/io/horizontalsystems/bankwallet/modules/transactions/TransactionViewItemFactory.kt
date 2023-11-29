@@ -434,6 +434,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     icon = icon,
                     record = record,
+                    currencyValue = transactionItem.currencyValue
                 )
             }
 
@@ -446,10 +447,15 @@ class TransactionViewItemFactory(
         timestamp: Long,
         icon: TransactionViewItem.Icon?,
         record: TonTransactionRecord,
+        currencyValue: CurrencyValue?,
     ): TransactionViewItem {
         val title: String
         val subtitle: String?
         val primaryValue: ColoredValue?
+        var secondaryValue = currencyValue?.let {
+            getColoredValue(it, ColorName.Grey)
+        }
+
         val singleTransfer = record.transfers.singleOrNull()
 
         when (record.type) {
@@ -477,6 +483,7 @@ class TransactionViewItemFactory(
                 title = Translator.getString(R.string.Transactions_Unknown)
                 subtitle = Translator.getString(R.string.Transactions_Unknown_Description)
                 primaryValue = null
+                secondaryValue = null
             }
         }
 
@@ -486,7 +493,7 @@ class TransactionViewItemFactory(
             title = title,
             subtitle = subtitle,
             primaryValue = primaryValue,
-            secondaryValue = null,
+            secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             icon = icon ?: singleValueIconType(record.mainValue)
