@@ -32,9 +32,11 @@ class CoinFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         val coinUid = requireArguments().getString(COIN_UID_KEY, "")
+        val apiTag = requireArguments().getString(API_TAG_KEY, "")
 
         CoinScreen(
             coinUid,
+            apiTag,
             coinViewModel(coinUid),
             navController,
             childFragmentManager
@@ -52,20 +54,22 @@ class CoinFragment : BaseComposeFragment() {
 
     companion object {
         private const val COIN_UID_KEY = "coin_uid_key"
+        private const val API_TAG_KEY = "api_tag_key"
 
-        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
+        fun prepareParams(coinUid: String, apiTag: String) = bundleOf(COIN_UID_KEY to coinUid, API_TAG_KEY to apiTag)
     }
 }
 
 @Composable
 fun CoinScreen(
     coinUid: String,
+    apiTag: String,
     coinViewModel: CoinViewModel?,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
     if (coinViewModel != null) {
-        CoinTabs(coinViewModel, navController, fragmentManager)
+        CoinTabs(apiTag, coinViewModel, navController, fragmentManager)
     } else {
         CoinNotFound(coinUid, navController)
     }
@@ -74,6 +78,7 @@ fun CoinScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CoinTabs(
+    apiTag: String,
     viewModel: CoinViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
@@ -137,6 +142,7 @@ fun CoinTabs(
             when (tabs[page]) {
                 CoinModule.Tab.Overview -> {
                     CoinOverviewScreen(
+                        apiTag = apiTag,
                         fullCoin = viewModel.fullCoin,
                         navController = navController
                     )
@@ -148,6 +154,7 @@ fun CoinTabs(
 
                 CoinModule.Tab.Details -> {
                     CoinAnalyticsScreen(
+                        apiTag = apiTag,
                         fullCoin = viewModel.fullCoin,
                         navController = navController,
                         fragmentManager = fragmentManager

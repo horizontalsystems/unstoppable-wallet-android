@@ -52,11 +52,12 @@ import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 
 @Composable
 fun CoinAnalyticsScreen(
+    apiTag: String,
     fullCoin: FullCoin,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
-    val viewModel = viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
+    val viewModel = viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin, apiTag))
     val uiState = viewModel.uiState
 
     HSSwipeRefresh(

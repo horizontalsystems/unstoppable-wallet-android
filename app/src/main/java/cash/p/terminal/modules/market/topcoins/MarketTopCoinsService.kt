@@ -4,6 +4,7 @@ import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
+import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
@@ -17,6 +18,7 @@ class MarketTopCoinsService(
     private val favoritesManager: MarketFavoritesManager,
     topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
+    private val marketField: MarketField,
 ) {
     private var disposables = CompositeDisposable()
 
@@ -51,7 +53,8 @@ class MarketTopCoinsService(
                 topMarket.value,
                 sortingField,
                 topMarket.value,
-                currencyManager.baseCurrency
+                currencyManager.baseCurrency,
+                marketField
             )
             .subscribeIO({
                 marketItems = it

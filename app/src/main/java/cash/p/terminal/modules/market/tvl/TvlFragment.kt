@@ -53,7 +53,7 @@ class TvlFragment : BaseComposeFragment() {
 
     private fun onCoinClick(coinUid: String?, navController: NavController) {
         if (coinUid != null) {
-            val arguments = CoinFragment.prepareParams(coinUid)
+            val arguments = CoinFragment.prepareParams(coinUid, "market_tvl")
             navController.slideFromRight(R.id.coinFragment, arguments)
         } else {
             HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_NoCoin)

@@ -23,7 +23,8 @@ object MarketTopCoinsModule {
                 App.currencyManager,
                 App.marketFavoritesManager,
                 topMarket ?: defaultTopMarket,
-                sortingField ?: defaultSortingField
+                sortingField ?: defaultSortingField,
+                marketField ?: defaultMarketField
             )
             return MarketTopCoinsViewModel(
                 service,

@@ -2,10 +2,10 @@ package cash.p.terminal.modules.market.favorites
 
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.sort
-import cash.p.terminal.entities.Currency
 import io.reactivex.Single
 
 class MarketFavoritesRepository(
@@ -25,7 +25,7 @@ class MarketFavoritesRepository(
             var marketItems = listOf<MarketItem>()
             if (favoriteCoins.isNotEmpty()) {
                 val favoriteCoinUids = favoriteCoins.map { it.coinUid }
-                marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code).blockingGet()
+                marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code, "watchlist").blockingGet()
                     .map { marketInfo ->
                         MarketItem.createFromCoinMarket(marketInfo, currency)
                     }

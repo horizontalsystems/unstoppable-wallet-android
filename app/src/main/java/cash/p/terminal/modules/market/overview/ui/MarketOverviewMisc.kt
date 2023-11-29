@@ -17,7 +17,7 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
 
 fun onItemClick(marketViewItem: MarketViewItem, navController: NavController) {
-    val arguments = CoinFragment.prepareParams(marketViewItem.coinUid)
+    val arguments = CoinFragment.prepareParams(marketViewItem.coinUid, "market_overview")
     navController.slideFromRight(R.id.coinFragment, arguments)
 }
 

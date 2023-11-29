@@ -22,6 +22,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class CoinAnalyticsService(
     val fullCoin: FullCoin,
+    private val apiTag: String,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val subscriptionManager: SubscriptionManager,
@@ -74,7 +75,7 @@ class CoinAnalyticsService(
         } else {
             stateSubject.onNext(DataState.Loading)
 
-            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code)
+            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code, apiTag)
                 .subscribeIO({ item ->
                     stateSubject.onNext(DataState.Success(AnalyticData(analytics = item)))
                 }, {
@@ -103,7 +104,7 @@ class CoinAnalyticsService(
             it.type.evmAddress(App.evmBlockchainManager.getChain(BlockchainType.Ethereum))?.hex
         }
 
-        marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses)
+        marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses, apiTag)
             .subscribeIO({ item ->
                 stateSubject.onNext(DataState.Success(AnalyticData(analyticsPreview = item)))
             }, {

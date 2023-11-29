@@ -26,7 +26,7 @@ class MarketPlatformCoinsRepository(
 
         val items = if (forceRefresh || currentCache == null) {
             val marketInfoItems = marketKit
-                .topPlatformCoinListSingle(platform.uid, currencyManager.baseCurrency.code)
+                .topPlatformCoinListSingle(platform.uid, currencyManager.baseCurrency.code, "market_top_platforms")
                 .await()
 
             marketInfoItems.map { marketInfo ->
