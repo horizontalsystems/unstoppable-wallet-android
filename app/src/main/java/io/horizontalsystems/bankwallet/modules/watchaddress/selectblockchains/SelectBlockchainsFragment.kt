@@ -109,7 +109,7 @@ private fun SelectBlockchainsScreen(
             },
             menuItems = listOf(
                 MenuItem(
-                    title = TranslatableString.ResString(R.string.Watch_Address_Watch),
+                    title = TranslatableString.ResString(R.string.Button_Done),
                     onClick = viewModel::onClickWatch,
                     enabled = submitEnabled
                 )

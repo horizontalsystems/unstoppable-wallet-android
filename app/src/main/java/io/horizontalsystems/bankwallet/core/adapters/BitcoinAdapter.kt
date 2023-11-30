@@ -125,6 +125,16 @@ class BitcoinAdapter(
                         purpose = derivation.purpose
                     )
                 }
+                is AccountType.BitcoinAddress -> {
+                    return BitcoinKit(
+                        context = App.instance,
+                        watchAddress =  accountType.address,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = NetworkType.MainNet,
+                        confirmationsThreshold = confirmationsThreshold
+                    )
+                }
                 else -> throw UnsupportedAccountException()
             }
 
