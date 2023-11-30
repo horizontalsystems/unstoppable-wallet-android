@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendSolanaAdapter
+import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
-import cash.p.terminal.modules.send.SendAmountAdvancedService
+import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -29,10 +30,11 @@ object SendSolanaModule {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendAmountAdvancedService(
-                        adapter.availableBalance.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
-                        wallet.token,
+                    val amountService = SendAmountService(
                         amountValidator,
+                        wallet.token.coin.code,
+                        adapter.availableBalance.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
+                        wallet.token.type.isNative,
                     )
                     val addressService = SendSolanaAddressService(prefilledAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)

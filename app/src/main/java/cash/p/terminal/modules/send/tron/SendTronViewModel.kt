@@ -16,8 +16,8 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
-import cash.p.terminal.modules.send.SendAmountAdvancedService
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.ui.compose.TranslatableString
@@ -36,7 +36,7 @@ class SendTronViewModel(
     private val feeToken: Token,
     private val adapter: ISendTronAdapter,
     private val xRateService: XRateService,
-    private val amountService: SendAmountAdvancedService,
+    private val amountService: SendAmountService,
     private val addressService: SendTronAddressService,
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
@@ -267,7 +267,7 @@ class SendTronViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    private fun handleUpdatedAmountState(amountState: SendAmountAdvancedService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
 
         emitState()

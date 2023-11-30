@@ -11,7 +11,7 @@ import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.send.SendAmountAdvancedService
+import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.Token
@@ -22,7 +22,7 @@ class SendEvmViewModel(
     val sendToken: Token,
     val adapter: ISendEthereumAdapter,
     private val xRateService: XRateService,
-    private val amountService: SendAmountAdvancedService,
+    private val amountService: SendAmountService,
     private val addressService: SendEvmAddressService,
     val coinMaxAllowedDecimals: Int,
     private val showAddressInput: Boolean,
@@ -69,7 +69,7 @@ class SendEvmViewModel(
         addressService.setAddress(address)
     }
 
-    private fun handleUpdatedAmountState(amountState: SendAmountAdvancedService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
 
         emitState()

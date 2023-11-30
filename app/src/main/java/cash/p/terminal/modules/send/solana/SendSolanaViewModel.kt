@@ -14,8 +14,8 @@ import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
-import cash.p.terminal.modules.send.SendAmountAdvancedService
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.SendUiState
@@ -35,7 +35,7 @@ class SendSolanaViewModel(
     val feeToken: Token,
     val adapter: ISendSolanaAdapter,
     private val xRateService: XRateService,
-    private val amountService: SendAmountAdvancedService,
+    private val amountService: SendAmountService,
     private val addressService: SendSolanaAddressService,
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
@@ -143,7 +143,7 @@ class SendSolanaViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    private fun handleUpdatedAmountState(amountState: SendAmountAdvancedService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
 
         emitState()
