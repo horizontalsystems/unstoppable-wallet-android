@@ -14,8 +14,8 @@ import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
-import io.horizontalsystems.bankwallet.modules.send.SendAmountAdvancedService
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.SendUiState
@@ -35,7 +35,7 @@ class SendSolanaViewModel(
     val feeToken: Token,
     val adapter: ISendSolanaAdapter,
     private val xRateService: XRateService,
-    private val amountService: SendAmountAdvancedService,
+    private val amountService: SendAmountService,
     private val addressService: SendSolanaAddressService,
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
@@ -143,7 +143,7 @@ class SendSolanaViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    private fun handleUpdatedAmountState(amountState: SendAmountAdvancedService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
 
         emitState()
