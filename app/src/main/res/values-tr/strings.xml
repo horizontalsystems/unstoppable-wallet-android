@@ -361,9 +361,7 @@
     <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
     <string name="FeeSettings_BaseFee">Baz Ücret</string>
     <string name="FeeSettings_BaseFee_Info">Ağ protokolü, her blok için gaz başına taban fiyatı belirler ve buna baz ücret oranı denir. Bloktan bloğa ağ kullanım seviyesine göre değişir. Bir sonraki blokta% 12,5\'ten fazla artamaz veya azalabilir ve bu da ücretleri daha öngörülebilir hale getirir. Burada gösterilen değer, geçerli bloğun temel ücret oranıdır.</string>
-    <string name="FeeSettings_MaxFee">Maks. Ücret Oranı (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">Bu, kullanıcının ödemek istediği gaz başına maksimum toplam fiyattır. Ağın temel ücret oranını ve maksimum öncelik ücreti oranını kapsamalıdır. Burada gösterilen değer, bir sonraki bloğun taban ücret oranının tahmini artı kullanıcı tarafından seçilen maksimum öncelik ücreti oranına göre önerilir. Ödenen gerçek ücret oranı normalde daha düşük olacaktır. Bunu mevcut taban ücret oranından daha düşük bir değere ayarlamak, ödenen ücreti sınırlayacaktır, ancak işlemin onaylanması için daha uzun bekleme sürelerine, hatta sıkışmış bir işlemde bile sonuçlanacaktır.</string>
-    <string name="FeeSettings_MaxMinerTips">Maks. Öncelik Ücreti (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Kullanıcılar, bir işlemin daha hızlı onaylanmasını teşvik etmek için öncelik ücretleri öderler. Bazen tips denir. Maksimum öncelik ücreti oranı, kullanıcının taban ücret oranının üzerine ödemek istediği gaz başına maksimum ek fiyattır. Burada gösterilen değer, tahmin edilen ağ koşullarına göre önerilir. Gerçek öncelik ücreti normalde daha düşük olacaktır. Bunu sıfıra ayarlamak, tüm kullanıcılardan bekleyen işlemler kuyruğunun sonuna yerleştirildiğinden, işlemin onaylanması için uzun bir bekleme süresine neden olabilir.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskli</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">İşlem bir süre beklemede kalabilir veya tamamen başarısız olabilir.</string>
@@ -892,7 +890,6 @@
     <string name="ManageAccounts_WatchAddress">Adresi İzle</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">Dosyadan</string>
-    <string name="ImportWallet_BackupFile_Description">Bir yedek dosyadan içe aktar.</string>
     <string name="ImportWallet_RecoveryPhrase">Kurtarma İfadesinden</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Kurtarma ifadesini veya özel anahtarı kullanarak içe aktarın.</string>
     <string name="ImportWallet_ExchangeWallet">Exchange Wallet\'tan</string>
