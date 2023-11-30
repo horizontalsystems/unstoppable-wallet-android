@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.watchaddress
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.address.AddressParserFactory
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object WatchAddressModule {
@@ -17,14 +17,15 @@ object WatchAddressModule {
         add(BlockchainType.ECash)
         add(BlockchainType.Solana)
         add(BlockchainType.Tron)
+        add(BlockchainType.Ton)
     }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = WatchAddressService(App.accountManager, App.walletActivator, App.accountFactory, App.marketKit, App.evmBlockchainManager)
-            val addressParserChainFactory =  AddressParserFactory(App.appConfigProvider.udnApiKey)
-            val addressParserChain = addressParserChainFactory.parserChain(supportedBlockchainTypes)
+            val addressHandlerFactory =  AddressHandlerFactory(App.appConfigProvider.udnApiKey)
+            val addressParserChain = addressHandlerFactory.parserChain(supportedBlockchainTypes)
             return WatchAddressViewModel(service, addressParserChain) as T
         }
     }

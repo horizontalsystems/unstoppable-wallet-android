@@ -107,6 +107,7 @@ class WatchAddressViewModel(
 
         BlockchainType.Solana -> Type.SolanaAddress
         BlockchainType.Tron -> Type.TronAddress
+        BlockchainType.Ton -> Type.TonAddress
 
         BlockchainType.Zcash,
         is BlockchainType.Unsupported,
@@ -168,6 +169,7 @@ class WatchAddressViewModel(
             Type.SolanaAddress -> SubmitButtonType.Watch(address != null)
             Type.TronAddress -> SubmitButtonType.Watch(address != null)
             Type.BitcoinAddress -> SubmitButtonType.Watch(address != null)
+            Type.TonAddress -> SubmitButtonType.Watch(address != null)
             Type.Unsupported -> SubmitButtonType.Watch(false)
         }
     }
@@ -184,6 +186,9 @@ class WatchAddressViewModel(
                 throw IllegalStateException("Unsupported address type")
             }
         }
+        Type.TonAddress -> address?.let {
+            AccountType.TonAddress(it.hex)
+        }
 
         Type.Unsupported -> throw IllegalStateException("Unsupported address type")
     }
@@ -194,6 +199,7 @@ class WatchAddressViewModel(
         SolanaAddress,
         XPubKey,
         BitcoinAddress,
+        TonAddress,
         Unsupported
     }
 }
