@@ -69,7 +69,7 @@ class SendSolanaViewModel(
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
     private val decimalAmount: BigDecimal
-        get() = amountState.evmAmount!!.toBigDecimal().movePointLeft(sendToken.decimals)
+        get() = amountState.amount!!
 
     init {
         amountService.stateFlow.collectWith(viewModelScope) {

@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.withContext
-import java.math.BigInteger
+import java.math.BigDecimal
 
 class TronAdapter(kitWrapper: TronKitWrapper) : BaseTronAdapter(kitWrapper, decimal), ISendTronAdapter {
 
@@ -51,14 +51,16 @@ class TronAdapter(kitWrapper: TronKitWrapper) : BaseTronAdapter(kitWrapper, deci
     override val trxBalanceData: BalanceData
         get() = balanceData
 
-    override suspend fun estimateFee(amount: BigInteger, to: Address): List<Fee> = withContext(Dispatchers.IO) {
-        val contract = tronKit.transferContract(amount, to)
+    override suspend fun estimateFee(amount: BigDecimal, to: Address): List<Fee> = withContext(Dispatchers.IO) {
+        val amountBigInt = amount.movePointRight(decimal).toBigInteger()
+        val contract = tronKit.transferContract(amountBigInt, to)
          tronKit.estimateFee(contract)
     }
 
-    override suspend fun send(amount: BigInteger, to: Address, feeLimit: Long?) {
+    override suspend fun send(amount: BigDecimal, to: Address, feeLimit: Long?) {
         if (signer == null) throw Exception()
-        val contract = tronKit.transferContract(amount, to)
+        val amountBigInt = amount.movePointRight(decimal).toBigInteger()
+        val contract = tronKit.transferContract(amountBigInt, to)
 
         tronKit.send(contract, signer, feeLimit)
     }

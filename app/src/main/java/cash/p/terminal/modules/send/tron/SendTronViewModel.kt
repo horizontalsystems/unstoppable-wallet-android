@@ -79,9 +79,6 @@ class SendTronViewModel(
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
-    private val decimalAmount: BigDecimal
-        get() = amountState.evmAmount!!.toBigDecimal().movePointLeft(sendToken.decimals)
-
     init {
         viewModelScope.launch {
             amountService.stateFlow.collect {
@@ -123,7 +120,7 @@ class SendTronViewModel(
         ).firstOrNull()
 
         confirmationData = SendTronConfirmationData(
-            amount = decimalAmount,
+            amount = amountState.amount!!,
             fee = null,
             activationFee = null,
             resourcesConsumed = null,
@@ -179,7 +176,7 @@ class SendTronViewModel(
             feeState = FeeState.Loading
             emitState()
 
-            val amount = amountState.evmAmount!!
+            val amount = amountState.amount!!
             val tronAddress = TronAddress.fromBase58(addressState.address!!.hex)
             val fees = adapter.estimateFee(amount, tronAddress)
 
@@ -214,12 +211,13 @@ class SendTronViewModel(
             emitState()
 
             val totalFee = fees.sumOf { it.feeInSuns }.toBigInteger()
-            val isMaxAmount = amountState.availableBalance == decimalAmount
-            val adjustedAmount = if (sendToken == feeToken && isMaxAmount) amount - totalFee else amount
+            val fee = totalFee.toBigDecimal().movePointLeft(feeToken.decimals)
+            val isMaxAmount = amountState.availableBalance == amountState.amount!!
+            val adjustedAmount = if (sendToken == feeToken && isMaxAmount) amount - fee else amount
 
             confirmationData = confirmationData?.copy(
-                amount = adjustedAmount.toBigDecimal().movePointLeft(sendToken.decimals),
-                fee = totalFee.toBigDecimal().movePointLeft(feeToken.decimals),
+                amount = adjustedAmount,
+                fee = fee,
                 activationFee = activationFee,
                 resourcesConsumed = resourcesConsumed
             )
@@ -252,7 +250,7 @@ class SendTronViewModel(
             sendResult = SendResult.Sending
             logger.info("sending tx")
 
-            val amount = confirmationData.amount.movePointRight(sendToken.decimals).toBigInteger()
+            val amount = confirmationData.amount
             adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
 
             sendResult = SendResult.Sent
