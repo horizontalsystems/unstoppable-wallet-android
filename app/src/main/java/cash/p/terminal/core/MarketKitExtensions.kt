@@ -312,6 +312,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 else -> false
             }
         }
+        is AccountType.BitcoinAddress -> this === accountType.blockchainType
         is AccountType.EvmAddress ->
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain

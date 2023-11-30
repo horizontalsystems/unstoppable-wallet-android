@@ -21,6 +21,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val ADDRESS = "address"
         private const val SOLANA_ADDRESS = "solana_address"
         private const val TRON_ADDRESS = "tron_address"
+        private const val BITCOIN_ADDRESS = "bitcoin_address"
         private const val HD_EXTENDED_LEY = "hd_extended_key"
         private const val CEX = "cex"
     }
@@ -48,6 +49,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             ADDRESS -> AccountType.EvmAddress(record.key!!.value)
                             SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
                             TRON_ADDRESS -> AccountType.TronAddress(record.key!!.value)
+                            BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             CEX -> {
                                 CexType.deserialize(record.key!!.value)?.let {
@@ -134,6 +136,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.TronAddress -> {
                 key = SecretString(account.type.address)
                 accountType = TRON_ADDRESS
+            }
+            is AccountType.BitcoinAddress -> {
+                key = SecretString(account.type.serialized)
+                accountType = BITCOIN_ADDRESS
             }
             is AccountType.HdExtendedKey -> {
                 key = SecretString(account.type.keySerialized)
