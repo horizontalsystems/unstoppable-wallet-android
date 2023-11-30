@@ -49,7 +49,6 @@ import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.util.Date
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 import io.horizontalsystems.tronkit.models.Address as TronAddress
@@ -320,7 +319,7 @@ interface ISendEthereumAdapter {
     val evmKitWrapper: EvmKitWrapper
     val balanceData: BalanceData
 
-    fun getTransactionData(amount: BigInteger, address: Address): TransactionData
+    fun getTransactionData(amount: BigDecimal, address: Address): TransactionData
 }
 
 interface ISendBinanceAdapter {
@@ -362,8 +361,8 @@ interface ISendTronAdapter {
     val balanceData: BalanceData
     val trxBalanceData: BalanceData
 
-    suspend fun estimateFee(amount: BigInteger, to: TronAddress): List<Fee>
-    suspend fun send(amount: BigInteger, to: TronAddress, feeLimit: Long?)
+    suspend fun estimateFee(amount: BigDecimal, to: TronAddress): List<Fee>
+    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?)
     suspend fun isAddressActive(address: TronAddress): Boolean
     fun isOwnAddress(address: TronAddress): Boolean
 }

@@ -10,7 +10,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
-import java.math.BigInteger
+import java.math.BigDecimal
 
 class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
     BaseEvmAdapter(evmKitWrapper, decimal, coinManager) {
@@ -52,8 +52,9 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
 
     // ISendEthereumAdapter
 
-    override fun getTransactionData(amount: BigInteger, address: Address): TransactionData {
-        return TransactionData(address, amount, byteArrayOf())
+    override fun getTransactionData(amount: BigDecimal, address: Address): TransactionData {
+        val amountBigInt = amount.movePointRight(decimal).toBigInteger()
+        return TransactionData(address, amountBigInt, byteArrayOf())
     }
 
     companion object {

@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
-import java.math.BigInteger
 
 class SendAmountAdvancedService(
     private val availableBalance: BigDecimal,
@@ -17,14 +16,13 @@ class SendAmountAdvancedService(
 ) {
     private var amount: BigDecimal? = null
     private var amountCaution: HSCaution? = null
-    private var evmAmount: BigInteger? = null
 
     private val _stateFlow = MutableStateFlow(
         State(
             amountCaution = amountCaution,
             availableBalance = availableBalance,
             canBeSend = false,
-            evmAmount = evmAmount,
+            amount = amount
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -33,7 +31,6 @@ class SendAmountAdvancedService(
         this.amount = amount
 
         validateAmount()
-        refreshEvmAmount()
 
         emitState()
     }
@@ -41,15 +38,15 @@ class SendAmountAdvancedService(
     private fun emitState() {
         val tmpAmountCaution = amountCaution
 
-        val canBeSend = evmAmount != null
+        val canBeSend = amount != null
             && (tmpAmountCaution == null || tmpAmountCaution.isWarning())
 
         _stateFlow.update {
             State(
-                evmAmount = evmAmount,
                 amountCaution = amountCaution,
                 availableBalance = availableBalance,
-                canBeSend = canBeSend
+                canBeSend = canBeSend,
+                amount = amount
             )
         }
     }
@@ -63,15 +60,6 @@ class SendAmountAdvancedService(
         )
     }
 
-    private fun refreshEvmAmount() {
-        val tmpAmount = amount
-        evmAmount = if (tmpAmount != null && tmpAmount > BigDecimal.ZERO) {
-            tmpAmount.movePointRight(token.decimals).toBigInteger()
-        } else {
-            null
-        }
-    }
-
     private fun isCoinUsedForFee(): Boolean {
         return token.type.isNative
     }
@@ -80,6 +68,6 @@ class SendAmountAdvancedService(
         val amountCaution: HSCaution?,
         val availableBalance: BigDecimal,
         val canBeSend: Boolean,
-        val evmAmount: BigInteger?
+        val amount: BigDecimal?
     )
 }
