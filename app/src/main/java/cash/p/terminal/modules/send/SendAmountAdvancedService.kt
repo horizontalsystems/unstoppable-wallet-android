@@ -1,10 +1,8 @@
 package cash.p.terminal.modules.send
 
-import cash.p.terminal.R
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.isNative
 import cash.p.terminal.modules.amount.AmountValidator
-import cash.p.terminal.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -60,15 +58,9 @@ class SendAmountAdvancedService(
         amountCaution = amountValidator.validate(
             amount,
             token.coin.code,
-            availableBalance
+            availableBalance,
+            leaveSomeBalanceForFee = isCoinUsedForFee()
         )
-
-        if (amountCaution == null && amount == availableBalance && isCoinUsedForFee()) {
-            amountCaution = HSCaution(
-                TranslatableString.ResString(R.string.EthereumTransaction_Warning_CoinNeededForFee, token.coin.code),
-                HSCaution.Type.Warning
-            )
-        }
     }
 
     private fun refreshEvmAmount() {
