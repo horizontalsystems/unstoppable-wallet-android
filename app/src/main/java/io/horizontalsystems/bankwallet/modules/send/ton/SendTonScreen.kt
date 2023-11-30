@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
+import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -43,6 +44,7 @@ fun SendTonScreen(
     val addressError = uiState.addressError
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
+    val fee = uiState.fee
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
@@ -75,7 +77,7 @@ fun SendTonScreen(
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
-                availableBalance = availableBalance,
+                availableBalance = availableBalance ?: BigDecimal.ZERO,
                 caution = amountCaution,
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
@@ -105,6 +107,16 @@ fun SendTonScreen(
                     viewModel.onEnterAddress(it)
                 }
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            HSFeeInput(
+                coinCode = viewModel.feeToken.coin.code,
+                coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
+                fee = fee,
+                amountInputType = amountInputType,
+                rate = viewModel.feeCoinRate,
+                navController = navController
+            )
 
             ButtonPrimaryYellow(
                 modifier = Modifier

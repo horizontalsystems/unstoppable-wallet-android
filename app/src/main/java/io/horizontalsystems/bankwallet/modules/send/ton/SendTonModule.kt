@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendTonAdapter
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
-import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -27,8 +26,9 @@ object SendTonModule {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
+                    val amountService = SendTonAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
                     val addressService = SendTonAddressService(prefilledAddress)
+                    val feeService = SendTonFeeService(adapter)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -40,9 +40,10 @@ object SendTonModule {
                         xRateService,
                         amountService,
                         addressService,
+                        feeService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        showAddressInput,
+                        showAddressInput
                     ) as T
                 }
 

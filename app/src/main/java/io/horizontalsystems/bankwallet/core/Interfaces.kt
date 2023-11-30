@@ -355,6 +355,7 @@ interface ISendSolanaAdapter {
 interface ISendTonAdapter {
     val availableBalance: BigDecimal
     suspend fun send(amount: BigDecimal, address: String)
+    suspend fun estimateFee() : BigDecimal
 }
 
 interface ISendTronAdapter {
