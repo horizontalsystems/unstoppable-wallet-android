@@ -297,12 +297,11 @@ class AddressHandlerTon : IAddressHandler {
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(value)
+        return Address(value, blockchainType = blockchainType)
     }
 }
 
-class AddressHandlerPure(blockchainType: BlockchainType) : IAddressHandler {
-    override val blockchainType = blockchainType
+class AddressHandlerPure(override val blockchainType: BlockchainType) : IAddressHandler {
 
     override fun isSupported(value: String) = true
 

@@ -40,6 +40,10 @@ class SelectBlockchainsViewModel(
         selectedCoins = tokens.toSet()
 
         when (accountType) {
+            is AccountType.SolanaAddress,
+            is AccountType.TronAddress,
+            is AccountType.BitcoinAddress,
+            is AccountType.TonAddress,
             is AccountType.Cex,
             is AccountType.Mnemonic,
             is AccountType.EvmPrivateKey -> Unit // N/A
@@ -49,9 +53,7 @@ class SelectBlockchainsViewModel(
                     coinViewItemForBlockchain(it)
                 }
             }
-            is AccountType.SolanaAddress,
-            is AccountType.TronAddress,
-            is AccountType.BitcoinAddress,
+
             is AccountType.HdExtendedKey -> {
                 title = R.string.Watch_Select_Coins
                 coinViewItems = tokens.map {

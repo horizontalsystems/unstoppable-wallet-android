@@ -59,13 +59,22 @@ class TonAdapter(
 
     init {
         val accountType = wallet.account.type
-        if (accountType !is AccountType.Mnemonic) {
-            throw UnsupportedAccountException()
-        }
+        val tonKitFactory = TonKitFactory(DriverFactory(App.instance), ConnectionManager(App.instance))
+        tonKit = when (accountType) {
+            is AccountType.Mnemonic -> {
+                val hdWallet = HDWallet(accountType.seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
+                val privateKey = hdWallet.privateKey(0)
+                tonKitFactory.create(privateKey.privKeyBytes, wallet.account.id)
+            }
 
-        val hdWallet = HDWallet(accountType.seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
-        val privateKey = hdWallet.privateKey(0)
-        tonKit = TonKitFactory(DriverFactory(App.instance), ConnectionManager(App.instance)).create(privateKey.privKeyBytes, wallet.account.id)
+            is AccountType.TonAddress -> {
+                tonKitFactory.createWatch(accountType.address, wallet.account.id)
+            }
+
+            else -> {
+                throw UnsupportedAccountException()
+            }
+        }
     }
 
     override fun start() {
