@@ -386,9 +386,7 @@
     <string name="FeeSettings_GasPrice_Info">Die Gebühr für Transaktionen im Netzwerk wird in Gaseinheiten gemessen. Der Gaspreis ist der Betrag, den ein Nutzer für eine Einheit Gas auszugeben bereit ist. Wenn das Netzwerk ausgelastet ist, sind die Gaspreise hoch, und niedrig, wenn es nicht genutzt wird. Ein unzureichender Gaspreis ist oft ein Grund dafür, dass eine Transaktion über einen längeren Zeitraum aussteht.</string>
     <string name="FeeSettings_BaseFee">Basisgebühr</string>
     <string name="FeeSettings_BaseFee_Info">Das Netzwerkprotokoll bestimmt den Basispreis pro Gas für jeden Block, sogenannte Basisgebühren. Sie variiert je nach Netzwerkauslastung von Block zu Block. Sie kann im nächsten Block um nicht mehr als 12,5% steigen oder sinken, was die Gebühren berechenbarer macht. Der hier angezeigte Wert ist die Basisgebühr des aktuellen Blocks.</string>
-    <string name="FeeSettings_MaxFee">Max Gebühr (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">Dies ist der maximale Gesamtpreis pro Gas, den der Nutzer zu zahlen bereit ist. Es muss den Basistarif des Netzwerks und den maximalen Prioritätstarif abdecken. Der hier angezeigte Wert wird anhand einer Schätzung der Basisgebühr des nächsten Blocks plus der vom Nutzer gewählten Maximalgebührengebühr vorgeschlagen. Der tatsächlich gezahlte Gebührensatz ist normalerweise niedriger. Wenn diese Einstellung niedriger als die aktuelle Basisgebühr ist, wird die gezahlte Gebühr begrenzt aber führt zu längeren Wartezeiten für die Bestätigung der Transaktion oder sogar zu einer festgefahrenen Transaktion.</string>
-    <string name="FeeSettings_MaxMinerTips">Max Prioritätsgebühr (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Benutzer zahlen Prioritätsgebühren, um eine Transaktion schneller zu bestätigen. Sie werden manchmal als Tipps bezeichnet. Die maximale Prioritätsgebühr ist der maximale Zusatzpreis pro Gas, den der Nutzer zusätzlich zur Basisgebühr zahlen möchte. Der hier angezeigte Wert wird basierend auf vorausgesagten Netzwerkbedingungen vorgeschlagen. Die tatsächliche Prioritätsgebühr wird normalerweise niedriger sein. Die Einstellung auf Null kann zu einer langen Wartezeit führen, bis die Transaktion bestätigt wird, , da er am Ende der Warteschlange aller Benutzer platziert ist.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskant</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">Die Transaktion kann eine Zeit lang ausstehend bleiben oder ganz fehlschlagen.</string>
@@ -615,7 +613,6 @@
     <string name="Transactions_Multiple">Mehrere</string>
     <string name="Transactions_Filter">Filtern</string>
     <string name="Transactions_Coins">Münzen</string>
-    <string name="Transactions_Filter_HideSuspiciousTx">Verdächtige tx ausblenden</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Das Verstecken eingehender Transaktionen mit dem Staub in Stablecoins löst teilweise die Adressenvergiftungsprobleme.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transaktion</string>
@@ -917,7 +914,6 @@
     <string name="ManageAccounts_WatchAddress">Watch-Adresse</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">aus Datei</string>
-    <string name="ImportWallet_BackupFile_Description">Aus Backup-Datei importieren.</string>
     <string name="ImportWallet_RecoveryPhrase">von Wiederherstellungsphrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Importieren Sie mithilfe der Wiederherstellungsphrase oder des privaten Schlüssels.</string>
     <string name="ImportWallet_ExchangeWallet">von Exchange Wallet</string>
