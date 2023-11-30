@@ -6,7 +6,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
-import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -27,8 +26,9 @@ object SendTonModule {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
+                    val amountService = SendTonAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
                     val addressService = SendTonAddressService(prefilledAddress)
+                    val feeService = SendTonFeeService(adapter)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -40,9 +40,10 @@ object SendTonModule {
                         xRateService,
                         amountService,
                         addressService,
+                        feeService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        showAddressInput,
+                        showAddressInput
                     ) as T
                 }
 

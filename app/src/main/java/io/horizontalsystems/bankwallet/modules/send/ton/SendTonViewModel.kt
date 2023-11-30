@@ -14,11 +14,9 @@ import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
-import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
@@ -34,8 +32,9 @@ class SendTonViewModel(
     val feeToken: Token,
     val adapter: ISendTonAdapter,
     private val xRateService: XRateService,
-    private val amountService: SendAmountService,
+    private val amountService: SendTonAmountService,
     private val addressService: SendTonAddressService,
+    private val feeService: SendTonFeeService,
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
@@ -46,16 +45,18 @@ class SendTonViewModel(
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
+    private var feeState = feeService.stateFlow.value
     private val prefilledAddress = addressService.tonAddress?.let { Address(it) }
 
     var uiState by mutableStateOf(
-        SendUiState(
+        SendTonUiState(
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress
+            prefilledAddress = prefilledAddress,
+            fee = feeState.fee
         )
     )
         private set
@@ -76,11 +77,18 @@ class SendTonViewModel(
         addressService.stateFlow.collectWith(viewModelScope) {
             handleUpdatedAddressState(it)
         }
+        feeService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedFeeState(it)
+        }
         xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
             coinRate = it
         }
         xRateService.getRateFlow(feeToken.coin.uid).collectWith(viewModelScope) {
             feeCoinRate = it
+        }
+
+        viewModelScope.launch {
+            feeService.start()
         }
     }
 
@@ -100,7 +108,7 @@ class SendTonViewModel(
         ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
-            fee = BigDecimal.ZERO,
+            fee = feeState.fee!!,
             address = address,
             contact = contact,
             coin = wallet.coin,
@@ -137,7 +145,7 @@ class SendTonViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
+    private fun handleUpdatedAmountState(amountState: SendTonAmountService.State) {
         this.amountState = amountState
 
         emitState()
@@ -149,13 +157,33 @@ class SendTonViewModel(
         emitState()
     }
 
+    private fun handleUpdatedFeeState(feeState: SendTonFeeService.State) {
+        this.feeState = feeState
+
+        amountService.setFee(feeState.fee)
+
+        emitState()
+    }
+
     private fun emitState() {
-        uiState = SendUiState(
+        uiState = SendTonUiState(
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
             prefilledAddress = prefilledAddress,
+            fee = feeState.fee,
         )
-    }}
+    }
+}
+
+data class SendTonUiState(
+    val availableBalance: BigDecimal?,
+    val amountCaution: HSCaution?,
+    val addressError: Throwable?,
+    val canBeSend: Boolean,
+    val showAddressInput: Boolean,
+    val prefilledAddress: Address?,
+    val fee: BigDecimal?,
+)

@@ -230,6 +230,10 @@ class TonAdapter(
     override suspend fun send(amount: BigDecimal, address: String) {
         tonKit.send(address, amount.movePointRight(decimals).toBigInteger().toString())
     }
+
+    override suspend fun estimateFee(): BigDecimal {
+        return tonKit.estimateFee().toBigDecimal().movePointLeft(decimals)
+    }
 }
 
 class TonTransactionRecord(
