@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.withContext
-import java.math.BigInteger
+import java.math.BigDecimal
 
 class Trc20Adapter(
     tronKitWrapper: TronKitWrapper,
@@ -56,14 +56,16 @@ class Trc20Adapter(
     override val trxBalanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(tronKit.trxBalance, TronAdapter.decimal))
 
-    override suspend fun estimateFee(amount: BigInteger, to: Address): List<Fee> = withContext(Dispatchers.IO) {
-        val contract = tronKit.transferTrc20TriggerSmartContract(contractAddress, to, amount)
+    override suspend fun estimateFee(amount: BigDecimal, to: Address): List<Fee> = withContext(Dispatchers.IO) {
+        val amountBigInt = amount.movePointRight(decimal).toBigInteger()
+        val contract = tronKit.transferTrc20TriggerSmartContract(contractAddress, to, amountBigInt)
         tronKit.estimateFee(contract)
     }
 
-    override suspend fun send(amount: BigInteger, to: Address, feeLimit: Long?) {
+    override suspend fun send(amount: BigDecimal, to: Address, feeLimit: Long?) {
         if (signer == null) throw Exception()
-        val contract = tronKit.transferTrc20TriggerSmartContract(contractAddress, to, amount)
+        val amountBigInt = amount.movePointRight(decimal).toBigInteger()
+        val contract = tronKit.transferTrc20TriggerSmartContract(contractAddress, to, amountBigInt)
 
         tronKit.send(contract, signer, feeLimit)
     }
