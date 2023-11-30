@@ -50,6 +50,10 @@ class WatchAddressService(
                     }
                 }
 
+                is AccountType.BitcoinAddress -> {
+                    add(TokenQuery(accountType.blockchainType, accountType.tokenType))
+                }
+
                 is AccountType.HdExtendedKey -> {
                     if (BlockchainType.Bitcoin.supports(accountType)) {
                         accountType.hdExtendedKey.purposes.forEach { purpose ->

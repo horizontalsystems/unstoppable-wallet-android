@@ -1143,23 +1143,11 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Invalid Password</string>
     <string name="ImportBackupFile_BackupPassword">Backup Password</string>
 
-    <string name="Watch_Address_Hint">Address or Domain</string>
-    <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
-    <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
+    <string name="Watch_Address_Hint">Enter Your EVM, TRON, TON or Public Address (Bitcoin, Litecoin, Bitcoin Cash) or Account xPubKey.</string>
     <string name="Watch_Address_Watch">Watch</string>
     <string name="Watch_Select_Blockchains">Choose Blockchains</string>
     <string name="Watch_Select_Coins">Choose Coins</string>
-    <string name="Watch_By">By</string>
-    <string name="Watch_WatchBy">Watch By</string>
-    <string name="Watch_TypeEvmAddress">EVM Address</string>
-    <string name="Watch_TypeSolanaAddress">Solana Address</string>
-    <string name="Watch_TypeTronAddress">Tron Address</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_TypeEvmAddress_Subtitle" translatable="false">(Ethereum, Binance, …)</string>
-    <string name="Watch_TypeSolanaAddress_Subtitle" translatable="false">(SOL, Solana tokens, …)</string>
-    <string name="Watch_TypeTronAddress_Subtitle" translatable="false">(TRX, Tron tokens, …)</string>
-    <string name="Watch_TypeXPubKey_Subtitle" translatable="false">(Bitcoin, Litecoin, …)</string>
-    <string name="Watch_Error_InvalidXPubKey">Invalid xPubKey</string>
+    <string name="Watch_Error_InvalidAddressFormat">Address format is not supported</string>
 
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>

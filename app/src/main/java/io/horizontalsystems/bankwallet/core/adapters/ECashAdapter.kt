@@ -108,6 +108,16 @@ class ECashAdapter(
                         confirmationsThreshold = confirmationsThreshold
                     )
                 }
+                is AccountType.BitcoinAddress -> {
+                    return ECashKit(
+                        context = App.instance,
+                        watchAddress = accountType.address,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = ECashKit.NetworkType.MainNet,
+                        confirmationsThreshold = confirmationsThreshold
+                    )
+                }
                 else -> throw UnsupportedAccountException()
             }
 

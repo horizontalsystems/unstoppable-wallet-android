@@ -26,13 +26,13 @@ class AddressHandlerFactory(
             BlockchainType.BitcoinCash -> {
                 val network = MainNetBitcoinCash()
                 addressHandlers.add(AddressHandlerBase58(network, blockchainType))
-                addressHandlers.add(AddressHandlerBitcoinCash(network))
+                addressHandlers.add(AddressHandlerBitcoinCash(network, blockchainType))
             }
 
             BlockchainType.ECash -> {
                 val network = MainNetECash()
                 addressHandlers.add(AddressHandlerBase58(network, blockchainType))
-                addressHandlers.add(AddressHandlerBitcoinCash(network))
+                addressHandlers.add(AddressHandlerBitcoinCash(network, blockchainType))
             }
 
             BlockchainType.Litecoin -> {
@@ -84,7 +84,7 @@ class AddressHandlerFactory(
     }
 
     private fun domainHandlers(blockchainType: BlockchainType): List<IAddressHandler> {
-        val udnHandler = AddressHandlerUdn(TokenQuery(blockchainType, TokenType.Native), "", udnApiKey)
+        val udnHandler = AddressHandlerUdn(TokenQuery(blockchainType, TokenType.Native), null, udnApiKey)
         val domainAddressHandlers = mutableListOf<IAddressHandler>(udnHandler)
         when (blockchainType) {
             BlockchainType.Ethereum,
@@ -123,4 +123,19 @@ class AddressHandlerFactory(
 
         return AddressParserChain(addressHandlers, domainHandlers)
     }
+
+    fun parserChain(blockchainTypes: List<BlockchainType>, withEns: Boolean = false): AddressParserChain {
+        val addressHandlers = mutableListOf<IAddressHandler>()
+        val domainHandlers = mutableListOf<IAddressHandler>()
+
+        for (blockchainType in blockchainTypes) {
+            addressHandlers.addAll(parserChainHandlers(blockchainType))
+            if (withEns) {
+                domainHandlers.addAll(domainHandlers(blockchainType))
+            }
+        }
+
+        return AddressParserChain(addressHandlers, domainHandlers)
+    }
+
 }
