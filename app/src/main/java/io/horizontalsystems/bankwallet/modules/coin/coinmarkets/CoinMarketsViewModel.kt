@@ -2,17 +2,19 @@ package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.VolumeMenuType
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel() {
     val volumeMenu by service::volumeMenu
-    val sortingType by service::sortType
+    val verifiedMenu by service::verifiedMenu
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val viewItemsLiveData = MutableLiveData<List<MarketTickerViewItem>>()
 
@@ -45,7 +47,8 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
             "${item.baseCoinCode}/${item.targetCoinCode}",
             App.numberFormatter.formatCoinFull(item.rate, item.targetCoinCode, 8),
             getVolume(item),
-            item.tradeUrl
+            item.tradeUrl,
+            if (item.verified) TranslatableString.ResString(R.string.CoinPage_MarketsLabel_Verified) else null
         )
     }
 
@@ -68,8 +71,8 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
         service.start()
     }
 
-    fun toggleSortType(sortType: SortType) {
-        service.setSortType(sortType)
+    fun toggleVerifiedType(verifiedType: VerifiedType) {
+        service.setVerifiedType(verifiedType)
     }
 
     fun toggleVolumeType(volumeMenuType: VolumeMenuType) {
