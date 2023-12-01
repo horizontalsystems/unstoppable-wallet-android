@@ -20,8 +20,14 @@ class AddressParserChain(
         }
     }
 
-    fun parse(address: String): Address? {
-        return supportedAddressHandlers(address).firstOrNull()?.parseAddress(address)
+    fun supportedHandler(address: String): IAddressHandler? {
+        return (addressHandlers + domainHandlers).firstOrNull {
+            try {
+                it.isSupported(address)
+            } catch (t: Throwable) {
+                false
+            }
+        }
     }
 
     fun getAddressFromDomain(address: String): Address? {

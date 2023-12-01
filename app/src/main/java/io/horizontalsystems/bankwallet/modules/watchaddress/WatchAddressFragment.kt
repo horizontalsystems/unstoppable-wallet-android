@@ -20,7 +20,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -137,12 +136,9 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 modifier = Modifier.padding(horizontal = 16.dp),
                 hint = stringResource(id = R.string.Watch_Address_Hint),
                 qrScannerEnabled = true,
-                state = if (uiState.invalidInput)
-                    DataState.Error(Exception(stringResource(R.string.Watch_Error_InvalidAddressFormat)))
-                else
-                    null
+                state = uiState.inputState
             ) {
-                viewModel.onEnterAddress(it)
+                viewModel.onEnterInput(it)
             }
             Spacer(Modifier.height(32.dp))
         }
