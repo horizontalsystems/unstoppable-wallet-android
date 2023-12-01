@@ -23,7 +23,7 @@ class AccountManager(
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
     private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
-    private var accountsMinLevel: Int? = null
+    private var currentLevel = Int.MAX_VALUE
 
     override val activeAccountStateFlow = _activeAccountStateFlow
 
@@ -53,7 +53,7 @@ class AccountManager(
 
     override fun setActiveAccountId(activeAccountId: String?) {
         if (activeAccount?.id != activeAccountId) {
-            storage.activeAccountId = activeAccountId
+            storage.setActiveAccountId(currentLevel, activeAccountId)
             activeAccount = activeAccountId?.let { account(it) }
             _activeAccountStateFlow.update {
                 ActiveAccountState.ActiveAccount(activeAccount)
@@ -146,12 +146,13 @@ class AccountManager(
     }
 
     override fun setLevel(level: Int) {
-        accountsMinLevel = level
+        currentLevel = level
 
         accountsCache = storage.allAccounts(level).associateBy { it.id }.toMutableMap()
 
-        if (!accountsCache.containsKey(activeAccount?.id)) {
-            activeAccount = accountsCache[storage.activeAccountId] ?: accounts.firstOrNull()
+        val activeAccountIdForLevel = storage.getActiveAccountId(level)
+        if (activeAccount == null || activeAccount?.id != activeAccountIdForLevel) {
+            activeAccount = accountsCache[activeAccountIdForLevel] ?: accounts.firstOrNull()
             _activeAccountStateFlow.update {
                 ActiveAccountState.ActiveAccount(activeAccount)
             }
