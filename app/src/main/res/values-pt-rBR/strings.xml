@@ -1213,6 +1213,8 @@
     <string name="CoinPage_SignalSmoothing">Suavização de sinal</string>
     <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium Unstoppable.</string>
     <string name="CoinPage_AiGeneratedText">Esta é uma descrição gerada por IA com base no material de referência fornecido para a criptomoeda em questão. Pode conter erros.</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Confirmado</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">Todas</string>
     <string name="CoinAnalytics_CexVolume_Info1">Volume total de trading para o token em corretoras centralizadas durante um período de 30 dias.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Gráfico mostrando a variação no volume diário de negociação do token nas principais corretoras centralizadas durante um período de 1 ano.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Classificação do Token baseada no volume de trading nas principais corretoras centralizadas durante um período de 30 dias.</string>
