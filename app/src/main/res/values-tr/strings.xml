@@ -904,19 +904,9 @@
     <string name="ImportBackupFile_EnterPassword_Description">Cüzdanınızı içe aktarmak için yedek parolayı girin.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Geçersiz şifre</string>
     <string name="ImportBackupFile_BackupPassword">Yedek Şifre</string>
-    <string name="Watch_Address_Hint">Adres veya Domain</string>
-    <string name="Watch_XPubKey_Hint">Account Extended Public Key girin</string>
-    <string name="Watch_Address_Description">Yalnızca Ethereum ve diğer desteklenen EVM blok zincirleri için kullanılabilir.</string>
     <string name="Watch_Address_Watch">İzle</string>
     <string name="Watch_Select_Blockchains">Blok Zincirleri Seç</string>
     <string name="Watch_Select_Coins">Kripto Parayı Seç</string>
-    <string name="Watch_By">İçerik</string>
-    <string name="Watch_WatchBy">İzle</string>
-    <string name="Watch_TypeEvmAddress">EVM Adresi</string>
-    <string name="Watch_TypeSolanaAddress">Solana Adresi</string>
-    <string name="Watch_TypeTronAddress">Tron Adresi</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_Error_InvalidXPubKey">Geçersiz xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
     <string name="ManageAccount_Save">Kaydet</string>
