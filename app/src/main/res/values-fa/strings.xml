@@ -549,7 +549,6 @@
     <!-- Import Wallet -->
     <string name="ImportWallet_WatchAddress">مشاهده آدرس</string>
     <!-- Import Backup File -->
-    <string name="Watch_Address_Hint">آدرس یا دامنه</string>
     <string name="Watch_Address_Watch">مشاهده</string>
     <string name="Watch_Select_Blockchains">انتخاب زنجیره های بلوکی</string>
     <string name="Watch_Select_Coins">سکه ها را انتخاب کنید</string>
