@@ -928,19 +928,9 @@
     <string name="ImportBackupFile_EnterPassword_Description">Introduzca la contraseña de copia de seguridad para importar su cartera.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Contraseña no válida</string>
     <string name="ImportBackupFile_BackupPassword">Copiar contraseña</string>
-    <string name="Watch_Address_Hint">Dominio o dirección</string>
-    <string name="Watch_XPubKey_Hint">Introduzca Account Extended Public Key</string>
-    <string name="Watch_Address_Description">Disponible sólo para Ethereum y otras blockchains EVM soportadas.</string>
     <string name="Watch_Address_Watch">Ver</string>
     <string name="Watch_Select_Blockchains">Elegir Blockchain</string>
     <string name="Watch_Select_Coins">Elegir monedas</string>
-    <string name="Watch_By">Por</string>
-    <string name="Watch_WatchBy">Ver por</string>
-    <string name="Watch_TypeEvmAddress">Dirección EVM</string>
-    <string name="Watch_TypeSolanaAddress">Dirección Solana</string>
-    <string name="Watch_TypeTronAddress">Dirección de Tron</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_Error_InvalidXPubKey">Clave xPubKey inválida</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>
     <string name="ManageAccount_Save">Guardar</string>
