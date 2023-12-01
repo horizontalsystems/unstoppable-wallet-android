@@ -1219,6 +1219,8 @@
     <string name="CoinPage_SignalSmoothing">Lissage du signal</string>
     <string name="CoinPage_IndicatorsAlertText">Indicateurs disponibles uniquement pour les utilisateurs Premium Unstoppable Wallet.</string>
     <string name="CoinPage_AiGeneratedText">Ceci est une description générée par intelligence artificielle basée sur le matériel de référence fourni pour la cryptomonnaie donnée. Elle peut contenir des erreurs.</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Vérifié</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">Tout</string>
     <string name="CoinAnalytics_CexVolume_Info1">Volume total des échanges pour le jeton sur les principales plateformes d\'échange centralisées au cours d\'une période de 30 jours.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Graphique montrant la variation du volume quotidien de trading du jeton sur les principales plateformes d\'échange centralisées sur une période d\'un an.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Classement du jeton en fonction du volume de négociation sur les principales bourses centralisées au cours d\'une période de 30 jours.</string>
