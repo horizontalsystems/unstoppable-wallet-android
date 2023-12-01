@@ -8,6 +8,7 @@ import cash.p.terminal.core.shorten
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.coin.overview.CoinOverviewItem
 import cash.p.terminal.modules.coin.overview.CoinOverviewViewItem
+import cash.p.terminal.ui.compose.TranslatableString
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -30,6 +31,7 @@ data class MarketTickerViewItem(
     val rate: String,
     val volume: String,
     val tradeUrl: String?,
+    val badge: TranslatableString?
 )
 
 sealed class RoiViewItem {

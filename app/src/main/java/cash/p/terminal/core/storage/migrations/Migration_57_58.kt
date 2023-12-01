@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.storage.migrations
+package cash.p.terminal.core.storage.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase

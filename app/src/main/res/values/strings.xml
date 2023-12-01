@@ -1496,6 +1496,9 @@
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Indicators available only for P.CASH Wallet premium users.</string>
     <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
+    <string name="CoinPage_MarketsLabel_Verified">VERIFIED</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Verified</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">All</string>
 
     // Coin Page -> Analytics
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over a 30-day period.</string>
