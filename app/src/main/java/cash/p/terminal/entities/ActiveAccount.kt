@@ -1,9 +1,11 @@
 package cash.p.terminal.entities
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Entity(primaryKeys = ["primaryKey"])
+@Entity
 class ActiveAccount(
-        val accountId: String,
-        val primaryKey: String = "active_account"
+    @PrimaryKey
+    val level: Int,
+    val accountId: String,
 )
