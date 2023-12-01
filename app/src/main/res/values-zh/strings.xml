@@ -928,19 +928,9 @@
     <string name="ImportBackupFile_EnterPassword_Description">输入备份密码以导入您的钱包。</string>
     <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
     <string name="ImportBackupFile_BackupPassword">备份密码</string>
-    <string name="Watch_Address_Hint">地址或域名</string>
-    <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
-    <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
     <string name="Watch_Address_Watch">观察</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>
-    <string name="Watch_By">由</string>
-    <string name="Watch_WatchBy">观看者</string>
-    <string name="Watch_TypeEvmAddress">EVM 地址</string>
-    <string name="Watch_TypeSolanaAddress">Solana 地址</string>
-    <string name="Watch_TypeTronAddress">Tron 地址</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_Error_InvalidXPubKey">无效的 xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
