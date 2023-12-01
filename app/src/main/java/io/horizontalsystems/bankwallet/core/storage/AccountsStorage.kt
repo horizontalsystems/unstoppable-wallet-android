@@ -27,15 +27,17 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val CEX = "cex"
     }
 
-    override var activeAccountId: String?
-        get() = dao.getActiveAccount()?.accountId
-        set(value) {
-            if (value != null) {
-                dao.insertActiveAccount(ActiveAccount(value))
-            } else {
-                dao.deleteActiveAccount()
-            }
+    override fun getActiveAccountId(level: Int): String? {
+        return dao.getActiveAccount(level)?.accountId
+    }
+
+    override fun setActiveAccountId(level: Int, id: String?) {
+        if (id == null) {
+            dao.deleteActiveAccount(level)
+        } else {
+            dao.insertActiveAccount(ActiveAccount(level, id))
         }
+    }
 
     override val isAccountsEmpty: Boolean
         get() = dao.getTotalCount() == 0

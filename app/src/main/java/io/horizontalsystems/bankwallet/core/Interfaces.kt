@@ -369,9 +369,10 @@ interface ISendTronAdapter {
 }
 
 interface IAccountsStorage {
-    var activeAccountId: String?
     val isAccountsEmpty: Boolean
 
+    fun getActiveAccountId(level: Int): String?
+    fun setActiveAccountId(level: Int, id: String?)
     fun allAccounts(accountsMinLevel: Int): List<Account>
     fun save(account: Account)
     fun update(account: Account)

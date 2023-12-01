@@ -40,12 +40,12 @@ interface AccountsDao {
     @Query("DELETE FROM AccountRecord WHERE deleted = 1")
     fun clearDeleted()
 
-    @Query("SELECT * FROM ActiveAccount LIMIT 1")
-    fun getActiveAccount(): ActiveAccount?
+    @Query("SELECT * FROM ActiveAccount WHERE level = :level LIMIT 1")
+    fun getActiveAccount(level: Int): ActiveAccount?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertActiveAccount(activeAccount: ActiveAccount)
 
-    @Query("DELETE FROM ActiveAccount")
-    fun deleteActiveAccount()
+    @Query("DELETE FROM ActiveAccount WHERE level = :level")
+    fun deleteActiveAccount(level: Int)
 }
