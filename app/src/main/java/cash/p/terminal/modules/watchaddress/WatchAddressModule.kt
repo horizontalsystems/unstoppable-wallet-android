@@ -9,15 +9,14 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 object WatchAddressModule {
 
     val supportedBlockchainTypes = buildList {
-        addAll(App.evmBlockchainManager.allBlockchainTypes)
+        add(BlockchainType.Ethereum)
+        add(BlockchainType.Tron)
+        add(BlockchainType.Ton)
         add(BlockchainType.Bitcoin)
         add(BlockchainType.BitcoinCash)
         add(BlockchainType.Litecoin)
         add(BlockchainType.Dash)
         add(BlockchainType.ECash)
-        add(BlockchainType.Solana)
-        add(BlockchainType.Tron)
-        add(BlockchainType.Ton)
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -25,7 +24,10 @@ object WatchAddressModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = WatchAddressService(App.accountManager, App.walletActivator, App.accountFactory, App.marketKit, App.evmBlockchainManager)
             val addressHandlerFactory =  AddressHandlerFactory(App.appConfigProvider.udnApiKey)
-            val addressParserChain = addressHandlerFactory.parserChain(supportedBlockchainTypes)
+            val addressParserChain = addressHandlerFactory.parserChain(
+                blockchainTypes = supportedBlockchainTypes,
+                blockchainTypesWithEns = listOf(BlockchainType.Ethereum)
+            )
             return WatchAddressViewModel(service, addressParserChain) as T
         }
     }

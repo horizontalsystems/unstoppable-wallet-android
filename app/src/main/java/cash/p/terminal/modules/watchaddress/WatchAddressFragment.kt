@@ -20,7 +20,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.watchaddress.selectblockchains.SelectBlockchainsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -137,12 +136,9 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 modifier = Modifier.padding(horizontal = 16.dp),
                 hint = stringResource(id = R.string.Watch_Address_Hint),
                 qrScannerEnabled = true,
-                state = if (uiState.invalidInput)
-                    DataState.Error(Exception(stringResource(R.string.Watch_Error_InvalidAddressFormat)))
-                else
-                    null
+                state = uiState.inputState
             ) {
-                viewModel.onEnterAddress(it)
+                viewModel.onEnterInput(it)
             }
             Spacer(Modifier.height(32.dp))
         }

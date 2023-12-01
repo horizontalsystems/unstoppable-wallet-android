@@ -4,13 +4,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import cash.p.terminal.R
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.BitcoinAddress
+import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.tokenType
 import cash.p.terminal.modules.address.AddressParserChain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WatchAddressViewModel(
     private val watchAddressService: WatchAddressService,
@@ -22,9 +31,10 @@ class WatchAddressViewModel(
     private var type = Type.Unsupported
     private var address: Address? = null
     private var xPubKey: String? = null
-    private var invalidInput = false
     private var accountType: AccountType? = null
     private var accountNameEdited = false
+    private var inputState: DataState<String>? = null
+    private var parseAddressJob: Job? = null
 
     val defaultAccountName = watchAddressService.nextWatchAccountName()
     var accountName: String = defaultAccountName
@@ -37,7 +47,7 @@ class WatchAddressViewModel(
             submitButtonType = submitButtonType,
             accountType = accountType,
             accountName = accountName,
-            invalidInput = invalidInput
+            inputState = inputState
         )
     )
         private set
@@ -48,7 +58,7 @@ class WatchAddressViewModel(
             submitButtonType = submitButtonType,
             accountType = accountType,
             accountName = accountName,
-            invalidInput = invalidInput
+            inputState = inputState
         )
     }
 
@@ -57,32 +67,81 @@ class WatchAddressViewModel(
         accountName = v
     }
 
-    fun onEnterAddress(v: String) {
-        if (v.isBlank()) {
-            address = null
-            xPubKey = null
-            invalidInput = false
+    fun onEnterInput(v: String) {
+        parseAddressJob?.cancel()
+        address = null
+        xPubKey = null
 
+        if (v.isBlank()) {
+            inputState = null
+            accountName = defaultAccountName
             syncSubmitButtonType()
             emitState()
         } else {
-            val address = addressParserChain.parse(v)
-            if (address != null) {
-                onEnterAddress(address)
-            } else {
-                onEnterXPubKey(v)
+            inputState = DataState.Loading
+            syncSubmitButtonType()
+            emitState()
+
+            val vTrimmed = v.trim()
+            parseAddressJob = viewModelScope.launch(Dispatchers.IO) {
+                val handler = addressParserChain.supportedHandler(vTrimmed)
+
+                if (handler == null) {
+                    ensureActive()
+                    withContext(Dispatchers.Main) {
+                        setXPubKey(vTrimmed)
+                    }
+                    return@launch
+                } else {
+                    try {
+                        val parsedAddress = handler.parseAddress(vTrimmed)
+                        ensureActive()
+                        withContext(Dispatchers.Main) {
+                            setAddress(parsedAddress)
+                        }
+                    } catch (t: Throwable) {
+                        ensureActive()
+                        withContext(Dispatchers.Main) {
+                            inputState = DataState.Error(t)
+                            syncSubmitButtonType()
+                            emitState()
+                        }
+                    }
+                }
             }
         }
     }
 
-    private fun onEnterAddress(address: Address) {
+    private fun setAddress(address: Address) {
         this.address = address
         if (!accountNameEdited) {
             accountName = address.domain ?: defaultAccountName
         }
 
         type = addressType(address)
-        invalidInput = type == Type.Unsupported
+        inputState = DataState.Success(address.hex)
+
+        syncSubmitButtonType()
+        emitState()
+    }
+
+    private fun setXPubKey(input: String) {
+        xPubKey = try {
+            val hdKey = HDExtendedKey(input)
+            require(hdKey.isPublic) {
+                throw HDExtendedKey.ParsingError.WrongVersion
+            }
+
+            inputState = DataState.Success(input)
+            type = Type.XPubKey
+
+            input
+        } catch (t: Throwable) {
+            inputState = DataState.Error(UnsupportedAddress)
+            type = Type.Unsupported
+
+            null
+        }
 
         syncSubmitButtonType()
         emitState()
@@ -112,29 +171,6 @@ class WatchAddressViewModel(
         BlockchainType.Zcash,
         is BlockchainType.Unsupported,
         null -> Type.Unsupported
-    }
-
-    private fun onEnterXPubKey(input: String) {
-        xPubKey = try {
-            val hdKey = HDExtendedKey(input)
-            require(hdKey.isPublic) {
-                throw HDExtendedKey.ParsingError.WrongVersion
-            }
-
-            invalidInput = false
-            type = Type.XPubKey
-
-            input
-        } catch (t: Throwable) {
-
-            invalidInput = input.isNotBlank()
-            type = Type.Unsupported
-
-            null
-        }
-
-        syncSubmitButtonType()
-        emitState()
     }
 
     fun blockchainSelectionOpened() {
@@ -209,10 +245,12 @@ data class WatchAddressUiState(
     val submitButtonType: SubmitButtonType,
     val accountType: AccountType?,
     val accountName: String?,
-    val invalidInput: Boolean
+    val inputState: DataState<String>?
 )
 
 sealed class SubmitButtonType {
     data class Watch(val enabled: Boolean) : SubmitButtonType()
     data class Next(val enabled: Boolean) : SubmitButtonType()
 }
+
+object UnsupportedAddress : Exception(Translator.getString(R.string.Watch_Error_InvalidAddressFormat))
