@@ -1131,6 +1131,8 @@
     <string name="CoinPage_SlowLength">Yavaş Uzunluk</string>
     <string name="CoinPage_SignalSmoothing">Sinyal Düzleştirme</string>
     <string name="CoinPage_AiGeneratedText">Bu, verilen kripto para birimi için sağlanan referans materyale dayanarak yapay zeka tarafından oluşturulmuş bir açıklamadır. Hatalar içerebilir.</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Onaylandı</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">Hepsi</string>
     <string name="CoinAnalytics_CexVolume_Info2">Bir yıllık süre zarfında önde gelen merkezi olmayan borsalarda token için günlük işlem hacmindeki değişikliği gösteren grafik.</string>
     <string name="CoinAnalytics_CexVolume_Info4">24 Saat / 7 Gün / 1 Ay aralıklarında merkezi borsalarda işlem hacmine göre sıralanan tüm tokenların listesi.</string>
     <string name="CoinAnalytics_DexVolume_Info2">Bir yıllık süre zarfında önde gelen merkezi olmayan borsalarda token için günlük işlem hacmindeki değişikliği gösteren grafik.</string>
