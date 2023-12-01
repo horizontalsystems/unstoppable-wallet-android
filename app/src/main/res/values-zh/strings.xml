@@ -1212,6 +1212,8 @@
     <string name="CoinPage_SignalSmoothing">信号平滑化</string>
     <string name="CoinPage_IndicatorsAlertText">指标仅适用于不可阻止的钱包高级用户。</string>
     <string name="CoinPage_AiGeneratedText">这是一个基于给定的加密货币所提供的参考材料生成的 AI 描述。它可能包含错误。</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">已验证</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">所有</string>
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">图表显示了过去一年内该代币在主要中心化交易所的日交易量变化。</string>
     <string name="CoinAnalytics_CexVolume_Info3">代币的排名基于过去30天内在主要中心化交易所的交易量。</string>
