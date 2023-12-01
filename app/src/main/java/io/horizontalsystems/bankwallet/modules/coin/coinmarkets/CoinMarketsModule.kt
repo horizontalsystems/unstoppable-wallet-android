@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -46,11 +47,18 @@ data class MarketTickerItem(
     val rate: BigDecimal,
     val volume: BigDecimal,
     val volumeType: CoinMarketsModule.VolumeMenuType,
-    val tradeUrl: String?
+    val tradeUrl: String?,
+    val verified: Boolean
 )
 
-enum class SortType {
-    HighestVolume, LowestVolume;
+enum class VerifiedType: WithTranslatableTitle  {
+    Verified, All;
+
+    override val title: TranslatableString
+        get() = when(this) {
+            Verified -> TranslatableString.ResString(R.string.CoinPage_MarketsVerifiedMenu_Verified)
+            All -> TranslatableString.ResString(R.string.CoinPage_MarketsVerifiedMenu_All)
+        }
 
     fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
 }

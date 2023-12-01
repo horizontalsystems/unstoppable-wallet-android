@@ -2,15 +2,26 @@ package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +37,14 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
+import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
+import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
@@ -42,7 +60,7 @@ fun CoinMarketsScreen(
     val viewItems by viewModel.viewItemsLiveData.observeAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
-        Crossfade(viewItemState) { viewItemState ->
+        Crossfade(viewItemState, label = "") { viewItemState ->
             when (viewItemState) {
                 ViewState.Loading -> {
                     Loading()
@@ -60,10 +78,10 @@ fun CoinMarketsScreen(
                                 )
                             } else {
                                 CoinMarketsMenu(
-                                    viewModel.sortingType,
+                                    viewModel.verifiedMenu,
                                     viewModel.volumeMenu,
                                     {
-                                        viewModel.toggleSortType(it)
+                                        viewModel.toggleVerifiedType(it)
                                         scrollToTopAfterUpdate = true
                                     },
                                     { viewModel.toggleVolumeType(it) }
@@ -84,24 +102,22 @@ fun CoinMarketsScreen(
 
 @Composable
 fun CoinMarketsMenu(
-    menuSorting: SortType,
+    menuVerified: Select<VerifiedType>,
     menuVolumeType: Select<CoinMarketsModule.VolumeMenuType>,
-    onToggleSortType: (SortType) -> Unit,
+    onToggleVerified: (VerifiedType) -> Unit,
     onToggleVolumeType: (CoinMarketsModule.VolumeMenuType) -> Unit
 ) {
 
-    var sortingType by remember { mutableStateOf(menuSorting) }
+    var verifiedType by remember { mutableStateOf(menuVerified) }
     var volumeType by remember { mutableStateOf(menuVolumeType) }
 
     HeaderSorting(borderTop = true, borderBottom = true) {
-        ButtonSecondaryCircle(
-            modifier = Modifier
-                .padding(start = 16.dp),
-            icon = if (sortingType == SortType.HighestVolume) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
-            onClick = {
-                val next = sortingType.next()
-                onToggleSortType(next)
-                sortingType = next
+        ButtonSecondaryToggle(
+            modifier = Modifier.padding(start = 16.dp),
+            select = verifiedType,
+            onSelect = {
+                onToggleVerified.invoke(it)
+                verifiedType = Select(it, verifiedType.options)
             }
         )
         Spacer(Modifier.weight(1f))
@@ -132,7 +148,8 @@ fun CoinMarketList(
                 item.marketImageUrl ?: "",
                 item.rate,
                 MarketDataValue.Volume(item.volume),
-                item.tradeUrl
+                item.tradeUrl,
+                item.badge
             )
         }
         item {
@@ -154,6 +171,7 @@ fun CoinMarketCell(
     coinRate: String? = null,
     marketDataValue: MarketDataValue? = null,
     tradeUrl: String?,
+    badge: TranslatableString?
 ) {
     val context = LocalContext.current
     SectionItemBorderedRowUniversalClear(
@@ -176,7 +194,7 @@ fun CoinMarketCell(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(name, coinRate)
+            MarketCoinFirstRow(name, coinRate, badge?.getString())
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(subtitle, marketDataValue, null)
         }

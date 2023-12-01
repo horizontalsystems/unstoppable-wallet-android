@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -30,6 +31,7 @@ data class MarketTickerViewItem(
     val rate: String,
     val volume: String,
     val tradeUrl: String?,
+    val badge: TranslatableString?
 )
 
 sealed class RoiViewItem {
