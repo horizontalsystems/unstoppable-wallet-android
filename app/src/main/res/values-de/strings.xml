@@ -1200,6 +1200,8 @@
     <string name="CoinPage_SignalSmoothing">Signal glättet</string>
     <string name="CoinPage_IndicatorsAlertText">Indikatoren nur für unaufhaltsame Wallet-Premium-Nutzer verfügbar.</string>
     <string name="CoinPage_AiGeneratedText">Dies ist eine von KI generierte Beschreibung, basierend auf dem bereitgestellten Referenzmaterial für die angegebene Kryptowährung. Sie kann Fehler enthalten.</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Verifiziert</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">Alle</string>
     <string name="CoinAnalytics_CexVolume_Info1">Gesamthandelsvolumen für das Token an führenden zentralen Börsen über einen Zeitraum von 30 Tagen.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Diagramm, das die Schwankungen im täglichen Handelsvolumen des Tokens an führenden zentralisierten Börsen über einen Zeitraum von 1 Jahr zeigt.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Die Rangfolge des Tokens basiert auf dem Handelsvolumen an führenden zentralisierten Börsen über einen Zeitraum von 30 Tagen.</string>
