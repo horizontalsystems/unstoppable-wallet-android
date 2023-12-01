@@ -928,19 +928,9 @@
     <string name="ImportBackupFile_EnterPassword_Description">Geben Sie das Sicherungspasswort ein, um Ihre Brieftasche zu importieren.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Ungültiges Passwort</string>
     <string name="ImportBackupFile_BackupPassword">Passwort sichern</string>
-    <string name="Watch_Address_Hint">Adresse oder Domäne</string>
-    <string name="Watch_XPubKey_Hint">Account Extended Public Key eingeben</string>
-    <string name="Watch_Address_Description">Nur für Ethereum und andere unterstützte EVM Blockchains verfügbar.</string>
     <string name="Watch_Address_Watch">Beobachten</string>
     <string name="Watch_Select_Blockchains">Blockchain auswählen</string>
     <string name="Watch_Select_Coins">Coins auswählen</string>
-    <string name="Watch_By">Von</string>
-    <string name="Watch_WatchBy">Beobachten von</string>
-    <string name="Watch_TypeEvmAddress">EVM-Adresse</string>
-    <string name="Watch_TypeSolanaAddress">Solana-Adresse</string>
-    <string name="Watch_TypeTronAddress">Tron Adresse</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_Error_InvalidXPubKey">Ungültiger xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Speichern</string>
