@@ -385,9 +385,7 @@
     <string name="FeeSettings_GasPrice_Info">Les frais pour effectuer des transactions sur le réseau sont mesurés en unités de gas. Le prix du gas est le montant qu\'un utilisateur est prêt à dépenser par unité de gas. Le prix du gas est élevé lorsque le réseau est encombré, et faible lorsqu\'il est inactif. Souvent, une transaction reste en suspens pendant une période prolongée si le montant du gas est insuffisant.</string>
     <string name="FeeSettings_BaseFee">Frais de base</string>
     <string name="FeeSettings_BaseFee_Info">Le protocole réseau détermine le prix de base par gaz pour chaque bloc, appelé tarif de base. Il varie selon le niveau d\'utilisation du réseau de bloc en bloc. Il peut augmenter ou diminuer de 12,5 % au maximum dans le prochain bloc, ce qui rend les frais plus prévisibles. La valeur affichée ici est le taux de frais de base du bloc actuel.</string>
-    <string name="FeeSettings_MaxFee">Taux de frais max (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">Cela correspond au montant maximal du prix auquel l\'utilisateur achète le gaz. Ce prix doit couvrir le taux minimal des frais de transaction du réseau, il doit aussi devenir la priorité avec laquelle une transaction sera traitée. L\'origine de l\'estimation de la valeur, indiquée ici, se trouve dans une analyse, selon laquelle la valeur serait calculée en ajoutant le taux minimal des frais de transaction du bloc successif à la priorité de l\'utilisateur avec la quelle une transaction sera traitée. Le taux actuel des frais de transaction à payer, sera revu à la baisse et ajusté automatiquement. La fixation du taux du prix en dessous du taux plancher actuel, serait, d\'une part, un soulagement parce qu\'elle limiterait les frais à payer, d\'autre part, il faut compter avec un temps de confirmation moyen plus long des transactions, voire un blocage de la transaction.</string>
-    <string name="FeeSettings_MaxMinerTips">Frais de priorité max (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Les utilisateurs paient des frais de priorité pour encourager une transaction à être confirmée plus rapidement. Ils sont parfois appelés conseils. Le taux de frais de priorité max est le prix supplémentaire maximum par gaz que l\'utilisateur est prêt à payer en plus du taux de frais de base. La valeur montrée ici est suggérée en fonction des conditions de réseau prévues. Les frais de priorité réels seront normalement inférieurs. Le fait de le définir à zéro peut entraîner un long délai d\'attente pour la confirmation de la transaction, car il est placé à la fin de la file d\'attente des transactions en attente de tous les utilisateurs.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risqué</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transaction risque de rester en attente pendant un certain temps ou d\'échouer complètement.</string>
@@ -614,7 +612,6 @@
     <string name="Transactions_Multiple">Multiples</string>
     <string name="Transactions_Filter">Filtre</string>
     <string name="Transactions_Coins">Pièces</string>
-    <string name="Transactions_Filter_HideSuspiciousTx">Masquer les transactions suspectes</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Masquer les transactions entrantes avec des montants infimes en stablecoins, cela résout partiellement les problèmes d\'attaques de poisoning d\'adresse.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Opération</string>
@@ -924,7 +921,6 @@
     <string name="ManageAccounts_WatchAddress">Adresse à suivre</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">À partir du fichier</string>
-    <string name="ImportWallet_BackupFile_Description">Importer depuis un fichier de sauvegarde.</string>
     <string name="ImportWallet_RecoveryPhrase">Voir la phase de récupération</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Importer à l\'aide de la phrase de récupération ou de la clé privée.</string>
     <string name="ImportWallet_ExchangeWallet">depuis Exchange Wallet</string>
@@ -939,19 +935,9 @@
     <string name="ImportBackupFile_EnterPassword_Description">Entrez le mot de passe de sauvegarde pour importer votre portefeuille.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Mot de passe invalide</string>
     <string name="ImportBackupFile_BackupPassword">Mot de passe de sauvegarde</string>
-    <string name="Watch_Address_Hint">Adresse ou domaine</string>
-    <string name="Watch_XPubKey_Hint">Entrez Account Extended Public Key</string>
-    <string name="Watch_Address_Description">Disponible uniquement pour Ethereum et autres blockchains EVM prises en charge.</string>
     <string name="Watch_Address_Watch">Suivi</string>
     <string name="Watch_Select_Blockchains">Choisir la blockchain</string>
     <string name="Watch_Select_Coins">Crypto Monnaie</string>
-    <string name="Watch_By">Par</string>
-    <string name="Watch_WatchBy">Regarder par</string>
-    <string name="Watch_TypeEvmAddress">Adresse EVM</string>
-    <string name="Watch_TypeSolanaAddress">Adresse Solana</string>
-    <string name="Watch_TypeTronAddress">Adresse du Tron</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_Error_InvalidXPubKey">xPubKey invalide</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
     <string name="ManageAccount_Save">Sauvegarder</string>
