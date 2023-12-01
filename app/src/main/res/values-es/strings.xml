@@ -1212,6 +1212,8 @@
     <string name="CoinPage_SignalSmoothing">Suavizado de señal</string>
     <string name="CoinPage_IndicatorsAlertText">Indicadores disponibles sólo para usuarios premium de Wallet imparables.</string>
     <string name="CoinPage_AiGeneratedText">Esta es una descripción generada por IA basada en el material de referencia proporcionado para la criptomoneda dada. Puede contener errores.</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Verificado</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">Todo</string>
     <string name="CoinAnalytics_CexVolume_Info2">Gráfico que muestra la variación en el volumen diario de comercio del token en los principales exchanges centralizados durante un período de 1 año.</string>
     <string name="CoinAnalytics_CexVolume_Info4">Lista de todos los tokens clasificados según el volumen de comercio en exchanges centralizados en intervalos de 24H / 7D / 1M.</string>
     <string name="CoinAnalytics_DexVolume_Info2">Gráfico que muestra variación en el volumen de operaciones diarias para la ficha de los principales intercambios descentralizados en un período de 1 año.</string>
