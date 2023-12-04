@@ -12,28 +12,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.EvmAddressFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysModule.ACCOUNT_KEY
-import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule
+import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.core.parcelable
 
 class PublicKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account: Account? = arguments?.parcelable(ACCOUNT_KEY)
+        val account = navController.getInput<Account>()
+
         if (account == null) {
             Toast.makeText(App.instance, "Account parameter is missing", Toast.LENGTH_SHORT).show()
             navController.popBackStack()
@@ -72,7 +71,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                 ) {
                     navController.slideFromRight(
                         R.id.evmAddressFragment,
-                        bundleOf(EvmAddressFragment.EVM_ADDRESS_KEY to evmAddress)
+                        EvmAddressFragment.Input(evmAddress)
                     )
                 }
             }
@@ -83,7 +82,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                 ) {
                     navController.slideFromRight(
                         R.id.showExtendedKeyFragment,
-                        ShowExtendedKeyModule.prepareParams(
+                        ShowExtendedKeyFragment.Input(
                             publicKey.hdKey,
                             publicKey.accountPublicKey
                         )

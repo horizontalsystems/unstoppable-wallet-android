@@ -18,22 +18,21 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.authorizedAction
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysModule.ACCOUNT_KEY
-import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule
+import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.core.parcelable
 
 class PrivateKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account: Account? = arguments?.parcelable(ACCOUNT_KEY)
+        val account = navController.getInput<Account>()
         if (account == null) {
             Toast.makeText(App.instance, "Account parameter is missing", Toast.LENGTH_SHORT).show()
             navController.popBackStack()
@@ -73,7 +72,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     navController.authorizedAction {
                         navController.slideFromRight(
                             R.id.evmPrivateKeyFragment,
-                            EvmPrivateKeyFragment.prepareParams(key)
+                            EvmPrivateKeyFragment.Input(key)
                         )
                     }
                 }
@@ -86,7 +85,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     navController.authorizedAction {
                         navController.slideFromRight(
                             R.id.showExtendedKeyFragment,
-                            ShowExtendedKeyModule.prepareParams(
+                            ShowExtendedKeyFragment.Input(
                                 key.hdKey,
                                 key.displayKeyType
                             )
@@ -102,7 +101,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     navController.authorizedAction {
                         navController.slideFromRight(
                             R.id.showExtendedKeyFragment,
-                            ShowExtendedKeyModule.prepareParams(key.hdKey, key.displayKeyType)
+                            ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
                         )
                     }
                 }

@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
-import io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
@@ -310,14 +309,14 @@ class MainViewModel(
                 when {
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
-                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.prepareParams(it, "widget_click"))
+                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it, "widget_click"))
                         }
                     }
 
                     deeplinkString.contains("nft-collection") -> {
                         val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
                         if (uid != null && blockchainTypeUid != null) {
-                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.prepareParams(uid, blockchainTypeUid))
+                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.Input(uid, blockchainTypeUid))
                         }
                     }
 
@@ -325,7 +324,7 @@ class MainViewModel(
                         val title = deepLink.getQueryParameter("title")
                         if (title != null && uid != null) {
                             val platform = Platform(uid, title)
-                            deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, MarketPlatformFragment.prepareParams(platform))
+                            deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
                         }
                     }
                 }
@@ -336,7 +335,7 @@ class MainViewModel(
             deeplinkString.startsWith("wc:") -> {
                 wcSupportState = wc2Manager.getWalletConnectSupportState()
                 if (wcSupportState == WC2Manager.SupportState.Supported) {
-                    deeplinkPage = DeeplinkPage(R.id.wallet_connect_graph, WCListFragment.prepareParams(deeplinkString))
+                    deeplinkPage = DeeplinkPage(R.id.wallet_connect_graph, WCListFragment.Input(deeplinkString))
                     tab = MainNavigation.Settings
                 }
             }

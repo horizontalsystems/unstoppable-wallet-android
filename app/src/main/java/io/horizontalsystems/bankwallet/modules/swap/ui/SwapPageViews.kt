@@ -86,7 +86,7 @@ fun SwapAllowance(
                     onClick = {
                         navController.slideFromBottom(
                             R.id.feeSettingsInfoDialog,
-                            FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
+                            FeeSettingsInfoDialog.Input(infoTitle, infoText)
                         )
                     },
                     interactionSource = MutableInteractionSource(),

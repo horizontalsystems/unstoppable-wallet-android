@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -89,5 +88,5 @@ object MainModule {
 
 data class DeeplinkPage(
     val navigationId: Int,
-    val bundle: Bundle? = null
+    val input: Parcelable
 )

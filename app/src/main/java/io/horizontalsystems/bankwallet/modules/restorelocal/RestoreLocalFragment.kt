@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.restorelocal
 
+import android.os.Parcelable
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,11 +41,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.OtherBackupItems
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
@@ -68,33 +69,29 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class RestoreLocalFragment : BaseComposeFragment() {
-    companion object {
-        const val jsonFileKey = "jsonFileKey"
-        const val fileNameKey = "fileNameKey"
-    }
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val popUpToInclusiveId =
-            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
-
-        val popUpInclusive =
-            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
-
-        val backupJsonString = arguments?.getString(jsonFileKey)
-        val fileName = arguments?.getString(fileNameKey)
-
+        val input = navController.getInput<Input>()
         RestoreLocalNavHost(
-            backupJsonString,
-            fileName,
+            input?.jsonFile,
+            input?.fileName,
             navController,
-            popUpToInclusiveId,
-            popUpInclusive
+            input?.popOffOnSuccess ?: R.id.restoreAccountFragment,
+            input?.popOffInclusive ?: false
         ) { activity?.let { MainModule.startAsNewTask(it) } }
     }
 
+    @Parcelize
+    data class Input(
+        val popOffOnSuccess: Int,
+        val popOffInclusive: Boolean,
+        val jsonFile: String,
+        val fileName: String?,
+    ) : Parcelable
 }
 
 @Composable

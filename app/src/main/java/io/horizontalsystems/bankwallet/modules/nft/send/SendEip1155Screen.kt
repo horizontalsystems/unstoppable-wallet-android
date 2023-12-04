@@ -128,7 +128,7 @@ fun SendEip1155Screen(
                         viewModel.getSendData()?.let { sendData ->
                             navController.slideFromRight(
                                 R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationModule.prepareParams(
+                                SendEvmConfirmationModule.Input(
                                     sendData,
                                     nftSendFragment
                                 )

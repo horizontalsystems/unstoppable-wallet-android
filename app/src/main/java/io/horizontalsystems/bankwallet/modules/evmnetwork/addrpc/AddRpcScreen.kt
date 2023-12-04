@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.evmnetwork.addrpc
 
-import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,13 +27,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.marketkit.models.Blockchain
 
 @Composable
 fun AddRpcScreen(
     navController: NavController,
-    arguments: Bundle,
-    viewModel: AddRpcViewModel = viewModel(factory = AddRpcModule.Factory(arguments))
+    blockchain: Blockchain,
 ) {
+    val viewModel = viewModel<AddRpcViewModel>(factory = AddRpcModule.Factory(blockchain))
     if (viewModel.viewState.closeScreen) {
         navController.popBackStack()
         viewModel.onScreenClose()

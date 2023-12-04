@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.platform
 
-import android.os.Bundle
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -25,12 +24,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
@@ -58,7 +57,7 @@ class MarketPlatformFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
 
-        val platform = arguments?.parcelable<Platform>(platformKey)
+        val platform = navController.getInput<Platform>()
 
         if (platform == null) {
             navController.popBackStack()
@@ -71,20 +70,11 @@ class MarketPlatformFragment : BaseComposeFragment() {
             factory = factory,
             onCloseButtonClick = { navController.popBackStack() },
             onCoinClick = { coinUid ->
-                val arguments = CoinFragment.prepareParams(coinUid, "market_platform")
+                val arguments = CoinFragment.Input(coinUid, "market_platform")
                 navController.slideFromRight(R.id.coinFragment, arguments)
             }
         )
     }
-
-    companion object {
-        private const val platformKey = "platform_key"
-
-        fun prepareParams(platform: Platform): Bundle {
-            return bundleOf(platformKey to platform)
-        }
-    }
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)

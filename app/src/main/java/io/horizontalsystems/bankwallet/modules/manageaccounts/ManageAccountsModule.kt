@@ -3,22 +3,14 @@ package io.horizontalsystems.bankwallet.modules.manageaccounts
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import kotlinx.parcelize.Parcelize
 
 object ManageAccountsModule {
-    const val MODE = "mode"
-    const val popOffOnSuccessKey = "popOffOnSuccessKey"
-    const val popOffInclusiveKey = "popOffInclusiveKey"
-
-    fun prepareParams(mode: Mode) = bundleOf(MODE to mode)
-    fun prepareParams(popOffOnSuccess: Int, inclusive: Boolean) = bundleOf(
-        popOffOnSuccessKey to popOffOnSuccess,
-        popOffInclusiveKey to inclusive,
-    )
+    @Parcelize
+    data class Input(val popOffOnSuccess: Int, val popOffInclusive: Boolean) : Parcelable
 
     class Factory(private val mode: Mode) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")

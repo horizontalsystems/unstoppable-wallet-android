@@ -1,13 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
+import android.os.Parcelable
 import androidx.annotation.StringRes
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import kotlinx.parcelize.Parcelize
 
 object NftAssetModule {
 
@@ -32,10 +33,13 @@ object NftAssetModule {
     const val collectionUidKey = "collectionUidKey"
     const val nftUidKey = "nftUidKey"
 
-    fun prepareParams(collectionUid: String?, nftUid: NftUid) = bundleOf(
-        collectionUidKey to collectionUid,
-        nftUidKey to nftUid.uid
-    )
+    @Parcelize
+    data class Input(val collectionUid: String?, val nftUidString: String) : Parcelable {
+        val nftUid: NftUid
+            get() = NftUid.fromUid(nftUidString)
+
+        constructor(collectionUid: String?, nftUid: NftUid) : this(collectionUid, nftUid.uid)
+    }
 
     enum class Tab(@StringRes val titleResId: Int) {
         Overview(R.string.NftAsset_Overview),

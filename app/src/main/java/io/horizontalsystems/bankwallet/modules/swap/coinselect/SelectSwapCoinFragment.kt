@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -21,47 +20,26 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.core.setNavigationResult
 
 class SelectSwapCoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val dex = arguments?.parcelable<SwapMainModule.Dex>(dexKey)
-        val requestId = arguments?.getLong(requestIdKey)
-        if (dex == null || requestId == null) {
+        val dex = navController.getInput<SwapMainModule.Dex>()
+        if (dex == null) {
             navController.popBackStack()
         } else {
             SelectSwapCoinDialogScreen(
                 navController = navController,
                 dex = dex,
                 onClickItem = {
-                    closeWithResult(it, requestId, navController)
+                    navController.setNavigationResultX(it)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        navController.popBackStack()
+                    }, 100)
                 }
             )
         }
-    }
-
-    private fun closeWithResult(coinBalanceItem: CoinBalanceItem, requestId: Long, navController: NavController) {
-        setNavigationResult(
-            resultBundleKey, bundleOf(
-                requestIdKey to requestId,
-                coinBalanceItemResultKey to coinBalanceItem
-            )
-        )
-        Handler(Looper.getMainLooper()).postDelayed({
-            navController.popBackStack()
-        }, 100)
-    }
-
-    companion object {
-        const val resultBundleKey = "selectSwapCoinResultKey"
-        const val dexKey = "dexKey"
-        const val requestIdKey = "requestIdKey"
-        const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
-
-        fun prepareParams(requestId: Long, dex: SwapMainModule.Dex) = bundleOf(requestIdKey to requestId, dexKey to dex)
     }
 }
 

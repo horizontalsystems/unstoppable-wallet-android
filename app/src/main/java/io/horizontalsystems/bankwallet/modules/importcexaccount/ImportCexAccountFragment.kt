@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.info.ErrorDisplayDialogFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -18,11 +19,9 @@ class ImportCexAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val popUpToInclusiveId =
-            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
-
-        val inclusive =
-            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+        val input = navController.getInput<ManageAccountsModule.Input>()
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.restoreAccountFragment
+        val inclusive = input?.popOffInclusive ?: false
 
         ImportCexAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
@@ -65,8 +64,8 @@ fun ImportCexAccountNavHost(
                 },
                 onShowError = { title, text ->
                     fragmentNavController.slideFromBottom(
-                        resId = R.id.errorDisplayDialogFragment,
-                        args = ErrorDisplayDialogFragment.prepareParams(title.toString(), text.toString())
+                        R.id.errorDisplayDialogFragment,
+                        ErrorDisplayDialogFragment.Input(title.toString(), text.toString())
                     )
                 }
             )

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.info
 
-import android.os.Bundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import io.horizontalsystems.bankwallet.modules.info.ui.BulletedText
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoBody
@@ -27,27 +26,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
-import io.horizontalsystems.core.parcelable
 
 class CoinAnalyticsInfoFragment : BaseComposeFragment() {
-
-    private val analyticsInfo by lazy {
-        requireArguments().parcelable<AnalyticInfo>(analyticsInfoKey)
-    }
 
     @Composable
     override fun GetContent(navController: NavController) {
         CoinAnalyticsInfoScreen(
-            analyticsInfo
+            navController.getInput()
         ) { navController.popBackStack() }
-    }
-
-    companion object {
-        private const val analyticsInfoKey = "analyticsInfoKey"
-
-        fun prepareParams(analyticsInfo: AnalyticInfo): Bundle {
-            return bundleOf(analyticsInfoKey to analyticsInfo)
-        }
     }
 
 }

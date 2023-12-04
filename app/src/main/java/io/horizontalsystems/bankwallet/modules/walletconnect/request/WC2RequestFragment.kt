@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -9,6 +9,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -21,13 +22,14 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEth
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2UnsupportedRequest
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
 class WC2RequestFragment : BaseComposeFragment() {
     private val logger = AppLogger("wallet-connect v2")
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val requestId = requireArguments().getLong(REQUEST_ID_KEY)
+        val requestId = navController.requireInput<Input>().requestId
         val wc2RequestViewModel = viewModel<WC2RequestViewModel>(factory = WC2RequestViewModel.Factory(requestId))
 
         val requestData = wc2RequestViewModel.requestData
@@ -75,10 +77,6 @@ class WC2RequestFragment : BaseComposeFragment() {
 
     }
 
-    companion object {
-        private const val REQUEST_ID_KEY = "request_id_key"
-
-        fun prepareParams(requestId: Long) =
-            bundleOf(REQUEST_ID_KEY to requestId)
-    }
+    @Parcelize
+    data class Input(val requestId: Long) : Parcelable
 }

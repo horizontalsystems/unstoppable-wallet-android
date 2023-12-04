@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey
 
+import android.os.Parcelable
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -8,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
@@ -22,20 +23,18 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
-    companion object {
-        const val EVM_PRIVATE_KEY = "evm_private_key"
-
-        fun prepareParams(evmPrivateKey: String) = bundleOf(EVM_PRIVATE_KEY to evmPrivateKey)
-    }
+    @Parcelize
+    data class Input(val evmPrivateKey: String) : Parcelable
 
     @Composable
     override fun GetContent(navController: NavController) {
         EvmPrivateKeyScreen(
             navController = navController,
-            evmPrivateKey = arguments?.getString(EVM_PRIVATE_KEY) ?: ""
+            evmPrivateKey = navController.getInput<Input>()?.evmPrivateKey ?: ""
         )
     }
 

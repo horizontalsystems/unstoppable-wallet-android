@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.metricspage
 
-import android.os.Bundle
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -15,7 +14,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -26,22 +24,16 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
 
 class MetricsPageFragment : BaseComposeFragment() {
 
-    private val metricsType by lazy {
-        requireArguments().parcelable<MetricsType>(METRICS_TYPE_KEY)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val factory = MetricsPageModule.Factory(metricsType!!)
+        val factory = MetricsPageModule.Factory(navController.requireInput())
         val chartViewModel by viewModels<ChartViewModel> { factory }
         val viewModel by viewModels<MetricsPageViewModel> { factory }
         MetricsPage(viewModel, chartViewModel, navController) {
@@ -50,7 +42,7 @@ class MetricsPageFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.prepareParams(coinUid, "market_metrics")
+        val arguments = CoinFragment.Input(coinUid, "market_metrics")
 
         navController.slideFromRight(R.id.coinFragment, arguments)
     }
@@ -167,14 +159,6 @@ class MetricsPageFragment : BaseComposeFragment() {
                 select = menu.marketFieldSelect,
                 onSelect = onSelectMarketField
             )
-        }
-    }
-
-    companion object {
-        private const val METRICS_TYPE_KEY = "metric_type"
-
-        fun prepareParams(metricType: MetricsType): Bundle {
-            return bundleOf(METRICS_TYPE_KEY to metricType)
         }
     }
 }

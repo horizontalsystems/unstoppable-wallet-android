@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +8,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
+import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBackupItemsScreen
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupPasswordScreen
@@ -19,18 +19,11 @@ class BackupLocalFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val accountId = arguments?.getString(ACCOUNT_ID_KEY)
-        if (accountId != null) {
-            SingleWalletBackupNavHost(navController, accountId)
+        val account = navController.getInput<Account>()
+        if (account != null) {
+            SingleWalletBackupNavHost(navController, account.id)
         } else {
             FullBackupNavHost(fragmentNavController = navController)
-        }
-    }
-
-    companion object {
-        private const val ACCOUNT_ID_KEY = "coin_uid_key"
-        fun prepareParams(accountId: String): Bundle {
-            return bundleOf(ACCOUNT_ID_KEY to accountId)
         }
     }
 }

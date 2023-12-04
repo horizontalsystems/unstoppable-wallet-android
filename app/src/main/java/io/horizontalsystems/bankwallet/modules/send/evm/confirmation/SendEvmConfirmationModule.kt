@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.confirmation
 
-import androidx.core.os.bundleOf
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -22,8 +22,11 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
+import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
 
 object SendEvmConfirmationModule {
 
@@ -101,17 +104,27 @@ object SendEvmConfirmationModule {
         }
     }
 
-    fun prepareParams(sendData: SendEvmData, sendNavId: Int) = bundleOf(
-        SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendData.transactionData),
-        SendEvmModule.additionalInfoKey to sendData.additionalInfo,
-        SendEvmModule.sendNavGraphIdKey to sendNavId
-    )
 
-    fun prepareParams(sendData: SendEvmData, sendNavId: Int, sendEntryPointDestId: Int) = bundleOf(
-        SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendData.transactionData),
-        SendEvmModule.additionalInfoKey to sendData.additionalInfo,
-        SendEvmModule.sendNavGraphIdKey to sendNavId,
-        SendEvmModule.sendEntryPointDestIdKey to sendEntryPointDestId
-    )
+    @Parcelize
+    data class Input(
+        val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
+        val additionalInfo: SendEvmData.AdditionalInfo?,
+        val sendNavId: Int,
+        val sendEntryPointDestId: Int
+    ) : Parcelable {
+        val transactionData: TransactionData
+            get() = TransactionData(
+                Address(transactionDataParcelable.toAddress),
+                transactionDataParcelable.value,
+                transactionDataParcelable.input
+            )
+
+        constructor(sendData: SendEvmData, sendNavId: Int, sendEntryPointDestId: Int = 0) : this(
+            SendEvmModule.TransactionDataParcelable(sendData.transactionData),
+            sendData.additionalInfo,
+            sendNavId,
+            sendEntryPointDestId
+        )
+    }
 
 }

@@ -51,9 +51,7 @@ fun WCSessionCell(
                 if (version == WalletConnectListModule.Version.Version2) {
                     navController.slideFromBottom(
                         R.id.wc2SessionFragment,
-                        WC2SessionModule.prepareParams(
-                            session.sessionId
-                        )
+                        WC2SessionModule.Input(session.sessionId)
                     )
                 }
             },

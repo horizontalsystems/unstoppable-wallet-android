@@ -28,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -113,7 +112,7 @@ private fun SettingSections(
                 onClick = {
                     navController.slideFromRight(
                         R.id.manageAccountsFragment,
-                        bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage)
+                        ManageAccountsModule.Mode.Manage
                     )
                 }
             )
@@ -158,13 +157,13 @@ private fun SettingSections(
                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                             navController.slideFromBottom(
                                 R.id.backupRequiredDialog,
-                                BackupRequiredDialog.prepareParams(state.account, text)
+                                BackupRequiredDialog.Input(state.account, text)
                             )
                         }
                         is WC2Manager.SupportState.NotSupported -> {
                             navController.slideFromBottom(
                                 R.id.wcAccountTypeNotSupportedDialog,
-                                WCAccountTypeNotSupportedDialog.prepareParams(state.accountTypeDescription)
+                                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
                             )
                         }
                     }
@@ -192,7 +191,7 @@ private fun SettingSections(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
                     onClick = {
-                        navController.slideFromRight(R.id.contactsFragment, ContactsFragment.prepareParams(Mode.Full))
+                        navController.slideFromRight(R.id.contactsFragment, ContactsFragment.Input(Mode.Full))
                     }
                 )
             },

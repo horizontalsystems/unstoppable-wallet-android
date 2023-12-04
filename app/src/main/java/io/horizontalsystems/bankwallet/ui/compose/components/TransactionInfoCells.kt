@@ -110,10 +110,7 @@ fun TransactionNftAmountCell(
         modifier = modifier.clickable {
             navController.slideFromBottom(
                     R.id.nftAssetFragment,
-                    NftAssetModule.prepareParams(
-                            providerCollectionUid,
-                            nftUid
-                    )
+                    NftAssetModule.Input(providerCollectionUid, nftUid)
             )
         }
     }
@@ -151,7 +148,7 @@ fun TransactionAmountCell(
 ) {
     val clickable = coinUid?.let {
         Modifier.clickable {
-            navController.slideFromRight(R.id.coinFragment, CoinFragment.prepareParams(it, "transaction_info"))
+            navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it, "transaction_info"))
         }
     } ?: Modifier
 
@@ -233,11 +230,11 @@ fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, b
                 blockchainType?.let {
                     val args = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
-                            ContactsFragment.prepareParams(mode = Mode.AddAddressToNewContact(blockchainType, value))
+                            ContactsFragment.Input(Mode.AddAddressToNewContact(blockchainType, value))
 
                         }
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
-                            ContactsFragment.prepareParams(mode = Mode.AddAddressToExistingContact(blockchainType, value))
+                            ContactsFragment.Input(Mode.AddAddressToExistingContact(blockchainType, value))
                         }
                     }
                     navController?.slideFromRight(R.id.contactsFragment, args)
@@ -474,11 +471,10 @@ fun TransactionInfoBtcLockCell(
                 modifier = Modifier.size(20.dp),
                 onClick = {
                     val lockTime = DateHelper.getFullDate(lockState.date)
-                    val params = TransactionLockTimeInfoFragment.prepareParams(lockTime)
 
                     navController.slideFromBottom(
                         R.id.transactionLockTimeInfoFragment,
-                        params
+                        TransactionLockTimeInfoFragment.Input(lockTime)
                     )
                 }
             ) {
@@ -515,13 +511,12 @@ fun TransactionInfoDoubleSpendCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                val params = TransactionDoubleSpendInfoFragment.prepareParams(
-                    transactionHash,
-                    conflictingHash
-                )
                 navController.slideFromBottom(
                     R.id.transactionDoubleSpendInfoFragment,
-                    params
+                    TransactionDoubleSpendInfoFragment.Input(
+                        transactionHash,
+                        conflictingHash
+                    )
                 )
             }
         ) {
@@ -568,10 +563,9 @@ fun TransactionInfoCell(title: String, value: String) {
 }
 
 private fun openTransactionOptionsModule(type: TransactionInfoOptionsModule.Type, transactionHash: String, navController: NavController) {
-    val params = TransactionSpeedUpCancelFragment.prepareParams(type, transactionHash)
     navController.slideFromRight(
         R.id.transactionSpeedUpCancelFragment,
-        params
+        TransactionSpeedUpCancelFragment.Input(type, transactionHash)
     )
 }
 

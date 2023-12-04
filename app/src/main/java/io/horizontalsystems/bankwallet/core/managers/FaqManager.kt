@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import com.google.gson.*
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -35,12 +38,10 @@ object FaqManager {
         .create()
 
     fun showFaqPage(navController: NavController, path: String, language: String = "en") {
-        val arguments = bundleOf(
-            MarkdownFragment.markdownUrlKey to getFaqUrl(path, language),
-            MarkdownFragment.handleRelativeUrlKey to true,
-            MarkdownFragment.showAsPopupKey to true
+        navController.slideFromBottom(
+            R.id.markdownFragment,
+            MarkdownFragment.Input(getFaqUrl(path, language), true, true)
         )
-        navController.slideFromBottom(R.id.markdownFragment, arguments)
     }
 
     fun getFaqList(): Single<List<FaqMap>> {

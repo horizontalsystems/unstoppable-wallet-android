@@ -21,7 +21,7 @@ fun DepositCexChooseAssetScreen(navController: NavController) {
         onClose = { navController.popBackStack() },
         itemIsSuspended = { !it.depositEnabled },
         onSelectAsset = { cexAsset ->
-            navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(cexAsset))
+            navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.Input(cexAsset))
         },
         withBalance = false
     )

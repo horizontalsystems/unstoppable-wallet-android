@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -30,7 +29,6 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.importwallet.getFileName
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -54,11 +52,11 @@ class BackupManagerFragment : BaseComposeFragment() {
                 navController.navigateWithTermsAccepted {
                     navController.slideFromBottom(
                         R.id.restoreLocalFragment,
-                        bundleOf(
-                            ManageAccountsModule.popOffOnSuccessKey to R.id.backupManagerFragment,
-                            ManageAccountsModule.popOffInclusiveKey to false,
-                            RestoreLocalFragment.jsonFileKey to jsonString,
-                            RestoreLocalFragment.fileNameKey to fileName
+                        RestoreLocalFragment.Input(
+                            R.id.backupManagerFragment,
+                            false,
+                            jsonString,
+                            fileName
                         )
                     )
                 }

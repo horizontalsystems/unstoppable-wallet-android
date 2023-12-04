@@ -14,7 +14,7 @@ import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import java.util.UUID
 
-fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
+fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_right)
         .setExitAnim(android.R.anim.fade_out)
@@ -22,10 +22,13 @@ fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
         .setPopExitAnim(R.anim.slide_to_right)
         .build()
 
+    val args = input?.let {
+        bundleOf("input" to it)
+    }
     navigate(resId, args, navOptions)
 }
 
-fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
+fun NavController.slideFromBottom(@IdRes resId: Int, input: Parcelable? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_bottom)
         .setExitAnim(android.R.anim.fade_out)
@@ -33,6 +36,9 @@ fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
         .setPopExitAnim(R.anim.slide_to_bottom)
         .build()
 
+    val args = input?.let {
+        bundleOf("input" to it)
+    }
     navigate(resId, args, navOptions)
 }
 
@@ -129,7 +135,15 @@ private fun <T: Parcelable> NavController.getNavigationResultX(key: String, onRe
 }
 
 inline fun <reified T: Parcelable> NavController.getInput() : T? {
-    return currentBackStackEntry?.arguments?.parcelable("input")
+    return currentBackStackEntry?.arguments?.getInputX()
+}
+
+inline fun <reified T: Parcelable> Bundle.getInputX() : T? {
+    return parcelable("input")
+}
+
+inline fun <reified T: Parcelable> NavController.requireInput() : T {
+    return getInput()!!
 }
 
 fun <T: Parcelable> NavController.setNavigationResultX(result: T, destinationId: Int? = null) {

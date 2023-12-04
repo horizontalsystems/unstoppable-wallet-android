@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
@@ -27,22 +29,17 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val hdExtendedKey = arguments?.getString(ShowExtendedKeyModule.EXTENDED_ROOT_KEY)?.let {
-            try {
-                HDExtendedKey(it)
-            } catch (error: Throwable) {
-                null
-            }
-        }
-        val displayKeyType = arguments?.parcelable<DisplayKeyType>(ShowExtendedKeyModule.DISPLAY_KEY_TYPE)
+        val input = navController.getInput<Input>()
+        val hdExtendedKey = input?.extendedRootKey
+        val displayKeyType = input?.displayKeyType
 
         if (hdExtendedKey == null || displayKeyType == null) {
             NoExtendKeyScreen()
@@ -55,6 +52,17 @@ class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
         }
     }
 
+    @Parcelize
+    data class Input(val extendedRootKeySerialized: String, val displayKeyType: DisplayKeyType) : Parcelable {
+        val extendedRootKey: HDExtendedKey?
+            get() = try {
+                HDExtendedKey(extendedRootKeySerialized)
+            } catch (error: Throwable) {
+                null
+            }
+
+        constructor(extendedRootKey: HDExtendedKey, displayKeyType: DisplayKeyType) : this(extendedRootKey.serialize(), displayKeyType)
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

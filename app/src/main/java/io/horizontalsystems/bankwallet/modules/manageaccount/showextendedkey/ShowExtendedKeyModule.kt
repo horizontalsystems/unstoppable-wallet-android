@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey
 
 import android.os.Parcelable
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -9,9 +8,6 @@ import io.horizontalsystems.hdwalletkit.HDKeychain
 import kotlinx.parcelize.Parcelize
 
 object ShowExtendedKeyModule {
-    const val EXTENDED_ROOT_KEY = "extended_root_key"
-    const val DISPLAY_KEY_TYPE = "display_key_type"
-
     class Factory(
         private val extendedRootKey: HDExtendedKey,
         private val displayKeyType: DisplayKeyType
@@ -52,7 +48,4 @@ object ShowExtendedKeyModule {
                 Bip32RootKey -> true
             }
     }
-
-    fun prepareParams(extendedRootKey: HDExtendedKey, displayKeyType: DisplayKeyType) =
-        bundleOf(EXTENDED_ROOT_KEY to extendedRootKey.serialize(), DISPLAY_KEY_TYPE to displayKeyType)
 }

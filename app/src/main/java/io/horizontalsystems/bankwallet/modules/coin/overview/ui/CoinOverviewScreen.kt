@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -251,13 +250,9 @@ private fun onClick(coinLink: CoinLink, context: Context, navController: NavCont
 
     when (coinLink.linkType) {
         LinkType.Guide -> {
-            val arguments = bundleOf(
-                MarkdownFragment.markdownUrlKey to absoluteUrl,
-                MarkdownFragment.handleRelativeUrlKey to true
-            )
             navController.slideFromRight(
                 R.id.markdownFragment,
-                arguments
+                MarkdownFragment.Input(absoluteUrl, true)
             )
         }
         else -> LinkHelper.openLinkInAppBrowser(context, absoluteUrl)

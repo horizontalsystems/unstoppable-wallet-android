@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve.confirmation
 
-import androidx.core.os.bundleOf
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -21,7 +21,10 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
 
 object SwapApproveConfirmationModule {
 
@@ -92,11 +95,27 @@ object SwapApproveConfirmationModule {
         }
     }
 
-    fun prepareParams(sendEvmData: SendEvmData, blockchainType: BlockchainType, backButton: Boolean = true) = bundleOf(
-        SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
-        SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo,
-        SendEvmModule.blockchainTypeKey to blockchainType,
-        SendEvmModule.backButtonKey to backButton,
-    )
+    @Parcelize
+    data class Input(
+        val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
+        val additionalInfo: SendEvmData.AdditionalInfo?,
+        val blockchainType: BlockchainType,
+        val backButton: Boolean = true,
+    ) : Parcelable {
+        val transactionData: TransactionData
+            get() = TransactionData(
+                Address(transactionDataParcelable.toAddress),
+                transactionDataParcelable.value,
+                transactionDataParcelable.input
+            )
+
+        constructor(sendEvmData: SendEvmData, blockchainType: BlockchainType, backButton: Boolean = true) :
+            this(
+                SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
+                sendEvmData.additionalInfo,
+                blockchainType,
+                backButton
+            )
+    }
 
 }

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.receivemain
 
-import android.os.Bundle
+import android.os.Parcelable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,13 +16,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.description
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
@@ -40,26 +40,26 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class NetworkSelectFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val coinUid = arguments?.getString("coinUid")
-
-        if (coinUid == null) {
+        val input = navController.getInput<Input>()
+        if (input == null) {
             HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
             navController.popBackStack()
         } else {
             val initViewModel = viewModel(initializer = {
-                NetworkSelectInitViewModel(coinUid)
+                NetworkSelectInitViewModel(input.coinUid)
             })
 
             val activeAccount = initViewModel.activeAccount
             val fullCoin = initViewModel.fullCoin
 
             if (activeAccount != null && fullCoin != null) {
-                NetworkSelectScreen(navController, activeAccount, fullCoin)
+                NetworkSelectScreen(navController, input.popupDestinationId, activeAccount, fullCoin)
             } else {
                 HudHelper.showErrorMessage(LocalView.current, "Active account and/or full coin is null")
                 navController.popBackStack()
@@ -67,16 +67,14 @@ class NetworkSelectFragment : BaseComposeFragment() {
         }
     }
 
-    companion object {
-        fun prepareParams(coinUid: String): Bundle {
-            return bundleOf("coinUid" to coinUid)
-        }
-    }
+    @Parcelize
+    data class Input(val coinUid: String, val popupDestinationId: Int?) : Parcelable
 }
 
 @Composable
 fun NetworkSelectScreen(
     navController: NavController,
+    popupDestinationId: Int?,
     activeAccount: Account,
     fullCoin: FullCoin,
 ) {
@@ -118,8 +116,7 @@ fun NetworkSelectScreen(
 
                                     navController.slideFromRight(
                                         R.id.receiveFragment,
-                                        bundleOf(ReceiveAddressFragment.WALLET_KEY to wallet)
-                                    )
+                                        ReceiveAddressFragment.Input(wallet, popupDestinationId)                                    )
                                 }
                             }
                         )

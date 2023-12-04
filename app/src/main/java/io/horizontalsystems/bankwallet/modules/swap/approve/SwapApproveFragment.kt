@@ -20,11 +20,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -34,13 +34,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
-import io.horizontalsystems.core.parcelable
 
 class SwapApproveFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val approveData = requireArguments().parcelable<SwapMainModule.ApproveData>(dataKey)!!
+        val approveData = navController.requireInput<SwapMainModule.ApproveData>()
         SwapApproveScreen(navController, approveData)
     }
 
@@ -113,7 +112,7 @@ fun SwapApproveScreen(
                     swapApproveViewModel.getSendEvmData()?.let { sendEvmData ->
                         navController.slideFromRight(
                             R.id.swapApproveConfirmationFragment,
-                            SwapApproveConfirmationModule.prepareParams(sendEvmData, swapApproveViewModel.dex.blockchainType)
+                            SwapApproveConfirmationModule.Input(sendEvmData, swapApproveViewModel.dex.blockchainType)
                         )
                     }
                 },

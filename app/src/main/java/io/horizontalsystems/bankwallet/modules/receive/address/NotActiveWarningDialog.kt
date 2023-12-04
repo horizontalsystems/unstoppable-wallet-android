@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.receive.address
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -27,20 +28,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
+import kotlinx.parcelize.Parcelize
 
 class NotActiveWarningDialog : BaseComposableBottomSheetFragment() {
 
-    private val title by lazy {
-        requireArguments().getString(TITLE) ?: ""
-    }
-
-    private val text by lazy {
-        requireArguments().getString(TEXT) ?: ""
-    }
-
-    private val showAsWarning by lazy {
-        requireArguments().getBoolean(SHOW_AS_WARNING)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,22 +43,24 @@ class NotActiveWarningDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                NotActiveWarningScreen(findNavController(), title, text, showAsWarning)
+                val navController = findNavController()
+                val input = navController.requireInput<Input>()
+                NotActiveWarningScreen(
+                    navController,
+                    input.title,
+                    input.text,
+                    input.showAsWarning
+                )
             }
         }
     }
 
-    companion object {
-        private const val TITLE = "title"
-        private const val TEXT = "text"
-        private const val SHOW_AS_WARNING = "show_as_warning"
-
-        fun prepareParams(title: String, text: String, showAsWarning: Boolean = true) = bundleOf(
-            TITLE to title,
-            TEXT to text,
-            SHOW_AS_WARNING to showAsWarning
-        )
-    }
+    @Parcelize
+    data class Input(
+        val title: String,
+        val text: String,
+        val showAsWarning: Boolean = true,
+    ) : Parcelable
 }
 
 @Composable

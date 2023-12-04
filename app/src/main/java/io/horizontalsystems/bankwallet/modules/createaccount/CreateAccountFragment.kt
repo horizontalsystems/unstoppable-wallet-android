@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -44,10 +45,9 @@ class CreateAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val popUpToInclusiveId =
-            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.createAccountFragment) ?: R.id.createAccountFragment
-        val inclusive =
-            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
+        val input = navController.getInput<ManageAccountsModule.Input>()
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
+        val inclusive = input?.popOffInclusive ?: true
         CreateAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
 

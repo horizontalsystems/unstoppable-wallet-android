@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,20 +23,15 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalFragment
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.balance.ui.NoteError
 import io.horizontalsystems.bankwallet.modules.balance.ui.NoteWarning
-import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.BackupItem
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.KeyAction
-import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyModule
-import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysModule
-import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
-import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -54,17 +50,21 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.body_lucian
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
 class ManageAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.requireInput<Input>()
         ManageAccountScreen(
             navController,
-            arguments?.getString(ACCOUNT_ID_KEY)!!
+            input.accountId
         )
     }
 
+    @Parcelize
+    data class Input(val accountId: String) : Parcelable
 }
 
 @Composable
@@ -154,7 +154,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     ) {
                         navController.slideFromBottom(
                             R.id.unlinkConfirmationDialog,
-                            UnlinkAccountDialog.prepareParams(viewModel.account)
+                            viewModel.account
                         )
                     }
                 })
@@ -185,7 +185,7 @@ private fun BackupActions(
                         navController.authorizedAction {
                             navController.slideFromBottom(
                                 R.id.backupKeyFragment,
-                                BackupKeyModule.prepareParams(account)
+                                account
                             )
                         }
                     }
@@ -200,7 +200,7 @@ private fun BackupActions(
                         attention = action.showAttention
                     ) {
                         navController.authorizedAction {
-                            navController.slideFromBottom(R.id.backupLocalFragment, BackupLocalFragment.prepareParams(account.id))
+                            navController.slideFromBottom(R.id.backupLocalFragment, account)
                         }
                     }
                 }
@@ -241,7 +241,7 @@ private fun KeyActions(
                         navController.authorizedAction {
                             navController.slideFromRight(
                                 R.id.recoveryPhraseFragment,
-                                RecoveryPhraseModule.prepareParams(viewModel.account)
+                                viewModel.account
                             )
                         }
                     }
@@ -256,7 +256,7 @@ private fun KeyActions(
                     ) {
                         navController.slideFromRight(
                             R.id.privateKeysFragment,
-                            PublicKeysModule.prepareParams(viewModel.account)
+                            viewModel.account
                         )
                     }
                 }
@@ -270,7 +270,7 @@ private fun KeyActions(
                     ) {
                         navController.slideFromRight(
                             R.id.publicKeysFragment,
-                            PublicKeysModule.prepareParams(viewModel.account)
+                            viewModel.account
                         )
                     }
                 }

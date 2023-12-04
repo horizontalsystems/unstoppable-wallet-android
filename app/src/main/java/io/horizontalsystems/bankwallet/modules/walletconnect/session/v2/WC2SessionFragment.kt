@@ -29,11 +29,11 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -51,7 +51,8 @@ import io.horizontalsystems.core.helpers.HudHelper
 class WC2SessionFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<WC2SessionViewModel> {
-        WC2SessionModule.Factory(arguments?.getString(SESSION_TOPIC_KEY))
+        val input = arguments?.getInputX<WC2SessionModule.Input>()
+        WC2SessionModule.Factory(input?.sessionTopic)
     }
 
     @Composable
@@ -167,7 +168,7 @@ private fun ColumnScope.WCSessionListContent(
                 RequestCell(viewItem = request) {
                     navController.slideFromBottom(
                         R.id.wc2RequestFragment,
-                        WC2RequestFragment.prepareParams(it.requestId)
+                        WC2RequestFragment.Input(it.requestId)
                     )
                 }
             }

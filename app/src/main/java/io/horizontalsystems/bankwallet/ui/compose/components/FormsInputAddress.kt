@@ -169,7 +169,7 @@ fun FormsInputAddress(
                                 onValueChange.invoke(textProcessed)
                             }
                             navController.slideFromRight(
-                                R.id.chooseContact, ChooseContactFragment.prepareParams(blockchainType)
+                                R.id.chooseContact, blockchainType
                             )
                         }
                     )
