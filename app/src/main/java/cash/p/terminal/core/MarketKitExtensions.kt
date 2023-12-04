@@ -521,7 +521,7 @@ val BlockchainType.nativeTokenQueries: List<TokenQuery>
 val TokenType.title: String
     get() = when (this) {
         is TokenType.Derived -> derivation.accountTypeDerivation.rawName
-        is TokenType.AddressTyped -> Translator.getString(type.bitcoinCashCoinType.title)
+        is TokenType.AddressTyped -> type.bitcoinCashCoinType.title
         else -> ""
     }
 
