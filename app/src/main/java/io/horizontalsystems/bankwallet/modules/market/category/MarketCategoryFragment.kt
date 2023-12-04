@@ -13,10 +13,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
@@ -27,20 +28,15 @@ import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogSta
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
 
 class MarketCategoryFragment : BaseComposeFragment() {
 
-    private val factory by lazy {
-        MarketCategoryModule.Factory(arguments?.parcelable(categoryKey)!!)
-    }
-
-    private val chartViewModel by viewModels<ChartViewModel> { factory }
-
-    private val viewModel by viewModels<MarketCategoryViewModel> { factory }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val factory = MarketCategoryModule.Factory(navController.requireInput())
+        val chartViewModel = viewModel<ChartViewModel>(factory = factory)
+        val viewModel = viewModel<MarketCategoryViewModel>(factory = factory)
+
         CategoryScreen(
             viewModel,
             chartViewModel,
@@ -50,15 +46,10 @@ class MarketCategoryFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.prepareParams(coinUid, "market_category")
+        val arguments = CoinFragment.Input(coinUid, "market_category")
 
         navController.slideFromRight(R.id.coinFragment, arguments)
     }
-
-    companion object {
-        const val categoryKey = "coin_category"
-    }
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -69,7 +69,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        navController.slideFromRight(R.id.setDuressPinFragment, SetDuressPinFragment.params(selected))
+                        navController.slideFromRight(R.id.setDuressPinFragment, SetDuressPinFragment.Input(selected))
                     },
                 )
             }

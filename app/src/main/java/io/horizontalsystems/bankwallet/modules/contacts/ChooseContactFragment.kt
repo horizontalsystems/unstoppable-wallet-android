@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.contacts
 
-import android.os.Bundle
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -28,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -42,7 +42,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -51,18 +50,13 @@ class ChooseContactFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         ChooseContactScreen(
-            arguments?.parcelable(blockchainTypeKey),
+            navController.getInput(),
             navController
         )
     }
 
     companion object {
         const val resultKey = "chooseContactResult"
-
-        private const val blockchainTypeKey = "blockchainTypeKey"
-        fun prepareParams(blockchainType: BlockchainType): Bundle {
-            return bundleOf(blockchainTypeKey to blockchainType)
-        }
     }
 
 }

@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session.v2
 
-import androidx.core.os.bundleOf
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2RequestViewItem
 import io.horizontalsystems.ethereumkit.models.Chain
+import kotlinx.parcelize.Parcelize
 
 object WC2SessionModule {
 
@@ -27,11 +28,8 @@ object WC2SessionModule {
         }
     }
 
-    fun prepareParams(sessionTopic: String?) = bundleOf(
-        SESSION_TOPIC_KEY to sessionTopic
-    )
-
-    const val SESSION_TOPIC_KEY = "session_topic_id"
+    @Parcelize
+    data class Input(val sessionTopic: String) : Parcelable
 }
 
 enum class WCButtonState(val visible: Boolean, val enabled: Boolean) {

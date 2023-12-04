@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
+import android.os.Parcelable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -10,12 +11,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
@@ -26,13 +27,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class CoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val coinUid = requireArguments().getString(COIN_UID_KEY, "")
-        val apiTag = requireArguments().getString(API_TAG_KEY, "")
+        val input = navController.getInput<Input>()
+        val coinUid = input?.coinUid ?: ""
+        val apiTag = input?.apiTag ?: ""
 
         CoinScreen(
             coinUid,
@@ -52,12 +55,8 @@ class CoinFragment : BaseComposeFragment() {
         null
     }
 
-    companion object {
-        private const val COIN_UID_KEY = "coin_uid_key"
-        private const val API_TAG_KEY = "api_tag_key"
-
-        fun prepareParams(coinUid: String, apiTag: String) = bundleOf(COIN_UID_KEY to coinUid, API_TAG_KEY to apiTag)
-    }
+    @Parcelize
+    data class Input(val coinUid: String, val apiTag: String) : Parcelable
 }
 
 @Composable

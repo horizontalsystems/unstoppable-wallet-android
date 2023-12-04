@@ -1,20 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
 class IndicatorSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val indicatorSetting = arguments?.getString("indicatorId")?.let {
+        val indicatorSetting = navController.getInput<Input>()?.indicatorId?.let {
             App.chartIndicatorManager.getChartIndicatorSetting(it)
         }
 
@@ -47,7 +49,6 @@ class IndicatorSettingsFragment : BaseComposeFragment() {
         }
     }
 
-    companion object {
-        fun params(indicatorId: String) = bundleOf("indicatorId" to indicatorId)
-    }
+    @Parcelize
+    data class Input(val indicatorId: String) : Parcelable
 }

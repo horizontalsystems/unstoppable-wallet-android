@@ -20,11 +20,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -40,7 +40,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeaderMultiline
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Token
 
 class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
@@ -55,19 +54,9 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val token = arguments?.parcelable<Token>(tokenKey)
-                if (token != null) {
-                    ConfiguredTokenInfo(findNavController(), token)
-                }
+                val navController = findNavController()
+                ConfiguredTokenInfo(navController, navController.requireInput<Token>())
             }
-        }
-    }
-
-    companion object {
-        private const val tokenKey = "token"
-
-        fun prepareParams(token: Token): Bundle {
-            return bundleOf(tokenKey to token)
         }
     }
 }

@@ -280,7 +280,7 @@ private fun InactiveAddressWarningItem(navController: NavController) {
                 onClick = {
                     navController.slideFromBottom(
                         R.id.feeSettingsInfoDialog,
-                        FeeSettingsInfoDialog.prepareParams(title, info)
+                        FeeSettingsInfoDialog.Input(title, info)
                     )
                 },
                 interactionSource = MutableInteractionSource(),
@@ -347,7 +347,7 @@ private fun ResourcesConsumed(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(
-                    R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(title, info)
+                    R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(title, info)
                 )
             }
         ) {

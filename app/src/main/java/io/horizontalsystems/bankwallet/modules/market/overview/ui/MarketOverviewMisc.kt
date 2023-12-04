@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 fun onItemClick(marketViewItem: MarketViewItem, navController: NavController) {
-    val arguments = CoinFragment.prepareParams(marketViewItem.coinUid, "market_overview")
+    val arguments = CoinFragment.Input(marketViewItem.coinUid, "market_overview")
     navController.slideFromRight(R.id.coinFragment, arguments)
 }
 

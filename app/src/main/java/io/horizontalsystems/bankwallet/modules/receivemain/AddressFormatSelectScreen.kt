@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -34,6 +33,7 @@ fun AddressFormatSelectScreen(
     navController: NavController,
     addressFormatItems: List<AddressFormatItem>,
     description: String,
+    popupDestinationId: Int?,
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -62,9 +62,10 @@ fun AddressFormatSelectScreen(
                         title = item.title,
                         subtitle = item.subtitle,
                         onClick = {
+
                             navController.slideFromRight(
                                 R.id.receiveFragment,
-                                bundleOf(ReceiveAddressFragment.WALLET_KEY to item.wallet)
+                                ReceiveAddressFragment.Input(item.wallet, popupDestinationId)
                             )
                         }
                     )

@@ -17,10 +17,10 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
@@ -33,11 +33,8 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 
 class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
-    private val account by lazy { requireArguments().parcelable<Account>(ACCOUNT) }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,17 +45,13 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
+                val navController = findNavController()
+
                 ComposeAppTheme {
-                    UnlinkAccountScreen(findNavController(), account!!)
+                    UnlinkAccountScreen(navController, navController.requireInput())
                 }
             }
         }
-    }
-
-    companion object {
-        private const val ACCOUNT = "account"
-
-        fun prepareParams(account: Account) = bundleOf(ACCOUNT to account)
     }
 }
 

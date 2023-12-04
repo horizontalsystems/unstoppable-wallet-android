@@ -8,7 +8,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.core.helpers.HudHelper
@@ -26,7 +26,7 @@ class SwapTokenSelectFragment : BaseComposeFragment() {
                     it.swapEnabled -> {
                         navController.slideFromRight(
                             R.id.swapFragment,
-                            SwapMainModule.prepareParams(it.wallet.token, R.id.swapTokenSelectFragment)
+                            SwapMainFragment.Input(it.wallet.token, R.id.swapTokenSelectFragment)
                         )
                     }
                     it.syncingProgress.progress != null -> {

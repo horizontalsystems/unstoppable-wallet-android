@@ -45,7 +45,7 @@ fun FeeCell(
         Row(
             modifier = Modifier.clickable(
                 enabled = navController != null,
-                onClick = { navController?.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(title, info)) },
+                onClick = { navController?.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(title, info)) },
                 interactionSource = MutableInteractionSource(),
                 indication = null
             ),

@@ -36,7 +36,7 @@ class MainActivity : BaseActivity() {
         wc2MainViewModel.openWalletConnectRequestLiveEvent.observe(this) { requestId ->
             navController.slideFromBottom(
                 R.id.wc2RequestFragment,
-                WC2RequestFragment.prepareParams(requestId)
+                WC2RequestFragment.Input(requestId)
             )
         }
 

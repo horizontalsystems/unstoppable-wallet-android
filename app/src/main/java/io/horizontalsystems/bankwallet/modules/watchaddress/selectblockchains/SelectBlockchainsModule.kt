@@ -7,10 +7,6 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressService
 
 object SelectBlockchainsModule {
-
-    const val accountTypeKey = "accountTypeKey"
-    const val accountNameKey = "accountNameKey"
-
     class Factory(val accountType: AccountType, val accountName: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

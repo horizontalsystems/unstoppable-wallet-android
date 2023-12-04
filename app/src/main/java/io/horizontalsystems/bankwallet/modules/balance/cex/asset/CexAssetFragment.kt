@@ -26,12 +26,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewItem
@@ -49,13 +49,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 
 class CexAssetFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val asset = requireArguments().parcelable<CexAsset>(ASSET_KEY)
+        val asset = navController.getInput<CexAsset>()
         if (asset == null) {
             Toast.makeText(App.instance, "Asset is Null", Toast.LENGTH_SHORT).show()
             navController.popBackStack()
@@ -67,14 +66,6 @@ class CexAssetFragment : BaseComposeFragment() {
         CexAssetScreen(
             viewModel,
             navController
-        )
-    }
-
-    companion object {
-        private const val ASSET_KEY = "asset_key"
-
-        fun prepareParams(asset: CexAsset) = bundleOf(
-            ASSET_KEY to asset
         )
     }
 }
@@ -216,7 +207,7 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
             title = stringResource(R.string.Balance_Deposit),
             enabled = viewItem.depositEnabled,
             onClick = {
-                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(viewItem.cexAsset))
+                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.Input(viewItem.cexAsset))
             },
         )
         HSpacer(width = 8.dp)
@@ -228,7 +219,7 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
                 viewItem.coinUid?.let { coinUid ->
                     navController.slideFromRight(
                         R.id.coinFragment,
-                        CoinFragment.prepareParams(coinUid, "cex_asset")
+                        CoinFragment.Input(coinUid, "cex_asset")
                     )
                 }
             },

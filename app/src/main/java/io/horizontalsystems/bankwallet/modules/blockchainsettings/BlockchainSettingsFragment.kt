@@ -16,15 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule
-import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -102,17 +99,15 @@ private fun onClick(
 ) {
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
-            val params = BtcBlockchainSettingsModule.args(item.blockchainItem.blockchain)
-            navController.slideFromBottom(R.id.btcBlockchainSettingsFragment, params)
+            navController.slideFromBottom(R.id.btcBlockchainSettingsFragment, item.blockchainItem.blockchain)
         }
 
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
-            val params = EvmNetworkModule.args(item.blockchainItem.blockchain)
-            navController.slideFromBottom(R.id.evmNetworkFragment, params)
+            navController.slideFromBottom(R.id.evmNetworkFragment, item.blockchainItem.blockchain)
         }
 
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
-            navController.slideFromBottom(R.id.solanaNetworkFragment, bundleOf())
+            navController.slideFromBottom(R.id.solanaNetworkFragment)
         }
     }
 }

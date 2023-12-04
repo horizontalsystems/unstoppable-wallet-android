@@ -15,11 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.OverallScore
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
@@ -34,14 +34,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
-import io.horizontalsystems.core.parcelable
 import java.math.BigDecimal
 
 class OverallScoreInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val scoreCategory = requireArguments().parcelable<ScoreCategory>(SCORE_CATEGORY_KEY)
+        val scoreCategory = navController.getInput<ScoreCategory>()
         val categoryScores = getScores(scoreCategory)
         if (scoreCategory == null) {
             ScreenMessageWithAction(
@@ -65,13 +64,6 @@ class OverallScoreInfoFragment : BaseComposeFragment() {
             )
         }
     }
-
-    companion object {
-        private const val SCORE_CATEGORY_KEY = "score_category_key"
-
-        fun prepareParams(scoreCategory: ScoreCategory) = bundleOf(SCORE_CATEGORY_KEY to scoreCategory)
-    }
-
 }
 
 @Composable

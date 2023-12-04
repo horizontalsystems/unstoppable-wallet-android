@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
@@ -23,7 +24,6 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.launch
 
 class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
@@ -32,7 +32,7 @@ class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
     override fun GetContent(navController: NavController) {
         RecoveryPhraseScreen(
             navController = navController,
-            account = arguments?.parcelable(RecoveryPhraseModule.ACCOUNT)!!
+            account = navController.requireInput()
         )
     }
 

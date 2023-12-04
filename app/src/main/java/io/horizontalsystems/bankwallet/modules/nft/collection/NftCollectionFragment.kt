@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
+import android.os.Parcelable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsScreen
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsScreen
 import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewScreen
@@ -31,13 +32,15 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class NftCollectionFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val nftCollectionUid = requireArguments().getString(collectionUidKey, "")
-        val blockchainTypeString = requireArguments().getString(blockchainTypeUidKey, "")
+        val input = navController.getInput<Input>()
+        val nftCollectionUid = input?.collectionUid ?: ""
+        val blockchainTypeString = input?.blockchainTypeUid ?: ""
         val blockchainType = BlockchainType.fromUid(blockchainTypeString)
 
         val viewModel by navGraphViewModels<NftCollectionOverviewViewModel>(R.id.nftCollectionFragment) {
@@ -50,13 +53,8 @@ class NftCollectionFragment : BaseComposeFragment() {
         )
     }
 
-    companion object {
-        private const val collectionUidKey = "collectionUid"
-        private const val blockchainTypeUidKey = "blockchainTypeUid"
-
-        fun prepareParams(collectionUid: String, blockchainTypeUid: String) =
-            bundleOf(collectionUidKey to collectionUid, blockchainTypeUidKey to blockchainTypeUid)
-    }
+    @Parcelize
+    data class Input(val collectionUid: String, val blockchainTypeUid: String) : Parcelable
 }
 
 @OptIn(ExperimentalFoundationApi::class)

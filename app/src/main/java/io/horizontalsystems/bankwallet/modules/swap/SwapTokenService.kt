@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.UUID
 import java.util.concurrent.Executors
 
 class SwapTokenService(
@@ -26,7 +25,6 @@ class SwapTokenService(
 ) {
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val coroutineScope = CoroutineScope(singleDispatcher)
-    private val uuid = UUID.randomUUID().leastSignificantBits
 
     var token: Token? = initialToken
         private set
@@ -41,7 +39,6 @@ class SwapTokenService(
     val state: SwapMainModule.SwapCoinCardViewState
         get() = SwapMainModule.SwapCoinCardViewState(
             token = token,
-            uuid = uuid,
             inputState = SwapMainModule.SwapAmountInputState(
                 amount = amount,
                 secondaryInfo = secondaryInfo,

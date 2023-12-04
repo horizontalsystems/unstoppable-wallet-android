@@ -19,10 +19,10 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey.BackupConfirmKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -31,14 +31,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.core.parcelable
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account = requireArguments().parcelable<Account>(BackupKeyModule.ACCOUNT)!!
-        RecoveryPhraseScreen(navController, account)
+        RecoveryPhraseScreen(navController, navController.requireInput())
     }
 
 }
@@ -97,7 +95,7 @@ fun RecoveryPhraseScreen(
                     onClick = {
                         navController.slideFromRight(
                             R.id.backupConfirmationKeyFragment,
-                            BackupConfirmKeyModule.prepareParams(viewModel.account)
+                            viewModel.account
                         )
                     },
                 )

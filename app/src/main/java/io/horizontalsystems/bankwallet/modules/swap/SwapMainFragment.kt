@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Address
@@ -47,7 +49,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapActionSta
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.confirmation.BaseSwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
@@ -70,8 +71,15 @@ import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.*
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class SwapMainFragment : BaseFragment() {
+
+    @Parcelize
+    data class Input(
+        val tokenFrom: Token,
+        val swapEntryPointDestId: Int = 0
+    ) : Parcelable
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,16 +90,17 @@ class SwapMainFragment : BaseFragment() {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
+            val navController = findNavController()
             try {
-                val arguments = requireArguments()
-                val swapEntryPointDestId = arguments.getInt(BaseSwapConfirmationFragment.swapEntryPointDestIdKey)
-                val factory = SwapMainModule.Factory(arguments)
+                val input = navController.requireInput<Input>()
+                val swapEntryPointDestId = input.swapEntryPointDestId
+                val factory = SwapMainModule.Factory(input.tokenFrom)
                 val mainViewModel: SwapMainViewModel by viewModels { factory }
                 val allowanceViewModel: SwapAllowanceViewModel by viewModels { factory }
                 setContent {
                     ComposeAppTheme {
                         SwapNavHost(
-                            findNavController(),
+                            navController,
                             mainViewModel,
                             allowanceViewModel,
                             swapEntryPointDestId
@@ -102,7 +111,7 @@ class SwapMainFragment : BaseFragment() {
                 Toast.makeText(
                     App.instance, t.message ?: t.javaClass.simpleName, Toast.LENGTH_SHORT
                 ).show()
-                findNavController().popBackStack()
+                navController.popBackStack()
             }
         }
     }
@@ -319,7 +328,7 @@ fun SwapCards(
                     viewModel.revokeEvmData?.let { revokeEvmData ->
                         navController.slideFromBottom(
                             R.id.swapApproveConfirmationFragment,
-                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, swapState.dex.blockchainType, false)
+                            SwapApproveConfirmationModule.Input(revokeEvmData, swapState.dex.blockchainType, false)
                         )
                     }
                 },
@@ -333,7 +342,7 @@ fun SwapCards(
                     viewModel.approveData?.let { data ->
                         navController.slideFromBottom(
                             R.id.swapApproveFragment,
-                            SwapApproveModule.prepareParams(data)
+                            data
                         )
                     }
                 },
@@ -342,7 +351,7 @@ fun SwapCards(
                         is SwapMainModule.SwapData.OneInchData -> {
                             navController.slideFromRight(
                                 R.id.oneInchConfirmationFragment,
-                                OneInchSwapConfirmationFragment.prepareParams(
+                                OneInchSwapConfirmationFragment.Input(
                                     swapState.dex.blockchainType,
                                     swapData.data,
                                     swapEntryPointDestId
@@ -354,7 +363,7 @@ fun SwapCards(
                             viewModel.getSendEvmData(swapData)?.let { sendEvmData ->
                                 navController.slideFromRight(
                                     R.id.uniswapConfirmationFragment,
-                                    UniswapConfirmationFragment.prepareParams(
+                                    UniswapConfirmationFragment.Input(
                                         swapState.dex,
                                         SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
                                         sendEvmData.additionalInfo,
@@ -424,7 +433,7 @@ private fun TopMenu(
                     SwapMainModule.OneInchProvider -> {
                         navController.slideFromBottom(
                             R.id.oneinchSettingsFragment,
-                            OneInchSettingsFragment.prepareParams(
+                            OneInchSettingsFragment.Input(
                                 state.dex,
                                 state.recipient,
                                 state.slippage,
@@ -435,7 +444,7 @@ private fun TopMenu(
                     SwapMainModule.UniswapV3Provider -> {
                         navController.slideFromBottom(
                             R.id.uniswapSettingsFragment,
-                            UniswapSettingsFragment.prepareParams(
+                            UniswapSettingsFragment.Input(
                                 dex = state.dex,
                                 address = state.recipient,
                                 slippage = state.slippage,
@@ -447,7 +456,7 @@ private fun TopMenu(
                     SwapMainModule.PancakeSwapV3Provider -> {
                         navController.slideFromBottom(
                             R.id.uniswapSettingsFragment,
-                            UniswapSettingsFragment.prepareParams(
+                            UniswapSettingsFragment.Input(
                                 dex = state.dex,
                                 address = state.recipient,
                                 slippage = state.slippage,
@@ -459,7 +468,7 @@ private fun TopMenu(
                     else -> {
                         navController.slideFromBottom(
                             R.id.uniswapSettingsFragment,
-                            UniswapSettingsFragment.prepareParams(
+                            UniswapSettingsFragment.Input(
                                 dex = state.dex,
                                 address = state.recipient,
                                 slippage = state.slippage,
@@ -540,7 +549,7 @@ fun PriceImpact(
                 onClick = {
                     navController.slideFromBottom(
                         R.id.feeSettingsInfoDialog,
-                        FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
+                        FeeSettingsInfoDialog.Input(infoTitle, infoText)
                     )
                 },
                 interactionSource = MutableInteractionSource(),

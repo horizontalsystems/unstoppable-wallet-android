@@ -75,8 +75,8 @@ fun SendEthRequestScreen(
                     tint = ComposeAppTheme.colors.jacob,
                     onClick = {
                         navController.slideFromBottom(
-                            resId = R.id.sendEvmSettingsFragment,
-                            args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                            R.id.sendEvmSettingsFragment,
+                            SendEvmSettingsFragment.Input(parentNavGraphId)
                         )
                     }
                 )

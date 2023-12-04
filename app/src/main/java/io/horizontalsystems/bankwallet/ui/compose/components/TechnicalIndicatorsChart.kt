@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,11 +29,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
+import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.AdviceBlock
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.AdviceViewItem
@@ -41,9 +43,8 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
+import kotlinx.parcelize.Parcelize
 
 @Composable
 fun TechnicalIndicatorsChart(
@@ -112,11 +113,14 @@ fun TechnicalIndicatorsChart(
                 title = stringResource(selectedPeriod.title),
                 iconRight = painterResource(R.drawable.ic_down_arrow_20),
                 onClick = {
-                    PeriodSelectDialog.onSelectPeriod(navController) { period ->
-                        onPeriodChange.invoke(period)
+                    navController.slideFromBottomForResult<PeriodSelectDialog.HsPointTimePeriodParcelable>(
+                        R.id.periodSelectDialog,
+                        PeriodSelectDialog.HsPointTimePeriodParcelable(selectedPeriod)
+                    ) { result ->
+                        result.selectedPeriod?.let {
+                            onPeriodChange.invoke(it)
+                        }
                     }
-                    val params = PeriodSelectDialog.prepareParams(selectedPeriod)
-                    navController.slideFromBottom(R.id.periodSelectDialog, params)
                 }
             )
         }
@@ -131,11 +135,6 @@ class PeriodSelectDialog : BaseComposableBottomSheetFragment() {
         HsPointTimePeriod.Week1,
     )
 
-    private val selectedPeriod by lazy {
-        val value = requireArguments().getString(SELECTED_PERIOD_KEY)
-        HsPointTimePeriod.fromString(value) ?: periods[2]
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -146,12 +145,15 @@ class PeriodSelectDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
+                val navController = findNavController()
+                val input = navController.getInput<HsPointTimePeriodParcelable>()
+                val selectedPeriod = input?.selectedPeriod ?: periods[2]
                 ComposeAppTheme {
                     BottomSheetScreen(
                         periods = periods,
                         selectedItem = selectedPeriod,
                         onSelectListener = { selectedTimePeriod ->
-                            setResult(findNavController(), selectedTimePeriod)
+                            navController.setNavigationResultX(HsPointTimePeriodParcelable(selectedTimePeriod))
                         },
                         onCloseClick = { close() }
                     )
@@ -160,30 +162,12 @@ class PeriodSelectDialog : BaseComposableBottomSheetFragment() {
         }
     }
 
-    companion object {
-        private const val resultKey = "PeriodSelectDialogResultKey"
-        private const val SELECTED_PERIOD_KEY = "SelectedPeriodKey"
-
-        fun prepareParams(period: HsPointTimePeriod) =
-            bundleOf(
-                SELECTED_PERIOD_KEY to period.value
-            )
-
-        fun onSelectPeriod(navController: NavController, callback: (HsPointTimePeriod) -> Unit) {
-            navController.getNavigationResult(resultKey) { bundle ->
-                bundle.getString(resultKey)?.let { value ->
-                    HsPointTimePeriod.values().find { it.value == value }?.let { period ->
-                        callback.invoke(period)
-                    }
-                }
-            }
-        }
-
-        fun setResult(navController: NavController, period: HsPointTimePeriod) {
-            navController.setNavigationResult(resultKey, bundleOf(resultKey to period.value))
-        }
+    @Parcelize
+    data class HsPointTimePeriodParcelable(val selectedPeriodString: String) : Parcelable {
+        val selectedPeriod: HsPointTimePeriod?
+            get() = HsPointTimePeriod.fromString(selectedPeriodString)
+        constructor(selectedPeriod: HsPointTimePeriod) : this(selectedPeriod.value)
     }
-
 }
 
 @Composable

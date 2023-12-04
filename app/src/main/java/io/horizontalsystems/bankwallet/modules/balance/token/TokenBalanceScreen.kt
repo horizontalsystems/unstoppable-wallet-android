@@ -48,7 +48,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -219,7 +219,7 @@ private fun LockedBalanceCell(balanceViewItem: BalanceViewItem, navController: N
             HsIconButton(
                 modifier = Modifier.size(20.dp),
                 onClick = {
-                    navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.prepareParams(infoTitle, infoText))
+                    navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(infoTitle, infoText))
                 }
             ) {
                 Icon(
@@ -300,7 +300,7 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 
             navController.slideFromBottom(
                 R.id.syncErrorDialog,
-                SyncErrorDialog.prepareParams(wallet, errorMessage)
+                SyncErrorDialog.Input(wallet, errorMessage)
             )
         }
 
@@ -315,7 +315,7 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: TokenBalanceViewModel) {
     val onClickReceive = {
         try {
-            val params = ReceiveAddressFragment.params(viewModel.getWalletForReceive(viewItem))
+            val params = ReceiveAddressFragment.Input(viewModel.getWalletForReceive(viewItem))
             navController.slideFromRight(R.id.receiveFragment, params)
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
@@ -325,7 +325,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             )
             navController.slideFromBottom(
                 R.id.backupRequiredDialog,
-                BackupRequiredDialog.prepareParams(e.account, text)
+                BackupRequiredDialog.Input(e.account, text)
             )
         }
     }
@@ -348,7 +348,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
                     navController.slideFromRight(
                         R.id.sendXFragment,
-                        SendFragment.prepareParams(viewItem.wallet, sendTitle)
+                        SendFragment.Input(viewItem.wallet, sendTitle)
                     )
                 },
                 enabled = viewItem.sendEnabled
@@ -367,7 +367,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     onClick = {
                         navController.slideFromRight(
                             R.id.swapFragment,
-                            SwapMainModule.prepareParams(viewItem.wallet.token)
+                            SwapMainFragment.Input(viewItem.wallet.token)
                         )
                     },
                     enabled = viewItem.swapEnabled
@@ -381,7 +381,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             enabled = !viewItem.wallet.token.isCustom,
             onClick = {
                 val coinUid = viewItem.wallet.coin.uid
-                val arguments = CoinFragment.prepareParams(coinUid, "wallet_token_balance")
+                val arguments = CoinFragment.Input(coinUid, "wallet_token_balance")
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
             },

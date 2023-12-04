@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.info
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -24,16 +25,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
+import kotlinx.parcelize.Parcelize
 
 class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
-
-    private val title by lazy {
-        requireArguments().getString(keyTitle) ?: ""
-    }
-
-    private val text by lazy {
-        requireArguments().getString(keyText) ?: ""
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,20 +39,17 @@ class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ErrorDisplayScreen(title, text, findNavController())
+                val navController = findNavController()
+                val input = navController.getInput<Input>()
+                val title = input?.title ?: ""
+                val text = input?.text ?: ""
+                ErrorDisplayScreen(title, text, navController)
             }
         }
     }
 
-    companion object {
-        private const val keyTitle = "key_title"
-        private const val keyText = "key_text"
-
-        fun prepareParams(title: String, text: String) = bundleOf(
-            keyTitle to title,
-            keyText to text
-        )
-    }
+    @Parcelize
+    data class Input(val title: String, val text: String) : Parcelable
 }
 
 @Composable

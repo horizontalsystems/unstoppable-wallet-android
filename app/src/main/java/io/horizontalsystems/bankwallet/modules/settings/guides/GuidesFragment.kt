@@ -23,7 +23,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -107,13 +106,9 @@ fun GuidesScreen(navController: NavController) {
                             ) {
                                 items(guides) { guide ->
                                     CardsPreviewCardsGuide(guide) {
-                                        val arguments = bundleOf(
-                                            MarkdownFragment.markdownUrlKey to guide.fileUrl,
-                                            MarkdownFragment.handleRelativeUrlKey to true
-                                        )
                                         navController.slideFromRight(
                                             R.id.markdownFragment,
-                                            arguments
+                                            MarkdownFragment.Input(guide.fileUrl, true)
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(8.dp))

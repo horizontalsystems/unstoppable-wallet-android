@@ -21,11 +21,11 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
@@ -40,13 +40,15 @@ import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
 class SendEvmConfirmationFragment : BaseComposeFragment() {
 
     private val logger = AppLogger("send-evm")
+
+    private val input by lazy {
+        arguments?.getInputX<SendEvmConfirmationModule.Input>()!!
+    }
 
     private val vmFactory by lazy {
         val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(sendNavGraphId)
@@ -61,8 +63,8 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
-    private val sendNavGraphId: Int by lazy { arguments?.getInt(SendEvmModule.sendNavGraphIdKey)!! }
-    private val sendEntryPointDestId: Int by lazy { arguments?.getInt(SendEvmModule.sendEntryPointDestIdKey) ?: 0 }
+    private val sendNavGraphId: Int by lazy { input.sendNavId }
+    private val sendEntryPointDestId: Int by lazy { input.sendEntryPointDestId }
     private val closeUntilDestId: Int by lazy {
         if (sendEntryPointDestId == 0) {
             sendNavGraphId
@@ -73,16 +75,9 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
 
 
     private val transactionData: TransactionData
-        get() {
-            val transactionDataParcelable = arguments?.parcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
-            return TransactionData(
-                Address(transactionDataParcelable.toAddress),
-                transactionDataParcelable.value,
-                transactionDataParcelable.input
-            )
-        }
+        get() = input.transactionData
     private val additionalInfo: SendEvmData.AdditionalInfo?
-        get() = arguments?.parcelable(SendEvmModule.additionalInfoKey)
+        get() = input.additionalInfo
 
     @Composable
     override fun GetContent(navController: NavController) {
@@ -154,8 +149,8 @@ private fun SendEvmConfirmationScreen(
                         tint = ComposeAppTheme.colors.jacob,
                         onClick = {
                             navController.slideFromBottom(
-                                resId = R.id.sendEvmSettingsFragment,
-                                args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                                R.id.sendEvmSettingsFragment,
+                                SendEvmSettingsFragment.Input(parentNavGraphId)
                             )
                         }
                     )

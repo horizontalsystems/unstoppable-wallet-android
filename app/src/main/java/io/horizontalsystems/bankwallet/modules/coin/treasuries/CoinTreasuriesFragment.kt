@@ -20,12 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
@@ -45,18 +45,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBordered
 import io.horizontalsystems.bankwallet.ui.compose.components.SortMenu
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.marketkit.models.Coin
 
 class CoinTreasuriesFragment : BaseComposeFragment() {
 
-    private val viewModel by viewModels<CoinTreasuriesViewModel> {
-        CoinTreasuriesModule.Factory(requireArguments().parcelable(COIN_KEY)!!)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        CoinTreasuriesScreen(viewModel)
+        CoinTreasuriesScreen(
+            viewModel(
+                factory = CoinTreasuriesModule.Factory(navController.requireInput())
+            )
+        )
     }
 
     @Composable
@@ -187,11 +185,5 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                 maxLines = 1,
             )
         }
-    }
-
-    companion object {
-        private const val COIN_KEY = "coin_key"
-
-        fun prepareParams(coin: Coin) = bundleOf(COIN_KEY to coin)
     }
 }

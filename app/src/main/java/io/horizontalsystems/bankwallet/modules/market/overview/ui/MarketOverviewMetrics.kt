@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.overview.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +23,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -32,19 +31,31 @@ import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartMinimal
 import java.math.BigDecimal
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MetricChartsView(marketMetrics: MarketOverviewModule.MarketMetrics, navController: NavController) {
-    MarketsHorizontalCards(4) { page ->
-        ChartView(marketMetrics[page], navController)
+    Column(
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
+    ) {
+        Row {
+            ChartView(marketMetrics.totalMarketCap, navController)
+            Spacer(Modifier.width(8.dp))
+            ChartView(marketMetrics.volume24h, navController)
+        }
+        Spacer(Modifier.height(8.dp))
+        Row {
+            ChartView(marketMetrics.defiCap, navController)
+            Spacer(Modifier.width(8.dp))
+            ChartView(marketMetrics.defiTvl, navController)
+        }
     }
 }
 
 @Composable
-private fun ChartView(metricsData: MetricData, navController: NavController) {
+private fun RowScope.ChartView(metricsData: MetricData, navController: NavController) {
     Card(
         modifier = Modifier
             .height(105.dp)
+            .weight(1f)
             .clip(RoundedCornerShape(12.dp))
             .clickable {
                 openMetricsPage(metricsData.type, navController)
@@ -114,9 +125,6 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavControll
     if (metricsType == MetricsType.TvlInDefi) {
         navController.slideFromBottom(R.id.tvlFragment)
     } else {
-        navController.slideFromBottom(
-            R.id.metricsPageFragment,
-            MetricsPageFragment.prepareParams(metricsType)
-        )
+        navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
     }
 }

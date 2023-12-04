@@ -20,12 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
@@ -33,16 +33,13 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
 
 class CoinRankFragment : BaseComposeFragment() {
 
-    private val type by lazy {
-        requireArguments().parcelable<RankType>(rankTypeKey)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val type = navController.getInput<RankType>()
+
         type?.let { rankType ->
             CoinRankScreen(
                 rankType,
@@ -62,12 +59,6 @@ class CoinRankFragment : BaseComposeFragment() {
                 )
             }
         }
-    }
-
-    companion object {
-        private const val rankTypeKey = "rank_type_key"
-
-        fun prepareParams(coinUid: RankType) = bundleOf(rankTypeKey to coinUid)
     }
 }
 

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
@@ -25,18 +27,18 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
 class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
 
-    companion object {
-        const val EVM_ADDRESS_KEY = "evm_address_key"
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val evmAddress = arguments?.getString(EVM_ADDRESS_KEY) ?: ""
+        val evmAddress = navController.getInput<Input>()?.evmAddress ?: ""
         EvmAddressScreen(evmAddress, navController)
     }
+
+    @Parcelize
+    data class Input(val evmAddress: String) : Parcelable
 
 }
 

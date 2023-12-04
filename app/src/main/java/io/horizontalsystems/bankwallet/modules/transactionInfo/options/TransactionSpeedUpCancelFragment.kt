@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
 import android.view.View
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,13 +17,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
@@ -41,23 +42,21 @@ import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
+import kotlinx.parcelize.Parcelize
 
 class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 
     private val logger = AppLogger("tx-speedUp-cancel")
     private val transactionInfoViewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment)
-    private val optionType by lazy {
-        arguments?.parcelable<TransactionInfoOptionsModule.Type>(
-            OPTION_TYPE_KEY
-        )!!
+
+    private val input by lazy {
+        requireArguments().getInputX<Input>()!!
     }
-    private val transactionHash by lazy { arguments?.getString(TRANSACTION_HASH_KEY)!! }
 
     private val vmFactory by lazy {
         TransactionInfoOptionsModule.Factory(
-            optionType,
-            transactionHash,
+            input.optionType,
+            input.transactionHash,
             transactionInfoViewModel.source
         )
     }
@@ -126,21 +125,11 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 
     }
 
-    companion object {
-        private const val OPTION_TYPE_KEY = "option_type_key"
-        private const val TRANSACTION_HASH_KEY = "transaction_hash_key"
-
-        fun prepareParams(
-            optionType: TransactionInfoOptionsModule.Type,
-            transactionHash: String
-        ): Bundle {
-            return bundleOf(
-                OPTION_TYPE_KEY to optionType,
-                TRANSACTION_HASH_KEY to transactionHash
-            )
-        }
-    }
-
+    @Parcelize
+    data class Input(
+        val optionType: TransactionInfoOptionsModule.Type,
+        val transactionHash: String
+    ) : Parcelable
 }
 
 @Composable
@@ -170,8 +159,8 @@ private fun TransactionSpeedUpCancelScreen(
                         tint = ComposeAppTheme.colors.jacob,
                         onClick = {
                             navController.slideFromBottom(
-                                resId = R.id.sendEvmSettingsFragment,
-                                args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                                R.id.sendEvmSettingsFragment,
+                                SendEvmSettingsFragment.Input(parentNavGraphId)
                             )
                         }
                     )

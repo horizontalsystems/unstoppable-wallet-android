@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceViewModel
@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronConfirmationScr
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
-import io.horizontalsystems.core.parcelable
 import kotlinx.parcelize.Parcelize
 
 class SendConfirmationFragment : BaseComposeFragment() {
@@ -28,10 +27,10 @@ class SendConfirmationFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val arguments = requireArguments()
-        val sendEntryPointDestId = arguments.getInt(sendEntryPointDestIdKey)
+        val input = navController.getInput<Input>()
+        val sendEntryPointDestId = input?.sendEntryPointDestId ?: 0
 
-        when (arguments.parcelable<Type>(typeKey)) {
+        when (input?.type) {
             Type.Bitcoin -> {
                 val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
 
@@ -100,13 +99,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
         Bitcoin, Bep2, ZCash, Solana, Tron, Ton
     }
 
-    companion object {
-        private const val typeKey = "typeKey"
-        private const val sendEntryPointDestIdKey = "sendEntryPointDestIdKey"
-
-        fun prepareParams(type: Type, sendEntryPointDestId: Int) = bundleOf(
-            typeKey to type,
-            sendEntryPointDestIdKey to sendEntryPointDestId,
-        )
-    }
+    @Parcelize
+    data class Input(val type: Type, val sendEntryPointDestId: Int) : Parcelable
 }

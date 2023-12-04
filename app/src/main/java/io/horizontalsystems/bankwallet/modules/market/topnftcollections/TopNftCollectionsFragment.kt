@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.topnftcollections
 
-import android.os.Bundle
+import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -16,11 +16,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
@@ -31,47 +31,36 @@ import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragm
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
 
 class TopNftCollectionsFragment : BaseComposeFragment() {
 
-    private val sortingField by lazy {
-        arguments?.parcelable<SortingField>(sortingFieldKey)!!
-    }
-    private val timeDuration by lazy {
-        arguments?.parcelable<TimeDuration>(timeDurationKey)!!
-    }
-    val viewModel by viewModels<TopNftCollectionsViewModel> {
-        TopNftCollectionsModule.Factory(sortingField, timeDuration)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.requireInput<Input>()
+        val viewModel = viewModel<TopNftCollectionsViewModel>(
+            factory = TopNftCollectionsModule.Factory(
+                input.sortingField,
+                input.timeDuration
+            )
+        )
+
         TopNftCollectionsScreen(
             viewModel,
             { navController.popBackStack() },
             { blockchainType, collectionUid ->
-                val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType.uid)
+                val args = NftCollectionFragment.Input(collectionUid, blockchainType.uid)
                 navController.slideFromBottom(R.id.nftCollectionFragment, args)
             }
         )
     }
 
-    companion object {
-        private const val sortingFieldKey = "sorting_field"
-        private const val timeDurationKey = "time_duration"
-
-        fun prepareParams(
-            sortingField: SortingField,
-            timeDuration: TimeDuration
-        ): Bundle {
-            return bundleOf(
-                sortingFieldKey to sortingField,
-                timeDurationKey to timeDuration
-            )
-        }
-    }
+    @Parcelize
+    data class Input(
+        val sortingField: SortingField,
+        val timeDuration: TimeDuration
+    ) : Parcelable
 }
 
 @OptIn(ExperimentalFoundationApi::class)
