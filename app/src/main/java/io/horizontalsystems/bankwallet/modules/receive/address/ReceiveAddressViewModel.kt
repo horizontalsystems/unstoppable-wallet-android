@@ -7,16 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressModule.DescriptionItem
+import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressModule.AdditionalData
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
     private val wallet: Wallet,
@@ -26,20 +26,35 @@ class ReceiveAddressViewModel(
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
     private val coinCode = wallet.coin.code
-    private var qrDescription = getQrDescription(wallet.account.isWatchAccount)
-    private var descriptionItems: List<DescriptionItem> = listOf()
-    private var warning: String? = null
-    private var popupWarningItem: ReceiveAddressModule.PopupWarningItem? = null
+    private var amount: BigDecimal? = null
+    private var accountActive = true
+    private var memo: String? = null
+    private var networkName = ""
+    private var mainNet = true
+    private var watchAccount = wallet.account.isWatchAccount
+    private var alertText: ReceiveAddressModule.AlertText = getAlertText(watchAccount)
+
+    private fun getAlertText(watchAccount: Boolean): ReceiveAddressModule.AlertText {
+        return when {
+            watchAccount -> ReceiveAddressModule.AlertText.Normal(
+                    Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
+                )
+            else -> ReceiveAddressModule.AlertText.Normal(
+                Translator.getString(R.string.Balance_Receive_AddressAlert)
+            )
+        }
+    }
 
     var uiState by mutableStateOf(
         ReceiveAddressModule.UiState(
             viewState = viewState,
             coinCode = coinCode,
             address = address,
-            qrDescription = qrDescription,
-            descriptionItems = descriptionItems,
-            warning = warning,
-            popupWarningItem = popupWarningItem
+            networkName = networkName,
+            watchAccount = watchAccount,
+            additionalItems = getAdditionalData(),
+            amount = amount,
+            alertText = alertText,
         )
     )
         private set
@@ -52,37 +67,43 @@ class ReceiveAddressViewModel(
                 }
         }
         setData()
+        setNetworkName()
+    }
+
+    private fun setNetworkName() {
+        when (val tokenType = wallet.token.type) {
+            is TokenType.Derived -> {
+                networkName = Translator.getString(R.string.Balance_Format) + ": "
+                networkName += "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
+            }
+
+            is TokenType.AddressTyped -> {
+                networkName = Translator.getString(R.string.Balance_Format) + ": "
+                networkName += tokenType.type.bitcoinCashCoinType.title
+            }
+
+            else -> {
+                networkName = Translator.getString(R.string.Balance_Network) + ": "
+                networkName += wallet.token.blockchain.name
+            }
+        }
+        if (!mainNet) {
+            networkName += " (TestNet)"
+        }
+        syncState()
     }
 
     private fun setData() {
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
-            prepare(adapter)
+            address = adapter.receiveAddress
+            accountActive = adapter.isAccountActive
+            mainNet = adapter.isMainNet
+            viewState = ViewState.Success
         } else {
             viewState = ViewState.Error(NullPointerException())
         }
         syncState()
-    }
-
-    fun popupShown() {
-        popupWarningItem = null
-        syncState()
-    }
-
-    private fun prepare(receiveAdapter: IReceiveAdapter) {
-        syncViewState(receiveAdapter.receiveAddress, receiveAdapter.isAccountActive, receiveAdapter.isMainNet)
-    }
-
-    private fun syncViewState(receiveAddress: String, accountActive: Boolean, isMainNet: Boolean) {
-        viewState = ViewState.Success
-        if (!accountActive) {
-            popupWarningItem = ReceiveAddressModule.PopupWarningItem(
-                title = Translator.getString(R.string.Tron_AddressNotActive_Title),
-                description = Translator.getString(R.string.Tron_AddressNotActive_Info),
-            )
-        }
-        address = receiveAddress
-        descriptionItems = getDescriptionItems(receiveAddress, accountActive, isMainNet)
     }
 
     private fun syncState() {
@@ -90,57 +111,33 @@ class ReceiveAddressViewModel(
             viewState = viewState,
             coinCode = coinCode,
             address = address,
-            qrDescription = qrDescription,
-            descriptionItems = descriptionItems,
-            warning = warning,
-            popupWarningItem = popupWarningItem
+            networkName = networkName,
+            watchAccount = watchAccount,
+            additionalItems = getAdditionalData(),
+            amount = amount,
+            alertText = alertText,
         )
     }
 
-    private fun getDescriptionItems(address: String? = null, accountActive: Boolean, isMainNet: Boolean): List<DescriptionItem> {
-        val items = mutableListOf<DescriptionItem>()
+    private fun getAdditionalData(): List<AdditionalData> {
+        val items = mutableListOf<AdditionalData>()
 
-        address?.let {
+        if (!accountActive) {
+            items.add(AdditionalData.AccountNotActive)
+        }
+
+        amount?.let {
             items.add(
-                DescriptionItem.Value(
-                    title = Translator.getString(R.string.Balance_Address),
-                    value = it
+                AdditionalData.Amount(
+                    value = it.toString()
                 )
             )
         }
 
-        var networkValue = when (val tokenType = wallet.token.type) {
-            is TokenType.Derived -> {
-                "${tokenType.derivation.accountTypeDerivation.addressType} (${ tokenType.derivation.accountTypeDerivation.rawName})"
-            }
-            is TokenType.AddressTyped -> Translator.getString(tokenType.type.bitcoinCashCoinType.title)
-            else -> wallet.token.blockchain.name
-        }
-
-        if (!isMainNet) {
-            networkValue += " (TestNet)"
-        }
-
-        val networkTitleRes = if(wallet.token.type is TokenType.Derived) {
-            R.string.Balance_Format
-        } else {
-            R.string.Balance_Network
-        }
-
-        items.add(
-            DescriptionItem.Value(
-                title = Translator.getString(networkTitleRes),
-                value = networkValue
-            )
-        )
-
-        if (!accountActive) {
+        memo?.let {
             items.add(
-                DescriptionItem.ValueInfo(
-                    title = Translator.getString(R.string.Balance_Receive_Account),
-                    value = Translator.getString(R.string.Balance_Receive_NotActive),
-                    infoTitle = Translator.getString(R.string.Tron_AddressNotActive_Title),
-                    infoText = Translator.getString(R.string.Tron_AddressNotActive_Info)
+                AdditionalData.Memo(
+                    value = it
                 )
             )
         }
@@ -148,14 +145,20 @@ class ReceiveAddressViewModel(
         return items
     }
 
-    private fun getQrDescription(watchAccount: Boolean) = if (watchAccount) {
-        Translator.getString(R.string.Balance_ReceiveWatchAddressHint, wallet.coin.code)
-    } else {
-        Translator.getString(R.string.Balance_ReceiveAddressHint, wallet.coin.code)
-    }
-
     fun onErrorClick() {
         setData()
+    }
+
+    fun setAmount(amount: BigDecimal?) {
+        amount?.let {
+            if (it <= BigDecimal.ZERO) {
+                this.amount = null
+                syncState()
+                return
+            }
+        }
+        this.amount = amount
+        syncState()
     }
 
 }

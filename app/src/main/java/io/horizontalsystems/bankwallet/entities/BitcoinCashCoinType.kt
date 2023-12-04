@@ -5,11 +5,11 @@ import io.horizontalsystems.bankwallet.R
 enum class BitcoinCashCoinType(val value: String) {
     type0("type0"), type145("type145");
 
-    val title: Int
+    val title: String
         get() {
             return when (this) {
-                type0 -> R.string.CoinSettings_BitcoinCashCoinType_Type0_Title
-                type145 -> R.string.CoinSettings_BitcoinCashCoinType_Type145_Title
+                type0 -> "Legacy (Type 0)"
+                type145 -> "CashAddress (Type 145)"
             }
         }
 
