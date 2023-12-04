@@ -65,6 +65,7 @@
     <string name="Button_TryAgain">Try Again</string>
     <string name="Button_Share">Share</string>
     <string name="Button_Apply">Apply</string>
+    <string name="Button_SetAmount">Set Amount</string>
 
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
@@ -359,15 +360,20 @@
     <string name="Balance_NetworkSelectDescription">Choose network to get an address to receive.</string>
     <string name="Balance_ReceiveAddressHint">Your address for depositing %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Watch address of %s</string>
-    <string name="Balance_ReceiveWarningText">Send only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
     <string name="Balance_Receive_AddressFormatDescription">Choose a format for providing an address to receive.</string>
     <string name="Balance_Receive_AddressFormat">Address Format</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">The Cash Address format is preferred for receiving Bitcoin Cash (BCH) due to its improved user experience and compatibility. However, both address formats can be used interchangeably to receive BCH, regardless of the sender\'s address format.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">The Native SegWit format is preferred in Bitcoin for improved throughput and security. All address formats (Taproot, SegWit, Legacy) can be used interchangeably to receive BTC regardless of the sender\'s address format, enabling seamless transactions across different coin types.</string>
     <string name="Balance_Receive_Account">Account</string>
     <string name="Balance_Receive_NotActive">Not active</string>
+    <string name="Balance_Receive_Amount">Amount</string>
+    <string name="Balance_Receive_SetAmount">Set Amount</string>
+    <string name="Balance_Receive_AddressType">Address type</string>
     <string name="Balance_LockedAmount_Title">Locked</string>
+    <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Can\'t recognize</string>
+    <string name="Balance_Receive_WatchAddressAlert">This address is the address of the watched account. Send only network-compatible tokens.</string>
+    <string name="Balance_Receive_AddressAlert">Send only network-compatible tokens. Others will be lost.</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
@@ -1347,8 +1353,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title" translatable="false">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
 

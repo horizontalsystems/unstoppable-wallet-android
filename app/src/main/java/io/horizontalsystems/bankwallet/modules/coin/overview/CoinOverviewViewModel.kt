@@ -231,7 +231,7 @@ class CoinOverviewViewModel(
                         canAddToWallet && activeWallets.any { it.token == token }
                     items.add(
                         TokenVariant(
-                            value = Translator.getString(bchCoinType.title),
+                            value = bchCoinType.title,
                             copyValue = null,
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = null,
