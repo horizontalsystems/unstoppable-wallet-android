@@ -102,14 +102,16 @@ class ReceiveAddressFragment : BaseComposeFragment() {
         }
 
         val viewContent = LocalContext.current
-        val popupDestinationId = arguments?.getInt(POPUP_DESTINATION_ID_KEY)
 
         val viewModel by viewModels<ReceiveAddressViewModel> {
             ReceiveAddressModule.Factory(wallet)
         }
 
         ReceiveAddressScreen(
-            viewModel = viewModel,
+            title = stringResource(R.string.Deposit_Title, wallet.coin.code),
+            uiState = viewModel.uiState,
+            onErrorClick = { viewModel.onErrorClick() },
+            setAmount = { amount -> viewModel.setAmount(amount) },
             navController = navController,
             onShareClick = { address ->
                 viewContent.startActivity(Intent().apply {
@@ -123,12 +125,10 @@ class ReceiveAddressFragment : BaseComposeFragment() {
 
     companion object {
         const val WALLET_KEY = "wallet_key"
-        const val POPUP_DESTINATION_ID_KEY = "popup_destination_id_key"
 
-        fun params(wallet: Wallet, popupDestination: Int? = null): Bundle {
+        fun params(wallet: Wallet): Bundle {
             return bundleOf(
                 WALLET_KEY to wallet,
-                POPUP_DESTINATION_ID_KEY to popupDestination,
             )
         }
     }
@@ -136,21 +136,22 @@ class ReceiveAddressFragment : BaseComposeFragment() {
 }
 
 @Composable
-private fun ReceiveAddressScreen(
-    viewModel: ReceiveAddressViewModel,
+fun ReceiveAddressScreen(
+    title: String,
+    uiState: ReceiveAddressModule.UiState,
     navController: NavController,
+    setAmount: (BigDecimal?) -> Unit,
+    onErrorClick: () -> Unit = {},
     onShareClick: (String) -> Unit,
 ) {
-
     val localView = LocalView.current
-    val uiState = viewModel.uiState
     val openAmountDialog = remember { mutableStateOf(false) }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = stringResource(R.string.Deposit_Title, uiState.coinCode),
+                title = title,
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
@@ -163,10 +164,10 @@ private fun ReceiveAddressScreen(
                 .padding(it)
         ) {
             Crossfade(uiState.viewState, label = "") { viewState ->
-                Column() {
+                Column {
                     when (viewState) {
                         is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                            ListErrorView(stringResource(R.string.SyncError), onErrorClick)
                         }
 
                         ViewState.Loading -> {
@@ -207,12 +208,12 @@ private fun ReceiveAddressScreen(
                                                 .size(224.dp),
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            qrCodeBitmap?.let {
+                                            qrCodeBitmap?.let { qrCode ->
                                                 Image(
                                                     modifier = Modifier
                                                         .padding(8.dp)
                                                         .fillMaxSize(),
-                                                    bitmap = it.asImageBitmap(),
+                                                    bitmap = qrCode.asImageBitmap(),
                                                     contentScale = ContentScale.FillWidth,
                                                     contentDescription = null
                                                 )
@@ -251,7 +252,7 @@ private fun ReceiveAddressScreen(
                                     if (uiState.additionalItems.isNotEmpty()) {
                                         AdditionalDataSection(
                                             items = uiState.additionalItems,
-                                            onClearAmount = { viewModel.setAmount(null) },
+                                            onClearAmount = { setAmount(null) },
                                             showAccountNotActiveWarningDialog = {
                                                 val args = NotActiveWarningDialog.prepareParams(
                                                     Translator.getString(R.string.Tron_AddressNotActive_Title),
@@ -283,7 +284,7 @@ private fun ReceiveAddressScreen(
                     initialAmount = uiState.amount,
                     onDismissRequest = { openAmountDialog.value = false },
                     onAmountConfirm = { amount ->
-                        viewModel.setAmount(amount)
+                        setAmount(amount)
                         openAmountDialog.value = false
                     }
                 )

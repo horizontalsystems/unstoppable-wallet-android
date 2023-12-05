@@ -25,30 +25,16 @@ class ReceiveAddressViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
-    private val coinCode = wallet.coin.code
     private var amount: BigDecimal? = null
     private var accountActive = true
-    private var memo: String? = null
     private var networkName = ""
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
     private var alertText: ReceiveAddressModule.AlertText = getAlertText(watchAccount)
 
-    private fun getAlertText(watchAccount: Boolean): ReceiveAddressModule.AlertText {
-        return when {
-            watchAccount -> ReceiveAddressModule.AlertText.Normal(
-                    Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
-                )
-            else -> ReceiveAddressModule.AlertText.Normal(
-                Translator.getString(R.string.Balance_Receive_AddressAlert)
-            )
-        }
-    }
-
     var uiState by mutableStateOf(
         ReceiveAddressModule.UiState(
             viewState = viewState,
-            coinCode = coinCode,
             address = address,
             networkName = networkName,
             watchAccount = watchAccount,
@@ -93,6 +79,17 @@ class ReceiveAddressViewModel(
         syncState()
     }
 
+    private fun getAlertText(watchAccount: Boolean): ReceiveAddressModule.AlertText {
+        return when {
+            watchAccount -> ReceiveAddressModule.AlertText.Normal(
+                Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
+            )
+            else -> ReceiveAddressModule.AlertText.Normal(
+                Translator.getString(R.string.Balance_Receive_AddressAlert)
+            )
+        }
+    }
+
     private fun setData() {
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
@@ -109,7 +106,6 @@ class ReceiveAddressViewModel(
     private fun syncState() {
         uiState = ReceiveAddressModule.UiState(
             viewState = viewState,
-            coinCode = coinCode,
             address = address,
             networkName = networkName,
             watchAccount = watchAccount,
@@ -130,14 +126,6 @@ class ReceiveAddressViewModel(
             items.add(
                 AdditionalData.Amount(
                     value = it.toString()
-                )
-            )
-        }
-
-        memo?.let {
-            items.add(
-                AdditionalData.Memo(
-                    value = it
                 )
             )
         }
