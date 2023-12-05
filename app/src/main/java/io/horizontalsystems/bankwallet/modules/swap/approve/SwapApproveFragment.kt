@@ -21,10 +21,12 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.requireInput
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -110,10 +112,12 @@ fun SwapApproveScreen(
                 title = stringResource(R.string.Swap_Proceed),
                 onClick = {
                     swapApproveViewModel.getSendEvmData()?.let { sendEvmData ->
-                        navController.slideFromRight(
+                        navController.slideFromRightForResult<SwapApproveConfirmationFragment.Result>(
                             R.id.swapApproveConfirmationFragment,
                             SwapApproveConfirmationModule.Input(sendEvmData, swapApproveViewModel.dex.blockchainType)
-                        )
+                        ) {
+                            navController.setNavigationResultX(it)
+                        }
                     }
                 },
                 enabled = approveAllowed
