@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -142,15 +143,12 @@ inline fun <reified T: Parcelable> NavController.requireInput() : T {
     return getInput()!!
 }
 
-fun <T: Parcelable> NavController.setNavigationResultX(result: T, destinationId: Int? = null) {
+fun <T: Parcelable> NavController.setNavigationResultX(result: T) {
     val resultKey = currentBackStackEntry?.arguments?.getString("resultKey")
 
-    val backStackEntry = when (destinationId) {
-        null -> previousBackStackEntry
-        else -> currentBackStack.value.findLast { it.destination.id == destinationId }
-    }
-
-    resultKey?.let {
-        backStackEntry?.savedStateHandle?.set(resultKey, result)
+    if (resultKey == null) {
+        Log.w("AAA", "No key registered to set the result")
+    } else {
+        previousBackStackEntry?.savedStateHandle?.set(resultKey, result)
     }
 }
