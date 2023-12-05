@@ -46,9 +46,6 @@ class NetworkSelectFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         val coinUid = arguments?.getString("coinUid")
-        val popupDestinationId = arguments?.getInt(
-            ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY
-        )
 
         if (coinUid == null) {
             HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
@@ -62,7 +59,7 @@ class NetworkSelectFragment : BaseComposeFragment() {
             val fullCoin = initViewModel.fullCoin
 
             if (activeAccount != null && fullCoin != null) {
-                NetworkSelectScreen(navController, popupDestinationId, activeAccount, fullCoin)
+                NetworkSelectScreen(navController, activeAccount, fullCoin)
             } else {
                 HudHelper.showErrorMessage(LocalView.current, "Active account and/or full coin is null")
                 navController.popBackStack()
@@ -71,11 +68,8 @@ class NetworkSelectFragment : BaseComposeFragment() {
     }
 
     companion object {
-        fun prepareParams(coinUid: String, popupDestinationId: Int?): Bundle {
-            return bundleOf(
-                "coinUid" to coinUid,
-                ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId
-            )
+        fun prepareParams(coinUid: String): Bundle {
+            return bundleOf("coinUid" to coinUid)
         }
     }
 }
@@ -83,7 +77,6 @@ class NetworkSelectFragment : BaseComposeFragment() {
 @Composable
 fun NetworkSelectScreen(
     navController: NavController,
-    popupDestinationId: Int?,
     activeAccount: Account,
     fullCoin: FullCoin,
 ) {
@@ -125,10 +118,7 @@ fun NetworkSelectScreen(
 
                                     navController.slideFromRight(
                                         R.id.receiveFragment,
-                                        bundleOf(
-                                            ReceiveAddressFragment.WALLET_KEY to wallet,
-                                            ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
-                                        )
+                                        bundleOf(ReceiveAddressFragment.WALLET_KEY to wallet)
                                     )
                                 }
                             }

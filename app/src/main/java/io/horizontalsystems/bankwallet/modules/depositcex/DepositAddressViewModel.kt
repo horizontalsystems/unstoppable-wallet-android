@@ -6,61 +6,137 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
+import io.horizontalsystems.bankwallet.core.providers.CexDepositNetwork
 import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
-import io.horizontalsystems.bankwallet.modules.balance.cex.CexAddress
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class DepositAddressViewModel(
     private val cexAsset: CexAsset,
-    private val networkId: String?,
-    private val cexProviderManager: CexProviderManager
+    private val network: CexDepositNetwork?,
+    cexProviderManager: CexProviderManager
 ) : ViewModel() {
     private val cexProvider = cexProviderManager.cexProviderFlow.value
 
-    private var address: CexAddress? = null
-    private var error: Throwable? = null
-    private var loading = false
+    private var viewState: ViewState = ViewState.Loading
+    private var address = ""
+    private var amount: BigDecimal? = null
+    private var memo: String? = null
+    private val networkName = network?.name ?: cexAsset.depositNetworks.firstOrNull()?.name ?: ""
+    private val watchAccount = false
 
     var uiState by mutableStateOf(
-        DepositAddress(
-            loading = loading,
+        ReceiveAddressModule.UiState(
+            viewState = viewState,
             address = address,
-            error = error
+            networkName = networkName,
+            watchAccount = watchAccount,
+            additionalItems = getAdditionalData(),
+            amount = amount,
+            alertText = getAlertText(memo != null)
         )
     )
 
     init {
-        loading = true
+        setInitialData()
+    }
+
+    private fun setInitialData() {
+        viewState = ViewState.Loading
         emitState()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                address = cexProvider?.getAddress(cexAsset.id, networkId)
+                val cexAddress = cexProvider?.getAddress(cexAsset.id, network?.id)
+                if (cexAddress == null) {
+                    viewState = ViewState.Error(Throwable("No address"))
+                } else {
+                    if (cexAddress.tag.isNotBlank()) {
+                        memo = cexAddress.tag
+                    }
+                    address = cexAddress.address
+                    viewState = ViewState.Success
+                }
             } catch (t: Throwable) {
-                error = t
+                viewState = ViewState.Error(t)
             }
-            loading = false
             emitState()
         }
     }
 
     private fun emitState() {
-        uiState = DepositAddress(
-            loading = loading,
+        uiState = ReceiveAddressModule.UiState(
+            viewState = viewState,
             address = address,
-            error = error
+            networkName = networkName,
+            watchAccount = watchAccount,
+            additionalItems = getAdditionalData(),
+            amount = amount,
+            alertText = getAlertText(memo != null)
         )
     }
 
-    class Factory(private val cexAsset: CexAsset, private val networkId: String?) : ViewModelProvider.Factory {
+    private fun getAdditionalData(): List<ReceiveAddressModule.AdditionalData> {
+        val items = mutableListOf<ReceiveAddressModule.AdditionalData>()
+
+        memo?.let {
+            items.add(
+                ReceiveAddressModule.AdditionalData.Memo(
+                    value = it
+                )
+            )
+        }
+
+        amount?.let {
+            items.add(
+                ReceiveAddressModule.AdditionalData.Amount(
+                    value = it.toString()
+                )
+            )
+        }
+
+        return items
+    }
+
+    private fun getAlertText(hasMemo: Boolean): ReceiveAddressModule.AlertText {
+        return when {
+            hasMemo -> ReceiveAddressModule.AlertText.Critical(
+                Translator.getString(R.string.Balance_Receive_AddressMemoAlert)
+            )
+
+            else -> ReceiveAddressModule.AlertText.Normal(
+                Translator.getString(R.string.Balance_Receive_AddressAlert)
+            )
+        }
+    }
+
+    fun onErrorClick() {
+        setInitialData()
+    }
+
+    fun setAmount(amount: BigDecimal?) {
+        amount?.let {
+            if (it <= BigDecimal.ZERO) {
+                this.amount = null
+                emitState()
+                return
+            }
+        }
+        this.amount = amount
+        emitState()
+    }
+
+    class Factory(private val cexAsset: CexAsset, private val network: CexDepositNetwork?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DepositAddressViewModel(cexAsset, networkId, App.cexProviderManager) as T
+            return DepositAddressViewModel(cexAsset, network, App.cexProviderManager) as T
         }
     }
 }
-
-data class DepositAddress(val loading: Boolean, val address: CexAddress?, val error: Throwable?)
