@@ -39,15 +39,15 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.PriceImpactLevel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ProviderTradeData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment
@@ -67,8 +67,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.*
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -319,31 +317,27 @@ fun SwapCards(
             ActionButtons(
                 buttons = buttons,
                 onTapRevoke = {
-                    navController.getNavigationResult(SwapApproveModule.requestKey) {
-                        if (it.getBoolean(SwapApproveModule.resultKey)) {
-                            viewModel.didApprove()
-                        }
-                    }
-
                     viewModel.revokeEvmData?.let { revokeEvmData ->
-                        navController.slideFromBottom(
+                        navController.slideFromBottomForResult<SwapApproveConfirmationFragment.Result>(
                             R.id.swapApproveConfirmationFragment,
                             SwapApproveConfirmationModule.Input(revokeEvmData, swapState.dex.blockchainType, false)
-                        )
+                        ) {
+                            if (it.approved) {
+                                viewModel.didApprove()
+                            }
+                        }
                     }
                 },
                 onTapApprove = {
-                    navController.getNavigationResult(SwapApproveModule.requestKey) {
-                        if (it.getBoolean(SwapApproveModule.resultKey)) {
-                            viewModel.didApprove()
-                        }
-                    }
-
                     viewModel.approveData?.let { data ->
-                        navController.slideFromBottom(
+                        navController.slideFromBottomForResult<SwapApproveConfirmationFragment.Result>(
                             R.id.swapApproveFragment,
                             data
-                        )
+                        ) {
+                            if (it.approved) {
+                                viewModel.didApprove()
+                            }
+                        }
                     }
                 },
                 onTapProceed = {
@@ -423,50 +417,50 @@ private fun TopMenu(
         ButtonSecondaryCircle(
             icon = R.drawable.ic_manage_2,
             onClick = {
-                navController.getNavigationResult(SwapMainModule.resultKey) {
-                    val recipient = it.parcelable<Address>(SwapMainModule.swapSettingsRecipientKey)
-                    val slippage = it.getString(SwapMainModule.swapSettingsSlippageKey)
-                    val ttl = it.getLong(SwapMainModule.swapSettingsTtlKey)
-                    viewModel.onUpdateSwapSettings(recipient, slippage?.toBigDecimal(), ttl)
+                val onResult: (SwapMainModule.Result) -> Unit = {
+                    viewModel.onUpdateSwapSettings(it.recipient, it.slippageStr.toBigDecimal(), it.ttl)
                 }
                 when (state.dex.provider) {
                     SwapMainModule.OneInchProvider -> {
-                        navController.slideFromBottom(
+                        navController.slideFromBottomForResult(
                             R.id.oneinchSettingsFragment,
                             OneInchSettingsFragment.Input(
                                 state.dex,
                                 state.recipient,
                                 state.slippage,
-                            )
+                            ),
+                            onResult
                         )
                     }
 
                     SwapMainModule.UniswapV3Provider -> {
-                        navController.slideFromBottom(
+                        navController.slideFromBottomForResult(
                             R.id.uniswapSettingsFragment,
                             UniswapSettingsFragment.Input(
                                 dex = state.dex,
                                 address = state.recipient,
                                 slippage = state.slippage,
                                 ttlEnabled = false,
-                            )
+                            ),
+                            onResult
                         )
                     }
 
                     SwapMainModule.PancakeSwapV3Provider -> {
-                        navController.slideFromBottom(
+                        navController.slideFromBottomForResult(
                             R.id.uniswapSettingsFragment,
                             UniswapSettingsFragment.Input(
                                 dex = state.dex,
                                 address = state.recipient,
                                 slippage = state.slippage,
                                 ttlEnabled = false,
-                            )
+                            ),
+                            onResult
                         )
                     }
 
                     else -> {
-                        navController.slideFromBottom(
+                        navController.slideFromBottomForResult(
                             R.id.uniswapSettingsFragment,
                             UniswapSettingsFragment.Input(
                                 dex = state.dex,
@@ -474,7 +468,8 @@ private fun TopMenu(
                                 slippage = state.slippage,
                                 ttlEnabled = true,
                                 ttl = state.ttl,
-                            )
+                            ),
+                            onResult
                         )
                     }
                 }

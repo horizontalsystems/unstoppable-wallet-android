@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -37,7 +37,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.setNavigationResult
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -144,14 +143,12 @@ private fun UniswapSettingsScreen(
                     title = buttonTitle,
                     onClick = {
                         val tradeOptions = uniswapSettingsViewModel.tradeOptions
-
                         if (tradeOptions != null) {
-                            navController.setNavigationResult(
-                                SwapMainModule.resultKey,
-                                bundleOf(
-                                    SwapMainModule.swapSettingsRecipientKey to tradeOptions.recipient,
-                                    SwapMainModule.swapSettingsSlippageKey to tradeOptions.allowedSlippage.toPlainString(),
-                                    SwapMainModule.swapSettingsTtlKey to tradeOptions.ttl,
+                            navController.setNavigationResultX(
+                                SwapMainModule.Result(
+                                    tradeOptions.recipient,
+                                    tradeOptions.allowedSlippage.toPlainString(),
+                                    tradeOptions.ttl
                                 )
                             )
                             onCloseClick()

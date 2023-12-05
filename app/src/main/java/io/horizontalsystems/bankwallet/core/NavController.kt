@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
-import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import java.util.UUID
 
@@ -56,14 +55,11 @@ fun NavController.authorizedAction(action: () -> Unit) {
 
 fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
     if (!App.termsManager.allTermsAccepted) {
-        getNavigationResult(TermsFragment.resultBundleKey) { bundle ->
-            val agreedToTerms = bundle.getInt(TermsFragment.requestResultKey)
-
-            if (agreedToTerms == TermsFragment.RESULT_OK) {
+        slideFromBottomForResult<TermsFragment.Result>(R.id.termsFragment) { result ->
+            if (result.termsAccepted) {
                 action.invoke()
             }
         }
-        slideFromBottom(R.id.termsFragment)
     } else {
         action.invoke()
     }
