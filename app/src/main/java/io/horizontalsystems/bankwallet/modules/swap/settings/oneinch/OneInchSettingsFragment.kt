@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.setNavigationResult
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -149,11 +148,10 @@ private fun OneInchSettingsScreen(
                         val swapSettings = oneInchSettingsViewModel.swapSettings
 
                         if (swapSettings != null) {
-                            navController.setNavigationResult(
-                                SwapMainModule.resultKey,
-                                bundleOf(
-                                    SwapMainModule.swapSettingsRecipientKey to swapSettings.recipient,
-                                    SwapMainModule.swapSettingsSlippageKey to swapSettings.slippage.toString(),
+                            navController.setNavigationResultX(
+                                SwapMainModule.Result(
+                                    swapSettings.recipient,
+                                    swapSettings.slippage.toPlainString()
                                 )
                             )
                             onCloseClick()

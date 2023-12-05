@@ -29,10 +29,12 @@ import kotlin.math.absoluteValue
 
 object SwapMainModule {
 
-    const val resultKey = "swap_settings_result"
-    const val swapSettingsRecipientKey = "swap_settings_recipient"
-    const val swapSettingsSlippageKey = "swap_settings_slippage"
-    const val swapSettingsTtlKey = "swap_settings_ttl"
+    @Parcelize
+    data class Result(
+        val recipient: Address?,
+        val slippageStr: String,
+        val ttl: Long? = null,
+    ) : Parcelable
 
     data class ProviderViewItem(
         val provider: ISwapProvider,

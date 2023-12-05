@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.zcashconfigure
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import androidx.activity.addCallback
 import androidx.compose.foundation.Image
@@ -54,13 +55,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -82,9 +83,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class ZcashConfigure : BaseComposeFragment() {
 
@@ -103,31 +104,17 @@ class ZcashConfigure : BaseComposeFragment() {
     }
 
     private fun closeWithConfigt(config: ZCashConfig, navController: NavController) {
-        navController.setNavigationResult(
-            resultBundleKey,
-            bundleOf(
-                requestResultKey to RESULT_OK,
-                zcashConfigKey to config,
-            )
-        )
+        navController.setNavigationResultX(Result(config))
         navController.popBackStack()
     }
 
     private fun close(navController: NavController) {
-        navController.setNavigationResult(
-            resultBundleKey,
-            bundleOf(requestResultKey to RESULT_CANCELLED)
-        )
+        navController.setNavigationResultX(Result(null))
         navController.popBackStack()
     }
 
-    companion object {
-        const val RESULT_OK = 1
-        const val RESULT_CANCELLED = 2
-        const val resultBundleKey = "resultBundleKey"
-        const val requestResultKey = "requestResultKey"
-        const val zcashConfigKey = "zcashConfigKey"
-    }
+    @Parcelize
+    data class Result(val config: ZCashConfig?) : Parcelable
 }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)

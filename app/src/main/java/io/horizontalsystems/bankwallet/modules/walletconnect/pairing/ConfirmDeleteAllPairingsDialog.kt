@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.pairing
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,17 +17,16 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.setNavigationResult
+import kotlinx.parcelize.Parcelize
 
 class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
 
@@ -45,21 +45,8 @@ class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
         }
     }
 
-    companion object {
-        private const val resultKey = "ConfirmDeleteAllPairingsDialogResultKey"
-
-        fun onConfirm(navController: NavController, callback: () -> Unit) {
-            navController.getNavigationResult(resultKey) {
-                if (it.getBoolean(resultKey)) {
-                    callback.invoke()
-                }
-            }
-        }
-
-        fun setResult(navController: NavController, confirmed: Boolean) {
-            navController.setNavigationResult(resultKey, bundleOf(resultKey to confirmed))
-        }
-    }
+    @Parcelize
+    data class Result(val confirmed: Boolean) : Parcelable
 }
 
 @Composable
@@ -84,7 +71,7 @@ fun ConfirmDeleteAllScreen(navController: NavController) {
                     .padding(horizontal = 24.dp),
                 title = stringResource(R.string.WalletConnect_Pairings_Delete),
                 onClick = {
-                    ConfirmDeleteAllPairingsDialog.setResult(navController, true)
+                    navController.setNavigationResultX(ConfirmDeleteAllPairingsDialog.Result(true))
                     navController.popBackStack()
                 }
             )

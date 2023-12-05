@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.approve.confirmation
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
 import android.view.View
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,13 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInputX
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
@@ -33,7 +34,6 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceVie
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -44,9 +44,9 @@ import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
 
 class SwapApproveConfirmationFragment : BaseComposeFragment() {
     private val logger = AppLogger("swap-approve")
@@ -111,9 +111,8 @@ class SwapApproveConfirmationFragment : BaseComposeFragment() {
                 R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().setNavigationResult(
-                    SwapApproveModule.requestKey,
-                    bundleOf(SwapApproveModule.resultKey to true),
+                findNavController().setNavigationResultX(
+                    Result(true),
                     R.id.swapFragment
                 )
                 findNavController().popBackStack(R.id.swapFragment, false)
@@ -127,6 +126,9 @@ class SwapApproveConfirmationFragment : BaseComposeFragment() {
         }
 
     }
+
+    @Parcelize
+    data class Result(val approved: Boolean) : Parcelable
 }
 
 @Composable

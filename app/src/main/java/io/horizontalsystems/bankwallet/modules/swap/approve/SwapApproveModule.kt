@@ -10,9 +10,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 
 object SwapApproveModule {
 
-    const val requestKey = "approve"
-    const val resultKey = "result"
-
     class Factory(private val approveData: SwapMainModule.ApproveData) :
         ViewModelProvider.Factory {
 
