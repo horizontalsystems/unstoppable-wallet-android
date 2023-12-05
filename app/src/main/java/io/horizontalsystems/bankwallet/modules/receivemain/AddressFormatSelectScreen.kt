@@ -34,7 +34,6 @@ fun AddressFormatSelectScreen(
     navController: NavController,
     addressFormatItems: List<AddressFormatItem>,
     description: String,
-    popupDestinationId: Int?,
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -65,10 +64,7 @@ fun AddressFormatSelectScreen(
                         onClick = {
                             navController.slideFromRight(
                                 R.id.receiveFragment,
-                                bundleOf(
-                                    ReceiveAddressFragment.WALLET_KEY to item.wallet,
-                                    ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
-                                )
+                                bundleOf(ReceiveAddressFragment.WALLET_KEY to item.wallet)
                             )
                         }
                     )
