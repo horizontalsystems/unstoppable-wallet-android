@@ -215,6 +215,7 @@
 
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">Top Sectors</string>
+    <string name="Market_Overview_Sectors">Sectors</string>
 
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Top Platforms</string>
